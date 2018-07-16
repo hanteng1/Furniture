@@ -3,16 +3,14 @@ window.onload = function()
 	
 	if(!Detector.webgl) Detector.addGetWebGLMessage();
 
-	var camera, scene, renderer, stats;
-	var plane;
-
+	var container, camera, scene, renderer, stats;
 
 	init();
 	animate();
 
 	function init(){
 
-		var container = document.getElementById('container');
+		container = document.getElementById('container');
 
 		camera = new THREE.PerspectiveCamera (45, window.innerWidth / window.innerHeight, 1, 10000);
 		camera.position.set( 500, 800, 1300 );
@@ -28,27 +26,8 @@ window.onload = function()
 		camera.add(pointLight)
 		scene.add(camera);
 
-
-		var gridHelper = new THREE.GridHelper( 1000, 20 );
+		var gridHelper = new THREE.GridHelper( 1000, 20 ); //size, divisions
 		scene.add( gridHelper );
-
-		var map = new THREE.TextureLoader().load('../three.js-master/examples/textures/roughness_map.jpg');
-		map.wrapS = map.wrapT = THREE.RepeatWrapping;
-		map.anisotropy = 16;
-
-		var material = new THREE.MeshPhongMaterial({map: map, side: THREE.DoubleSide});
-
-		var geometry, object;  //get an object from geometry
-
-		geometry = new THREE.ParametricBufferGeometry(THREE.ParametricGeometries.klein, 10, 10);
-		geometry.center();
-		object = new THREE.Mesh(geometry, material);
-		object.position.set(0, 0, 0);
-		scene.add(object);
-
-		//
-
-
 
 		renderer = new THREE.WebGLRenderer( { antialias: true } );
 		renderer.setPixelRatio( window.devicePixelRatio );
@@ -60,10 +39,11 @@ window.onload = function()
 
 		var controls = new THREE.OrbitControls( camera, renderer.domElement );
 		controls.addEventListener( 'change', render );
-		controls.minDistance = 20;
-		controls.maxDistance = 500;
-		controls.enablePan = false;
+		controls.minDistance = 1;
+		controls.maxDistance = 10000;
+		controls.enablePan = true;
 
+		loadModel();
 		
 	}
 
@@ -82,6 +62,35 @@ window.onload = function()
 	function render()
 	{
 		renderer.render(scene, camera);
+	}
+
+	var center = new THREE.Vector3();
+
+	//load model function
+	function loadModel ()
+	{
+		// var material;
+
+		// var loader = new THREE.TextureLoader();
+		// loader.load('../textures/hardwood2_diffuse.jgp', function(texture){
+		// 	material = new THREE.MeshBasicMaterial({
+		// 		map: texture
+		// 	})
+		// });
+
+		var loader = new THREE.OBJLoader();
+		loader.load('../models/Polantis_Stickley_Chair_01.obj', function(object){
+			object.traverse( function ( child ) {
+				if ( child instanceof THREE.Mesh ) {
+					//child.material = material;
+				}
+			});
+			//object.position.y = - 95;
+			scene.add( object );
+		});
+
+
+
 	}
 
 }
