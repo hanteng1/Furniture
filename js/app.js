@@ -69,24 +69,24 @@ window.onload = function()
 	//load model function
 	function loadModel ()
 	{
-		// var material;
+		var material;
 
-		// var loader = new THREE.TextureLoader();
-		// loader.load('../textures/hardwood2_diffuse.jgp', function(texture){
-		// 	material = new THREE.MeshBasicMaterial({
-		// 		map: texture
-		// 	})
-		// });
-
-		var loader = new THREE.OBJLoader();
-		loader.load('../models/Polantis_Stickley_Chair_01.obj', function(object){
-			object.traverse( function ( child ) {
-				if ( child instanceof THREE.Mesh ) {
-					//child.material = material;
-				}
+		var loader = new THREE.TextureLoader();
+		loader.load('../textures/light_oak.jpg', function(texture){
+			material = new THREE.MeshLambertMaterial({
+				map: texture
 			});
-			//object.position.y = - 95;
-			scene.add( object );
+
+			loader = new THREE.OBJLoader();
+			loader.load('../models/Polantis_Stickley_Chair_01.obj', function(object){
+				object.traverse( function ( child ) {
+					if ( child instanceof THREE.Mesh ) {
+						child.material = material;
+					}
+				});
+				//object.position.y = - 95;
+				scene.add( object );
+			});
 		});
 
 
