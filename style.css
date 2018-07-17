@@ -3,12 +3,23 @@ body {
 	font-weight: bold;
 	background-color: #777;
 	margin: 0px; 
+	
 	overflow: hidden;
+	min-height: 100%;
+    height: 100%;
+    min-width: 100%;
+    width: 100%;
+
+    border: 0px none black;  /* not inherited */
 }
 
 canvas {
+	margin: 0px;
+	border: 0px none black;
+	padding: 0px;
 	width: 100%; 
-	height: 100% 
+	height: 100%; 
+	cursor: move;
 }
 
 #info {
@@ -23,4 +34,36 @@ canvas {
 
 a {
 	color: #ff0000;
+}
+
+#menu, #menu nav a {
+   transition: all 0.4s;
+   -o-transition: all 0.4s;
+   -moz-transition: all 0.4s;
+   -webkit-transition: all 0.4s;
+}
+
+#menu {
+   background: white;
+
+   opacity: 0.8;
+   -moz-opacity: 0.8;
+
+   border: 0px none black;  /* not inherited */
+   height: inherit;
+   width: 350px;
+   padding-left: 20px;
+   padding-right: 10px;
+   position: fixed;
+   z-index: 5;
+
+   font-size: 0.9em;
+
+   box-shadow: 4px 0 10px rgba(0,0,0,0.25);
+   -moz-box-shadow: 4px 0 10px rgba(0,0,0,0.25);
+   -webkit-box-shadow: 4px 0 10px rgba(0,0,0,0.25);
+}
+
+#menu {
+   left: 0;
 }

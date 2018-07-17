@@ -13,7 +13,7 @@ window.onload = function()
 		container = document.getElementById('container');
 
 		camera = new THREE.PerspectiveCamera (45, window.innerWidth / window.innerHeight, 1, 10000);
-		camera.position.set( 500, 800, 1300 );
+		camera.position.set( 250, 400, 650 );
 		camera.lookAt(new THREE.Vector3());
 
 		scene = new THREE.Scene();
@@ -33,8 +33,9 @@ window.onload = function()
 		renderer.setPixelRatio( window.devicePixelRatio );
 		renderer.setSize( window.innerWidth, window.innerHeight );
 		container.appendChild( renderer.domElement );
+		
 		stats = new Stats();
-		container.appendChild( stats.dom );
+		//container.appendChild( stats.dom );
 		window.addEventListener( 'resize', onWindowResize, false );
 
 		var controls = new THREE.OrbitControls( camera, renderer.domElement );
@@ -69,24 +70,20 @@ window.onload = function()
 	//load model function
 	function loadModel ()
 	{
-		var material;
+		var material = new THREE.MeshLambertMaterial();
 
-		var loader = new THREE.TextureLoader();
-		loader.load('../textures/light_oak.jpg', function(texture){
-			material = new THREE.MeshLambertMaterial({
-				map: texture
-			});
 
-			loader = new THREE.OBJLoader();
-			loader.load('../models/Polantis_Stickley_Chair_01.obj', function(object){
-				object.traverse( function ( child ) {
-					if ( child instanceof THREE.Mesh ) {
-						child.material = material;
-					}
-				});
-				//object.position.y = - 95;
-				scene.add( object );
+		var loader = new THREE.OBJLoader();
+		loader.load('../models/Polantis_Stickley_Chair_01.obj', function(object){
+			object.traverse( function ( child ) {
+				if ( child instanceof THREE.Mesh ) {
+					child.material = material;
+				}
 			});
+			//object.position.y = - 95;
+			object.scale.set(0.2, 0.2, 0.2);
+			scene.add( object );
+
 		});
 
 
