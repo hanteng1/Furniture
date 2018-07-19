@@ -1,3 +1,5 @@
+
+const {log, status} = require('./log')
 const scadApi = require('@jscad/scad-api')
 const { CSG, CAG, isCSG, isCAG } = require('@jscad/csg')
 const {cube, sphere, cylinder} = scadApi.primitives3d
@@ -42,12 +44,11 @@ function coneWithCutouts () {
     translate([0, 0, 5], cylinder({h: 50, r1: 20, r2: 5, center: true})))
 }
 
-
 var mGeometries = [];
 var scene = null;
 
 function setCsg(){
-  var mConeWithCutouts = new coneWithCutouts();
+  var mConeWithCutouts = new jscadLogo();
 
   if(isCAG(mConeWithCutouts) || isCSG (mConeWithCutouts)) {
     if(0 && mConeWithCutouts.length){
@@ -94,6 +95,8 @@ function csgToGeometries(initial_csg) {
     var polygons = csg.toPolygons();
     var numpolygons = polygons.length;
 
+    log("numpolygons " + numpolygons);
+
     //iterate each polygons, after convertion
     for (var j = 0; j < numpolygons; j++) {
       var polygon = polygons[j]
@@ -113,6 +116,7 @@ function csgToGeometries(initial_csg) {
       var indices = polygon.vertices.map(function (vertex) {
         var vertextag = vertex.getTag()
         var vertexindex = vertexTag2Index[vertextag]
+
         var prevcolor = colors[vertexindex]
         if (smoothlighting && (vertextag in vertexTag2Index) &&
            (prevcolor[0] === color[0]) &&
@@ -122,47 +126,76 @@ function csgToGeometries(initial_csg) {
           vertexindex = vertexTag2Index[vertextag]
         } else {
           vertexindex = vertices.length
+
+
+          if(j == 1)
+          {
+            log("vertextindex " + vertexindex);
+          }
+
           vertexTag2Index[vertextag] = vertexindex
           //vertices.push([vertex.pos.x, vertex.pos.y, vertex.pos.z])
-          vertices.push(vertex.pos.x);
-          vertices.push(vertex.pos.y);
-          vertices.push(vertex.pos.z);
+          vertices.push([vertex.pos.x, vertex.pos.y, vertex.pos.z]);
           
           colors.push(color)
         }
         return vertexindex
       });
 
+      if(j == 2)
+      {
+        log("indices of polygon 2 " + indices);
+      }
+
       for (var i = 2; i < indices.length; i++) {
         triangles.push([indices[0], indices[i - 1], indices[i]])
       }
 
       // if too many vertices, start a new mesh;
-      if (vertices.length > 65000) {
-        // finalize the old mesh
-        // mesh.triangles = triangles
-        // mesh.vertices = vertices
-        // mesh.colors = colors
-        // mesh.computeWireframe()
-        // mesh.computeNormals()
+      // if (vertices.length > 65000) {
+      //   // finalize the old mesh
+      //   // mesh.triangles = triangles
+      //   // mesh.vertices = vertices
+      //   // mesh.colors = colors
+      //   // mesh.computeWireframe()
+      //   // mesh.computeNormals()
 
-        // if (mesh.vertices.length) {
-        //   meshes.push(mesh)
-        // }
+      //   // if (mesh.vertices.length) {
+      //   //   meshes.push(mesh)
+      //   // }
 
-        var geo_vertices = new Float32Array(vertices);
-        geometry.addAttribute('position', new THREE.BufferAttribute(geo_vertices, 3));
-        if(geometry.getAttribute('position').count)
-        {
-          geometries.push(geometry);  
-        }
 
-        // start a new mesh
-        geometry = new THREE.BufferGeometry();
-        triangles = []
-        colors = []
-        vertices = []
-      }
+      //   var temp_vertices = [];
+      //   for(var i = 0; i < triangles.length; i++)
+      //   {
+      //     var vertex_0 = vertices[triangles[i][0]];
+      //     var vertex_1 = vertices[triangles[i][0]];
+      //     var vertex_2 = vertices[triangles[i][0]];
+
+      //     temp_vertices.push(vertex_0[0]);
+      //     temp_vertices.push(vertex_0[1]);
+      //     temp_vertices.push(vertex_0[2]);
+      //     temp_vertices.push(vertex_1[0]);
+      //     temp_vertices.push(vertex_1[1]);
+      //     temp_vertices.push(vertex_1[2]);
+      //     temp_vertices.push(vertex_2[0]);
+      //     temp_vertices.push(vertex_2[1]);
+      //     temp_vertices.push(vertex_2[2]);
+
+      //   }
+      //   var geo_vertices = new Float32Array(temp_vertices);
+      //   geometry.addAttribute('position', new THREE.BufferAttribute(geo_vertices, 3));
+      //   if(geometry.getAttribute('position').count)
+      //   {
+      //     geometries.push(geometry);  
+      //   }
+
+      //   // start a new mesh
+      //   geometry = new THREE.BufferGeometry();
+      //   triangles = []
+      //   colors = []
+      //   vertices = []
+      // }
 
 
     }  //end of for loop of polygons
@@ -179,7 +212,26 @@ function csgToGeometries(initial_csg) {
     //   meshes.push(mesh)
     // }
 
-    var geo_vertices = new Float32Array(vertices);
+
+    var temp_vertices = [];
+    for(var i = 0; i < triangles.length; i++)
+    {
+      var vertex_0 = vertices[triangles[i][0]];
+      var vertex_1 = vertices[triangles[i][1]];
+      var vertex_2 = vertices[triangles[i][2]];
+
+      temp_vertices.push(vertex_0[0]);
+      temp_vertices.push(vertex_0[1]);
+      temp_vertices.push(vertex_0[2]);
+      temp_vertices.push(vertex_1[0]);
+      temp_vertices.push(vertex_1[1]);
+      temp_vertices.push(vertex_1[2]);
+      temp_vertices.push(vertex_2[0]);
+      temp_vertices.push(vertex_2[1]);
+      temp_vertices.push(vertex_2[2]);
+
+    }
+    var geo_vertices = new Float32Array(temp_vertices);
     geometry.addAttribute('position', new THREE.BufferAttribute(geo_vertices, 3));
     
     if(geometry.getAttribute('position').count)
