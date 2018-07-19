@@ -1,6 +1,5 @@
 const { CSG, CAG, isCSG, isCAG } = require('@jscad/csg')
 
-
 function colorBytes (colorRGBA) {
   var result = [colorRGBA.r, colorRGBA.g, colorRGBA.b]
   if (colorRGBA.a !== undefined) result.push(colorRGBA.a)
@@ -9,7 +8,6 @@ function colorBytes (colorRGBA) {
 
 function csgToGeometries(initial_csg) {
     var csg = initial_csg.canonicalized()
-    //var mesh = new GL.Mesh({ normals: true, colors: true })
     var geometry = new THREE.BufferGeometry();
     var geometries = [ geometry ]
 
@@ -89,6 +87,8 @@ function csgToGeometries(initial_csg) {
         }
         var geo_vertices = new Float32Array(temp_vertices);
         geometry.addAttribute('position', new THREE.BufferAttribute(geo_vertices, 3));
+        geometry.computeBoundingBox();
+        geometry.computeVertexNormals();
         if(geometry.getAttribute('position').count)
         {
           geometries.push(geometry);  
@@ -123,7 +123,8 @@ function csgToGeometries(initial_csg) {
     }
     var geo_vertices = new Float32Array(temp_vertices);
     geometry.addAttribute('position', new THREE.BufferAttribute(geo_vertices, 3));
-    
+    geometry.computeBoundingBox();
+    geometry.computeVertexNormals();
     if(geometry.getAttribute('position').count)
     {
       geometries.push(geometry);  

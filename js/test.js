@@ -1,6 +1,7 @@
 
 const {log, status} = require('./log')
 const csgToGeometries =  require('./csgToGeometries')
+const geometryToCsg = require('./geometryToCsg')
 const scadApi = require('@jscad/scad-api')
 const { CSG, CAG, isCSG, isCAG } = require('@jscad/csg')
 const {cube, sphere, cylinder} = scadApi.primitives3d
@@ -49,7 +50,7 @@ var mGeometries = [];
 var scene = null;
 
 function setCsg(){
-  var mConeWithCutouts = new jscadLogo();
+  var mConeWithCutouts = new coneWithCutouts();
 
   if(isCAG(mConeWithCutouts) || isCSG (mConeWithCutouts)) {
     if(0 && mConeWithCutouts.length){
@@ -66,17 +67,9 @@ function setCsg(){
   for(var i = 0; i < mGeometries.length; i++)
   {
     var mesh = new THREE.Mesh( mGeometries[i], material );
-
     scene.add(mesh);
   }
 
-}
-
-
-function colorBytes (colorRGBA) {
-  var result = [colorRGBA.r, colorRGBA.g, colorRGBA.b]
-  if (colorRGBA.a !== undefined) result.push(colorRGBA.a)
-  return result;
 }
 
 
@@ -121,7 +114,6 @@ function init(){
   loadModel();
   animate();
 
-
   setCsg();
 
   function animate(){
@@ -141,7 +133,11 @@ function init(){
     loader.load('../models/Polantis_Stickley_Chair_01.obj', function(object){
       object.traverse( function ( child ) {
         if ( child instanceof THREE.Mesh ) {
-          child.material = material
+          child.material = material;
+          
+          //var childCsg = geometryToCsg(child.geometry).scale(20);
+          //child.geometry = csgToGeometries(childCsg)[0];
+
         }
       });
      //object.position.y = - 95;
