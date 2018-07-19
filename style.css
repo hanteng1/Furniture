@@ -67,3 +67,18 @@ a {
 #menu {
    left: 0;
 }
+
+
+#viewerContext {
+   margin: 0px;             /* not inherited */
+   border: 0px none black;  /* not inherited */
+   padding: 0px;            /* not inherited */
+
+   /* ensure that the canvas uses the whole width and height of the document */
+   background: white;
+   height: 100%;
+   width: 100%;
+
+   top: 0px;
+   bottom: 0px;
+}
