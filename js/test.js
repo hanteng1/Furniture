@@ -2,11 +2,12 @@
 const {log, status} = require('./log')
 const csgToGeometries =  require('./csgToGeometries')
 const geometryToCsg = require('./geometryToCsg')
+const {hinge, addHinge} = require('./processor')
 const scadApi = require('@jscad/scad-api')
 const { CSG, CAG, isCSG, isCAG } = require('@jscad/csg')
 const {cube, sphere, cylinder} = scadApi.primitives3d
 const {union, difference, intersection} = scadApi.booleanOps
-const {translate} = scadApi.transformations
+const {translate, rotate} = scadApi.transformations
 
 // NOTE : all the functions below are taken from the official examples of OpenJSCAD.org
 
@@ -70,6 +71,9 @@ function setCsg(){
     scene.add(mesh);
   }
 
+  //var hingeMesh = new THREE.Mesh(hinge(), material);
+  //scene.add(hingeMesh);
+
 }
 
 
@@ -111,10 +115,13 @@ function init(){
   controls.maxDistance = 10000;
   controls.enablePan = true;
 
-  loadModel();
+    loadModelStl();
   animate();
 
-  setCsg();
+  //setCsg();
+
+  //do some opration on the object
+
 
   function animate(){
     requestAnimationFrame(animate);
@@ -127,24 +134,68 @@ function init(){
     renderer.render(scene, camera);
   }
 
-  function loadModel(){
+
+  var loadedObject = null;
+  function loadModelObj(){
     var material = new THREE.MeshLambertMaterial()
     var loader = new THREE.OBJLoader()
     loader.load('../models/Polantis_Stickley_Chair_01.obj', function(object){
-      object.traverse( function ( child ) {
+      loadedObject = object;
+      loadedObject.traverse( function ( child ) {
         if ( child instanceof THREE.Mesh ) {
           child.material = material;
           
-          //var childCsg = geometryToCsg(child.geometry).scale(20);
-          //child.geometry = csgToGeometries(childCsg)[0];
+          var childCsg = geometryToCsg(child.geometry);
+          //child.geometry = addHinge(child.geometry);
+          child.geometry = csgToGeometries(childCsg)[0];
 
         }
       });
      //object.position.y = - 95;
-    object.scale.set(0.2, 0.2, 0.2);
-    scene.add( object );
+    loadedObject.scale.set(0.2, 0.2, 0.2);
+    scene.add( loadedObject );
 
     });
+  }
+
+
+  function loadModelStl()
+  {
+    var loader = new THREE.STLLoader();
+    loader.load('../models/Ikea_Alex_Desk.stl', function(geometry) {
+      var material = new THREE.MeshPhongMaterial( { color: 0xff5533, specular: 0x111111, shininess: 200 });
+        var mesh = new THREE.Mesh(geometry, material);
+        mesh.position.set( 0, 0, 0 );
+        mesh.rotation.set( - Math.PI / 2, 0, 0 );
+        mesh.scale.set(1, 1, 1);
+        mesh.castShadow = true;
+        mesh.receiveShadow = true;
+
+        scene.add(mesh);
+
+
+        //testModel(mesh.geometry);
+
+    });
+
+  }
+
+
+  function testModel(initialGeo)
+  {
+    //to test conversion and basic operations
+    var toCsg = geometryToCsg(initialGeo).rotateX(90).rotateY(180).translate([150, 30, 0]);
+    
+    var toGeos = csgToGeometries(toCsg);
+    var material = new THREE.MeshPhongMaterial( { color: 0xff5533, specular: 0x111111, shininess: 200 });
+
+    for(var i = 0; i < toGeos.length; i++)
+    {
+      var mesh = new THREE.Mesh(toGeos[i], material);
+      scene.add(mesh);
+    }
+
+
   }
 
 

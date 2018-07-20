@@ -3,34 +3,43 @@ const getParameterDefinitions = require('@jscad/core/parameters/getParameterDefi
 const getParameterValues = require('@jscad/core/parameters/getParameterValuesFromUIControls')
 const { rebuildSolids, rebuildSolidsInWorker } = require('@jscad/core/code-evaluation/rebuildSolids')
 const { mergeSolids } = require('@jscad/core/utils/mergeSolids')
-
-function Processor(){
-	this.builder = null;
-	this.currentObjects = [];
-	this.viewedObject = null;
-
-	//state of the processor
-	//0 - initialized
-	//1 - processing
-	//2 - complete
-	//3 - incomplete
-	this.state = 0;
+const scadApi = require('@jscad/scad-api')
+const {cube, sphere, cylinder} = scadApi.primitives3d
+const {union, difference, intersection} = scadApi.booleanOps
+const {translate} = scadApi.transformations
+const csgToGeometries =  require('./csgToGeometries')
+const geometryToCsg = require('./geometryToCsg')
 
 
+function hinge()
+{
+
+	var hingeCsg = union(
+		cube({size: [30, 150, 30], center: true})
+	).translate([0, 75, 0]);
+
+	return csgToGeometries(hingeCsg)[0];
 }
 
-Processor.mergeSolids = mergeSolids;
-
-Processor.prototype = {
-
-	setCurrentObjects: function(objs) {
-		this.currentObjects = objs;
-		this.updateView;
-	}
-
-	updateView: function() {
-		//build a list of objects to view
-		
-	}
+function hinge2Csg()
+{
+	return union(
+		cube({size: [30, 150, 30], center: true})
+	).translate([0, 75, 0]);
 }
 
+function addHinge(initialGeo)
+{
+	var hingeCsg = hinge2Csg();
+
+	var addHingeCsg = difference(
+		geometryToCsg(initialGeo),
+		hingeCsg
+	);
+
+	return csgToGeometries(addHingeCsg)[0];
+}
+
+
+
+module.exports = {hinge, addHinge}

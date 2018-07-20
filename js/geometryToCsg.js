@@ -29,6 +29,11 @@ function geometryToCsg (initialGeometry){
 		polygonsArray.push(polygon);
 	}
 
+
+	//divide into parts
+	//for ease of operations
+	
+
 	return union(
 		//objects: 1
 		polyhedron({points: pointsArray, 
