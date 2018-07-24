@@ -1,7 +1,7 @@
 
 const {log, status} = require('./log')
 const csgToGeometries =  require('./csgToGeometries')
-const geometryToCsg = require('./geometryToCsg')
+const {geometryToCsgs, unionCsgs} = require('./geometryToCsgs')
 const {hinge, addHinge} = require('./processor')
 const scadApi = require('@jscad/scad-api')
 const { CSG, CAG, isCSG, isCAG } = require('@jscad/csg')
@@ -115,7 +115,7 @@ function init(){
   controls.maxDistance = 10000;
   controls.enablePan = true;
 
-    loadModelStl();
+  loadModelStl();
   animate();
 
   //setCsg();
@@ -174,18 +174,22 @@ function init(){
         scene.add(mesh);
 
 
-        //testModel(mesh.geometry);
+        testModel(mesh.geometry);
 
     });
 
   }
 
 
+  //only use csg to compute modification (e.g., union, difference, aligh)
   function testModel(initialGeo)
   {
     //to test conversion and basic operations
-    var toCsg = geometryToCsg(initialGeo).rotateX(90).rotateY(180).translate([150, 30, 0]);
-    
+    var toCsgs = geometryToCsgs(initialGeo);
+
+    log("tocsgs length " + toCsgs.length);
+
+    var toCsg = unionCsgs(toCsgs).rotateX(90).rotateY(180).translate([150, 30, 0]);
     var toGeos = csgToGeometries(toCsg);
     var material = new THREE.MeshPhongMaterial( { color: 0xff5533, specular: 0x111111, shininess: 200 });
 
@@ -196,6 +200,20 @@ function init(){
     }
 
 
+    // for(var i = 0; i < toCsgs.length; i++)
+    // {
+    //   var toCsg = toCsgs[i].rotateX(90).rotateY(180).translate([150, 30, 0]);
+    
+    //   var toGeos = csgToGeometries(toCsg);
+    //   var material = new THREE.MeshPhongMaterial( { color: 0xff5533, specular: 0x111111, shininess: 200 });
+
+    //   for(var i = 0; i < toGeos.length; i++)
+    //   {
+    //     var mesh = new THREE.Mesh(toGeos[i], material);
+    //     scene.add(mesh);
+    //   }
+    // }
+    
   }
 
 

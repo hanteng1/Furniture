@@ -8,7 +8,7 @@ const {cube, sphere, cylinder} = scadApi.primitives3d
 const {union, difference, intersection} = scadApi.booleanOps
 const {translate} = scadApi.transformations
 const csgToGeometries =  require('./csgToGeometries')
-const geometryToCsg = require('./geometryToCsg')
+const {geometryToCsgs, unionCsgs} = require('./geometryToCsgs')
 
 
 function hinge()
