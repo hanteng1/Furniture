@@ -216,6 +216,12 @@ function init(){
       }
     }
 
+
+    function testHinge(initialGeo)
+    {
+      
+    }
+
     
 
 

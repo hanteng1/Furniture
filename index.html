@@ -4,16 +4,40 @@
 		<meta charset=utf-8>
 		<title>test app</title>
 		<link rel="stylesheet" href="style.css">
+		<link rel="stylesheet" type="text/css" href="js/semantic/dist/semantic.min.css">
 	</head>
 	<body>
 
 		<div id="info">Description</div>
 
 		<div id="menu">
-
-
-
+			<div class="ui dropdown">
+				<div class="text">File</div>
+				<i class="dropdown icon"></i>
+				<div class="menu">
+					<div class="item" data-value="1">New</div>
+					<div class="item" data-value="2">
+						<span class="description">ctrl + o</span>
+						Open...
+					</div>
+					<div class="item" data-value="3">
+						<span class="description">ctrl + s</span>
+						Save as...
+					</div>
+				</div>
+			</div>
 		</div> <!--menu-->
+
+
+
+
+
+
+
+
+
+
+
 
 
 		<div id="container"></div>
@@ -21,6 +45,11 @@
 		<!-- design viewer -->
     	<!-- <div oncontextmenu="return false;" id="viewerContext"></div> --> <!-- avoiding popup when right mouse is clicked -->
 		
+		<script
+	  		src="https://code.jquery.com/jquery-3.1.1.min.js"
+	  		integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8="
+	  		crossorigin="anonymous"></script>
+	  	<script src="js/semantic/dist/semantic.min.js"></script>
 		<script src="three.js-master/build/three.js"></script>
 		<script type="text/javascript" src="three.js-master/examples/js/Detector.js"></script>
 		<script type="text/javascript" src="three.js-master/examples/js/controls/OrbitControls.js"></script>
@@ -29,6 +58,8 @@
 		<script type="text/javascript" src="three.js-master/examples/js/ParametricGeometries.js"></script>
 		<script type="text/javascript" src="three.js-master/examples/js/loaders/OBJLoader.js"></script>
 		<script type="text/javascript" src="three.js-master/examples/js/loaders/STLLoader.js"></script>
+		<script type="text/javascript" src="js/ui.js"></script>
+
 
 		<script type="x-shader/x-vertex" id="vertexShader">
 			attribute vec3 center;
@@ -52,7 +83,7 @@
 			}
 		</script>
 
-
 		<script type="text/javascript" src="js/bundle.js"></script>
+
 	</body>
 </html>

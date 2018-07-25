@@ -11,7 +11,7 @@ const csgToGeometries =  require('./csgToGeometries')
 const {geometryToCsgs, unionCsgs} = require('./geometryToCsgs')
 
 
-function hinge()
+function hinge2Geo()
 {
 
 	var hingeCsg = union(
@@ -28,9 +28,11 @@ function hinge2Csg()
 	).translate([0, 75, 0]);
 }
 
-function addHinge(initialGeo)
+function addHinge2Geo(initialGeo)
 {
 	var hingeCsg = hinge2Csg();
+
+	var toCsgs = geometryToCsgs(initialGeo);
 
 	var addHingeCsg = difference(
 		geometryToCsg(initialGeo),
@@ -42,4 +44,4 @@ function addHinge(initialGeo)
 
 
 
-module.exports = {hinge, addHinge}
+module.exports = {hinge2Geo, addHinge2Geo}
