@@ -9,7 +9,7 @@ function colorBytes (colorRGBA) {
 function csgToGeometries(initial_csg) {
     var csg = initial_csg.canonicalized()
     var geometry = new THREE.BufferGeometry();
-    var geometries = [ geometry ]
+    var geometries = [ ];
 
     var vertexTag2Index = {}
     var vertices = []

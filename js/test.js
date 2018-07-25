@@ -164,17 +164,18 @@ function init(){
     var loader = new THREE.STLLoader();
     loader.load('../models/Ikea_Alex_Desk.stl', function(geometry) {
       var material = new THREE.MeshPhongMaterial( { color: 0xff5533, specular: 0x111111, shininess: 200 });
-        var mesh = new THREE.Mesh(geometry, material);
-        mesh.position.set( 0, 0, 0 );
-        mesh.rotation.set( - Math.PI / 2, 0, 0 );
-        mesh.scale.set(1, 1, 1);
-        mesh.castShadow = true;
-        mesh.receiveShadow = true;
+      //var material = new THREE.MeshBasicMaterial( { wireframe: true } );
+      var mesh = new THREE.Mesh(geometry, material);
+      mesh.position.set( 0, 0, 0 );
+      mesh.rotation.set( - Math.PI / 2, 0, 0 );
+      mesh.scale.set(1, 1, 1);
+      mesh.castShadow = true;
+      mesh.receiveShadow = true;
 
-        scene.add(mesh);
+      scene.add(mesh);
 
 
-        testModel(mesh.geometry);
+      testModel(mesh.geometry);
 
     });
 
@@ -186,18 +187,39 @@ function init(){
   {
     //to test conversion and basic operations
     var toCsgs = geometryToCsgs(initialGeo);
+    //var toCsg = unionCsgs(toCsgs).rotateX(-90).translate([100, 0, 0]);  //.rotateX(90).rotateY(180)
 
-    log("tocsgs length " + toCsgs.length);
-
-    var toCsg = unionCsgs(toCsgs).rotateX(90).rotateY(180).translate([150, 30, 0]);
-    var toGeos = csgToGeometries(toCsg);
-    var material = new THREE.MeshPhongMaterial( { color: 0xff5533, specular: 0x111111, shininess: 200 });
-
-    for(var i = 0; i < toGeos.length; i++)
+    for(var itrc = 0; itrc < toCsgs.length; itrc++)
     {
-      var mesh = new THREE.Mesh(toGeos[i], material);
-      scene.add(mesh);
+      var toGeos = csgToGeometries(toCsgs[itrc].rotateX(-90).translate([100, 0, 0]));
+      //var material = new THREE.MeshPhongMaterial( { color: 0xff5533, specular: 0x111111, shininess: 200 });
+      var material = new THREE.MeshBasicMaterial( { wireframe: true } );
+
+      //log("togeos length " + toGeos.length);
+      for(var i = 0; i < toGeos.length; i++)
+      {
+        //var mesh = new THREE.Mesh(toGeos[i], material);
+
+        var toGeo = toGeos[i].toNonIndexed();
+        setupAttributes(toGeo);
+
+        material = new THREE.ShaderMaterial( {
+            uniforms: {},
+            vertexShader: document.getElementById( 'vertexShader' ).textContent,
+            fragmentShader: document.getElementById( 'fragmentShader' ).textContent
+        });
+
+        material.extensions.derivatives = true;
+        var mesh = new THREE.Mesh(toGeo, material);
+
+        scene.add(mesh);
+      }
     }
+
+    
+
+
+    
 
 
     // for(var i = 0; i < toCsgs.length; i++)
@@ -215,6 +237,22 @@ function init(){
     // }
     
   }
+
+
+  function setupAttributes( geometry ) {
+        // TODO: Bring back quads
+        var vectors = [
+          new THREE.Vector3( 1, 0, 0 ),
+          new THREE.Vector3( 0, 1, 0 ),
+          new THREE.Vector3( 0, 0, 1 )
+        ];
+        var position = geometry.attributes.position;
+        var centers = new Float32Array( position.count * 3 );
+        for ( var i = 0, l = position.count; i < l; i ++ ) {
+          vectors[ i % 3 ].toArray( centers, i * 3 );
+        }
+        geometry.addAttribute( 'center', new THREE.BufferAttribute( centers, 3 ) );
+    }
 
 
   function onWindowResize() {

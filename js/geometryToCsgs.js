@@ -64,7 +64,8 @@ function geometryToCsgs (initialGeometry){
 }
 
 function unionCsgs(csgs) {
-	return union(csgs[2]);//union(csgs);
+	//computationally inefficient, be careful to use
+	return union(csgs);
 }
 
 
