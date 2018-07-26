@@ -18,12 +18,15 @@ function Main()
 	this.materials = {};
 	this.selected = null;
 	this.helpers = {};
-	this.sceneHelpers = new THREE.Scene();
+	//this.sceneHelpers = new THREE.Scene();
 	this.stats = new Stats();
 	this.camera = new THREE.PerspectiveCamera (45, window.innerWidth / window.innerHeight, 1, 10000);
 	this.renderer = new THREE.WebGLRenderer( { antialias: true } );
 	this.control = null;
 
+	this.transformControls = null;
+	this.box = new THREE.Box3();
+	this.selectionBox = new THREE.BoxHelper();
 	// function loadModelObj(objFilePath)
 	// {
 
@@ -115,6 +118,16 @@ Main.prototype = {
 		this.controls.maxDistance = 10000;
 		this.controls.enablePan = true;
 
+
+		this.transformControls = new THREE.TransformControls(this.camera, this.renderer.domElement);
+		this.transformControls.addEventListener('change', this.render.bind(this));
+		this.scene.add(this.transformControls);
+
+		this.selectionBox.material.depthTest = false;
+		this.selectionBox.material.transparent = true;
+		this.selectionBox.visible = false;
+		this.scene.add( this.selectionBox );
+
 		this.animate();
 	},
 
@@ -147,14 +160,13 @@ Main.prototype = {
 			if ( child.geometry !== undefined ) scope.addGeometry( child.geometry );
 			if ( child.material !== undefined ) scope.addMaterial( child.material );
 
-			scope.addHelper( child );
+			scope.addHelper( child ); //to visualize helpers
 
 		} );
 
 		this.scene.add( object );
 
-		//this.signals.objectAdded.dispatch( object );
-		//this.signals.sceneGraphChanged.dispatch();
+		this.select(object);
 
 	},
 
@@ -215,10 +227,10 @@ Main.prototype = {
 			picker.userData.object = object;
 			helper.add( picker );
 
-			this.sceneHelpers.add( helper );
+			this.scene.add( helper );
 			this.helpers[ object.id ] = helper;
 
-			this.signals.helperAdded.dispatch( helper );
+			//this.signals.helperAdded.dispatch( helper );
 
 		};
 
@@ -233,10 +245,46 @@ Main.prototype = {
 
 			delete this.helpers[ object.id ];
 
-			this.signals.helperRemoved.dispatch( helper );
+			//this.signals.helperRemoved.dispatch( helper );
 
 		}
 
+	},
+
+	select: function(object){
+		//var scope = this;
+
+		if(this.selected == object) return;
+		var uuid = null;
+
+		if(object !== null) {
+			uuid = object.uuid;
+		}
+
+		this.selected = object;
+		this.addTransformControl(this.selected);
+
+	},
+
+	addTransformControl: function(object){
+		this.selectionBox.visible = false;
+		this.transformControls.detach();
+
+		if ( object !== null && object !== this.scene && object !== this.camera ) {
+
+			this.box.setFromObject( object );
+
+			if ( this.box.isEmpty() === false ) {
+
+				this.selectionBox.setFromObject( object );
+				this.selectionBox.visible = true;
+
+			}
+
+			this.transformControls.attach( object );
+
+
+		}
 	}
 
 };
