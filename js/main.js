@@ -12,6 +12,7 @@ const {translate, rotate} = scadApi.transformations
 function Main()
 {
 	//only stores data
+	this.container = document.getElementById('container');
 	this.scene = new THREE.Scene();
 	this.scene.background = new THREE.Color(0xf0f0f0);
 	this.geometries = {};
@@ -24,9 +25,21 @@ function Main()
 	this.renderer = new THREE.WebGLRenderer( { antialias: true } );
 	this.control = null;
 
+	//obj transform controller
 	this.transformControls = null;
 	this.box = new THREE.Box3();
 	this.selectionBox = new THREE.BoxHelper();
+
+	//mouse pick
+	this.raycaster = new THREE.Raycaster();
+	this.mouse = new THREE.Vector2();
+	this.onDownPosition = new THREE.Vector2();
+	this.onUpPosition = new THREE.Vector2();
+	this.onDoubleClickPosition = new THREE.Vector2();
+
+	this.objects = [];
+
+
 	// function loadModelObj(objFilePath)
 	// {
 
@@ -89,8 +102,6 @@ Main.prototype = {
 		if(!Detector.webgl)
 			Detector.addGetWebGLMessage();
 
-		var container = document.getElementById('container');
-
 		this.camera.position.set(250, 400, 650);
 		this.camera.lookAt(new THREE.Vector3());
 
@@ -107,10 +118,16 @@ Main.prototype = {
 		
 		this.renderer.setPixelRatio( window.devicePixelRatio );
 		this.renderer.setSize( window.innerWidth, window.innerHeight );
-		container.appendChild( this.renderer.domElement );
+		this.container.appendChild( this.renderer.domElement );
 
-		//container.appendChild( this.stats.dom )
+		//this.container.appendChild( this.stats.dom )
 		window.addEventListener( 'resize', this.onWindowResize.bind(this), false );
+
+		//mouse events
+		this.container.addEventListener('mousedown', this.onMouseDown.bind(this), false);
+		this.container.addEventListener('touchstart', this.onTouchStart.bind(this), false);		
+		this.container.addEventListener('dblclick', this.onDoubleClick.bind(this), false);
+
 
 		this.controls = new THREE.OrbitControls( this.camera, this.renderer.domElement );
 		this.controls.addEventListener( 'change', this.render.bind(this) );
@@ -160,12 +177,13 @@ Main.prototype = {
 			if ( child.geometry !== undefined ) scope.addGeometry( child.geometry );
 			if ( child.material !== undefined ) scope.addMaterial( child.material );
 
+			scope.objects.push(child);
+
 			scope.addHelper( child ); //to visualize helpers
 
 		} );
 
 		this.scene.add( object );
-
 		this.select(object);
 
 	},
@@ -283,6 +301,92 @@ Main.prototype = {
 
 			this.transformControls.attach( object );
 
+
+		}
+	},
+
+	//mouse events
+	getIntersects: function(point, objects) {
+		this.mouse.set( ( point.x * 2 ) - 1, - ( point.y * 2 ) + 1 );
+		this.raycaster.setFromCamera( this.mouse, this.camera );
+		return this.raycaster.intersectObjects( objects );
+	},
+
+	getMousePosition: function(dom, x, y)
+	{
+		var rect = dom.getBoundingClientRect();
+		return [ ( x - rect.left ) / rect.width, ( y - rect.top ) / rect.height ];
+	},
+
+
+	handleClick: function()
+	{
+		if ( this.onDownPosition.distanceTo( this.onUpPosition ) === 0 ) {
+			var intersects = this.getIntersects( this.onUpPosition, this.objects );
+
+			if ( intersects.length > 0 ) {
+
+				var object = intersects[ 0 ].object;
+
+				if ( object.userData.object !== undefined ) {
+					this.select( object.userData.object );
+				} else {
+					this.select( object );
+				}
+			} else {
+				this.select( null );
+			}
+		}
+	},
+
+	onMouseDown: function(event) {
+		event.preventDefault();
+		var array = this.getMousePosition( this.container, event.clientX, event.clientY );
+		this.onDownPosition.fromArray( array );
+		document.addEventListener( 'mouseup', this.onMouseUp.bind(this), false );
+	},
+
+
+	onMouseUp: function(event) {
+		var array = this.getMousePosition( this.container, event.clientX, event.clientY );
+		this.onUpPosition.fromArray( array );
+
+		this.handleClick();
+
+		document.removeEventListener( 'mouseup', this.onMouseUp.bind(this), false );
+	},
+
+	onTouchStart: function(event) {
+		var touch = event.changedTouches[ 0 ];
+
+		var array = this.getMousePosition( this.container, touch.clientX, touch.clientY );
+		this.onDownPosition.fromArray( array );
+
+		document.addEventListener( 'touchend', this.onTouchEnd.bind(this), false );
+	},
+
+	onTouchEnd: function(event) {
+		var touch = event.changedTouches[ 0 ];
+
+		var array = this.getMousePosition( this.container, touch.clientX, touch.clientY );
+		this.onUpPosition.fromArray( array );
+
+		this.handleClick();
+
+		document.removeEventListener( 'touchend', this.onTouchEnd.bind(this), false );
+	},
+
+	onDoubleClick: function(event) {
+		var array = this.getMousePosition( this.container, event.clientX, event.clientY );
+		this.onDoubleClickPosition.fromArray( array );
+
+		var intersects = this.getIntersects( this.onDoubleClickPosition, this.objects );
+
+		if ( intersects.length > 0 ) {
+
+			var intersect = intersects[ 0 ];
+
+			//focused
 
 		}
 	}
