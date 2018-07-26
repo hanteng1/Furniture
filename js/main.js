@@ -9,78 +9,20 @@ const {union, difference, intersection} = scadApi.booleanOps
 const {translate, rotate} = scadApi.transformations
 
 
-function main()
+function Main()
 {
-	var scene;
-	var geometries = {};
-	var materials = {};
-	var selected = null;
-	var helpers = {};
-
-	init();
-
-	function init()
-	{
-		let a = 1;
-		if(!Detector.webgl)
-			Detector.addGetWebGLMessage();
-
-		var container = document.getElementById('container');
-
-		var camera = new THREE.PerspectiveCamera (45, window.innerWidth / window.innerHeight, 1, 10000);
-		camera.position.set(250, 400, 650);
-		camera.lookAt(new THREE.Vector3());
-
-		scene = new THREE.Scene();
-		scene.background = new THREE.Color(0xf0f0f0);
-
-		var ambientLight = new THREE.AmbientLight( 0xccccc, 0.4);
-		scene.add(ambientLight);
-
-		var pointLight = new THREE.PointLight(0xffffff, 0.8);
-		camera.add(pointLight);
-		scene.add(camera);
-
-		var gridHelper = new THREE.GridHelper( 1000, 20 ) ;//size, divisions
-		scene.add( gridHelper );
-
-		var renderer = new THREE.WebGLRenderer( { antialias: true } );
-		renderer.setPixelRatio( window.devicePixelRatio );
-		renderer.setSize( window.innerWidth, window.innerHeight );
-		container.appendChild( renderer.domElement );
-
-		var stats = new Stats();
-		//container.appendChild( stats.dom )
-		window.addEventListener( 'resize', onWindowResize, false );
-
-		var controls = new THREE.OrbitControls( camera, renderer.domElement );
-		controls.addEventListener( 'change', render );
-		controls.minDistance = 1;
-		controls.maxDistance = 10000;
-		controls.enablePan = true;
-
-		animate();
-
-		function animate()
-		{
-			requestAnimationFrame(animate);
-			render();
-			stats.update();
-		}
-
-		function render()
-		{
-			renderer.render(scene, camera);
-		}
-
-		function onWindowResize()
-		{
-			camera.aspect = window.innerWidth / window.innerHeight;
-			camera.updateProjectionMatrix();
-			renderer.setSize( window.innerWidth, window.innerHeight );
-		}
-
-	}
+	//only stores data
+	this.scene = new THREE.Scene();
+	this.scene.background = new THREE.Color(0xf0f0f0);
+	this.geometries = {};
+	this.materials = {};
+	this.selected = null;
+	this.helpers = {};
+	this.sceneHelpers = new THREE.Scene();
+	this.stats = new Stats();
+	this.camera = new THREE.PerspectiveCamera (45, window.innerWidth / window.innerHeight, 1, 10000);
+	this.renderer = new THREE.WebGLRenderer( { antialias: true } );
+	this.control = null;
 
 	// function loadModelObj(objFilePath)
 	// {
@@ -115,50 +57,197 @@ function main()
 	// }
 
 
-	function setupAttributes(geometry)
-	{
-		//todo: bring back quads
-		var vectors = [
-			new THREE.Vector3(1, 0, 0),
-			new THREE.Vector3(0, 1, 0),
-			new THREE.Vector3(0, 0, 1)
-		];
+	// function setupAttributes(geometry)
+	// {
+	// 	//todo: bring back quads
+	// 	var vectors = [
+	// 		new THREE.Vector3(1, 0, 0),
+	// 		new THREE.Vector3(0, 1, 0),
+	// 		new THREE.Vector3(0, 0, 1)
+	// 	];
 
-		var position = geometry.attributes.position;
-		var centers = new Float32Array( position.count * 3 );
-		for ( var i = 0, l = position.count; i < l; i ++ ) {
-			vectors[ i % 3 ].toArray( centers, i * 3 );
-		}
-		geometry.addAttribute( 'center', new THREE.BufferAttribute( centers, 3 ) );
-	}
+	// 	var position = geometry.attributes.position;
+	// 	var centers = new Float32Array( position.count * 3 );
+	// 	for ( var i = 0, l = position.count; i < l; i ++ ) {
+	// 		vectors[ i % 3 ].toArray( centers, i * 3 );
+	// 	}
+	// 	geometry.addAttribute( 'center', new THREE.BufferAttribute( centers, 3 ) );
+	// }
 
 
-	function addObject(object) {
-		object.traverse(function(child){
-			if(child.geometry !== undefined) addGeometry(child.geometry);
-			if(child.material !== undefined) addMaterial(child.material);
-
-			addHelper(child);
-		});
-
-		scene.add(object);
-	}
-
-	function addGeometry(geometry)
-	{
-		geometries[geometry.uuid] = geometry;
-	}
-
-	function addMaterial(material)
-	{
-		materials[material.uuid] = material;
-	}	
 }
+
+Main.prototype = {
+
+	init: function(){
+		var scope = this;
+
+		let a = 1;
+		if(!Detector.webgl)
+			Detector.addGetWebGLMessage();
+
+		var container = document.getElementById('container');
+
+		this.camera.position.set(250, 400, 650);
+		this.camera.lookAt(new THREE.Vector3());
+
+		var ambientLight = new THREE.AmbientLight( 0xccccc, 0.4);
+		this.scene.add(ambientLight);
+
+		var pointLight = new THREE.PointLight(0xffffff, 0.8);
+		this.camera.add(pointLight);
+		this.scene.add(this.camera);
+
+		var gridHelper = new THREE.GridHelper( 1000, 20 ) ;//size, divisions
+		this.scene.add( gridHelper );
+
+		
+		this.renderer.setPixelRatio( window.devicePixelRatio );
+		this.renderer.setSize( window.innerWidth, window.innerHeight );
+		container.appendChild( this.renderer.domElement );
+
+		//container.appendChild( this.stats.dom )
+		window.addEventListener( 'resize', this.onWindowResize.bind(this), false );
+
+		this.controls = new THREE.OrbitControls( this.camera, this.renderer.domElement );
+		this.controls.addEventListener( 'change', this.render.bind(this) );
+		this.controls.minDistance = 1;
+		this.controls.maxDistance = 10000;
+		this.controls.enablePan = true;
+
+		this.animate();
+	},
+
+	animate: function()
+	{
+		requestAnimationFrame(this.animate.bind(this));
+		this.render();
+		this.stats.update();
+	},
+
+	render: function()
+	{
+		this.renderer.render(this.scene, this.camera);
+	},
+
+	onWindowResize: function()
+	{
+		this.camera.aspect = window.innerWidth / window.innerHeight;
+		this.camera.updateProjectionMatrix();
+		this.renderer.setSize( window.innerWidth, window.innerHeight );
+	},
+
+
+	addObject: function ( object ) {
+
+		var scope = this;
+
+		object.traverse( function ( child ) {
+
+			if ( child.geometry !== undefined ) scope.addGeometry( child.geometry );
+			if ( child.material !== undefined ) scope.addMaterial( child.material );
+
+			scope.addHelper( child );
+
+		} );
+
+		this.scene.add( object );
+
+		//this.signals.objectAdded.dispatch( object );
+		//this.signals.sceneGraphChanged.dispatch();
+
+	},
+
+	addGeometry: function ( geometry ) {
+
+		this.geometries[ geometry.uuid ] = geometry;
+	},
+
+	addMaterial: function ( material ) {
+
+		this.materials[ material.uuid ] = material;
+
+	},
+
+
+	addHelper: function () {
+
+		var geometry = new THREE.SphereBufferGeometry( 2, 4, 2 );
+		var material = new THREE.MeshBasicMaterial( { color: 0xff0000, visible: false } );
+
+		return function ( object ) {
+
+			var helper;
+
+			if ( object instanceof THREE.Camera ) {
+
+				helper = new THREE.CameraHelper( object, 1 );
+
+			} else if ( object instanceof THREE.PointLight ) {
+
+				helper = new THREE.PointLightHelper( object, 1 );
+
+			} else if ( object instanceof THREE.DirectionalLight ) {
+
+				helper = new THREE.DirectionalLightHelper( object, 1 );
+
+			} else if ( object instanceof THREE.SpotLight ) {
+
+				helper = new THREE.SpotLightHelper( object, 1 );
+
+			} else if ( object instanceof THREE.HemisphereLight ) {
+
+				helper = new THREE.HemisphereLightHelper( object, 1 );
+
+			} else if ( object instanceof THREE.SkinnedMesh ) {
+
+				helper = new THREE.SkeletonHelper( object );
+
+			} else {
+
+				// no helper for this object type
+				return;
+
+			}
+
+			var picker = new THREE.Mesh( geometry, material );
+			picker.name = 'picker';
+			picker.userData.object = object;
+			helper.add( picker );
+
+			this.sceneHelpers.add( helper );
+			this.helpers[ object.id ] = helper;
+
+			this.signals.helperAdded.dispatch( helper );
+
+		};
+
+	}(),
+
+	removeHelper: function ( object ) {
+
+		if ( this.helpers[ object.id ] !== undefined ) {
+
+			var helper = this.helpers[ object.id ];
+			helper.parent.remove( helper );
+
+			delete this.helpers[ object.id ];
+
+			this.signals.helperRemoved.dispatch( helper );
+
+		}
+
+	}
+
+};
 
 
 document.addEventListener('DOMContentLoaded', function(event){
-	var _main = new main();
-	var _ui = new ui(_main);
+	let main = new Main();
+	main.init();
+	let ui = new Ui(main);
+	ui.init();
+	
 })
 
 
