@@ -85,6 +85,23 @@ Ui.prototype = {
 				reader.readAsText( file );
 
 			break;
+
+
+			case 'dae':
+
+				reader.addEventListener( 'load', function ( event ) {
+
+					var contents = event.target.result;
+
+					var loader = new THREE.ColladaLoader();
+					var collada = loader.parse( contents );
+
+					collada.scene.name = filename;
+					scope.main.addObject(collada.scene ); 
+
+				}, false );
+				reader.readAsText( file );
+			break;
 		}
 	}
 

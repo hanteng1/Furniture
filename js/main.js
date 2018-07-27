@@ -36,9 +36,13 @@ function Main()
 	this.onDownPosition = new THREE.Vector2();
 	this.onUpPosition = new THREE.Vector2();
 	this.onDoubleClickPosition = new THREE.Vector2();
+	this.onCtrlE = false;
 
+	//store pieces of mesh
 	this.objects = [];
 
+	//for explode vectors
+	this.explodeVectors = [];
 
 	// function loadModelObj(objFilePath)
 	// {
@@ -128,6 +132,9 @@ Main.prototype = {
 		this.container.addEventListener('touchstart', this.onTouchStart.bind(this), false);		
 		this.container.addEventListener('dblclick', this.onDoubleClick.bind(this), false);
 
+		//keyboard events
+		document.addEventListener('keydown', this.onKeyDown.bind(this), false);
+
 
 		this.controls = new THREE.OrbitControls( this.camera, this.renderer.domElement );
 		this.controls.addEventListener( 'change', this.render.bind(this) );
@@ -167,20 +174,21 @@ Main.prototype = {
 		this.renderer.setSize( window.innerWidth, window.innerHeight );
 	},
 
-
 	addObject: function ( object ) {
 
 		var scope = this;
 
+		var ccc = 0;
 		object.traverse( function ( child ) {
 
-			if ( child.geometry !== undefined ) scope.addGeometry( child.geometry );
+			if ( child.geometry !== undefined ) {
+				scope.addGeometry( child.geometry );
+				
+				scope.objects.push(child);
+				scope.addHelper( child ); //to visualize helpers
+			}
+
 			if ( child.material !== undefined ) scope.addMaterial( child.material );
-
-			scope.objects.push(child);
-
-			scope.addHelper( child ); //to visualize helpers
-
 		} );
 
 		this.scene.add( object );
@@ -301,7 +309,61 @@ Main.prototype = {
 
 			this.transformControls.attach( object );
 
+		}
+	},
 
+	getCenterPoint: function(mesh){
+		var geometry = mesh.geometry;
+		geometry.computeBoundingBox();
+		var center = geometry.boundingBox.getCenter();
+		mesh.localToWorld(center);
+		return center;
+	},
+
+	explode: function(objects){
+		//compute the furniture's center
+		//log(objects.length);
+
+		var objCenter = new THREE.Vector3();
+
+		for(var itro = 0; itro < objects.length; itro++)
+		{
+			var elmCenter = this.getCenterPoint(objects[itro]);
+			//console.log(center);
+			objCenter.add(elmCenter);
+		}
+		objCenter.divideScalar(objects.length);
+		
+		this.explodeVectors = [];
+		for(var i = 0; i < objects.length; i++)
+		{
+			var elmCenter = this.getCenterPoint(objects[i]);
+			
+			var subVector = new THREE.Vector3();
+			subVector.subVectors(elmCenter, objCenter);
+			subVector.multiplyScalar(15);
+			this.explodeVectors.push(subVector.clone());
+
+			objects[i].translateX(subVector.x);
+			objects[i].translateY(subVector.y);
+			objects[i].translateZ(subVector.z);
+
+		}
+		
+	},
+
+	collapse: function(objects){
+
+		if(this.explodeVectors.length != objects.length)
+			return;
+
+		for(var i = 0; i < objects.length; i++)
+		{
+			var subVector = this.explodeVectors[i];
+			subVector.negate();
+			objects[i].translateX(subVector.x);
+			objects[i].translateY(subVector.y);
+			objects[i].translateZ(subVector.z);
 		}
 	},
 
@@ -389,6 +451,32 @@ Main.prototype = {
 			//focused
 
 		}
+	},
+
+	onKeyDown: function(event) {
+		var keyCode = event.which;
+		if(event.ctrlKey && keyCode == 69 && this.onCtrlE == false){
+			this.onCtrlE = true;
+
+			//enable explosion sview
+			this.explode(this.objects);
+			
+		}
+
+		document.addEventListener( 'keyup', this.onKeyUp.bind(this), false );
+	},
+
+	onKeyUp: function(event) {
+
+		if(this.onCtrlE == true)
+		{
+			this.onCtrlE = false;
+
+			//disable explosion view 
+			this.collapse(this.objects);
+		}
+
+		document.removeEventListener( 'keyup', this.onKeyUp.bind(this), false );
 	}
 
 };
