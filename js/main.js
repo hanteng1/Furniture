@@ -43,8 +43,8 @@ function Main()
 
 	//for explode vectors
 	this.explodeVectors = [];
+	this.selectedIndices = [];
 	this.objCenter = new THREE.Vector3();
-
 	//for multi selection
 	this.selectionBoxes = [];
 
@@ -341,6 +341,15 @@ Main.prototype = {
 				this.selectionBoxes.push(selectionBox);
 				this.scene.add( selectionBox );
 
+				var selectedIndex = this.objects.indexOf(object);
+				this.selectedIndices.push(selectedIndex);
+
+
+				if(this.selectionBoxes.length > 1)
+				{
+					$('.ui.compact.vertical.labeled.icon.menu').show();
+				}
+
 			}
 		}
 	},
@@ -380,6 +389,7 @@ Main.prototype = {
 		this.objCenter.divideScalar(objects.length);
 		
 		this.explodeVectors = [];
+		this.selectedIndices = [];
 		for(var i = 0; i < objects.length; i++)
 		{
 			var elmCenter = this.getCenterPoint(objects[i]);
@@ -413,41 +423,41 @@ Main.prototype = {
 		this.explodeVectors = [];
 	},
 
-	mergeObjs: function(objects, explodeVectors, indices){
-		if(objects.length != explodeVectors.length)
+	mergeObjs: function(){
+		if(this.objects.length != this.explodeVectors.length)
 			return;
 
-		if(indices.length == 0)
+		if(this.selectedIndices.length == 0)
 			return;
 
 		//get the selected obj back to orignal positions
-		for(var i = 0; i < indices.length; i++)
+		for(var i = 0; i < this.selectedIndices.length; i++)
 		{
-			var objIndex = indices[i];
-			var subVector = explodeVectors[objIndex];
+			var objIndex = this.selectedIndices[i];
+			var subVector = this.explodeVectors[objIndex];
 			subVector.negate();
-			objects[objIndex].translateX(subVector.x);
-			objects[objIndex].translateY(subVector.y);
-			objects[objIndex].translateZ(subVector.z);
+			this.objects[objIndex].translateX(subVector.x);
+			this.objects[objIndex].translateY(subVector.y);
+			this.objects[objIndex].translateZ(subVector.z);
 		}
 
 		//merge the selected objs into a single obj
 		var geometry = new THREE.BufferGeometry();
-		for(var i = 0; i < indices.length; i++)
+		for(var i = 0; i < this.selectedIndices.length; i++)
 		{
-			var objIndex = indices[i];
-			geometry.merge(objects[objIndex].geometry, 0);
+			var objIndex = this.selectedIndices[i];
+			geometry.merge(this.objects[objIndex].geometry, 0);
 		}
 		var material = new THREE.MeshPhongMaterial( { color: 0xff5533, specular: 0x111111, shininess: 200 });
 		var mergedObj = new THREE.Mesh(geometry, material);
 
 		//delete old ones and add new ones
-		indices.sort(function(a, b){ return b - a;});
-		for(var i = 0; i < indices.length; i++)
+		this.selectedIndices.sort(function(a, b){ return b - a;});
+		for(var i = 0; i < this.selectedIndices.length; i++)
 		{
-			var objIndex = indices[i];
-			objects.splice(objIndex,1);
-			explodeVectors.splice(objIndex,1);
+			var objIndex = this.selectedIndices[i];
+			this.objects.splice(objIndex,1);
+			this.explodeVectors.splice(objIndex,1);
 		}
 
 		//delete from scene
@@ -456,13 +466,13 @@ Main.prototype = {
 		var n_subVector = new THREE.Vector3();
 		n_subVector.subVectors(n_elmCenter, this.objCenter);
 		n_subVector.multiplyScalar(15);
-		explodeVectors.push(n_subVector.clone());
+		this.explodeVectors.push(n_subVector.clone());
 
 		mergedObj.translateX(n_subVector.x);
 		mergedObj.translateY(n_subVector.y);
 		mergedObj.translateZ(n_subVector.z);
 
-		objects.push(mergedObj);
+		this.objects.push(mergedObj);
 		this.scene.add(mergedObj);
 
 	},
@@ -555,7 +565,8 @@ Main.prototype = {
 
 	onKeyDown: function(event) {
 		var keyCode = event.which;
-		if(event.ctrlKey && keyCode == 69 && this.onCtrlE == false){
+		//event.ctrlKey && 
+		if(keyCode == 69 && this.onCtrlE == false){  
 			this.onCtrlE = true;
 
 			//enable explosion sview
@@ -582,6 +593,11 @@ Main.prototype = {
 					this.removeFromScene(this.selectionBoxes[i]);
 				}
 			}
+
+			this.selectionBoxes = [];
+			this.selectedIndices = [];
+
+			$('.ui.compact.vertical.labeled.icon.menu').hide();
 
 		}
 

@@ -34,6 +34,14 @@ Ui.prototype = {
 				}
 			}
 		});
+
+		$('.ui.compact.vertical.labeled.icon.menu').hide();
+
+		$( ".item.m_group" ).click(function() {
+			//group function
+			scope.main.mergeObjs();
+		});
+
 	},
 
 	fileLoader: function(){

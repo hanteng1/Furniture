@@ -22,7 +22,7 @@ canvas {
 	cursor: move;
 }
 
-#info {
+#minfo {
 	position: absolute;
 	padding: 10px;
 	top: 10px;
@@ -36,14 +36,14 @@ a {
 	color: #ff0000;
 }
 
-#menu, #menu nav a {
+#mmenu, #mmenu nav a {
    transition: all 0.4s;
    -o-transition: all 0.4s;
    -moz-transition: all 0.4s;
    -webkit-transition: all 0.4s;
 }
 
-#menu {
+#mmenu {
    background: white;
 
    opacity: 0.8;
@@ -64,10 +64,9 @@ a {
    -webkit-box-shadow: 4px 0 10px rgba(0,0,0,0.25);
 }
 
-#menu {
+#mmenu {
    left: 0;
 }
-
 
 #viewerContext {
    margin: 0px;             /* not inherited */
@@ -82,3 +81,28 @@ a {
    top: 0px;
    bottom: 0px;
 }
+
+
+.ui.compact.vertical.labeled.icon.menu {
+  position: absolute;
+  opacity: 0.8;
+  -moz-opacity: 0.8;
+  left:350px;
+  top: 200px;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

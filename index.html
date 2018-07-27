@@ -3,14 +3,14 @@
 	<head>
 		<meta charset=utf-8>
 		<title>test app</title>
-		<link rel="stylesheet" href="style.css">
 		<link rel="stylesheet" type="text/css" href="js/semantic/dist/semantic.min.css">
+		<link rel="stylesheet" href="style.css">
 	</head>
 	<body>
 
-		<div id="info">Description</div>
+		<div id="minfo">Description</div>
 
-		<div id="menu">
+		<div id="mmenu">
 			<div class="ui dropdown">
 				<div class="text">File</div>
 				<i class="dropdown icon"></i>
@@ -26,14 +26,26 @@
 					</div>
 				</div>
 			</div>
-		</div> <!--menu-->
 
 
+		</div> <!--side menu-->
 
 
-
-
-
+		<!--for group and ungroup operation-->
+		<div class="ui compact vertical labeled icon menu">
+				<a class="item m_group">
+					<i class="object group icon"></i>
+					Group
+				</a>
+				<a class="item">
+					<i class="object ungroup icon"></i>
+					Ungroup
+				</a>
+				<a class="item">
+					<i class="edit icon"></i>
+					Edit
+				</a>
+		</div>
 
 
 
