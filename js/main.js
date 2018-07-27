@@ -39,6 +39,7 @@ function Main()
 	this.onCtrlE = false;
 
 	//store pieces of mesh
+	this.furniture = new THREE.Group();
 	this.objects = [];
 
 	//for explode vectors
@@ -196,8 +197,13 @@ Main.prototype = {
 			if ( child.material !== undefined ) scope.addMaterial( child.material );
 		} );
 
-		this.scene.add( object );
-		this.select(object);
+
+		for(var i = 0; i < this.objects.length; i++)
+		{
+			this.furniture.add(this.objects[i]);
+		}
+		this.scene.add( this.furniture );
+		this.select( this.furniture);
 
 	},
 
@@ -366,11 +372,26 @@ Main.prototype = {
 	},
 
 
-	getCenterPoint: function(mesh){
-		var geometry = mesh.geometry;
-		geometry.computeBoundingBox();
-		var center = geometry.boundingBox.getCenter();
-		mesh.localToWorld(center);
+	// getCenterPoint: function(mesh){
+	// 	var geometry = mesh.geometry;
+	// 	geometry.computeBoundingBox();
+	// 	var center = new THREE.Vector3();
+	// 	geometry.boundingBox.getCenter(center);
+	// 	mesh.localToWorld(center);
+	// 	return center;
+	// },
+
+	getCenterPoint: function(object){
+		var box = new THREE.Box3();
+		box.setFromObject(object);
+		var center = new THREE.Vector3();
+		if(box.isEmpty() === false)
+		{
+			box.getCenter(center);
+		}else{
+			console.log("error on getting center point");
+		}
+
 		return center;
 	},
 
@@ -396,7 +417,7 @@ Main.prototype = {
 			
 			var subVector = new THREE.Vector3();
 			subVector.subVectors(elmCenter, this.objCenter);
-			subVector.multiplyScalar(15);
+			subVector.multiplyScalar(2);
 			this.explodeVectors.push(subVector.clone());
 
 			objects[i].translateX(subVector.x);
@@ -441,17 +462,52 @@ Main.prototype = {
 			this.objects[objIndex].translateZ(subVector.z);
 		}
 
+		//delete the selected boxes from scene
+		for(var i = 0; i < this.selectionBoxes.length; i++)
+		{
+			this.removeFromScene(this.selectionBoxes[i]);
+		}
+		this.selectionBoxes = [];
+
+		console.log("deleted selected boxes")
+
 		//merge the selected objs into a single obj
-		var geometry = new THREE.BufferGeometry();
+		//this is a dangerous action
+
+
+		// var geometry = new THREE.BufferGeometry();
+		// for(var i = 0; i < this.selectedIndices.length; i++)
+		// {
+		// 	var objIndex = this.selectedIndices[i];
+		// 	geometry.merge(this.objects[objIndex].geometry, 0);
+		// }
+		// var material = new THREE.MeshPhongMaterial( { color: 0xff5533, specular: 0x111111, shininess: 200 });
+		// var mergedObj = new THREE.Mesh(geometry, material);
+
+		// console.log("merge the geometires")
+
+		var groupObj = new THREE.Group();
 		for(var i = 0; i < this.selectedIndices.length; i++)
 		{
 			var objIndex = this.selectedIndices[i];
-			geometry.merge(this.objects[objIndex].geometry, 0);
+			groupObj.add(this.objects[objIndex]);
 		}
-		var material = new THREE.MeshPhongMaterial( { color: 0xff5533, specular: 0x111111, shininess: 200 });
-		var mergedObj = new THREE.Mesh(geometry, material);
 
-		//delete old ones and add new ones
+		//delete from scene first
+
+		//this.removeFromScene(this.furniture);
+
+		// for(var i = 0; i < this.selectedIndices.length; i++)
+		// {
+		// 	var objIndex = this.selectedIndices[i];
+		// 	this.furniture.remove(this.objects[objIndex]);
+		// }
+
+		//remove from the furniture as the child
+
+
+
+		// //delete old ones from the obj and vector arrays
 		this.selectedIndices.sort(function(a, b){ return b - a;});
 		for(var i = 0; i < this.selectedIndices.length; i++)
 		{
@@ -460,20 +516,24 @@ Main.prototype = {
 			this.explodeVectors.splice(objIndex,1);
 		}
 
-		//delete from scene
+		// console.log("deleted from array")
 
-		var n_elmCenter = this.getCenterPoint(mergedObj);
+
+		//add the new one to the array
+		var n_elmCenter = this.getCenterPoint(groupObj);
 		var n_subVector = new THREE.Vector3();
 		n_subVector.subVectors(n_elmCenter, this.objCenter);
-		n_subVector.multiplyScalar(15);
+		n_subVector.multiplyScalar(2);
 		this.explodeVectors.push(n_subVector.clone());
 
-		mergedObj.translateX(n_subVector.x);
-		mergedObj.translateY(n_subVector.y);
-		mergedObj.translateZ(n_subVector.z);
+		groupObj.translateX(n_subVector.x);
+		groupObj.translateY(n_subVector.y);
+		groupObj.translateZ(n_subVector.z);
 
-		this.objects.push(mergedObj);
-		this.scene.add(mergedObj);
+		// console.log("translated merged obj")
+
+		this.objects.push(groupObj);
+		this.scene.add(groupObj);
 
 	},
 
