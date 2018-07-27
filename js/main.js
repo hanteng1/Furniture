@@ -43,6 +43,11 @@ function Main()
 
 	//for explode vectors
 	this.explodeVectors = [];
+	this.objCenter = new THREE.Vector3();
+
+	//for multi selection
+	this.selectionBoxes = [];
+
 
 	// function loadModelObj(objFilePath)
 	// {
@@ -288,7 +293,16 @@ Main.prototype = {
 		}
 
 		this.selected = object;
-		this.addTransformControl(this.selected);
+
+		if(this.onCtrlE == false)
+		{
+			//single select
+			this.addTransformControl(this.selected);
+		}else{
+			//multi select for merge
+			this.addMultiSelection(this.selected);
+		}
+		
 
 	},
 
@@ -312,6 +326,37 @@ Main.prototype = {
 		}
 	},
 
+	addMultiSelection: function(object){
+		this.transformControls.detach();
+		
+		if ( object !== null && object !== this.scene && object !== this.camera ) {
+			this.box.setFromObject( object );
+			if ( this.box.isEmpty() === false ) {
+				var selectionBox = new THREE.BoxHelper();
+				selectionBox.setFromObject( object );
+				selectionBox.material.depthTest = false;
+				selectionBox.material.transparent = true;
+				selectionBox.visible = true;
+
+				this.selectionBoxes.push(selectionBox);
+				this.scene.add( selectionBox );
+
+			}
+		}
+	},
+
+
+	removeFromScene: function(object){
+		this.scene.remove(object);
+		
+		if(object.geometry !== undefined)
+			object.geometry.dispose();
+		if(object.material !== undefined)
+			object.material.dispose();
+		object = undefined;
+	},
+
+
 	getCenterPoint: function(mesh){
 		var geometry = mesh.geometry;
 		geometry.computeBoundingBox();
@@ -324,15 +369,15 @@ Main.prototype = {
 		//compute the furniture's center
 		//log(objects.length);
 
-		var objCenter = new THREE.Vector3();
+		this.objCenter = new THREE.Vector3();
 
 		for(var itro = 0; itro < objects.length; itro++)
 		{
 			var elmCenter = this.getCenterPoint(objects[itro]);
 			//console.log(center);
-			objCenter.add(elmCenter);
+			this.objCenter.add(elmCenter);
 		}
-		objCenter.divideScalar(objects.length);
+		this.objCenter.divideScalar(objects.length);
 		
 		this.explodeVectors = [];
 		for(var i = 0; i < objects.length; i++)
@@ -340,7 +385,7 @@ Main.prototype = {
 			var elmCenter = this.getCenterPoint(objects[i]);
 			
 			var subVector = new THREE.Vector3();
-			subVector.subVectors(elmCenter, objCenter);
+			subVector.subVectors(elmCenter, this.objCenter);
 			subVector.multiplyScalar(15);
 			this.explodeVectors.push(subVector.clone());
 
@@ -365,6 +410,61 @@ Main.prototype = {
 			objects[i].translateY(subVector.y);
 			objects[i].translateZ(subVector.z);
 		}
+		this.explodeVectors = [];
+	},
+
+	mergeObjs: function(objects, explodeVectors, indices){
+		if(objects.length != explodeVectors.length)
+			return;
+
+		if(indices.length == 0)
+			return;
+
+		//get the selected obj back to orignal positions
+		for(var i = 0; i < indices.length; i++)
+		{
+			var objIndex = indices[i];
+			var subVector = explodeVectors[objIndex];
+			subVector.negate();
+			objects[objIndex].translateX(subVector.x);
+			objects[objIndex].translateY(subVector.y);
+			objects[objIndex].translateZ(subVector.z);
+		}
+
+		//merge the selected objs into a single obj
+		var geometry = new THREE.BufferGeometry();
+		for(var i = 0; i < indices.length; i++)
+		{
+			var objIndex = indices[i];
+			geometry.merge(objects[objIndex].geometry, 0);
+		}
+		var material = new THREE.MeshPhongMaterial( { color: 0xff5533, specular: 0x111111, shininess: 200 });
+		var mergedObj = new THREE.Mesh(geometry, material);
+
+		//delete old ones and add new ones
+		indices.sort(function(a, b){ return b - a;});
+		for(var i = 0; i < indices.length; i++)
+		{
+			var objIndex = indices[i];
+			objects.splice(objIndex,1);
+			explodeVectors.splice(objIndex,1);
+		}
+
+		//delete from scene
+
+		var n_elmCenter = this.getCenterPoint(mergedObj);
+		var n_subVector = new THREE.Vector3();
+		n_subVector.subVectors(n_elmCenter, this.objCenter);
+		n_subVector.multiplyScalar(15);
+		explodeVectors.push(n_subVector.clone());
+
+		mergedObj.translateX(n_subVector.x);
+		mergedObj.translateY(n_subVector.y);
+		mergedObj.translateZ(n_subVector.z);
+
+		objects.push(mergedObj);
+		this.scene.add(mergedObj);
+
 	},
 
 	//mouse events
@@ -474,6 +574,15 @@ Main.prototype = {
 
 			//disable explosion view 
 			this.collapse(this.objects);
+
+			if(this.selectionBoxes.length > 0)
+			{
+				for(var i = 0; i < this.selectionBoxes.length; i++)
+				{
+					this.removeFromScene(this.selectionBoxes[i]);
+				}
+			}
+
 		}
 
 		document.removeEventListener( 'keyup', this.onKeyUp.bind(this), false );
