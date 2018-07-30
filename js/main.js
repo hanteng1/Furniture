@@ -46,8 +46,8 @@ function Main()
 
 	//store pieces of mesh
 	//set to current selected furniture
-	this.furniture = new THREE.Group();
-	this.objects = [];
+	this.furniture = null;
+	//this.objects = [];
 
 	//for explode vectors
 	this.explodeVectors = [];
@@ -211,17 +211,19 @@ Main.prototype = {
 		// {
 		// 	this.furniture.add(this.objects[i]);
 		// }
-		// this.scene.add( this.furniture );
+		// this.scene.add( this.furniture );s
 		// this.select( this.furniture );
 
-		//add this to array and visualize it
+		//add this to array and visualize its
 		var furnitureObj = new THREE.Group();
 		for(var i = 0; i < objects.length; i++){
 			furnitureObj.add(objects[i]);
 		}
 
 		let furniture = new Furniture(furnitureObj);
+		furniture.setObjects(objects);
 		furniture.setCategory("straight_chair");
+		furniture.setIndex(this.furnitures.length + 1);
 		this.furnitures.push(furniture);
 
 		this.scene.add(this.furnitures[this.furnitures.length - 1].getFurniture());
@@ -425,25 +427,16 @@ Main.prototype = {
 		return center;
 	},
 
-	explode: function(objects){
+	explode: function(furniture){
 		//compute the furniture's center
-		//log(objects.length);
-
 		this.objCenter = new THREE.Vector3();
-
-		// for(var itro = 0; itro < objects.length; itro++)
-		// {
-		// 	var elmCenter = this.getCenterPoint(objects[itro]);
-		// 	//console.log(center);
-		// 	this.objCenter.add(elmCenter);
-		// }
-		// this.objCenter.divideScalar(objects.length);
-		this.objCenter = this.getCenterPoint(this.furniture);
+		this.objCenter = this.getCenterPoint(furniture.getFurniture());
 		console.log("whole: ");
 		console.log(this.objCenter);
 		
 		this.explodeVectors = [];
 		this.selectedIndices = [];
+		var objects = furniture.getObjects();
 		for(var i = 0; i < objects.length; i++)  //objects.length
 		{
 			var elmCenter = this.getCenterPoint(objects[i]);
@@ -467,15 +460,14 @@ Main.prototype = {
 				console.log("part after: ");
 				console.log(elmCenter);
 			}
-			
-
 
 		}
 		
 	},
 
-	collapse: function(objects){
+	collapse: function(furniture){
 
+		var objects = furniture.getObjects();
 		if(this.explodeVectors.length != objects.length)
 			return;
 
@@ -554,6 +546,12 @@ Main.prototype = {
 		return this.raycaster.intersectObjects( objects );
 	},
 
+	getIntersect: function(point, object) {
+		this.mouse.set( ( point.x * 2 ) - 1, - ( point.y * 2 ) + 1 );
+		this.raycaster.setFromCamera( this.mouse, this.camera );
+		return this.raycaster.intersectObject( object, true);
+	},
+
 	getMousePosition: function(dom, x, y)
 	{
 		var rect = dom.getBoundingClientRect();
@@ -564,20 +562,41 @@ Main.prototype = {
 	handleClick: function()
 	{
 		if ( this.onDownPosition.distanceTo( this.onUpPosition ) === 0 ) {
-			var intersects = this.getIntersects( this.onUpPosition, this.objects );
 
-			if ( intersects.length > 0 ) {
+			if(this.onCtrlE == false) {
+				//only select the furniture
+				for(var i = 0; i < this.furnitures.length; i++) {
+					var intersects = this.getIntersect( this.onUpPosition, this.furnitures[i].getFurniture());
 
-				var object = intersects[ 0 ].object;
+					//console.log(intersects.length);
 
-				if ( object.userData.object !== undefined ) {
-					this.select( object.userData.object );
-				} else {
-					this.select( object );
+					if ( intersects.length > 0 ) {
+
+						this.furniture = this.furnitures[i];
+						this.select(this.furniture.getFurniture());
+
+					} else {
+						//it also calls select, to detach
+						this.select( null );
+						this.furniture = null;
+					}
 				}
-			} else {
-				//it also calls select, to detach
-				this.select( null );
+			}else{
+				//select from explode objects, this.furniture should not be null
+				var intersects = this.getIntersects( this.onUpPosition, this.furniture.getObjects());
+				if ( intersects.length > 0 ) {
+
+					var object = intersects[ 0 ].object;
+
+					if ( object.userData.object !== undefined ) {
+						this.select( object.userData.object );
+					} else {
+						this.select( object );
+					}
+				} else {
+					//it also calls select, to detach
+					this.select( null );
+				}
 			}
 		}
 	},
@@ -620,27 +639,27 @@ Main.prototype = {
 	},
 
 	onDoubleClick: function(event) {
-		var array = this.getMousePosition( this.container, event.clientX, event.clientY );
-		this.onDoubleClickPosition.fromArray( array );
+		// var array = this.getMousePosition( this.container, event.clientX, event.clientY );
+		// this.onDoubleClickPosition.fromArray( array );
 
-		var intersects = this.getIntersects( this.onDoubleClickPosition, this.objects );
+		// var intersects = this.getIntersects( this.onDoubleClickPosition, this.objects );
 
-		if ( intersects.length > 0 ) {
+		// if ( intersects.length > 0 ) {
 
-			var intersect = intersects[ 0 ];
+		// 	var intersect = intersects[ 0 ];
 
-			//focused
+		// 	//focused
 
-		}
+		// }
 	},
 
 	onKeyDown: function(event) {
 		var keyCode = event.which;
 		//event.ctrlKey && 
-		if(keyCode == 69 && this.onCtrlE == false){  
+		if(keyCode == 69 && this.onCtrlE == false && this.furniture != undefined){  
 			this.onCtrlE = true;
 			//enable explosion sview
-			this.explode(this.objects);
+			this.explode(this.furniture);
 			
 		}else if(keyCode == 87) {
 
@@ -660,30 +679,32 @@ Main.prototype = {
 
 			}
 
-		}else if(keyCode == 37){
-			//left
-			this.furniture.translateX(-10);
-		}else if(keyCode == 39) {
-			//right
-			this.furniture.translateX(10);
-		}else if(keyCode == 38) {
-			//ups
-			this.furniture.translateY(10);
-		}else if(keyCode == 40) {
-			//down
-			this.furniture.translateY(-10);
-		}else if(keyCode == 77) {
-			//m
-			var quaternion = new THREE.Quaternion();
-			quaternion.setFromAxisAngle( new THREE.Vector3( 1, 0, 0 ), Math.PI / 2 );
-			//this.furniture.matrix.makeRotationFromQuaternion(quaternion);
-			//this.furniture.matrix.setPosition(start_position);
-			//this.furniture.matrixAutoUpdate = false;
-
-			this.furniture.quaternion.copy(quaternion);
-
-
 		}
+
+		// else if(keyCode == 37){
+		// 	//left
+		// 	this.furniture.translateX(-10);
+		// }else if(keyCode == 39) {
+		// 	//right
+		// 	this.furniture.translateX(10);
+		// }else if(keyCode == 38) {
+		// 	//ups
+		// 	this.furniture.translateY(10);
+		// }else if(keyCode == 40) {
+		// 	//down
+		// 	this.furniture.translateY(-10);
+		// }else if(keyCode == 77) {
+		// 	//m
+		// 	var quaternion = new THREE.Quaternion();
+		// 	quaternion.setFromAxisAngle( new THREE.Vector3( 1, 0, 0 ), Math.PI / 2 );
+		// 	//this.furniture.matrix.makeRotationFromQuaternion(quaternion);
+		// 	//this.furniture.matrix.setPosition(start_position);
+		// 	//this.furniture.matrixAutoUpdate = false;
+
+		// 	this.furniture.quaternion.copy(quaternion);
+
+
+		// }
 
 		document.addEventListener( 'keyup', this.onKeyUp.bind(this), false );
 	},
@@ -695,7 +716,7 @@ Main.prototype = {
 			this.onCtrlE = false;
 
 			//disable explosion view 
-			this.collapse(this.objects);
+			this.collapse(this.furniture);
 
 			if(this.selectionBoxes.length > 0)
 			{
