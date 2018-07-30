@@ -1,3 +1,5 @@
+"use strict;"
+
 const {log, status} = require('./log')
 const csgToGeometries = require('./csgToGeometries')
 const {geometryToCsgs, unionCsgs} = require('./geometryToCsgs')
@@ -38,7 +40,12 @@ function Main()
 	this.onDoubleClickPosition = new THREE.Vector2();
 	this.onCtrlE = false;
 
+	//store the furniture object and transformation info
+	//arrays of Furniture
+	this.furnitures = [];  
+
 	//store pieces of mesh
+	//set to current selected furniture
 	this.furniture = new THREE.Group();
 	this.objects = [];
 
@@ -180,30 +187,47 @@ Main.prototype = {
 		this.renderer.setSize( window.innerWidth, window.innerHeight );
 	},
 
+	//function to load model into the scene
 	addObject: function ( object ) {
 
 		var scope = this;
 
-		var ccc = 0;
+		var objects = [];
 		object.traverse( function ( child ) {
 
 			if ( child.geometry !== undefined ) {
-				scope.addGeometry( child.geometry );
+				//scope.addGeometry( child.geometry );
 				
-				scope.objects.push(child);
-				scope.addHelper( child ); //to visualize helpers
+				//scope.objects.push(child);
+				objects.push(child);
+				//scope.addHelper( child ); //to visualize helpers
 			}
 
-			if ( child.material !== undefined ) scope.addMaterial( child.material );
+			//if ( child.material !== undefined ) scope.addMaterial( child.material );
 		} );
 
 
-		for(var i = 0; i < this.objects.length; i++)
-		{
-			this.furniture.add(this.objects[i]);
+		// for(var i = 0; i < this.objects.length; i++)
+		// {
+		// 	this.furniture.add(this.objects[i]);
+		// }
+		// this.scene.add( this.furniture );
+		// this.select( this.furniture );
+
+		//add this to array and visualize it
+		var furnitureObj = new THREE.Group();
+		for(var i = 0; i < objects.length; i++){
+			furnitureObj.add(objects[i]);
 		}
-		this.scene.add( this.furniture );
-		this.select( this.furniture);
+
+		let furniture = new Furniture(furnitureObj);
+		furniture.setCategory("straight_chair");
+		this.furnitures.push(furniture);
+
+		this.scene.add(this.furnitures[this.furnitures.length - 1].getFurniture());
+
+		//update the menu interface
+		furniture.addCard();
 
 	},
 
@@ -251,6 +275,10 @@ Main.prototype = {
 			} else if ( object instanceof THREE.SkinnedMesh ) {
 
 				helper = new THREE.SkeletonHelper( object );
+
+			} else if( object instanceof THREE.Object3D) {
+
+				helper = new THREE.AxesHelper(20);
 
 			} else {
 
@@ -308,6 +336,8 @@ Main.prototype = {
 			//multi select for merge
 			this.addMultiSelection(this.selected);
 		}
+
+
 		
 
 	},
@@ -401,19 +431,26 @@ Main.prototype = {
 
 		this.objCenter = new THREE.Vector3();
 
-		for(var itro = 0; itro < objects.length; itro++)
-		{
-			var elmCenter = this.getCenterPoint(objects[itro]);
-			//console.log(center);
-			this.objCenter.add(elmCenter);
-		}
-		this.objCenter.divideScalar(objects.length);
+		// for(var itro = 0; itro < objects.length; itro++)
+		// {
+		// 	var elmCenter = this.getCenterPoint(objects[itro]);
+		// 	//console.log(center);
+		// 	this.objCenter.add(elmCenter);
+		// }
+		// this.objCenter.divideScalar(objects.length);
+		this.objCenter = this.getCenterPoint(this.furniture);
+		console.log("whole: ");
+		console.log(this.objCenter);
 		
 		this.explodeVectors = [];
 		this.selectedIndices = [];
-		for(var i = 0; i < objects.length; i++)
+		for(var i = 0; i < objects.length; i++)  //objects.length
 		{
 			var elmCenter = this.getCenterPoint(objects[i]);
+			if(i == 0){
+				console.log("part before: ");
+				console.log(elmCenter);
+			}
 			
 			var subVector = new THREE.Vector3();
 			subVector.subVectors(elmCenter, this.objCenter);
@@ -423,6 +460,15 @@ Main.prototype = {
 			objects[i].translateX(subVector.x);
 			objects[i].translateY(subVector.y);
 			objects[i].translateZ(subVector.z);
+
+			if(i == 0){
+				console.log("part moving: x " + subVector.x + " y " + subVector.y + " z " + subVector.z);
+				elmCenter = this.getCenterPoint(objects[i]);
+				console.log("part after: ");
+				console.log(elmCenter);
+			}
+			
+
 
 		}
 		
@@ -469,43 +515,12 @@ Main.prototype = {
 		}
 		this.selectionBoxes = [];
 
-		console.log("deleted selected boxes")
-
-		//merge the selected objs into a single obj
-		//this is a dangerous action
-
-
-		// var geometry = new THREE.BufferGeometry();
-		// for(var i = 0; i < this.selectedIndices.length; i++)
-		// {
-		// 	var objIndex = this.selectedIndices[i];
-		// 	geometry.merge(this.objects[objIndex].geometry, 0);
-		// }
-		// var material = new THREE.MeshPhongMaterial( { color: 0xff5533, specular: 0x111111, shininess: 200 });
-		// var mergedObj = new THREE.Mesh(geometry, material);
-
-		// console.log("merge the geometires")
-
 		var groupObj = new THREE.Group();
 		for(var i = 0; i < this.selectedIndices.length; i++)
 		{
 			var objIndex = this.selectedIndices[i];
 			groupObj.add(this.objects[objIndex]);
 		}
-
-		//delete from scene first
-
-		//this.removeFromScene(this.furniture);
-
-		// for(var i = 0; i < this.selectedIndices.length; i++)
-		// {
-		// 	var objIndex = this.selectedIndices[i];
-		// 	this.furniture.remove(this.objects[objIndex]);
-		// }
-
-		//remove from the furniture as the child
-
-
 
 		// //delete old ones from the obj and vector arrays
 		this.selectedIndices.sort(function(a, b){ return b - a;});
@@ -515,9 +530,6 @@ Main.prototype = {
 			this.objects.splice(objIndex,1);
 			this.explodeVectors.splice(objIndex,1);
 		}
-
-		// console.log("deleted from array")
-
 
 		//add the new one to the array
 		var n_elmCenter = this.getCenterPoint(groupObj);
@@ -529,8 +541,6 @@ Main.prototype = {
 		groupObj.translateX(n_subVector.x);
 		groupObj.translateY(n_subVector.y);
 		groupObj.translateZ(n_subVector.z);
-
-		// console.log("translated merged obj")
 
 		this.objects.push(groupObj);
 		this.scene.add(groupObj);
@@ -566,6 +576,7 @@ Main.prototype = {
 					this.select( object );
 				}
 			} else {
+				//it also calls select, to detach
 				this.select( null );
 			}
 		}
@@ -628,10 +639,50 @@ Main.prototype = {
 		//event.ctrlKey && 
 		if(keyCode == 69 && this.onCtrlE == false){  
 			this.onCtrlE = true;
-
 			//enable explosion sview
 			this.explode(this.objects);
 			
+		}else if(keyCode == 87) {
+
+			if(this.transformControls.visible == true)
+			{
+				//w to change mode
+				var ctrlMode = this.transformControls.getMode();
+
+				if(ctrlMode == "translate"){
+					this.transformControls.setMode("rotate");
+				}else if(ctrlMode == "rotate"){
+					this.transformControls.setMode("translate");
+				}
+			}else{
+				//w to switch on
+				this.select(this.furniture);
+
+			}
+
+		}else if(keyCode == 37){
+			//left
+			this.furniture.translateX(-10);
+		}else if(keyCode == 39) {
+			//right
+			this.furniture.translateX(10);
+		}else if(keyCode == 38) {
+			//ups
+			this.furniture.translateY(10);
+		}else if(keyCode == 40) {
+			//down
+			this.furniture.translateY(-10);
+		}else if(keyCode == 77) {
+			//m
+			var quaternion = new THREE.Quaternion();
+			quaternion.setFromAxisAngle( new THREE.Vector3( 1, 0, 0 ), Math.PI / 2 );
+			//this.furniture.matrix.makeRotationFromQuaternion(quaternion);
+			//this.furniture.matrix.setPosition(start_position);
+			//this.furniture.matrixAutoUpdate = false;
+
+			this.furniture.quaternion.copy(quaternion);
+
+
 		}
 
 		document.addEventListener( 'keyup', this.onKeyUp.bind(this), false );
