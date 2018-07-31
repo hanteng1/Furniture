@@ -18,19 +18,33 @@ Ui.prototype = {
 		$('.ui.dropdown').dropdown({
 			action: 'hide',
 			onChange: function(value, text, $selectedItem) {
-				switch(parseInt(value))
+				switch(value)
 				{
-					case 1:
+					//file menu commnads
+					case "f_1":
 						//new
 						break;
-					case 2:
+					case "f_2":
 						//open
 						scope.fileLoader();
 						break;
-					case 3:
+					case "f_3":
 						//save
 						break;
-
+					//label menu commands
+					case  "l_1":
+						//back
+						scope.assignLabel("back");
+						break;
+					case "l_2":
+						//seat
+						scope.assignLabel("seat");
+						break;
+					case "l_3":
+						//stand
+						scope.assignLabel("stand");
+						break;
+					
 				}
 			}
 		});
@@ -41,7 +55,6 @@ Ui.prototype = {
 			//group function
 			scope.main.mergeObjs();
 		});
-
 
 	},
 
@@ -112,6 +125,12 @@ Ui.prototype = {
 				reader.readAsText( file );
 			break;
 		}
+	},
+
+	assignLabel: function(label){
+		
+		this.main.assignLabel(label);
+
 	}
 
 }

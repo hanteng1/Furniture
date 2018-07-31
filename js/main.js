@@ -365,6 +365,8 @@ Main.prototype = {
 
 			this.transformControls.attach( object );
 
+		}else {
+			this.selected = null;
 		}
 	},
 
@@ -407,7 +409,7 @@ Main.prototype = {
 
 				var selectedId = object.id; //this.furniture.getObjects().indexOf(object);
 				this.selectedIds.push(selectedId);
-
+				this.selected = object;
 
 				if(this.selectionBoxes.length > 0)
 				{
@@ -415,6 +417,8 @@ Main.prototype = {
 				}
 
 			}
+		}else {
+			this.selected = null;
 		}
 	},
 
@@ -585,7 +589,26 @@ Main.prototype = {
 		// console.log(this.furniture.getFurniture().children.length)
 		// //this.scene.add(groupObj);
 
+		//make the current selection of the new groupObj
+		this.selectedIds = [];
+		this.addMultiSelection(groupObj);
+
 	},
+
+
+
+	//label a selected part
+	assignLabel: function(label) {
+		//there has to be a seected object
+		if(this.selected == null || this.selected == undefined) return;
+
+		//set the selected to the label
+		this.selected.name = label;
+
+		//console.log(this.selected.name);
+		this.furniture.addComponentLabel(label);
+	},
+
 
 	//mouse events
 	getIntersects: function(point, objects) {

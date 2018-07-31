@@ -13,6 +13,8 @@ function Furniture(furniture) {
 	this.direction = new THREE.Vector3();
 
 
+	this.componentLabels = document.createElement('div');
+
 	// this.setObjects = function(objects) {
 	// 	this.objects = objects;
 	// }
@@ -77,10 +79,46 @@ function Furniture(furniture) {
 		detailDiv.appendChild(direction);
 
 		//add components
+		var componentDiv = document.createElement("div");
+		componentDiv.className = 'content';
+		componentDiv.classList.add("extra");
+		card.appendChild(componentDiv);
 
+		var componentMeta = document.createElement("div");
+		componentMeta.className = 'meta';
+		componentMeta.innerHTML = 'Components';
+		componentDiv.appendChild(componentMeta);
+
+		
+		this.componentLabels.className = 'ui';
+		this.componentLabels.classList.add('very');
+		this.componentLabels.classList.add('relaxed');
+		this.componentLabels.classList.add('horizontal');
+		this.componentLabels.classList.add('list');
+		componentDiv.appendChild(this.componentLabels);
+
+	}
+
+
+	this.addComponentLabel = function(label) {
+		var itemLabel = document.createElement("div");
+		itemLabel.className = "item";
+		var itemImg = document.createElement("img");
+		itemImg.className = "ui";
+		itemImg.classList.add("avatar");
+		itemImg.classList.add("image");
+		itemImg.src = "/images/avatar/small/daniel.jpg";
+		itemLabel.appendChild(itemImg);
+		var itemContent = document.createElement("div");
+		itemContent.className = "content";
+		itemContent.innerHTML = label;
+		itemLabel.appendChild(itemContent);
+
+		this.componentLabels.appendChild(itemLabel);
 
 
 	}
+
 
 	this.updatePosition = function() {
 
