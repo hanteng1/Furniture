@@ -591,7 +591,7 @@ Main.prototype = {
 	getIntersects: function(point, objects) {
 		this.mouse.set( ( point.x * 2 ) - 1, - ( point.y * 2 ) + 1 );
 		this.raycaster.setFromCamera( this.mouse, this.camera );
-		return this.raycaster.intersectObjects( objects );
+		return this.raycaster.intersectObjects( objects, true );
 	},
 
 	getIntersect: function(point, object) {
@@ -632,9 +632,14 @@ Main.prototype = {
 			}else{
 				//select from explode objects, this.furniture should not be null
 				var intersects = this.getIntersects( this.onUpPosition, this.furniture.getObjects());
+
 				if ( intersects.length > 0 ) {
 
 					var object = intersects[ 0 ].object;
+
+					if(object.parent != this.furniture.getFurniture()){
+						object = object.parent;
+					}
 
 					if ( object.userData.object !== undefined ) {
 						this.select( object.userData.object );
@@ -707,28 +712,29 @@ Main.prototype = {
 		if(keyCode == 69 && this.onCtrlE == false && this.furniture != undefined){  
 			this.onCtrlE = true;
 			//enable explosion sview
-			this.explode(this.furniture);
+			if(this.furniture  != null )
+				this.explode(this.furniture);
 			
 		}else if(keyCode == 87) {
 
-			if(this.transformControls.visible == true)
-			{
-				//w to change mode
-				var ctrlMode = this.transformControls.getMode();
+			// if(this.transformControls.visible == true)
+			// {
+			// 	//w to change mode
+			// 	var ctrlMode = this.transformControls.getMode();
 
-				if(ctrlMode == "translate"){
-					this.transformControls.setMode("rotate");
-				}else if(ctrlMode == "rotate"){
-					this.transformControls.setMode("translate");
-				}
-			}else{
-				//w to switch on
-				this.select(this.furniture);
+			// 	if(ctrlMode == "translate"){
+			// 		this.transformControls.setMode("rotate");
+			// 	}else if(ctrlMode == "rotate"){
+			// 		this.transformControls.setMode("translate");
+			// 	}
+			// }else{
+			// 	//w to switch on
+			// 	this.select(this.furniture);
 
-			}
+			// }
 
 		}else if(keyCode == 37) {
-			addAxis(this.furniture, this.scene);
+			//addAxis(this.furniture, this.scene);
 		}
 
 
@@ -768,7 +774,8 @@ Main.prototype = {
 			this.onCtrlE = false;
 
 			//disable explosion view 
-			this.collapse(this.furniture);
+			if(this.furniture  != null )
+				this.collapse(this.furniture);
 
 			if(this.selectionBoxes.length > 0)
 			{
@@ -779,7 +786,8 @@ Main.prototype = {
 			}
 
 			this.selectionBoxes = [];
-			this.selectedIndices = [];
+			this.selectedIds = [];
+			this.furniture = null;
 
 			$('.ui.compact.vertical.labeled.icon.menu').hide();
 
