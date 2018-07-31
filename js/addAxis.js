@@ -163,6 +163,7 @@ var Gizmo = function () {
 
 Gizmo.prototype = Object.create( THREE.Object3D.prototype );
 Gizmo.prototype.constructor = Gizmo;
+
 Gizmo.prototype.update = function ( rotation, eye ) {
 
 	var vec1 = new THREE.Vector3( 0, 0, 0 );
@@ -252,7 +253,7 @@ var AddAxis = function(camera, domElement) {
 	this.visible = false;
 	this.translationSnap = null;
 	this.rotationSnap = null;
-	this.space = "world";
+	this.space = "local";
 	this.size = 1;
 	this.axis = null;
 
@@ -380,8 +381,6 @@ var AddAxis = function(camera, domElement) {
 
 		_mode = mode ? mode : _mode;
 
-		if ( _mode === "scale" ) scope.space = "local";
-
 		for ( var type in _gizmo ) _gizmo[ type ].visible = ( type === _mode );
 
 		this.update();
@@ -401,10 +400,16 @@ var AddAxis = function(camera, domElement) {
 		camPosition.setFromMatrixPosition( camera.matrixWorld );
 		camRotation.setFromRotationMatrix( tempMatrix.extractRotation( camera.matrixWorld ) );
 
+		//these are to set the positions and scale
 		scale = worldPosition.distanceTo( camPosition ) / 6 * scope.size;
 		this.position.copy( worldPosition );
 		this.scale.set( scale, scale, scale );
 
+		console.log(worldPosition);
+		console.log(worldRotation);
+		console.log(scale);
+
+		//these are to set the initial rotations
 		if ( camera instanceof THREE.PerspectiveCamera ) {
 
 			eye.copy( camPosition ).sub( worldPosition ).normalize();
@@ -416,11 +421,11 @@ var AddAxis = function(camera, domElement) {
 		}
 
 		if ( scope.space === "local" ) {
-
+			//alighed to the object
 			_gizmo[ _mode ].update( worldRotation, eye );
 
 		} else if ( scope.space === "world" ) {
-
+			//aligned to the world
 			_gizmo[ _mode ].update( new THREE.Euler(), eye );
 
 		}
@@ -455,6 +460,20 @@ var AddAxis = function(camera, domElement) {
 			scope.dispatchEvent( changeEvent );
 
 		}
+
+	}
+
+	function intersectObjects( pointer, objects ) {
+
+		var rect = domElement.getBoundingClientRect();
+		var x = ( pointer.clientX - rect.left ) / rect.width;
+		var y = ( pointer.clientY - rect.top ) / rect.height;
+
+		pointerVector.set( ( x * 2 ) - 1, - ( y * 2 ) + 1 );
+		ray.setFromCamera( pointerVector, camera );
+
+		var intersections = ray.intersectObjects( objects, true );
+		return intersections[ 0 ] ? intersections[ 0 ] : false;
 
 	}
 

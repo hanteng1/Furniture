@@ -2,7 +2,7 @@
 function Furniture(furniture) {
 	
 	this.furniture = furniture; //a group type
-	this.objects = []; //a array type of the components
+	//this.objects = []; //a array type of the components
 	this.category = null;
 	this.index = null;
 	//world positon transformation info
@@ -13,12 +13,12 @@ function Furniture(furniture) {
 	this.direction = new THREE.Vector3();
 
 
-	this.setObjects = function(objects) {
-		this.objects = objects;
-	}
+	// this.setObjects = function(objects) {
+	// 	this.objects = objects;
+	// }
 
 	this.getObjects = function() {
-		return this.objects;
+		return this.furniture.children;
 	}
 
 	this.setCategory = function(category) {
@@ -91,6 +91,6 @@ function Furniture(furniture) {
 	}
 
 	//indicate the object axes
-	
+
 
 }

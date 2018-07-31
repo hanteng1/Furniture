@@ -1,16 +1,14 @@
 "use strict;"
 
-const {log, status} = require('./log')
-const csgToGeometries = require('./csgToGeometries')
-const {geometryToCsgs, unionCsgs} = require('./geometryToCsgs')
-const {hinge, addHinge} = require('./processor')
-const scadApi = require('@jscad/scad-api')
-const { CSG, CAG, isCSG, isCAG } = require('@jscad/csg')
-const {cube, sphere, cylinder} = scadApi.primitives3d
-const {union, difference, intersection} = scadApi.booleanOps
+//const {log, status} = require('./log')
+//const csgToGeometries = require('./csgToGeometries')
+//const {geometryToCsgs, unionCsgs} = require('./geometryToCsgs')
+//const {hinge, addHinge} = require('./processor')
+//const scadApi = require('@jscad/scad-api')
+//const { CSG, CAG, isCSG, isCAG } = require('@jscad/csg')
+//const {cube, sphere, cylinder} = scadApi.primitives3d
+//const {union, difference, intersection} = scadApi.booleanOps
 //const {translate, rotate} = scadApi.transformations
-//const addAxis = require('./addAxis')
-
 
 function Main()
 {
@@ -55,7 +53,7 @@ function Main()
 
 	//for explode vectors
 	this.explodeVectors = [];
-	this.selectedIndices = [];
+	this.selectedIds = [];
 	this.objCenter = new THREE.Vector3();
 	//for multi selection
 	this.selectionBoxes = [];
@@ -229,7 +227,7 @@ Main.prototype = {
 		}
 
 		let furniture = new Furniture(furnitureObj);
-		furniture.setObjects(objects);
+		//furniture.setObjects(objects);
 		furniture.setCategory("straight_chair");
 		furniture.setIndex(this.furnitures.length + 1);
 		this.furnitures.push(furniture);
@@ -341,15 +339,12 @@ Main.prototype = {
 		if(this.onCtrlE == false)
 		{
 			//single select
-			//this.addTransformControl(this.selected);
-			this.addNormalAxis(this.selected);
+			this.addTransformControl(this.selected);
+			//this.addNormalAxis(this.selected);
 		}else{
 			//multi select for merge
 			this.addMultiSelection(this.selected);
-		}
-
-
-		
+		}		
 
 	},
 
@@ -393,7 +388,9 @@ Main.prototype = {
 		}
 	},
 
+	//selection when exploded, to define group relationship among pieces
 	addMultiSelection: function(object){
+		this.selectionBox.visible = false;
 		this.transformControls.detach();
 		
 		if ( object !== null && object !== this.scene && object !== this.camera ) {
@@ -408,11 +405,11 @@ Main.prototype = {
 				this.selectionBoxes.push(selectionBox);
 				this.scene.add( selectionBox );
 
-				var selectedIndex = this.objects.indexOf(object);
-				this.selectedIndices.push(selectedIndex);
+				var selectedId = object.id; //this.furniture.getObjects().indexOf(object);
+				this.selectedIds.push(selectedId);
 
 
-				if(this.selectionBoxes.length > 1)
+				if(this.selectionBoxes.length > 0)
 				{
 					$('.ui.compact.vertical.labeled.icon.menu').show();
 				}
@@ -457,22 +454,24 @@ Main.prototype = {
 	},
 
 	explode: function(furniture){
+		this.select(null);
+
 		//compute the furniture's center
 		this.objCenter = new THREE.Vector3();
 		this.objCenter = this.getCenterPoint(furniture.getFurniture());
-		console.log("whole: ");
+		//console.log("whole: ");
 		console.log(this.objCenter);
 		
 		this.explodeVectors = [];
-		this.selectedIndices = [];
-		var objects = furniture.getObjects();
+		this.selectedIds = [];
+		var objects = furniture.getObjects(); //get the children objs
 		for(var i = 0; i < objects.length; i++)  //objects.length
 		{
 			var elmCenter = this.getCenterPoint(objects[i]);
-			if(i == 0){
-				console.log("part before: ");
-				console.log(elmCenter);
-			}
+			// if(i == 0){
+			// 	console.log("part before: ");
+			// 	console.log(elmCenter);
+			// }
 			
 			var subVector = new THREE.Vector3();
 			subVector.subVectors(elmCenter, this.objCenter);
@@ -483,12 +482,12 @@ Main.prototype = {
 			objects[i].translateY(subVector.y);
 			objects[i].translateZ(subVector.z);
 
-			if(i == 0){
-				console.log("part moving: x " + subVector.x + " y " + subVector.y + " z " + subVector.z);
-				elmCenter = this.getCenterPoint(objects[i]);
-				console.log("part after: ");
-				console.log(elmCenter);
-			}
+			// if(i == 0){
+			// 	console.log("part moving: x " + subVector.x + " y " + subVector.y + " z " + subVector.z);
+			// 	elmCenter = this.getCenterPoint(objects[i]);
+			// 	console.log("part after: ");
+			// 	console.log(elmCenter);
+			// }
 
 		}
 		
@@ -511,22 +510,32 @@ Main.prototype = {
 		this.explodeVectors = [];
 	},
 
+	//this is actually apply a group to the objects
 	mergeObjs: function(){
-		if(this.objects.length != this.explodeVectors.length)
+
+		var objects = this.furniture.getObjects();  //children of the furniture
+		var furnitureObj = this.furniture.getFurniture();
+
+		// if(objects.length != this.explodeVectors.length)
+		// 	return;
+
+		if(this.selectedIds.length < 1)
 			return;
 
-		if(this.selectedIndices.length == 0)
-			return;
 
+		//selected indices in the explodevectors
+		var selectedIndices = [];
 		//get the selected obj back to orignal positions
-		for(var i = 0; i < this.selectedIndices.length; i++)
+		for(var i = 0; i < this.selectedIds.length; i++)
 		{
-			var objIndex = this.selectedIndices[i];
-			var subVector = this.explodeVectors[objIndex];
+			var objId = this.selectedIds[i];
+			var childObj = furnitureObj.getObjectById(objId);
+			selectedIndices.push(objects.indexOf(childObj));
+			var subVector = this.explodeVectors[ objects.indexOf(childObj) ];
 			subVector.negate();
-			this.objects[objIndex].translateX(subVector.x);
-			this.objects[objIndex].translateY(subVector.y);
-			this.objects[objIndex].translateZ(subVector.z);
+			childObj.translateX(subVector.x);
+			childObj.translateY(subVector.y);
+			childObj.translateZ(subVector.z);
 		}
 
 		//delete the selected boxes from scene
@@ -536,19 +545,25 @@ Main.prototype = {
 		}
 		this.selectionBoxes = [];
 
-		var groupObj = new THREE.Group();
-		for(var i = 0; i < this.selectedIndices.length; i++)
+		//console.log(this.furniture.getFurniture().children.length)
+
+		//group the selected children objs
+		var groupObj = new THREE.Object3D();
+		for(var i = 0; i < this.selectedIds.length; i++)
 		{
-			var objIndex = this.selectedIndices[i];
-			groupObj.add(this.objects[objIndex]);
+			var objId = this.selectedIds[i];
+			var childObj = furnitureObj.getObjectById(objId);
+			groupObj.add(childObj);
 		}
 
+		//console.log(this.furniture.getFurniture().children.length)
+
+
 		// //delete old ones from the obj and vector arrays
-		this.selectedIndices.sort(function(a, b){ return b - a;});
-		for(var i = 0; i < this.selectedIndices.length; i++)
+		selectedIndices.sort(function(a, b){ return b - a;});
+		for(var i = 0; i < selectedIndices.length; i++)
 		{
-			var objIndex = this.selectedIndices[i];
-			this.objects.splice(objIndex,1);
+			var objIndex = selectedIndices[i];
 			this.explodeVectors.splice(objIndex,1);
 		}
 
@@ -563,8 +578,12 @@ Main.prototype = {
 		groupObj.translateY(n_subVector.y);
 		groupObj.translateZ(n_subVector.z);
 
-		this.objects.push(groupObj);
-		this.scene.add(groupObj);
+		// //objects.push(groupObj);
+		furnitureObj.add(groupObj);
+		// console.log(this.furniture.getFurniture().children.length)
+		// furnitureObj.add(groupObj);
+		// console.log(this.furniture.getFurniture().children.length)
+		// //this.scene.add(groupObj);
 
 	},
 
