@@ -8,7 +8,8 @@ const scadApi = require('@jscad/scad-api')
 const { CSG, CAG, isCSG, isCAG } = require('@jscad/csg')
 const {cube, sphere, cylinder} = scadApi.primitives3d
 const {union, difference, intersection} = scadApi.booleanOps
-const {translate, rotate} = scadApi.transformations
+//const {translate, rotate} = scadApi.transformations
+//const addAxis = require('./addAxis')
 
 
 function Main()
@@ -31,6 +32,9 @@ function Main()
 	this.transformControls = null;
 	this.box = new THREE.Box3();
 	this.selectionBox = new THREE.BoxHelper();
+
+	//normal axis
+	this.addAxis = null;
 
 	//mouse pick
 	this.raycaster = new THREE.Raycaster();
@@ -159,6 +163,10 @@ Main.prototype = {
 		this.transformControls = new THREE.TransformControls(this.camera, this.renderer.domElement);
 		this.transformControls.addEventListener('change', this.render.bind(this));
 		this.scene.add(this.transformControls);
+
+		this.addAxis = new AddAxis(this.camera, this.renderer.domElement);
+		this.addAxis.addEventListener('change', this.render.bind(this));
+		this.scene.add(this.addAxis);
 
 		this.selectionBox.material.depthTest = false;
 		this.selectionBox.material.transparent = true;
@@ -333,7 +341,8 @@ Main.prototype = {
 		if(this.onCtrlE == false)
 		{
 			//single select
-			this.addTransformControl(this.selected);
+			//this.addTransformControl(this.selected);
+			this.addNormalAxis(this.selected);
 		}else{
 			//multi select for merge
 			this.addMultiSelection(this.selected);
@@ -360,6 +369,26 @@ Main.prototype = {
 			}
 
 			this.transformControls.attach( object );
+
+		}
+	},
+
+	addNormalAxis: function(object) {
+		this.selectionBox.visible = false;
+		this.addAxis.detach();
+
+		if ( object !== null && object !== this.scene && object !== this.camera ) {
+
+			this.box.setFromObject( object );
+
+			if ( this.box.isEmpty() === false ) {
+
+				this.selectionBox.setFromObject( object );
+				this.selectionBox.visible = true;
+
+			}
+
+			this.addAxis.attach( object );
 
 		}
 	},
@@ -679,7 +708,11 @@ Main.prototype = {
 
 			}
 
+		}else if(keyCode == 37) {
+			addAxis(this.furniture, this.scene);
 		}
+
+
 
 		// else if(keyCode == 37){
 		// 	//left
