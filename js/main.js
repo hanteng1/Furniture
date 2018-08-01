@@ -605,6 +605,7 @@ Main.prototype = {
 		if(this.selected == null || this.selected == undefined) return;
 
 		//set the selected to the label
+		//the obj is labeled if it has a name
 		this.selected.name = label;
 
 		//console.log(this.selected.name);

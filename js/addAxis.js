@@ -419,9 +419,9 @@ var AddAxis = function(camera, domElement) {
 		this.position.copy(centerPosition);
 		this.scale.set( scale, scale, scale );
 
-		console.log(worldPosition);
-		console.log(worldRotation);
-		console.log(scale);
+		//console.log(worldPosition);
+		//console.log(worldRotation);
+		//console.log(scale);
 
 		//these are to set the initial rotations
 		if ( camera instanceof THREE.PerspectiveCamera ) {
@@ -488,6 +488,16 @@ var AddAxis = function(camera, domElement) {
 
 		var intersections = ray.intersectObjects( objects, true );
 		return intersections[ 0 ] ? intersections[ 0 ] : false;
+
+	}
+
+	//to select the normal axis
+	function onPointerDown( event ) {
+
+	}
+
+
+	function onPointerUp( event ) {
 
 	}
 
