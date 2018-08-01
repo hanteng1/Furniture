@@ -371,11 +371,11 @@ Main.prototype = {
 		}
 	},
 
-	addNormalAxis: function(object) {
+	addNormalAxis: function(furniture, object) {
 		this.addAxis.detach();
 		//this is shown only in the exploded mode
 		if ( object !== null && object !== this.scene && object !== this.camera ) {
-			this.addAxis.attach( object );
+			this.addAxis.attach(furniture, object );
 		}
 	},
 
@@ -612,7 +612,7 @@ Main.prototype = {
 		this.furniture.addComponentLabel(label);
 
 		//attach the normal axis
-		this.addNormalAxis(this.selected);
+		this.addNormalAxis(this.furniture, this.selected);
 	},
 
 

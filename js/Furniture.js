@@ -1,7 +1,7 @@
 "use strict;"
 function Furniture(furniture) {
 	
-	this.furniture = furniture; //a group type
+	this.furniture = furniture; //a group type object
 	//this.objects = []; //a array type of the components
 	this.category = null;
 	this.index = null;
@@ -19,6 +19,20 @@ function Furniture(furniture) {
 	// this.setObjects = function(objects) {
 	// 	this.objects = objects;
 	// }
+
+	//expected normal axis
+	//need to complete
+	this.normalAxises = {
+		//for chairs
+		seat: new THREE.Vector3(0, 1, 0),
+		back: new THREE.Vector3(0, 0, 1)
+		//for cabinet
+
+		//for table
+
+
+	};
+
 
 	this.getObjects = function() {
 		return this.furniture.children;
@@ -125,10 +139,41 @@ function Furniture(furniture) {
 	}
 
 	this.updateDirection = function() {
-		
+
 	}
 
 	//indicate the object axes
+	this.setNormalAxis = function(name, vector) {
+		//console.log(name)
+		//console.log(vector);
 
+		var targetVector = this.normalAxises[name];
+		if(targetVector !== undefined) {
+			//compare the vectors and define an rotation matrix
+			if(targetVector.equals(vector)) {
+				return;
+			}else {
+				var tempQuaternion = new THREE.Quaternion();
+				tempQuaternion.setFromUnitVectors(vector, targetVector);
+
+				//make the rotation
+				this.furniture.applyQuaternion(tempQuaternion);
+
+				//store the rotation info to the qua
+				this.quaternion = this.furniture.quaternion;
+
+
+			}
+
+		}
+
+	}
 
 }
+
+
+
+
+
+
+

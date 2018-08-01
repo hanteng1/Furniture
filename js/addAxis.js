@@ -250,6 +250,8 @@ var AddAxis = function(camera, domElement) {
 	domElement = ( domElement !== undefined ) ? domElement : document;
 
 	this.object = undefined;
+	this.furniture = undefined;
+
 	this.visible = false;
 	this.translationSnap = null;
 	this.rotationSnap = null;
@@ -296,9 +298,16 @@ var AddAxis = function(camera, domElement) {
 	var tempMatrix = new THREE.Matrix4();
 	var tempVector = new THREE.Vector3();
 	var tempQuaternion = new THREE.Quaternion();
+
 	var unitX = new THREE.Vector3( 1, 0, 0 );
 	var unitY = new THREE.Vector3( 0, 1, 0 );
 	var unitZ = new THREE.Vector3( 0, 0, 1 );
+
+	this.units = {
+		X: unitX,
+		Y: unitY,
+		Z: unitZ
+	};
 
 	var quaternionXYZ = new THREE.Quaternion();
 	var quaternionX = new THREE.Quaternion();
@@ -320,8 +329,8 @@ var AddAxis = function(camera, domElement) {
 	var camPosition = new THREE.Vector3();
 	var camRotation = new THREE.Euler();
 
-	//domElement.addEventListener( "mousedown", onPointerDown, false );
-	//domElement.addEventListener( "touchstart", onPointerDown, false );
+	domElement.addEventListener( "mousedown", onPointerDown, false );
+	domElement.addEventListener( "touchstart", onPointerDown, false );
 
 	domElement.addEventListener( "mousemove", onPointerHover, false );
 	domElement.addEventListener( "touchmove", onPointerHover, false );
@@ -329,17 +338,17 @@ var AddAxis = function(camera, domElement) {
 	//domElement.addEventListener( "mousemove", onPointerMove, false );
 	//domElement.addEventListener( "touchmove", onPointerMove, false );
 
-	//domElement.addEventListener( "mouseup", onPointerUp, false );
-	//domElement.addEventListener( "mouseout", onPointerUp, false );
-	//domElement.addEventListener( "touchend", onPointerUp, false );
-	//domElement.addEventListener( "touchcancel", onPointerUp, false );
-	//domElement.addEventListener( "touchleave", onPointerUp, false );
+	domElement.addEventListener( "mouseup", onPointerUp, false );
+	domElement.addEventListener( "mouseout", onPointerUp, false );
+	domElement.addEventListener( "touchend", onPointerUp, false );
+	domElement.addEventListener( "touchcancel", onPointerUp, false );
+	domElement.addEventListener( "touchleave", onPointerUp, false );
 
 
 	this.dispose = function () {
 
-		//domElement.removeEventListener( "mousedown", onPointerDown );
-		//domElement.removeEventListener( "touchstart", onPointerDown );
+		domElement.removeEventListener( "mousedown", onPointerDown );
+		domElement.removeEventListener( "touchstart", onPointerDown );
 
 		domElement.removeEventListener( "mousemove", onPointerHover );
 		domElement.removeEventListener( "touchmove", onPointerHover );
@@ -347,17 +356,17 @@ var AddAxis = function(camera, domElement) {
 		//domElement.removeEventListener( "mousemove", onPointerMove );
 		//domElement.removeEventListener( "touchmove", onPointerMove );
 
-		//domElement.removeEventListener( "mouseup", onPointerUp );
-		//domElement.removeEventListener( "mouseout", onPointerUp );
-		//domElement.removeEventListener( "touchend", onPointerUp );
-		//domElement.removeEventListener( "touchcancel", onPointerUp );
-		//domElement.removeEventListener( "touchleave", onPointerUp );
+		domElement.removeEventListener( "mouseup", onPointerUp );
+		domElement.removeEventListener( "mouseout", onPointerUp );
+		domElement.removeEventListener( "touchend", onPointerUp );
+		domElement.removeEventListener( "touchcancel", onPointerUp );
+		domElement.removeEventListener( "touchleave", onPointerUp );
 
 	};
 
 
-	this.attach = function ( object ) {
-
+	this.attach = function (furniture, object ) {
+		this.furniture = furniture;
 		this.object = object;
 		this.visible = true;
 		this.update();
@@ -493,12 +502,75 @@ var AddAxis = function(camera, domElement) {
 
 	//to select the normal axis
 	function onPointerDown( event ) {
+		if ( scope.object === undefined || _dragging === true || ( event.button !== undefined && event.button !== 0 ) ) return;
+
+		var pointer = event.changedTouches ? event.changedTouches[ 0 ] : event;
+
+		if ( pointer.button === 0 || pointer.button === undefined ) {
+
+			var intersect = intersectObjects( pointer, _gizmo[ _mode ].pickers.children );
+
+			if ( intersect ) {
+				event.preventDefault();
+				event.stopPropagation();
+				scope.axis = intersect.object.name;
+
+				//console.log(scope.axis);
+
+				scope.dispatchEvent( mouseDownEvent );
+
+				scope.update();
+
+			}
+		}
 
 	}
 
 
 	function onPointerUp( event ) {
+		event.preventDefault(); // Prevent MouseEvent on mobile
 
+		if ( event.button !== undefined && event.button !== 0 ) return;
+
+		if ( _dragging && ( scope.axis !== null ) ) {
+
+			mouseUpEvent.mode = _mode;
+			scope.dispatchEvent( mouseUpEvent );
+
+		}
+
+		_dragging = false;
+
+		//make the selection
+		
+		if(scope.axis !== null) {
+			//hide the others
+			for(var i = 0; i < _gizmo[ _mode ].handles.children.length; i++) {
+				var child = _gizmo[ _mode ].handles.children[i];
+				if(child.name !== scope.axis) {
+					child.visible = false;
+				}
+			}
+
+			//send the vector info to the furniture
+			scope.furniture.setNormalAxis(scope.object.name, scope.units[scope.axis]);
+		}		
+		
+
+
+		if ( 'TouchEvent' in window && event instanceof TouchEvent ) {
+
+			// Force "rollover"
+
+			scope.axis = null;
+			scope.update();
+			scope.dispatchEvent( changeEvent );
+
+		} else {
+
+			onPointerHover( event );
+
+		}
 	}
 
 
