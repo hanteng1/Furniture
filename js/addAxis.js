@@ -216,6 +216,21 @@ var NormalAxis = function() {
 		Z: [
 			[ new THREE.Mesh( arrowGeometry, new GizmoMaterial( { color: 0x0000ff } ) ), [ 0, 0, 0.5 ], [ Math.PI / 2, 0, 0 ] ],
 			[ new THREE.Line( lineZGeometry, new GizmoLineMaterial( { color: 0x0000ff } ) ) ]
+		],
+
+		NX: [
+			[ new THREE.Mesh( arrowGeometry, new GizmoMaterial( { color: 0xff0000 } ) ), [ - 0.5, 0, 0 ], [ 0, 0, Math.PI / 2 ] ],
+			[ new THREE.Line( lineXGeometry, new GizmoLineMaterial( { color: 0xff0000 } ) ), [ - 1, 0, 0 ] ]
+		],
+
+		NY: [
+			[ new THREE.Mesh( arrowGeometry, new GizmoMaterial( { color: 0x00ff00 } ) ), [ 0, - 0.5, 0 ], [ Math.PI , 0 , 0 ] ],
+			[	new THREE.Line( lineYGeometry, new GizmoLineMaterial( { color: 0x00ff00 } ) ), [ 0, - 1, 0 ] ]
+		],
+
+		NZ: [
+			[ new THREE.Mesh( arrowGeometry, new GizmoMaterial( { color: 0x0000ff } ) ), [ 0, 0, - 0.5 ], [ - Math.PI / 2, 0, 0 ] ],
+			[ new THREE.Line( lineZGeometry, new GizmoLineMaterial( { color: 0x0000ff } ) ), [ 0, 0, - 1 ] ]
 		]
 
 	};
@@ -232,6 +247,18 @@ var NormalAxis = function() {
 
 		Z: [
 			[ new THREE.Mesh( new THREE.CylinderBufferGeometry( 0.2, 0, 1, 4, 1, false ), pickerMaterial ), [ 0, 0, 0.6 ], [ Math.PI / 2, 0, 0 ] ]
+		],
+
+		NX: [
+			[ new THREE.Mesh( new THREE.CylinderBufferGeometry( 0.2, 0, 1, 4, 1, false ), pickerMaterial ), [ - 0.6, 0, 0 ], [ 0, 0,  Math.PI / 2 ] ]
+		],
+
+		NY: [
+			[ new THREE.Mesh( new THREE.CylinderBufferGeometry( 0.2, 0, 1, 4, 1, false ), pickerMaterial ), [ 0, - 0.6, 0 ], [ Math.PI , 0 , 0 ] ]
+		],
+
+		NZ: [
+			[ new THREE.Mesh( new THREE.CylinderBufferGeometry( 0.2, 0, 1, 4, 1, false ), pickerMaterial ), [ 0, 0, - 0.6 ], [ - Math.PI / 2, 0, 0 ] ]
 		]
 
 	};
@@ -302,11 +329,18 @@ var AddAxis = function(camera, domElement) {
 	var unitX = new THREE.Vector3( 1, 0, 0 );
 	var unitY = new THREE.Vector3( 0, 1, 0 );
 	var unitZ = new THREE.Vector3( 0, 0, 1 );
+	var unitNX = new THREE.Vector3( -1, 0, 0 );
+	var unitNY = new THREE.Vector3( 0, -1, 0 );
+	var unitNZ = new THREE.Vector3( 0, 0, -1 );
+
 
 	this.units = {
 		X: unitX,
 		Y: unitY,
-		Z: unitZ
+		Z: unitZ,
+		NX: unitNX,
+		NY: unitNY,
+		NZ: unitNZ
 	};
 
 	var quaternionXYZ = new THREE.Quaternion();
@@ -398,6 +432,14 @@ var AddAxis = function(camera, domElement) {
 
 	};
 
+	this.setAllVisible = function() {
+		for(var i = 0; i < _gizmo[ _mode ].handles.children.length; i++) {
+			var child = _gizmo[ _mode ].handles.children[i];
+			
+			child.visible = true;
+		}
+	};
+
 	this.update = function () {
 
 		if ( scope.object === undefined ) return;
@@ -476,6 +518,7 @@ var AddAxis = function(camera, domElement) {
 
 		}
 
+		//this is called whenever the state is changed
 		if ( scope.axis !== axis ) {
 
 			scope.axis = axis;
@@ -553,17 +596,22 @@ var AddAxis = function(camera, domElement) {
 			}
 
 			//send the vector info to the furniture
+			//when doing this step.. the space should be world
+			scope.space = "local";
 			scope.furniture.setNormalAxis(scope.object.name, scope.units[scope.axis]);
+			//rotate the axis right away
+			scope.axis = null;
+			scope.update(); 
+			scope.dispatchEvent( changeEvent );
 		}		
-		
-
 
 		if ( 'TouchEvent' in window && event instanceof TouchEvent ) {
 
 			// Force "rollover"
+			//this is not called with mouse
 
 			scope.axis = null;
-			scope.update();
+			scope.update(); 
 			scope.dispatchEvent( changeEvent );
 
 		} else {

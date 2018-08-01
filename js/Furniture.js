@@ -162,6 +162,9 @@ function Furniture(furniture) {
 				//store the rotation info to the qua
 				this.quaternion = this.furniture.quaternion;
 
+				//update the ui information
+				this.furniture.getWorldDirection(this.direction);
+				this.directionInfo.innerHTML = `Rot : (x) ${parseFloat(this.direction.x).toFixed(1)} (y) ${parseFloat(this.direction.y).toFixed(1)} (z) ${parseFloat(this.direction.z).toFixed(1)}`;
 
 			}
 

@@ -820,6 +820,13 @@ Main.prototype = {
 			this.addAxis.detach();
 			this.selected = null;
 
+			//need to reset the axis
+			//to world axis
+			this.addAxis.space = 'world';
+			//make invisile visible
+			this.addAxis.setAllVisible();
+
+
 			$('.ui.compact.vertical.labeled.icon.menu').hide();
 
 		}
