@@ -12,7 +12,8 @@ function Furniture(furniture) {
 	//world diretion, direction of object's positive z
 	this.direction = new THREE.Vector3();
 
-
+	this.positionInfo = document.createElement('div');
+	this.directionInfo = document.createElement('div');
 	this.componentLabels = document.createElement('div');
 
 	// this.setObjects = function(objects) {
@@ -65,18 +66,17 @@ function Furniture(furniture) {
 
 
 		//add position in world
-		var position = document.createElement('div');
-		position.className = 'description';
+		this.positionInfo.className = 'description';
 		this.furniture.getWorldPosition(this.position);
-		position.innerHTML = `Position : (x) ${this.position.x} (y) ${this.position.y} (z) ${this.position.z}`;
-		detailDiv.appendChild(position);
+		this.positionInfo.innerHTML = `Pos : (x) ${this.position.x} (y) ${this.position.y} (z) ${this.position.z}`;
+		detailDiv.appendChild(this.positionInfo);
 
 		//add rotation
-		var direction = document.createElement('div');
-		direction.className = 'description';
+		
+		this.directionInfo.className = 'description';
 		this.furniture.getWorldDirection(this.direction);
-		direction.innerHTML = `Rotation : (x) ${this.direction.x} (y) ${this.direction.y} (z) ${this.direction.z}`;
-		detailDiv.appendChild(direction);
+		this.directionInfo.innerHTML = `Rot : (x) ${this.direction.x} (y) ${this.direction.y} (z) ${this.direction.z}`;
+		detailDiv.appendChild(this.directionInfo);
 
 		//add components
 		var componentDiv = document.createElement("div");
@@ -116,16 +116,16 @@ function Furniture(furniture) {
 
 		this.componentLabels.appendChild(itemLabel);
 
-
 	}
 
 
-	this.updatePosition = function() {
-
+	this.updatePosition = function(updatedPosition) {
+		this.position.copy(updatedPosition);
+		this.positionInfo.innerHTML = `Pos : (x) ${parseFloat(this.position.x).toFixed(1)} (y) ${parseFloat(this.position.y).toFixed(1)} (z) ${parseFloat(this.position.z).toFixed(1)}`;
 	}
 
 	this.updateDirection = function() {
-
+		
 	}
 
 	//indicate the object axes

@@ -32,6 +32,7 @@ function Main()
 	this.selectionBox = new THREE.BoxHelper();
 
 	//normal axis
+	//show only one axis at a time
 	this.addAxis = null;
 
 	//mouse pick
@@ -339,7 +340,7 @@ Main.prototype = {
 		if(this.onCtrlE == false)
 		{
 			//single select
-			this.addTransformControl(this.selected);
+			this.addTransformControl(this.furniture, this.selected);
 			//this.addNormalAxis(this.selected);
 		}else{
 			//multi select for merge
@@ -348,11 +349,11 @@ Main.prototype = {
 
 	},
 
-	addTransformControl: function(object){
+	addTransformControl: function(furniture, object){
 		this.selectionBox.visible = false;
 		this.transformControls.detach();
 
-		if ( object !== null && object !== this.scene && object !== this.camera ) {
+		if (furniture !== null && object !== null && object !== this.scene && object !== this.camera ) {
 
 			this.box.setFromObject( object );
 
@@ -363,7 +364,7 @@ Main.prototype = {
 
 			}
 
-			this.transformControls.attach( object );
+			this.transformControls.attach(furniture, object );
 
 		}else {
 			this.selected = null;
@@ -371,22 +372,10 @@ Main.prototype = {
 	},
 
 	addNormalAxis: function(object) {
-		this.selectionBox.visible = false;
 		this.addAxis.detach();
-
+		//this is shown only in the exploded mode
 		if ( object !== null && object !== this.scene && object !== this.camera ) {
-
-			this.box.setFromObject( object );
-
-			if ( this.box.isEmpty() === false ) {
-
-				this.selectionBox.setFromObject( object );
-				this.selectionBox.visible = true;
-
-			}
-
 			this.addAxis.attach( object );
-
 		}
 	},
 
@@ -463,8 +452,7 @@ Main.prototype = {
 		//compute the furniture's center
 		this.objCenter = new THREE.Vector3();
 		this.objCenter = this.getCenterPoint(furniture.getFurniture());
-		//console.log("whole: ");
-		console.log(this.objCenter);
+		//console.log(this.objCenter);
 		
 		this.explodeVectors = [];
 		this.selectedIds = [];
@@ -527,6 +515,9 @@ Main.prototype = {
 			return;
 
 
+		var revertTranslation = this.furniture.position.clone();
+		revertTranslation.negate();
+
 		//selected indices in the explodevectors
 		var selectedIndices = [];
 		//get the selected obj back to orignal positions
@@ -540,6 +531,8 @@ Main.prototype = {
 			childObj.translateX(subVector.x);
 			childObj.translateY(subVector.y);
 			childObj.translateZ(subVector.z);
+
+			//childObj.position.add(revertTranslation);
 		}
 
 		//delete the selected boxes from scene
@@ -549,10 +542,13 @@ Main.prototype = {
 		}
 		this.selectionBoxes = [];
 
-		//console.log(this.furniture.getFurniture().children.length)
-
 		//group the selected children objs
+		//attention: this action move the obj back to the (0,0,0)
 		var groupObj = new THREE.Object3D();
+		//groupObj.position.copy(this.furniture.position);
+		//console.log(groupObj.position);
+		//console.log(this.getCenterPoint(groupObj));
+
 		for(var i = 0; i < this.selectedIds.length; i++)
 		{
 			var objId = this.selectedIds[i];
@@ -560,8 +556,12 @@ Main.prototype = {
 			groupObj.add(childObj);
 		}
 
-		//console.log(this.furniture.getFurniture().children.length)
+		//console.log(groupObj.position);
+		//console.log(this.getCenterPoint(groupObj));
 
+		//groupObj.position.add(this.furniture.position);
+		//console.log(groupObj.position);
+		//console.log(this.getCenterPoint(groupObj));
 
 		// //delete old ones from the obj and vector arrays
 		selectedIndices.sort(function(a, b){ return b - a;});
@@ -574,8 +574,8 @@ Main.prototype = {
 		//add the new one to the array
 		var n_elmCenter = this.getCenterPoint(groupObj);
 		var n_subVector = new THREE.Vector3();
-		n_subVector.subVectors(n_elmCenter, this.objCenter);
-		n_subVector.multiplyScalar(2);
+		//n_subVector.subVectors(n_elmCenter, this.objCenter);
+		//n_subVector.multiplyScalar(2);
 		this.explodeVectors.push(n_subVector.clone());
 
 		groupObj.translateX(n_subVector.x);
@@ -590,6 +590,7 @@ Main.prototype = {
 		// //this.scene.add(groupObj);
 
 		//make the current selection of the new groupObj
+		//re-start the multiple seletion process
 		this.selectedIds = [];
 		this.addMultiSelection(groupObj);
 
@@ -598,6 +599,7 @@ Main.prototype = {
 
 
 	//label a selected part
+	//this should be after an object is selected or merged
 	assignLabel: function(label) {
 		//there has to be a seected object
 		if(this.selected == null || this.selected == undefined) return;
@@ -607,6 +609,9 @@ Main.prototype = {
 
 		//console.log(this.selected.name);
 		this.furniture.addComponentLabel(label);
+
+		//attach the normal axis
+		this.addNormalAxis(this.selected);
 	},
 
 
@@ -811,6 +816,8 @@ Main.prototype = {
 			this.selectionBoxes = [];
 			this.selectedIds = [];
 			this.furniture = null;
+			this.addAxis.detach();
+			this.selected = null;
 
 			$('.ui.compact.vertical.labeled.icon.menu').hide();
 

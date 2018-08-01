@@ -314,6 +314,7 @@ var AddAxis = function(camera, domElement) {
 	var parentScale = new THREE.Vector3();
 
 	var worldPosition = new THREE.Vector3();
+	var centerPosition = new THREE.Vector3();
 	var worldRotation = new THREE.Euler();
 	var worldRotationMatrix = new THREE.Matrix4();
 	var camPosition = new THREE.Vector3();
@@ -394,6 +395,18 @@ var AddAxis = function(camera, domElement) {
 
 		scope.object.updateMatrixWorld();
 		worldPosition.setFromMatrixPosition( scope.object.matrixWorld );
+
+		//instead of using worldposition, using object's center
+		var box = new THREE.Box3();
+		box.setFromObject(scope.object);
+		if(box.isEmpty() === false)
+		{
+			box.getCenter(centerPosition);
+		}else{
+			console.log("error on getting center point");
+		}
+
+
 		worldRotation.setFromRotationMatrix( tempMatrix.extractRotation( scope.object.matrixWorld ) );
 
 		camera.updateMatrixWorld();
@@ -402,7 +415,8 @@ var AddAxis = function(camera, domElement) {
 
 		//these are to set the positions and scale
 		scale = worldPosition.distanceTo( camPosition ) / 6 * scope.size;
-		this.position.copy( worldPosition );
+		//this.position.copy( worldPosition );
+		this.position.copy(centerPosition);
 		this.scale.set( scale, scale, scale );
 
 		console.log(worldPosition);
