@@ -1,47 +1,55 @@
-const log = require('./log')
-const getParameterDefinitions = require('@jscad/core/parameters/getParameterDefinitions')
-const getParameterValues = require('@jscad/core/parameters/getParameterValuesFromUIControls')
-const { rebuildSolids, rebuildSolidsInWorker } = require('@jscad/core/code-evaluation/rebuildSolids')
-const { mergeSolids } = require('@jscad/core/utils/mergeSolids')
-const scadApi = require('@jscad/scad-api')
-const {cube, sphere, cylinder} = scadApi.primitives3d
-const {union, difference, intersection} = scadApi.booleanOps
-const {translate} = scadApi.transformations
-const csgToGeometries =  require('./csgToGeometries')
-const {geometryToCsgs, unionCsgs} = require('./geometryToCsgs')
+//this is to handle the new design approaches
+//that without the need of cad operations
 
-
-function hinge2Geo()
-{
-
-	var hingeCsg = union(
-		cube({size: [30, 150, 30], center: true})
-	).translate([0, 75, 0]);
-
-	return csgToGeometries(hingeCsg)[0];
+function Processor(main) {
+	this.main = main;
+	this.category = main.category;  //chair, cabinet, table
+	this.furnitures = main.furnitures;
 }
 
-function hinge2Csg()
-{
-	return union(
-		cube({size: [30, 150, 30], center: true})
-	).translate([0, 75, 0]);
+Processor.prototype = {
+
+	//execute design for chairs
+	executeDesign: function() {
+		
+		var scope = this;
+
+		switch(scope.category){
+
+			case "chair" :
+				if(scope.furnitures.length == 0) {
+			
+					return;
+
+				}else if(scope.furnitures.length == 1){
+					//possible actions with one furniture
+
+
+				}else if( scope.furnitures.length > 1) {
+					//possible actions with many furnitures
+					var chair_align = new Chair_Align(scope.main);
+					chair_align.execute();
+
+				}
+
+
+				break;
+
+			case "cabinent" :
+
+
+				break;
+
+
+			case "table" :
+
+				break;
+
+
+		};
+
+	}
+
+
+
 }
-
-function addHinge2Geo(initialGeo)
-{
-	var hingeCsg = hinge2Csg();
-
-	var toCsgs = geometryToCsgs(initialGeo);
-
-	var addHingeCsg = difference(
-		geometryToCsg(initialGeo),
-		hingeCsg
-	);
-
-	return csgToGeometries(addHingeCsg)[0];
-}
-
-
-
-module.exports = {hinge2Geo, addHinge2Geo}

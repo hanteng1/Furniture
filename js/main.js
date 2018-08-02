@@ -12,6 +12,11 @@
 
 function Main()
 {
+
+	//category
+	//todo: an floating window to select category
+	this.category = "chair";
+
 	//only stores data
 	this.container = document.getElementById('container');
 	this.scene = new THREE.Scene();
@@ -645,13 +650,12 @@ Main.prototype = {
 				for(var i = 0; i < this.furnitures.length; i++) {
 					var intersects = this.getIntersect( this.onUpPosition, this.furnitures[i].getFurniture());
 
-					//console.log(intersects.length);
-
 					if ( intersects.length > 0 ) {
 
 						this.furniture = this.furnitures[i];
 						this.select(this.furniture.getFurniture());
 
+						break;
 					} else {
 						//it also calls select, to detach
 						this.select( null );
@@ -832,6 +836,15 @@ Main.prototype = {
 		}
 
 		document.removeEventListener( 'keyup', this.onKeyUp.bind(this), false );
+	},
+
+
+
+	//here to put all the operations available
+	applyDesign: function() {
+		var processor = new Processor(this);
+		processor.executeDesign();
+
 	}
 
 };

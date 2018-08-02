@@ -41,6 +41,10 @@ Ui.prototype = {
 						scope.assignLabel("seat");
 						break;
 					case "l_3":
+						//midframe
+						scope.assignLabel("midframe");
+						break;
+					case "l_4":
 						//stand
 						scope.assignLabel("stand");
 						break;
@@ -54,6 +58,40 @@ Ui.prototype = {
 		$( ".item.m_group" ).click(function() {
 			//group function
 			scope.main.mergeObjs();
+		});
+
+
+		//duplicate a model
+		$('.ui.blue.submit.button.duplicate').click(function(){
+			
+			if(scope.main.furniture == null || scope.main.furniture == undefined){
+				return;
+			}
+
+			var furniture = scope.main.furniture;
+			var new_furnitureObj = new THREE.Object3D();
+			new_furnitureObj.copy(furniture.getFurniture(), true);
+			var new_furniture = new Furniture(new_furnitureObj);
+
+			new_furniture.setCategory("straight_chair");
+			new_furniture.setIndex(scope.main.furnitures.length + 1);
+			scope.main.furnitures.push(new_furniture);
+
+			scope.main.scene.add(scope.main.furnitures[scope.main.furnitures.length - 1].getFurniture());
+
+			//update the menu interface
+			new_furniture.addCard();
+
+			//copy the state
+			//to do.... 
+
+
+		});
+
+		$('.ui.blue.submit.button.newdesign').click(function(){
+
+			scope.main.applyDesign();
+
 		});
 
 	},

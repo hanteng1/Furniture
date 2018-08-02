@@ -25,17 +25,35 @@ function Furniture(furniture) {
 	this.normalAxises = {
 		//for chairs
 		seat: new THREE.Vector3(0, 1, 0),
-		back: new THREE.Vector3(0, 0, 1)
+		back: new THREE.Vector3(0, 0, 1),
+		midframe: new THREE.Vector3(0, 0, 1)
+
+
 		//for cabinet
 
 		//for table
-
-
 	};
+
+	//array of names of labeled components
+	//label means normal axis is set
+	this.labeledComponents = [];
+	//array of names of components identified
+	this.listedComponents = [];
 
 
 	this.getObjects = function() {
 		return this.furniture.children;
+	}
+
+	this.getComponentByName = function(name) {
+		return this.furniture.getObjectByName(name);
+	}
+
+	this.getComponentPosition = function(name) {
+		var component = this.getComponentByName(name);
+		var worldPosition = new THREE.Vector3();
+		component.getWorldPosition(worldPosition);
+		return worldPosition;
 	}
 
 	this.setCategory = function(category) {
@@ -82,14 +100,14 @@ function Furniture(furniture) {
 		//add position in world
 		this.positionInfo.className = 'description';
 		this.furniture.getWorldPosition(this.position);
-		this.positionInfo.innerHTML = `Pos : (x) ${this.position.x} (y) ${this.position.y} (z) ${this.position.z}`;
+		this.positionInfo.innerHTML = `Pos : (x) ${parseFloat(this.position.x).toFixed(1)} (y) ${parseFloat(this.position.y).toFixed(1)} (z) ${parseFloat(this.position.z).toFixed(1)}`;
 		detailDiv.appendChild(this.positionInfo);
 
 		//add rotation
 		
 		this.directionInfo.className = 'description';
 		this.furniture.getWorldDirection(this.direction);
-		this.directionInfo.innerHTML = `Rot : (x) ${this.direction.x} (y) ${this.direction.y} (z) ${this.direction.z}`;
+		this.directionInfo.innerHTML = `Rot : (x) ${parseFloat(this.direction.x).toFixed(1)} (y) ${parseFloat(this.direction.y).toFixed(1)} (z) ${parseFloat(this.direction.z).toFixed(1)}`;
 		detailDiv.appendChild(this.directionInfo);
 
 		//add components
@@ -117,7 +135,7 @@ function Furniture(furniture) {
 	this.addComponentLabel = function(label) {
 		var itemLabel = document.createElement("div");
 		itemLabel.className = "item";
-		itemLabel.setAttribute("id", label);
+		itemLabel.setAttribute("id", label + `${this.index}`);
 		var itemImg = document.createElement("img");
 		itemImg.className = "ui";
 		itemImg.classList.add("avatar");
@@ -130,12 +148,14 @@ function Furniture(furniture) {
 		itemLabel.appendChild(itemContent);
 
 		this.componentLabels.appendChild(itemLabel);
+
+		this.listedComponents.push(label);
 	}
 
 	this.indicateComponentLabeled = function(name) {
 
 		//console.log("called");
-		var itemLabel = $('#' + name);
+		var itemLabel = $('#' + name + `${this.index}`);
 
 		itemLabel.find("span").css("text-decoration", "underline");
 		// //problem
@@ -143,6 +163,10 @@ function Furniture(furniture) {
 		// icon.className = "star";
 		// icon.classList.add("icon");
 		// itemLabel.appendChild(icon);
+
+		//todo: check the name is not repeated
+		//if components are the same type.. need to label them with different name
+		this.labeledComponents.push(name);
 	}
 
 	this.updatePosition = function(updatedPosition) {
@@ -187,6 +211,61 @@ function Furniture(furniture) {
 		}
 
 	}
+
+
+	this.hasComponent = function(name) {
+		for(var i = 0; i < this.listedComponents.length; i++) {
+			if(this.listedComponents[i] == name){
+				return true;
+			}
+		}
+
+		return false;
+	}
+
+	//get height of a component
+	this.getComponentHeight2Floor = function(name) {
+		
+		//hascomponent has to be true, assuming this is checked
+		var component = this.getComponentByName(name);
+		
+		//check this component's height regardign to the whole body
+		//get the box of whole body
+		//attention: this is not working for rotated objects, in which case it needs to be rotated back
+		var box_1 = new THREE.Box3();
+		box_1.setFromObject(this.furniture);
+
+		//get the box of the component
+		var box_2 = new THREE.Box3();
+		box_2.setFromObject(component);
+
+		//return the distance
+		var box_1_center = new THREE.Vector3();
+		box_1.getCenter(box_1_center);
+		var box_1_size = new THREE.Vector3();
+		box_1.getSize(box_1_size);
+		var box_1_height_lower_face = box_1_center.y - box_1_size.y / 2;
+
+		var box_2_center = new THREE.Vector3();
+		box_2.getCenter(box_2_center);
+		var box_2_size = new THREE.Vector3();
+		box_2.getSize(box_2_size);
+		var box_2_height_higher_face = box_2_center.y + box_2_size.y / 2;
+
+		var height = box_2_height_higher_face - box_1_height_lower_face;
+
+		if(height > 0) 
+		{
+			return height;
+		}
+
+		return -1;
+	}
+
+	this.lieFlat2Floor = function() {
+
+	}
+
 
 }
 
