@@ -219,18 +219,18 @@ var NormalAxis = function() {
 		],
 
 		NX: [
-			[ new THREE.Mesh( arrowGeometry, new GizmoMaterial( { color: 0xff0000 } ) ), [ - 0.5, 0, 0 ], [ 0, 0, Math.PI / 2 ] ],
-			[ new THREE.Line( lineXGeometry, new GizmoLineMaterial( { color: 0xff0000 } ) ), [ - 1, 0, 0 ] ]
+			[ new THREE.Mesh( arrowGeometry, new GizmoMaterial( { color: 0xf0f000 } ) ), [ - 0.5, 0, 0 ], [ 0, 0, Math.PI / 2 ] ],
+			[ new THREE.Line( lineXGeometry, new GizmoLineMaterial( { color: 0xf0f000 } ) ), [ - 1, 0, 0 ] ]
 		],
 
 		NY: [
-			[ new THREE.Mesh( arrowGeometry, new GizmoMaterial( { color: 0x00ff00 } ) ), [ 0, - 0.5, 0 ], [ Math.PI , 0 , 0 ] ],
-			[	new THREE.Line( lineYGeometry, new GizmoLineMaterial( { color: 0x00ff00 } ) ), [ 0, - 1, 0 ] ]
+			[ new THREE.Mesh( arrowGeometry, new GizmoMaterial( { color: 0x00f0f0 } ) ), [ 0, - 0.5, 0 ], [ Math.PI , 0 , 0 ] ],
+			[	new THREE.Line( lineYGeometry, new GizmoLineMaterial( { color: 0x00f0f0 } ) ), [ 0, - 1, 0 ] ]
 		],
 
 		NZ: [
-			[ new THREE.Mesh( arrowGeometry, new GizmoMaterial( { color: 0x0000ff } ) ), [ 0, 0, - 0.5 ], [ - Math.PI / 2, 0, 0 ] ],
-			[ new THREE.Line( lineZGeometry, new GizmoLineMaterial( { color: 0x0000ff } ) ), [ 0, 0, - 1 ] ]
+			[ new THREE.Mesh( arrowGeometry, new GizmoMaterial( { color: 0xf000f0 } ) ), [ 0, 0, - 0.5 ], [ - Math.PI / 2, 0, 0 ] ],
+			[ new THREE.Line( lineZGeometry, new GizmoLineMaterial( { color: 0xf000f0 } ) ), [ 0, 0, - 1 ] ]
 		]
 
 	};

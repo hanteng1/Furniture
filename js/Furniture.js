@@ -117,6 +117,7 @@ function Furniture(furniture) {
 	this.addComponentLabel = function(label) {
 		var itemLabel = document.createElement("div");
 		itemLabel.className = "item";
+		itemLabel.setAttribute("id", label);
 		var itemImg = document.createElement("img");
 		itemImg.className = "ui";
 		itemImg.classList.add("avatar");
@@ -125,13 +126,24 @@ function Furniture(furniture) {
 		itemLabel.appendChild(itemImg);
 		var itemContent = document.createElement("div");
 		itemContent.className = "content";
-		itemContent.innerHTML = label;
+		itemContent.innerHTML = '<span>' + label + '</span>';
 		itemLabel.appendChild(itemContent);
 
 		this.componentLabels.appendChild(itemLabel);
-
 	}
 
+	this.indicateComponentLabeled = function(name) {
+
+		//console.log("called");
+		var itemLabel = $('#' + name);
+
+		itemLabel.find("span").css("text-decoration", "underline");
+		// //problem
+		// var icon = document.createElement("i");
+		// icon.className = "star";
+		// icon.classList.add("icon");
+		// itemLabel.appendChild(icon);
+	}
 
 	this.updatePosition = function(updatedPosition) {
 		this.position.copy(updatedPosition);
@@ -139,7 +151,8 @@ function Furniture(furniture) {
 	}
 
 	this.updateDirection = function() {
-
+		this.furniture.getWorldDirection(this.direction);
+		this.directionInfo.innerHTML = `Rot : (x) ${parseFloat(this.direction.x).toFixed(1)} (y) ${parseFloat(this.direction.y).toFixed(1)} (z) ${parseFloat(this.direction.z).toFixed(1)}`;
 	}
 
 	//indicate the object axes
@@ -151,7 +164,7 @@ function Furniture(furniture) {
 		if(targetVector !== undefined) {
 			//compare the vectors and define an rotation matrix
 			if(targetVector.equals(vector)) {
-				return;
+				
 			}else {
 				var tempQuaternion = new THREE.Quaternion();
 				tempQuaternion.setFromUnitVectors(vector, targetVector);
@@ -167,6 +180,9 @@ function Furniture(furniture) {
 				this.directionInfo.innerHTML = `Rot : (x) ${parseFloat(this.direction.x).toFixed(1)} (y) ${parseFloat(this.direction.y).toFixed(1)} (z) ${parseFloat(this.direction.z).toFixed(1)}`;
 
 			}
+
+			//indicating the label is added to the component
+			this.indicateComponentLabeled(name);
 
 		}
 
