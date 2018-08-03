@@ -41,6 +41,23 @@ function Furniture(furniture) {
 	this.listedComponents = [];
 
 
+	////////////////////////////////////////////////////////////
+	//get info and object
+	this.getSize = function() {
+		var box = new THREE.Box3();
+		box.setFromObject(this.furniture);
+		var box_size = new THREE.Vector3();
+		box.getSize(box_size);
+
+		//this includes width, height, depth
+		return box_size;
+	}
+
+
+	this.getPosition = function() {
+		return this.position;
+	}
+
 	this.getObjects = function() {
 		return this.furniture.children;
 	}
@@ -68,6 +85,97 @@ function Furniture(furniture) {
 		return this.furniture;
 	}
 
+	this.hasComponent = function(name) {
+		for(var i = 0; i < this.listedComponents.length; i++) {
+			if(this.listedComponents[i] == name){
+				return true;
+			}
+		}
+
+		return false;
+	}
+
+
+	//get height of a component
+	this.getComponentHeight2Floor = function(name) {
+		
+		//hascomponent has to be true, assuming this is checked
+		var component = this.getComponentByName(name);
+		
+		//check this component's height regardign to the whole body
+		//get the box of whole body
+		//attention: this is not working for rotated objects, in which case it needs to be rotated back
+		var box_1 = new THREE.Box3();
+		box_1.setFromObject(this.furniture);
+
+		//get the box of the component
+		var box_2 = new THREE.Box3();
+		box_2.setFromObject(component);
+
+		//return the distance
+		var box_1_center = new THREE.Vector3();
+		box_1.getCenter(box_1_center);
+		var box_1_size = new THREE.Vector3();
+		box_1.getSize(box_1_size);
+		var box_1_height_lower_face = box_1_center.y - box_1_size.y / 2;
+
+		var box_2_center = new THREE.Vector3();
+		box_2.getCenter(box_2_center);
+		var box_2_size = new THREE.Vector3();
+		box_2.getSize(box_2_size);
+		var box_2_height_higher_face = box_2_center.y + box_2_size.y / 2;
+
+		var height = box_2_height_higher_face - box_1_height_lower_face;
+
+		if(height > 0) 
+		{
+			return height;
+		}
+
+		return -1;
+	}
+
+
+	////////////////////////////////////////////////////////////
+	//update info
+	this.updatePosition = function(updatedPosition) {
+		this.position.copy(updatedPosition);
+		this.positionInfo.innerHTML = `Pos : (x) ${parseFloat(this.position.x).toFixed(1)} (y) ${parseFloat(this.position.y).toFixed(1)} (z) ${parseFloat(this.position.z).toFixed(1)}`;
+	}
+
+	this.updatePosition = function() {
+		this.furniture.getWorldPosition(this.position);
+		this.positionInfo.innerHTML = `Pos : (x) ${parseFloat(this.position.x).toFixed(1)} (y) ${parseFloat(this.position.y).toFixed(1)} (z) ${parseFloat(this.position.z).toFixed(1)}`;
+	}
+
+	this.updateDirection = function() {
+		this.furniture.getWorldDirection(this.direction);
+		this.directionInfo.innerHTML = `Rot : (x) ${parseFloat(this.direction.x).toFixed(1)} (y) ${parseFloat(this.direction.y).toFixed(1)} (z) ${parseFloat(this.direction.z).toFixed(1)}`;
+	}
+
+	this.updateQuaternion = function(quaternion) {
+		this.quaternion.copy(quaternion);
+	}
+
+	this.updateQuaternion = function() {
+		this.furniture.getWorldQuaternion(this.quaternion);
+	}
+
+	this.updateListedComponents = function(listedComponents) {
+		for(var i = 0; i < listedComponents.length; i++) {
+			this.addComponentLabel(listedComponents[i]);
+		}
+	}
+
+	this.updateLabeledComponents = function(labeledComponents) {
+		for(var i = 0; i < labeledComponents.length; i++) {
+			this.indicateComponentLabeled(labeledComponents[i]);
+		}
+	}
+
+
+	////////////////////////////////////////////////////////////
+	//update ui
 	this.addCard = function(){
 		var cards = document.getElementById("cards");
 		var card = document.createElement("div");
@@ -169,14 +277,28 @@ function Furniture(furniture) {
 		this.labeledComponents.push(name);
 	}
 
-	this.updatePosition = function(updatedPosition) {
-		this.position.copy(updatedPosition);
-		this.positionInfo.innerHTML = `Pos : (x) ${parseFloat(this.position.x).toFixed(1)} (y) ${parseFloat(this.position.y).toFixed(1)} (z) ${parseFloat(this.position.z).toFixed(1)}`;
-	}
+	
 
-	this.updateDirection = function() {
-		this.furniture.getWorldDirection(this.direction);
-		this.directionInfo.innerHTML = `Rot : (x) ${parseFloat(this.direction.x).toFixed(1)} (y) ${parseFloat(this.direction.y).toFixed(1)} (z) ${parseFloat(this.direction.z).toFixed(1)}`;
+	////////////////////////////////////////////////////////////
+	//apply transformation
+	//this is moving in the world coordinates
+	this.moveToPosition = function(position) {
+
+		var translation = new THREE.Vector3();
+		translation.subVectors(position, this.position);
+
+		var quaternion = new THREE.Quaternion();
+		quaternion.copy(this.quaternion);
+		quaternion.inverse();
+		translation.applyQuaternion(quaternion);
+
+		this.furniture.translateX(translation.x);
+		this.furniture.translateY(translation.y);
+		this.furniture.translateZ(translation.z);
+
+		this.updatePosition();
+
+
 	}
 
 	//indicate the object axes
@@ -213,54 +335,9 @@ function Furniture(furniture) {
 	}
 
 
-	this.hasComponent = function(name) {
-		for(var i = 0; i < this.listedComponents.length; i++) {
-			if(this.listedComponents[i] == name){
-				return true;
-			}
-		}
+	
 
-		return false;
-	}
-
-	//get height of a component
-	this.getComponentHeight2Floor = function(name) {
-		
-		//hascomponent has to be true, assuming this is checked
-		var component = this.getComponentByName(name);
-		
-		//check this component's height regardign to the whole body
-		//get the box of whole body
-		//attention: this is not working for rotated objects, in which case it needs to be rotated back
-		var box_1 = new THREE.Box3();
-		box_1.setFromObject(this.furniture);
-
-		//get the box of the component
-		var box_2 = new THREE.Box3();
-		box_2.setFromObject(component);
-
-		//return the distance
-		var box_1_center = new THREE.Vector3();
-		box_1.getCenter(box_1_center);
-		var box_1_size = new THREE.Vector3();
-		box_1.getSize(box_1_size);
-		var box_1_height_lower_face = box_1_center.y - box_1_size.y / 2;
-
-		var box_2_center = new THREE.Vector3();
-		box_2.getCenter(box_2_center);
-		var box_2_size = new THREE.Vector3();
-		box_2.getSize(box_2_size);
-		var box_2_height_higher_face = box_2_center.y + box_2_size.y / 2;
-
-		var height = box_2_height_higher_face - box_1_height_lower_face;
-
-		if(height > 0) 
-		{
-			return height;
-		}
-
-		return -1;
-	}
+	
 
 	this.lieFlat2Floor = function() {
 

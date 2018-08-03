@@ -83,8 +83,22 @@ Ui.prototype = {
 			new_furniture.addCard();
 
 			//copy the state
-			//to do.... 
+			new_furniture.updatePosition(furniture.position);
+			new_furniture.updateDirection();
+			new_furniture.updateQuaternion(furniture.quaternion);
 
+			//copy the components and labeled state
+			new_furniture.updateListedComponents(furniture.listedComponents);
+			new_furniture.updateLabeledComponents(furniture.labeledComponents);
+
+			//make an offset for the position
+			var size = new_furniture.getSize();
+			var position = new_furniture.getPosition();
+			var new_position = new THREE.Vector3();
+			new_position.copy(position);
+			new_position.add(new THREE.Vector3(2 * size.x, 0, (-2) * size.z))
+
+			new_furniture.moveToPosition(new_position);
 
 		});
 

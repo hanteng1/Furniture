@@ -98,6 +98,9 @@ Chair_Align.prototype = {
 			furniture.getFurniture().translateY(translation.y);
 			furniture.getFurniture().translateZ(translation.z);
 
+			//update the position info
+			furniture.updatePosition();
+
 		}
 
 
