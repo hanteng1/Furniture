@@ -64,6 +64,7 @@ Chair_Align.prototype = {
 		console.log(`using reference: ${this.reference}`);
 
 		//create a link line from (0, h, 0) to (n, h, 0), where n = count, and h = existing height of the reference component
+		//this has some problem
 		var refHeight = furnitures[0].getComponentHeight2Floor(this.reference);
 		console.log(`reference height: ${refHeight}`);
 
@@ -82,7 +83,17 @@ Chair_Align.prototype = {
 			var translation = new THREE.Vector3();
 			translation.subVectors(destination, origin);
 
+			//the translation has no problem
+			//console.log(translation);
+
+			//correct the transition using the furniture's current orientation
+			var quaternion = new THREE.Quaternion();
+			quaternion.copy(furniture.quaternion);
+			quaternion.inverse();
+			translation.applyQuaternion(quaternion);
+
 			//rotations might be a problem
+			//has to consider the oritation
 			furniture.getFurniture().translateX(translation.x);
 			furniture.getFurniture().translateY(translation.y);
 			furniture.getFurniture().translateZ(translation.z);
