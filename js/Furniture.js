@@ -335,6 +335,33 @@ function Furniture(furniture) {
 	}
 
 
+	this.setRotationWithNormalAxis = function(name, vector) {
+
+		var originVector = this.normalAxises[name];
+		if(originVector !== undefined) {
+			//compare the vectors and define an rotation matrix
+			if(originVector.equals(vector)) {
+				
+			}else {
+				var tempQuaternion = new THREE.Quaternion();
+				tempQuaternion.setFromUnitVectors(originVector, vector);
+
+				//make the rotation
+				this.furniture.applyQuaternion(tempQuaternion);
+
+				//store the rotation info to the qua
+				this.quaternion = this.furniture.quaternion;
+
+				//update the ui information
+				this.furniture.getWorldDirection(this.direction);
+				this.directionInfo.innerHTML = `Rot : (x) ${parseFloat(this.direction.x).toFixed(1)} (y) ${parseFloat(this.direction.y).toFixed(1)} (z) ${parseFloat(this.direction.z).toFixed(1)}`;
+
+			}
+
+		}
+	}
+
+
 	
 
 	

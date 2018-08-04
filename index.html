@@ -51,6 +51,44 @@
 			<div class="ui blue submit button newdesign">Create New Design</div>
 
 
+			<h4 class="ui horizontal divider header">
+				Controller
+			</h4>
+
+			<!--chair align controller-->
+			<div class="ui segment" id="CHAIR_ALIGN">
+				<table class="ui definition table">
+					<tbody>
+						<tr>
+							<td>Length</td>
+							<td>
+								<div class="range-slider" id="CHAIR_ALIGN">
+									<input class="range-slider__range" id="DISTANCE" type="range" value="30" min="30" max="90">
+									<span class="range-slider__value">30</span>
+								</div>
+							</td>
+						</tr>
+						<tr>
+							<td>Angle</td>
+							<td>
+								<div class="range-slider" id="CHAIR_ALIGN">
+									<input class="range-slider__range" id="ANGLE" type="range" value="0" min="0" max="90">
+									<span class="range-slider__value">0</span>
+								</div>
+							</td>
+						</tr>
+					</tbody>
+				</table>
+
+			</div>
+
+
+			<!--xxxxx-->
+
+
+
+
+
 
 		</div> <!--side menu-->
 
@@ -102,6 +140,10 @@
 
 		<!-- design viewer -->
     	<!-- <div oncontextmenu="return false;" id="viewerContext"></div> --> <!-- avoiding popup when right mouse is clicked -->
+
+
+    	
+
 		
 		<script
 	  		src="https://code.jquery.com/jquery-3.1.1.min.js"
@@ -121,7 +163,6 @@
 		<script type="text/javascript" src="js/Furniture.js"></script>
 		<script type="text/javascript" src="js/AddAxis.js"></script>
 		<script type="text/javascript" src="js/TransformControls.js"></script>
-
 
 		<!--operations-->
 		<script type="text/javascript" src="js/Processor.js"></script>
@@ -149,6 +190,7 @@
 				gl_FragColor.a = 1.0;
 			}
 		</script>
+
 
 		<script type="text/javascript" src="js/Main.js"></script>
 

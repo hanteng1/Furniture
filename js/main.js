@@ -65,6 +65,10 @@ function Main()
 	this.selectionBoxes = [];
 
 
+	//processor for transformations
+	this.processor = null;
+
+
 	// function loadModelObj(objFilePath)
 	// {
 
@@ -178,6 +182,9 @@ Main.prototype = {
 		this.scene.add( this.selectionBox );
 
 		this.animate();
+
+		//initialize processor
+		this.processor = new Processor(scope);
 	},
 
 	animate: function()
@@ -842,8 +849,8 @@ Main.prototype = {
 
 	//here to put all the operations available
 	applyDesign: function() {
-		var processor = new Processor(this);
-		processor.executeDesign();
+		this.processor.init();
+		this.processor.executeDesign();
 
 	}
 

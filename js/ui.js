@@ -108,7 +108,46 @@ Ui.prototype = {
 
 		});
 
+
+		//chair_align controller function
+		this.rangeSlider();
+
 	},
+
+
+	rangeSlider: function() {
+		var scope = this;
+
+		var slider = $('.range-slider'),
+		range = $('.range-slider__range'),
+		value = $('.range-slider__value');
+    	
+    	slider.each(function(){
+
+    		var slider_id = this.id;
+
+    		if(slider_id !== undefined) {
+    			value.each(function(){
+	    			var value = $(this).prev().attr('value');
+	    			$(this).html(value);
+		    	});
+
+				range.on('input', function(){
+					$(this).next(value).html(this.value);
+
+					//add functions here
+					//direct to the function in main
+					scope.main.processor.changeParameterValue(slider_id, this.id, this.value);
+
+
+				});
+    		}else {
+    			console.log("there is slider without id");
+    		}
+
+		});
+	},
+
 
 	fileLoader: function(){
 		

@@ -5,9 +5,32 @@ function Processor(main) {
 	this.main = main;
 	this.category = main.category;  //chair, cabinet, table
 	this.furnitures = main.furnitures;
+
+
+	//variables of transformation functions
+	//chair
+	this.chair_align = undefined;
+	this.chair_add = undefined;
+
+
+
+	this.transformFunctions = { };
+
 }
 
 Processor.prototype = {
+
+	init: function() {
+		var scope = this;
+
+		//initialize chair transformers
+		scope.chair_align = new Chair_Align(scope.main);
+		this.transformFunctions.CHAIR_ALIGN = scope.chair_align;
+
+
+
+	},
+
 
 	//execute design for chairs
 	executeDesign: function() {
@@ -27,8 +50,7 @@ Processor.prototype = {
 
 				}else if( scope.furnitures.length > 1) {
 					//possible actions with many furnitures
-					var chair_align = new Chair_Align(scope.main);
-					chair_align.execute();
+					this.chair_align.execute();
 
 				}
 
@@ -45,9 +67,19 @@ Processor.prototype = {
 
 				break;
 
-
 		};
 
+	},
+
+
+	changeParameterValue: function(tfname, pname, value) {
+
+		if(tfname in this.transformFunctions) {
+			this.transformFunctions[tfname].changeParameterValue(pname, value);
+
+			//console.log(this.transformFunctions[tfname]);
+		}
+		
 	}
 
 
