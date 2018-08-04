@@ -22,7 +22,7 @@ function Furniture(furniture) {
 
 	//expected normal axis
 	//need to complete
-	this.normalAxises = {
+	this.refNormalAxises = {
 		//for chairs
 		seat: new THREE.Vector3(0, 1, 0),
 		back: new THREE.Vector3(0, 0, 1),
@@ -33,6 +33,12 @@ function Furniture(furniture) {
 
 		//for table
 	};
+
+
+	//actual normal axis
+	this.normalAxises = {};
+
+
 
 	//array of names of labeled components
 	//label means normal axis is set
@@ -306,7 +312,7 @@ function Furniture(furniture) {
 		//console.log(name)
 		//console.log(vector);
 
-		var targetVector = this.normalAxises[name];
+		var targetVector = this.refNormalAxises[name];
 		if(targetVector !== undefined) {
 			//compare the vectors and define an rotation matrix
 			if(targetVector.equals(vector)) {
@@ -330,6 +336,10 @@ function Furniture(furniture) {
 			//indicating the label is added to the component
 			this.indicateComponentLabeled(name);
 
+
+			//add the actual normal axis
+			this.normalAxises[name] = targetVector;
+
 		}
 
 	}
@@ -337,28 +347,34 @@ function Furniture(furniture) {
 
 	this.setRotationWithNormalAxis = function(name, vector) {
 
-		var originVector = this.normalAxises[name];
-		if(originVector !== undefined) {
-			//compare the vectors and define an rotation matrix
-			if(originVector.equals(vector)) {
-				
-			}else {
-				var tempQuaternion = new THREE.Quaternion();
-				tempQuaternion.setFromUnitVectors(originVector, vector);
+		if(name in this.normalAxises) {
+			var originVector = this.normalAxises[name];
+			if(originVector !== undefined) {
+				//compare the vectors and define an rotation matrix
+				if(originVector.equals(vector)) {
+					
+				}else {
+					var tempQuaternion = new THREE.Quaternion();
+					tempQuaternion.setFromUnitVectors(originVector, vector);
 
-				//make the rotation
-				this.furniture.applyQuaternion(tempQuaternion);
+					//make the rotation
+					this.furniture.applyQuaternion(tempQuaternion);
 
-				//store the rotation info to the qua
-				this.quaternion = this.furniture.quaternion;
+					//store the rotation info to the qua
+					this.quaternion = this.furniture.quaternion;
 
-				//update the ui information
-				this.furniture.getWorldDirection(this.direction);
-				this.directionInfo.innerHTML = `Rot : (x) ${parseFloat(this.direction.x).toFixed(1)} (y) ${parseFloat(this.direction.y).toFixed(1)} (z) ${parseFloat(this.direction.z).toFixed(1)}`;
+					//update the ui information
+					this.furniture.getWorldDirection(this.direction);
+					this.directionInfo.innerHTML = `Rot : (x) ${parseFloat(this.direction.x).toFixed(1)} (y) ${parseFloat(this.direction.y).toFixed(1)} (z) ${parseFloat(this.direction.z).toFixed(1)}`;
+
+				}
+
+				this.normalAxises[name] = vector;
 
 			}
-
 		}
+
+		
 	}
 
 

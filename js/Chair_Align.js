@@ -128,19 +128,40 @@ Chair_Align.prototype = {
 		this.toggleController();
 
 		//alignment in position
+		//make it based on x axis
+		var segAngleR = segAngle/180*Math.PI * (-1);
+
+		var destVector = new THREE.Vector3(0, refHeight, 0);
+		var segVector = new THREE.Vector3(segDistance, 0, 0);
+		
+		var refAxis = new THREE.Vector3(0, 1, 0);
+
+		var destNormalVector = new THREE.Vector3(0, 0, 1);
+
+
 		for(var i = 0; i < furnitures.length; i++) {
 			var furniture = furnitures[i];
 
 			var	origin = new THREE.Vector3();
 			origin.copy(furniture.getComponentPosition(this.reference));
 
-			var destination = new THREE.Vector3(segDistance * i, refHeight, 0);
+			//need to consider the distance and angle at the same time
+			//var destination = new THREE.Vector3(segDistance * i, refHeight, 0);
+			if(i > 0) {
+				segVector.applyAxisAngle(refAxis, segAngleR);
+				
+				destNormalVector.applyAxisAngle(refAxis, segAngleR);
+				//destNormalVector.normalize();
+
+				destVector.add(segVector);
+			}
+
 
 			var translation = new THREE.Vector3();
-			translation.subVectors(destination, origin);
+			translation.subVectors(destVector, origin);
 
 			//the translation has no problem
-			console.log(translation);
+			//console.log(translation);
 
 			//correct the transition using the furniture's current orientation
 			var quaternion = new THREE.Quaternion();
@@ -154,17 +175,18 @@ Chair_Align.prototype = {
 			furniture.getFurniture().translateY(translation.y);
 			furniture.getFurniture().translateZ(translation.z);
 
-			//update the position info
+			//update the position info. only the state
 			furniture.updatePosition();
 
 
-			//apply rotations, calcute a rotation vector
+			//update the rotation
+			furniture.setRotationWithNormalAxis("back", destNormalVector);
 			
 
 		}
 
 
-		this.addSeat(furnitures, this.reference);
+		//this.addSeat(furnitures, this.reference);
 
 	},
 
