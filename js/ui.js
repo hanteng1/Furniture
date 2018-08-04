@@ -127,20 +127,28 @@ Ui.prototype = {
     		var slider_id = this.id;
 
     		if(slider_id !== undefined) {
+
+    			//initialize the value
     			value.each(function(){
 	    			var value = $(this).prev().attr('value');
 	    			$(this).html(value);
 		    	});
 
-				range.on('input', function(){
+    			//attach an event callback function
+    			$(this).children(".range-slider__range").on('input', function(){
 					$(this).next(value).html(this.value);
 
 					//add functions here
 					//direct to the function in main
 					scope.main.processor.changeParameterValue(slider_id, this.id, this.value);
 
-
 				});
+
+				// range.on('input', function(){
+				// 	$(this).next(value).html(this.value);
+				// });
+
+
     		}else {
     			console.log("there is slider without id");
     		}

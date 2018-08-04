@@ -10,15 +10,11 @@ function Chair_Align (main) {
 
 	this.reference = null;  //midframe, seat, mixed
 
-	//two parameters
-	this.segAngle = 0;
-	this.segDistance = 30;
-
 
 	this.parameters = {
 
-		DISTANCE: this.segDistance,
-		ANGLE: this.segAngle
+		DISTANCE: 30,
+		ANGLE: 0
 
 	};
 
@@ -92,7 +88,7 @@ Chair_Align.prototype = {
 	//make transformation
 
 	execute: function(){
-		this.align(this.furnitures, this.segDistance, this.segAngle);
+		this.align(this.furnitures, this.parameters.DISTANCE, this.parameters.ANGLE);
 	},
 
 
@@ -105,27 +101,27 @@ Chair_Align.prototype = {
 	changeParameterValue: function(pname, value) {
 		this.parameters[pname] = value;
 
-		console.log(value);
+		//console.log(this.parameters[pname]);
 
-		//this.execute();
+		this.execute();
 	},
 
 	//align
 	align: function(furnitures, segDistance, segAngle) {
 
-		console.log("checking *align* operation ... ");
+		//console.log("checking *align* operation ... ");
 
 		this.checkLabeledComponents(furnitures);
 
 		if(this.reference == null) return;
 
 		//creat a reference line
-		console.log(`using reference: ${this.reference}`);
+		//console.log(`using reference: ${this.reference}`);
 
 		//create a link line from (0, h, 0) to (n, h, 0), where n = count, and h = existing height of the reference component
 		//this has some problem
 		var refHeight = furnitures[0].getComponentHeight2Floor(this.reference);
-		console.log(`reference height: ${refHeight}`);
+		//console.log(`reference height: ${refHeight}`);
 
 		//todo: calculate a suitable seg distance
 
@@ -144,7 +140,7 @@ Chair_Align.prototype = {
 			translation.subVectors(destination, origin);
 
 			//the translation has no problem
-			//console.log(translation);
+			console.log(translation);
 
 			//correct the transition using the furniture's current orientation
 			var quaternion = new THREE.Quaternion();
@@ -191,6 +187,7 @@ Chair_Align.prototype = {
 			var bBox = new THREE.BoxHelper(refComponent, 0xffffff);
 
 			bBox.renderOrder = Infinity;
+			//this will cause problems... only add.. no delete
 			scope.main.scene.add(bBox);
 
 			bBoxes.push(bBox);
