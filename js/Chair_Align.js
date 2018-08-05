@@ -137,7 +137,7 @@ Chair_Align.prototype = {
 		var refAxis = new THREE.Vector3(0, 1, 0);
 
 		var destNormalVector = new THREE.Vector3(0, 0, 1);
-
+		var correctedNormalVector = new THREE.Vector3();
 
 		for(var i = 0; i < furnitures.length; i++) {
 			var furniture = furnitures[i];
@@ -157,31 +157,37 @@ Chair_Align.prototype = {
 			}
 
 
-			var translation = new THREE.Vector3();
-			translation.subVectors(destVector, origin);
+			correctedNormalVector.copy(destNormalVector);
+			//an extra angle/2
+			correctedNormalVector.applyAxisAngle(refAxis, segAngleR / 2);
 
-			//the translation has no problem
-			//console.log(translation);
 
-			//correct the transition using the furniture's current orientation
-			var quaternion = new THREE.Quaternion();
-			quaternion.copy(furniture.quaternion);
-			quaternion.inverse();
-			translation.applyQuaternion(quaternion);
+			// var translation = new THREE.Vector3();
+			// translation.subVectors(destVector, origin);
 
-			//rotations might be a problem
-			//has to consider the oritation
-			furniture.getFurniture().translateX(translation.x);
-			furniture.getFurniture().translateY(translation.y);
-			furniture.getFurniture().translateZ(translation.z);
+			// //correct the transition using the furniture's current orientation
+			// var quaternion = new THREE.Quaternion();
+			// quaternion.copy(furniture.quaternion);
+			// quaternion.inverse();
+			// translation.applyQuaternion(quaternion);
+
+			// //rotations might be a problem
+			// //has to consider the oritation
+			// furniture.getFurniture().translateX(translation.x);
+			// furniture.getFurniture().translateY(translation.y);
+			// furniture.getFurniture().translateZ(translation.z);
 
 			//update the position info. only the state
-			furniture.updatePosition();
+			//furniture.updatePosition();
+
+
+			//update the translation
+			furniture.moveToPositionWithComponentCenter(destVector, this.reference);
 
 
 			//update the rotation
-			console.log(i);
-			furniture.setRotationWithNormalAxis("back", destNormalVector);
+			//console.log(i);
+			furniture.setRotationWithNormalAxis("back", correctedNormalVector);
 			
 
 		}

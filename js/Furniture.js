@@ -59,6 +59,18 @@ function Furniture(furniture) {
 		return box_size;
 	}
 
+	this.getComponentSize = function(name) {
+		var component = this.getComponentByName(name);
+
+		var box = new THREE.Box3();
+		box.setFromObject(component);
+		var box_size = new THREE.Vector3();
+		box.getSize(box_size);
+
+		//this includes width, height, depth
+		return box_size;
+	}
+
 
 	this.getPosition = function() {
 		return this.position;
@@ -77,6 +89,23 @@ function Furniture(furniture) {
 		var worldPosition = new THREE.Vector3();
 		component.getWorldPosition(worldPosition);
 		return worldPosition;
+	}
+
+
+	this.getComponentCenterPosition = function(name) {
+		var component = this.getComponentByName(name);
+
+		var box = new THREE.Box3();
+		box.setFromObject(component);
+		var center = new THREE.Vector3();
+		if(box.isEmpty() === false)
+		{
+			box.getCenter(center);
+		}else{
+			console.log("error on getting center point");
+		}
+
+		return center;
 	}
 
 	this.setCategory = function(category) {
@@ -303,9 +332,29 @@ function Furniture(furniture) {
 		this.furniture.translateZ(translation.z);
 
 		this.updatePosition();
-
-
 	}
+
+
+	this.moveToPositionWithComponentCenter = function(position, name) {
+		var translation = new THREE.Vector3();
+
+		var componentCenterPosition = this.getComponentCenterPosition(name);
+
+		translation.subVectors(position, componentCenterPosition);
+
+		var quaternion = new THREE.Quaternion();
+		quaternion.copy(this.quaternion);
+		quaternion.inverse();
+		translation.applyQuaternion(quaternion);
+
+		this.furniture.translateX(translation.x);
+		this.furniture.translateY(translation.y);
+		this.furniture.translateZ(translation.z);
+
+		this.updatePosition();
+	}
+
+
 
 	//indicate the object axes
 	this.setNormalAxis = function(name, vector) {
@@ -353,9 +402,9 @@ function Furniture(furniture) {
 		if(name in this.normalAxises) {
 			var originVector = this.normalAxises[name];
 
-			console.log("");
-			console.log(originVector);
-			console.log(vector);
+			//console.log("");
+			//console.log(originVector);
+			//console.log(vector);
 
 			if(originVector !== undefined) {
 				//compare the vectors and define an rotation matrix
