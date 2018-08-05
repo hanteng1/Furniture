@@ -3,6 +3,7 @@
 
 function Chair_Rebuild (main) {
 
+	var test = "Hello"; 
 
 }
 
