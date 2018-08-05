@@ -400,7 +400,26 @@ function Furniture(furniture) {
 
 
 
-	//
+	//end of zhuen's block
+
+
+
+
+	//weixiang's block
+
+
+
+
+	//end of weixiang's block
+
+
+
+	//trif's block
+
+
+
+
+	//end of trif's block
 
 
 }
