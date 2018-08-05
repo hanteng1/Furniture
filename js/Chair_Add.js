@@ -2,7 +2,8 @@
 
 
 function Chair_Add (main) {
-
+ var vari =5;
+ 
 
 }
 
