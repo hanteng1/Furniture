@@ -120,6 +120,30 @@ function Main()
 	// }
 
 
+	//zhuen's block
+
+
+
+	//end of zhuen's block
+
+
+
+	//weixiang's bloack
+
+
+
+	//end of weixiang's block
+
+
+
+
+	//trif's block
+
+
+
+
+	//end of trif's block
+
 }
 
 Main.prototype = {
@@ -853,6 +877,36 @@ Main.prototype = {
 		this.processor.executeDesign();
 
 	}
+
+
+
+
+
+	//zhuen's block
+
+
+
+	//end of zhuen's block
+
+
+
+	//weixiang's bloack
+
+
+
+	//end of weixiang's block
+
+
+
+
+	//trif's block
+
+
+
+
+	//end of trif's block
+
+
 
 };
 

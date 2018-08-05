@@ -54,7 +54,7 @@ Chair_Align.prototype = {
 	checkLabeledComponents: function(furnitures) {
 
 		count = furnitures.length;
-		console.log(`number of chairs: ${count}`);
+		//console.log(`number of chairs: ${count}`);
 
 		//determine reference type
 		var hasFrameCount = 0;
@@ -180,6 +180,7 @@ Chair_Align.prototype = {
 
 
 			//update the rotation
+			console.log(i);
 			furniture.setRotationWithNormalAxis("back", destNormalVector);
 			
 

@@ -338,7 +338,8 @@ function Furniture(furniture) {
 
 
 			//add the actual normal axis
-			this.normalAxises[name] = targetVector;
+			this.normalAxises[name] = new THREE.Vector3();
+			this.normalAxises[name].copy(targetVector);
 
 		}
 
@@ -347,8 +348,15 @@ function Furniture(furniture) {
 
 	this.setRotationWithNormalAxis = function(name, vector) {
 
+
+
 		if(name in this.normalAxises) {
 			var originVector = this.normalAxises[name];
+
+			console.log("");
+			console.log(originVector);
+			console.log(vector);
+
 			if(originVector !== undefined) {
 				//compare the vectors and define an rotation matrix
 				if(originVector.equals(vector)) {
@@ -369,7 +377,7 @@ function Furniture(furniture) {
 
 				}
 
-				this.normalAxises[name] = vector;
+				this.normalAxises[name].copy(vector);
 
 			}
 		}
@@ -385,6 +393,14 @@ function Furniture(furniture) {
 	this.lieFlat2Floor = function() {
 
 	}
+
+	//zhuen's block
+
+
+
+
+
+	//
 
 
 }

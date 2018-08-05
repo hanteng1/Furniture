@@ -7,6 +7,32 @@ function Ui(main)
 		return this.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,");
 	};
 
+
+
+	//zhuen's block
+
+
+
+	//end of zhuen's block
+
+
+
+	//weixiang's bloack
+
+
+
+	//end of weixiang's block
+
+
+
+
+	//trif's block
+
+
+
+
+	//end of trif's block
+
 }
 
 
@@ -91,6 +117,13 @@ Ui.prototype = {
 			new_furniture.updateListedComponents(furniture.listedComponents);
 			new_furniture.updateLabeledComponents(furniture.labeledComponents);
 
+			//copy the already labeled normal axis
+			//Object.assign(new_furniture.normalAxises, furniture.normalAxises);
+			for (let key in furniture.normalAxises) {
+				new_furniture.normalAxises[key] = new THREE.Vector3();
+				new_furniture.normalAxises[key].copy(furniture.normalAxises[key]);
+			}
+
 			//make an offset for the position
 			var size = new_furniture.getSize();
 			var position = new_furniture.getPosition();
@@ -111,6 +144,38 @@ Ui.prototype = {
 
 		//chair_align controller function
 		this.rangeSlider();
+
+
+
+
+		//zhuen's block
+
+
+
+		//end of zhuen's block
+
+
+
+		//weixiang's bloack
+
+
+
+		//end of weixiang's block
+
+
+
+
+		//trif's block
+
+
+
+
+		//end of trif's block
+
+
+
+
+
 
 	},
 
@@ -231,6 +296,32 @@ Ui.prototype = {
 		this.main.assignLabel(label);
 
 	}
+
+
+
+	//zhuen's block
+
+
+
+	//end of zhuen's block
+
+
+
+	//weixiang's bloack
+
+
+
+	//end of weixiang's block
+
+
+
+
+	//trif's block
+
+
+
+
+	//end of trif's block
 
 }
 
