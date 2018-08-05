@@ -353,9 +353,9 @@ function Furniture(furniture) {
 		if(name in this.normalAxises) {
 			var originVector = this.normalAxises[name];
 
-			console.log("");
-			console.log(originVector);
-			console.log(vector);
+			//console.log("");
+			//console.log(originVector);
+			//console.log(vector);
 
 			if(originVector !== undefined) {
 				//compare the vectors and define an rotation matrix

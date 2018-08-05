@@ -137,7 +137,7 @@ Chair_Align.prototype = {
 		var refAxis = new THREE.Vector3(0, 1, 0);
 
 		var destNormalVector = new THREE.Vector3(0, 0, 1);
-
+		var correctedNormalVector = new THREE.Vector3();
 
 		for(var i = 0; i < furnitures.length; i++) {
 			var furniture = furnitures[i];
@@ -155,6 +155,11 @@ Chair_Align.prototype = {
 
 				destVector.add(segVector);
 			}
+
+
+			correctedNormalVector.copy(destNormalVector);
+			//an extra angle/2
+			correctedNormalVector.applyAxisAngle(refAxis, segAngleR / 2);
 
 
 			var translation = new THREE.Vector3();
@@ -180,8 +185,8 @@ Chair_Align.prototype = {
 
 
 			//update the rotation
-			console.log(i);
-			furniture.setRotationWithNormalAxis("back", destNormalVector);
+			//console.log(i);
+			furniture.setRotationWithNormalAxis("back", correctedNormalVector);
 			
 
 		}
