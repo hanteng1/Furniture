@@ -162,26 +162,27 @@ Chair_Align.prototype = {
 			correctedNormalVector.applyAxisAngle(refAxis, segAngleR / 2);
 
 
-			var translation = new THREE.Vector3();
-			translation.subVectors(destVector, origin);
+			// var translation = new THREE.Vector3();
+			// translation.subVectors(destVector, origin);
 
-			//the translation has no problem
-			//console.log(translation);
+			// //correct the transition using the furniture's current orientation
+			// var quaternion = new THREE.Quaternion();
+			// quaternion.copy(furniture.quaternion);
+			// quaternion.inverse();
+			// translation.applyQuaternion(quaternion);
 
-			//correct the transition using the furniture's current orientation
-			var quaternion = new THREE.Quaternion();
-			quaternion.copy(furniture.quaternion);
-			quaternion.inverse();
-			translation.applyQuaternion(quaternion);
-
-			//rotations might be a problem
-			//has to consider the oritation
-			furniture.getFurniture().translateX(translation.x);
-			furniture.getFurniture().translateY(translation.y);
-			furniture.getFurniture().translateZ(translation.z);
+			// //rotations might be a problem
+			// //has to consider the oritation
+			// furniture.getFurniture().translateX(translation.x);
+			// furniture.getFurniture().translateY(translation.y);
+			// furniture.getFurniture().translateZ(translation.z);
 
 			//update the position info. only the state
-			furniture.updatePosition();
+			//furniture.updatePosition();
+
+
+			//update the translation
+			furniture.moveToPositionWithComponentCenter(destVector, this.reference);
 
 
 			//update the rotation
