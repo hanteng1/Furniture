@@ -40,11 +40,22 @@ function Furniture(furniture) {
 
 
 
+	//added bounding box
+	this.boundingBoxes = {};
+
+	//after axis added.. eight corners of the boundingbox
+	this.corners = {};
+
+
 	//array of names of labeled components
 	//label means normal axis is set
 	this.labeledComponents = [];
 	//array of names of components identified
 	this.listedComponents = [];
+	
+
+
+
 
 
 	////////////////////////////////////////////////////////////
@@ -59,6 +70,7 @@ function Furniture(furniture) {
 		return box_size;
 	}
 
+	//this is not correct
 	this.getComponentSize = function(name) {
 		var component = this.getComponentByName(name);
 
@@ -293,6 +305,10 @@ function Furniture(furniture) {
 		this.componentLabels.appendChild(itemLabel);
 
 		this.listedComponents.push(label);
+
+
+		//add a bounding box to it
+		this.addBoundingBox(label);
 	}
 
 	this.indicateComponentLabeled = function(name) {
@@ -312,7 +328,120 @@ function Furniture(furniture) {
 		this.labeledComponents.push(name);
 	}
 
-	
+
+
+	//add a bounding box to track labeled component: center, size
+	//add it when a component is labelled
+	//use this one to calcuate the position, center
+	this.addBoundingBox = function(name) {
+		var component = this.getComponentByName(name);
+
+		var inverseMatrix = new THREE.Matrix4();
+		inverseMatrix.getInverse(this.furniture.matrixWorld, true);
+
+		var box = new THREE.Box3();
+		box.setFromObject(component);
+
+		//this box represent the very orignal box without transformation
+		//this can be updated all the times
+		box.applyMatrix4(inverseMatrix);
+
+		this.boundingBoxes[name] = box;
+
+		//var helper = new THREE.Box3Helper( box, 0xffff00 );
+		//this.boundingBoxHelpers
+
+	}
+
+
+	this.addCorners = function() {
+
+		for(var i = 0; i < this.labeledComponents.length; i++) {
+			console.log(this.labeledComponents[i]);
+			this.addCornersByName(this.labeledComponents[i]);
+		}
+	}
+
+
+	//get the initial eight corners of the referenced object when normal aix is used
+	//use these information for cad modelling
+	this.addCornersByName = function(name) {
+		var component = this.getComponentByName(name);
+
+		//get the box
+		var box = new THREE.Box3();
+		box.setFromObject(component);
+
+		//get the four surface corners in the clockwise order
+		//  1 ----- 2
+		//  |       |
+		//  |       |
+		//  4 ----- 3
+
+		//caution: the compoent has to be aligned with world axis
+		var min = box.min;
+		var max = box.max;
+
+		var corner_1 = new THREE.Vector3();
+		var corner_2 = new THREE.Vector3();
+		var corner_3 = new THREE.Vector3();
+		var corner_4 = new THREE.Vector3();
+
+		if(this.normalAxises[name].x == 1) {
+
+			corner_1 = new THREE.Vector3(max.x, max.y, max.z);
+			corner_2 = new THREE.Vector3(max.x, max.y, min.z);
+			corner_3 = new THREE.Vector3(max.x, min.y, min.z);
+			corner_4 = new THREE.Vector3(max.x, min.y, max.z);
+
+		}else if(this.normalAxises[name].y == 1) {
+
+			corner_1 = new THREE.Vector3(min.x, max.y, min.z);
+			corner_2 = new THREE.Vector3(max.x, max.y, min.z);
+			corner_3 = new THREE.Vector3(max.x, max.y, max.z);
+			corner_4 = new THREE.Vector3(min.x, max.y, max.z);
+
+		}else if(this.normalAxises[name].z == 1) {
+
+			corner_1 = new THREE.Vector3(min.x, max.y, max.z);
+			corner_2 = new THREE.Vector3(max.x, max.y, max.z);
+			corner_3 = new THREE.Vector3(max.x, min.y, max.z);
+			corner_4 = new THREE.Vector3(min.x, min.y, max.z);
+
+		}
+		
+
+		var corners = [];
+		corners.push(corner_1);
+		corners.push(corner_2);
+		corners.push(corner_3);
+		corners.push(corner_4);
+
+		this.corners[name] = corners; 		
+	}
+
+
+	//this is to update the corners with all the applied transformations since it is built
+	//to keep track of them
+	//stupid method
+	this.applyQuaternion2Corners = function(quaternion) {
+		for(let key in this.corners) {
+			var corners = this.corners[key];
+			for(var i = 0; i < corners.length; i++) {
+				corners[i].applyQuaternion(quaternion);
+			}
+		}
+
+	}
+
+	this.applyTranslation2Corners = function(translation) {
+		for(let key in this.corners) {
+			var corners = this.corners[key];
+			for(var i = 0; i < corners.length; i++) {
+				corners[i].add(translation);
+			}
+		}
+	}
 
 	////////////////////////////////////////////////////////////
 	//apply transformation
@@ -330,6 +459,14 @@ function Furniture(furniture) {
 		this.furniture.translateX(translation.x);
 		this.furniture.translateY(translation.y);
 		this.furniture.translateZ(translation.z);
+
+
+		//make translation to boudning box
+		//todo
+
+		//make trnaslation to cornerss
+		this.applyTranslation2Corners(translation);
+
 
 		this.updatePosition();
 	}
@@ -350,6 +487,12 @@ function Furniture(furniture) {
 		this.furniture.translateX(translation.x);
 		this.furniture.translateY(translation.y);
 		this.furniture.translateZ(translation.z);
+
+		//make translation to boudning box
+		//todo
+
+		//make trnaslation to cornerss
+		this.applyTranslation2Corners(translation);
 
 		this.updatePosition();
 	}
@@ -373,6 +516,15 @@ function Furniture(furniture) {
 				//make the rotation
 				this.furniture.applyQuaternion(tempQuaternion);
 
+
+				//make the rotation for the existing boundingbox
+				//todo...
+
+
+				//make the rotation for the existing corners
+				this.applyQuaternion2Corners(tempQuaternion);
+
+
 				//store the rotation info to the qua
 				this.quaternion = this.furniture.quaternion;
 
@@ -389,6 +541,11 @@ function Furniture(furniture) {
 			//add the actual normal axis
 			this.normalAxises[name] = new THREE.Vector3();
 			this.normalAxises[name].copy(targetVector);
+
+
+			//add the corners
+			//do not add it here.. there are explode and collapse operations
+			//this.addCorners(name);
 
 		}
 
@@ -416,6 +573,16 @@ function Furniture(furniture) {
 
 					//make the rotation
 					this.furniture.applyQuaternion(tempQuaternion);
+
+
+					//make the rotation for the existing boundingbox
+					//todo...
+
+
+					//make the rotation for the existing corners
+					this.applyQuaternion2Corners(tempQuaternion);
+
+
 
 					//store the rotation info to the qua
 					this.quaternion = this.furniture.quaternion;

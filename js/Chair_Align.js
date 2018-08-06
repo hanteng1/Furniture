@@ -193,7 +193,7 @@ Chair_Align.prototype = {
 		}
 
 
-		//this.addSeat(furnitures, this.reference);
+		this.addSeat(furnitures, this.reference);
 
 	},
 
@@ -211,15 +211,23 @@ Chair_Align.prototype = {
 		var bBoxes = [];
 
 		for(var i = 0; i < furnitures.length; i++) {
-			var refComponent = furnitures[i].getComponentByName(reference);
 
-			var bBox = new THREE.BoxHelper(refComponent, 0xffffff);
+			//draw the corners
+			var material = new THREE.LineBasicMaterial( { color: 0x0000ff } );
 
-			bBox.renderOrder = Infinity;
-			//this will cause problems... only add.. no delete
-			scope.main.scene.add(bBox);
+			var geometry = new THREE.Geometry();
 
-			bBoxes.push(bBox);
+			for(let key in furnitures[i].corners) {
+				var corners = furnitures[i].corners[key];
+				for(var j = 0; j < corners.length; j++) {
+					geometry.vertices.push(corners[j]);
+				}
+			}
+
+			var line = new THREE.Line( geometry, material );
+
+			scope.main.scene.add( line );
+
 		}
 
 	}
