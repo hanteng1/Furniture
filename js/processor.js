@@ -78,8 +78,8 @@ Processor.prototype = {
 
 				}else if(scope.furnitures.length == 1){
 					//possible actions with one furniture
-					//this.chair_add.execute();
-					this.chair_rebuild.execute();
+					this.chair_add.execute();
+					//this.chair_rebuild.execute();
 
 				}else if( scope.furnitures.length > 1) {
 					//possible actions with many furnitures
