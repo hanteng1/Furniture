@@ -8,7 +8,9 @@ function Chair_Add (main) {
 	this.reference = null;  //midframe, seat, mixed
 
 
-	
+	this.parameters = {
+		POSITION: 0
+	};
 
 	//number of furnitures
 	var count = 0;
@@ -64,10 +66,20 @@ Chair_Add.prototype = {
 		}
 	},
 
+	changeParameterValue: function(pname, value) {
+		this.parameters[pname] = value;
+
+		//console.log(this.parameters[pname]);
+
+		this.execute();
+	},
+
 	//////////////////////////////////////////////////////////////////////////
 
 	execute: function(){
 		if (this.checkHasBack(this.furnitures[0])) {
+			
+			//remove other part
 			var group = this.furnitures[0].getFurniture();			
 			
 			for (var i = group.children.length - 1; i >= 0 ; i--) {				
@@ -77,24 +89,54 @@ Chair_Add.prototype = {
 				}		
 			}
 
+
+			//creat board
 			var size = this.furnitures[0].getSize();
-			var back = group.getObjectByName ('back');
-			var pos = this.furnitures[0].getComponentCenterPosition('back');
+			////console.log("size.x = " + size.x + "size.y = " + size.y + "size.z = " + size.z);
+			var width = size.x;
+			var height = size.y;
+			var depth  = size.z;
 
-			var geometry = new THREE.BoxGeometry( size.x, size.y, size.z );
+			if(height > width)
+				height= height/2;
+			else
+				width = width/2;
+
+			var geometry = new THREE.BoxGeometry( width, height, depth );
 			var material = new THREE.MeshBasicMaterial( {color: 0x9C5F04} );
-			var cube = new THREE.Mesh( geometry, material );
+			var board = new THREE.Mesh( geometry, material );
 
-			console.log(pos);
+			//get chair back world position
+			var pos = this.furnitures[0].getComponentCenterPosition('back');
+			////console.log(pos); // check type = Vector3
+			////console.log("back position: (" + pos.x + ", " + pos.y + ", " + pos.z + ")");
 
 
-			cube.position.set(pos.x, pos.y, 0);
+			//update chair back transfrom Matrix
+			var back = group.getObjectByName ('back');
+			////console.log(back); // check type = Object3D
+			back.updateMatrix();
+			back.updateMatrixWorld(true);
 
-			
-			group.add(cube);
 
-			//this.main.scene.updateMatrixWorld();
-			//this.furnitures[0].updateMatrixWorld();
+			//turn chair back world position to loacl position
+			back.worldToLocal(pos);
+			if(height > width)
+				pos.x += height/2;
+			else
+				pos.x += width/2;
+
+			var segPosition = this.parameters.POSITION;
+			console.log(segPosition);
+			pos.z += parseInt(segPosition);
+
+			//set board position
+			board.position.set(pos.x, pos.y, pos.z);
+			console.log("board position: (" + board.position.x + ", " + board.position.y + ", " + board.position.z + ")");
+
+
+			//add borad to furniture
+			group.add(board);			
 		}		
 	}
 
