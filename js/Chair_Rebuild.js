@@ -77,33 +77,37 @@ Chair_Rebuild.prototype = {
 	changeTexture: function(furniture){
 		$('.ui.compact.vertical.labeled.image.menu').show();
 		var seat = furniture.getComponentByName('seat');
-		
+		newscene = this.main.scene;
+		seat.geometry.computeFaceNormals();
 		$( ".item.ui.image.label.1" ).click(function() {
 			//change material function
-			var texture = new THREE.TextureLoader().load( 'images/material/material1.jpg' );
+			var texture = new THREE.TextureLoader().load( 'images/material/material6.jpg' );
 			// immediately use the texture for material creation
-			var newmaterial = new THREE.MeshBasicMaterial( { map: texture } );
-			seat.material = newmaterial;
+			var newmaterial = new THREE.MeshLambertMaterial( { map: texture } );
+			newmaterial = new THREE.LineBasicMaterial();
+			var new_seat = new THREE.Line(seat.geometry , newmaterial);
+			newscene.add(new_seat);
+			//console.log(seat);
 		});
 		$( ".item.ui.image.label.2" ).click(function() {
 			//change material function
-			var texture = new THREE.TextureLoader().load( 'images/material/material2.jpg' );
+			var texture = new THREE.TextureLoader().load( 'images/material/material6.jpg' );
 			// immediately use the texture for material creation
-			var newmaterial = new THREE.MeshBasicMaterial( { map: texture } );
+			var newmaterial = new THREE.MeshStandardMaterial( { map: texture } );
 			seat.material = newmaterial;
 		});
 		$( ".item.ui.image.label.3" ).click(function() {
 			//change material function
-			var texture = new THREE.TextureLoader().load( 'images/material/material3.jpg' );
+			var texture = new THREE.TextureLoader().load( 'images/material/material6.jpg' );
 			// immediately use the texture for material creation
 			var newmaterial = new THREE.MeshBasicMaterial( { map: texture } );
 			seat.material = newmaterial;
 		});
 		$( ".item.ui.image.label.4" ).click(function() {
 			//change material function
-			var texture = new THREE.TextureLoader().load( 'images/material/material4.jpg' );
+			var texture = new THREE.TextureLoader().load( 'images/material/material6.jpg' );
 			// immediately use the texture for material creation
-			var newmaterial = new THREE.MeshBasicMaterial( { map: texture } );
+			var newmaterial = new THREE.MeshPhongMaterial( { map: texture } );
 			seat.material = newmaterial;
 		});
 
