@@ -2,6 +2,8 @@
 //chair align related functions
 //align in one line
 //add seat
+const makeSeat = require('./cadMakeSeat')
+
 
 function Chair_Align (main) {
 
@@ -20,6 +22,9 @@ function Chair_Align (main) {
 
 	//number of furnitures
 	var count = 0;
+
+	//seat object
+	this.seat;
 }
 
 Chair_Align.prototype = {
@@ -173,37 +178,14 @@ Chair_Align.prototype = {
 				destVector.add(segVector);
 			}
 
-
 			correctedNormalVector.copy(destNormalVector);
 			//an extra angle/2
 			correctedNormalVector.applyAxisAngle(refAxis, segAngleR / 2);
 
-
-			// var translation = new THREE.Vector3();
-			// translation.subVectors(destVector, origin);
-
-			// //correct the transition using the furniture's current orientation
-			// var quaternion = new THREE.Quaternion();
-			// quaternion.copy(furniture.quaternion);
-			// quaternion.inverse();
-			// translation.applyQuaternion(quaternion);
-
-			// //rotations might be a problem
-			// //has to consider the oritation
-			// furniture.getFurniture().translateX(translation.x);
-			// furniture.getFurniture().translateY(translation.y);
-			// furniture.getFurniture().translateZ(translation.z);
-
-			//update the position info. only the state
-			//furniture.updatePosition();
-
-
 			//update the translation
 			furniture.moveToPositionWithComponentCenter(destVector, this.reference);
 
-
 			//update the rotation
-			//console.log(i);
 			furniture.setRotationWithNormalAxis("back", correctedNormalVector);
 			
 
@@ -225,8 +207,6 @@ Chair_Align.prototype = {
 		//the important part is getting the four cornners of the compoents
 		var scope = this;
 
-		var bBoxes = [];
-
 		// for(var i = 0; i < furnitures.length; i++) {
 
 		// 	//draw the corners
@@ -247,8 +227,47 @@ Chair_Align.prototype = {
 
 		// }
 
+		if(scope.seat != undefined) {
+			scope.main.removeFromScene(this.seat);
+		}
 
 
+		//create the seat object
+		var innerRaceCorners2D = [];  //use x and z
+		var outerRaceCorners2D = [];
+
+
+		for(var i = 0; i < furnitures.length; i++) {
+			var corners = furnitures[1].getCornersByName(reference);
+
+			//corners
+			//  1 ----- 2
+			//  |       |
+			//  |       |
+			//  4 --|-- 3
+			
+			let corner_1 = [corners[0].x, corners[0].z];
+			let corner_2 = [corners[0].x, corners[0].z];
+			let corner_3 = [corners[0].x, corners[0].z];
+			let corner_4 = [corners[0].x, corners[0].z];
+
+			//inner
+			innerRaceCorners2D.push(corner_1);
+			innerRaceCorners2D.push(corner_2);
+			//outer race
+			outerRaceCorners2D.push(corner_4);
+			outerRaceCorners2D.push(corner_3);
+		}
+
+		outerRaceCorners2D.reverse();
+
+
+
+		//csg make seat
+		scope.seat = makeSeat(innerRaceCorners2D, outerRaceCorners2D);
+		scope.main.scene.add( scope.seat );
+
+		
 	}
 	
 

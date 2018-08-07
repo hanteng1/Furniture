@@ -884,9 +884,6 @@ Main.prototype = {
 		}
 
 
-
-
-
 		//testing
 		// for(var i = 0; i < this.furnitures.length; i++) {
 
