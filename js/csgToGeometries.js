@@ -1,3 +1,5 @@
+"use strict;"
+
 const { CSG, CAG, isCSG, isCAG } = require('@jscad/csg')
 
 function colorBytes (colorRGBA) {
@@ -54,7 +56,8 @@ function csgToGeometries(initial_csg) {
 
           vertexTag2Index[vertextag] = vertexindex
           //vertices.push([vertex.pos.x, vertex.pos.y, vertex.pos.z])
-          vertices.push([vertex.pos.x, vertex.pos.y, vertex.pos.z]);
+          //vertices.push([vertex.pos.x, vertex.pos.y, vertex.pos.z]);
+          vertices.push([vertex.pos.x, vertex.pos.z, vertex.pos.y]);
           
           colors.push(color)
         }

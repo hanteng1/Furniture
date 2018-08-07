@@ -10,6 +10,8 @@
 //const {union, difference, intersection} = scadApi.booleanOps
 //const {translate, rotate} = scadApi.transformations
 
+const Processor = require('./Processor')
+
 function Main()
 {
 

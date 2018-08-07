@@ -1,8 +1,8 @@
-
+"use strict;"
 //chair align related functions
 //align in one line
 //add seat
-const makeSeat = require('./cadMakeSeat')
+const cadMakeSeat = require('./cadMakeSeat')
 
 
 function Chair_Align (main) {
@@ -237,8 +237,10 @@ Chair_Align.prototype = {
 		var outerRaceCorners2D = [];
 
 
+		var offsetY = 0;
+
 		for(var i = 0; i < furnitures.length; i++) {
-			var corners = furnitures[1].getCornersByName(reference);
+			var corners = furnitures[i].getCornersByName(reference);
 
 			//corners
 			//  1 ----- 2
@@ -247,9 +249,9 @@ Chair_Align.prototype = {
 			//  4 --|-- 3
 			
 			let corner_1 = [corners[0].x, corners[0].z];
-			let corner_2 = [corners[0].x, corners[0].z];
-			let corner_3 = [corners[0].x, corners[0].z];
-			let corner_4 = [corners[0].x, corners[0].z];
+			let corner_2 = [corners[1].x, corners[1].z];
+			let corner_3 = [corners[2].x, corners[2].z];
+			let corner_4 = [corners[3].x, corners[3].z];
 
 			//inner
 			innerRaceCorners2D.push(corner_1);
@@ -257,37 +259,24 @@ Chair_Align.prototype = {
 			//outer race
 			outerRaceCorners2D.push(corner_4);
 			outerRaceCorners2D.push(corner_3);
+
+
+			offsetY = corners[0].y;
 		}
 
 		outerRaceCorners2D.reverse();
 
-
-
 		//csg make seat
-		scope.seat = makeSeat(innerRaceCorners2D, outerRaceCorners2D);
+		scope.seat = cadMakeSeat(innerRaceCorners2D, outerRaceCorners2D, offsetY);
 		scope.main.scene.add( scope.seat );
 
-		
+
 	}
 	
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 }
 
-
+module.exports = Chair_Align
 
 
 
