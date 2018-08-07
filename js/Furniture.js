@@ -44,8 +44,10 @@ function Furniture(furniture) {
 	this.boundingBoxes = {};
 
 	//after axis added.. eight corners of the boundingbox
+	//use Points here
 	this.corners = {};
-
+	//points object to manage the transformations of the corners
+	this.points;
 
 	//array of names of labeled components
 	//label means normal axis is set
@@ -91,6 +93,21 @@ function Furniture(furniture) {
 	this.getObjects = function() {
 		return this.furniture.children;
 	}
+
+	this.getFurnitureCenter = function() {
+		var box = new THREE.Box3();
+		box.setFromObject(this.furniture);
+		var center = new THREE.Vector3();
+		if(box.isEmpty() === false)
+		{
+			box.getCenter(center);
+		}else{
+			console.log("error on getting center point");
+		}
+
+		return center;
+	}
+
 
 	this.getComponentByName = function(name) {
 		return this.furniture.getObjectByName(name);
@@ -357,7 +374,7 @@ function Furniture(furniture) {
 	this.addCorners = function() {
 
 		for(var i = 0; i < this.labeledComponents.length; i++) {
-			console.log(this.labeledComponents[i]);
+			//console.log(this.labeledComponents[i]);
 			this.addCornersByName(this.labeledComponents[i]);
 		}
 	}
@@ -421,17 +438,80 @@ function Furniture(furniture) {
 	}
 
 
+	//add the corners to the point object
+	this.addtoPoint = function() {
+
+		function getRandomInt(max) {
+  			return Math.floor(Math.random() * Math.floor(max));
+		}
+
+		var geometry = new THREE.BufferGeometry();
+		var positions = [];
+		var colors = [];
+		var color = new THREE.Color();
+
+		for(let key in this.corners) {
+
+			var vx = Math.random();
+			var vy = Math.random();
+			var vz = Math.random();
+			color.setRGB( vx, vy, vz );  //float between 0 and 1.0s
+
+			var corners = this.corners[key];
+			for ( var i = 0; i < corners.length; i ++ ) {
+				// positions
+				var x = corners[i].x;
+				var y = corners[i].y;
+				var z = corners[i].z;
+				positions.push( x, y, z );
+				colors.push( color.r, color.g, color.b );
+			}
+		}
+		
+		geometry.addAttribute( 'position', new THREE.Float32BufferAttribute( positions, 3 ) );
+		geometry.addAttribute( 'color', new THREE.Float32BufferAttribute( colors, 3 ) );
+		geometry.computeBoundingSphere();
+		//
+		var material = new THREE.PointsMaterial( { size: 5, vertexColors: THREE.VertexColors } );
+		this.points = new THREE.Points( geometry, material );
+
+
+		this.points.name = "points";
+
+		//apply the transformations
+		var inverseMatrixWorld = new THREE.Matrix4();
+		inverseMatrixWorld.getInverse(this.furniture.matrixWorld.clone(), true);
+		this.points.applyMatrix(inverseMatrixWorld);
+
+		this.furniture.add(this.points);
+
+	}
+
+
+
+
 	//this is to update the corners with all the applied transformations since it is built
 	//to keep track of them
 	//stupid method
 	this.applyQuaternion2Corners = function(quaternion) {
+		
+		var furnitureCenter = this.getFurnitureCenter();
+
 		for(let key in this.corners) {
 			var corners = this.corners[key];
+
 			for(var i = 0; i < corners.length; i++) {
-				corners[i].applyQuaternion(quaternion);
+				//corners[i].applyQuaternion(quaternion);
+
+				//a vector from corner's to the center
+				var tempVector = new THREE.Vector3();
+				tempVector.subVectors(corners[i], furnitureCenter);
+
+				tempVector.applyQuaternion(quaternion);
+
+				corners[i].addVectors(furnitureCenter, tempVector);
 			}
 		}
-
 	}
 
 	this.applyTranslation2Corners = function(translation) {
@@ -451,6 +531,16 @@ function Furniture(furniture) {
 		var translation = new THREE.Vector3();
 		translation.subVectors(position, this.position);
 
+
+		//make trnaslation to cornerss
+		//this.applyTranslation2Corners(translation);
+
+		// if(this.points !== undefined) {
+		// 	this.points.translateX(translation.x);
+		// 	this.points.translateY(translation.y);
+		// 	this.points.translateZ(translation.z);
+		// }
+
 		var quaternion = new THREE.Quaternion();
 		quaternion.copy(this.quaternion);
 		quaternion.inverse();
@@ -463,10 +553,8 @@ function Furniture(furniture) {
 
 		//make translation to boudning box
 		//todo
-
-		//make trnaslation to cornerss
-		this.applyTranslation2Corners(translation);
-
+		
+		
 
 		this.updatePosition();
 	}
@@ -479,6 +567,16 @@ function Furniture(furniture) {
 
 		translation.subVectors(position, componentCenterPosition);
 
+
+		//make trnaslation to cornerss
+		//this.applyTranslation2Corners(translation);
+		// if(this.points !== undefined) {
+		// 	this.points.translateX(translation.x);
+		// 	this.points.translateY(translation.y);
+		// 	this.points.translateZ(translation.z);
+		// }
+
+
 		var quaternion = new THREE.Quaternion();
 		quaternion.copy(this.quaternion);
 		quaternion.inverse();
@@ -491,8 +589,11 @@ function Furniture(furniture) {
 		//make translation to boudning box
 		//todo
 
-		//make trnaslation to cornerss
-		this.applyTranslation2Corners(translation);
+		
+		
+
+
+		
 
 		this.updatePosition();
 	}
@@ -518,11 +619,13 @@ function Furniture(furniture) {
 
 
 				//make the rotation for the existing boundingbox
-				//todo...
+				//todo...\
+				// if(this.points !== undefined)
+				// 	this.points.applyQuaternion(tempQuaternion);
 
 
 				//make the rotation for the existing corners
-				this.applyQuaternion2Corners(tempQuaternion);
+				//this.applyQuaternion2Corners(tempQuaternion);
 
 
 				//store the rotation info to the qua
@@ -555,7 +658,6 @@ function Furniture(furniture) {
 	this.setRotationWithNormalAxis = function(name, vector) {
 
 
-
 		if(name in this.normalAxises) {
 			var originVector = this.normalAxises[name];
 
@@ -571,17 +673,18 @@ function Furniture(furniture) {
 					var tempQuaternion = new THREE.Quaternion();
 					tempQuaternion.setFromUnitVectors(originVector, vector);
 
+					//make the rotation for the existing corners
+					//this.applyQuaternion2Corners(tempQuaternion);
+
 					//make the rotation
 					this.furniture.applyQuaternion(tempQuaternion);
 
 
 					//make the rotation for the existing boundingbox
 					//todo...
-
-
-					//make the rotation for the existing corners
-					this.applyQuaternion2Corners(tempQuaternion);
-
+					// if(this.points !== undefined)
+					// 	this.points.applyQuaternion(tempQuaternion);
+					
 
 
 					//store the rotation info to the qua

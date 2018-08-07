@@ -210,25 +210,27 @@ Chair_Align.prototype = {
 
 		var bBoxes = [];
 
-		for(var i = 0; i < furnitures.length; i++) {
+		// for(var i = 0; i < furnitures.length; i++) {
 
-			//draw the corners
-			var material = new THREE.LineBasicMaterial( { color: 0x0000ff } );
+		// 	//draw the corners
+		// 	var material = new THREE.LineBasicMaterial( { color: 0x0000ff } );
 
-			var geometry = new THREE.Geometry();
+		// 	var geometry = new THREE.Geometry();
 
-			for(let key in furnitures[i].corners) {
-				var corners = furnitures[i].corners[key];
-				for(var j = 0; j < corners.length; j++) {
-					geometry.vertices.push(corners[j]);
-				}
-			}
+		// 	for(let key in furnitures[i].corners) {
+		// 		var corners = furnitures[i].corners[key];
+		// 		for(var j = 0; j < corners.length; j++) {
+		// 			geometry.vertices.push(corners[j]);
+		// 		}
+		// 	}
 
-			var line = new THREE.Line( geometry, material );
+		// 	var line = new THREE.Line( geometry, material );
 
-			scope.main.scene.add( line );
+		// 	scope.main.scene.add( line );
 
-		}
+		// }
+
+		
 
 	}
 	
