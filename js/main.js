@@ -10,6 +10,8 @@
 //const {union, difference, intersection} = scadApi.booleanOps
 //const {translate, rotate} = scadApi.transformations
 
+const Processor = require('./Processor')
+
 function Main()
 {
 
@@ -234,7 +236,7 @@ Main.prototype = {
 		// this.select( this.furniture );
 
 		//add this to array and visualize its
-		var furnitureObj = new THREE.Group();
+		var furnitureObj = new THREE.Object3D();
 		for(var i = 0; i < objects.length; i++){
 			furnitureObj.add(objects[i]);
 		}
@@ -849,6 +851,45 @@ Main.prototype = {
 
 	//here to put all the operations available
 	applyDesign: function() {
+
+		//assume the furnitures are annoted well and get ready
+		//add the corners to the labeled and axised components
+		for(var i = 0; i < this.furnitures.length; i++) {
+			this.furnitures[i].addCorners();
+			this.furnitures[i].addtoPoint();
+
+			//this.scene.add(this.furnitures[i].points);
+		}
+
+
+		//testing
+		// for(var i = 0; i < this.furnitures.length; i++) {
+
+		// 	//draw the corners
+		// 	var material = new THREE.LineBasicMaterial( { color: 0x0000ff } );
+
+		// 	var geometry = new THREE.Geometry();
+
+		// 	for(let key in this.furnitures[i].corners) {
+		// 		var corners = this.furnitures[i].corners[key];
+		// 		for(var j = 0; j < corners.length; j++) {
+		// 			geometry.vertices.push(corners[j]);
+		// 		}
+		// 	}
+
+		// 	var line = new THREE.Line( geometry, material );
+
+		// 	this.scene.add( line );
+
+		// }
+
+
+		//testing
+
+
+
+
+
 		this.processor.init();
 		this.processor.executeDesign();
 
