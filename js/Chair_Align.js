@@ -104,6 +104,23 @@ Chair_Align.prototype = {
 		//console.log(this.parameters[pname]);
 
 		this.execute();
+
+
+		//test
+		//console.log(this.furnitures[1].getCornersByName(this.reference));
+
+		// var corners = this.furnitures[1].getCornersByName(this.reference);
+		// //draw the corners
+		// var material = new THREE.LineBasicMaterial( { color: 0xff0000 } );
+
+		// var geometry = new THREE.Geometry();
+		// for(var j = 0; j < corners.length; j++) {
+		// 	geometry.vertices.push(corners[j]);
+		// }
+		// var line = new THREE.Line( geometry, material );
+
+		// this.main.scene.add( line );
+
 	},
 
 	//align
@@ -230,7 +247,7 @@ Chair_Align.prototype = {
 
 		// }
 
-		
+
 
 	}
 	

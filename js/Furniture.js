@@ -200,6 +200,51 @@ function Furniture(furniture) {
 	}
 
 
+
+	//get corner point by name from points
+	this.getCornersByName = function(name) {
+		
+		function findFirstItem(element) {
+  			return element == name;
+		}
+
+		var index = this.labeledComponents.findIndex(findFirstItem);
+		
+		var verticesAttribute = this.points.geometry.getAttribute('position');
+		var verticesArray = verticesAttribute.array;
+		var itemSize = verticesAttribute.itemSize;
+		//var verticesNum = verticesArray.length / itemSize;
+
+		var pIndex = index * (itemSize * 4);
+
+		//corners
+		//  1 ----- 2
+		//  |       |
+		//  |       |
+		//  4 ----- 3
+
+		//
+		var corner_1 = new THREE.Vector3(verticesArray[pIndex], verticesArray[pIndex + 1], verticesArray[pIndex + 2]);
+		var corner_2 = new THREE.Vector3(verticesArray[pIndex + 3], verticesArray[pIndex + 4], verticesArray[pIndex + 5]);
+		var corner_3 = new THREE.Vector3(verticesArray[pIndex + 6], verticesArray[pIndex + 7], verticesArray[pIndex + 8]);
+		var corner_4 = new THREE.Vector3(verticesArray[pIndex + 9], verticesArray[pIndex + 10], verticesArray[pIndex + 11]);
+
+		corner_1.applyMatrix4( this.points.matrixWorld );
+		corner_2.applyMatrix4( this.points.matrixWorld );
+		corner_3.applyMatrix4( this.points.matrixWorld );
+		corner_4.applyMatrix4( this.points.matrixWorld );
+
+		var corners = [];
+		corners.push(corner_1);
+		corners.push(corner_2);
+		corners.push(corner_3);
+		corners.push(corner_4);
+
+		return corners;
+
+	}
+
+
 	////////////////////////////////////////////////////////////
 	//update info
 	this.updatePosition = function(updatedPosition) {
@@ -474,6 +519,7 @@ function Furniture(furniture) {
 		//
 		var material = new THREE.PointsMaterial( { size: 5, vertexColors: THREE.VertexColors } );
 		this.points = new THREE.Points( geometry, material );
+		//here is its very initial positions... this is not changed while being transformed..
 
 
 		this.points.name = "points";
@@ -486,8 +532,6 @@ function Furniture(furniture) {
 		this.furniture.add(this.points);
 
 	}
-
-
 
 
 	//this is to update the corners with all the applied transformations since it is built
