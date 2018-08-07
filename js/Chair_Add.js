@@ -74,6 +74,17 @@ Chair_Add.prototype = {
 		this.execute();
 	},
 
+	computeNumber: function (value) {
+		if (value < 0) {
+	        return Math.floor(value);
+	    }
+	    else{
+	    	if (value < 0.5)
+	    		return Math.floor(value);
+	    	return Math.ceil(value);
+	    }	    
+	},
+
 	//////////////////////////////////////////////////////////////////////////
 
 	execute: function(){
@@ -86,7 +97,7 @@ Chair_Add.prototype = {
 				var name = group.children[i].name;
 				if (name != 'back') {
 					group.remove(group.children[i]);
-				}		
+				}	
 			}
 
 
@@ -100,7 +111,7 @@ Chair_Add.prototype = {
 			if(height > width)
 				height= height/2;
 			else
-				width = width/2;
+				width = width/2; 
 
 			var geometry = new THREE.BoxGeometry( width, height, depth );
 			var material = new THREE.MeshBasicMaterial( {color: 0x9C5F04} );
@@ -119,6 +130,20 @@ Chair_Add.prototype = {
 			back.updateMatrixWorld(true);
 
 
+			var x = new THREE.Vector3(1, 0, 0);
+			var y = new THREE.Vector3(0, 1, 0);
+			var z = new THREE.Vector3(0, 0, 1);
+			back.localToWorld(x);
+			back.localToWorld(y);
+			back.localToWorld(z);
+			console.log("x: " + this.computeNumber(x.z));
+			console.log("y: " + this.computeNumber(y.z));
+			console.log("z: " + this.computeNumber(z.z));
+			var flag = this.computeNumber(x.z) + this.computeNumber(y.z) + this.computeNumber(z.z);
+
+
+
+
 			//turn chair back world position to loacl position
 			back.worldToLocal(pos);
 			if(height > width)
@@ -127,12 +152,10 @@ Chair_Add.prototype = {
 				pos.x += width/2;
 
 			var segPosition = this.parameters.POSITION;
-			console.log(segPosition);
 			pos.z += parseInt(segPosition);
 
 			//set board position
 			board.position.set(pos.x, pos.y, pos.z);
-			console.log("board position: (" + board.position.x + ", " + board.position.y + ", " + board.position.z + ")");
 
 
 			//add borad to furniture
@@ -141,3 +164,6 @@ Chair_Add.prototype = {
 	}
 
 }
+
+
+module.exports = Chair_Add

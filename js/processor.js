@@ -3,6 +3,7 @@
 //that without the need of cad operations
 
 const Chair_Align = require('./Chair_Align')
+const Chair_Add = require('./Chair_Add')
 
 function Processor(main) {
 	this.main = main;
@@ -60,8 +61,8 @@ Processor.prototype = {
 		scope.chair_add = new Chair_Add(scope.main);
 		this.transformFunctions.CHAIR_ADD = scope.chair_add;
 
-		scope.chair_rebuild = new Chair_Rebuild(scope.main);
-		this.transformFunctions.CHAIR_REBUILD = scope.chair_rebuild;
+		//scope.chair_rebuild = new Chair_Rebuild(scope.main);
+		//this.transformFunctions.CHAIR_REBUILD = scope.chair_rebuild;
 
 
 	},
