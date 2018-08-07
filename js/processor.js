@@ -2,8 +2,9 @@
 //this is to handle the new design approaches
 //that without the need of cad operations
 
-const Chair_Align = require('./Chair_Align')
-
+const Chair_Align = require('./Chair_Align');
+const Chair_Add = require('./Chair_Add');
+const Chair_Rebuild = require('./Chair_Rebuild');
 function Processor(main) {
 	this.main = main;
 	this.category = main.category;  //chair, cabinet, table

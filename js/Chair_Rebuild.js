@@ -76,39 +76,51 @@ Chair_Rebuild.prototype = {
 	},
 	changeTexture: function(furniture){
 		$('.ui.compact.vertical.labeled.image.menu').show();
+		//get the furniture
+		var group = furniture.getFurniture();
+
 		var seat = furniture.getComponentByName('seat');
+		var NewSeatSize = furniture.getComponentSize('seat');
+		var NewSeatPosi = furniture.getComponentCenterPosition('seat');
+		
+		group.remove(seat);
+		
+		var geometry = new THREE.BoxGeometry( NewSeatSize.x , NewSeatSize.y , NewSeatSize.z );		
+		var texture = new THREE.TextureLoader().load( 'images/material/material1.jpg' );
+		var newmaterial = new THREE.MeshBasicMaterial( {map: texture} );
+		var NewSeat = new THREE.Mesh( geometry, newmaterial );
+		NewSeat.position.set(NewSeatPosi.x, NewSeatPosi.y, NewSeatPosi.z);
 		newscene = this.main.scene;
-		seat.geometry.computeFaceNormals();
+		newscene.add( NewSeat );
+
 		$( ".item.ui.image.label.1" ).click(function() {
 			//change material function
-			var texture = new THREE.TextureLoader().load( 'images/material/material6.jpg' );
+			texture = new THREE.TextureLoader().load( 'images/material/material1.jpg' );
 			// immediately use the texture for material creation
-			var newmaterial = new THREE.MeshLambertMaterial( { map: texture } );
-			newmaterial = new THREE.LineBasicMaterial();
-			var new_seat = new THREE.Line(seat.geometry , newmaterial);
-			newscene.add(new_seat);
-			//console.log(seat);
+			newmaterial = new THREE.MeshBasicMaterial( { map: texture } );
+			NewSeat.material = newmaterial;
+			
 		});
 		$( ".item.ui.image.label.2" ).click(function() {
 			//change material function
-			var texture = new THREE.TextureLoader().load( 'images/material/material6.jpg' );
+			texture = new THREE.TextureLoader().load( 'images/material/material2.jpg' );
 			// immediately use the texture for material creation
-			var newmaterial = new THREE.MeshStandardMaterial( { map: texture } );
-			seat.material = newmaterial;
+			newmaterial = new THREE.MeshBasicMaterial( { map: texture } );
+			NewSeat.material = newmaterial;
 		});
 		$( ".item.ui.image.label.3" ).click(function() {
 			//change material function
-			var texture = new THREE.TextureLoader().load( 'images/material/material6.jpg' );
+			texture = new THREE.TextureLoader().load( 'images/material/material3.jpg' );
 			// immediately use the texture for material creation
-			var newmaterial = new THREE.MeshBasicMaterial( { map: texture } );
-			seat.material = newmaterial;
+			newmaterial = new THREE.MeshBasicMaterial( { map: texture } );
+			NewSeat.material = newmaterial;
 		});
 		$( ".item.ui.image.label.4" ).click(function() {
 			//change material function
-			var texture = new THREE.TextureLoader().load( 'images/material/material6.jpg' );
+			texture = new THREE.TextureLoader().load( 'images/material/material4.jpg' );
 			// immediately use the texture for material creation
-			var newmaterial = new THREE.MeshPhongMaterial( { map: texture } );
-			seat.material = newmaterial;
+			newmaterial = new THREE.MeshBasicMaterial( { map: texture } );
+			NewSeat.material = newmaterial;
 		});
 
 	}
@@ -116,3 +128,4 @@ Chair_Rebuild.prototype = {
 
 
 }
+module.exports = Chair_Rebuild

@@ -73,3 +73,5 @@ Chair_Add.prototype = {
 	}
 
 }
+
+module.exports = Chair_Add
