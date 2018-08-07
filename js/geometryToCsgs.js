@@ -1,3 +1,5 @@
+"use strict;"
+
 const {log, status} = require('./log')
 const { CSG, CAG, isCSG, isCAG } = require('@jscad/csg')
 const scadApi = require('@jscad/scad-api')

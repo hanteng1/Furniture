@@ -1,7 +1,9 @@
-
+"use strict;"
 //chair align related functions
 //align in one line
 //add seat
+const cadMakeSeat = require('./cadMakeSeat')
+
 
 function Chair_Align (main) {
 
@@ -20,6 +22,9 @@ function Chair_Align (main) {
 
 	//number of furnitures
 	var count = 0;
+
+	//seat object
+	this.seat;
 }
 
 Chair_Align.prototype = {
@@ -104,6 +109,23 @@ Chair_Align.prototype = {
 		//console.log(this.parameters[pname]);
 
 		this.execute();
+
+
+		//test
+		//console.log(this.furnitures[1].getCornersByName(this.reference));
+
+		// var corners = this.furnitures[1].getCornersByName(this.reference);
+		// //draw the corners
+		// var material = new THREE.LineBasicMaterial( { color: 0xff0000 } );
+
+		// var geometry = new THREE.Geometry();
+		// for(var j = 0; j < corners.length; j++) {
+		// 	geometry.vertices.push(corners[j]);
+		// }
+		// var line = new THREE.Line( geometry, material );
+
+		// this.main.scene.add( line );
+
 	},
 
 	//align
@@ -156,44 +178,21 @@ Chair_Align.prototype = {
 				destVector.add(segVector);
 			}
 
-
 			correctedNormalVector.copy(destNormalVector);
 			//an extra angle/2
 			correctedNormalVector.applyAxisAngle(refAxis, segAngleR / 2);
 
-
-			// var translation = new THREE.Vector3();
-			// translation.subVectors(destVector, origin);
-
-			// //correct the transition using the furniture's current orientation
-			// var quaternion = new THREE.Quaternion();
-			// quaternion.copy(furniture.quaternion);
-			// quaternion.inverse();
-			// translation.applyQuaternion(quaternion);
-
-			// //rotations might be a problem
-			// //has to consider the oritation
-			// furniture.getFurniture().translateX(translation.x);
-			// furniture.getFurniture().translateY(translation.y);
-			// furniture.getFurniture().translateZ(translation.z);
-
-			//update the position info. only the state
-			//furniture.updatePosition();
-
-
 			//update the translation
 			furniture.moveToPositionWithComponentCenter(destVector, this.reference);
 
-
 			//update the rotation
-			//console.log(i);
 			furniture.setRotationWithNormalAxis("back", correctedNormalVector);
 			
 
 		}
 
 
-		//this.addSeat(furnitures, this.reference);
+		this.addSeat(furnitures, this.reference);
 
 	},
 
@@ -208,40 +207,76 @@ Chair_Align.prototype = {
 		//the important part is getting the four cornners of the compoents
 		var scope = this;
 
-		var bBoxes = [];
+		// for(var i = 0; i < furnitures.length; i++) {
+
+		// 	//draw the corners
+		// 	var material = new THREE.LineBasicMaterial( { color: 0x0000ff } );
+
+		// 	var geometry = new THREE.Geometry();
+
+		// 	for(let key in furnitures[i].corners) {
+		// 		var corners = furnitures[i].corners[key];
+		// 		for(var j = 0; j < corners.length; j++) {
+		// 			geometry.vertices.push(corners[j]);
+		// 		}
+		// 	}
+
+		// 	var line = new THREE.Line( geometry, material );
+
+		// 	scope.main.scene.add( line );
+
+		// }
+
+		if(scope.seat != undefined) {
+			scope.main.removeFromScene(this.seat);
+		}
+
+
+		//create the seat object
+		var innerRaceCorners2D = [];  //use x and z
+		var outerRaceCorners2D = [];
+
+
+		var offsetY = 0;
 
 		for(var i = 0; i < furnitures.length; i++) {
-			var refComponent = furnitures[i].getComponentByName(reference);
+			var corners = furnitures[i].getCornersByName(reference);
 
-			var bBox = new THREE.BoxHelper(refComponent, 0xffffff);
+			//corners
+			//  1 ----- 2
+			//  |       |
+			//  |       |
+			//  4 --|-- 3
+			
+			let corner_1 = [corners[0].x, corners[0].z];
+			let corner_2 = [corners[1].x, corners[1].z];
+			let corner_3 = [corners[2].x, corners[2].z];
+			let corner_4 = [corners[3].x, corners[3].z];
 
-			bBox.renderOrder = Infinity;
-			//this will cause problems... only add.. no delete
-			scope.main.scene.add(bBox);
+			//inner
+			innerRaceCorners2D.push(corner_1);
+			innerRaceCorners2D.push(corner_2);
+			//outer race
+			outerRaceCorners2D.push(corner_4);
+			outerRaceCorners2D.push(corner_3);
 
-			bBoxes.push(bBox);
+
+			offsetY = corners[0].y;
 		}
+
+		outerRaceCorners2D.reverse();
+
+		//csg make seat
+		scope.seat = cadMakeSeat(innerRaceCorners2D, outerRaceCorners2D, offsetY);
+		scope.main.scene.add( scope.seat );
+
 
 	}
 	
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 }
 
-
+module.exports = Chair_Align
 
 
 

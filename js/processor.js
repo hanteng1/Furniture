@@ -1,5 +1,8 @@
+"use strict;"
 //this is to handle the new design approaches
 //that without the need of cad operations
+
+const Chair_Align = require('./Chair_Align')
 
 function Processor(main) {
 	this.main = main;
@@ -144,3 +147,6 @@ Processor.prototype = {
 
 
 }
+
+
+module.exports = Processor
