@@ -236,16 +236,29 @@ Main.prototype = {
 	addObject: function ( object ) {
 
 		var scope = this;
-
 		var objects = [];
+
+
+		//test a material
+		// var manager = new THREE.LoadingManager();
+	 //    manager.onProgress = function ( item, loaded, total ) {
+	 //        console.log( item, loaded, total );
+	 //    };
+
+	 //    var textureLoader = new THREE.TextureLoader( manager );
+	 //    var texture = textureLoader.load( '../model/Fabric-Canyon.jpg' );
+	 //    var material = new THREE.MeshBasicMaterial( { wireframe: true});
+
+
 		object.traverse( function ( child ) {
 
 			if ( child.geometry !== undefined ) {
 				//scope.addGeometry( child.geometry );
-				
+
 				//scope.objects.push(child);
 				objects.push(child);
 				//scope.addHelper( child ); //to visualize helpers
+
 			}
 
 			//if ( child.material !== undefined ) scope.addMaterial( child.material );

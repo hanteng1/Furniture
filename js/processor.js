@@ -55,6 +55,7 @@ Processor.prototype = {
 
 		//initialize chair transformers
 		scope.chair_align = new Chair_Align(scope.main);
+		scope.chair_align.init();
 		this.transformFunctions.CHAIR_ALIGN = scope.chair_align;
 
 

@@ -25,9 +25,29 @@ function Chair_Align (main) {
 
 	//seat object
 	this.seat;
+
+
+	//textures
+	//load the textures once
+	this.textures = {};
+
 }
 
 Chair_Align.prototype = {
+
+
+	init : function() {
+		var manager = new THREE.LoadingManager();
+	    manager.onProgress = function ( item, loaded, total ) {
+	        console.log( item, loaded, total );
+	    };
+
+	    var textureLoader = new THREE.TextureLoader( manager );
+	    this.textures["fabric_canyon"] = textureLoader.load( '../model/Fabric-Canyon.jpg' );
+	    this.textures["cherry"] = textureLoader.load( '../model/Cherry_Kaffe_Vert.jpg' );
+
+	},
+
 
 	//////////////////////////////////////////////////////////////////////////
 	//check and get information
@@ -192,12 +212,12 @@ Chair_Align.prototype = {
 		}
 
 
-		this.addSeat(furnitures, this.reference);
+		this.addSeat(furnitures, this.reference, this.textures);
 
 	},
 
 	
-	addSeat: function(furnitures, reference) {
+	addSeat: function(furnitures, reference, textures) {
 
 		//here the furnitures should be aligned already along x axis
 
@@ -267,7 +287,7 @@ Chair_Align.prototype = {
 		outerRaceCorners2D.reverse();
 
 		//csg make seat
-		scope.seat = cadMakeSeat(innerRaceCorners2D, outerRaceCorners2D, offsetY);
+		scope.seat = cadMakeSeat(innerRaceCorners2D, outerRaceCorners2D, offsetY, textures);
 		scope.main.scene.add( scope.seat );
 
 
