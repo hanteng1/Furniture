@@ -1,3 +1,4 @@
+const chairCreatBoard = require('./chairCreatBoard')
 
 function Chair_Add (main) {
  	this.main = main;
@@ -15,7 +16,6 @@ function Chair_Add (main) {
 	//number of furnitures
 	var count = 0;
 
- 	var hasBoard = false;
  	
 }
 
@@ -139,8 +139,17 @@ Chair_Add.prototype = {
 		
 	},
 
+	creatWall: function(position, width, height, depth){
+		var geometry = new THREE.BoxGeometry( width, height, depth );
+		var texture = new THREE.TextureLoader().load( 'images/material/wall3.jpg' );
+ 		var material = new THREE.MeshBasicMaterial( {map: texture} );
+		var wall = new THREE.Mesh( geometry, material );
+		wall.position.set(position.x, position.y, position.z);
+		return wall;
+	},
+
 	creatBoard: function(obj, width, height, depth){
-		console.log(obj);
+		/*
 		while(this.hasChildren(obj))
 			obj = obj.children[0];
 		var material = new THREE.MeshBasicMaterial();
@@ -149,11 +158,11 @@ Chair_Add.prototype = {
 			material = obj.material[0].clone();
 		else
 			material = obj.material.clone();
+		*/
 
-		var geometry = new THREE.BoxGeometry( height/2, width, depth );
+		var geometry = chairCreatBoard( width, height, depth );
 		var texture = new THREE.TextureLoader().load( 'images/material/material3.jpg' );
- 		//var material = new THREE.MeshBasicMaterial( {map: texture} );
- 		console.log(material);
+ 		var material = new THREE.MeshBasicMaterial( {map: texture} );
 		var board = new THREE.Mesh( geometry, material );		
 
 		return board;
@@ -175,17 +184,29 @@ Chair_Add.prototype = {
 		return box_size;
 	},
 
-	addBoard: function(){
+	getObjCenter: function(component){
+		var box = new THREE.Box3();
+		box.setFromObject(component);
+		var pos = new THREE.Vector3();
+		if(box.isEmpty() === false)
+		{
+			box.getCenter(pos);
+		}else{
+			console.log("error on getting center point");
+		}
+		return pos;
+	},
+
+	addBoard: function(furniture_clone){
+		var moveTo = new THREE.Vector3(75, 25, 0);
+
 		//remove other part
-		var group = this.furnitures[0].getFurniture();		
+		var group = furniture_clone;		
 		this.remove(group, 'back');
 
 		//update chair back transfrom Matrix
 		var back = group.getObjectByName ('back');		
-		this.updateBack(back);
-
-		//get chair back world position
-		var pos = this.furnitures[0].getComponentCenterPosition('back');
+		this.updateBack(back);		
 
 		//creat board
 		var size = this.getPartSize(back);
@@ -195,11 +216,25 @@ Chair_Add.prototype = {
 		var board = this.creatBoard(back, width, height, depth);
 		board.name = "board";
 		
+		//-------------------------------------
+
+		//get chair back world position
+		var component = furniture_clone.getObjectByName('back');		
+		var pos = this.getObjCenter(component);
+
+		board.position.set(pos.x, pos.y, pos.z);
+
+		this.main.scene.add(board);
+
+		//-------------------------------------
+		
+		//add borad to furniture
+		//group.add(board);
+
 		//change max and min value
 		var position_id = document.getElementById("CHAIR_ADD_POSITION");
 		position_id.max = this.computeNumber(size.y / 2);
 		position_id.min = this.computeNumber((size.y / 2) * (-1));
-
 
 		size = this.getPartSize(board);
 		width = size.x;  
@@ -207,22 +242,21 @@ Chair_Add.prototype = {
 		depth  = size.y;
 
 
-		//calculate offset axis.z		
-		pos.z += width/2;
-		
+		var position_id = document.getElementById("CHAIR_ADD_WIDTH");
+		position_id.max = this.computeNumber(width);
 
-		//turn chair back world position to local position
-		back.worldToLocal(pos);
-		
-		//set board position
-		board.position.set(pos.x, pos.y, pos.z);
+		var position_id = document.getElementById("CHAIR_ADD_HEIGHT");
+		position_id.max = this.computeNumber(depth/2);
+		position_id.min = this.computeNumber((depth/2) * (-1));
 
-		//add borad to furniture
-		group.add(board);
+
+
+		//group.position.set(moveTo.x, moveTo.y, moveTo.z);
 	},
 
-	setBoard: function(){
-		var group = this.furnitures[0].getFurniture();
+	setBoard: function(furniture_clone){
+		var moveTo = new THREE.Vector3(75, 25, 0);
+		var group = furniture_clone;
 		var board = group.getObjectByName('board');
 		var back = group.getObjectByName ('back');	
 		this.updateBack(back);
@@ -243,6 +277,11 @@ Chair_Add.prototype = {
 		local_x = this.changeToWorldVector(local_x);
 		local_y = this.changeToWorldVector(local_y);
 		local_z = this.changeToWorldVector(local_z);
+
+
+		local_x.sub(moveTo);
+		local_y.sub(moveTo);
+		local_z.sub(moveTo);
 		
 		if(local_x.x != 0){
 			board.scale.x = 1 + 0.05 * parseInt(segWidth);
@@ -271,7 +310,9 @@ Chair_Add.prototype = {
 		var depth = size.y;
 
 		//get chair back world position
-		var pos = this.furnitures[0].getComponentCenterPosition('back');
+		var component = furniture_clone.getObjectByName('back');		
+		var pos = this.getObjCenter(component);
+		
 
 		//set POSITION offset axis.y
 		var segPosition = this.parameters.CHAIR_ADD_POSITION;
@@ -286,17 +327,38 @@ Chair_Add.prototype = {
 		
 		//set board position
 		board.position.set(pos.x, pos.y, pos.z);
+		
 	},
 	//////////////////////////////////////////////////////////////////////////
 
 	execute: function(){
-		if(this.checkHasBack(this.furnitures[0]) && this.checkHasSeat(this.furnitures[0])){			
+		var hasBoard = false;		
+
+		if(this.checkHasBack(this.furnitures[0]) && this.checkHasSeat(this.furnitures[0])){
 			if(!this.hasBoard){
-				this.addBoard();
+				var furniture_clone = new THREE.Object3D();
+				furniture_clone = this.furnitures[0].getFurniture().clone();
+				furniture_clone.name = "add_board";
+
+				this.addBoard(furniture_clone);
+
+				/*
+				var clone_size = this.getPartSize(furniture_clone);
+				var wallPosition = new THREE.Vector3();
+				wallPosition = this.getObjCenter(furniture_clone);
+				wallPosition.z -= clone_size.z;
+				var wall = this.creatWall(wallPosition, 100, 100, 10);
+				*/
+
+
+				//this.main.scene.add(furniture_clone);
+				//this.main.scene.add(wall);
+
 				this.hasBoard = true;
 			}
 			else{
-				this.setBoard();				
+				var furniture_clone = this.main.scene.getObjectByName("add_board");
+				this.setBoard(furniture_clone);	
 			}			
 		}
 		else
