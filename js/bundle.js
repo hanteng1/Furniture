@@ -398,9 +398,29 @@ function Chair_Align (main) {
 
 	//seat object
 	this.seat;
+
+
+	//textures
+	//load the textures once
+	this.textures = {};
+
 }
 
 Chair_Align.prototype = {
+
+
+	init : function() {
+		var manager = new THREE.LoadingManager();
+	    manager.onProgress = function ( item, loaded, total ) {
+	        console.log( item, loaded, total );
+	    };
+
+	    var textureLoader = new THREE.TextureLoader( manager );
+	    this.textures["fabric_canyon"] = textureLoader.load( '../model/Fabric-Canyon.jpg' );
+	    this.textures["cherry"] = textureLoader.load( '../model/Cherry_Kaffe_Vert.jpg' );
+
+	},
+
 
 	//////////////////////////////////////////////////////////////////////////
 	//check and get information
@@ -565,12 +585,12 @@ Chair_Align.prototype = {
 		}
 
 
-		this.addSeat(furnitures, this.reference);
+		this.addSeat(furnitures, this.reference, this.textures);
 
 	},
 
 	
-	addSeat: function(furnitures, reference) {
+	addSeat: function(furnitures, reference, textures) {
 
 		//here the furnitures should be aligned already along x axis
 
@@ -640,7 +660,7 @@ Chair_Align.prototype = {
 		outerRaceCorners2D.reverse();
 
 		//csg make seat
-		scope.seat = cadMakeSeat(innerRaceCorners2D, outerRaceCorners2D, offsetY);
+		scope.seat = cadMakeSeat(innerRaceCorners2D, outerRaceCorners2D, offsetY, textures);
 		scope.main.scene.add( scope.seat );
 
 
@@ -716,6 +736,7 @@ Processor.prototype = {
 
 		//initialize chair transformers
 		scope.chair_align = new Chair_Align(scope.main);
+		scope.chair_align.init();
 		this.transformFunctions.CHAIR_ALIGN = scope.chair_align;
 
 		scope.chair_add = new Chair_Add(scope.main);
@@ -822,7 +843,7 @@ const {union, difference, intersection} = scadApi.booleanOps
 const {translate, rotate} = scadApi.transformations
 const csgToGeometries = require('./csgToGeometries')
 
-function cadMakeSeat (innerRace, outerRace, offsetY) {
+function cadMakeSeat (innerRace, outerRace, offsetY, textures) {
 
 	var innerStart = innerRace.slice(0, 1);
 	//console.log(innerStart);
@@ -853,14 +874,27 @@ function cadMakeSeat (innerRace, outerRace, offsetY) {
     //get the geometry
     //be careful if there are too many vertices gerneated...
     var geometry = csgToGeometries(csg)[0];
-    var material = new THREE.MeshPhongMaterial( { color: 0xff5533, specular: 0x111111, shininess: 200 });
 
+
+    //texture
+    //don't do it here.. do it once
+    
+   var material = new THREE.MeshBasicMaterial( { map: textures["cherry"]});
+    //var material = new THREE.MeshBasicMaterial( {  wireframe: true});
     var mesh = new THREE.Mesh(geometry, material);
 
     mesh.castShadow = true;
     mesh.receiveShadow = true;
 
-    mesh.translateY(offsetY);
+    //todo.. can we set it in the csgtogeometry function? the normal vectors are meshed up
+    mesh.translateY(offsetY + 2);
+    //rotate from y - z
+    var tempQuaternion = new THREE.Quaternion();
+    tempQuaternion.setFromUnitVectors(new THREE.Vector3(0, 1, 0), new THREE.Vector3(0, 0, 1));
+    mesh.applyQuaternion(tempQuaternion);
+
+    var vertexNormalsHelper = new THREE.VertexNormalsHelper( mesh, 10 );
+    mesh.add( vertexNormalsHelper );
 
     return mesh;
 
@@ -910,6 +944,9 @@ function csgToGeometries(initial_csg) {
     var vertices = []
     var colors = []
     var triangles = []
+
+    var triangleUVs = [];
+    var uvs = [[0, 0], [1, 0], [0, 1], [1, 1]];
     // set to true if we want to use interpolated vertex normals
     // this creates nice round spheres but does not represent the shape of
     // the actual model
@@ -917,9 +954,16 @@ function csgToGeometries(initial_csg) {
     var polygons = csg.toPolygons();
     var numpolygons = polygons.length;
 
+
     //iterate each polygons, after convertion
     for (var j = 0; j < numpolygons; j++) {
       var polygon = polygons[j]
+
+
+      //each polygon may contain 3 or 4 vertices.. 
+      //in case of 4... it is a quad...
+      //in case of 3... it is just a triangle
+
       var color = colorBytes({r: 1.0, g: 0.4, b: 1.0, a: 1.0})  // default color
 
       if (polygon.shared && polygon.shared.color) {
@@ -932,9 +976,16 @@ function csgToGeometries(initial_csg) {
         color.push(1.0)
       } // opaque
 
+      console.log("");
+      console.log(j);
+      console.log(polygon.vertices);
+
       //get indices of the vertices array
       var indices = polygon.vertices.map(function (vertex) {
         var vertextag = vertex.getTag()
+
+        console.log(vertextag);
+
         var vertexindex = vertexTag2Index[vertextag]
 
         var prevcolor = colors[vertexindex]
@@ -949,19 +1000,25 @@ function csgToGeometries(initial_csg) {
 
           vertexTag2Index[vertextag] = vertexindex
           //vertices.push([vertex.pos.x, vertex.pos.y, vertex.pos.z])
-          //vertices.push([vertex.pos.x, vertex.pos.y, vertex.pos.z]);
-          vertices.push([vertex.pos.x, vertex.pos.z, vertex.pos.y]);
+          vertices.push([vertex.pos.x, vertex.pos.y, vertex.pos.z]);
+          //vertices.push([vertex.pos.x, vertex.pos.z, vertex.pos.y]);
           
           colors.push(color)
         }
         return vertexindex
       });
 
+      console.log(indices);
+
       for (var i = 2; i < indices.length; i++) {
         triangles.push([indices[0], indices[i - 1], indices[i]])
+        //triangleUVs.push([0, i - 1, i]);
+        triangleUVs.push([0, 1, 2]);
       }
 
       // if too many vertices, start a new mesh;
+      //this is only run if there are too many vertices.. otherwise .. it will keep accumulated
+      /////////////////////////////////////////////////////////
        if (vertices.length > 65000) {
         var temp_vertices = [];
         for(var i = 0; i < triangles.length; i++)
@@ -985,6 +1042,7 @@ function csgToGeometries(initial_csg) {
         geometry.addAttribute('position', new THREE.BufferAttribute(geo_vertices, 3));
         geometry.computeBoundingBox();
         geometry.computeVertexNormals();
+
         if(geometry.getAttribute('position').count)
         {
           geometries.push(geometry);  
@@ -997,14 +1055,21 @@ function csgToGeometries(initial_csg) {
         vertices = []
       }
 
-    }  
+      ///////////////////////////////////////////////////////////
+
+    }  //end of polygon loop  
 
     var temp_vertices = [];
+    var temp_uvs = [];
     for(var i = 0; i < triangles.length; i++)
     {
       var vertex_0 = vertices[triangles[i][0]];
       var vertex_1 = vertices[triangles[i][1]];
       var vertex_2 = vertices[triangles[i][2]];
+
+      var uv_0 = uvs[triangleUVs[i][0]];
+      var uv_1 = uvs[triangleUVs[i][1]];
+      var uv_2 = uvs[triangleUVs[i][2]];
 
       temp_vertices.push(vertex_0[0]);
       temp_vertices.push(vertex_0[1]);
@@ -1016,9 +1081,19 @@ function csgToGeometries(initial_csg) {
       temp_vertices.push(vertex_2[1]);
       temp_vertices.push(vertex_2[2]);
 
+      temp_uvs.push(uv_0[0]);
+      temp_uvs.push(uv_0[1]);
+      temp_uvs.push(uv_1[0]);
+      temp_uvs.push(uv_1[1]);
+      temp_uvs.push(uv_2[0]);
+      temp_uvs.push(uv_2[1]);
+
     }
     var geo_vertices = new Float32Array(temp_vertices);
     geometry.addAttribute('position', new THREE.BufferAttribute(geo_vertices, 3));
+    var geo_uvs = new Float32Array(temp_uvs);
+    geometry.addAttribute('uv', new THREE.BufferAttribute(geo_uvs, 2));
+
     geometry.computeBoundingBox();
     geometry.computeVertexNormals();
     if(geometry.getAttribute('position').count)
@@ -1247,16 +1322,29 @@ Main.prototype = {
 	addObject: function ( object ) {
 
 		var scope = this;
-
 		var objects = [];
+
+
+		//test a material
+		// var manager = new THREE.LoadingManager();
+	 //    manager.onProgress = function ( item, loaded, total ) {
+	 //        console.log( item, loaded, total );
+	 //    };
+
+	 //    var textureLoader = new THREE.TextureLoader( manager );
+	 //    var texture = textureLoader.load( '../model/Fabric-Canyon.jpg' );
+	 //    var material = new THREE.MeshBasicMaterial( { wireframe: true});
+
+
 		object.traverse( function ( child ) {
 
 			if ( child.geometry !== undefined ) {
 				//scope.addGeometry( child.geometry );
-				
+
 				//scope.objects.push(child);
 				objects.push(child);
 				//scope.addHelper( child ); //to visualize helpers
+
 			}
 
 			//if ( child.material !== undefined ) scope.addMaterial( child.material );
