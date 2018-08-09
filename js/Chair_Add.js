@@ -132,11 +132,28 @@ Chair_Add.prototype = {
 		}
 	},
 
+	hasChildren: function(obj){
+		if (obj.children.length != 0)
+			return true;
+		return false;
+		
+	},
+
 	creatBoard: function(obj, width, height, depth){
 		console.log(obj);
+		while(this.hasChildren(obj))
+			obj = obj.children[0];
+		var material = new THREE.MeshBasicMaterial();
+
+		if (Array.isArray(obj.material))
+			material = obj.material[0].clone();
+		else
+			material = obj.material.clone();
+
 		var geometry = new THREE.BoxGeometry( height/2, width, depth );
 		var texture = new THREE.TextureLoader().load( 'images/material/material3.jpg' );
- 		var material = new THREE.MeshBasicMaterial( {map: texture} );
+ 		//var material = new THREE.MeshBasicMaterial( {map: texture} );
+ 		console.log(material);
 		var board = new THREE.Mesh( geometry, material );		
 
 		return board;
