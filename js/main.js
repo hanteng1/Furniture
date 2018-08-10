@@ -10,6 +10,8 @@
 //const {union, difference, intersection} = scadApi.booleanOps
 //const {translate, rotate} = scadApi.transformations
 
+//here we define 1 unit == 1 fm
+
 const Processor = require('./Processor')
 
 function Main()
@@ -159,32 +161,32 @@ Main.prototype = {
 		if(!Detector.webgl)
 			Detector.addGetWebGLMessage();
 
-		this.camera.position.set(250, 400, 650);
-		this.camera.lookAt(new THREE.Vector3());
+		this.camera.position.set(0, 30, 50);
+		this.camera.lookAt(new THREE.Vector3(0, 30, -50));
 
-		var ambientLight = new THREE.AmbientLight( 0xccccc, 0.4);
+		var ambientLight = new THREE.AmbientLight( 0xeeeeee, 0.4);
 		this.scene.add(ambientLight);
 
-		var pointLight = new THREE.PointLight(0xffffff, 0.8);
-		this.camera.add(pointLight);
+		//var pointLight = new THREE.PointLight(0xffffff, 0.8);
+		//this.camera.add(pointLight);
 		this.scene.add(this.camera);
 		//this.addHelper(pointLight);
 
 
 		//var hemiLight = new THREE.HemisphereLight( 0xffffff, 0x444444 );
-		//hemiLight.position.set( 0, 20, 0 );
+		//hemiLight.position.set( 0, 100, 0 );
 		//this.scene.add( hemiLight );
 		//this.addHelper(hemiLight);
 
-		//var directlight = new THREE.DirectionalLight( 0xffffff );
-		//directlight.position.set( 0, 20, 10 );
+		var directlight = new THREE.DirectionalLight( 0xffffff, 0.3 );
+		directlight.position.set( 0, 30, 50 );
 		// directlight.castShadow = true;
 		// directlight.shadow.camera.top = 1.8;
 		// directlight.shadow.camera.bottom = -1.8;
 		// directlight.shadow.camera.left = -1.2;
 		// directlight.shadow.camera.right = 1.2;
-		//this.scene.add( directlight );
-		//this.addHelper(directlight);
+		this.scene.add( directlight );
+		this.addHelper(directlight);
 
 
 
@@ -198,9 +200,9 @@ Main.prototype = {
 
 		this.scene.background = new THREE.Color(.95,.95,.95);
 
-		var gridHelper = new THREE.GridHelper( 1000, 20 ) ;//size, divisions
-		this.scene.add( gridHelper );
-
+		//var gridHelper = new THREE.GridHelper( 1000, 20 ) ;//size, divisions
+		//this.scene.add( gridHelper );
+		this.addHouseEnvironment();
 		
 		this.renderer.setPixelRatio( window.devicePixelRatio );
 		this.renderer.setSize( window.innerWidth, window.innerHeight );
@@ -250,7 +252,7 @@ Main.prototype = {
 		// model
 		var loader = new THREE.GLTFLoader();
 		loader.load(
-			'models/EamesLoungeChair.glb',
+			'models/vitra-chair.glb',
 			function ( gltf ) {
 				scope.gltfLoadedCallback(
 					gltf,
@@ -261,6 +263,121 @@ Main.prototype = {
 		} );
 
 	},
+
+
+	addHouseEnvironment: function() {
+
+		var scope = this;
+
+		//sky
+		// SKYDOME
+		var light = new THREE.DirectionalLight( 0xaabbff, 0.3 );
+		var vertexShader = document.getElementById( 'vertexShader' ).textContent;
+		var fragmentShader = document.getElementById( 'fragmentShader' ).textContent;
+		var uniforms = {
+			topColor: 	 { type: "c", value: new THREE.Color( 0x0077ff ) },
+			bottomColor: { type: "c", value: new THREE.Color( 0xffffff ) },
+			offset:		 { type: "f", value: 400 },
+			exponent:	 { type: "f", value: 0.6 }
+		};
+		uniforms.topColor.value.copy( light.color );
+		var skyGeo = new THREE.SphereBufferGeometry( 4000, 32, 15 );
+		var skyMat = new THREE.ShaderMaterial( {
+			uniforms: uniforms,
+			vertexShader: vertexShader,
+			fragmentShader: fragmentShader,
+			side: THREE.BackSide
+		} );
+		var sky = new THREE.Mesh( skyGeo, skyMat );
+		scope.scene.add( sky );
+
+
+		// ground
+		var groundTexture = new THREE.TextureLoader().load("../images/floor.jpg");
+		groundTexture.wrapS = groundTexture.wrapT = THREE.RepeatWrapping;
+    	groundTexture.offset.set( 0, 0 );
+    	groundTexture.repeat.set( 10, 10 );
+
+		var ground = new THREE.Mesh(
+			new THREE.PlaneBufferGeometry( 100, 100, 10, 10),
+			new THREE.MeshPhongMaterial( {wireframe: false, map: groundTexture, specular: 0x101010} )
+		);
+		ground.rotation.x = - Math.PI / 2;
+		// plane.position.y = -1;
+		ground.receiveShadow = true;
+		scope.scene.add(ground);
+
+		//wall
+		var purpleWallTexture = new THREE.TextureLoader().load("../images/purple_wall.jpg");
+		purpleWallTexture.wrapS = purpleWallTexture.wrapT = THREE.RepeatWrapping;
+    	purpleWallTexture.offset.set( 0, 0 );
+    	purpleWallTexture.repeat.set( 10, 3 );
+
+    	var purple_wall = new THREE.Mesh(
+			new THREE.PlaneBufferGeometry( 100, 30, 10, 3),
+			new THREE.MeshPhongMaterial( {map: purpleWallTexture, specular: 0x101010} )
+		);
+
+    	purple_wall.position.copy(new THREE.Vector3(0, 15, -50));
+		purple_wall.receiveShadow = true;
+		scope.scene.add(purple_wall);
+
+		//left wall
+		var left_wall = new THREE.Mesh(
+			new THREE.BoxBufferGeometry( 3, 30, 10),
+			new THREE.MeshPhongMaterial( {color: 0xdcd9cd, specular: 0xcccccc} )
+		);
+
+    	left_wall.position.copy(new THREE.Vector3(-50, 15, -45));
+		left_wall.receiveShadow = true;
+		scope.scene.add(left_wall);
+
+		//right wall
+		var right_wall = new THREE.Mesh(
+			new THREE.BoxBufferGeometry( 3, 30, 50),
+			new THREE.MeshPhongMaterial( {color: 0xdcd9cd, specular: 0xcccccc} )
+		);
+
+    	right_wall.position.copy(new THREE.Vector3(50, 15, -25));
+		right_wall.receiveShadow = true;
+		scope.scene.add(right_wall);
+
+
+		//left glass wall
+		// var glassEnvMap = new THREE.CubeTextureLoader().load( [
+		// 	, path + 'nx' + format,
+		// 	path + 'py' + format, path + 'ny' + format,
+		// 	path + 'pz' + format, path + 'nz' + format
+		// 	] );	
+
+		// var glassMaterial = new THREE.MeshBasicMaterial( { color: 0xffffff, envMap: glassEnvMap, refractionRatio: 0.95 } );
+		// glassMaterial.envMap.mapping = THREE.CubeRefractionMapping;
+		
+		// var left_glass = new THREE.Mesh( new THREE.BoxBufferGeometry( 0.5, 30, 30), glassMaterial );
+		// left_glass.position.copy(new THREE.Vector3(-50, 15, -30));
+		// left_glass.receiveShadow = true;
+		// scope.scene.add(left_glass);
+
+
+		//left window
+		var loader = new THREE.ColladaLoader();
+		loader.load( '../models/window.dae', function ( collada ) {
+			var fcWindow = collada.scene;
+			fcWindow.scale.copy(new THREE.Vector3(0.2, 0.2, 0.2));
+			fcWindow.position.copy(new THREE.Vector3(-53, 0, -58));
+			fcWindow.rotation.z = - Math.PI / 2;
+			scope.scene.add(fcWindow);
+		});
+
+		
+
+		//right door
+		
+
+
+
+	},
+
 
 	gltfLoadedCallback: function(gltf, envMap, position, rotation) {
 
