@@ -200,9 +200,9 @@ Main.prototype = {
 
 		this.scene.background = new THREE.Color(.95,.95,.95);
 
-		//var gridHelper = new THREE.GridHelper( 1000, 20 ) ;//size, divisions
-		//this.scene.add( gridHelper );
-		this.addHouseEnvironment();
+		var gridHelper = new THREE.GridHelper( 1000, 20 ) ;//size, divisions
+		this.scene.add( gridHelper );
+		//this.addHouseEnvironment();
 		
 		this.renderer.setPixelRatio( window.devicePixelRatio );
 		this.renderer.setSize( window.innerWidth, window.innerHeight );
