@@ -126,30 +126,6 @@ function Main()
 	// }
 
 
-	//zhuen's block
-
-
-
-	//end of zhuen's block
-
-
-
-	//weixiang's bloack
-
-
-
-	//end of weixiang's block
-
-
-
-
-	//trif's block
-
-
-
-
-	//end of trif's block
-
 }
 
 Main.prototype = {
@@ -704,7 +680,7 @@ Main.prototype = {
 
 				if(this.selectionBoxes.length > 0)
 				{
-					$('.ui.compact.vertical.labeled.icon.menu').show();
+					$('#label').show();
 				}
 
 			}
@@ -1128,7 +1104,7 @@ Main.prototype = {
 			this.addAxis.setAllVisible();
 
 
-			$('.ui.compact.vertical.labeled.icon.menu').hide();
+			$('#label').hide();
 
 		}
 
@@ -1182,36 +1158,6 @@ Main.prototype = {
 		this.processor.executeDesign();
 
 	}
-
-
-
-
-
-	//zhuen's block
-
-
-
-	//end of zhuen's block
-
-
-
-	//weixiang's bloack
-
-
-
-	//end of weixiang's block
-
-
-
-
-	//trif's block
-
-
-
-
-	//end of trif's block
-
-
 
 };
 

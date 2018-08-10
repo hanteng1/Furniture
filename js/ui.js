@@ -82,6 +82,10 @@ Ui.prototype = {
 		});
 
 		$('.ui.compact.vertical.labeled.icon.menu').hide();
+		
+		//weixiang's bloack
+		$('.ui.compact.vertical.labeled.image.menu').hide();
+		//end of weixiang's block
 
 		$( ".item.m_group" ).click(function() {
 			//group function
