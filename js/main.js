@@ -332,6 +332,37 @@ Main.prototype = {
 		left_wall.receiveShadow = true;
 		scope.scene.add(left_wall);
 
+		//left window
+		var loader = new THREE.ColladaLoader();
+		loader.load( '../models/window.dae', function ( collada ) {
+			var fcWindow = collada.scene;
+			fcWindow.scale.copy(new THREE.Vector3(0.21, 0.21, 0.21));
+			fcWindow.position.copy(new THREE.Vector3(-53, 0, -60));
+			fcWindow.rotation.z = - Math.PI / 2;
+			scope.scene.add(fcWindow);
+		});
+
+		//left window left
+		var left_window_left_wall = new THREE.Mesh(
+			new THREE.BoxBufferGeometry( 3, 30, 90 - 55.5),
+			new THREE.MeshPhongMaterial( {color: 0xdcd9cd, specular: 0xcccccc} )
+		);
+
+    	left_window_left_wall.position.copy(new THREE.Vector3(-20, 15, 50 - (90 - 55.5)/2));
+		left_window_left_wall.receiveShadow = true;
+		scope.scene.add(left_window_left_wall);
+
+
+		var left_wall_left_wall = new THREE.Mesh(
+			new THREE.BoxBufferGeometry( 30, 30, 3),
+			new THREE.MeshPhongMaterial( {color: 0xdcd9cd, specular: 0xcccccc} )
+		);
+
+    	left_wall_left_wall.position.copy(new THREE.Vector3(-35, 15, 50 - (90 - 55.5) + 1.5));
+		left_wall_left_wall.receiveShadow = true;
+		scope.scene.add(left_wall_left_wall);
+
+
 		//right wall
 		var right_wall = new THREE.Mesh(
 			new THREE.BoxBufferGeometry( 3, 30, 50),
@@ -341,40 +372,65 @@ Main.prototype = {
     	right_wall.position.copy(new THREE.Vector3(50, 15, -25));
 		right_wall.receiveShadow = true;
 		scope.scene.add(right_wall);
-
-
-		//left glass wall
-		// var glassEnvMap = new THREE.CubeTextureLoader().load( [
-		// 	, path + 'nx' + format,
-		// 	path + 'py' + format, path + 'ny' + format,
-		// 	path + 'pz' + format, path + 'nz' + format
-		// 	] );	
-
-		// var glassMaterial = new THREE.MeshBasicMaterial( { color: 0xffffff, envMap: glassEnvMap, refractionRatio: 0.95 } );
-		// glassMaterial.envMap.mapping = THREE.CubeRefractionMapping;
 		
-		// var left_glass = new THREE.Mesh( new THREE.BoxBufferGeometry( 0.5, 30, 30), glassMaterial );
-		// left_glass.position.copy(new THREE.Vector3(-50, 15, -30));
-		// left_glass.receiveShadow = true;
-		// scope.scene.add(left_glass);
+		//right door
+		loader.load( '../models/door.dae', function ( collada ) {
+			var fcDoor = collada.scene;
+			fcDoor.scale.copy(new THREE.Vector3(0.25, 0.25, 0.25));
+			fcDoor.position.copy(new THREE.Vector3(40, 0, -14.3));
+			fcDoor.rotation.z = - Math.PI / 2;
+			scope.scene.add(fcDoor);
 
-
-		//left window
-		var loader = new THREE.ColladaLoader();
-		loader.load( '../models/window.dae', function ( collada ) {
-			var fcWindow = collada.scene;
-			fcWindow.scale.copy(new THREE.Vector3(0.2, 0.2, 0.2));
-			fcWindow.position.copy(new THREE.Vector3(-53, 0, -58));
-			fcWindow.rotation.z = - Math.PI / 2;
-			scope.scene.add(fcWindow);
 		});
 
-		
+		//right door top
+		var right_door_top_wall = new THREE.Mesh(
+			new THREE.BoxBufferGeometry( 3, 9.4, 8.858),
+			new THREE.MeshPhongMaterial( {color: 0xdcd9cd, specular: 0xcccccc} )
+		);
 
-		//right door
-		
+    	right_door_top_wall.position.copy(new THREE.Vector3(50, 20.66 + 9.4 / 2, 8.858 / 2));
+		right_door_top_wall.receiveShadow = true;
+		scope.scene.add(right_door_top_wall);
+
+		//right door right
+		var right_door_right_wall = new THREE.Mesh(
+			new THREE.BoxBufferGeometry( 3, 30, 50 - 8.85),
+			new THREE.MeshPhongMaterial( {color: 0xdcd9cd, specular: 0xcccccc} )
+		);
+
+    	right_door_right_wall.position.copy(new THREE.Vector3(50, 15, 8.85 + (50 - 8.858) / 2));
+		right_door_right_wall.receiveShadow = true;
+		scope.scene.add(right_door_right_wall);
+
+		//ceiling
+		var ceiling = new THREE.Mesh(
+			new THREE.PlaneBufferGeometry( 100, 100, 1, 1),
+			new THREE.MeshPhongMaterial( {color: 0xdcd9cd, specular: 0x101010} )
+		);
+		ceiling.position.y = 30;
+		ceiling.rotation.x = Math.PI / 2;
+		ceiling.receiveShadow = true;
+		scope.scene.add(ceiling);
 
 
+		//the other side, 70 window
+		loader.load( '../models/wall_window.dae', function ( collada ) {
+			var wWindow = collada.scene;
+			wWindow.scale.copy(new THREE.Vector3(0.25, 0.25, 0.25));
+			wWindow.position.copy(new THREE.Vector3(-40, 0, 55));
+			//wWindow.rotation.z = - Math.PI / 2;
+			wWindow.rotation.x = - Math.PI / 2;
+			scope.scene.add(wWindow);
+
+			var box = new THREE.Box3();
+			box.setFromObject(wWindow);
+			var box_size = new THREE.Vector3();
+			box.getSize(box_size);
+
+			//this includes width, height, depth
+			console.log(box_size);
+		});
 
 	},
 
