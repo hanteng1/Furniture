@@ -1,5 +1,6 @@
-//
+"use strict;"
 
+const rebuildMakeSeat = require('./rebuildMakeSeat');
 
 function Chair_Rebuild (main) {
 
@@ -75,56 +76,133 @@ Chair_Rebuild.prototype = {
 		
 	},
 	changeTexture: function(furniture){
-		$('.ui.compact.vertical.labeled.image.menu').show();
-		//get the furniture
+		$('#rebuild').show();
 		var group = furniture.getFurniture();
-
 		var seat = furniture.getComponentByName('seat');
-		var NewSeatSize = furniture.getComponentSize('seat');
-		var NewSeatPosi = furniture.getComponentCenterPosition('seat');
-		
-		group.remove(seat);
-		
-		var geometry = new THREE.BoxGeometry( NewSeatSize.x , NewSeatSize.y , NewSeatSize.z );		
+		var SeatSize = furniture.getComponentSize('seat');
+		var SeatPosi = furniture.getComponentCenterPosition('seat');
+		var saveposi = new THREE.Vector3(0,0,0);
+		//save pisition
+		saveposi.x = SeatPosi.x;
+		saveposi.y = SeatPosi.y;
+		saveposi.z = SeatPosi.z;
+
+
+		var group = furniture.getFurniture();
+		var mode = "NormalSeat"
 		var texture = new THREE.TextureLoader().load( 'images/material/material1.jpg' );
-		var newmaterial = new THREE.MeshBasicMaterial( {map: texture} );
-		var NewSeat = new THREE.Mesh( geometry, newmaterial );
-		NewSeat.position.set(NewSeatPosi.x, NewSeatPosi.y, NewSeatPosi.z);
-		newscene = this.main.scene;
-		newscene.add( NewSeat );
+		var main = this;
+		main.changeseatmodel(furniture,SeatSize,SeatPosi, texture, mode);
+		SeatPosi.x = saveposi.x;
+		SeatPosi.y = saveposi.y;
+		SeatPosi.z = saveposi.z;
 
 		$( ".item.ui.image.label.1" ).click(function() {
+			//change seat
+			if (mode == "ThinBoard"){
+				mode = "NormalSeat";
+				main.changeseatmodel(furniture,SeatSize,SeatPosi, texture, mode);
+				SeatPosi.x = saveposi.x;
+				SeatPosi.y = saveposi.y;
+				SeatPosi.z = saveposi.z;
+			}
 			//change material function
+			var seat = furniture.getComponentByName('seat');
 			texture = new THREE.TextureLoader().load( 'images/material/material1.jpg' );
 			// immediately use the texture for material creation
 			newmaterial = new THREE.MeshBasicMaterial( { map: texture } );
-			NewSeat.material = newmaterial;
-			
+			seat.material = newmaterial;
+			console.log(SeatPosi);
 		});
 		$( ".item.ui.image.label.2" ).click(function() {
+			//change seat
+			if (mode == "ThinBoard"){
+				mode = "NormalSeat";
+				main.changeseatmodel(furniture,SeatSize,SeatPosi, texture, mode);
+				SeatPosi.x = saveposi.x;
+				SeatPosi.y = saveposi.y;
+				SeatPosi.z = saveposi.z;
+			}
 			//change material function
+			var seat = furniture.getComponentByName('seat');
 			texture = new THREE.TextureLoader().load( 'images/material/material2.jpg' );
 			// immediately use the texture for material creation
 			newmaterial = new THREE.MeshBasicMaterial( { map: texture } );
-			NewSeat.material = newmaterial;
+			seat.material = newmaterial;
 		});
 		$( ".item.ui.image.label.3" ).click(function() {
+			//change seat
+			if (mode == "ThinBoard"){
+				mode = "NormalSeat";
+				main.changeseatmodel(furniture,SeatSize,SeatPosi, texture, mode);
+				SeatPosi.x = saveposi.x;
+				SeatPosi.y = saveposi.y;
+				SeatPosi.z = saveposi.z;
+			}
 			//change material function
+			var seat = furniture.getComponentByName('seat');
 			texture = new THREE.TextureLoader().load( 'images/material/material3.jpg' );
 			// immediately use the texture for material creation
 			newmaterial = new THREE.MeshBasicMaterial( { map: texture } );
-			NewSeat.material = newmaterial;
+			seat.material = newmaterial;
 		});
 		$( ".item.ui.image.label.4" ).click(function() {
+			//change seat
+			if (mode == "ThinBoard"){
+				mode = "NormalSeat";
+				main.changeseatmodel(furniture,SeatSize,SeatPosi, texture, mode);
+				SeatPosi.x = saveposi.x;
+				SeatPosi.y = saveposi.y;
+				SeatPosi.z = saveposi.z;
+			}
 			//change material function
+			var seat = furniture.getComponentByName('seat');
 			texture = new THREE.TextureLoader().load( 'images/material/material4.jpg' );
 			// immediately use the texture for material creation
 			newmaterial = new THREE.MeshBasicMaterial( { map: texture } );
-			NewSeat.material = newmaterial;
+			seat.material = newmaterial;
+		});
+		$( ".align.justify.icon.1" ).click(function() {
+			//change seat
+			if (mode == "NormalSeat"){
+				mode = "ThinBoard";
+				main.changeseatmodel(furniture,SeatSize,SeatPosi, texture, mode);
+				SeatPosi.x = saveposi.x;
+				SeatPosi.y = saveposi.y;
+				SeatPosi.z = saveposi.z;
+			}
+			//change material function
+			var seat = furniture.getComponentByName('seat');
+			texture = new THREE.TextureLoader().load( 'images/material/material2.jpg' );
+			// immediately use the texture for material creation
+			newmaterial = new THREE.MeshBasicMaterial( { map: texture } );
+			seat.material = newmaterial;
+			console.log(SeatPosi);
+			
 		});
 
-	}
+	},
 
+	changeseatmodel: function(furniture,NewSeatSize,NewSeatPosi, texture, mode){
+		//get the furniture
+		var group = furniture.getFurniture();
+		var seat = furniture.getComponentByName('seat');
+		group.remove(seat);
+
+		geometry = rebuildMakeSeat( NewSeatSize.x , NewSeatSize.y , NewSeatSize.z , mode);
+		var newmaterial = new THREE.MeshBasicMaterial( {map: texture} );
+		var NewSeat = new THREE.Mesh( geometry, newmaterial );
+		NewSeat.name = 'seat';
+
+		var inverseMatrix = new THREE.Matrix4();
+		inverseMatrix.getInverse(group.matrixWorld, true);
+		NewSeat.applyMatrix(inverseMatrix);
+		
+		group.worldToLocal(NewSeatPosi);
+		NewSeat.position.set(NewSeatPosi.x - NewSeatSize.x/2, NewSeatPosi.y + NewSeatSize.z/2, NewSeatPosi.z );
+		group.add(NewSeat);
+
+	}
 
 
 }

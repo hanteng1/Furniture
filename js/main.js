@@ -429,7 +429,7 @@ Main.prototype = {
 
 				if(this.selectionBoxes.length > 0)
 				{
-					$('.ui.compact.vertical.labeled.icon.menu').show();
+					$('#label').show();
 				}
 
 			}
@@ -853,7 +853,7 @@ Main.prototype = {
 			this.addAxis.setAllVisible();
 
 
-			$('.ui.compact.vertical.labeled.icon.menu').hide();
+			$('#label').hide();
 
 		}
 

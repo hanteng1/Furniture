@@ -5,6 +5,8 @@
 const Chair_Align = require('./Chair_Align');
 const Chair_Add = require('./Chair_Add');
 const Chair_Rebuild = require('./Chair_Rebuild');
+
+
 function Processor(main) {
 	this.main = main;
 	this.category = main.category;  //chair, cabinet, table

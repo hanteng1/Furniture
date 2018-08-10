@@ -384,8 +384,9 @@ module.exports = Chair_Align
 
 
 },{"./cadMakeSeat":5}],3:[function(require,module,exports){
-//
+"use strict;"
 
+const rebuildMakeSeat = require('./rebuildMakeSeat');
 
 function Chair_Rebuild (main) {
 
@@ -461,62 +462,128 @@ Chair_Rebuild.prototype = {
 		
 	},
 	changeTexture: function(furniture){
-		$('.ui.compact.vertical.labeled.image.menu').show();
-		//get the furniture
+		$('#rebuild').show();
 		var group = furniture.getFurniture();
-
 		var seat = furniture.getComponentByName('seat');
-		var NewSeatSize = furniture.getComponentSize('seat');
-		var NewSeatPosi = furniture.getComponentCenterPosition('seat');
-		
-		group.remove(seat);
-		
-		var geometry = new THREE.BoxGeometry( NewSeatSize.x , NewSeatSize.y , NewSeatSize.z );		
+		var SeatSize = furniture.getComponentSize('seat');
+		var SeatPosi = furniture.getComponentCenterPosition('seat');
+		var saveposi = new THREE.Vector3(0,0,0);
+		saveposi.x = SeatPosi.x;
+		saveposi.y = SeatPosi.y;
+		saveposi.z = SeatPosi.z;
+
+
+		var group = furniture.getFurniture();
+		var mode = "NormalSeat"
 		var texture = new THREE.TextureLoader().load( 'images/material/material1.jpg' );
-		var newmaterial = new THREE.MeshBasicMaterial( {map: texture} );
-		var NewSeat = new THREE.Mesh( geometry, newmaterial );
-		NewSeat.position.set(NewSeatPosi.x, NewSeatPosi.y, NewSeatPosi.z);
-		newscene = this.main.scene;
-		newscene.add( NewSeat );
+		var main = this;
+		main.changeseatmodel(furniture,SeatSize,SeatPosi, texture, mode);
+		SeatPosi.x = saveposi.x;
+		SeatPosi.y = saveposi.y;
+		SeatPosi.z = saveposi.z;
 
 		$( ".item.ui.image.label.1" ).click(function() {
+			//change seat
+			if (mode == "ThinBoard"){
+				mode = "NormalSeat";
+				main.changeseatmodel(furniture,SeatSize,SeatPosi, texture, mode);
+				SeatPosi.x = saveposi.x;
+				SeatPosi.y = saveposi.y;
+				SeatPosi.z = saveposi.z;
+			}
 			//change material function
+			var seat = furniture.getComponentByName('seat');
 			texture = new THREE.TextureLoader().load( 'images/material/material1.jpg' );
 			// immediately use the texture for material creation
 			newmaterial = new THREE.MeshBasicMaterial( { map: texture } );
-			NewSeat.material = newmaterial;
-			
+			seat.material = newmaterial;
+			console.log(SeatPosi);
 		});
 		$( ".item.ui.image.label.2" ).click(function() {
+			//change seat
+			if (mode == "ThinBoard"){
+				mode = "NormalSeat";
+				main.changeseatmodel(furniture,SeatSize,SeatPosi, texture, mode);
+			}
 			//change material function
+			var seat = furniture.getComponentByName('seat');
 			texture = new THREE.TextureLoader().load( 'images/material/material2.jpg' );
 			// immediately use the texture for material creation
 			newmaterial = new THREE.MeshBasicMaterial( { map: texture } );
-			NewSeat.material = newmaterial;
+			seat.material = newmaterial;
 		});
 		$( ".item.ui.image.label.3" ).click(function() {
+			//change seat
+			if (mode == "ThinBoard"){
+				mode = "NormalSeat";
+				main.changeseatmodel(furniture,SeatSize,SeatPosi, texture, mode);
+			}
 			//change material function
+			var seat = furniture.getComponentByName('seat');
 			texture = new THREE.TextureLoader().load( 'images/material/material3.jpg' );
 			// immediately use the texture for material creation
 			newmaterial = new THREE.MeshBasicMaterial( { map: texture } );
-			NewSeat.material = newmaterial;
+			seat.material = newmaterial;
 		});
 		$( ".item.ui.image.label.4" ).click(function() {
+			//change seat
+			if (mode == "ThinBoard"){
+				mode = "NormalSeat";
+				main.changeseatmodel(furniture,SeatSize,SeatPosi, texture, mode);
+			}
 			//change material function
+			var seat = furniture.getComponentByName('seat');
 			texture = new THREE.TextureLoader().load( 'images/material/material4.jpg' );
 			// immediately use the texture for material creation
 			newmaterial = new THREE.MeshBasicMaterial( { map: texture } );
-			NewSeat.material = newmaterial;
+			seat.material = newmaterial;
+		});
+		$( ".align.justify.icon.1" ).click(function() {
+			//change seat
+			if (mode == "NormalSeat"){
+				mode = "ThinBoard";
+				main.changeseatmodel(furniture,SeatSize,SeatPosi, texture, mode);
+			}
+			//change material function
+			var seat = furniture.getComponentByName('seat');
+			texture = new THREE.TextureLoader().load( 'images/material/material2.jpg' );
+			// immediately use the texture for material creation
+			newmaterial = new THREE.MeshBasicMaterial( { map: texture } );
+			seat.material = newmaterial;
+			console.log(SeatPosi);
+			SeatPosi.x = saveposi.x;
+			SeatPosi.y = saveposi.y;
+			SeatPosi.z = saveposi.z;
 		});
 
-	}
+	},
 
+	changeseatmodel: function(furniture,NewSeatSize,NewSeatPosi, texture, mode){
+		//get the furniture
+		var group = furniture.getFurniture();
+		var seat = furniture.getComponentByName('seat');
+		group.remove(seat);
+
+		geometry = rebuildMakeSeat( NewSeatSize.x , NewSeatSize.y , NewSeatSize.z , mode);
+		var newmaterial = new THREE.MeshBasicMaterial( {map: texture} );
+		var NewSeat = new THREE.Mesh( geometry, newmaterial );
+		NewSeat.name = 'seat';
+
+		var inverseMatrix = new THREE.Matrix4();
+		inverseMatrix.getInverse(group.matrixWorld, true);
+		NewSeat.applyMatrix(inverseMatrix);
+		
+		group.worldToLocal(NewSeatPosi);
+		NewSeat.position.set(NewSeatPosi.x - NewSeatSize.x/2, NewSeatPosi.y + NewSeatSize.z/2, NewSeatPosi.z );
+		group.add(NewSeat);
+
+	}
 
 
 }
 module.exports = Chair_Rebuild
 
-},{}],4:[function(require,module,exports){
+},{"./rebuildMakeSeat":104}],4:[function(require,module,exports){
 "use strict;"
 //this is to handle the new design approaches
 //that without the need of cad operations
@@ -524,6 +591,8 @@ module.exports = Chair_Rebuild
 const Chair_Align = require('./Chair_Align');
 const Chair_Add = require('./Chair_Add');
 const Chair_Rebuild = require('./Chair_Rebuild');
+
+
 function Processor(main) {
 	this.main = main;
 	this.category = main.category;  //chair, cabinet, table
@@ -718,7 +787,7 @@ function cadMakeSeat (innerRace, outerRace, offsetY, textures) {
     //texture
     //don't do it here.. do it once
     
-   var material = new THREE.MeshBasicMaterial( { map: textures["cherry"]});
+   var material = new THREE.MeshLambertMaterial( { map: textures["cherry"]});
     //var material = new THREE.MeshBasicMaterial( {  wireframe: true});
     var mesh = new THREE.Mesh(geometry, material);
 
@@ -1357,7 +1426,7 @@ Main.prototype = {
 
 				if(this.selectionBoxes.length > 0)
 				{
-					$('.ui.compact.vertical.labeled.icon.menu').show();
+					$('#label').show();
 				}
 
 			}
@@ -1781,7 +1850,7 @@ Main.prototype = {
 			this.addAxis.setAllVisible();
 
 
-			$('.ui.compact.vertical.labeled.icon.menu').hide();
+			$('#label').hide();
 
 		}
 
@@ -18581,4 +18650,55 @@ module.exports = {
   vector_text
 }
 
-},{}]},{},[7]);
+},{}],104:[function(require,module,exports){
+"use strict;"
+
+const scadApi = require('@jscad/scad-api')
+const { CSG, CAG, isCSG, isCAG } = require('@jscad/csg')
+const {cube, sphere, cylinder} = scadApi.primitives3d
+const {union, difference, intersection} = scadApi.booleanOps
+const {translate, rotate} = scadApi.transformations
+const csgToGeometries = require('./csgToGeometries')
+
+function rebuildMakeSeat ( NewSeatSizex , NewSeatSizey , NewSeatSizez , mode){
+	
+	if (mode == "NormalSeat"){
+		//var seat = geometryToCsgs(geometry);
+		var seat = cube({size:[NewSeatSizex , NewSeatSizey , NewSeatSizez]});
+		var obj = seat.expand(0.3, 16);
+
+		var geometry = csgToGeometries(obj)[0];
+		return geometry;
+	}
+	if (mode == "ThinBoard"){
+
+		var x=NewSeatSizex;
+	    var y=NewSeatSizey;
+	    var z=NewSeatSizez;
+	    var example_cube = cube({size:[x,y,z]});
+	    
+	    var cube1 = cube({size:[x*0.04, y, z]});
+	    var cube2 = cube({size:[x*0.04, y, z]});
+	    var cube3 = cube({size:[x*0.04, y, z]});
+	    var cube4 = cube({size:[x*0.04, y, z]});
+	    var cube5 = cube({size:[x*0.04, y, z]});
+	    
+	    cube1 = cube1.translate([x*0.0, 0, 0]);
+	    cube2 = cube1.translate([x*0.2, 0, 0]);
+	    cube3 = cube1.translate([x*0.4, 0, 0]);
+	    cube4 = cube1.translate([x*0.6, 0, 0]);
+	    cube5 = cube1.translate([x*0.8, 0, 0]);
+	    
+	    example_cube = difference(example_cube,cube1);
+	    example_cube = difference(example_cube,cube2);
+	    example_cube = difference(example_cube,cube3);
+	    example_cube = difference(example_cube,cube4);
+	    example_cube = difference(example_cube,cube5);
+
+	    var geometry = csgToGeometries(example_cube)[0];
+		return geometry;
+	}
+}
+
+module.exports = rebuildMakeSeat
+},{"./csgToGeometries":6,"@jscad/csg":8,"@jscad/scad-api":95}]},{},[7]);
