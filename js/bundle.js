@@ -500,7 +500,7 @@ function cadMakeSeat (innerRace, outerRace, offsetY, textures) {
     //texture
     //don't do it here.. do it once
     
-   var material = new THREE.MeshBasicMaterial( { map: textures["cherry"]});
+   var material = new THREE.MeshLambertMaterial( { map: textures["cherry"]});
     //var material = new THREE.MeshBasicMaterial( {  wireframe: true});
     var mesh = new THREE.Mesh(geometry, material);
 
@@ -720,6 +720,8 @@ module.exports = csgToGeometries
 //const {union, difference, intersection} = scadApi.booleanOps
 //const {translate, rotate} = scadApi.transformations
 
+//here we define 1 unit == 1 fm
+
 const Processor = require('./Processor')
 
 function Main()
@@ -732,7 +734,7 @@ function Main()
 	//only stores data
 	this.container = document.getElementById('container');
 	this.scene = new THREE.Scene();
-	this.scene.background = new THREE.Color(0xf0f0f0);
+	this.scene.background = new THREE.Color(0x443333);
 	this.geometries = {};
 	this.materials = {};
 	this.selected = null;
@@ -742,6 +744,8 @@ function Main()
 	this.camera = new THREE.PerspectiveCamera (45, window.innerWidth / window.innerHeight, 1, 10000);
 	this.renderer = new THREE.WebGLRenderer( { antialias: true } );
 	this.control = null;
+
+	this.envMap;
 
 	//obj transform controller
 	this.transformControls = null;
@@ -867,22 +871,52 @@ Main.prototype = {
 		if(!Detector.webgl)
 			Detector.addGetWebGLMessage();
 
-		this.camera.position.set(250, 400, 650);
-		this.camera.lookAt(new THREE.Vector3());
+		this.camera.position.set(0, 30, 50);
+		this.camera.lookAt(new THREE.Vector3(0, 30, -50));
 
-		var ambientLight = new THREE.AmbientLight( 0xccccc, 0.4);
+		var ambientLight = new THREE.AmbientLight( 0xeeeeee, 0.4);
 		this.scene.add(ambientLight);
 
-		var pointLight = new THREE.PointLight(0xffffff, 0.8);
+		var pointLight = new THREE.PointLight(0xffffff, 0.2);
 		this.camera.add(pointLight);
 		this.scene.add(this.camera);
+		//this.addHelper(pointLight);
 
-		var gridHelper = new THREE.GridHelper( 1000, 20 ) ;//size, divisions
-		this.scene.add( gridHelper );
 
+		var hemiLight = new THREE.HemisphereLight( 0xffffff, 0x444444, 0.2);
+		hemiLight.position.set( 0, 100, 0 );
+		this.scene.add( hemiLight );
+		this.addHelper(hemiLight);
+
+		var directlight = new THREE.DirectionalLight( 0xffffff, 0.3 );
+		directlight.position.set( 0, 30, 50 );
+		// directlight.castShadow = true;
+		// directlight.shadow.camera.top = 1.8;
+		// directlight.shadow.camera.bottom = -1.8;
+		// directlight.shadow.camera.left = -1.2;
+		// directlight.shadow.camera.right = 1.2;
+		this.scene.add( directlight );
+		this.addHelper(directlight);
+
+
+
+		var path = './skybox/';
+		var format = '.jpg';
+		this.envMap = new THREE.CubeTextureLoader().load( [
+			path + 'px' + format, path + 'nx' + format,
+			path + 'py' + format, path + 'ny' + format,
+			path + 'pz' + format, path + 'nz' + format
+			] );			
+
+		this.scene.background = new THREE.Color(.95,.95,.95);
+
+		//var gridHelper = new THREE.GridHelper( 1000, 20 ) ;//size, divisions
+		//this.scene.add( gridHelper );
+		this.addHouseEnvironment();
 		
 		this.renderer.setPixelRatio( window.devicePixelRatio );
 		this.renderer.setSize( window.innerWidth, window.innerHeight );
+		this.renderer.gammaOutput = true;
 		this.container.appendChild( this.renderer.domElement );
 
 		//this.container.appendChild( this.stats.dom )
@@ -902,6 +936,7 @@ Main.prototype = {
 		this.controls.minDistance = 1;
 		this.controls.maxDistance = 10000;
 		this.controls.enablePan = true;
+		//this.controls.target.set(0, 0.5, - 0.2);
 
 
 		this.transformControls = new THREE.TransformControls(this.camera, this.renderer.domElement);
@@ -921,7 +956,216 @@ Main.prototype = {
 
 		//initialize processor
 		this.processor = new Processor(scope);
+
+
+		//test
+		// model
+		var loader = new THREE.GLTFLoader();
+		loader.load(
+			'models/vitra-chair.glb',
+			function ( gltf ) {
+				scope.gltfLoadedCallback(
+					gltf,
+					scope.envMap,
+					new THREE.Vector3(-1.5,0,-0.5),
+					Math.PI*0.2
+				);
+		} );
+
 	},
+
+
+	addHouseEnvironment: function() {
+
+		var scope = this;
+
+		//sky
+		// SKYDOME
+		var light = new THREE.DirectionalLight( 0xaabbff, 0.3 );
+		var vertexShader = document.getElementById( 'vertexShader' ).textContent;
+		var fragmentShader = document.getElementById( 'fragmentShader' ).textContent;
+		var uniforms = {
+			topColor: 	 { type: "c", value: new THREE.Color( 0x0077ff ) },
+			bottomColor: { type: "c", value: new THREE.Color( 0xffffff ) },
+			offset:		 { type: "f", value: 400 },
+			exponent:	 { type: "f", value: 0.6 }
+		};
+		uniforms.topColor.value.copy( light.color );
+		var skyGeo = new THREE.SphereBufferGeometry( 4000, 32, 15 );
+		var skyMat = new THREE.ShaderMaterial( {
+			uniforms: uniforms,
+			vertexShader: vertexShader,
+			fragmentShader: fragmentShader,
+			side: THREE.BackSide
+		} );
+		var sky = new THREE.Mesh( skyGeo, skyMat );
+		scope.scene.add( sky );
+
+
+		// ground
+		var groundTexture = new THREE.TextureLoader().load("../images/floor.jpg");
+		groundTexture.wrapS = groundTexture.wrapT = THREE.RepeatWrapping;
+    	groundTexture.offset.set( 0, 0 );
+    	groundTexture.repeat.set( 10, 10 );
+
+		var ground = new THREE.Mesh(
+			new THREE.PlaneBufferGeometry( 100, 100, 10, 10),
+			new THREE.MeshPhongMaterial( {wireframe: false, map: groundTexture, specular: 0x101010} )
+		);
+		ground.rotation.x = - Math.PI / 2;
+		// plane.position.y = -1;
+		ground.receiveShadow = true;
+		scope.scene.add(ground);
+
+		//wall
+		var purpleWallTexture = new THREE.TextureLoader().load("../images/purple_wall.jpg");
+		purpleWallTexture.wrapS = purpleWallTexture.wrapT = THREE.RepeatWrapping;
+    	purpleWallTexture.offset.set( 0, 0 );
+    	purpleWallTexture.repeat.set( 10, 3 );
+
+    	var purple_wall = new THREE.Mesh(
+			new THREE.PlaneBufferGeometry( 100, 30, 10, 3),
+			new THREE.MeshPhongMaterial( {map: purpleWallTexture, specular: 0x101010} )
+		);
+
+    	purple_wall.position.copy(new THREE.Vector3(0, 15, -50));
+		purple_wall.receiveShadow = true;
+		scope.scene.add(purple_wall);
+
+		//left wall
+		var left_wall = new THREE.Mesh(
+			new THREE.BoxBufferGeometry( 3, 30, 10),
+			new THREE.MeshPhongMaterial( {color: 0xdcd9cd, specular: 0xcccccc} )
+		);
+
+    	left_wall.position.copy(new THREE.Vector3(-50, 15, -45));
+		left_wall.receiveShadow = true;
+		scope.scene.add(left_wall);
+
+		//left window
+		var loader = new THREE.ColladaLoader();
+		loader.load( '../models/window.dae', function ( collada ) {
+			var fcWindow = collada.scene;
+			fcWindow.scale.copy(new THREE.Vector3(0.21, 0.21, 0.21));
+			fcWindow.position.copy(new THREE.Vector3(-53, 0, -60));
+			fcWindow.rotation.z = - Math.PI / 2;
+			scope.scene.add(fcWindow);
+		});
+
+		//left window left
+		var left_window_left_wall = new THREE.Mesh(
+			new THREE.BoxBufferGeometry( 3, 30, 90 - 55.5),
+			new THREE.MeshPhongMaterial( {color: 0xdcd9cd, specular: 0xcccccc} )
+		);
+
+    	left_window_left_wall.position.copy(new THREE.Vector3(-20, 15, 50 - (90 - 55.5)/2));
+		left_window_left_wall.receiveShadow = true;
+		scope.scene.add(left_window_left_wall);
+
+
+		var left_wall_left_wall = new THREE.Mesh(
+			new THREE.BoxBufferGeometry( 30, 30, 3),
+			new THREE.MeshPhongMaterial( {color: 0xdcd9cd, specular: 0xcccccc} )
+		);
+
+    	left_wall_left_wall.position.copy(new THREE.Vector3(-35, 15, 50 - (90 - 55.5) + 1.5));
+		left_wall_left_wall.receiveShadow = true;
+		scope.scene.add(left_wall_left_wall);
+
+
+		//right wall
+		var right_wall = new THREE.Mesh(
+			new THREE.BoxBufferGeometry( 3, 30, 50),
+			new THREE.MeshPhongMaterial( {color: 0xdcd9cd, specular: 0xcccccc} )
+		);
+
+    	right_wall.position.copy(new THREE.Vector3(50, 15, -25));
+		right_wall.receiveShadow = true;
+		scope.scene.add(right_wall);
+		
+		//right door
+		loader.load( '../models/door.dae', function ( collada ) {
+			var fcDoor = collada.scene;
+			fcDoor.scale.copy(new THREE.Vector3(0.25, 0.25, 0.25));
+			fcDoor.position.copy(new THREE.Vector3(40, 0, -14.3));
+			fcDoor.rotation.z = - Math.PI / 2;
+			scope.scene.add(fcDoor);
+
+		});
+
+		//right door top
+		var right_door_top_wall = new THREE.Mesh(
+			new THREE.BoxBufferGeometry( 3, 9.4, 8.858),
+			new THREE.MeshPhongMaterial( {color: 0xdcd9cd, specular: 0xcccccc} )
+		);
+
+    	right_door_top_wall.position.copy(new THREE.Vector3(50, 20.66 + 9.4 / 2, 8.858 / 2));
+		right_door_top_wall.receiveShadow = true;
+		scope.scene.add(right_door_top_wall);
+
+		//right door right
+		var right_door_right_wall = new THREE.Mesh(
+			new THREE.BoxBufferGeometry( 3, 30, 50 - 8.85),
+			new THREE.MeshPhongMaterial( {color: 0xdcd9cd, specular: 0xcccccc} )
+		);
+
+    	right_door_right_wall.position.copy(new THREE.Vector3(50, 15, 8.85 + (50 - 8.858) / 2));
+		right_door_right_wall.receiveShadow = true;
+		scope.scene.add(right_door_right_wall);
+
+		//ceiling
+		var ceiling = new THREE.Mesh(
+			new THREE.PlaneBufferGeometry( 100, 100, 1, 1),
+			new THREE.MeshPhongMaterial( {color: 0xdcd9cd, specular: 0x101010} )
+		);
+		ceiling.position.y = 30;
+		ceiling.rotation.x = Math.PI / 2;
+		ceiling.receiveShadow = true;
+		scope.scene.add(ceiling);
+
+
+		//the other side, 70 window
+		loader.load( '../models/wall_window.dae', function ( collada ) {
+			var wWindow = collada.scene;
+			wWindow.scale.copy(new THREE.Vector3(0.25, 0.25, 0.25));
+			wWindow.position.copy(new THREE.Vector3(-40, 0, 55));
+			//wWindow.rotation.z = - Math.PI / 2;
+			wWindow.rotation.x = - Math.PI / 2;
+			scope.scene.add(wWindow);
+
+			var box = new THREE.Box3();
+			box.setFromObject(wWindow);
+			var box_size = new THREE.Vector3();
+			box.getSize(box_size);
+
+			//this includes width, height, depth
+			console.log(box_size);
+		});
+
+	},
+
+
+	gltfLoadedCallback: function(gltf, envMap, position, rotation) {
+
+		var scope = this;
+
+		gltf.scene.traverse( function ( child ) {
+
+			if ( child.isMesh ) {
+
+				child.material.envMap = envMap;
+				child.material.needsUpdate = true;
+				child.castShadow = true;
+
+			}
+
+		} );
+		gltf.scene.position.copy( position );
+		gltf.scene.rotation.y = rotation;
+		gltf.scene.scale.copy(new THREE.Vector3(10, 10, 10));
+		scope.scene.add( gltf.scene );
+	},
+
 
 	animate: function()
 	{
@@ -966,6 +1210,10 @@ Main.prototype = {
 				//scope.addGeometry( child.geometry );
 
 				//scope.objects.push(child);
+				child.material.envMap = scope.envMap;
+				child.material.needsUpdate = true;
+				child.castShadow = true;
+
 				objects.push(child);
 				//scope.addHelper( child ); //to visualize helpers
 
@@ -1014,11 +1262,14 @@ Main.prototype = {
 
 
 	addHelper: function () {
+		//var scope = this;
 
 		var geometry = new THREE.SphereBufferGeometry( 2, 4, 2 );
 		var material = new THREE.MeshBasicMaterial( { color: 0xff0000, visible: false } );
 
 		return function ( object ) {
+
+			var scope = this;
 
 			var helper;
 
@@ -1062,8 +1313,8 @@ Main.prototype = {
 			picker.userData.object = object;
 			helper.add( picker );
 
-			this.scene.add( helper );
-			this.helpers[ object.id ] = helper;
+			scope.scene.add( helper );
+			scope.helpers[ object.id ] = helper;
 
 			//this.signals.helperAdded.dispatch( helper );
 
