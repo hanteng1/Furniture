@@ -22,66 +22,28 @@ function Chair_Add (main) {
 
 Chair_Add.prototype = {
 
-	checkHasFrame: function(furniture) {		
-		return furniture.hasComponent('midframe');
-	},
 	checkHasSeat: function(furniture) {		
 		return furniture.hasComponent('seat');
 	},
+
 	checkHasBack: function(furniture) {		
 		return furniture.hasComponent('back');
-	},
-	getFrameHeight2Floor: function(furniture) {
-		return furniture.getComponentHeight2Floor('midframe');
-	},
-	getSeatHeight2Floor: function(furniture) {
-		return furniture.getComponentHeight2Floor('seat');
-	},
-	checkLabeledComponents: function(furnitures) {
-		count = furnitures.length;
-		//console.log(`number of chairs: ${count}`);
-
-		//determine reference type
-		var hasFrameCount = 0;
-		var hasSeatCount = 0;
-		for(var i = 0; i < count; i++)
-		{
-			if(this.checkHasFrame(furnitures[i])) hasFrameCount++;
-			if(this.checkHasSeat(furnitures[i])) hasSeatCount++;	
-		}
-
-		if(hasFrameCount == count) {
-			this.reference = 'midframe';
-
-		}else if(hasSeatCount == count) {
-			this.reference = 'seat';
-		}else {
-			//don't handle for now
-			console.log("frame count or seat count not matched");
-		}
-
-		//todo: check the height and see whether they are the same
-		if(this.reference == 'midframe') {
-			//check the height
-
-		}
 	},
 
 	changeParameterValue: function(pname, value) {
 		this.parameters[pname] = value;
-
-		//console.log(this.parameters[pname]);
-
 		this.execute();
 	},
 
 	plantLoader: function(board){
 		var plant;
+
 		// loading manager
 		var scene = this.main.scene;
 		var loadingManager = new THREE.LoadingManager( function() {
 			scene.add( plant );
 		} );
+
 		// collada
 		var loader = new THREE.ColladaLoader( loadingManager );
 		loader.load( "./models/plant1.dae", function ( collada ) {
@@ -97,19 +59,65 @@ Chair_Add.prototype = {
 			var center_board = new THREE.Vector3();
 			box.setFromObject(board);
 			box.getCenter(center_board);
-			
-			console.log(center_board);
 
 			var board_matrix_inverse = new THREE.Matrix4();
 			board_matrix_inverse.getInverse(board.matrixWorld, true);
 
 			plant.applyMatrix(board_matrix_inverse);
 			plant.position.set(center_board.x, center_board.y, center_board.z);
-			//board.worldToLocal(plant.position);
 
 			scene.add(plant);
+		} );
+	},
 
-			console.log(plant);
+	createHook: function(scene, child, hook, position, offset){		
+		var pos = new THREE.Vector3(position.x + 3 * offset, position.y, position.z + 10);
+		var raycaster = new THREE.Raycaster();
+		raycaster.set(pos, new THREE.Vector3(0,0,-1));
+		var intersects = raycaster.intersectObject(child);
+		if(intersects.length > 0){
+			var hook_clone = hook.clone();
+			hook_clone.position.set(intersects[0].point.x, intersects[0].point.y, intersects[0].point.z);
+			console.log(hook_clone.position);
+			scene.add( hook_clone );
+		}
+	},
+
+	createColumnHook: function(scene, child, hook){
+		//get hook size
+		var box = new THREE.Box3();
+		box.setFromObject(hook);
+		var size_hook = new THREE.Vector3();
+		box.getSize(size_hook);
+
+		//get back size
+		var center_child = new THREE.Vector3();
+		box.setFromObject(child);
+		box.getCenter(center_child);
+
+		this.createHook(scene, child, hook, center_child, size_hook.x * (-1) );
+		this.createHook(scene, child, hook, center_child, size_hook.x * 0 );
+		this.createHook(scene, child, hook, center_child, size_hook.x * 1);		
+	},
+
+	hookLoader: function(back){
+		var hook;
+
+		// loading manager
+		var scene = this.main.scene;
+		var chair_add = this;
+		var loadingManager = new THREE.LoadingManager( function() {
+			for (var i = 0; i < back.children.length; i++) {
+				chair_add.createColumnHook(scene, back.children[i], hook);
+			}		
+		} );
+
+		// collada
+		var loader = new THREE.ColladaLoader( loadingManager );
+		loader.load( "./models/hook/source/B01020/B01020.dae", function ( collada ) {
+			hook = collada.scene;
+			hook.name = "hook";			
+			hook.scale.x = 0.025; hook.scale.y = 0.025; hook.scale.z = 0.025;
 		} );
 	},
 
@@ -155,7 +163,6 @@ Chair_Add.prototype = {
 			material = obj.material[0].clone();
 		else
 			material = obj.material.clone();
-		
 
 		var geometry = chairCreatBoard(width, height/10, depth/2);	
 		var board = new THREE.Mesh( geometry, material );		
@@ -222,7 +229,6 @@ Chair_Add.prototype = {
 		
 		var back_matrix_inverse = new THREE.Matrix4();
 		back_matrix_inverse.getInverse(back.matrixWorld, true);
-
 		
 
 		//set board position and rotation in back
@@ -282,6 +288,21 @@ Chair_Add.prototype = {
 		plant.position.set(center_board.x, center_board.y, center_board.z);
 		
 	},
+
+	addHook: function(furniture_clone){
+		var moveTo = new THREE.Vector3(125, 25, 0);
+		//remove other part
+		var group = furniture_clone;		
+		this.remove(group, 'back');
+		//update chair back transfrom Matrix
+		var back = group.getObjectByName ('back');		
+		this.updateBack(back);
+
+		group.position.set(moveTo.x, moveTo.y, moveTo.z);
+
+		this.hookLoader(back);
+			
+	},
 	//////////////////////////////////////////////////////////////////////////
 
 	execute: function(){
@@ -295,14 +316,13 @@ Chair_Add.prototype = {
 				furniture_clone_board.name = "add_board";
 
 				this.addBoard(furniture_clone_board);
-
 				
 				var clone_size = this.getPartSize(furniture_clone_board);
 				var wallPosition = new THREE.Vector3();
 				wallPosition = this.getObjCenter(furniture_clone_board);
 				wallPosition.z -= clone_size.z;
-				wallPosition.x -= 10;
-				var wall = this.creatWall(wallPosition, 50, 50, 10);
+				wallPosition.x += 25;
+				var wall = this.creatWall(wallPosition, 100, 50, 10);
 				
 				this.main.scene.add(furniture_clone_board);
 				this.main.scene.add(wall);
@@ -313,7 +333,7 @@ Chair_Add.prototype = {
 				var furniture_clone_board = this.main.scene.getObjectByName("add_board");
 				this.setBoard(furniture_clone_board);	
 			}
-			/*
+			
 			if(!this.hasHook){
 				var furniture_clone_hook = new THREE.Object3D();
 				furniture_clone_hook = this.furnitures[0].getFurniture().clone();
@@ -322,13 +342,13 @@ Chair_Add.prototype = {
 				this.addHook(furniture_clone_hook);
 
 				this.main.scene.add(furniture_clone_hook);
-				this.hasBoard = true;
+				this.hasHook = true;
 
 			}
 			else{
 
 			}
-			*/
+			
 		}
 		else
 			alert("Please mark seat and back");		
