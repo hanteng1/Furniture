@@ -2,7 +2,10 @@
 //this is to handle the new design approaches
 //that without the need of cad operations
 
-const Chair_Align = require('./Chair_Align')
+const Chair_Align = require('./Chair_Align');
+const Chair_Add = require('./Chair_Add');
+const Chair_Rebuild = require('./Chair_Rebuild');
+
 
 function Processor(main) {
 	this.main = main;
@@ -13,7 +16,7 @@ function Processor(main) {
 	//variables of transformation functions
 	//chair
 	this.chair_align = undefined;
-	this.chair_add = undefined;
+	
 
 
 
@@ -22,7 +25,7 @@ function Processor(main) {
 
 
 	//zhuen's block
-
+	this.chair_add = undefined;
 
 
 	//end of zhuen's block
@@ -30,7 +33,7 @@ function Processor(main) {
 
 
 	//weixiang's bloack
-
+	this.chair_rebuild = undefined;
 
 
 	//end of weixiang's block
@@ -58,6 +61,11 @@ Processor.prototype = {
 		scope.chair_align.init();
 		this.transformFunctions.CHAIR_ALIGN = scope.chair_align;
 
+		scope.chair_add = new Chair_Add(scope.main);
+		this.transformFunctions.CHAIR_ADD = scope.chair_add;
+
+		scope.chair_rebuild = new Chair_Rebuild(scope.main);
+		this.transformFunctions.CHAIR_REBUILD = scope.chair_rebuild;
 
 
 	},
@@ -77,7 +85,8 @@ Processor.prototype = {
 
 				}else if(scope.furnitures.length == 1){
 					//possible actions with one furniture
-
+					//this.chair_add.execute();
+					this.chair_rebuild.execute();
 
 				}else if( scope.furnitures.length > 1) {
 					//possible actions with many furnitures
