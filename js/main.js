@@ -22,7 +22,7 @@ function Main()
 	//only stores data
 	this.container = document.getElementById('container');
 	this.scene = new THREE.Scene();
-	this.scene.background = new THREE.Color(0xf0f0f0);
+	this.scene.background = new THREE.Color(0x443333);
 	this.geometries = {};
 	this.materials = {};
 	this.selected = null;
@@ -32,6 +32,8 @@ function Main()
 	this.camera = new THREE.PerspectiveCamera (45, window.innerWidth / window.innerHeight, 1, 10000);
 	this.renderer = new THREE.WebGLRenderer( { antialias: true } );
 	this.control = null;
+
+	this.envMap;
 
 	//obj transform controller
 	this.transformControls = null;
@@ -166,6 +168,35 @@ Main.prototype = {
 		var pointLight = new THREE.PointLight(0xffffff, 0.8);
 		this.camera.add(pointLight);
 		this.scene.add(this.camera);
+		//this.addHelper(pointLight);
+
+
+		//var hemiLight = new THREE.HemisphereLight( 0xffffff, 0x444444 );
+		//hemiLight.position.set( 0, 20, 0 );
+		//this.scene.add( hemiLight );
+		//this.addHelper(hemiLight);
+
+		//var directlight = new THREE.DirectionalLight( 0xffffff );
+		//directlight.position.set( 0, 20, 10 );
+		// directlight.castShadow = true;
+		// directlight.shadow.camera.top = 1.8;
+		// directlight.shadow.camera.bottom = -1.8;
+		// directlight.shadow.camera.left = -1.2;
+		// directlight.shadow.camera.right = 1.2;
+		//this.scene.add( directlight );
+		//this.addHelper(directlight);
+
+
+
+		var path = './skybox/';
+		var format = '.jpg';
+		this.envMap = new THREE.CubeTextureLoader().load( [
+			path + 'px' + format, path + 'nx' + format,
+			path + 'py' + format, path + 'ny' + format,
+			path + 'pz' + format, path + 'nz' + format
+			] );			
+
+		this.scene.background = new THREE.Color(.95,.95,.95);
 
 		var gridHelper = new THREE.GridHelper( 1000, 20 ) ;//size, divisions
 		this.scene.add( gridHelper );
@@ -173,6 +204,7 @@ Main.prototype = {
 		
 		this.renderer.setPixelRatio( window.devicePixelRatio );
 		this.renderer.setSize( window.innerWidth, window.innerHeight );
+		this.renderer.gammaOutput = true;
 		this.container.appendChild( this.renderer.domElement );
 
 		//this.container.appendChild( this.stats.dom )
@@ -192,6 +224,7 @@ Main.prototype = {
 		this.controls.minDistance = 1;
 		this.controls.maxDistance = 10000;
 		this.controls.enablePan = true;
+		//this.controls.target.set(0, 0.5, - 0.2);
 
 
 		this.transformControls = new THREE.TransformControls(this.camera, this.renderer.domElement);
@@ -211,7 +244,45 @@ Main.prototype = {
 
 		//initialize processor
 		this.processor = new Processor(scope);
+
+
+		//test
+		// model
+		var loader = new THREE.GLTFLoader();
+		loader.load(
+			'models/EamesLoungeChair.glb',
+			function ( gltf ) {
+				scope.gltfLoadedCallback(
+					gltf,
+					scope.envMap,
+					new THREE.Vector3(-1.5,0,-0.5),
+					Math.PI*0.2
+				);
+		} );
+
 	},
+
+	gltfLoadedCallback: function(gltf, envMap, position, rotation) {
+
+		var scope = this;
+
+		gltf.scene.traverse( function ( child ) {
+
+			if ( child.isMesh ) {
+
+				child.material.envMap = envMap;
+				child.material.needsUpdate = true;
+				child.castShadow = true;
+
+			}
+
+		} );
+		gltf.scene.position.copy( position );
+		gltf.scene.rotation.y = rotation;
+		gltf.scene.scale.copy(new THREE.Vector3(10, 10, 10));
+		scope.scene.add( gltf.scene );
+	},
+
 
 	animate: function()
 	{
@@ -256,6 +327,10 @@ Main.prototype = {
 				//scope.addGeometry( child.geometry );
 
 				//scope.objects.push(child);
+				child.material.envMap = scope.envMap;
+				child.material.needsUpdate = true;
+				child.castShadow = true;
+
 				objects.push(child);
 				//scope.addHelper( child ); //to visualize helpers
 
@@ -304,11 +379,14 @@ Main.prototype = {
 
 
 	addHelper: function () {
+		//var scope = this;
 
 		var geometry = new THREE.SphereBufferGeometry( 2, 4, 2 );
 		var material = new THREE.MeshBasicMaterial( { color: 0xff0000, visible: false } );
 
 		return function ( object ) {
+
+			var scope = this;
 
 			var helper;
 
@@ -352,8 +430,8 @@ Main.prototype = {
 			picker.userData.object = object;
 			helper.add( picker );
 
-			this.scene.add( helper );
-			this.helpers[ object.id ] = helper;
+			scope.scene.add( helper );
+			scope.helpers[ object.id ] = helper;
 
 			//this.signals.helperAdded.dispatch( helper );
 

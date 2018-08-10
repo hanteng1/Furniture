@@ -290,6 +290,24 @@ Ui.prototype = {
 				}, false );
 				reader.readAsText( file );
 			break;
+
+
+			case 'glb':
+				reader.addEventListener( 'load', function ( event ) {
+
+					var contents = event.target.result;
+
+					//console.log(contents);
+
+					var loader = new THREE.GLTFLoader();
+					var gltf = loader.parse(contents);
+					scope.main.addObject(gltf.scene ); 
+
+				}, false );
+
+				reader.readAsText( file );
+
+			break;
 		}
 	},
 
