@@ -167,16 +167,16 @@ Main.prototype = {
 		var ambientLight = new THREE.AmbientLight( 0xeeeeee, 0.4);
 		this.scene.add(ambientLight);
 
-		//var pointLight = new THREE.PointLight(0xffffff, 0.8);
-		//this.camera.add(pointLight);
+		var pointLight = new THREE.PointLight(0xffffff, 0.2);
+		this.camera.add(pointLight);
 		this.scene.add(this.camera);
 		//this.addHelper(pointLight);
 
 
-		//var hemiLight = new THREE.HemisphereLight( 0xffffff, 0x444444 );
-		//hemiLight.position.set( 0, 100, 0 );
-		//this.scene.add( hemiLight );
-		//this.addHelper(hemiLight);
+		var hemiLight = new THREE.HemisphereLight( 0xffffff, 0x444444, 0.2);
+		hemiLight.position.set( 0, 100, 0 );
+		this.scene.add( hemiLight );
+		this.addHelper(hemiLight);
 
 		var directlight = new THREE.DirectionalLight( 0xffffff, 0.3 );
 		directlight.position.set( 0, 30, 50 );
