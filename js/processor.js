@@ -5,7 +5,7 @@
 const Chair_Align = require('./Chair_Align');
 const Chair_Add = require('./Chair_Add');
 const Chair_Rebuild = require('./Chair_Rebuild');
-
+const Chair_Rebuild_AddMat = require('./Chair_Rebuild_AddMat');
 
 function Processor(main) {
 	this.main = main;
@@ -34,7 +34,7 @@ function Processor(main) {
 
 	//weixiang's bloack
 	this.chair_rebuild = undefined;
-
+	this.chair_rebuild_addMat = undefined;
 
 	//end of weixiang's block
 
@@ -67,6 +67,9 @@ Processor.prototype = {
 		scope.chair_rebuild = new Chair_Rebuild(scope.main);
 		this.transformFunctions.CHAIR_REBUILD = scope.chair_rebuild;
 
+		scope.chair_rebuild_addMat = new Chair_Rebuild_AddMat(scope.main);
+		this.transformFunctions.CHAIR_REBUILD_ADDMAT = scope.chair_rebuild_addMat;
+		
 
 	},
 
@@ -86,7 +89,8 @@ Processor.prototype = {
 				}else if(scope.furnitures.length == 1){
 					//possible actions with one furniture
 					//this.chair_add.execute();
-					this.chair_rebuild.execute();
+					//this.chair_rebuild.execute();
+					this.chair_rebuild_addMat.execute();
 
 				}else if( scope.furnitures.length > 1) {
 					//possible actions with many furnitures

@@ -223,7 +223,7 @@ Main.prototype = {
 		//initialize processor
 		this.processor = new Processor(scope);
 
-
+		/*
 		//test
 		// model
 		var loader = new THREE.GLTFLoader();
@@ -237,7 +237,7 @@ Main.prototype = {
 					Math.PI*0.2
 				);
 		} );
-
+		*/
 	},
 
 
