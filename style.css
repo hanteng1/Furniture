@@ -93,19 +93,6 @@ a {
   top: 200px;
 }
 
-
-.ui.compact.vertical.labeled.icon.menu.parameters {
-  top: 0;
-}
-
-.ui.compact.vertical.labeled.image.menu {
-  position: absolute;
-  opacity: 0.8;
-  -moz-opacity: 0.8;
-  left:350px;
-  top: 400px;
-}
-
 .ui.inverted.segment .ui.header{
   color: #444444;
   font-size: 1.2em !important;
@@ -138,6 +125,14 @@ a {
   top: 0;
 }
 
+
+.ui.compact.parameters {
+  position: absolute;
+  opacity: 0.8;
+  -moz-opacity: 0.8;
+  left:350px;
+  top: 0;
+}
 
 
 

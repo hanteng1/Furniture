@@ -116,33 +116,7 @@
 			</div>
 
 
-			<!--chair align-->
-			<div class="ui segment" id="CHAIR_ALIGN">
-				<table class="ui definition table">
-					<tbody>
-						<tr>
-							<td>Length</td>
-							<td>
-								<div class="range-slider" id="CHAIR_ALIGN">
-									<input class="range-slider__range" id="DISTANCE" type="range" value="30" min="30" max="90">
-									<span class="range-slider__value">30</span>
-								</div>
-							</td>
-						</tr>
-						<tr>
-							<td>Angle</td>
-							<td>
-								<div class="range-slider" id="CHAIR_ALIGN">
-									<input class="range-slider__range" id="ANGLE" type="range" value="0" min="0" max="180">
-									<span class="range-slider__value">0</span>
-								</div>
-							</td>
-						</tr>
-					</tbody>
-				</table>
-
-			</div>
-
+			<!--dfdfdf-->
 
 
 		</div> <!--side menu-->
@@ -193,8 +167,9 @@
 
 
 		<!--for design parameters -->
-		<div class="ui compact vertical labeled icon menu parameters" id="parameter_control">
-		
+
+		<!--chair align-->
+		<div class="ui compact parameters" id="parameter_control_chair_align">
 			<div class="ui segment" id="CHAIR_ALIGN">
 				<table class="ui definition table">
 					<tbody>
@@ -220,35 +195,42 @@
 				</table>
 
 			</div>
-
-
 		</div>
+
+
+		<!--chair rebuild-->
+		<div class="ui compact parameters" id="parameter_control_chair_rebuild">
+			<div class="ui labeled icon menu" id = "CHAIR_REBUILD">
+			
+				<a class="item ui image label 1">
+					<img src="/images/material/material1.jpg">
+				</a>
+				<a class="item ui image label 2">
+					<img src="/images/material/material2.jpg">
+				</a>
+				<a class="item ui image label 3">
+				  	<img src="/images/material/material3.jpg">
+				</a>
+				<a class="item ui image label 4">
+				  	<img src="/images/material/material4.jpg">
+				</a>
+				<a class="item">
+					<i class="align justify icon 1"></i>
+				</a>
+
+			</div>
+		</div>
+
+
+		<!--end of for design parameters -->
+
+
 
 
 		<!-- Weihsiang's Block, for seat texture change-->
-		<div class="ui compact vertical labeled image icon menu" id = "rebuild">
-			
-			<a class="item ui image label 1">
-				<img src="/images/material/material1.jpg">
-			  	1
-			</a>
-			<a class="item ui image label 2">
-				<img src="/images/material/material2.jpg">
-			  	2
-			</a>
-			<a class="item ui image label 3">
-			  	<img src="/images/material/material3.jpg">
-			  	3
-			</a>
-			<a class="item ui image label 4">
-			  	<img src="/images/material/material4.jpg">
-			  	4
-			</a>
-			<a class="item">
-				<i class="align justify icon 1"></i>
-				ThinBoard
-			</a>
-		</div>
+		
+
+
 		<!-- End of Weihsiang's Block-->
 
 		<div id="container"></div>
