@@ -80,12 +80,10 @@ Ui.prototype = {
 				}
 			}
 		});
-
-		$('#label').hide();
 		
 		//weixiang's bloack
 
-		
+
 		//end of weixiang's block
 
 		$( ".item.m_group" ).click(function() {
@@ -150,6 +148,9 @@ Ui.prototype = {
 
 
 		//chair_align controller function
+		this.designButtons();
+
+
 		this.rangeSlider();
 
 
@@ -182,16 +183,79 @@ Ui.prototype = {
 
 
 		//in the end, hide all the needed items
-		$('#parameter_control_chair_align').hide();
+		$('#label').hide();
 
+		$('#parameter_control_chair_align').hide();
 		$('#parameter_control_chair_rebuild').hide();
 
+		$('.operations.operation_chair_align').hide();
+		$('.operations.operation_chair_add').hide();
+		$('.operations.operation_chair_rebuild').hide();
 
 
 
 	},
 
 
+	//operation click functions 
+	designButtons: function() {
+		
+		var scope = this.main;
+
+		//chair_align_vertical
+		$( "#operation_chair_align_vertical" ).click(function() {
+			console.log("chair_align_vertical");
+			scope.processor.executeDesign("CHAIR_ALIGN", "vertical");
+
+			$('#parameter_control_chair_align').show();
+		});
+
+		//chair_align_horizontal
+		$( "#operation_chair_align_horizontal" ).click(function() {
+			
+		});
+
+		//chair_align_flip
+		$( "#operation_chair_align_flip" ).click(function() {
+			
+		});
+
+		//chair_add_plate
+		$('#operation_chair_add_plate').click(function() {
+			scope.processor.executeDesign("CHAIR_ADD", "plate");
+		});
+
+		//chair_add_hook
+		$('#operation_chair_add_hook').click(function() {
+			scope.processor.executeDesign("CHAIR_ADD", "hook");
+		});
+
+		//chair_add_flip
+		$('#operation_chair_add_flip').click(function() {
+			
+		});
+
+		//chair_rebuild_seat
+		$('#operation_chair_rebuild_seat').click(function() {
+			console.log("chair_rebuild_seat");
+			scope.processor.executeDesign("CHAIR_REBUILD", "seat");
+			$('#parameter_control_chair_rebuild').show();
+		});
+
+		//chair_rebuild_back
+		$('#operation_chair_rebuild_back').click(function() {
+			scope.processor.executeDesign("CHAIR_REBUILD", "back");
+		});
+
+		//chair_rebuild_leg
+		$('#operation_chair_rebuild_leg').click(function() {
+			scope.processor.executeDesign("CHAIR_REBUILD", "leg");
+		});
+
+	},
+
+
+	//range slider functions
 	rangeSlider: function() {
 		var scope = this;
 
