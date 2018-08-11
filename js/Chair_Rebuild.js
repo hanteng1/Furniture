@@ -72,10 +72,10 @@ Chair_Rebuild.prototype = {
 
 	},
 	execute: function(){
-		this.SeatReplacement(this.furnitures[0]);
+		this.changeTexture(this.furnitures[0]);
 		
 	},
-	SeatReplacement: function(furniture){
+	changeTexture: function(furniture){
 		$('#rebuild').show();
 		var group = furniture.getFurniture();
 		var seat = furniture.getComponentByName('seat');
@@ -87,6 +87,8 @@ Chair_Rebuild.prototype = {
 		saveposi.y = SeatPosi.y;
 		saveposi.z = SeatPosi.z;
 
+
+		var group = furniture.getFurniture();
 		var mode = "NormalSeat"
 		var texture = new THREE.TextureLoader().load( 'images/material/material1.jpg' );
 		var main = this;

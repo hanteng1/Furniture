@@ -50,12 +50,126 @@
 			<div class="ui blue submit button duplicate">Duplicate</div>
 			<div class="ui blue submit button newdesign">Create New Design</div>
 
-
+			<!--Available Designs-->
 			<h4 class="ui horizontal divider header">
-				Controller
+				Available Designs
 			</h4>
 
-			<!--chair align controller-->
+			<div class="ui segment">
+				<div class="ui inverted segment" style="background:none">
+
+					<div class="operations operation_chair_align">
+						<h3 class="ui header">Align</h3>
+						<button class="ui inverted secondary button">
+								<i class="gamepad icon"></i>
+	    						Vertical
+						</button>
+
+						<button class="ui inverted secondary button">
+								<i class="gamepad icon"></i>
+	    						Horizontal
+						</button>
+
+						<button class="ui inverted secondary button">
+								<i class="gamepad icon"></i>
+	    						Flip
+						</button>
+					</div>
+
+					<div class="operations operation_chair_add">
+	 					<h3 class="ui header">Add</h3>
+	 					<button class="ui inverted secondary button">
+								<i class="gamepad icon"></i>
+	    						Plate
+						</button>
+
+						<button class="ui inverted secondary button">
+								<i class="gamepad icon"></i>
+	    						Hook
+						</button>
+
+						<button class="ui inverted secondary button">
+								<i class="gamepad icon"></i>
+	    						Flip
+						</button>
+ 					</div>
+
+ 					<div class="operations operation_chair_rebuild">
+	 					<h3 class="ui header">Rebuild</h3>
+	 					<button class="ui inverted secondary button">
+								<i class="gamepad icon"></i>
+	    						Seat
+						</button>
+
+						<button class="ui inverted secondary button">
+								<i class="gamepad icon"></i>
+	    						Back
+						</button>
+
+						<button class="ui inverted secondary button">
+								<i class="gamepad icon"></i>
+	    						Leg
+						</button>
+ 					</div>
+
+				</div>
+			</div>
+
+
+			<!--dfdfdf-->
+
+
+		</div> <!--side menu-->
+
+
+		<!--for group and ungroup operation-->
+		<div class="ui compact vertical labeled icon menu" id="label">
+			<a class="item m_group">
+				<i class="object group icon"></i>
+				Group
+			</a>
+			<a class="item">
+				<i class="object ungroup icon"></i>
+				Ungroup
+			</a>
+			<a class="item">
+				<i class="edit icon"></i>
+				<div class="ui floating dropdown icon button">
+					<span class="text">Label</span>
+					<div class="menu">
+						<div class="scrolling menu">
+							<div class="item" data-value="l_1">
+								<div class="ui red empty circular label"></div>
+								Back
+							</div>
+							<div class="item" data-value="l_2">
+								<div class="ui blue empty circular label"></div>
+								Seat
+							</div>
+							<div class="item" data-value="l_3">
+								<div class="ui black empty circular label"></div>
+								MidFrame
+							</div>
+							<div class="item" data-value="l_4">
+								<div class="ui purple empty circular label"></div>
+								Stand
+							</div>
+							<div class="item" data-value="l_5">
+								<div class="ui orange empty circular label"></div>
+								...
+							</div> 
+						</div>
+					</div>
+				</div>
+			</a>
+		</div>
+
+
+
+		<!--for design parameters -->
+
+		<!--chair align-->
+		<div class="ui compact parameters" id="parameter_control_chair_align">
 			<div class="ui segment" id="CHAIR_ALIGN">
 				<table class="ui definition table">
 					<tbody>
@@ -81,84 +195,42 @@
 				</table>
 
 			</div>
-
-
-			<!--xxxxx-->
-
-
-
-
-
-
-		</div> <!--side menu-->
-
-
-		<!--for group and ungroup operation-->
-		<div class="ui compact vertical labeled icon menu" id="label">
-				<a class="item m_group">
-					<i class="object group icon"></i>
-					Group
-				</a>
-				<a class="item">
-					<i class="object ungroup icon"></i>
-					Ungroup
-				</a>
-				<a class="item">
-					<i class="edit icon"></i>
-					<div class="ui floating dropdown icon button">
-						<span class="text">Label</span>
-						<div class="menu">
-							<div class="scrolling menu">
-								<div class="item" data-value="l_1">
-									<div class="ui red empty circular label"></div>
-									Back
-								</div>
-								<div class="item" data-value="l_2">
-									<div class="ui blue empty circular label"></div>
-									Seat
-								</div>
-								<div class="item" data-value="l_3">
-									<div class="ui black empty circular label"></div>
-									MidFrame
-								</div>
-								<div class="item" data-value="l_4">
-									<div class="ui purple empty circular label"></div>
-									Stand
-								</div>
-								<div class="item" data-value="l_5">
-									<div class="ui orange empty circular label"></div>
-									...
-								</div> 
-							</div>
-						</div>
-					</div>
-				</a>
 		</div>
+
+
+		<!--chair rebuild-->
+		<div class="ui compact parameters" id="parameter_control_chair_rebuild">
+			<div class="ui labeled icon menu" id = "CHAIR_REBUILD">
+			
+				<a class="item ui image label 1">
+					<img src="/images/material/material1.jpg">
+				</a>
+				<a class="item ui image label 2">
+					<img src="/images/material/material2.jpg">
+				</a>
+				<a class="item ui image label 3">
+				  	<img src="/images/material/material3.jpg">
+				</a>
+				<a class="item ui image label 4">
+				  	<img src="/images/material/material4.jpg">
+				</a>
+				<a class="item">
+					<i class="align justify icon 1"></i>
+				</a>
+
+			</div>
+		</div>
+
+
+		<!--end of for design parameters -->
+
+
+
 
 		<!-- Weihsiang's Block, for seat texture change-->
-		<div class="ui compact vertical labeled image icon menu" id = "rebuild">
-			
-			<a class="item ui image label 1">
-				<img src="/images/material/material1.jpg">
-			  	1
-			</a>
-			<a class="item ui image label 2">
-				<img src="/images/material/material2.jpg">
-			  	2
-			</a>
-			<a class="item ui image label 3">
-			  	<img src="/images/material/material3.jpg">
-			  	3
-			</a>
-			<a class="item ui image label 4">
-			  	<img src="/images/material/material4.jpg">
-			  	4
-			</a>
-			<a class="item">
-				<i class="align justify icon 1"></i>
-				ThinBoard
-			</a>
-		</div>
+		
+
+
 		<!-- End of Weihsiang's Block-->
 
 		<div id="container"></div>
@@ -243,9 +315,6 @@
 				gl_FragColor = vec4( mix( bottomColor, topColor, max( pow( max( h, 0.0 ), exponent ), 0.0 ) ), 1.0 );
 			}
 		</script>
-
-		
-
 
 		<script type="text/javascript" src="js/bundle.js"></script>
 		<!--<script type="text/javascript" src="js/Main.js"></script>-->

@@ -81,10 +81,11 @@ Ui.prototype = {
 			}
 		});
 
-		$('.ui.compact.vertical.labeled.icon.menu').hide();
+		$('#label').hide();
 		
 		//weixiang's bloack
-		$('.ui.compact.vertical.labeled.image.menu').hide();
+
+		
 		//end of weixiang's block
 
 		$( ".item.m_group" ).click(function() {
@@ -179,6 +180,11 @@ Ui.prototype = {
 		//end of trif's block
 
 
+
+		//in the end, hide all the needed items
+		$('#parameter_control_chair_align').hide();
+
+		$('#parameter_control_chair_rebuild').hide();
 
 
 

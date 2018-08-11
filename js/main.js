@@ -75,6 +75,9 @@ function Main()
 	this.processor = null;
 
 
+	//house environment
+	this.house = new THREE.Object3D();
+
 	// function loadModelObj(objFilePath)
 	// {
 
@@ -176,9 +179,9 @@ Main.prototype = {
 
 		this.scene.background = new THREE.Color(.95,.95,.95);
 
-		var gridHelper = new THREE.GridHelper( 1000, 20 ) ;//size, divisions
-		this.scene.add( gridHelper );
-		//this.addHouseEnvironment();
+		//var gridHelper = new THREE.GridHelper( 1000, 20 ) ;//size, divisions
+		//this.scene.add( gridHelper );
+		this.addHouseEnvironment();
 		
 		this.renderer.setPixelRatio( window.devicePixelRatio );
 		this.renderer.setSize( window.innerWidth, window.innerHeight );
@@ -265,8 +268,8 @@ Main.prototype = {
 			side: THREE.BackSide
 		} );
 		var sky = new THREE.Mesh( skyGeo, skyMat );
-		scope.scene.add( sky );
-
+		//scope.scene.add( sky );
+		this.house.add(sky);
 
 		// ground
 		var groundTexture = new THREE.TextureLoader().load("../images/floor.jpg");
@@ -281,7 +284,8 @@ Main.prototype = {
 		ground.rotation.x = - Math.PI / 2;
 		// plane.position.y = -1;
 		ground.receiveShadow = true;
-		scope.scene.add(ground);
+		//scope.scene.add(ground);
+		this.house.add(ground);
 
 		//wall
 		var purpleWallTexture = new THREE.TextureLoader().load("../images/purple_wall.jpg");
@@ -296,58 +300,75 @@ Main.prototype = {
 
     	purple_wall.position.copy(new THREE.Vector3(0, 15, -50));
 		purple_wall.receiveShadow = true;
-		scope.scene.add(purple_wall);
+		//scope.scene.add(purple_wall);
+		this.house.add(purple_wall);
+
+
+		var whiteWallTexture = new THREE.TextureLoader().load("../images/white_wall.jpg");
+		whiteWallTexture.wrapS = whiteWallTexture.wrapT = THREE.RepeatWrapping;
+    	whiteWallTexture.offset.set( 0, 0 );
+    	whiteWallTexture.repeat.set( 1, 3 );
 
 		//left wall
 		var left_wall = new THREE.Mesh(
-			new THREE.BoxBufferGeometry( 3, 30, 10),
-			new THREE.MeshPhongMaterial( {color: 0xdcd9cd, specular: 0xcccccc} )
+			new THREE.BoxBufferGeometry( 3, 30, 10, 1, 3, 1),
+			new THREE.MeshPhongMaterial( {map: whiteWallTexture, specular: 0x101010} )
 		);
 
     	left_wall.position.copy(new THREE.Vector3(-50, 15, -45));
 		left_wall.receiveShadow = true;
-		scope.scene.add(left_wall);
+		//scope.scene.add(left_wall);
+		this.house.add(left_wall);
 
 		//left window
 		var loader = new THREE.ColladaLoader();
+
 		loader.load( '../models/window.dae', function ( collada ) {
 			var fcWindow = collada.scene;
 			fcWindow.scale.copy(new THREE.Vector3(0.21, 0.21, 0.21));
 			fcWindow.position.copy(new THREE.Vector3(-53, 0, -60));
 			fcWindow.rotation.z = - Math.PI / 2;
-			scope.scene.add(fcWindow);
+			//scope.scene.add(fcWindow);
+			scope.house.add(fcWindow);
 		});
+		
 
 		//left window left
+		whiteWallTexture.repeat.set( 1, 3);
 		var left_window_left_wall = new THREE.Mesh(
-			new THREE.BoxBufferGeometry( 3, 30, 90 - 55.5),
-			new THREE.MeshPhongMaterial( {color: 0xdcd9cd, specular: 0xcccccc} )
+			new THREE.BoxBufferGeometry( 3, 30, 90 - 55.5, 1, 3, 3),
+			new THREE.MeshPhongMaterial( {map: whiteWallTexture, specular: 0x101010} )
 		);
 
     	left_window_left_wall.position.copy(new THREE.Vector3(-20, 15, 50 - (90 - 55.5)/2));
 		left_window_left_wall.receiveShadow = true;
-		scope.scene.add(left_window_left_wall);
+		//scope.scene.add(left_window_left_wall);
+		this.house.add(left_window_left_wall);
 
 
+		whiteWallTexture.repeat.set( 3, 3);
 		var left_wall_left_wall = new THREE.Mesh(
-			new THREE.BoxBufferGeometry( 30, 30, 3),
-			new THREE.MeshPhongMaterial( {color: 0xdcd9cd, specular: 0xcccccc} )
+			new THREE.BoxBufferGeometry( 30, 30, 3, 3, 3, 1),
+			new THREE.MeshPhongMaterial( {map: whiteWallTexture, specular: 0x101010} )
 		);
 
     	left_wall_left_wall.position.copy(new THREE.Vector3(-35, 15, 50 - (90 - 55.5) + 1.5));
 		left_wall_left_wall.receiveShadow = true;
-		scope.scene.add(left_wall_left_wall);
+		//scope.scene.add(left_wall_left_wall);
+		this.house.add(left_wall_left_wall);
 
 
 		//right wall
+		whiteWallTexture.repeat.set(3, 5);
 		var right_wall = new THREE.Mesh(
-			new THREE.BoxBufferGeometry( 3, 30, 50),
-			new THREE.MeshPhongMaterial( {color: 0xdcd9cd, specular: 0xcccccc} )
+			new THREE.BoxBufferGeometry( 3, 30, 50, 1, 3, 5),
+			new THREE.MeshPhongMaterial( {map: whiteWallTexture, specular: 0x101010} )
 		);
 
     	right_wall.position.copy(new THREE.Vector3(50, 15, -25));
 		right_wall.receiveShadow = true;
-		scope.scene.add(right_wall);
+		//scope.scene.add(right_wall);
+		this.house.add(right_wall);
 		
 		//right door
 		loader.load( '../models/door.dae', function ( collada ) {
@@ -355,39 +376,47 @@ Main.prototype = {
 			fcDoor.scale.copy(new THREE.Vector3(0.25, 0.25, 0.25));
 			fcDoor.position.copy(new THREE.Vector3(40, 0, -14.3));
 			fcDoor.rotation.z = - Math.PI / 2;
-			scope.scene.add(fcDoor);
+			//scope.scene.add(fcDoor);
+			scope.house.add(fcDoor);
 
 		});
 
+
 		//right door top
+		whiteWallTexture.repeat.set(1, 1);
 		var right_door_top_wall = new THREE.Mesh(
-			new THREE.BoxBufferGeometry( 3, 9.4, 8.858),
-			new THREE.MeshPhongMaterial( {color: 0xdcd9cd, specular: 0xcccccc} )
+			new THREE.BoxBufferGeometry( 3, 9.4, 8.858, 1, 1, 1),
+			new THREE.MeshPhongMaterial( {map: whiteWallTexture, specular: 0x101010} )
 		);
 
     	right_door_top_wall.position.copy(new THREE.Vector3(50, 20.66 + 9.4 / 2, 8.858 / 2));
 		right_door_top_wall.receiveShadow = true;
-		scope.scene.add(right_door_top_wall);
+		//scope.scene.add(right_door_top_wall);
+		this.house.add(right_door_top_wall);
 
 		//right door right
+		whiteWallTexture.repeat.set(3, 4);
 		var right_door_right_wall = new THREE.Mesh(
-			new THREE.BoxBufferGeometry( 3, 30, 50 - 8.85),
-			new THREE.MeshPhongMaterial( {color: 0xdcd9cd, specular: 0xcccccc} )
+			new THREE.BoxBufferGeometry( 3, 30, 50 - 8.85, 1, 3, 4),
+			new THREE.MeshPhongMaterial( {map: whiteWallTexture, specular: 0x101010} )
 		);
 
     	right_door_right_wall.position.copy(new THREE.Vector3(50, 15, 8.85 + (50 - 8.858) / 2));
 		right_door_right_wall.receiveShadow = true;
-		scope.scene.add(right_door_right_wall);
+		//scope.scene.add(right_door_right_wall);
+		this.house.add(right_door_right_wall);
 
 		//ceiling
+		whiteWallTexture.repeat.set(10, 10);
 		var ceiling = new THREE.Mesh(
-			new THREE.PlaneBufferGeometry( 100, 100, 1, 1),
-			new THREE.MeshPhongMaterial( {color: 0xdcd9cd, specular: 0x101010} )
+			new THREE.PlaneBufferGeometry( 100, 100, 10, 10),
+			new THREE.MeshPhongMaterial( {map: whiteWallTexture, specular: 0x101010} )
 		);
 		ceiling.position.y = 30;
 		ceiling.rotation.x = Math.PI / 2;
 		ceiling.receiveShadow = true;
-		scope.scene.add(ceiling);
+		//scope.scene.add(ceiling);
+		this.house.add(ceiling);
 
 
 		//the other side, 70 window
@@ -397,16 +426,81 @@ Main.prototype = {
 			wWindow.position.copy(new THREE.Vector3(-40, 0, 55));
 			//wWindow.rotation.z = - Math.PI / 2;
 			wWindow.rotation.x = - Math.PI / 2;
-			scope.scene.add(wWindow);
+			//scope.scene.add(wWindow);
+			scope.house.add(wWindow);
 
-			var box = new THREE.Box3();
-			box.setFromObject(wWindow);
-			var box_size = new THREE.Vector3();
-			box.getSize(box_size);
 
-			//this includes width, height, depth
-			console.log(box_size);
+			// var box = new THREE.Box3();
+			// box.setFromObject(wWindow);
+			// var box_size = new THREE.Vector3();
+			// box.getSize(box_size);
+
+			// //this includes width, height, depth
+			// console.log(box_size);
 		});
+
+
+		//flower
+		loader.load( '../models/apsad.dae', function ( collada ) {
+			var apsad = collada.scene;
+
+			// apsad.traverse( function ( child ) {
+			// 	if ( child.isMesh ) {
+			// 		child.material.envMap = scope.envMap;
+			// 		child.material.needsUpdate = true;
+			// 		child.castShadow = true;
+			// 	}
+			// });
+
+			apsad.scale.copy(new THREE.Vector3(0.4, 0.4, 0.4));
+			apsad.position.copy(new THREE.Vector3(-40, 0, -40));
+			apsad.rotation.x = - Math.PI / 2;
+			scope.house.add(apsad);
+			
+		});
+
+
+		//on purple wall hanger
+		loader.load( '../models/wall_art.dae', function ( collada ) {
+			var wall_art = collada.scene;
+
+			// wall_art.traverse( function ( child ) {
+			// 	if ( child.isMesh ) {
+			// 		child.material.envMap = scope.envMap;
+			// 		child.material.needsUpdate = true;
+			// 		child.castShadow = true;
+			// 	}
+			// });
+
+			wall_art.scale.copy(new THREE.Vector3(0.02, 0.02, 0.02));
+			wall_art.position.copy(new THREE.Vector3(0, 15, -49));
+			wall_art.rotation.z = Math.PI / 2;
+			scope.house.add(wall_art);
+			
+		});
+
+		//wall shelf
+		loader.load( '../models/wall_shelf.dae', function ( collada ) {
+			var wall_shelf = collada.scene;
+
+			wall_shelf.traverse( function ( child ) {
+				if ( child.isMesh ) {
+					child.material.envMap = scope.envMap;
+					child.material.needsUpdate = true;
+					child.castShadow = true;
+				}
+			});
+
+			wall_shelf.position.copy(new THREE.Vector3(48.5, 15, -30));
+			//wall_shelf.rotation.x = - Math.PI / 2;
+			wall_shelf.rotation.z = - Math.PI / 2;
+			wall_shelf.scale.copy(new THREE.Vector3(0.3, 0.3, 0.3));
+
+			scope.house.add(wall_shelf);
+			
+		});
+
+		this.scene.add(this.house);
 
 	},
 
