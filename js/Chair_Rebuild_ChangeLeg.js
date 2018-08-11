@@ -28,6 +28,11 @@ Chair_Rebuild_ChangeLeg.prototype = {
 		return furniture.hasComponent('back');
 	},
 
+	checkHasLeg: function(furniture) {
+		
+		return furniture.hasComponent('stand');
+	},
+
 	getFrameHeight2Floor: function(furniture) {
 		return furniture.getComponentHeight2Floor('midframe');
 	},
@@ -69,7 +74,7 @@ Chair_Rebuild_ChangeLeg.prototype = {
 
 	},
 	execute: function(){
-		
+		this.ChangeLeg(this.furnitures[0]);
 		
 	},
 	ChangeLeg: function(furniture){
@@ -78,10 +83,29 @@ Chair_Rebuild_ChangeLeg.prototype = {
 		//get seat size
 		var SeatSize = furniture.getComponentSize('seat');
 		var SeatPosi = furniture.getComponentCenterPosition('seat');
+		/*
+		//delete leg
+		while(this.checkHasLeg(furniture)){
+			//get Leg object
+			var Leg = furniture.getComponentByName('stand');
+			group.remove(Leg);
+		}
+		*/
+		this.remove(furniture,'stand');
+		
+		
+		
 
-
-
-	}
+	},
+	remove: function(group, name){
+		for (var i = group.children.length - 1; i >= 0 ; i--) {				
+			var str = group.children[i].name;
+			if (str == name) {
+				group.remove(group.children[i]);
+			}	
+		}
+	},
 
 }
 
+module.exports = Chair_Rebuild_ChangeLeg

@@ -76,7 +76,7 @@ Chair_Rebuild.prototype = {
 		
 	},
 	changeTexture: function(furniture){
-		$('#rebuild').show();
+		$('#parameter_control_chair_rebuild').show();
 		var group = furniture.getFurniture();
 		var seat = furniture.getComponentByName('seat');
 		var SeatSize = furniture.getComponentSize('seat');
