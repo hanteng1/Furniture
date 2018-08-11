@@ -50,12 +50,73 @@
 			<div class="ui blue submit button duplicate">Duplicate</div>
 			<div class="ui blue submit button newdesign">Create New Design</div>
 
-
+			<!--Available Designs-->
 			<h4 class="ui horizontal divider header">
-				Controller
+				Available Designs
 			</h4>
 
-			<!--chair align controller-->
+			<div class="ui segment">
+				<div class="ui inverted segment" style="background:none">
+
+					<div class="operations operation_chair_align">
+						<h3 class="ui header">Align</h3>
+						<button class="ui inverted secondary button">
+								<i class="gamepad icon"></i>
+	    						Vertical
+						</button>
+
+						<button class="ui inverted secondary button">
+								<i class="gamepad icon"></i>
+	    						Horizontal
+						</button>
+
+						<button class="ui inverted secondary button">
+								<i class="gamepad icon"></i>
+	    						Flip
+						</button>
+					</div>
+
+					<div class="operations operation_chair_add">
+	 					<h3 class="ui header">Add</h3>
+	 					<button class="ui inverted secondary button">
+								<i class="gamepad icon"></i>
+	    						Plate
+						</button>
+
+						<button class="ui inverted secondary button">
+								<i class="gamepad icon"></i>
+	    						Hook
+						</button>
+
+						<button class="ui inverted secondary button">
+								<i class="gamepad icon"></i>
+	    						Flip
+						</button>
+ 					</div>
+
+ 					<div class="operations operation_chair_rebuild">
+	 					<h3 class="ui header">Rebuild</h3>
+	 					<button class="ui inverted secondary button">
+								<i class="gamepad icon"></i>
+	    						Seat
+						</button>
+
+						<button class="ui inverted secondary button">
+								<i class="gamepad icon"></i>
+	    						Back
+						</button>
+
+						<button class="ui inverted secondary button">
+								<i class="gamepad icon"></i>
+	    						Leg
+						</button>
+ 					</div>
+
+				</div>
+			</div>
+
+
+			<!--chair align-->
 			<div class="ui segment" id="CHAIR_ALIGN">
 				<table class="ui definition table">
 					<tbody>
@@ -83,57 +144,86 @@
 			</div>
 
 
-			<!--xxxxx-->
-
-
-
-
-
 
 		</div> <!--side menu-->
 
 
 		<!--for group and ungroup operation-->
 		<div class="ui compact vertical labeled icon menu" id="label">
-				<a class="item m_group">
-					<i class="object group icon"></i>
-					Group
-				</a>
-				<a class="item">
-					<i class="object ungroup icon"></i>
-					Ungroup
-				</a>
-				<a class="item">
-					<i class="edit icon"></i>
-					<div class="ui floating dropdown icon button">
-						<span class="text">Label</span>
-						<div class="menu">
-							<div class="scrolling menu">
-								<div class="item" data-value="l_1">
-									<div class="ui red empty circular label"></div>
-									Back
-								</div>
-								<div class="item" data-value="l_2">
-									<div class="ui blue empty circular label"></div>
-									Seat
-								</div>
-								<div class="item" data-value="l_3">
-									<div class="ui black empty circular label"></div>
-									MidFrame
-								</div>
-								<div class="item" data-value="l_4">
-									<div class="ui purple empty circular label"></div>
-									Stand
-								</div>
-								<div class="item" data-value="l_5">
-									<div class="ui orange empty circular label"></div>
-									...
-								</div> 
+			<a class="item m_group">
+				<i class="object group icon"></i>
+				Group
+			</a>
+			<a class="item">
+				<i class="object ungroup icon"></i>
+				Ungroup
+			</a>
+			<a class="item">
+				<i class="edit icon"></i>
+				<div class="ui floating dropdown icon button">
+					<span class="text">Label</span>
+					<div class="menu">
+						<div class="scrolling menu">
+							<div class="item" data-value="l_1">
+								<div class="ui red empty circular label"></div>
+								Back
 							</div>
+							<div class="item" data-value="l_2">
+								<div class="ui blue empty circular label"></div>
+								Seat
+							</div>
+							<div class="item" data-value="l_3">
+								<div class="ui black empty circular label"></div>
+								MidFrame
+							</div>
+							<div class="item" data-value="l_4">
+								<div class="ui purple empty circular label"></div>
+								Stand
+							</div>
+							<div class="item" data-value="l_5">
+								<div class="ui orange empty circular label"></div>
+								...
+							</div> 
 						</div>
 					</div>
-				</a>
+				</div>
+			</a>
 		</div>
+
+
+
+		<!--for design parameters -->
+		<div class="ui compact vertical labeled icon menu parameters" id="parameter_control">
+		
+			<div class="ui segment" id="CHAIR_ALIGN">
+				<table class="ui definition table">
+					<tbody>
+						<tr>
+							<td>Length</td>
+							<td>
+								<div class="range-slider" id="CHAIR_ALIGN">
+									<input class="range-slider__range" id="DISTANCE" type="range" value="30" min="30" max="90">
+									<span class="range-slider__value">30</span>
+								</div>
+							</td>
+						</tr>
+						<tr>
+							<td>Angle</td>
+							<td>
+								<div class="range-slider" id="CHAIR_ALIGN">
+									<input class="range-slider__range" id="ANGLE" type="range" value="0" min="0" max="180">
+									<span class="range-slider__value">0</span>
+								</div>
+							</td>
+						</tr>
+					</tbody>
+				</table>
+
+			</div>
+
+
+		</div>
+
 
 		<!-- Weihsiang's Block, for seat texture change-->
 		<div class="ui compact vertical labeled image icon menu" id = "rebuild">
@@ -243,9 +333,6 @@
 				gl_FragColor = vec4( mix( bottomColor, topColor, max( pow( max( h, 0.0 ), exponent ), 0.0 ) ), 1.0 );
 			}
 		</script>
-
-		
-
 
 		<script type="text/javascript" src="js/bundle.js"></script>
 		<!--<script type="text/javascript" src="js/Main.js"></script>-->

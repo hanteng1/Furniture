@@ -81,7 +81,7 @@ Ui.prototype = {
 			}
 		});
 
-		$('.ui.compact.vertical.labeled.icon.menu').hide();
+		$('#label').hide();
 		
 		//weixiang's bloack
 		$('.ui.compact.vertical.labeled.image.menu').hide();
