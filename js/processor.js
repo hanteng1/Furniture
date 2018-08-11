@@ -5,8 +5,7 @@
 const Chair_Align = require('./Chair_Align');
 const Chair_Add = require('./Chair_Add');
 const Chair_Rebuild = require('./Chair_Rebuild');
-const Chair_Rebuild_AddMat = require('./Chair_Rebuild_AddMat');
-const Chair_Rebuild_ChangeLeg = require('./Chair_Rebuild_ChangeLeg');
+
 
 function Processor(main) {
 	this.main = main;
@@ -35,8 +34,8 @@ function Processor(main) {
 
 	//weixiang's bloack
 	this.chair_rebuild = undefined;
-	this.chair_rebuild_addMat = undefined;
-	this.chair_rebuild_changeleg = undefined;
+
+
 	//end of weixiang's block
 
 
@@ -55,32 +54,10 @@ function Processor(main) {
 Processor.prototype = {
 
 	init: function() {
+
+		//determine which functions are available and get those functions ready
 		var scope = this;
 
-		//initialize chair transformers
-		scope.chair_align = new Chair_Align(scope.main);
-		scope.chair_align.init();
-		this.transformFunctions.CHAIR_ALIGN = scope.chair_align;
-
-		scope.chair_add = new Chair_Add(scope.main);
-		this.transformFunctions.CHAIR_ADD = scope.chair_add;
-
-		scope.chair_rebuild = new Chair_Rebuild(scope.main);
-		this.transformFunctions.CHAIR_REBUILD = scope.chair_rebuild;
-
-		scope.chair_rebuild_addMat = new Chair_Rebuild_AddMat(scope.main);
-		this.transformFunctions.CHAIR_REBUILD_ADDMAT = scope.chair_rebuild_addMat;
-		
-		scope.chair_rebuild_changeleg = new Chair_Rebuild_ChangeLeg(scope.main);
-		this.transformFunctions.CHAIR_REBUILD_CHANGLEG = scope.chair_rebuild_changeleg;
-
-	},
-
-
-	//execute design for chairs
-	executeDesign: function() {
-		
-		var scope = this;
 
 		switch(scope.category){
 
@@ -91,15 +68,22 @@ Processor.prototype = {
 
 				}else if(scope.furnitures.length == 1){
 					//possible actions with one furniture
-					//this.chair_add.execute();
-					//this.chair_rebuild.execute();
-					//this.chair_rebuild_addMat.execute();
-					this.chair_rebuild_changeleg.execute();
+					scope.chair_add = new Chair_Add(scope.main);
+					scope.transformFunctions.CHAIR_ADD = scope.chair_add;
+
+					scope.chair_rebuild = new Chair_Rebuild(scope.main);
+					scope.transformFunctions.CHAIR_REBUILD = scope.chair_rebuild;
+					
+					$('.operations.operation_chair_add').show();
+					$('.operations.operation_chair_rebuild').show();
 
 				}else if( scope.furnitures.length > 1) {
 					//possible actions with many furnitures
-					this.chair_align.execute();
+					scope.chair_align = new Chair_Align(scope.main);
+					scope.chair_align.init();
+					scope.transformFunctions.CHAIR_ALIGN = scope.chair_align;
 
+					$('.operations.operation_chair_align').show();
 				}
 
 
@@ -116,6 +100,19 @@ Processor.prototype = {
 				break;
 
 		};
+
+	},
+
+
+	//execute design for chairs
+	//based on which design button is pressed
+	executeDesign: function(tfname, tfvalue) {
+		
+		var scope = this;
+
+		if(tfname in this.transformFunctions) {
+			this.transformFunctions[tfname].execute();
+		}
 
 	},
 

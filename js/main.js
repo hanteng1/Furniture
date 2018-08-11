@@ -179,9 +179,9 @@ Main.prototype = {
 
 		this.scene.background = new THREE.Color(.95,.95,.95);
 
-		//var gridHelper = new THREE.GridHelper( 1000, 20 ) ;//size, divisions
-		//this.scene.add( gridHelper );
-		this.addHouseEnvironment();
+		var gridHelper = new THREE.GridHelper( 1000, 20 ) ;//size, divisions
+		this.scene.add( gridHelper );
+		//this.addHouseEnvironment();
 		
 		this.renderer.setPixelRatio( window.devicePixelRatio );
 		this.renderer.setSize( window.innerWidth, window.innerHeight );
@@ -226,21 +226,21 @@ Main.prototype = {
 		//initialize processor
 		this.processor = new Processor(scope);
 
-		/*
-		//test
-		// model
-		var loader = new THREE.GLTFLoader();
-		loader.load(
-			'models/vitra-chair.glb',
-			function ( gltf ) {
-				scope.gltfLoadedCallback(
-					gltf,
-					scope.envMap,
-					new THREE.Vector3(-1.5,0,-0.5),
-					Math.PI*0.2
-				);
-		} );
-		*/
+		
+
+		// var loader = new THREE.GLTFLoader();
+		// loader.load(
+		// 	'models/vitra-chair.glb',
+		// 	function ( gltf ) {
+		// 		scope.gltfLoadedCallback(
+		// 			gltf,
+		// 			scope.envMap,
+		// 			new THREE.Vector3(-1.5,0,-0.5),
+		// 			Math.PI*0.2
+		// 		);
+		// } );
+
+
 	},
 
 
@@ -1245,11 +1245,16 @@ Main.prototype = {
 		//testing
 
 
+		$('#parameter_control_chair_align').hide();
+		$('#parameter_control_chair_rebuild').hide();
 
-
-
+		$('.operations.operation_chair_align').hide();
+		$('.operations.operation_chair_add').hide();
+		$('.operations.operation_chair_rebuild').hide();
+		
+		
 		this.processor.init();
-		this.processor.executeDesign();
+		//this.processor.executeDesign();
 
 	}
 
