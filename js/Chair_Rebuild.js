@@ -71,9 +71,15 @@ Chair_Rebuild.prototype = {
 		}
 
 	},
-	execute: function(){
-		this.changeTexture(this.furnitures[0]);
+	execute: function(name){
+
+		if(name == 'seat'){
+			this.changeTexture(this.furnitures[0]);
+		}
 		
+		else if(name == 'leg'){
+			this.ChangeLeg(this.furnitures[0]);
+		}
 	},
 	changeTexture: function(furniture){
 		$('#parameter_control_chair_rebuild').show();
@@ -202,6 +208,73 @@ Chair_Rebuild.prototype = {
 		NewSeat.position.set(NewSeatPosi.x - NewSeatSize.x/2, NewSeatPosi.y + NewSeatSize.z/2, NewSeatPosi.z );
 		group.add(NewSeat);
 
+	},
+	ChangeLeg: function(furniture){
+		//get the furniture group
+		var group = furniture.getFurniture();
+
+		//get seat size
+		var SeatSize = furniture.getComponentSize('seat');
+		var SeatPosi = furniture.getComponentCenterPosition('seat');
+
+		//remove leg
+		this.remove(group,'stand');
+
+		//load new leg
+		this.loadLegModel('../models/Legs/Leg1.dae', furniture, SeatPosi, SeatSize);
+		
+
+	},
+	remove: function(group, name){
+		for (var i = group.children.length - 1; i >= 0 ; i--) {				
+			var str = group.children[i].name;
+			if (str == name) {
+				group.remove(group.children[i]);
+			}	
+		}
+	},
+	
+	loadLegModel: function( ModelPath, furniture, SeatPosi, SeatSize ){
+		
+		var group = furniture.getFurniture();
+		var scope=this;
+		var LegModel;
+		
+		// loading manager
+		var loadingManager = new THREE.LoadingManager( function() {} );
+		
+		// collada
+		var loader = new THREE.ColladaLoader( loadingManager );
+		loader.load( ModelPath , function ( collada ) {
+			LegModel = collada.scene;
+			//scope.main.scene.add(LegModel);
+			//LegModel.position.set(0,0,0);
+			LegModel.name = 'stand';
+
+			//calculate the leg inverse metrix
+			var inverseMatrix = new THREE.Matrix4();
+			inverseMatrix.getInverse(group.matrixWorld, true);
+			LegModel.applyMatrix(inverseMatrix);
+
+			//add new leg to original model
+			group.worldToLocal(SeatPosi);
+			
+			group.add(LegModel);
+
+			//leg1
+			LegModel.scale.set(9,9,9);
+			var LegSize = furniture.getComponentSize('stand');
+			LegModel.position.set(SeatPosi.x - LegSize.x/2, SeatPosi.y + LegSize.z/2 , SeatPosi.z - LegSize.y);
+			
+			/*Leg4
+			LegModel.scale.set(40,40,40);
+			var LegSize = furniture.getComponentSize('stand');
+			LegModel.position.set(SeatPosi.x - LegSize.x/2, SeatPosi.y - LegSize.z , SeatPosi.z - LegSize.y);
+			*/
+
+
+
+		} );
 	}
 
 

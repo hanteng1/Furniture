@@ -76,35 +76,7 @@ Chair_Rebuild_ChangeLeg.prototype = {
 	execute: function(){
 		this.ChangeLeg(this.furnitures[0]);
 		
-	},
-	ChangeLeg: function(furniture){
-		//get the furniture group
-		var group = furniture.getFurniture();
-		//get seat size
-		var SeatSize = furniture.getComponentSize('seat');
-		var SeatPosi = furniture.getComponentCenterPosition('seat');
-		/*
-		//delete leg
-		while(this.checkHasLeg(furniture)){
-			//get Leg object
-			var Leg = furniture.getComponentByName('stand');
-			group.remove(Leg);
-		}
-		*/
-		this.remove(furniture,'stand');
-		
-		
-		
-
-	},
-	remove: function(group, name){
-		for (var i = group.children.length - 1; i >= 0 ; i--) {				
-			var str = group.children[i].name;
-			if (str == name) {
-				group.remove(group.children[i]);
-			}	
-		}
-	},
+	}
 
 }
 

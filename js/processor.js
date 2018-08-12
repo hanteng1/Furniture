@@ -73,6 +73,7 @@ Processor.prototype = {
 
 					scope.chair_rebuild = new Chair_Rebuild(scope.main);
 					scope.transformFunctions.CHAIR_REBUILD = scope.chair_rebuild;
+
 					
 					$('.operations.operation_chair_add').show();
 					$('.operations.operation_chair_rebuild').show();
@@ -111,7 +112,7 @@ Processor.prototype = {
 		var scope = this;
 
 		if(tfname in this.transformFunctions) {
-			this.transformFunctions[tfname].execute();
+			this.transformFunctions[tfname].execute(tfvalue);
 		}
 
 	},
