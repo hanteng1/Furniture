@@ -347,7 +347,10 @@ Chair_Add.prototype = {
 	},
 	//////////////////////////////////////////////////////////////////////////
 
-	execute: function(){		
+	execute: function(){
+
+		$('#parameter_control_chair_add').show();
+
 		var flagCutLeg = false;
 		if(this.checkHasBack(this.furnitures[0]) && this.checkHasSeat(this.furnitures[0])){
 			if(!this.hasBoard){				
