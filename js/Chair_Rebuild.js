@@ -221,7 +221,7 @@ Chair_Rebuild.prototype = {
 		this.remove(group,'stand');
 
 		//load new leg
-		this.loadLegModel('../models/Legs/Leg4.dae', furniture, SeatPosi, SeatSize);
+		this.loadLegModel('../models/Legs/Leg2.dae', furniture, SeatPosi, SeatSize);
 		
 
 	},
@@ -246,33 +246,45 @@ Chair_Rebuild.prototype = {
 		// collada
 		var loader = new THREE.ColladaLoader( loadingManager );
 		loader.load( ModelPath , function ( collada ) {
+			
 			LegModel = collada.scene;
-			//scope.main.scene.add(LegModel);
-			LegModel.position.set(0,0,0);
-			LegModel.name = 'stand';
+			scope.main.scene.add(LegModel);
 
+			LegModel.name = 'stand';
+			LegModel.scale.set(9,9,9);
+
+			var box = new THREE.Box3();
+			box.setFromObject(LegModel);
+			var LegCenter = new THREE.Vector3();
+			box.getCenter(LegCenter);
+
+			var diff = new THREE.Vector3( SeatPosi.x - LegCenter.x ,
+									  	  SeatPosi.y - LegCenter.y ,
+									  	  SeatPosi.z - LegCenter.z );
+			
+			var LegPosi = LegModel.position;
+			LegModel.position.set(LegPosi.x + diff.x  ,
+								  LegPosi.y + diff.y - LegCenter.y ,
+								  LegPosi.z + diff.z );
+
+			LegPosi = LegModel.position;
+			
 			//calculate the leg inverse metrix
 			var inverseMatrix = new THREE.Matrix4();
 			inverseMatrix.getInverse(group.matrixWorld, true);
 			LegModel.applyMatrix(inverseMatrix);
 
 			//add new leg to original model
-			group.worldToLocal(SeatPosi);
+			//group.worldToLocal(LegPosi);
+			box.setFromObject(LegModel);
+			box.getCenter(LegCenter);
+
+			LegModel.position.set( LegPosi.x - LegCenter.x - SeatSize.x/2 , 
+								   LegPosi.y - LegCenter.y + SeatSize.z/2 , 
+								   SeatPosi.y - LegCenter.z*2);
 			
 			group.add(LegModel);
-
-			/*leg1
-			LegModel.scale.set(9,9,9);
-			var LegSize = furniture.getComponentSize('stand');
-			LegModel.position.set(SeatPosi.x - LegSize.x/2, SeatPosi.y + LegSize.z/2 , SeatPosi.z - LegSize.y);
-			*/
-			//Leg4
-			LegModel.scale.set(40,40,40);
-			var LegSize = furniture.getComponentSize('stand');
-			LegModel.position.set(SeatPosi.x - LegSize.x/2, SeatPosi.y  , SeatPosi.z - LegSize.y);
 			
-
-
 
 		} );
 	}

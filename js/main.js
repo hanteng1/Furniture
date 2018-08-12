@@ -228,10 +228,9 @@ Main.prototype = {
 
 		
 
-<<<<<<< HEAD
-=======
+
 		// //test
->>>>>>> master
+
 		// var loader = new THREE.GLTFLoader();
 		// loader.load(
 		// 	'models/vitra-chair.glb',
