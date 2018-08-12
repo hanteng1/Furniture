@@ -125,7 +125,7 @@ function Furniture(furniture) {
 		}
 
 		//chair: check has labels seat and back
-		if((labeledComponents.includes("back") == false) || (labeledComponents.includes("back") == false))
+		if((this.labeledComponents.includes("back") == false) || (this.labeledComponents.includes("seat") == false))
 		{
 			console.log("missing labels");
 			return;
@@ -146,19 +146,65 @@ function Furniture(furniture) {
 			return group;
 		}
 
-		var groupComponents = {};
+		var groupComponents = [];
 		for(var i = 0; i < count; i++) {
 			var child = group.children[i];
 			var id = child.id;
-			var x = 0;
+			var childCenter = this.getObjCenterPosition(child);
+			var childObj = {cId: id, cCenter: childCenter};
+			groupComponents.push(childObj);
+		}
 
+		//order the group components
+		var targetId = -1;
+
+		if(tag == "left" || tag == "right")
+		{
+			//order by x
+			groupComponents.sort(function(a, b){return a.cCenter.x - b.cCenter.x});
+
+			if(tag == "left")
+			{
+				var targetId = groupComponents[0].cId;
+			}else if(tag == "right") {
+				var targetId = groupComponents[count - 1].cId;
+			}
+
+		}else if(tag == "top" || tag == "bottom"){
+
+			//order by y
+			groupComponents.sort(function(a, b){return a.cCenter.y - b.cCenter.y});
+
+			if(tag == "bottom")
+			{
+				var targetId = groupComponents[0].cId;
+			}else if(tag == "top") {
+				var targetId = groupComponents[count - 1].cId;
+			}
+
+		}else if(tag == "front" || tag == "back"){
+
+			//order by z
+			groupComponents.sort(function(a, b){return a.cCenter.z - b.cCenter.z});
+
+			if(tag == "back")
+			{
+				var targetId = groupComponents[0].cId;
+			}else if(tag == "front") {
+				var targetId = groupComponents[count - 1].cId;
+			}
+		}else
+		{
+			console.log("tag name not matched");
+			return;
 		}
 
 
+		var targetComponent = group.getObjectById(targetId);
+
+		return targetComponent;
+
 	}
-
-
-
 
 
 	this.getComponentPosition = function(name) {
@@ -174,6 +220,21 @@ function Furniture(furniture) {
 
 		var box = new THREE.Box3();
 		box.setFromObject(component);
+		var center = new THREE.Vector3();
+		if(box.isEmpty() === false)
+		{
+			box.getCenter(center);
+		}else{
+			console.log("error on getting center point");
+		}
+
+		return center;
+	}
+
+	this.getObjCenterPosition = function(obj) {
+
+		var box = new THREE.Box3();
+		box.setFromObject(obj);
 		var center = new THREE.Vector3();
 		if(box.isEmpty() === false)
 		{

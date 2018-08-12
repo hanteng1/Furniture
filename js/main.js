@@ -14,6 +14,8 @@
 
 const Processor = require('./Processor')
 
+const computeConvexHull = require('./computeConvexHull')
+
 function Main()
 {
 
@@ -1263,8 +1265,34 @@ Main.prototype = {
 		$('.operations.operation_chair_rebuild').hide();
 
 
-		this.processor.init();
+		//this.processor.init();
 		//this.processor.executeDesign();
+
+
+		//test
+		var back_left = this.furnitures[0].getComponentInName("back", "left");
+
+		//visualize
+		this.selectionBox.setFromObject( back_left );
+		this.selectionBox.visible = true;
+
+		var points = computeConvexHull(back_left, "yz");
+
+		//draw points
+		var material = new THREE.LineBasicMaterial( { color: 0x0000ff } );
+		var geometry = new THREE.Geometry();
+
+		for(var i =0; i < points.length; i++) {
+			var point = points[i];
+			var tempP = new THREE.Vector3(0, point[0], point[1]);
+			geometry.vertices.push(tempP);
+		}
+
+		var line = new THREE.Line( geometry, material );
+
+		this.scene.add( line );
+
+
 
 	}
 
