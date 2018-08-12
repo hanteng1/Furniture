@@ -187,6 +187,7 @@ Ui.prototype = {
 
 		$('#parameter_control_chair_align').hide();
 		$('#parameter_control_chair_rebuild').hide();
+		$('#parameter_control_chair_add').hide();
 
 		$('.operations.operation_chair_align').hide();
 		$('.operations.operation_chair_add').hide();

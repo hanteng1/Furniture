@@ -34,7 +34,7 @@ function geometryToCsgs (initialGeometry){
 	
 	//csg objects
 	var csgs = [];
-	var divisionSize = 500;
+	var divisionSize = 1000;
 	var divisions = polygonsArray.length / divisionSize;  //could be int or double
 
 	for(var i = 0; i < divisions; i++)
