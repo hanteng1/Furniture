@@ -1,11 +1,6 @@
 (function(){function r(e,n,t){function o(i,f){if(!n[i]){if(!e[i]){var c="function"==typeof require&&require;if(!f&&c)return c(i,!0);if(u)return u(i,!0);var a=new Error("Cannot find module '"+i+"'");throw a.code="MODULE_NOT_FOUND",a}var p=n[i]={exports:{}};e[i][0].call(p.exports,function(r){var n=e[i][1][r];return o(n||r)},p,p.exports,r,e,n,t)}return n[i].exports}for(var u="function"==typeof require&&require,i=0;i<t.length;i++)o(t[i]);return o}return r})()({1:[function(require,module,exports){
-<<<<<<< HEAD
-//
-
-=======
 const chairCreatBoard = require('./chairCreatBoard')
 const chairCutBack = require('./chairCutBack')
->>>>>>> Hou-branch
 
 function Chair_Add (main) {
  	this.main = main;
@@ -13,15 +8,6 @@ function Chair_Add (main) {
 
 	this.reference = null;  //midframe, seat, mixed
 
-<<<<<<< HEAD
-
-	
-
-	//number of furnitures
-	var count = 0;
- 
-
-=======
 	this.parameters = {
 		CHAIR_ADD_POSITION: 0,
 		CHAIR_ADD_WIDTH: 0, 
@@ -33,65 +19,11 @@ function Chair_Add (main) {
 
 	var hasBoard = false;
 	var hasHook = false;
->>>>>>> Hou-branch
 }
 
 
 Chair_Add.prototype = {
 
-<<<<<<< HEAD
-	checkHasFrame: function(furniture) {		
-		return furniture.hasComponent('midframe');
-	},
-	checkHasSeat: function(furniture) {		
-		return furniture.hasComponent('seat');
-	},
-	checkHasBack: function(furniture) {		
-		return furniture.hasComponent('back');
-	},
-	getFrameHeight2Floor: function(furniture) {
-		return furniture.getComponentHeight2Floor('midframe');
-	},
-	getSeatHeight2Floor: function(furniture) {
-		return furniture.getComponentHeight2Floor('seat');
-	},
-	checkLabeledComponents: function(furnitures) {
-		count = furnitures.length;
-		//console.log(`number of chairs: ${count}`);
-
-		//determine reference type
-		var hasFrameCount = 0;
-		var hasSeatCount = 0;
-		for(var i = 0; i < count; i++)
-		{
-			if(this.checkHasFrame(furnitures[i])) hasFrameCount++;
-			if(this.checkHasSeat(furnitures[i])) hasSeatCount++;	
-		}
-
-		if(hasFrameCount == count) {
-			this.reference = 'midframe';
-
-		}else if(hasSeatCount == count) {
-			this.reference = 'seat';
-		}else {
-			//don't handle for now
-			console.log("frame count or seat count not matched");
-		}
-
-		//todo: check the height and see whether they are the same
-		if(this.reference == 'midframe') {
-			//check the height
-
-		}
-	},
-
-	//////////////////////////////////////////////////////////////////////////
-
-	execute: function(){
-		if (this.checkHasBack(this.furnitures[0])) {
-			alert("add active.");
-		}		
-=======
 //--------------------------------------------------------------------------------------------
 	init : function() {
 		this.hasBoard = false;
@@ -416,7 +348,10 @@ Chair_Add.prototype = {
 	},
 	//////////////////////////////////////////////////////////////////////////
 
-	execute: function(){		
+	execute: function(){
+
+		$('#parameter_control_chair_add').show();
+
 		var flagCutLeg = false;
 		if(this.checkHasBack(this.furnitures[0]) && this.checkHasSeat(this.furnitures[0])){
 			if(!this.hasBoard){				
@@ -514,25 +449,18 @@ Chair_Add.prototype = {
 		}
 		else
 			alert("Please mark seat and back");		
->>>>>>> Hou-branch
 	}
 
 }
 
-<<<<<<< HEAD
 module.exports = Chair_Add
-},{}],2:[function(require,module,exports){
-=======
-
-module.exports = Chair_Add
-},{"./chairCreatBoard":5,"./chairCutBack":6}],2:[function(require,module,exports){
->>>>>>> Hou-branch
+},{"./chairCreatBoard":6,"./chairCutBack":7}],2:[function(require,module,exports){
 "use strict;"
 //chair align related functions
 //align in one line
 //add seat
 const cadMakeSeat = require('./cadMakeSeat')
-
+const computeConvexHull = require('./computeConvexHull')
 
 function Chair_Align (main) {
 
@@ -833,8 +761,7 @@ module.exports = Chair_Align
 
 
 
-<<<<<<< HEAD
-},{"./cadMakeSeat":5}],3:[function(require,module,exports){
+},{"./cadMakeSeat":5,"./computeConvexHull":8}],3:[function(require,module,exports){
 "use strict;"
 
 const rebuildMakeSeat = require('./rebuildMakeSeat');
@@ -913,12 +840,13 @@ Chair_Rebuild.prototype = {
 		
 	},
 	changeTexture: function(furniture){
-		$('#rebuild').show();
+		$('#parameter_control_chair_rebuild').show();
 		var group = furniture.getFurniture();
 		var seat = furniture.getComponentByName('seat');
 		var SeatSize = furniture.getComponentSize('seat');
 		var SeatPosi = furniture.getComponentCenterPosition('seat');
 		var saveposi = new THREE.Vector3(0,0,0);
+		//save pisition
 		saveposi.x = SeatPosi.x;
 		saveposi.y = SeatPosi.y;
 		saveposi.z = SeatPosi.z;
@@ -955,6 +883,9 @@ Chair_Rebuild.prototype = {
 			if (mode == "ThinBoard"){
 				mode = "NormalSeat";
 				main.changeseatmodel(furniture,SeatSize,SeatPosi, texture, mode);
+				SeatPosi.x = saveposi.x;
+				SeatPosi.y = saveposi.y;
+				SeatPosi.z = saveposi.z;
 			}
 			//change material function
 			var seat = furniture.getComponentByName('seat');
@@ -968,6 +899,9 @@ Chair_Rebuild.prototype = {
 			if (mode == "ThinBoard"){
 				mode = "NormalSeat";
 				main.changeseatmodel(furniture,SeatSize,SeatPosi, texture, mode);
+				SeatPosi.x = saveposi.x;
+				SeatPosi.y = saveposi.y;
+				SeatPosi.z = saveposi.z;
 			}
 			//change material function
 			var seat = furniture.getComponentByName('seat');
@@ -981,6 +915,9 @@ Chair_Rebuild.prototype = {
 			if (mode == "ThinBoard"){
 				mode = "NormalSeat";
 				main.changeseatmodel(furniture,SeatSize,SeatPosi, texture, mode);
+				SeatPosi.x = saveposi.x;
+				SeatPosi.y = saveposi.y;
+				SeatPosi.z = saveposi.z;
 			}
 			//change material function
 			var seat = furniture.getComponentByName('seat');
@@ -994,6 +931,9 @@ Chair_Rebuild.prototype = {
 			if (mode == "NormalSeat"){
 				mode = "ThinBoard";
 				main.changeseatmodel(furniture,SeatSize,SeatPosi, texture, mode);
+				SeatPosi.x = saveposi.x;
+				SeatPosi.y = saveposi.y;
+				SeatPosi.z = saveposi.z;
 			}
 			//change material function
 			var seat = furniture.getComponentByName('seat');
@@ -1002,9 +942,7 @@ Chair_Rebuild.prototype = {
 			newmaterial = new THREE.MeshBasicMaterial( { map: texture } );
 			seat.material = newmaterial;
 			console.log(SeatPosi);
-			SeatPosi.x = saveposi.x;
-			SeatPosi.y = saveposi.y;
-			SeatPosi.z = saveposi.z;
+			
 		});
 
 	},
@@ -1034,23 +972,15 @@ Chair_Rebuild.prototype = {
 }
 module.exports = Chair_Rebuild
 
-},{"./rebuildMakeSeat":104}],4:[function(require,module,exports){
-=======
-},{"./cadMakeSeat":4}],3:[function(require,module,exports){
->>>>>>> Hou-branch
+},{"./rebuildMakeSeat":114}],4:[function(require,module,exports){
 "use strict;"
 //this is to handle the new design approaches
 //that without the need of cad operations
 
-<<<<<<< HEAD
 const Chair_Align = require('./Chair_Align');
 const Chair_Add = require('./Chair_Add');
 const Chair_Rebuild = require('./Chair_Rebuild');
 
-=======
-const Chair_Align = require('./Chair_Align')
-const Chair_Add = require('./Chair_Add')
->>>>>>> Hou-branch
 
 function Processor(main) {
 	this.main = main;
@@ -1071,10 +1001,7 @@ function Processor(main) {
 
 	//zhuen's block
 	this.chair_add = undefined;
-<<<<<<< HEAD
 
-=======
->>>>>>> Hou-branch
 
 	//end of zhuen's block
 
@@ -1102,35 +1029,10 @@ function Processor(main) {
 Processor.prototype = {
 
 	init: function() {
+
+		//determine which functions are available and get those functions ready
 		var scope = this;
 
-		//initialize chair transformers
-		scope.chair_align = new Chair_Align(scope.main);
-		scope.chair_align.init();
-		this.transformFunctions.CHAIR_ALIGN = scope.chair_align;
-
-		scope.chair_add = new Chair_Add(scope.main);
-<<<<<<< HEAD
-		this.transformFunctions.CHAIR_ADD = scope.chair_add;
-
-		scope.chair_rebuild = new Chair_Rebuild(scope.main);
-		this.transformFunctions.CHAIR_REBUILD = scope.chair_rebuild;
-=======
-		scope.chair_add.init();
-		this.transformFunctions.CHAIR_ADD = scope.chair_add;
-
-		//scope.chair_rebuild = new Chair_Rebuild(scope.main);
-		//this.transformFunctions.CHAIR_REBUILD = scope.chair_rebuild;
->>>>>>> Hou-branch
-
-
-	},
-
-
-	//execute design for chairs
-	executeDesign: function() {
-		
-		var scope = this;
 
 		switch(scope.category){
 
@@ -1141,18 +1043,23 @@ Processor.prototype = {
 
 				}else if(scope.furnitures.length == 1){
 					//possible actions with one furniture
-<<<<<<< HEAD
-					//this.chair_add.execute();
-					this.chair_rebuild.execute();
-=======
-					this.chair_add.execute();
-					//this.chair_rebuild.execute();
->>>>>>> Hou-branch
+					scope.chair_add = new Chair_Add(scope.main);
+					scope.chair_add.init();
+					scope.transformFunctions.CHAIR_ADD = scope.chair_add;
+
+					scope.chair_rebuild = new Chair_Rebuild(scope.main);
+					scope.transformFunctions.CHAIR_REBUILD = scope.chair_rebuild;
+					
+					$('.operations.operation_chair_add').show();
+					$('.operations.operation_chair_rebuild').show();
 
 				}else if( scope.furnitures.length > 1) {
 					//possible actions with many furnitures
-					this.chair_align.execute();
+					scope.chair_align = new Chair_Align(scope.main);
+					scope.chair_align.init();
+					scope.transformFunctions.CHAIR_ALIGN = scope.chair_align;
 
+					$('.operations.operation_chair_align').show();
 				}
 
 
@@ -1172,7 +1079,20 @@ Processor.prototype = {
 
 	},
 
-	
+
+	//execute design for chairs
+	//based on which design button is pressed
+	executeDesign: function(tfname, tfvalue) {
+		
+		var scope = this;
+
+		if(tfname in this.transformFunctions) {
+			this.transformFunctions[tfname].execute();
+		}
+
+	},
+
+
 	changeParameterValue: function(tfname, pname, value) {
 
 		if(tfname in this.transformFunctions) {
@@ -1182,7 +1102,6 @@ Processor.prototype = {
 		}
 		
 	}
-	
 
 
 
@@ -1217,11 +1136,7 @@ Processor.prototype = {
 
 module.exports = Processor
 
-<<<<<<< HEAD
 },{"./Chair_Add":1,"./Chair_Align":2,"./Chair_Rebuild":3}],5:[function(require,module,exports){
-=======
-},{"./Chair_Add":1,"./Chair_Align":2}],4:[function(require,module,exports){
->>>>>>> Hou-branch
 "use strict;"
 
 const scadApi = require('@jscad/scad-api')
@@ -1291,10 +1206,7 @@ function cadMakeSeat (innerRace, outerRace, offsetY, textures) {
 
 
 module.exports = cadMakeSeat
-<<<<<<< HEAD
-},{"./csgToGeometries":6,"@jscad/csg":8,"@jscad/scad-api":95}],6:[function(require,module,exports){
-=======
-},{"./csgToGeometries":7,"@jscad/csg":11,"@jscad/scad-api":98}],5:[function(require,module,exports){
+},{"./csgToGeometries":10,"@jscad/csg":18,"@jscad/scad-api":105}],6:[function(require,module,exports){
 "use strict;"
 
 const scadApi = require('@jscad/scad-api')
@@ -1315,7 +1227,7 @@ function chairCreatBoard(width, height, depth) {
 
 
 module.exports = chairCreatBoard
-},{"./csgToGeometries":7,"@jscad/csg":11,"@jscad/scad-api":98}],6:[function(require,module,exports){
+},{"./csgToGeometries":10,"@jscad/csg":18,"@jscad/scad-api":105}],7:[function(require,module,exports){
 "use strict;"
 
 const scadApi = require('@jscad/scad-api')
@@ -1348,8 +1260,64 @@ function chairCutBack(back) {
 
 
 module.exports = chairCutBack
-},{"./csgToGeometries":7,"./geometryToCsgs":8,"@jscad/csg":11,"@jscad/scad-api":98}],7:[function(require,module,exports){
->>>>>>> Hou-branch
+},{"./csgToGeometries":10,"./geometryToCsgs":12,"@jscad/csg":18,"@jscad/scad-api":105}],8:[function(require,module,exports){
+"use strict;"
+
+const hull = require('./hull')
+
+function computeConvexHull() {
+
+	
+
+
+}
+
+
+
+module.exports = computeConvexHull;
+},{"./hull":14}],9:[function(require,module,exports){
+function _cross(o, a, b) {
+    return (a[0] - o[0]) * (b[1] - o[1]) - (a[1] - o[1]) * (b[0] - o[0]);
+}
+
+function _upperTangent(pointset) {
+    var lower = [];
+    for (var l = 0; l < pointset.length; l++) {
+        while (lower.length >= 2 && (_cross(lower[lower.length - 2], lower[lower.length - 1], pointset[l]) <= 0)) {
+            lower.pop();
+        }
+        lower.push(pointset[l]);
+    }
+    lower.pop();
+    return lower;
+}
+
+function _lowerTangent(pointset) {
+    var reversed = pointset.reverse(),
+        upper = [];
+    for (var u = 0; u < reversed.length; u++) {
+        while (upper.length >= 2 && (_cross(upper[upper.length - 2], upper[upper.length - 1], reversed[u]) <= 0)) {
+            upper.pop();
+        }
+        upper.push(reversed[u]);
+    }
+    upper.pop();
+    return upper;
+}
+
+// pointset has to be sorted by X
+function convex(pointset) {
+    var convex,
+        upper = _upperTangent(pointset),
+        lower = _lowerTangent(pointset);
+    convex = lower.concat(upper);
+    convex.push(pointset[0]);  
+    return convex;  
+}
+
+module.exports = convex;
+
+},{}],10:[function(require,module,exports){
 "use strict;"
 
 const { CSG, CAG, isCSG, isCAG } = require('@jscad/csg')
@@ -1532,10 +1500,33 @@ function csgToGeometries(initial_csg) {
 
 
 module.exports = csgToGeometries
-<<<<<<< HEAD
-},{"@jscad/csg":8}],7:[function(require,module,exports){
-=======
-},{"@jscad/csg":11}],8:[function(require,module,exports){
+},{"@jscad/csg":18}],11:[function(require,module,exports){
+module.exports = {
+
+    toXy: function(pointset, format) {
+        if (format === undefined) {
+            return pointset.slice();
+        }
+        return pointset.map(function(pt) {
+            /*jslint evil: true */
+            var _getXY = new Function('pt', 'return [pt' + format[0] + ',' + 'pt' + format[1] + '];');
+            return _getXY(pt);
+        });
+    },
+
+    fromXy: function(pointset, format) {
+        if (format === undefined) {
+            return pointset.slice();
+        }
+        return pointset.map(function(pt) {
+            /*jslint evil: true */
+            var _getObj = new Function('pt', 'var o = {}; o' + format[0] + '= pt[0]; o' + format[1] + '= pt[1]; return o;');
+            return _getObj(pt);
+        });
+    }
+
+}
+},{}],12:[function(require,module,exports){
 "use strict;"
 
 const {log, status} = require('./log')
@@ -1610,7 +1601,303 @@ function unionCsgs(csgs) {
 
 
 module.exports = {geometryToCsgs, unionCsgs};
-},{"./log":9,"@jscad/csg":11,"@jscad/scad-api":98}],9:[function(require,module,exports){
+},{"./log":16,"@jscad/csg":18,"@jscad/scad-api":105}],13:[function(require,module,exports){
+function Grid(points, cellSize) {
+    this._cells = [];
+    this._cellSize = cellSize;
+
+    points.forEach(function(point) {
+        var cellXY = this.point2CellXY(point),
+            x = cellXY[0],
+            y = cellXY[1];
+        if (this._cells[x] === undefined) {
+            this._cells[x] = [];
+        }
+        if (this._cells[x][y] === undefined) {
+            this._cells[x][y] = [];
+        }
+        this._cells[x][y].push(point);
+    }, this);
+}
+
+Grid.prototype = {
+    cellPoints: function(x, y) { // (Number, Number) -> Array
+        return (this._cells[x] !== undefined && this._cells[x][y] !== undefined) ? this._cells[x][y] : [];
+    },
+
+    rangePoints: function(bbox) { // (Array) -> Array
+        var tlCellXY = this.point2CellXY([bbox[0], bbox[1]]),
+            brCellXY = this.point2CellXY([bbox[2], bbox[3]]),
+            points = [];
+
+        for (var x = tlCellXY[0]; x <= brCellXY[0]; x++) {
+            for (var y = tlCellXY[1]; y <= brCellXY[1]; y++) {
+                points = points.concat(this.cellPoints(x, y));
+            }
+        }
+
+        return points;
+    },
+
+    removePoint: function(point) { // (Array) -> Array
+        var cellXY = this.point2CellXY(point),
+            cell = this._cells[cellXY[0]][cellXY[1]],
+            pointIdxInCell;
+        
+        for (var i = 0; i < cell.length; i++) {
+            if (cell[i][0] === point[0] && cell[i][1] === point[1]) {
+                pointIdxInCell = i;
+                break;
+            }
+        }
+
+        cell.splice(pointIdxInCell, 1);
+
+        return cell;
+    },
+
+    point2CellXY: function(point) { // (Array) -> Array
+        var x = parseInt(point[0] / this._cellSize),
+            y = parseInt(point[1] / this._cellSize);
+        return [x, y];
+    },
+
+    extendBbox: function(bbox, scaleFactor) { // (Array, Number) -> Array
+        return [
+            bbox[0] - (scaleFactor * this._cellSize),
+            bbox[1] - (scaleFactor * this._cellSize),
+            bbox[2] + (scaleFactor * this._cellSize),
+            bbox[3] + (scaleFactor * this._cellSize)
+        ];
+    }
+};
+
+function grid(points, cellSize) {
+    return new Grid(points, cellSize);
+}
+
+module.exports = grid;
+},{}],14:[function(require,module,exports){
+/*
+ (c) 2014-2016, Andrii Heonia
+ Hull.js, a JavaScript library for concave hull generation by set of points.
+ https://github.com/AndriiHeonia/hull
+*/
+
+'use strict';
+
+var intersect = require('./intersect.js');
+var grid = require('./grid.js');
+var formatUtil = require('./format.js');
+var convexHull = require('./convex.js');
+
+function _filterDuplicates(pointset) {
+    return pointset.filter(function(el, idx, arr) {
+        var prevEl = arr[idx - 1];
+        return idx === 0 || !(prevEl[0] === el[0] && prevEl[1] === el[1]);
+    });
+}
+
+function _sortByX(pointset) {
+    return pointset.sort(function(a, b) {
+        if (a[0] == b[0]) {
+            return a[1] - b[1];
+        } else {
+            return a[0] - b[0];
+        }
+    });
+}
+
+function _sqLength(a, b) {
+    return Math.pow(b[0] - a[0], 2) + Math.pow(b[1] - a[1], 2);
+}
+
+function _cos(o, a, b) {
+    var aShifted = [a[0] - o[0], a[1] - o[1]],
+        bShifted = [b[0] - o[0], b[1] - o[1]],
+        sqALen = _sqLength(o, a),
+        sqBLen = _sqLength(o, b),
+        dot = aShifted[0] * bShifted[0] + aShifted[1] * bShifted[1];
+
+    return dot / Math.sqrt(sqALen * sqBLen);
+}
+
+function _intersect(segment, pointset) {
+    for (var i = 0; i < pointset.length - 1; i++) {
+        var seg = [pointset[i], pointset[i + 1]];
+        if (segment[0][0] === seg[0][0] && segment[0][1] === seg[0][1] ||
+            segment[0][0] === seg[1][0] && segment[0][1] === seg[1][1]) {
+            continue;
+        }
+        if (intersect(segment, seg)) {
+            return true;
+        }
+    }
+    return false;
+}
+
+function _occupiedArea(pointset) {
+    var minX = Infinity,
+        minY = Infinity,
+        maxX = -Infinity,
+        maxY = -Infinity;
+
+    for (var i = pointset.length - 1; i >= 0; i--) {
+        if (pointset[i][0] < minX) {
+            minX = pointset[i][0];
+        }
+        if (pointset[i][1] < minY) {
+            minY = pointset[i][1];
+        }
+        if (pointset[i][0] > maxX) {
+            maxX = pointset[i][0];
+        }
+        if (pointset[i][1] > maxY) {
+            maxY = pointset[i][1];
+        }
+    }
+
+    return [
+        maxX - minX, // width
+        maxY - minY  // height
+    ];
+}
+
+function _bBoxAround(edge) {
+    return [
+        Math.min(edge[0][0], edge[1][0]), // left
+        Math.min(edge[0][1], edge[1][1]), // top
+        Math.max(edge[0][0], edge[1][0]), // right
+        Math.max(edge[0][1], edge[1][1])  // bottom
+    ];
+}
+
+function _midPoint(edge, innerPoints, convex) {
+    var point = null,
+        angle1Cos = MAX_CONCAVE_ANGLE_COS,
+        angle2Cos = MAX_CONCAVE_ANGLE_COS,
+        a1Cos, a2Cos;
+
+    for (var i = 0; i < innerPoints.length; i++) {
+        a1Cos = _cos(edge[0], edge[1], innerPoints[i]);
+        a2Cos = _cos(edge[1], edge[0], innerPoints[i]);
+
+        if (a1Cos > angle1Cos && a2Cos > angle2Cos &&
+            !_intersect([edge[0], innerPoints[i]], convex) &&
+            !_intersect([edge[1], innerPoints[i]], convex)) {
+
+            angle1Cos = a1Cos;
+            angle2Cos = a2Cos;
+            point = innerPoints[i];
+        }
+    }
+
+    return point;
+}
+
+function _concave(convex, maxSqEdgeLen, maxSearchArea, grid, edgeSkipList) {
+    var edge,
+        keyInSkipList,
+        scaleFactor,
+        midPoint,
+        bBoxAround,
+        bBoxWidth,
+        bBoxHeight,
+        midPointInserted = false;
+
+    for (var i = 0; i < convex.length - 1; i++) {
+        edge = [convex[i], convex[i + 1]];
+        keyInSkipList = edge[0].join() + ',' + edge[1].join();
+
+        if (_sqLength(edge[0], edge[1]) < maxSqEdgeLen ||
+            edgeSkipList[keyInSkipList] === true) { continue; }
+
+        scaleFactor = 0;
+        bBoxAround = _bBoxAround(edge);
+        do {
+            bBoxAround = grid.extendBbox(bBoxAround, scaleFactor);
+            bBoxWidth = bBoxAround[2] - bBoxAround[0];
+            bBoxHeight = bBoxAround[3] - bBoxAround[1];
+
+            midPoint = _midPoint(edge, grid.rangePoints(bBoxAround), convex);            
+            scaleFactor++;
+        }  while (midPoint === null && (maxSearchArea[0] > bBoxWidth || maxSearchArea[1] > bBoxHeight));
+
+        if (bBoxWidth >= maxSearchArea[0] && bBoxHeight >= maxSearchArea[1]) {
+            edgeSkipList[keyInSkipList] = true;
+        }
+
+        if (midPoint !== null) {
+            convex.splice(i + 1, 0, midPoint);
+            grid.removePoint(midPoint);
+            midPointInserted = true;
+        }
+    }
+
+    if (midPointInserted) {
+        return _concave(convex, maxSqEdgeLen, maxSearchArea, grid, edgeSkipList);
+    }
+
+    return convex;
+}
+
+function hull(pointset, concavity, format) {
+    var convex,
+        concave,
+        innerPoints,
+        occupiedArea,
+        maxSearchArea,
+        cellSize,
+        points,
+        maxEdgeLen = concavity || 20;
+
+    if (pointset.length < 4) {
+        return pointset.slice();
+    }
+
+    points = _filterDuplicates(_sortByX(formatUtil.toXy(pointset, format)));
+
+    occupiedArea = _occupiedArea(points);
+    maxSearchArea = [
+        occupiedArea[0] * MAX_SEARCH_BBOX_SIZE_PERCENT,
+        occupiedArea[1] * MAX_SEARCH_BBOX_SIZE_PERCENT
+    ];
+
+    convex = convexHull(points);
+    innerPoints = points.filter(function(pt) {
+        return convex.indexOf(pt) < 0;
+    });
+
+    cellSize = Math.ceil(1 / (points.length / (occupiedArea[0] * occupiedArea[1])));
+
+    concave = _concave(
+        convex, Math.pow(maxEdgeLen, 2),
+        maxSearchArea, grid(innerPoints, cellSize), {});
+ 
+    return formatUtil.fromXy(concave, format);
+}
+
+var MAX_CONCAVE_ANGLE_COS = Math.cos(90 / (180 / Math.PI)); // angle = 90 deg
+var MAX_SEARCH_BBOX_SIZE_PERCENT = 0.6;
+
+module.exports = hull;
+},{"./convex.js":9,"./format.js":11,"./grid.js":13,"./intersect.js":15}],15:[function(require,module,exports){
+function ccw(x1, y1, x2, y2, x3, y3) {           
+    var cw = ((y3 - y1) * (x2 - x1)) - ((y2 - y1) * (x3 - x1));
+    return cw > 0 ? true : cw < 0 ? false : true; // colinear
+}
+
+function intersect(seg1, seg2) {
+  var x1 = seg1[0][0], y1 = seg1[0][1],
+      x2 = seg1[1][0], y2 = seg1[1][1],
+      x3 = seg2[0][0], y3 = seg2[0][1],
+      x4 = seg2[1][0], y4 = seg2[1][1];
+
+    return ccw(x1, y1, x3, y3, x4, y4) !== ccw(x2, y2, x3, y3, x4, y4) && ccw(x1, y1, x2, y2, x3, y3) !== ccw(x1, y1, x2, y2, x4, y4);
+}
+
+module.exports = intersect;
+},{}],16:[function(require,module,exports){
 function log (txt) {
   var timeInMs = Date.now()
   var prevtime = undefined//OpenJsCad.log.prevLogTime
@@ -1638,8 +1925,7 @@ module.exports = {
   status
 }
 
-},{}],10:[function(require,module,exports){
->>>>>>> Hou-branch
+},{}],17:[function(require,module,exports){
 "use strict;"
 
 //const {log, status} = require('./log')
@@ -1716,6 +2002,9 @@ function Main()
 	//processor for transformations
 	this.processor = null;
 
+
+	//house environment
+	this.house = new THREE.Object3D();
 
 	// function loadModelObj(objFilePath)
 	// {
@@ -1818,9 +2107,9 @@ Main.prototype = {
 
 		this.scene.background = new THREE.Color(.95,.95,.95);
 
-		//var gridHelper = new THREE.GridHelper( 1000, 20 ) ;//size, divisions
-		//this.scene.add( gridHelper );
-		this.addHouseEnvironment();
+		var gridHelper = new THREE.GridHelper( 1000, 20 ) ;//size, divisions
+		this.scene.add( gridHelper );
+		//this.addHouseEnvironment();
 		
 		this.renderer.setPixelRatio( window.devicePixelRatio );
 		this.renderer.setSize( window.innerWidth, window.innerHeight );
@@ -1866,19 +2155,18 @@ Main.prototype = {
 		this.processor = new Processor(scope);
 
 
-		//test
-		// model
-		var loader = new THREE.GLTFLoader();
-		loader.load(
-			'models/vitra-chair.glb',
-			function ( gltf ) {
-				scope.gltfLoadedCallback(
-					gltf,
-					scope.envMap,
-					new THREE.Vector3(-1.5,0,-0.5),
-					Math.PI*0.2
-				);
-		} );
+		// //test
+		// var loader = new THREE.GLTFLoader();
+		// loader.load(
+		// 	'models/vitra-chair.glb',
+		// 	function ( gltf ) {
+		// 		scope.gltfLoadedCallback(
+		// 			gltf,
+		// 			scope.envMap,
+		// 			new THREE.Vector3(-1.5,0,-0.5),
+		// 			Math.PI*0.2
+		// 		);
+		// } );
 
 	},
 
@@ -1907,8 +2195,8 @@ Main.prototype = {
 			side: THREE.BackSide
 		} );
 		var sky = new THREE.Mesh( skyGeo, skyMat );
-		scope.scene.add( sky );
-
+		//scope.scene.add( sky );
+		this.house.add(sky);
 
 		// ground
 		var groundTexture = new THREE.TextureLoader().load("../images/floor.jpg");
@@ -1923,7 +2211,8 @@ Main.prototype = {
 		ground.rotation.x = - Math.PI / 2;
 		// plane.position.y = -1;
 		ground.receiveShadow = true;
-		scope.scene.add(ground);
+		//scope.scene.add(ground);
+		this.house.add(ground);
 
 		//wall
 		var purpleWallTexture = new THREE.TextureLoader().load("../images/purple_wall.jpg");
@@ -1938,58 +2227,75 @@ Main.prototype = {
 
     	purple_wall.position.copy(new THREE.Vector3(0, 15, -50));
 		purple_wall.receiveShadow = true;
-		scope.scene.add(purple_wall);
+		//scope.scene.add(purple_wall);
+		this.house.add(purple_wall);
+
+
+		var whiteWallTexture = new THREE.TextureLoader().load("../images/white_wall.jpg");
+		whiteWallTexture.wrapS = whiteWallTexture.wrapT = THREE.RepeatWrapping;
+    	whiteWallTexture.offset.set( 0, 0 );
+    	whiteWallTexture.repeat.set( 1, 3 );
 
 		//left wall
 		var left_wall = new THREE.Mesh(
-			new THREE.BoxBufferGeometry( 3, 30, 10),
-			new THREE.MeshPhongMaterial( {color: 0xdcd9cd, specular: 0xcccccc} )
+			new THREE.BoxBufferGeometry( 3, 30, 10, 1, 3, 1),
+			new THREE.MeshPhongMaterial( {map: whiteWallTexture, specular: 0x101010} )
 		);
 
     	left_wall.position.copy(new THREE.Vector3(-50, 15, -45));
 		left_wall.receiveShadow = true;
-		scope.scene.add(left_wall);
+		//scope.scene.add(left_wall);
+		this.house.add(left_wall);
 
 		//left window
 		var loader = new THREE.ColladaLoader();
+
 		loader.load( '../models/window.dae', function ( collada ) {
 			var fcWindow = collada.scene;
 			fcWindow.scale.copy(new THREE.Vector3(0.21, 0.21, 0.21));
 			fcWindow.position.copy(new THREE.Vector3(-53, 0, -60));
 			fcWindow.rotation.z = - Math.PI / 2;
-			scope.scene.add(fcWindow);
+			//scope.scene.add(fcWindow);
+			scope.house.add(fcWindow);
 		});
+		
 
 		//left window left
+		whiteWallTexture.repeat.set( 1, 3);
 		var left_window_left_wall = new THREE.Mesh(
-			new THREE.BoxBufferGeometry( 3, 30, 90 - 55.5),
-			new THREE.MeshPhongMaterial( {color: 0xdcd9cd, specular: 0xcccccc} )
+			new THREE.BoxBufferGeometry( 3, 30, 90 - 55.5, 1, 3, 3),
+			new THREE.MeshPhongMaterial( {map: whiteWallTexture, specular: 0x101010} )
 		);
 
     	left_window_left_wall.position.copy(new THREE.Vector3(-20, 15, 50 - (90 - 55.5)/2));
 		left_window_left_wall.receiveShadow = true;
-		scope.scene.add(left_window_left_wall);
+		//scope.scene.add(left_window_left_wall);
+		this.house.add(left_window_left_wall);
 
 
+		whiteWallTexture.repeat.set( 3, 3);
 		var left_wall_left_wall = new THREE.Mesh(
-			new THREE.BoxBufferGeometry( 30, 30, 3),
-			new THREE.MeshPhongMaterial( {color: 0xdcd9cd, specular: 0xcccccc} )
+			new THREE.BoxBufferGeometry( 30, 30, 3, 3, 3, 1),
+			new THREE.MeshPhongMaterial( {map: whiteWallTexture, specular: 0x101010} )
 		);
 
     	left_wall_left_wall.position.copy(new THREE.Vector3(-35, 15, 50 - (90 - 55.5) + 1.5));
 		left_wall_left_wall.receiveShadow = true;
-		scope.scene.add(left_wall_left_wall);
+		//scope.scene.add(left_wall_left_wall);
+		this.house.add(left_wall_left_wall);
 
 
 		//right wall
+		whiteWallTexture.repeat.set(3, 5);
 		var right_wall = new THREE.Mesh(
-			new THREE.BoxBufferGeometry( 3, 30, 50),
-			new THREE.MeshPhongMaterial( {color: 0xdcd9cd, specular: 0xcccccc} )
+			new THREE.BoxBufferGeometry( 3, 30, 50, 1, 3, 5),
+			new THREE.MeshPhongMaterial( {map: whiteWallTexture, specular: 0x101010} )
 		);
 
     	right_wall.position.copy(new THREE.Vector3(50, 15, -25));
 		right_wall.receiveShadow = true;
-		scope.scene.add(right_wall);
+		//scope.scene.add(right_wall);
+		this.house.add(right_wall);
 		
 		//right door
 		loader.load( '../models/door.dae', function ( collada ) {
@@ -1997,39 +2303,47 @@ Main.prototype = {
 			fcDoor.scale.copy(new THREE.Vector3(0.25, 0.25, 0.25));
 			fcDoor.position.copy(new THREE.Vector3(40, 0, -14.3));
 			fcDoor.rotation.z = - Math.PI / 2;
-			scope.scene.add(fcDoor);
+			//scope.scene.add(fcDoor);
+			scope.house.add(fcDoor);
 
 		});
 
+
 		//right door top
+		whiteWallTexture.repeat.set(1, 1);
 		var right_door_top_wall = new THREE.Mesh(
-			new THREE.BoxBufferGeometry( 3, 9.4, 8.858),
-			new THREE.MeshPhongMaterial( {color: 0xdcd9cd, specular: 0xcccccc} )
+			new THREE.BoxBufferGeometry( 3, 9.4, 8.858, 1, 1, 1),
+			new THREE.MeshPhongMaterial( {map: whiteWallTexture, specular: 0x101010} )
 		);
 
     	right_door_top_wall.position.copy(new THREE.Vector3(50, 20.66 + 9.4 / 2, 8.858 / 2));
 		right_door_top_wall.receiveShadow = true;
-		scope.scene.add(right_door_top_wall);
+		//scope.scene.add(right_door_top_wall);
+		this.house.add(right_door_top_wall);
 
 		//right door right
+		whiteWallTexture.repeat.set(3, 4);
 		var right_door_right_wall = new THREE.Mesh(
-			new THREE.BoxBufferGeometry( 3, 30, 50 - 8.85),
-			new THREE.MeshPhongMaterial( {color: 0xdcd9cd, specular: 0xcccccc} )
+			new THREE.BoxBufferGeometry( 3, 30, 50 - 8.85, 1, 3, 4),
+			new THREE.MeshPhongMaterial( {map: whiteWallTexture, specular: 0x101010} )
 		);
 
     	right_door_right_wall.position.copy(new THREE.Vector3(50, 15, 8.85 + (50 - 8.858) / 2));
 		right_door_right_wall.receiveShadow = true;
-		scope.scene.add(right_door_right_wall);
+		//scope.scene.add(right_door_right_wall);
+		this.house.add(right_door_right_wall);
 
 		//ceiling
+		whiteWallTexture.repeat.set(10, 10);
 		var ceiling = new THREE.Mesh(
-			new THREE.PlaneBufferGeometry( 100, 100, 1, 1),
-			new THREE.MeshPhongMaterial( {color: 0xdcd9cd, specular: 0x101010} )
+			new THREE.PlaneBufferGeometry( 100, 100, 10, 10),
+			new THREE.MeshPhongMaterial( {map: whiteWallTexture, specular: 0x101010} )
 		);
 		ceiling.position.y = 30;
 		ceiling.rotation.x = Math.PI / 2;
 		ceiling.receiveShadow = true;
-		scope.scene.add(ceiling);
+		//scope.scene.add(ceiling);
+		this.house.add(ceiling);
 
 
 		//the other side, 70 window
@@ -2039,16 +2353,81 @@ Main.prototype = {
 			wWindow.position.copy(new THREE.Vector3(-40, 0, 55));
 			//wWindow.rotation.z = - Math.PI / 2;
 			wWindow.rotation.x = - Math.PI / 2;
-			scope.scene.add(wWindow);
+			//scope.scene.add(wWindow);
+			scope.house.add(wWindow);
 
-			var box = new THREE.Box3();
-			box.setFromObject(wWindow);
-			var box_size = new THREE.Vector3();
-			box.getSize(box_size);
 
-			//this includes width, height, depth
-			console.log(box_size);
+			// var box = new THREE.Box3();
+			// box.setFromObject(wWindow);
+			// var box_size = new THREE.Vector3();
+			// box.getSize(box_size);
+
+			// //this includes width, height, depth
+			// console.log(box_size);
 		});
+
+
+		//flower
+		loader.load( '../models/apsad.dae', function ( collada ) {
+			var apsad = collada.scene;
+
+			// apsad.traverse( function ( child ) {
+			// 	if ( child.isMesh ) {
+			// 		child.material.envMap = scope.envMap;
+			// 		child.material.needsUpdate = true;
+			// 		child.castShadow = true;
+			// 	}
+			// });
+
+			apsad.scale.copy(new THREE.Vector3(0.4, 0.4, 0.4));
+			apsad.position.copy(new THREE.Vector3(-40, 0, -40));
+			apsad.rotation.x = - Math.PI / 2;
+			scope.house.add(apsad);
+			
+		});
+
+
+		//on purple wall hanger
+		loader.load( '../models/wall_art.dae', function ( collada ) {
+			var wall_art = collada.scene;
+
+			// wall_art.traverse( function ( child ) {
+			// 	if ( child.isMesh ) {
+			// 		child.material.envMap = scope.envMap;
+			// 		child.material.needsUpdate = true;
+			// 		child.castShadow = true;
+			// 	}
+			// });
+
+			wall_art.scale.copy(new THREE.Vector3(0.02, 0.02, 0.02));
+			wall_art.position.copy(new THREE.Vector3(0, 15, -49));
+			wall_art.rotation.z = Math.PI / 2;
+			scope.house.add(wall_art);
+			
+		});
+
+		//wall shelf
+		loader.load( '../models/wall_shelf.dae', function ( collada ) {
+			var wall_shelf = collada.scene;
+
+			wall_shelf.traverse( function ( child ) {
+				if ( child.isMesh ) {
+					child.material.envMap = scope.envMap;
+					child.material.needsUpdate = true;
+					child.castShadow = true;
+				}
+			});
+
+			wall_shelf.position.copy(new THREE.Vector3(48.5, 15, -30));
+			//wall_shelf.rotation.x = - Math.PI / 2;
+			wall_shelf.rotation.z = - Math.PI / 2;
+			wall_shelf.scale.copy(new THREE.Vector3(0.3, 0.3, 0.3));
+
+			scope.house.add(wall_shelf);
+			
+		});
+
+		this.scene.add(this.house);
 
 	},
 
@@ -2065,6 +2444,12 @@ Main.prototype = {
 				child.material.needsUpdate = true;
 				child.castShadow = true;
 
+
+				//
+				var edges = new THREE.EdgesGeometry( child.geometry );
+				var line = new THREE.LineSegments( edges, new THREE.LineBasicMaterial( { color: 0xff0000 } ) );
+
+				scope.scene.add( line );
 			}
 
 		} );
@@ -2124,6 +2509,10 @@ Main.prototype = {
 
 				objects.push(child);
 				//scope.addHelper( child ); //to visualize helpers
+
+
+				//test
+
 
 			}
 
@@ -2793,11 +3182,17 @@ Main.prototype = {
 		//testing
 
 
+		$('#parameter_control_chair_align').hide();
+		$('#parameter_control_chair_rebuild').hide();
+		$('#parameter_control_chair_add').hide();
 
+		$('.operations.operation_chair_align').hide();
+		$('.operations.operation_chair_add').hide();
+		$('.operations.operation_chair_rebuild').hide();
 
 
 		this.processor.init();
-		this.processor.executeDesign();
+		//this.processor.executeDesign();
 
 	}
 
@@ -2814,11 +3209,7 @@ document.addEventListener('DOMContentLoaded', function(event){
 
 
 
-<<<<<<< HEAD
-},{"./Processor":4}],8:[function(require,module,exports){
-=======
-},{"./Processor":3}],11:[function(require,module,exports){
->>>>>>> Hou-branch
+},{"./Processor":4}],18:[function(require,module,exports){
 /*
 ## License
 
@@ -3029,11 +3420,7 @@ const globalApi = Object.assign({}, {CSG, CAG}, optionsParsers, {isCAG, isCSG})
 
 module.exports = globalApi
 
-<<<<<<< HEAD
-},{"./src/api/debugHelpers":11,"./src/api/optionParsers":18,"./src/api/primitives2d":19,"./src/api/primitives3d":20,"./src/core/CAG":22,"./src/core/CAGFactories":23,"./src/core/CSG":24,"./src/core/CSGFactories":25,"./src/core/Properties":29,"./src/core/connectors":30,"./src/core/constants":31,"./src/core/math/Line2":32,"./src/core/math/Line3":33,"./src/core/math/Matrix4":34,"./src/core/math/OrthoNormalBasis":35,"./src/core/math/Path2":36,"./src/core/math/Plane":37,"./src/core/math/Polygon2":38,"./src/core/math/Polygon3":39,"./src/core/math/Side":40,"./src/core/math/Vector2":41,"./src/core/math/Vector3":42,"./src/core/math/Vertex2":43,"./src/core/math/Vertex3":44,"./src/core/mutators":47,"./src/core/utils":49}],9:[function(require,module,exports){
-=======
-},{"./src/api/debugHelpers":14,"./src/api/optionParsers":21,"./src/api/primitives2d":22,"./src/api/primitives3d":23,"./src/core/CAG":25,"./src/core/CAGFactories":26,"./src/core/CSG":27,"./src/core/CSGFactories":28,"./src/core/Properties":32,"./src/core/connectors":33,"./src/core/constants":34,"./src/core/math/Line2":35,"./src/core/math/Line3":36,"./src/core/math/Matrix4":37,"./src/core/math/OrthoNormalBasis":38,"./src/core/math/Path2":39,"./src/core/math/Plane":40,"./src/core/math/Polygon2":41,"./src/core/math/Polygon3":42,"./src/core/math/Side":43,"./src/core/math/Vector2":44,"./src/core/math/Vector3":45,"./src/core/math/Vertex2":46,"./src/core/math/Vertex3":47,"./src/core/mutators":50,"./src/core/utils":52}],12:[function(require,module,exports){
->>>>>>> Hou-branch
+},{"./src/api/debugHelpers":21,"./src/api/optionParsers":28,"./src/api/primitives2d":29,"./src/api/primitives3d":30,"./src/core/CAG":32,"./src/core/CAGFactories":33,"./src/core/CSG":34,"./src/core/CSGFactories":35,"./src/core/Properties":39,"./src/core/connectors":40,"./src/core/constants":41,"./src/core/math/Line2":42,"./src/core/math/Line3":43,"./src/core/math/Matrix4":44,"./src/core/math/OrthoNormalBasis":45,"./src/core/math/Path2":46,"./src/core/math/Plane":47,"./src/core/math/Polygon2":48,"./src/core/math/Polygon3":49,"./src/core/math/Side":50,"./src/core/math/Vector2":51,"./src/core/math/Vector3":52,"./src/core/math/Vertex2":53,"./src/core/math/Vertex3":54,"./src/core/mutators":57,"./src/core/utils":59}],19:[function(require,module,exports){
 const Path2D = require('../core/math/Path2')
 
 const cagoutlinePaths = function (_cag) {
@@ -3115,11 +3502,7 @@ const cagoutlinePaths = function (_cag) {
 
 module.exports = cagoutlinePaths
 
-<<<<<<< HEAD
-},{"../core/math/Path2":36}],10:[function(require,module,exports){
-=======
-},{"../core/math/Path2":39}],13:[function(require,module,exports){
->>>>>>> Hou-branch
+},{"../core/math/Path2":46}],20:[function(require,module,exports){
 const toArray = require('../core/utils/toArray')
 
 /**
@@ -3157,11 +3540,7 @@ const center = function (options, objects) {
 
 module.exports = center
 
-<<<<<<< HEAD
-},{"../core/utils/toArray":57}],11:[function(require,module,exports){
-=======
-},{"../core/utils/toArray":60}],14:[function(require,module,exports){
->>>>>>> Hou-branch
+},{"../core/utils/toArray":67}],21:[function(require,module,exports){
 const CSG = require('../core/CSG')
 const {cube} = require('./primitives3d')
 
@@ -3196,11 +3575,7 @@ const toPointCloud = function (csg, cuberadius) {
 
 module.exports = {toPointCloud}
 
-<<<<<<< HEAD
-},{"../core/CSG":24,"./primitives3d":20}],12:[function(require,module,exports){
-=======
-},{"../core/CSG":27,"./primitives3d":23}],15:[function(require,module,exports){
->>>>>>> Hou-branch
+},{"../core/CSG":34,"./primitives3d":30}],22:[function(require,module,exports){
 const Vertex3 = require('../core/math/Vertex3')
 const Vector3 = require('../core/math/Vector3')
 const Polygon3 = require('../core/math/Polygon3')
@@ -3265,11 +3640,7 @@ const degToRad = deg => (Math.PI / 180) * deg
 
 module.exports = {cagToPointsArray, clamp, rightMultiply1x3VectorToArray, polygonFromPoints}
 
-<<<<<<< HEAD
-},{"../core/math/Polygon3":39,"../core/math/Vector3":42,"../core/math/Vertex3":44}],13:[function(require,module,exports){
-=======
-},{"../core/math/Polygon3":42,"../core/math/Vector3":45,"../core/math/Vertex3":47}],16:[function(require,module,exports){
->>>>>>> Hou-branch
+},{"../core/math/Polygon3":49,"../core/math/Vector3":52,"../core/math/Vertex3":54}],23:[function(require,module,exports){
 const {isCAG} = require('../core/utils')
 // boolean operations
 
@@ -3372,11 +3743,7 @@ module.exports = {
   intersection
 }
 
-<<<<<<< HEAD
-},{"../core/utils":49}],14:[function(require,module,exports){
-=======
-},{"../core/utils":52}],17:[function(require,module,exports){
->>>>>>> Hou-branch
+},{"../core/utils":59}],24:[function(require,module,exports){
 const Matrix4x4 = require('../core/math/Matrix4.js')
 const Vector3D = require('../core/math/Vector3.js')
 const {Connector} = require('../core/connectors.js')
@@ -3545,11 +3912,7 @@ const overCutInsideCorners = function (_cag, cutterradius) {
 
 module.exports = {lieFlat, getTransformationToFlatLying, getTransformationAndInverseTransformationToFlatLying, overCutInsideCorners}
 
-<<<<<<< HEAD
-},{"../core/CAGFactories":23,"../core/connectors.js":30,"../core/math/Matrix4.js":34,"../core/math/Vector2":41,"../core/math/Vector3.js":42}],15:[function(require,module,exports){
-=======
-},{"../core/CAGFactories":26,"../core/connectors.js":33,"../core/math/Matrix4.js":37,"../core/math/Vector2":44,"../core/math/Vector3.js":45}],18:[function(require,module,exports){
->>>>>>> Hou-branch
+},{"../core/CAGFactories":33,"../core/connectors.js":40,"../core/math/Matrix4.js":44,"../core/math/Vector2":51,"../core/math/Vector3.js":52}],25:[function(require,module,exports){
 const {EPS} = require('../core/constants')
 const Plane = require('../core/math/Plane')
 const Vector2 = require('../core/math/Vector2')
@@ -3615,11 +3978,7 @@ const cutByPlane = function (csg, plane) {
 
 module.exports = {sectionCut, cutByPlane}
 
-<<<<<<< HEAD
-},{"../core/CSG":24,"../core/constants":31,"../core/math/OrthoNormalBasis":35,"../core/math/Plane":37,"../core/math/Polygon3":39,"../core/math/Vector2":41,"../core/math/Vertex3":44}],16:[function(require,module,exports){
-=======
-},{"../core/CSG":27,"../core/constants":34,"../core/math/OrthoNormalBasis":38,"../core/math/Plane":40,"../core/math/Polygon3":42,"../core/math/Vector2":44,"../core/math/Vertex3":47}],19:[function(require,module,exports){
->>>>>>> Hou-branch
+},{"../core/CSG":34,"../core/constants":41,"../core/math/OrthoNormalBasis":45,"../core/math/Plane":47,"../core/math/Polygon3":49,"../core/math/Vector2":51,"../core/math/Vertex3":54}],26:[function(require,module,exports){
 
 const {EPS, angleEPS} = require('../core/constants')
 const Vertex = require('../core/math/Vertex3')
@@ -3958,11 +4317,7 @@ module.exports = {
   expandedShellOfCCSG
 }
 
-<<<<<<< HEAD
-},{"../core/CAG":22,"../core/CAGFactories":23,"../core/CSG":24,"../core/CSGFactories":25,"../core/constants":31,"../core/math/Polygon3":39,"../core/math/Vector2":41,"../core/math/Vertex3":44,"../core/utils":49}],17:[function(require,module,exports){
-=======
-},{"../core/CAG":25,"../core/CAGFactories":26,"../core/CSG":27,"../core/CSGFactories":28,"../core/constants":34,"../core/math/Polygon3":42,"../core/math/Vector2":44,"../core/math/Vertex3":47,"../core/utils":52}],20:[function(require,module,exports){
->>>>>>> Hou-branch
+},{"../core/CAG":32,"../core/CAGFactories":33,"../core/CSG":34,"../core/CSGFactories":35,"../core/constants":41,"../core/math/Polygon3":49,"../core/math/Vector2":51,"../core/math/Vertex3":54,"../core/utils":59}],27:[function(require,module,exports){
 const {EPS, defaultResolution3D} = require('../core/constants')
 const OrthoNormalBasis = require('../core/math/OrthoNormalBasis')
 const {parseOptionAs3DVector, parseOptionAsBool, parseOptionAsFloat, parseOptionAsInt} = require('./optionParsers')
@@ -4321,11 +4676,7 @@ module.exports = {
   rectangular_extrude
 }
 
-<<<<<<< HEAD
-},{"../core/CAGFactories":23,"../core/CSG":24,"../core/CSGFactories":25,"../core/connectors":30,"../core/constants":31,"../core/math/Matrix4":34,"../core/math/OrthoNormalBasis":35,"../core/math/Path2":36,"../core/math/Vector3":42,"./helpers":12,"./optionParsers":18}],18:[function(require,module,exports){
-=======
-},{"../core/CAGFactories":26,"../core/CSG":27,"../core/CSGFactories":28,"../core/connectors":33,"../core/constants":34,"../core/math/Matrix4":37,"../core/math/OrthoNormalBasis":38,"../core/math/Path2":39,"../core/math/Vector3":45,"./helpers":15,"./optionParsers":21}],21:[function(require,module,exports){
->>>>>>> Hou-branch
+},{"../core/CAGFactories":33,"../core/CSG":34,"../core/CSGFactories":35,"../core/connectors":40,"../core/constants":41,"../core/math/Matrix4":44,"../core/math/OrthoNormalBasis":45,"../core/math/Path2":46,"../core/math/Vector3":52,"./helpers":22,"./optionParsers":28}],28:[function(require,module,exports){
 const Vector3D = require('../core/math/Vector3')
 const Vector2D = require('../core/math/Vector2')
 
@@ -4403,11 +4754,7 @@ module.exports = {
   parseOptionAs3DVectorList
 }
 
-<<<<<<< HEAD
-},{"../core/math/Vector2":41,"../core/math/Vector3":42}],19:[function(require,module,exports){
-=======
-},{"../core/math/Vector2":44,"../core/math/Vector3":45}],22:[function(require,module,exports){
->>>>>>> Hou-branch
+},{"../core/math/Vector2":51,"../core/math/Vector3":52}],29:[function(require,module,exports){
 const CAG = require('../core/CAG')
 const {parseOptionAs2DVector, parseOptionAsFloat, parseOptionAsInt} = require('./optionParsers')
 const {defaultResolution2D} = require('../core/constants')
@@ -4594,11 +4941,7 @@ module.exports = {
   fromCompactBinary
 }
 
-<<<<<<< HEAD
-},{"../core/CAG":22,"../core/CAGFactories":23,"../core/constants":31,"../core/math/Path2":36,"../core/math/Vector2":41,"../core/math/Vertex2":43,"./optionParsers":18}],20:[function(require,module,exports){
-=======
-},{"../core/CAG":25,"../core/CAGFactories":26,"../core/constants":34,"../core/math/Path2":39,"../core/math/Vector2":44,"../core/math/Vertex2":46,"./optionParsers":21}],23:[function(require,module,exports){
->>>>>>> Hou-branch
+},{"../core/CAG":32,"../core/CAGFactories":33,"../core/constants":41,"../core/math/Path2":46,"../core/math/Vector2":51,"../core/math/Vertex2":53,"./optionParsers":28}],30:[function(require,module,exports){
 const {parseOption, parseOptionAs3DVector, parseOptionAs2DVector, parseOptionAs3DVectorList, parseOptionAsFloat, parseOptionAsInt} = require('./optionParsers')
 const {defaultResolution3D, defaultResolution2D, EPS} = require('../core/constants')
 const Vector3 = require('../core/math/Vector3')
@@ -5148,11 +5491,7 @@ module.exports = {
   polyhedron
 }
 
-<<<<<<< HEAD
-},{"../core/CSGFactories":25,"../core/Properties":29,"../core/connectors":30,"../core/constants":31,"../core/math/Polygon3":39,"../core/math/Vector3":42,"../core/math/Vertex3":44,"./optionParsers":18}],21:[function(require,module,exports){
-=======
-},{"../core/CSGFactories":28,"../core/Properties":32,"../core/connectors":33,"../core/constants":34,"../core/math/Polygon3":42,"../core/math/Vector3":45,"../core/math/Vertex3":47,"./optionParsers":21}],24:[function(require,module,exports){
->>>>>>> Hou-branch
+},{"../core/CSGFactories":35,"../core/Properties":39,"../core/connectors":40,"../core/constants":41,"../core/math/Polygon3":49,"../core/math/Vector3":52,"../core/math/Vertex3":54,"./optionParsers":28}],31:[function(require,module,exports){
 const Polygon = require('../core/math/Polygon3')
 const {fromPolygons} = require('../core/CSGFactories')
 const {fnSortByIndex} = require('../core/utils')
@@ -5367,11 +5706,7 @@ const _addWalls = function (walls, bottom, top, bFlipped) {
 
 module.exports = solidFromSlices
 
-<<<<<<< HEAD
-},{"../core/CSGFactories":25,"../core/math/Polygon3":39,"../core/utils":49}],22:[function(require,module,exports){
-=======
-},{"../core/CSGFactories":28,"../core/math/Polygon3":42,"../core/utils":52}],25:[function(require,module,exports){
->>>>>>> Hou-branch
+},{"../core/CSGFactories":35,"../core/math/Polygon3":49,"../core/utils":59}],32:[function(require,module,exports){
 const {Connector} = require('./connectors')
 const Vertex3D = require('./math/Vertex3')
 const Vector2D = require('./math/Vector2')
@@ -5750,11 +6085,7 @@ CAG.prototype = {
 
 module.exports = CAG
 
-<<<<<<< HEAD
-},{"../api/cagOutlinePaths":9,"../api/center":10,"../api/ops-cnc":14,"../api/ops-expandContract":16,"../api/ops-extrusions":17,"./CAGFactories":23,"./CSGFactories":25,"./connectors":30,"./math/Polygon3":39,"./math/Vector2":41,"./math/Vector3":42,"./math/Vertex3":44,"./utils/cagMeasurements":50,"./utils/cagValidation":51,"./utils/canonicalize":52,"./utils/retesellate":56}],23:[function(require,module,exports){
-=======
-},{"../api/cagOutlinePaths":12,"../api/center":13,"../api/ops-cnc":17,"../api/ops-expandContract":19,"../api/ops-extrusions":20,"./CAGFactories":26,"./CSGFactories":28,"./connectors":33,"./math/Polygon3":42,"./math/Vector2":44,"./math/Vector3":45,"./math/Vertex3":47,"./utils/cagMeasurements":53,"./utils/cagValidation":54,"./utils/canonicalize":55,"./utils/retesellate":59}],26:[function(require,module,exports){
->>>>>>> Hou-branch
+},{"../api/cagOutlinePaths":19,"../api/center":20,"../api/ops-cnc":24,"../api/ops-expandContract":26,"../api/ops-extrusions":27,"./CAGFactories":33,"./CSGFactories":35,"./connectors":40,"./math/Polygon3":49,"./math/Vector2":51,"./math/Vector3":52,"./math/Vertex3":54,"./utils/cagMeasurements":60,"./utils/cagValidation":61,"./utils/canonicalize":62,"./utils/retesellate":66}],33:[function(require,module,exports){
 const Side = require('./math/Side')
 const Vector2D = require('./math/Vector2')
 const Vertex2 = require('./math/Vertex2')
@@ -5970,11 +6301,7 @@ module.exports = {
   fromCompactBinary
 }
 
-<<<<<<< HEAD
-},{"../api/ops-booleans":13,"./CAG":22,"./constants":31,"./math/Side":40,"./math/Vector2":41,"./math/Vertex2":43,"./utils/cagValidation":51}],24:[function(require,module,exports){
-=======
-},{"../api/ops-booleans":16,"./CAG":25,"./constants":34,"./math/Side":43,"./math/Vector2":44,"./math/Vertex2":46,"./utils/cagValidation":54}],27:[function(require,module,exports){
->>>>>>> Hou-branch
+},{"../api/ops-booleans":23,"./CAG":32,"./constants":41,"./math/Side":50,"./math/Vector2":51,"./math/Vertex2":53,"./utils/cagValidation":61}],34:[function(require,module,exports){
 const Tree = require('./trees')
 const Polygon = require('./math/Polygon3')
 const Plane = require('./math/Plane')
@@ -6562,11 +6889,7 @@ CSG.prototype = {
 
 module.exports = CSG
 
-<<<<<<< HEAD
-},{"../api/center":10,"../api/ops-cnc":14,"../api/ops-cuts":15,"../api/ops-expandContract":16,"./CAG":22,"./CSGFactories":25,"./Properties":29,"./math/OrthoNormalBasis":35,"./math/Plane":37,"./math/Polygon3":39,"./trees":48,"./utils/canonicalize":52,"./utils/csgMeasurements":53,"./utils/csgProjections":54,"./utils/fixTJunctions":55,"./utils/retesellate":56}],25:[function(require,module,exports){
-=======
-},{"../api/center":13,"../api/ops-cnc":17,"../api/ops-cuts":18,"../api/ops-expandContract":19,"./CAG":25,"./CSGFactories":28,"./Properties":32,"./math/OrthoNormalBasis":38,"./math/Plane":40,"./math/Polygon3":42,"./trees":51,"./utils/canonicalize":55,"./utils/csgMeasurements":56,"./utils/csgProjections":57,"./utils/fixTJunctions":58,"./utils/retesellate":59}],28:[function(require,module,exports){
->>>>>>> Hou-branch
+},{"../api/center":20,"../api/ops-cnc":24,"../api/ops-cuts":25,"../api/ops-expandContract":26,"./CAG":32,"./CSGFactories":35,"./Properties":39,"./math/OrthoNormalBasis":45,"./math/Plane":47,"./math/Polygon3":49,"./trees":58,"./utils/canonicalize":62,"./utils/csgMeasurements":63,"./utils/csgProjections":64,"./utils/fixTJunctions":65,"./utils/retesellate":66}],35:[function(require,module,exports){
 const Vector3D = require('./math/Vector3')
 const Vertex = require('./math/Vertex3')
 const Plane = require('./math/Plane')
@@ -6689,11 +7012,7 @@ module.exports = {
   fromCompactBinary
 }
 
-<<<<<<< HEAD
-},{"./CSG":24,"./math/Plane":37,"./math/Polygon2":38,"./math/Polygon3":39,"./math/Vector3":42,"./math/Vertex3":44}],26:[function(require,module,exports){
-=======
-},{"./CSG":27,"./math/Plane":40,"./math/Polygon2":41,"./math/Polygon3":42,"./math/Vector3":45,"./math/Vertex3":47}],29:[function(require,module,exports){
->>>>>>> Hou-branch
+},{"./CSG":34,"./math/Plane":47,"./math/Polygon2":48,"./math/Polygon3":49,"./math/Vector3":52,"./math/Vertex3":54}],36:[function(require,module,exports){
 // //////////////////////////////
 // ## class fuzzyFactory
 // This class acts as a factory for objects. We can search for an object with approximately
@@ -6751,11 +7070,7 @@ FuzzyFactory.prototype = {
 
 module.exports = FuzzyFactory
 
-<<<<<<< HEAD
-},{}],27:[function(require,module,exports){
-=======
-},{}],30:[function(require,module,exports){
->>>>>>> Hou-branch
+},{}],37:[function(require,module,exports){
 const FuzzyFactory = require('./FuzzyFactory')
 const {EPS} = require('./constants')
 const Side = require('./math/Side')
@@ -6782,11 +7097,7 @@ FuzzyCAGFactory.prototype = {
 
 module.exports = FuzzyCAGFactory
 
-<<<<<<< HEAD
-},{"./FuzzyFactory":26,"./constants":31,"./math/Side":40}],28:[function(require,module,exports){
-=======
-},{"./FuzzyFactory":29,"./constants":34,"./math/Side":43}],31:[function(require,module,exports){
->>>>>>> Hou-branch
+},{"./FuzzyFactory":36,"./constants":41,"./math/Side":50}],38:[function(require,module,exports){
 const {EPS} = require('./constants')
 const Polygon = require('./math/Polygon3')
 const FuzzyFactory = require('./FuzzyFactory')
@@ -6856,11 +7167,7 @@ FuzzyCSGFactory.prototype = {
 
 module.exports = FuzzyCSGFactory
 
-<<<<<<< HEAD
-},{"./FuzzyFactory":26,"./constants":31,"./math/Polygon3":39}],29:[function(require,module,exports){
-=======
-},{"./FuzzyFactory":29,"./constants":34,"./math/Polygon3":42}],32:[function(require,module,exports){
->>>>>>> Hou-branch
+},{"./FuzzyFactory":36,"./constants":41,"./math/Polygon3":49}],39:[function(require,module,exports){
 // ////////////////////////////////////
 // # Class Properties
 // This class is used to store properties of a solid
@@ -6944,11 +7251,7 @@ Properties.addFrom = function (result, otherproperties) {
 
 module.exports = Properties
 
-<<<<<<< HEAD
-},{}],30:[function(require,module,exports){
-=======
-},{}],33:[function(require,module,exports){
->>>>>>> Hou-branch
+},{}],40:[function(require,module,exports){
 const Vector3D = require('./math/Vector3')
 const Line3D = require('./math/Line3')
 const Matrix4x4 = require('./math/Matrix4')
@@ -7170,11 +7473,7 @@ ConnectorList.prototype = {
 
 module.exports = {Connector, ConnectorList}
 
-<<<<<<< HEAD
-},{"./CSG":24,"./math/Line3":33,"./math/Matrix4":34,"./math/OrthoNormalBasis":35,"./math/Plane":37,"./math/Vector3":42}],31:[function(require,module,exports){
-=======
-},{"./CSG":27,"./math/Line3":36,"./math/Matrix4":37,"./math/OrthoNormalBasis":38,"./math/Plane":40,"./math/Vector3":45}],34:[function(require,module,exports){
->>>>>>> Hou-branch
+},{"./CSG":34,"./math/Line3":43,"./math/Matrix4":44,"./math/OrthoNormalBasis":45,"./math/Plane":47,"./math/Vector3":52}],41:[function(require,module,exports){
 const _CSGDEBUG = false
 
 /** Number of polygons per 360 degree revolution for 2D objects.
@@ -7231,11 +7530,7 @@ module.exports = {
   getTag
 }
 
-<<<<<<< HEAD
-},{}],32:[function(require,module,exports){
-=======
-},{}],35:[function(require,module,exports){
->>>>>>> Hou-branch
+},{}],42:[function(require,module,exports){
 const Vector2D = require('./Vector2')
 const {solve2Linear} = require('../utils')
 
@@ -7327,11 +7622,7 @@ Line2D.prototype = {
 
 module.exports = Line2D
 
-<<<<<<< HEAD
-},{"../utils":49,"./Vector2":41}],33:[function(require,module,exports){
-=======
-},{"../utils":52,"./Vector2":44}],36:[function(require,module,exports){
->>>>>>> Hou-branch
+},{"../utils":59,"./Vector2":51}],43:[function(require,module,exports){
 const Vector3D = require('./Vector3')
 const {EPS} = require('../constants')
 const {solve2Linear} = require('../utils')
@@ -7433,11 +7724,7 @@ Line3D.prototype = {
 
 module.exports = Line3D
 
-<<<<<<< HEAD
-},{"../constants":31,"../utils":49,"./Vector3":42}],34:[function(require,module,exports){
-=======
-},{"../constants":34,"../utils":52,"./Vector3":45}],37:[function(require,module,exports){
->>>>>>> Hou-branch
+},{"../constants":41,"../utils":59,"./Vector3":52}],44:[function(require,module,exports){
 const Vector3D = require('./Vector3')
 const Vector2D = require('./Vector2')
 const OrthoNormalBasis = require('./OrthoNormalBasis')
@@ -7723,11 +8010,7 @@ Matrix4x4.scaling = function (v) {
 
 module.exports = Matrix4x4
 
-<<<<<<< HEAD
-},{"./OrthoNormalBasis":35,"./Plane":37,"./Vector2":41,"./Vector3":42}],35:[function(require,module,exports){
-=======
-},{"./OrthoNormalBasis":38,"./Plane":40,"./Vector2":44,"./Vector3":45}],38:[function(require,module,exports){
->>>>>>> Hou-branch
+},{"./OrthoNormalBasis":45,"./Plane":47,"./Vector2":51,"./Vector3":52}],45:[function(require,module,exports){
 const Vector2D = require('./Vector2')
 const Vector3D = require('./Vector3')
 const Line2D = require('./Line2')
@@ -7934,11 +8217,7 @@ OrthoNormalBasis.prototype = {
 
 module.exports = OrthoNormalBasis
 
-<<<<<<< HEAD
-},{"./Line2":32,"./Line3":33,"./Matrix4":34,"./Plane":37,"./Vector2":41,"./Vector3":42}],36:[function(require,module,exports){
-=======
-},{"./Line2":35,"./Line3":36,"./Matrix4":37,"./Plane":40,"./Vector2":44,"./Vector3":45}],39:[function(require,module,exports){
->>>>>>> Hou-branch
+},{"./Line2":42,"./Line3":43,"./Matrix4":44,"./Plane":47,"./Vector2":51,"./Vector3":52}],46:[function(require,module,exports){
 const Vector2D = require('./Vector2')
 const {EPS, angleEPS} = require('../constants')
 const {parseOptionAs2DVector, parseOptionAsFloat, parseOptionAsInt, parseOptionAsBool} = require('../../api/optionParsers')
@@ -8411,11 +8690,7 @@ Path2D.prototype = {
 
 module.exports = Path2D
 
-<<<<<<< HEAD
-},{"../../api/optionParsers":18,"../CAG":22,"../constants":31,"./Side":40,"./Vector2":41,"./Vertex2":43}],37:[function(require,module,exports){
-=======
-},{"../../api/optionParsers":21,"../CAG":25,"../constants":34,"./Side":43,"./Vector2":44,"./Vertex2":46}],40:[function(require,module,exports){
->>>>>>> Hou-branch
+},{"../../api/optionParsers":28,"../CAG":32,"../constants":41,"./Side":50,"./Vector2":51,"./Vertex2":53}],47:[function(require,module,exports){
 const Vector3D = require('./Vector3')
 const Line3D = require('./Line3')
 const {EPS, getTag} = require('../constants')
@@ -8557,11 +8832,7 @@ Plane.prototype = {
 
 module.exports = Plane
 
-<<<<<<< HEAD
-},{"../constants":31,"./Line3":33,"./Vector3":42}],38:[function(require,module,exports){
-=======
-},{"../constants":34,"./Line3":36,"./Vector3":45}],41:[function(require,module,exports){
->>>>>>> Hou-branch
+},{"../constants":41,"./Line3":43,"./Vector3":52}],48:[function(require,module,exports){
 const CAG = require('../CAG')
 const {fromPoints} = require('../CAGFactories')
 
@@ -8583,11 +8854,7 @@ Polygon2D.prototype = CAG.prototype
 
 module.exports = Polygon2D
 
-<<<<<<< HEAD
-},{"../CAG":22,"../CAGFactories":23}],39:[function(require,module,exports){
-=======
-},{"../CAG":25,"../CAGFactories":26}],42:[function(require,module,exports){
->>>>>>> Hou-branch
+},{"../CAG":32,"../CAGFactories":33}],49:[function(require,module,exports){
 const Vector3D = require('./Vector3')
 const Vertex = require('./Vertex3')
 const Matrix4x4 = require('./Matrix4')
@@ -8963,11 +9230,7 @@ Polygon.defaultShared = new Polygon.Shared(null)
 
 module.exports = Polygon
 
-<<<<<<< HEAD
-},{"../../api/solidFromSlices":21,"../CAG":22,"../CAGFactories":23,"../CSGFactories":25,"../constants":31,"./Matrix4":34,"./Plane":37,"./Vector3":42,"./Vertex3":44}],40:[function(require,module,exports){
-=======
-},{"../../api/solidFromSlices":24,"../CAG":25,"../CAGFactories":26,"../CSGFactories":28,"../constants":34,"./Matrix4":37,"./Plane":40,"./Vector3":45,"./Vertex3":47}],43:[function(require,module,exports){
->>>>>>> Hou-branch
+},{"../../api/solidFromSlices":31,"../CAG":32,"../CAGFactories":33,"../CSGFactories":35,"../constants":41,"./Matrix4":44,"./Plane":47,"./Vector3":52,"./Vertex3":54}],50:[function(require,module,exports){
 const Vector2D = require('./Vector2')
 const Vertex = require('./Vertex2')
 const Vertex3 = require('./Vertex3')
@@ -9071,11 +9334,7 @@ Side.prototype = {
 
 module.exports = Side
 
-<<<<<<< HEAD
-},{"../constants":31,"./Polygon3":39,"./Vector2":41,"./Vertex2":43,"./Vertex3":44}],41:[function(require,module,exports){
-=======
-},{"../constants":34,"./Polygon3":42,"./Vector2":44,"./Vertex2":46,"./Vertex3":47}],44:[function(require,module,exports){
->>>>>>> Hou-branch
+},{"../constants":41,"./Polygon3":49,"./Vector2":51,"./Vertex2":53,"./Vertex3":54}],51:[function(require,module,exports){
 const {IsFloat} = require('../utils')
 
 /** Class Vector2D
@@ -9273,11 +9532,7 @@ Vector2D.prototype = {
 
 module.exports = Vector2D
 
-<<<<<<< HEAD
-},{"../utils":49,"./Vector3":42}],42:[function(require,module,exports){
-=======
-},{"../utils":52,"./Vector3":45}],45:[function(require,module,exports){
->>>>>>> Hou-branch
+},{"../utils":59,"./Vector3":52}],52:[function(require,module,exports){
 const {IsFloat} = require('../utils')
 const Vector2D = require('./Vector2')
 
@@ -9492,11 +9747,7 @@ Vector3D.prototype = {
 
 module.exports = Vector3D
 
-<<<<<<< HEAD
-},{"../utils":49,"./Vector2":41}],43:[function(require,module,exports){
-=======
-},{"../utils":52,"./Vector2":44}],46:[function(require,module,exports){
->>>>>>> Hou-branch
+},{"../utils":59,"./Vector2":51}],53:[function(require,module,exports){
 const Vector2D = require('./Vector2')
 const {getTag} = require('../constants')
 
@@ -9524,11 +9775,7 @@ Vertex.prototype = {
 
 module.exports = Vertex
 
-<<<<<<< HEAD
-},{"../constants":31,"./Vector2":41}],44:[function(require,module,exports){
-=======
-},{"../constants":34,"./Vector2":44}],47:[function(require,module,exports){
->>>>>>> Hou-branch
+},{"../constants":41,"./Vector2":51}],54:[function(require,module,exports){
 const Vector3D = require('./Vector3')
 const {getTag} = require('../constants')
 
@@ -9586,11 +9833,7 @@ Vertex.prototype = {
 
 module.exports = Vertex
 
-<<<<<<< HEAD
-},{"../constants":31,"./Vector3":42}],45:[function(require,module,exports){
-=======
-},{"../constants":34,"./Vector3":45}],48:[function(require,module,exports){
->>>>>>> Hou-branch
+},{"../constants":41,"./Vector3":52}],55:[function(require,module,exports){
 const {EPS} = require('../constants')
 const {solve2Linear} = require('../utils')
 
@@ -9616,11 +9859,7 @@ const linesIntersect = function (p0start, p0end, p1start, p1end) {
 
 module.exports = {linesIntersect}
 
-<<<<<<< HEAD
-},{"../constants":31,"../utils":49}],46:[function(require,module,exports){
-=======
-},{"../constants":34,"../utils":52}],49:[function(require,module,exports){
->>>>>>> Hou-branch
+},{"../constants":41,"../utils":59}],56:[function(require,module,exports){
 const {EPS} = require('../constants')
 const OrthoNormalBasis = require('./OrthoNormalBasis')
 const {interpolateBetween2DPointsForY, insertSorted, fnNumberSort} = require('../utils')
@@ -9964,11 +10203,7 @@ const reTesselateCoplanarPolygons = function (sourcepolygons, destpolygons) {
 
 module.exports = reTesselateCoplanarPolygons
 
-<<<<<<< HEAD
-},{"../constants":31,"../utils":49,"./Line2":32,"./OrthoNormalBasis":35,"./Polygon3":39,"./Vector2":41,"./Vertex3":44}],47:[function(require,module,exports){
-=======
-},{"../constants":34,"../utils":52,"./Line2":35,"./OrthoNormalBasis":38,"./Polygon3":42,"./Vector2":44,"./Vertex3":47}],50:[function(require,module,exports){
->>>>>>> Hou-branch
+},{"../constants":41,"../utils":59,"./Line2":42,"./OrthoNormalBasis":45,"./Polygon3":49,"./Vector2":51,"./Vertex3":54}],57:[function(require,module,exports){
 const Matrix4x4 = require('./math/Matrix4')
 const Vector3D = require('./math/Vector3')
 const Plane = require('./math/Plane')
@@ -10051,11 +10286,7 @@ module.exports = {
   addCenteringToPrototype
 }
 
-<<<<<<< HEAD
-},{"./math/Matrix4":34,"./math/Plane":37,"./math/Vector3":42}],48:[function(require,module,exports){
-=======
-},{"./math/Matrix4":37,"./math/Plane":40,"./math/Vector3":45}],51:[function(require,module,exports){
->>>>>>> Hou-branch
+},{"./math/Matrix4":44,"./math/Plane":47,"./math/Vector3":52}],58:[function(require,module,exports){
 const {_CSGDEBUG, EPS} = require('./constants')
 const Vertex = require('./math/Vertex3')
 const Polygon = require('./math/Polygon3')
@@ -10566,11 +10797,7 @@ Node.prototype = {
 
 module.exports = Tree
 
-<<<<<<< HEAD
-},{"./constants":31,"./math/Polygon3":39,"./math/Vertex3":44}],49:[function(require,module,exports){
-=======
-},{"./constants":34,"./math/Polygon3":42,"./math/Vertex3":47}],52:[function(require,module,exports){
->>>>>>> Hou-branch
+},{"./constants":41,"./math/Polygon3":49,"./math/Vertex3":54}],59:[function(require,module,exports){
 function fnNumberSort (a, b) {
   return a - b
 }
@@ -10674,11 +10901,7 @@ module.exports = {
   isCSG
 }
 
-<<<<<<< HEAD
-},{}],50:[function(require,module,exports){
-=======
-},{}],53:[function(require,module,exports){
->>>>>>> Hou-branch
+},{}],60:[function(require,module,exports){
 const Vector2D = require('../math/Vector2')
 
 // see http://local.wasp.uwa.edu.au/~pbourke/geometry/polyarea/ :
@@ -10712,11 +10935,7 @@ const getBounds = function (cag) {
 
 module.exports = {area, getBounds}
 
-<<<<<<< HEAD
-},{"../math/Vector2":41}],51:[function(require,module,exports){
-=======
-},{"../math/Vector2":44}],54:[function(require,module,exports){
->>>>>>> Hou-branch
+},{"../math/Vector2":51}],61:[function(require,module,exports){
 const {areaEPS} = require('../constants')
 const {linesIntersect} = require('../math/lineUtils')
 
@@ -10818,11 +11037,7 @@ module.exports = {
   contains
 }
 
-<<<<<<< HEAD
-},{"../constants":31,"../math/lineUtils":45}],52:[function(require,module,exports){
-=======
-},{"../constants":34,"../math/lineUtils":48}],55:[function(require,module,exports){
->>>>>>> Hou-branch
+},{"../constants":41,"../math/lineUtils":55}],62:[function(require,module,exports){
 const {EPS} = require('../constants')
 const FuzzyCSGFactory = require('../FuzzyFactory3d')
 const FuzzyCAGFactory = require('../FuzzyFactory2d')
@@ -10908,11 +11123,7 @@ const CAGFromCAGFuzzyFactory = function (factory, sourcecag) {
 
 module.exports = canonicalize
 
-<<<<<<< HEAD
-},{"../CAGFactories":23,"../CSGFactories":25,"../FuzzyFactory2d":27,"../FuzzyFactory3d":28,"../constants":31}],53:[function(require,module,exports){
-=======
-},{"../CAGFactories":26,"../CSGFactories":28,"../FuzzyFactory2d":30,"../FuzzyFactory3d":31,"../constants":34}],56:[function(require,module,exports){
->>>>>>> Hou-branch
+},{"../CAGFactories":33,"../CSGFactories":35,"../FuzzyFactory2d":37,"../FuzzyFactory3d":38,"../constants":41}],63:[function(require,module,exports){
 const Vector3D = require('../math/Vector3')
 
 /**
@@ -10962,11 +11173,7 @@ const area = function (csg) {
 
 module.exports = {bounds, volume, area}
 
-<<<<<<< HEAD
-},{"../math/Vector3":42}],54:[function(require,module,exports){
-=======
-},{"../math/Vector3":45}],57:[function(require,module,exports){
->>>>>>> Hou-branch
+},{"../math/Vector3":52}],64:[function(require,module,exports){
 const CAG = require('../CAG') // FIXME: circular dependency !
 const {EPS} = require('../constants')
 
@@ -10991,11 +11198,7 @@ const projectToOrthoNormalBasis = function (csg, orthobasis) {
 
 module.exports = {projectToOrthoNormalBasis}
 
-<<<<<<< HEAD
-},{"../CAG":22,"../constants":31}],55:[function(require,module,exports){
-=======
-},{"../CAG":25,"../constants":34}],58:[function(require,module,exports){
->>>>>>> Hou-branch
+},{"../CAG":32,"../constants":41}],65:[function(require,module,exports){
 const {EPS} = require('../constants')
 const Polygon = require('../math/Polygon3')
 const Plane = require('../math/Plane')
@@ -11313,11 +11516,7 @@ const fixTJunctions = function (fromPolygons, csg) {
 
 module.exports = fixTJunctions
 
-<<<<<<< HEAD
-},{"../constants":31,"../math/Plane":37,"../math/Polygon3":39}],56:[function(require,module,exports){
-=======
-},{"../constants":34,"../math/Plane":40,"../math/Polygon3":42}],59:[function(require,module,exports){
->>>>>>> Hou-branch
+},{"../constants":41,"../math/Plane":47,"../math/Polygon3":49}],66:[function(require,module,exports){
 const FuzzyCSGFactory = require('../FuzzyFactory3d')
 const reTesselateCoplanarPolygons = require('../math/reTesselateCoplanarPolygons')
 const {fromPolygons} = require('../CSGFactories')
@@ -11366,11 +11565,7 @@ const reTesselate = function (csg) {
 
 module.exports = reTesselate
 
-<<<<<<< HEAD
-},{"../CSGFactories":25,"../FuzzyFactory3d":28,"../math/reTesselateCoplanarPolygons":46}],57:[function(require,module,exports){
-=======
-},{"../CSGFactories":28,"../FuzzyFactory3d":31,"../math/reTesselateCoplanarPolygons":49}],60:[function(require,module,exports){
->>>>>>> Hou-branch
+},{"../CSGFactories":35,"../FuzzyFactory3d":38,"../math/reTesselateCoplanarPolygons":56}],67:[function(require,module,exports){
 /* converts input data to array if it is not already an array */
 function toArray (data) {
   if (!data) return []
@@ -11380,11 +11575,7 @@ function toArray (data) {
 
 module.exports = toArray
 
-<<<<<<< HEAD
-},{}],58:[function(require,module,exports){
-=======
-},{}],61:[function(require,module,exports){
->>>>>>> Hou-branch
+},{}],68:[function(require,module,exports){
 /*
 ## License
 
@@ -11575,11 +11766,7 @@ addCenteringToPrototype(CAG.prototype, ['x', 'y'])
 
 module.exports = {CSG, CAG}
 
-<<<<<<< HEAD
-},{"./src/CAG":59,"./src/CAGFactories":60,"./src/CSG":61,"./src/CSGFactories":62,"./src/Properties":66,"./src/connectors":67,"./src/constants":68,"./src/debugHelpers":69,"./src/math/Line2":70,"./src/math/Line3":71,"./src/math/Matrix4":72,"./src/math/OrthoNormalBasis":73,"./src/math/Path2":74,"./src/math/Plane":75,"./src/math/Polygon2":76,"./src/math/Polygon3":77,"./src/math/Side":78,"./src/math/Vector2":79,"./src/math/Vector3":80,"./src/math/Vertex2":81,"./src/math/Vertex3":82,"./src/mutators":85,"./src/primitives2d":87,"./src/primitives3d":88}],59:[function(require,module,exports){
-=======
-},{"./src/CAG":62,"./src/CAGFactories":63,"./src/CSG":64,"./src/CSGFactories":65,"./src/Properties":69,"./src/connectors":70,"./src/constants":71,"./src/debugHelpers":72,"./src/math/Line2":73,"./src/math/Line3":74,"./src/math/Matrix4":75,"./src/math/OrthoNormalBasis":76,"./src/math/Path2":77,"./src/math/Plane":78,"./src/math/Polygon2":79,"./src/math/Polygon3":80,"./src/math/Side":81,"./src/math/Vector2":82,"./src/math/Vector3":83,"./src/math/Vertex2":84,"./src/math/Vertex3":85,"./src/mutators":88,"./src/primitives2d":90,"./src/primitives3d":91}],62:[function(require,module,exports){
->>>>>>> Hou-branch
+},{"./src/CAG":69,"./src/CAGFactories":70,"./src/CSG":71,"./src/CSGFactories":72,"./src/Properties":76,"./src/connectors":77,"./src/constants":78,"./src/debugHelpers":79,"./src/math/Line2":80,"./src/math/Line3":81,"./src/math/Matrix4":82,"./src/math/OrthoNormalBasis":83,"./src/math/Path2":84,"./src/math/Plane":85,"./src/math/Polygon2":86,"./src/math/Polygon3":87,"./src/math/Side":88,"./src/math/Vector2":89,"./src/math/Vector3":90,"./src/math/Vertex2":91,"./src/math/Vertex3":92,"./src/mutators":95,"./src/primitives2d":97,"./src/primitives3d":98}],69:[function(require,module,exports){
 const {EPS, angleEPS, areaEPS, defaultResolution3D} = require('./constants')
 const {Connector} = require('./connectors')
 const OrthoNormalBasis = require('./math/OrthoNormalBasis')
@@ -12397,11 +12584,7 @@ CAG.prototype = {
 
 module.exports = CAG
 
-<<<<<<< HEAD
-},{"./CSG":61,"./FuzzyFactory2d":64,"./connectors":67,"./constants":68,"./math/OrthoNormalBasis":73,"./math/Path2":74,"./math/Polygon3":77,"./math/Side":78,"./math/Vector2":79,"./math/Vector3":80,"./math/Vertex2":81,"./math/Vertex3":82,"./math/lineUtils":83,"./optionParsers":86}],60:[function(require,module,exports){
-=======
-},{"./CSG":64,"./FuzzyFactory2d":67,"./connectors":70,"./constants":71,"./math/OrthoNormalBasis":76,"./math/Path2":77,"./math/Polygon3":80,"./math/Side":81,"./math/Vector2":82,"./math/Vector3":83,"./math/Vertex2":84,"./math/Vertex3":85,"./math/lineUtils":86,"./optionParsers":89}],63:[function(require,module,exports){
->>>>>>> Hou-branch
+},{"./CSG":71,"./FuzzyFactory2d":74,"./connectors":77,"./constants":78,"./math/OrthoNormalBasis":83,"./math/Path2":84,"./math/Polygon3":87,"./math/Side":88,"./math/Vector2":89,"./math/Vector3":90,"./math/Vertex2":91,"./math/Vertex3":92,"./math/lineUtils":93,"./optionParsers":96}],70:[function(require,module,exports){
 const CAG = require('./CAG')
 const Side = require('./math/Side')
 const Vector2D = require('./math/Vector2')
@@ -12461,11 +12644,7 @@ module.exports = {
   //fromFakeCSG
 }
 
-<<<<<<< HEAD
-},{"./CAG":59,"./math/Path2":74,"./math/Side":78,"./math/Vector2":79,"./math/Vertex2":81}],61:[function(require,module,exports){
-=======
-},{"./CAG":62,"./math/Path2":77,"./math/Side":81,"./math/Vector2":82,"./math/Vertex2":84}],64:[function(require,module,exports){
->>>>>>> Hou-branch
+},{"./CAG":69,"./math/Path2":84,"./math/Side":88,"./math/Vector2":89,"./math/Vertex2":91}],71:[function(require,module,exports){
 const {fnNumberSort} = require('./utils')
 const FuzzyCSGFactory = require('./FuzzyFactory3d')
 const Tree = require('./trees')
@@ -13436,11 +13615,7 @@ const CSGFromCSGFuzzyFactory = function (factory, sourcecsg) {
 
 module.exports = CSG
 
-<<<<<<< HEAD
-},{"./CAG":59,"./FuzzyFactory3d":65,"./Properties":66,"./connectors":67,"./constants":68,"./math/Matrix4":72,"./math/OrthoNormalBasis":73,"./math/Plane":75,"./math/Polygon3":77,"./math/Vector2":79,"./math/Vector3":80,"./math/Vertex3":82,"./math/polygonUtils":84,"./trees":89,"./utils":90,"./utils/fixTJunctions":91}],62:[function(require,module,exports){
-=======
-},{"./CAG":62,"./FuzzyFactory3d":68,"./Properties":69,"./connectors":70,"./constants":71,"./math/Matrix4":75,"./math/OrthoNormalBasis":76,"./math/Plane":78,"./math/Polygon3":80,"./math/Vector2":82,"./math/Vector3":83,"./math/Vertex3":85,"./math/polygonUtils":87,"./trees":92,"./utils":93,"./utils/fixTJunctions":94}],65:[function(require,module,exports){
->>>>>>> Hou-branch
+},{"./CAG":69,"./FuzzyFactory3d":75,"./Properties":76,"./connectors":77,"./constants":78,"./math/Matrix4":82,"./math/OrthoNormalBasis":83,"./math/Plane":85,"./math/Polygon3":87,"./math/Vector2":89,"./math/Vector3":90,"./math/Vertex3":92,"./math/polygonUtils":94,"./trees":99,"./utils":100,"./utils/fixTJunctions":101}],72:[function(require,module,exports){
 const Vector3D = require('./math/Vector3')
 const Vertex = require('./math/Vertex3')
 const Plane = require('./math/Plane')
@@ -13553,27 +13728,15 @@ module.exports = {
   fromCompactBinary
 }
 
-<<<<<<< HEAD
-},{"./CSG":61,"./math/Plane":75,"./math/Polygon2":76,"./math/Polygon3":77,"./math/Vector3":80,"./math/Vertex3":82}],63:[function(require,module,exports){
-arguments[4][26][0].apply(exports,arguments)
-},{"dup":26}],64:[function(require,module,exports){
-arguments[4][27][0].apply(exports,arguments)
-},{"./FuzzyFactory":63,"./constants":68,"./math/Side":78,"dup":27}],65:[function(require,module,exports){
-arguments[4][28][0].apply(exports,arguments)
-},{"./FuzzyFactory":63,"./constants":68,"./math/Polygon3":77,"dup":28}],66:[function(require,module,exports){
-arguments[4][29][0].apply(exports,arguments)
-},{"dup":29}],67:[function(require,module,exports){
-=======
-},{"./CSG":64,"./math/Plane":78,"./math/Polygon2":79,"./math/Polygon3":80,"./math/Vector3":83,"./math/Vertex3":85}],66:[function(require,module,exports){
-arguments[4][29][0].apply(exports,arguments)
-},{"dup":29}],67:[function(require,module,exports){
-arguments[4][30][0].apply(exports,arguments)
-},{"./FuzzyFactory":66,"./constants":71,"./math/Side":81,"dup":30}],68:[function(require,module,exports){
-arguments[4][31][0].apply(exports,arguments)
-},{"./FuzzyFactory":66,"./constants":71,"./math/Polygon3":80,"dup":31}],69:[function(require,module,exports){
-arguments[4][32][0].apply(exports,arguments)
-},{"dup":32}],70:[function(require,module,exports){
->>>>>>> Hou-branch
+},{"./CSG":71,"./math/Plane":85,"./math/Polygon2":86,"./math/Polygon3":87,"./math/Vector3":90,"./math/Vertex3":92}],73:[function(require,module,exports){
+arguments[4][36][0].apply(exports,arguments)
+},{"dup":36}],74:[function(require,module,exports){
+arguments[4][37][0].apply(exports,arguments)
+},{"./FuzzyFactory":73,"./constants":78,"./math/Side":88,"dup":37}],75:[function(require,module,exports){
+arguments[4][38][0].apply(exports,arguments)
+},{"./FuzzyFactory":73,"./constants":78,"./math/Polygon3":87,"dup":38}],76:[function(require,module,exports){
+arguments[4][39][0].apply(exports,arguments)
+},{"dup":39}],77:[function(require,module,exports){
 const Vector3D = require('./math/Vector3')
 const Line3D = require('./math/Line3')
 const Matrix4x4 = require('./math/Matrix4')
@@ -13795,15 +13958,9 @@ ConnectorList.prototype = {
 
 module.exports = {Connector, ConnectorList}
 
-<<<<<<< HEAD
-},{"./CSG":61,"./math/Line3":71,"./math/Matrix4":72,"./math/OrthoNormalBasis":73,"./math/Plane":75,"./math/Vector3":80}],68:[function(require,module,exports){
-arguments[4][31][0].apply(exports,arguments)
-},{"dup":31}],69:[function(require,module,exports){
-=======
-},{"./CSG":64,"./math/Line3":74,"./math/Matrix4":75,"./math/OrthoNormalBasis":76,"./math/Plane":78,"./math/Vector3":83}],71:[function(require,module,exports){
-arguments[4][34][0].apply(exports,arguments)
-},{"dup":34}],72:[function(require,module,exports){
->>>>>>> Hou-branch
+},{"./CSG":71,"./math/Line3":81,"./math/Matrix4":82,"./math/OrthoNormalBasis":83,"./math/Plane":85,"./math/Vector3":90}],78:[function(require,module,exports){
+arguments[4][41][0].apply(exports,arguments)
+},{"dup":41}],79:[function(require,module,exports){
 const CSG = require('./CSG')
 const {cube} = require('./primitives3d')
 
@@ -13838,23 +13995,13 @@ const toPointCloud = function (csg, cuberadius) {
 
 module.exports = {toPointCloud}
 
-<<<<<<< HEAD
-},{"./CSG":61,"./primitives3d":88}],70:[function(require,module,exports){
-arguments[4][32][0].apply(exports,arguments)
-},{"../utils":90,"./Vector2":79,"dup":32}],71:[function(require,module,exports){
-arguments[4][33][0].apply(exports,arguments)
-},{"../constants":68,"../utils":90,"./Vector3":80,"dup":33}],72:[function(require,module,exports){
-arguments[4][34][0].apply(exports,arguments)
-},{"./OrthoNormalBasis":73,"./Plane":75,"./Vector2":79,"./Vector3":80,"dup":34}],73:[function(require,module,exports){
-=======
-},{"./CSG":64,"./primitives3d":91}],73:[function(require,module,exports){
-arguments[4][35][0].apply(exports,arguments)
-},{"../utils":93,"./Vector2":82,"dup":35}],74:[function(require,module,exports){
-arguments[4][36][0].apply(exports,arguments)
-},{"../constants":71,"../utils":93,"./Vector3":83,"dup":36}],75:[function(require,module,exports){
-arguments[4][37][0].apply(exports,arguments)
-},{"./OrthoNormalBasis":76,"./Plane":78,"./Vector2":82,"./Vector3":83,"dup":37}],76:[function(require,module,exports){
->>>>>>> Hou-branch
+},{"./CSG":71,"./primitives3d":98}],80:[function(require,module,exports){
+arguments[4][42][0].apply(exports,arguments)
+},{"../utils":100,"./Vector2":89,"dup":42}],81:[function(require,module,exports){
+arguments[4][43][0].apply(exports,arguments)
+},{"../constants":78,"../utils":100,"./Vector3":90,"dup":43}],82:[function(require,module,exports){
+arguments[4][44][0].apply(exports,arguments)
+},{"./OrthoNormalBasis":83,"./Plane":85,"./Vector2":89,"./Vector3":90,"dup":44}],83:[function(require,module,exports){
 const Vector2D = require('./Vector2')
 const Vector3D = require('./Vector3')
 const Line2D = require('./Line2')
@@ -14058,11 +14205,7 @@ OrthoNormalBasis.prototype = {
 
 module.exports = OrthoNormalBasis
 
-<<<<<<< HEAD
-},{"./Line2":70,"./Line3":71,"./Matrix4":72,"./Plane":75,"./Vector2":79,"./Vector3":80}],74:[function(require,module,exports){
-=======
-},{"./Line2":73,"./Line3":74,"./Matrix4":75,"./Plane":78,"./Vector2":82,"./Vector3":83}],77:[function(require,module,exports){
->>>>>>> Hou-branch
+},{"./Line2":80,"./Line3":81,"./Matrix4":82,"./Plane":85,"./Vector2":89,"./Vector3":90}],84:[function(require,module,exports){
 const Vector2D = require('./Vector2')
 const {EPS, angleEPS} = require('../constants')
 const {parseOptionAs2DVector, parseOptionAsFloat, parseOptionAsInt, parseOptionAsBool} = require('../optionParsers')
@@ -14536,15 +14679,9 @@ Path2D.prototype = {
 
 module.exports = Path2D
 
-<<<<<<< HEAD
-},{"../CAG":59,"../constants":68,"../optionParsers":86,"./Side":78,"./Vector2":79,"./Vertex2":81}],75:[function(require,module,exports){
-arguments[4][37][0].apply(exports,arguments)
-},{"../constants":68,"./Line3":71,"./Vector3":80,"dup":37}],76:[function(require,module,exports){
-=======
-},{"../CAG":62,"../constants":71,"../optionParsers":89,"./Side":81,"./Vector2":82,"./Vertex2":84}],78:[function(require,module,exports){
-arguments[4][40][0].apply(exports,arguments)
-},{"../constants":71,"./Line3":74,"./Vector3":83,"dup":40}],79:[function(require,module,exports){
->>>>>>> Hou-branch
+},{"../CAG":69,"../constants":78,"../optionParsers":96,"./Side":88,"./Vector2":89,"./Vertex2":91}],85:[function(require,module,exports){
+arguments[4][47][0].apply(exports,arguments)
+},{"../constants":78,"./Line3":81,"./Vector3":90,"dup":47}],86:[function(require,module,exports){
 const CAG = require('../CAG')
 
 /*
@@ -14565,11 +14702,7 @@ Polygon2D.prototype = CAG.prototype
 
 module.exports = Polygon2D
 
-<<<<<<< HEAD
-},{"../CAG":59}],77:[function(require,module,exports){
-=======
-},{"../CAG":62}],80:[function(require,module,exports){
->>>>>>> Hou-branch
+},{"../CAG":69}],87:[function(require,module,exports){
 const Vector3D = require('./Vector3')
 const Vertex = require('./Vertex3')
 const Matrix4x4 = require('./Matrix4')
@@ -15146,11 +15279,7 @@ Polygon.defaultShared = new Polygon.Shared(null)
 
 module.exports = Polygon
 
-<<<<<<< HEAD
-},{"../CAG":59,"../CAGFactories":60,"../CSG":61,"../constants":68,"../utils":90,"./Matrix4":72,"./Plane":75,"./Vector3":80,"./Vertex3":82}],78:[function(require,module,exports){
-=======
-},{"../CAG":62,"../CAGFactories":63,"../CSG":64,"../constants":71,"../utils":93,"./Matrix4":75,"./Plane":78,"./Vector3":83,"./Vertex3":85}],81:[function(require,module,exports){
->>>>>>> Hou-branch
+},{"../CAG":69,"../CAGFactories":70,"../CSG":71,"../constants":78,"../utils":100,"./Matrix4":82,"./Plane":85,"./Vector3":90,"./Vertex3":92}],88:[function(require,module,exports){
 const Vector2D = require('./Vector2')
 const Vertex = require('./Vertex2')
 const Vertex3 = require('./Vertex3')
@@ -15254,11 +15383,7 @@ Side.prototype = {
 
 module.exports = Side
 
-<<<<<<< HEAD
-},{"../constants":68,"./Polygon3":77,"./Vector2":79,"./Vertex2":81,"./Vertex3":82}],79:[function(require,module,exports){
-=======
-},{"../constants":71,"./Polygon3":80,"./Vector2":82,"./Vertex2":84,"./Vertex3":85}],82:[function(require,module,exports){
->>>>>>> Hou-branch
+},{"../constants":78,"./Polygon3":87,"./Vector2":89,"./Vertex2":91,"./Vertex3":92}],89:[function(require,module,exports){
 const {IsFloat} = require('../utils')
 
 /** Class Vector2D
@@ -15456,23 +15581,13 @@ Vector2D.prototype = {
 
 module.exports = Vector2D
 
-<<<<<<< HEAD
-},{"../utils":90,"./Vector3":80}],80:[function(require,module,exports){
-arguments[4][42][0].apply(exports,arguments)
-},{"../utils":90,"./Vector2":79,"dup":42}],81:[function(require,module,exports){
-arguments[4][43][0].apply(exports,arguments)
-},{"../constants":68,"./Vector2":79,"dup":43}],82:[function(require,module,exports){
-arguments[4][44][0].apply(exports,arguments)
-},{"../constants":68,"./Vector3":80,"dup":44}],83:[function(require,module,exports){
-=======
-},{"../utils":93,"./Vector3":83}],83:[function(require,module,exports){
-arguments[4][45][0].apply(exports,arguments)
-},{"../utils":93,"./Vector2":82,"dup":45}],84:[function(require,module,exports){
-arguments[4][46][0].apply(exports,arguments)
-},{"../constants":71,"./Vector2":82,"dup":46}],85:[function(require,module,exports){
-arguments[4][47][0].apply(exports,arguments)
-},{"../constants":71,"./Vector3":83,"dup":47}],86:[function(require,module,exports){
->>>>>>> Hou-branch
+},{"../utils":100,"./Vector3":90}],90:[function(require,module,exports){
+arguments[4][52][0].apply(exports,arguments)
+},{"../utils":100,"./Vector2":89,"dup":52}],91:[function(require,module,exports){
+arguments[4][53][0].apply(exports,arguments)
+},{"../constants":78,"./Vector2":89,"dup":53}],92:[function(require,module,exports){
+arguments[4][54][0].apply(exports,arguments)
+},{"../constants":78,"./Vector3":90,"dup":54}],93:[function(require,module,exports){
 const {EPS} = require('../constants')
 const {solve2Linear} = require('../utils')
 
@@ -15499,11 +15614,7 @@ const linesIntersect = function (p0start, p0end, p1start, p1end) {
 
 module.exports = {linesIntersect}
 
-<<<<<<< HEAD
-},{"../constants":68,"../utils":90}],84:[function(require,module,exports){
-=======
-},{"../constants":71,"../utils":93}],87:[function(require,module,exports){
->>>>>>> Hou-branch
+},{"../constants":78,"../utils":100}],94:[function(require,module,exports){
 const {EPS} = require('../constants')
 const OrthoNormalBasis = require('./OrthoNormalBasis')
 const {interpolateBetween2DPointsForY, insertSorted, fnNumberSort} = require('../utils')
@@ -15847,15 +15958,9 @@ const reTesselateCoplanarPolygons = function (sourcepolygons, destpolygons) {
 
 module.exports = {reTesselateCoplanarPolygons}
 
-<<<<<<< HEAD
-},{"../constants":68,"../utils":90,"./Line2":70,"./OrthoNormalBasis":73,"./Polygon3":77,"./Vector2":79,"./Vertex3":82}],85:[function(require,module,exports){
-arguments[4][47][0].apply(exports,arguments)
-},{"./math/Matrix4":72,"./math/Plane":75,"./math/Vector3":80,"dup":47}],86:[function(require,module,exports){
-=======
-},{"../constants":71,"../utils":93,"./Line2":73,"./OrthoNormalBasis":76,"./Polygon3":80,"./Vector2":82,"./Vertex3":85}],88:[function(require,module,exports){
-arguments[4][50][0].apply(exports,arguments)
-},{"./math/Matrix4":75,"./math/Plane":78,"./math/Vector3":83,"dup":50}],89:[function(require,module,exports){
->>>>>>> Hou-branch
+},{"../constants":78,"../utils":100,"./Line2":80,"./OrthoNormalBasis":83,"./Polygon3":87,"./Vector2":89,"./Vertex3":92}],95:[function(require,module,exports){
+arguments[4][57][0].apply(exports,arguments)
+},{"./math/Matrix4":82,"./math/Plane":85,"./math/Vector3":90,"dup":57}],96:[function(require,module,exports){
 const Vector3D = require('./math/Vector3')
 const Vector2D = require('./math/Vector2')
 
@@ -15933,11 +16038,7 @@ module.exports = {
   parseOptionAs3DVectorList
 }
 
-<<<<<<< HEAD
-},{"./math/Vector2":79,"./math/Vector3":80}],87:[function(require,module,exports){
-=======
-},{"./math/Vector2":82,"./math/Vector3":83}],90:[function(require,module,exports){
->>>>>>> Hou-branch
+},{"./math/Vector2":89,"./math/Vector3":90}],97:[function(require,module,exports){
 const CAG = require('./CAG')
 const {parseOptionAs2DVector, parseOptionAsFloat, parseOptionAsInt} = require('./optionParsers')
 const {defaultResolution2D} = require('./constants')
@@ -16123,11 +16224,7 @@ module.exports = {
   fromCompactBinary
 }
 
-<<<<<<< HEAD
-},{"./CAG":59,"./CAGFactories":60,"./constants":68,"./math/Path2":74,"./math/Vector2":79,"./optionParsers":86}],88:[function(require,module,exports){
-=======
-},{"./CAG":62,"./CAGFactories":63,"./constants":71,"./math/Path2":77,"./math/Vector2":82,"./optionParsers":89}],91:[function(require,module,exports){
->>>>>>> Hou-branch
+},{"./CAG":69,"./CAGFactories":70,"./constants":78,"./math/Path2":84,"./math/Vector2":89,"./optionParsers":96}],98:[function(require,module,exports){
 const CSG = require('./CSG')
 const {parseOption, parseOptionAs3DVector, parseOptionAs2DVector, parseOptionAs3DVectorList, parseOptionAsFloat, parseOptionAsInt} = require('./optionParsers')
 const {defaultResolution3D, defaultResolution2D, EPS} = require('./constants')
@@ -16677,11 +16774,7 @@ module.exports = {
   polyhedron
 }
 
-<<<<<<< HEAD
-},{"./CSG":61,"./Properties":66,"./connectors":67,"./constants":68,"./math/Polygon3":77,"./math/Vector3":80,"./math/Vertex3":82,"./optionParsers":86}],89:[function(require,module,exports){
-=======
-},{"./CSG":64,"./Properties":69,"./connectors":70,"./constants":71,"./math/Polygon3":80,"./math/Vector3":83,"./math/Vertex3":85,"./optionParsers":89}],92:[function(require,module,exports){
->>>>>>> Hou-branch
+},{"./CSG":71,"./Properties":76,"./connectors":77,"./constants":78,"./math/Polygon3":87,"./math/Vector3":90,"./math/Vertex3":92,"./optionParsers":96}],99:[function(require,module,exports){
 const {_CSGDEBUG, EPS} = require('./constants')
 const Vertex = require('./math/Vertex3')
 const Polygon = require('./math/Polygon3')
@@ -17193,11 +17286,7 @@ Node.prototype = {
 
 module.exports = Tree
 
-<<<<<<< HEAD
-},{"./constants":68,"./math/Polygon3":77,"./math/Vertex3":82}],90:[function(require,module,exports){
-=======
-},{"./constants":71,"./math/Polygon3":80,"./math/Vertex3":85}],93:[function(require,module,exports){
->>>>>>> Hou-branch
+},{"./constants":78,"./math/Polygon3":87,"./math/Vertex3":92}],100:[function(require,module,exports){
 function fnNumberSort (a, b) {
   return a - b
 }
@@ -17270,15 +17359,9 @@ module.exports = {
   interpolateBetween2DPointsForY
 }
 
-<<<<<<< HEAD
-},{}],91:[function(require,module,exports){
-arguments[4][55][0].apply(exports,arguments)
-},{"../constants":68,"../math/Plane":75,"../math/Polygon3":77,"dup":55}],92:[function(require,module,exports){
-=======
-},{}],94:[function(require,module,exports){
-arguments[4][58][0].apply(exports,arguments)
-},{"../constants":71,"../math/Plane":78,"../math/Polygon3":80,"dup":58}],95:[function(require,module,exports){
->>>>>>> Hou-branch
+},{}],101:[function(require,module,exports){
+arguments[4][65][0].apply(exports,arguments)
+},{"../constants":78,"../math/Plane":85,"../math/Polygon3":87,"dup":65}],102:[function(require,module,exports){
 // color table from http://www.w3.org/TR/css3-color/
 const cssColors = {
 // basic color keywords
@@ -17725,11 +17808,7 @@ module.exports = {
   rgb2html
 }
 
-<<<<<<< HEAD
-},{}],93:[function(require,module,exports){
-=======
-},{}],96:[function(require,module,exports){
->>>>>>> Hou-branch
+},{}],103:[function(require,module,exports){
 function echo () {
   console.warn('echo() will be deprecated in the near future: please use console.log/warn/error instead')
   var s = '', a = arguments
@@ -17746,11 +17825,7 @@ module.exports = {
   echo
 }
 
-<<<<<<< HEAD
-},{}],94:[function(require,module,exports){
-=======
-},{}],97:[function(require,module,exports){
->>>>>>> Hou-branch
+},{}],104:[function(require,module,exports){
 const { CSG } = require('@jscad/csg')
 
 // FIXME: this is to have more readable/less extremely verbose code below
@@ -17812,11 +17887,7 @@ const cagToPointsArray = input => {
 const degToRad = deg => (Math.PI / 180) * deg
 
 module.exports = {cagToPointsArray, clamp, rightMultiply1x3VectorToArray, polygonFromPoints}
-<<<<<<< HEAD
-},{"@jscad/csg":58}],95:[function(require,module,exports){
-=======
-},{"@jscad/csg":61}],98:[function(require,module,exports){
->>>>>>> Hou-branch
+},{"@jscad/csg":68}],105:[function(require,module,exports){
 
 const primitives3d = require('./primitives3d')
 const primitives2d = require('./primitives2d')
@@ -17852,11 +17923,7 @@ const exportedApi = {
 
 module.exports = exportedApi
 
-<<<<<<< HEAD
-},{"./color":92,"./debug":93,"./log":96,"./maths":97,"./ops-booleans":98,"./ops-extrusions":99,"./ops-transformations":100,"./primitives2d":101,"./primitives3d":102,"./text":103,"@jscad/csg":58}],96:[function(require,module,exports){
-=======
-},{"./color":95,"./debug":96,"./log":99,"./maths":100,"./ops-booleans":101,"./ops-extrusions":102,"./ops-transformations":103,"./primitives2d":104,"./primitives3d":105,"./text":106,"@jscad/csg":61}],99:[function(require,module,exports){
->>>>>>> Hou-branch
+},{"./color":102,"./debug":103,"./log":106,"./maths":107,"./ops-booleans":108,"./ops-extrusions":109,"./ops-transformations":110,"./primitives2d":111,"./primitives3d":112,"./text":113,"@jscad/csg":68}],106:[function(require,module,exports){
 function log (txt) {
   var timeInMs = Date.now()
   var prevtime// OpenJsCad.log.prevLogTime
@@ -17883,11 +17950,7 @@ module.exports = {
   status
 }
 
-<<<<<<< HEAD
-},{}],97:[function(require,module,exports){
-=======
-},{}],100:[function(require,module,exports){
->>>>>>> Hou-branch
+},{}],107:[function(require,module,exports){
 // -- Math functions (360 deg based vs 2pi)
 function sin (a) {
   return Math.sin(a / 360 * Math.PI * 2)
@@ -17998,11 +18061,7 @@ module.exports = {
   round
 }
 
-<<<<<<< HEAD
-},{}],98:[function(require,module,exports){
-=======
-},{}],101:[function(require,module,exports){
->>>>>>> Hou-branch
+},{}],108:[function(require,module,exports){
 const { CAG } = require('@jscad/csg')
 
 // -- 3D boolean operations
@@ -18106,11 +18165,7 @@ module.exports = {
   intersection
 }
 
-<<<<<<< HEAD
-},{"@jscad/csg":58}],99:[function(require,module,exports){
-=======
-},{"@jscad/csg":61}],102:[function(require,module,exports){
->>>>>>> Hou-branch
+},{"@jscad/csg":68}],109:[function(require,module,exports){
 const { CSG, CAG } = require('@jscad/csg')
 const {cagToPointsArray, clamp, rightMultiply1x3VectorToArray, polygonFromPoints} = require('./helpers')
 // -- 2D to 3D primitives
@@ -18326,11 +18381,7 @@ module.exports = {
   rectangular_extrude
 }
 
-<<<<<<< HEAD
-},{"./helpers":94,"@jscad/csg":58}],100:[function(require,module,exports){
-=======
-},{"./helpers":97,"@jscad/csg":61}],103:[function(require,module,exports){
->>>>>>> Hou-branch
+},{"./helpers":104,"@jscad/csg":68}],110:[function(require,module,exports){
 const { CSG, CAG } = require('@jscad/csg')
 const { union } = require('./ops-booleans')
 // -- 3D transformations (OpenSCAD like notion)
@@ -18743,11 +18794,7 @@ module.exports = {
   chain_hull
 }
 
-<<<<<<< HEAD
-},{"./ops-booleans":98,"@jscad/csg":58}],101:[function(require,module,exports){
-=======
-},{"./ops-booleans":101,"@jscad/csg":61}],104:[function(require,module,exports){
->>>>>>> Hou-branch
+},{"./ops-booleans":108,"@jscad/csg":68}],111:[function(require,module,exports){
 const { CAG } = require('@jscad/csg')
 
 // -- 2D primitives (OpenSCAD like notion)
@@ -18864,11 +18911,7 @@ module.exports = {
   triangle
 }
 
-<<<<<<< HEAD
-},{"@jscad/csg":58}],102:[function(require,module,exports){
-=======
-},{"@jscad/csg":61}],105:[function(require,module,exports){
->>>>>>> Hou-branch
+},{"@jscad/csg":68}],112:[function(require,module,exports){
 // -- 3D primitives (OpenSCAD like notion)
 const { CSG } = require('@jscad/csg')
 const { circle } = require('./primitives2d')
@@ -19259,11 +19302,7 @@ module.exports = {
   polyhedron
 }
 
-<<<<<<< HEAD
-},{"./ops-extrusions":99,"./ops-transformations":100,"./primitives2d":101,"@jscad/csg":58}],103:[function(require,module,exports){
-=======
-},{"./ops-extrusions":102,"./ops-transformations":103,"./primitives2d":104,"@jscad/csg":61}],106:[function(require,module,exports){
->>>>>>> Hou-branch
+},{"./ops-extrusions":109,"./ops-transformations":110,"./primitives2d":111,"@jscad/csg":68}],113:[function(require,module,exports){
 
 /** Construct a with, segments tupple from a character
  * @param {Float} x - x offset
@@ -19902,8 +19941,7 @@ module.exports = {
   vector_text
 }
 
-<<<<<<< HEAD
-},{}],104:[function(require,module,exports){
+},{}],114:[function(require,module,exports){
 "use strict;"
 
 const scadApi = require('@jscad/scad-api')
@@ -19954,7 +19992,4 @@ function rebuildMakeSeat ( NewSeatSizex , NewSeatSizey , NewSeatSizez , mode){
 }
 
 module.exports = rebuildMakeSeat
-},{"./csgToGeometries":6,"@jscad/csg":8,"@jscad/scad-api":95}]},{},[7]);
-=======
-},{}]},{},[10]);
->>>>>>> Hou-branch
+},{"./csgToGeometries":10,"@jscad/csg":18,"@jscad/scad-api":105}]},{},[17]);
