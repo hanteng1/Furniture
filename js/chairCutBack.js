@@ -12,16 +12,16 @@ function chairCutBack(back) {
 
   var obj = geometryToCsgs(back.geometry);
 
-  console.log(obj);
+  //console.log(obj);
 
   var plane = CSG.Plane.fromNormalAndPoint([0, 0, 1], [0, 0, 0.5]);
 
-  console.log(plane);
+  //console.log(plane);
 
-  var half_part = obj[0].cutByPlane(plane);
-  //var half_part = obj[0];
+  //var half_part = obj[0].cutByPlane(plane);
+  var half_part = obj[0];
 
-  console.log(half_part);
+  //console.log(half_part);
 
   var geometry = csgToGeometries(half_part)[0];  
 

@@ -25,7 +25,6 @@ function Processor(main) {
 	//zhuen's block
 	this.chair_add = undefined;
 
-
 	//end of zhuen's block
 
 
@@ -60,6 +59,7 @@ Processor.prototype = {
 		this.transformFunctions.CHAIR_ALIGN = scope.chair_align;
 
 		scope.chair_add = new Chair_Add(scope.main);
+		scope.chair_add.init();
 		this.transformFunctions.CHAIR_ADD = scope.chair_add;
 
 		//scope.chair_rebuild = new Chair_Rebuild(scope.main);
@@ -109,7 +109,7 @@ Processor.prototype = {
 
 	},
 
-
+	
 	changeParameterValue: function(tfname, pname, value) {
 
 		if(tfname in this.transformFunctions) {
@@ -119,6 +119,7 @@ Processor.prototype = {
 		}
 		
 	}
+	
 
 
 

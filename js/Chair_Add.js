@@ -1,38 +1,41 @@
-/*
-
 const chairCreatBoard = require('./chairCreatBoard')
 const chairCutBack = require('./chairCutBack')
-*/
-const Chair_Add_Board = require('./Chair_Add_Board')
-const Chair_Add_Hook = require('./Chair_Add_Hook')
 
 function Chair_Add (main) {
  	this.main = main;
 	this.furnitures = main.furnitures;
 
-	/*
+	this.reference = null;  //midframe, seat, mixed
+
 	this.parameters = {
 		CHAIR_ADD_POSITION: 0,
 		CHAIR_ADD_WIDTH: 0, 
 		CHAIR_ADD_HEIGHT: 0
 	};
-	*/
+
+	//number of furnitures
+	var count = 0;
+
+	var hasBoard = false;
+	var hasHook = false;
 }
 
 
 Chair_Add.prototype = {
-	/*
+
+//--------------------------------------------------------------------------------------------
+	init : function() {
+		this.hasBoard = false;
+		this.hasHook = false;
+	},
+//--------------------------------------------------------------------------------------------
+
 	checkHasSeat: function(furniture) {		
 		return furniture.hasComponent('seat');
 	},
 
 	checkHasBack: function(furniture) {		
 		return furniture.hasComponent('back');
-	},
-
-	changeParameterValue: function(pname, value) {
-		this.parameters[pname] = value;
-		this.execute();
 	},
 
 	checkNeedCut: function(furniture){
@@ -47,14 +50,20 @@ Chair_Add.prototype = {
 		var seat_bottom = center_seat.y - (size_seat.y/2);
 
 		if(back_bottom >= seat_bottom){
-			//don't need cut
 			return false;
 		}
 		else{
-			//need cut
 			return true;
 		}
+
 	},
+	
+	changeParameterValue: function(pname, value) {
+		this.parameters[pname] = value;
+		this.execute();
+	},
+	
+	
 
 	plantLoader: function(board){
 		var plant;
@@ -171,8 +180,6 @@ Chair_Add.prototype = {
 		
 	},
 
-	*/
-	/*
 	creatWall: function(position, width, height, depth){
 		var geometry = new THREE.BoxGeometry( width, height, depth );
 		var texture = new THREE.TextureLoader().load( 'images/material/wall_2.jpg' );
@@ -181,9 +188,7 @@ Chair_Add.prototype = {
 		wall.position.set(position.x, position.y, position.z);
 		return wall;
 	},
-	*/
 
-	/*
 	creatBoard: function(obj, width, height, depth){
 		//creat board x , depth > height
 		while(this.hasChildren(obj))
@@ -227,9 +232,9 @@ Chair_Add.prototype = {
 		return box_size;
 	},
 
-	getPartCenter: function(part){
+	getPartCenter: function(obj){
 		var box = new THREE.Box3();
-		box.setFromObject(part);
+		box.setFromObject(obj);
 		var box_center = new THREE.Vector3();
 		box.getCenter (box_center);
 
@@ -340,32 +345,18 @@ Chair_Add.prototype = {
 		this.hookLoader(back);
 			
 	},
-
-	*/
 	//////////////////////////////////////////////////////////////////////////
 
-	execute: function(){
-		if(this.checkHasBack(this.furnitures[0]) && this.checkHasSeat(this.furnitures[0])){
-			Chair_Add_Board(this.main);
-			Chair_Add_Hook(this.main);
-		}
-
-
-
-	/*
-		var hasBoard = false;
-		var hasHook = false;		
+	execute: function(){		
 		var flagCutLeg = false;
 		if(this.checkHasBack(this.furnitures[0]) && this.checkHasSeat(this.furnitures[0])){
-			if(!this.hasBoard){
-				
+			if(!this.hasBoard){				
 				var furniture_clone_board = new THREE.Object3D();
 				furniture_clone_board = this.furnitures[0].getFurniture().clone();
 				furniture_clone_board.name = "add_board";
 				
 				this.flagCutLeg = this.checkNeedCut(furniture_clone_board);
-				*/
-				/*
+				
 				this.addBoard(furniture_clone_board);
 				
 				var clone_size = this.getPartSize(furniture_clone_board);
@@ -373,19 +364,15 @@ Chair_Add.prototype = {
 				wallPosition = this.getPartCenter(furniture_clone_board);
 				wallPosition.z -= clone_size.z;
 				wallPosition.x += 25;
-				var wall = this.creatWall(wallPosition, 100, 50, 10);
-				
+				var wall = this.creatWall(wallPosition, 100, 50, 10);				
 				this.main.scene.add(furniture_clone_board);
-
-
 				this.main.scene.add(wall);
-
 				this.hasBoard = true;
-				*/
+				
 //-------------------------------------------------------------------------------
-				/*
+/*
 				if(this.flagCutLeg){
-					var back = this.main.scene.getObjectByName("back");
+					var back = this.main.scene.getObjectByName("add_board");
 
 					var parts = new Array();
 					this.findAllChildren(parts, back);
@@ -415,28 +402,24 @@ Chair_Add.prototype = {
 							max = values_x[i];
 							id_right = i;
 						}				
-					}
-					
+					}			
 
-					//cutBack(parts[id_left], pos);
-
-					//var pos = positions[positions.length - 1].y;
+					console.log(back.children[0]);
 					var geometry = chairCutBack(parts[id_right]);
-					var material = back.children[0].material[0];
+					var material = back.children[0].material;
 					var test = new THREE.Mesh( geometry, material );
 					test.position.set(0,0,0);
 					this.main.scene.add(test);
+
 				}
-				*/
+*/			
 //-------------------------------------------------------------------------------
-			/*
 			}
 			else{
 				var furniture_clone_board = this.main.scene.getObjectByName("add_board");
 				this.setBoard(furniture_clone_board);
 			}
-			*/
-			/*
+			
 			if(!this.hasHook){
 				var furniture_clone_hook = new THREE.Object3D();
 				furniture_clone_hook = this.furnitures[0].getFurniture().clone();
@@ -451,23 +434,19 @@ Chair_Add.prototype = {
 			else{
 				var add_hook = this.main.scene.getObjectByName("add_hook");
 				var back = add_hook.getObjectByName("back");
+
 				var part = back.children[0];
 				var box = new THREE.Box3();
 				box.setFromObject(part);
-
 				var helper = new THREE.Box3Helper( box, 0xffff00 );
-				this.main.scene.add(helper);
-				// add_hook(back) --> part --> hook
-				
+				this.main.scene.add(helper);				
 			}
-			*/
-
-		/*
+			
 		}
 		else
 			alert("Please mark seat and back");		
 	}
-	*/
+
 }
 
 
