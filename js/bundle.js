@@ -1,6 +1,11 @@
 (function(){function r(e,n,t){function o(i,f){if(!n[i]){if(!e[i]){var c="function"==typeof require&&require;if(!f&&c)return c(i,!0);if(u)return u(i,!0);var a=new Error("Cannot find module '"+i+"'");throw a.code="MODULE_NOT_FOUND",a}var p=n[i]={exports:{}};e[i][0].call(p.exports,function(r){var n=e[i][1][r];return o(n||r)},p,p.exports,r,e,n,t)}return n[i].exports}for(var u="function"==typeof require&&require,i=0;i<t.length;i++)o(t[i]);return o}return r})()({1:[function(require,module,exports){
+<<<<<<< HEAD
 //
 
+=======
+const chairCreatBoard = require('./chairCreatBoard')
+const chairCutBack = require('./chairCutBack')
+>>>>>>> Hou-branch
 
 function Chair_Add (main) {
  	this.main = main;
@@ -8,6 +13,7 @@ function Chair_Add (main) {
 
 	this.reference = null;  //midframe, seat, mixed
 
+<<<<<<< HEAD
 
 	
 
@@ -15,11 +21,25 @@ function Chair_Add (main) {
 	var count = 0;
  
 
+=======
+	this.parameters = {
+		CHAIR_ADD_POSITION: 0,
+		CHAIR_ADD_WIDTH: 0, 
+		CHAIR_ADD_HEIGHT: 0
+	};
+
+	//number of furnitures
+	var count = 0;
+
+	var hasBoard = false;
+	var hasHook = false;
+>>>>>>> Hou-branch
 }
 
 
 Chair_Add.prototype = {
 
+<<<<<<< HEAD
 	checkHasFrame: function(furniture) {		
 		return furniture.hasComponent('midframe');
 	},
@@ -71,12 +91,442 @@ Chair_Add.prototype = {
 		if (this.checkHasBack(this.furnitures[0])) {
 			alert("add active.");
 		}		
+=======
+//--------------------------------------------------------------------------------------------
+	init : function() {
+		this.hasBoard = false;
+		this.hasHook = false;
+	},
+//--------------------------------------------------------------------------------------------
+
+	checkHasSeat: function(furniture) {		
+		return furniture.hasComponent('seat');
+	},
+
+	checkHasBack: function(furniture) {		
+		return furniture.hasComponent('back');
+	},
+
+	checkNeedCut: function(furniture){
+		var back = furniture.getObjectByName("back");
+		var seat = furniture.getObjectByName("seat");
+		var center_back = this.getPartCenter(back);
+		var center_seat = this.getPartCenter(seat);
+		var size_back = this.getPartSize(back);
+		var size_seat = this.getPartSize(seat);
+
+		var back_bottom = center_back.y - (size_back.y/2);
+		var seat_bottom = center_seat.y - (size_seat.y/2);
+
+		if(back_bottom >= seat_bottom){
+			return false;
+		}
+		else{
+			return true;
+		}
+
+	},
+	
+	changeParameterValue: function(pname, value) {
+		this.parameters[pname] = value;
+		this.execute();
+	},
+	
+	
+
+	plantLoader: function(board){
+		var plant;
+
+		// loading manager
+		var scene = this.main.scene;
+		var loadingManager = new THREE.LoadingManager( function() {
+			scene.add( plant );
+		} );
+
+		// collada
+		var loader = new THREE.ColladaLoader( loadingManager );
+		loader.load( "./models/plant1.dae", function ( collada ) {
+			plant = collada.scene;
+			plant.name = "plant";
+			plant.scale.x = 0.05; plant.scale.y = 0.05; plant.scale.z = 0.05;
+			
+			var box = new THREE.Box3();
+			box.setFromObject(plant);
+			var size_plant = new THREE.Vector3();
+			box.getSize(size_plant);
+
+			var center_board = new THREE.Vector3();
+			box.setFromObject(board);
+			box.getCenter(center_board);
+
+			var board_matrix_inverse = new THREE.Matrix4();
+			board_matrix_inverse.getInverse(board.matrixWorld, true);
+
+			plant.applyMatrix(board_matrix_inverse);
+			plant.position.set(center_board.x, center_board.y, center_board.z);
+
+			scene.add(plant);
+		} );
+	},
+
+	createHook: function(scene, child, hook, position, offset){		
+		var pos = new THREE.Vector3(position.x + offset, position.y, position.z + 10);
+		var raycaster = new THREE.Raycaster();
+		raycaster.set(pos, new THREE.Vector3(0,0,-1));
+		var intersects = raycaster.intersectObject(child);
+		if(intersects.length > 0){
+			var hook_clone = hook.clone();
+
+			var child_matrix_inverse = new THREE.Matrix4();
+			child_matrix_inverse.getInverse(child.matrixWorld, true);
+			hook_clone.applyMatrix(child_matrix_inverse);
+
+			hook_clone.position.set(intersects[0].point.x, intersects[0].point.y, intersects[0].point.z);
+			child.worldToLocal(hook_clone.position);
+
+			child.add( hook_clone );
+		}
+	},
+
+	createColumnHook: function(scene, child, hook){
+		//get hook size
+		var box = new THREE.Box3();
+		box.setFromObject(hook);
+		var size_hook = new THREE.Vector3();
+		box.getSize(size_hook);
+
+		//get back size
+		var center_child = new THREE.Vector3();
+		box.setFromObject(child);
+		box.getCenter(center_child);
+
+		this.createHook(scene, child, hook, center_child, size_hook.x * (-3) );
+		this.createHook(scene, child, hook, center_child, size_hook.x * 0 );
+		this.createHook(scene, child, hook, center_child, size_hook.x * 3);		
+	},
+
+	hookLoader: function(back){
+		var hook;
+
+		// loading manager
+		var scene = this.main.scene;
+		var chair_add = this;
+		var loadingManager = new THREE.LoadingManager( function() {
+			for (var i = 0; i < back.children.length; i++) {
+				chair_add.createColumnHook(scene, back.children[i], hook);
+			}		
+		} );
+
+		// collada
+		var loader = new THREE.ColladaLoader( loadingManager );
+		loader.load( "./models/hook/source/B01020/B01020.dae", function ( collada ) {
+			hook = collada.scene;
+			hook.name = "hook";			
+			hook.scale.x = 0.025; hook.scale.y = 0.025; hook.scale.z = 0.025;
+		} );
+	},
+
+	computeNumber: function (value) {		
+		if (value < 0)
+	        return Math.ceil(value);
+	    else
+	    	return Math.floor(value);
+	},	
+
+	remove: function(group, name){
+		for (var i = group.children.length - 1; i >= 0 ; i--) {				
+			var str = group.children[i].name;
+			if (str != name) {
+				group.remove(group.children[i]);
+			}	
+		}
+	},
+
+	hasChildren: function(obj){
+		if (obj.children.length != 0)
+			return true;
+		return false;
+		
+	},
+
+	creatWall: function(position, width, height, depth){
+		var geometry = new THREE.BoxGeometry( width, height, depth );
+		var texture = new THREE.TextureLoader().load( 'images/material/wall_2.jpg' );
+ 		var material = new THREE.MeshBasicMaterial( {map: texture} );
+		var wall = new THREE.Mesh( geometry, material );
+		wall.position.set(position.x, position.y, position.z);
+		return wall;
+	},
+
+	creatBoard: function(obj, width, height, depth){
+		//creat board x , depth > height
+		while(this.hasChildren(obj))
+			obj = obj.children[0];
+		var material = new THREE.MeshBasicMaterial();
+
+		if (Array.isArray(obj.material))
+			material = obj.material[0].clone();
+		else
+			material = obj.material.clone();
+
+		var geometry = chairCreatBoard(width, height/10, depth/2);	
+		var board = new THREE.Mesh( geometry, material );		
+
+		return board;
+		
+	},
+
+	findAllChildren: function(array, obj){
+	  if(obj.children.length > 0){
+	    for (var i = 0; i < obj.children.length; i++) {
+	      this.findAllChildren(array, obj.children[i]);
+	    }
+	  }
+	  else
+	    array.push(obj);		
+	},
+
+	updateBack: function(back){
+		back.updateMatrix();
+		back.updateMatrixWorld(true);
+	},
+
+	getPartSize: function(obj){
+		var box = new THREE.Box3();
+		box.setFromObject(obj);
+		var box_size = new THREE.Vector3();
+		box.getSize(box_size);
+
+		//this includes width, height, depth
+		return box_size;
+	},
+
+	getPartCenter: function(obj){
+		var box = new THREE.Box3();
+		box.setFromObject(obj);
+		var box_center = new THREE.Vector3();
+		box.getCenter (box_center);
+
+		return box_center;
+	},
+
+	addBoard: function(furniture_clone){
+		var moveTo = new THREE.Vector3(75, 25, 0);
+		
+		//remove other part
+		var group = furniture_clone;		
+		this.remove(group, 'back');
+
+		//update chair back transfrom Matrix
+		var back = group.getObjectByName ('back');		
+		this.updateBack(back);		
+
+		//creat board width > depth > height
+		var size_back = this.getPartSize(back);
+		var array = new Array();
+		array.push(size_back.x, size_back.y, size_back.z);
+		array.sort(function(a, b){return b-a});
+		var width = size_back.x;
+		var depth  = array[1]; 
+		var height = array[2];
+
+		var board = this.creatBoard(back, width, height, depth);
+		board.name = "board";
+		
+		//get chair back world position and back world matrix's inverse
+		var component = furniture_clone.getObjectByName('back');		
+		var pos = this.getPartCenter(component);
+		var size_board = this.getPartSize(board);
+		
+		var back_matrix_inverse = new THREE.Matrix4();
+		back_matrix_inverse.getInverse(back.matrixWorld, true);
+		
+
+		//set board position and rotation in back
+		board.applyMatrix(back_matrix_inverse);
+		board.position.set(pos.x - size_board.x/2, pos.y, pos.z);		
+		back.worldToLocal(board.position);	
+
+		//add borad to furniture
+		group.add(board);
+
+		//change max and min value
+		var position_id = document.getElementById("CHAIR_ADD_POSITION");
+		position_id.max = this.computeNumber(size_back.y / 2);
+		position_id.min = this.computeNumber((size_back.y / 2) * (-1));
+
+		var position_id = document.getElementById("CHAIR_ADD_WIDTH");
+		position_id.max = this.computeNumber(size_board.z * 2 / 3);
+
+		var position_id = document.getElementById("CHAIR_ADD_HEIGHT");
+		position_id.max = this.computeNumber(size_board.z * 2 / 3);
+
+		group.position.set(moveTo.x, moveTo.y, moveTo.z);
+
+		this.plantLoader(board);
+	},
+
+	setBoard: function(furniture_clone){
+		var moveTo = new THREE.Vector3(75, 25, 0);
+
+		var group = furniture_clone;
+		var board = group.getObjectByName('board');
+		var back = group.getObjectByName ('back');	
+		this.updateBack(back);
+
+		//get parameters CHAIR_ADD_WIDTH, CHAIR_ADD_HEIGHT
+		var segWidth = this.parameters.CHAIR_ADD_WIDTH;
+		var segHeight = this.parameters.CHAIR_ADD_HEIGHT;
+
+		board.scale.x = 1 + 0.05 * parseInt(segWidth);
+		board.scale.z = 1 + 0.05 * parseInt(segHeight);
+
+		//get chair back world position and back world matrix's inverse
+		var component = group.getObjectByName('back');		
+		var pos = this.getPartCenter(component);
+		var size_board = this.getPartSize(board);
+		
+		var segPosition = this.parameters.CHAIR_ADD_POSITION;
+		pos.y += parseInt(segPosition);
+		board.position.set(pos.x - size_board.x/2, pos.y, pos.z);
+		back.worldToLocal(board.position);
+
+		var plant = this.main.scene.getObjectByName("plant");
+		var box = new THREE.Box3();
+		var center_board = new THREE.Vector3();
+		box.setFromObject(board);
+		box.getCenter(center_board);
+		plant.position.set(center_board.x, center_board.y, center_board.z);
+		
+	},
+
+	addHook: function(furniture_clone){
+		var moveTo = new THREE.Vector3(125, 25, 0);
+		//remove other part
+		var group = furniture_clone;		
+		this.remove(group, 'back');
+		//update chair back transfrom Matrix
+		var back = group.getObjectByName ('back');		
+		this.updateBack(back);
+
+		group.position.set(moveTo.x, moveTo.y, moveTo.z);
+
+		this.hookLoader(back);
+			
+	},
+	//////////////////////////////////////////////////////////////////////////
+
+	execute: function(){		
+		var flagCutLeg = false;
+		if(this.checkHasBack(this.furnitures[0]) && this.checkHasSeat(this.furnitures[0])){
+			if(!this.hasBoard){				
+				var furniture_clone_board = new THREE.Object3D();
+				furniture_clone_board = this.furnitures[0].getFurniture().clone();
+				furniture_clone_board.name = "add_board";
+				
+				this.flagCutLeg = this.checkNeedCut(furniture_clone_board);
+				
+				this.addBoard(furniture_clone_board);
+				
+				var clone_size = this.getPartSize(furniture_clone_board);
+				var wallPosition = new THREE.Vector3();
+				wallPosition = this.getPartCenter(furniture_clone_board);
+				wallPosition.z -= clone_size.z;
+				wallPosition.x += 25;
+				var wall = this.creatWall(wallPosition, 100, 50, 10);				
+				this.main.scene.add(furniture_clone_board);
+				this.main.scene.add(wall);
+				this.hasBoard = true;
+				
+//-------------------------------------------------------------------------------
+/*
+				if(this.flagCutLeg){
+					var back = this.main.scene.getObjectByName("add_board");
+
+					var parts = new Array();
+					this.findAllChildren(parts, back);
+					
+					var positions = new Array();
+					var values_x = new Array();
+					for (var i = 0; i < parts.length - 1; i++) {
+						positions.push(this.getPartCenter(parts[i]));
+						values_x.push( this.getPartCenter(parts[i]).x ); 
+					}
+					
+					//left
+					var min = values_x[0];
+					var id_left = 0;
+					for (var i = 0; i < values_x.length; i++) {
+						if(min > values_x[i]){
+							min = values_x[i];
+							id_left = i;
+						}				
+					}					
+
+					//right
+					var max = values_x[0];
+					var id_right = 0;
+					for (var i = 0; i < values_x.length; i++) {
+						if(max < values_x[i]){
+							max = values_x[i];
+							id_right = i;
+						}				
+					}			
+
+					console.log(back.children[0]);
+					var geometry = chairCutBack(parts[id_right]);
+					var material = back.children[0].material;
+					var test = new THREE.Mesh( geometry, material );
+					test.position.set(0,0,0);
+					this.main.scene.add(test);
+
+				}
+*/			
+//-------------------------------------------------------------------------------
+			}
+			else{
+				var furniture_clone_board = this.main.scene.getObjectByName("add_board");
+				this.setBoard(furniture_clone_board);
+			}
+			
+			if(!this.hasHook){
+				var furniture_clone_hook = new THREE.Object3D();
+				furniture_clone_hook = this.furnitures[0].getFurniture().clone();
+				furniture_clone_hook.name = "add_hook";
+
+				this.addHook(furniture_clone_hook);
+
+				this.main.scene.add(furniture_clone_hook);
+				this.hasHook = true;
+
+			}
+			else{
+				var add_hook = this.main.scene.getObjectByName("add_hook");
+				var back = add_hook.getObjectByName("back");
+
+				var part = back.children[0];
+				var box = new THREE.Box3();
+				box.setFromObject(part);
+				var helper = new THREE.Box3Helper( box, 0xffff00 );
+				this.main.scene.add(helper);				
+			}
+			
+		}
+		else
+			alert("Please mark seat and back");		
+>>>>>>> Hou-branch
 	}
 
 }
 
+<<<<<<< HEAD
 module.exports = Chair_Add
 },{}],2:[function(require,module,exports){
+=======
+
+module.exports = Chair_Add
+},{"./chairCreatBoard":5,"./chairCutBack":6}],2:[function(require,module,exports){
+>>>>>>> Hou-branch
 "use strict;"
 //chair align related functions
 //align in one line
@@ -386,7 +836,12 @@ module.exports = Chair_Align
 
 
 
+<<<<<<< HEAD
 },{"./cadMakeSeat":5,"./computeConvexHull":6}],3:[function(require,module,exports){
+=======
+<<<<<<< HEAD
+},{"./cadMakeSeat":5}],3:[function(require,module,exports){
+>>>>>>> 6df7b805a6651c979c79684eb3ff99363049cf86
 "use strict;"
 
 const rebuildMakeSeat = require('./rebuildMakeSeat');
@@ -597,15 +1052,27 @@ Chair_Rebuild.prototype = {
 }
 module.exports = Chair_Rebuild
 
+<<<<<<< HEAD
 },{"./rebuildMakeSeat":110}],4:[function(require,module,exports){
+=======
+},{"./rebuildMakeSeat":104}],4:[function(require,module,exports){
+=======
+},{"./cadMakeSeat":4}],3:[function(require,module,exports){
+>>>>>>> Hou-branch
+>>>>>>> 6df7b805a6651c979c79684eb3ff99363049cf86
 "use strict;"
 //this is to handle the new design approaches
 //that without the need of cad operations
 
+<<<<<<< HEAD
 const Chair_Align = require('./Chair_Align');
 const Chair_Add = require('./Chair_Add');
 const Chair_Rebuild = require('./Chair_Rebuild');
 
+=======
+const Chair_Align = require('./Chair_Align')
+const Chair_Add = require('./Chair_Add')
+>>>>>>> Hou-branch
 
 function Processor(main) {
 	this.main = main;
@@ -626,7 +1093,10 @@ function Processor(main) {
 
 	//zhuen's block
 	this.chair_add = undefined;
+<<<<<<< HEAD
 
+=======
+>>>>>>> Hou-branch
 
 	//end of zhuen's block
 
@@ -654,6 +1124,30 @@ function Processor(main) {
 Processor.prototype = {
 
 	init: function() {
+<<<<<<< HEAD
+=======
+		var scope = this;
+
+		//initialize chair transformers
+		scope.chair_align = new Chair_Align(scope.main);
+		scope.chair_align.init();
+		this.transformFunctions.CHAIR_ALIGN = scope.chair_align;
+
+		scope.chair_add = new Chair_Add(scope.main);
+<<<<<<< HEAD
+		this.transformFunctions.CHAIR_ADD = scope.chair_add;
+
+		scope.chair_rebuild = new Chair_Rebuild(scope.main);
+		this.transformFunctions.CHAIR_REBUILD = scope.chair_rebuild;
+=======
+		scope.chair_add.init();
+		this.transformFunctions.CHAIR_ADD = scope.chair_add;
+
+		//scope.chair_rebuild = new Chair_Rebuild(scope.main);
+		//this.transformFunctions.CHAIR_REBUILD = scope.chair_rebuild;
+>>>>>>> Hou-branch
+
+>>>>>>> 6df7b805a6651c979c79684eb3ff99363049cf86
 
 		//determine which functions are available and get those functions ready
 		var scope = this;
@@ -668,6 +1162,7 @@ Processor.prototype = {
 
 				}else if(scope.furnitures.length == 1){
 					//possible actions with one furniture
+<<<<<<< HEAD
 					scope.chair_add = new Chair_Add(scope.main);
 					scope.transformFunctions.CHAIR_ADD = scope.chair_add;
 
@@ -676,6 +1171,15 @@ Processor.prototype = {
 					
 					$('.operations.operation_chair_add').show();
 					$('.operations.operation_chair_rebuild').show();
+=======
+<<<<<<< HEAD
+					//this.chair_add.execute();
+					this.chair_rebuild.execute();
+=======
+					this.chair_add.execute();
+					//this.chair_rebuild.execute();
+>>>>>>> Hou-branch
+>>>>>>> 6df7b805a6651c979c79684eb3ff99363049cf86
 
 				}else if( scope.furnitures.length > 1) {
 					//possible actions with many furnitures
@@ -703,6 +1207,7 @@ Processor.prototype = {
 
 	},
 
+<<<<<<< HEAD
 
 	//execute design for chairs
 	//based on which design button is pressed
@@ -717,6 +1222,9 @@ Processor.prototype = {
 	},
 
 
+=======
+	
+>>>>>>> 6df7b805a6651c979c79684eb3ff99363049cf86
 	changeParameterValue: function(tfname, pname, value) {
 
 		if(tfname in this.transformFunctions) {
@@ -726,6 +1234,7 @@ Processor.prototype = {
 		}
 		
 	}
+	
 
 
 
@@ -760,7 +1269,11 @@ Processor.prototype = {
 
 module.exports = Processor
 
+<<<<<<< HEAD
 },{"./Chair_Add":1,"./Chair_Align":2,"./Chair_Rebuild":3}],5:[function(require,module,exports){
+=======
+},{"./Chair_Add":1,"./Chair_Align":2}],4:[function(require,module,exports){
+>>>>>>> Hou-branch
 "use strict;"
 
 const scadApi = require('@jscad/scad-api')
@@ -830,6 +1343,7 @@ function cadMakeSeat (innerRace, outerRace, offsetY, textures) {
 
 
 module.exports = cadMakeSeat
+<<<<<<< HEAD
 },{"./csgToGeometries":8,"@jscad/csg":14,"@jscad/scad-api":101}],6:[function(require,module,exports){
 "use strict;"
 
@@ -888,6 +1402,67 @@ function convex(pointset) {
 module.exports = convex;
 
 },{}],8:[function(require,module,exports){
+=======
+<<<<<<< HEAD
+},{"./csgToGeometries":6,"@jscad/csg":8,"@jscad/scad-api":95}],6:[function(require,module,exports){
+=======
+},{"./csgToGeometries":7,"@jscad/csg":11,"@jscad/scad-api":98}],5:[function(require,module,exports){
+"use strict;"
+
+const scadApi = require('@jscad/scad-api')
+const { CSG, CAG, isCSG, isCAG } = require('@jscad/csg')
+const {cube, sphere, cylinder} = scadApi.primitives3d
+const {union, difference, intersection} = scadApi.booleanOps
+const {translate, rotate} = scadApi.transformations
+const csgToGeometries = require('./csgToGeometries')
+
+function chairCreatBoard(width, height, depth) {
+	var board = cube({size:[width, height, depth]});
+	var obj = board.expand(0.3, 16);
+
+	var geometry = csgToGeometries(obj)[0];
+
+	return geometry;
+}
+
+
+module.exports = chairCreatBoard
+},{"./csgToGeometries":7,"@jscad/csg":11,"@jscad/scad-api":98}],6:[function(require,module,exports){
+"use strict;"
+
+const scadApi = require('@jscad/scad-api')
+const { CSG, CAG, isCSG, isCAG } = require('@jscad/csg')
+const {cube, sphere, cylinder} = scadApi.primitives3d
+const {union, difference, intersection} = scadApi.booleanOps
+const {translate, rotate} = scadApi.transformations
+const csgToGeometries = require('./csgToGeometries')
+const {geometryToCsgs, unionCsgs} = require('./geometryToCsgs')
+
+function chairCutBack(back) {
+
+  var obj = geometryToCsgs(back.geometry);
+
+  //console.log(obj);
+
+  var plane = CSG.Plane.fromNormalAndPoint([0, 0, 1], [0, 0, 0.5]);
+
+  //console.log(plane);
+
+  //var half_part = obj[0].cutByPlane(plane);
+  var half_part = obj[0];
+
+  //console.log(half_part);
+
+  var geometry = csgToGeometries(half_part)[0];  
+
+  return geometry;
+}
+
+
+module.exports = chairCutBack
+},{"./csgToGeometries":7,"./geometryToCsgs":8,"@jscad/csg":11,"@jscad/scad-api":98}],7:[function(require,module,exports){
+>>>>>>> Hou-branch
+>>>>>>> 6df7b805a6651c979c79684eb3ff99363049cf86
 "use strict;"
 
 const { CSG, CAG, isCSG, isCAG } = require('@jscad/csg')
@@ -1070,6 +1645,7 @@ function csgToGeometries(initial_csg) {
 
 
 module.exports = csgToGeometries
+<<<<<<< HEAD
 },{"@jscad/csg":14}],9:[function(require,module,exports){
 module.exports = {
 
@@ -1393,6 +1969,116 @@ function intersect(seg1, seg2) {
 
 module.exports = intersect;
 },{}],13:[function(require,module,exports){
+=======
+<<<<<<< HEAD
+},{"@jscad/csg":8}],7:[function(require,module,exports){
+=======
+},{"@jscad/csg":11}],8:[function(require,module,exports){
+"use strict;"
+
+const {log, status} = require('./log')
+const { CSG, CAG, isCSG, isCAG } = require('@jscad/csg')
+const scadApi = require('@jscad/scad-api')
+const {cube, sphere, cylinder, polyhedron} = scadApi.primitives3d
+const {union, difference, intersection} = scadApi.booleanOps
+const {translate} = scadApi.transformations
+
+function geometryToCsgs (initialGeometry){
+	var pointsArray = [];
+	var polygonsArray = [];
+
+	var verticesAttribute = initialGeometry.getAttribute('position');
+	var verticesArray = verticesAttribute.array;
+	var itemSize = verticesAttribute.itemSize;
+	var verticesNum = verticesArray.length / itemSize;
+
+	for(var i = 0; i < verticesNum; i++)
+	{
+		var vertex = [verticesArray[i * itemSize + 0], 
+		   verticesArray[i * itemSize + 1],
+		   verticesArray[i * itemSize + 2]];
+
+		pointsArray.push(vertex);
+	}
+
+	for(var j = 0; j < verticesNum / 3; j++)
+	{
+		var polygon = [ j * 3 + 0, j * 3 + 1, j * 3 + 2 ];
+		polygonsArray.push(polygon);
+	}
+
+	
+	//csg objects
+	var csgs = [];
+	var divisionSize = 1000;
+	var divisions = polygonsArray.length / divisionSize;  //could be int or double
+
+	for(var i = 0; i < divisions; i++)
+	{
+		var divPolygonsArray = polygonsArray.slice(i * divisionSize, (i + 1) * divisionSize);
+		var divPointsArray = [];
+		var newDivPolygonsArray = [];
+
+		for(var j = 0; j < divPolygonsArray.length; j++)
+		{
+			divPointsArray.push(pointsArray[divPolygonsArray[j][0]]);
+			divPointsArray.push(pointsArray[divPolygonsArray[j][1]]);
+			divPointsArray.push(pointsArray[divPolygonsArray[j][2]]);
+
+			var divPolygon  = divPolygonsArray[j].map(x => x - i * divisionSize * 3); 
+			newDivPolygonsArray.push(divPolygon);
+		}
+
+		csgs.push(union(
+			polyhedron({points: divPointsArray, 
+				//correct the div polygon array
+				polygons: divPolygonsArray.map(polygon => polygon.map(x => x - i * divisionSize * 3)) 
+			}))
+		);
+	}
+
+	//return the divided arrays	
+	return csgs;
+}
+
+function unionCsgs(csgs) {
+	//computationally inefficient, be careful to use
+	return union(csgs);
+}
+
+
+module.exports = {geometryToCsgs, unionCsgs};
+},{"./log":9,"@jscad/csg":11,"@jscad/scad-api":98}],9:[function(require,module,exports){
+function log (txt) {
+  var timeInMs = Date.now()
+  var prevtime = undefined//OpenJsCad.log.prevLogTime
+  if (!prevtime) prevtime = timeInMs
+  var deltatime = timeInMs - prevtime
+  log.prevLogTime = timeInMs
+  var timefmt = (deltatime * 0.001).toFixed(3)
+  txt = '[' + timefmt + '] ' + txt
+  if ((typeof (console) == 'object') && (typeof (console.log) == 'function')) {
+    console.log(txt)
+  } else if ((typeof (self) == 'object') && (typeof (self.postMessage) == 'function')) {
+    self.postMessage({cmd: 'log', txt: txt})
+  }
+  else throw new Error('Cannot log')
+}
+
+// See Processor.setStatus()
+// Note: leave for compatibility
+function status (s) {
+  log(s)
+}
+
+module.exports = {
+  log,
+  status
+}
+
+},{}],10:[function(require,module,exports){
+>>>>>>> Hou-branch
+>>>>>>> 6df7b805a6651c979c79684eb3ff99363049cf86
 "use strict;"
 
 //const {log, status} = require('./log')
@@ -2675,7 +3361,15 @@ document.addEventListener('DOMContentLoaded', function(event){
 
 
 
+<<<<<<< HEAD
 },{"./Processor":4}],14:[function(require,module,exports){
+=======
+<<<<<<< HEAD
+},{"./Processor":4}],8:[function(require,module,exports){
+=======
+},{"./Processor":3}],11:[function(require,module,exports){
+>>>>>>> Hou-branch
+>>>>>>> 6df7b805a6651c979c79684eb3ff99363049cf86
 /*
 ## License
 
@@ -2886,7 +3580,15 @@ const globalApi = Object.assign({}, {CSG, CAG}, optionsParsers, {isCAG, isCSG})
 
 module.exports = globalApi
 
+<<<<<<< HEAD
 },{"./src/api/debugHelpers":17,"./src/api/optionParsers":24,"./src/api/primitives2d":25,"./src/api/primitives3d":26,"./src/core/CAG":28,"./src/core/CAGFactories":29,"./src/core/CSG":30,"./src/core/CSGFactories":31,"./src/core/Properties":35,"./src/core/connectors":36,"./src/core/constants":37,"./src/core/math/Line2":38,"./src/core/math/Line3":39,"./src/core/math/Matrix4":40,"./src/core/math/OrthoNormalBasis":41,"./src/core/math/Path2":42,"./src/core/math/Plane":43,"./src/core/math/Polygon2":44,"./src/core/math/Polygon3":45,"./src/core/math/Side":46,"./src/core/math/Vector2":47,"./src/core/math/Vector3":48,"./src/core/math/Vertex2":49,"./src/core/math/Vertex3":50,"./src/core/mutators":53,"./src/core/utils":55}],15:[function(require,module,exports){
+=======
+<<<<<<< HEAD
+},{"./src/api/debugHelpers":11,"./src/api/optionParsers":18,"./src/api/primitives2d":19,"./src/api/primitives3d":20,"./src/core/CAG":22,"./src/core/CAGFactories":23,"./src/core/CSG":24,"./src/core/CSGFactories":25,"./src/core/Properties":29,"./src/core/connectors":30,"./src/core/constants":31,"./src/core/math/Line2":32,"./src/core/math/Line3":33,"./src/core/math/Matrix4":34,"./src/core/math/OrthoNormalBasis":35,"./src/core/math/Path2":36,"./src/core/math/Plane":37,"./src/core/math/Polygon2":38,"./src/core/math/Polygon3":39,"./src/core/math/Side":40,"./src/core/math/Vector2":41,"./src/core/math/Vector3":42,"./src/core/math/Vertex2":43,"./src/core/math/Vertex3":44,"./src/core/mutators":47,"./src/core/utils":49}],9:[function(require,module,exports){
+=======
+},{"./src/api/debugHelpers":14,"./src/api/optionParsers":21,"./src/api/primitives2d":22,"./src/api/primitives3d":23,"./src/core/CAG":25,"./src/core/CAGFactories":26,"./src/core/CSG":27,"./src/core/CSGFactories":28,"./src/core/Properties":32,"./src/core/connectors":33,"./src/core/constants":34,"./src/core/math/Line2":35,"./src/core/math/Line3":36,"./src/core/math/Matrix4":37,"./src/core/math/OrthoNormalBasis":38,"./src/core/math/Path2":39,"./src/core/math/Plane":40,"./src/core/math/Polygon2":41,"./src/core/math/Polygon3":42,"./src/core/math/Side":43,"./src/core/math/Vector2":44,"./src/core/math/Vector3":45,"./src/core/math/Vertex2":46,"./src/core/math/Vertex3":47,"./src/core/mutators":50,"./src/core/utils":52}],12:[function(require,module,exports){
+>>>>>>> Hou-branch
+>>>>>>> 6df7b805a6651c979c79684eb3ff99363049cf86
 const Path2D = require('../core/math/Path2')
 
 const cagoutlinePaths = function (_cag) {
@@ -2968,7 +3670,15 @@ const cagoutlinePaths = function (_cag) {
 
 module.exports = cagoutlinePaths
 
+<<<<<<< HEAD
 },{"../core/math/Path2":42}],16:[function(require,module,exports){
+=======
+<<<<<<< HEAD
+},{"../core/math/Path2":36}],10:[function(require,module,exports){
+=======
+},{"../core/math/Path2":39}],13:[function(require,module,exports){
+>>>>>>> Hou-branch
+>>>>>>> 6df7b805a6651c979c79684eb3ff99363049cf86
 const toArray = require('../core/utils/toArray')
 
 /**
@@ -3006,7 +3716,15 @@ const center = function (options, objects) {
 
 module.exports = center
 
+<<<<<<< HEAD
 },{"../core/utils/toArray":63}],17:[function(require,module,exports){
+=======
+<<<<<<< HEAD
+},{"../core/utils/toArray":57}],11:[function(require,module,exports){
+=======
+},{"../core/utils/toArray":60}],14:[function(require,module,exports){
+>>>>>>> Hou-branch
+>>>>>>> 6df7b805a6651c979c79684eb3ff99363049cf86
 const CSG = require('../core/CSG')
 const {cube} = require('./primitives3d')
 
@@ -3041,7 +3759,15 @@ const toPointCloud = function (csg, cuberadius) {
 
 module.exports = {toPointCloud}
 
+<<<<<<< HEAD
 },{"../core/CSG":30,"./primitives3d":26}],18:[function(require,module,exports){
+=======
+<<<<<<< HEAD
+},{"../core/CSG":24,"./primitives3d":20}],12:[function(require,module,exports){
+=======
+},{"../core/CSG":27,"./primitives3d":23}],15:[function(require,module,exports){
+>>>>>>> Hou-branch
+>>>>>>> 6df7b805a6651c979c79684eb3ff99363049cf86
 const Vertex3 = require('../core/math/Vertex3')
 const Vector3 = require('../core/math/Vector3')
 const Polygon3 = require('../core/math/Polygon3')
@@ -3106,7 +3832,15 @@ const degToRad = deg => (Math.PI / 180) * deg
 
 module.exports = {cagToPointsArray, clamp, rightMultiply1x3VectorToArray, polygonFromPoints}
 
+<<<<<<< HEAD
 },{"../core/math/Polygon3":45,"../core/math/Vector3":48,"../core/math/Vertex3":50}],19:[function(require,module,exports){
+=======
+<<<<<<< HEAD
+},{"../core/math/Polygon3":39,"../core/math/Vector3":42,"../core/math/Vertex3":44}],13:[function(require,module,exports){
+=======
+},{"../core/math/Polygon3":42,"../core/math/Vector3":45,"../core/math/Vertex3":47}],16:[function(require,module,exports){
+>>>>>>> Hou-branch
+>>>>>>> 6df7b805a6651c979c79684eb3ff99363049cf86
 const {isCAG} = require('../core/utils')
 // boolean operations
 
@@ -3209,7 +3943,15 @@ module.exports = {
   intersection
 }
 
+<<<<<<< HEAD
 },{"../core/utils":55}],20:[function(require,module,exports){
+=======
+<<<<<<< HEAD
+},{"../core/utils":49}],14:[function(require,module,exports){
+=======
+},{"../core/utils":52}],17:[function(require,module,exports){
+>>>>>>> Hou-branch
+>>>>>>> 6df7b805a6651c979c79684eb3ff99363049cf86
 const Matrix4x4 = require('../core/math/Matrix4.js')
 const Vector3D = require('../core/math/Vector3.js')
 const {Connector} = require('../core/connectors.js')
@@ -3378,7 +4120,15 @@ const overCutInsideCorners = function (_cag, cutterradius) {
 
 module.exports = {lieFlat, getTransformationToFlatLying, getTransformationAndInverseTransformationToFlatLying, overCutInsideCorners}
 
+<<<<<<< HEAD
 },{"../core/CAGFactories":29,"../core/connectors.js":36,"../core/math/Matrix4.js":40,"../core/math/Vector2":47,"../core/math/Vector3.js":48}],21:[function(require,module,exports){
+=======
+<<<<<<< HEAD
+},{"../core/CAGFactories":23,"../core/connectors.js":30,"../core/math/Matrix4.js":34,"../core/math/Vector2":41,"../core/math/Vector3.js":42}],15:[function(require,module,exports){
+=======
+},{"../core/CAGFactories":26,"../core/connectors.js":33,"../core/math/Matrix4.js":37,"../core/math/Vector2":44,"../core/math/Vector3.js":45}],18:[function(require,module,exports){
+>>>>>>> Hou-branch
+>>>>>>> 6df7b805a6651c979c79684eb3ff99363049cf86
 const {EPS} = require('../core/constants')
 const Plane = require('../core/math/Plane')
 const Vector2 = require('../core/math/Vector2')
@@ -3444,7 +4194,15 @@ const cutByPlane = function (csg, plane) {
 
 module.exports = {sectionCut, cutByPlane}
 
+<<<<<<< HEAD
 },{"../core/CSG":30,"../core/constants":37,"../core/math/OrthoNormalBasis":41,"../core/math/Plane":43,"../core/math/Polygon3":45,"../core/math/Vector2":47,"../core/math/Vertex3":50}],22:[function(require,module,exports){
+=======
+<<<<<<< HEAD
+},{"../core/CSG":24,"../core/constants":31,"../core/math/OrthoNormalBasis":35,"../core/math/Plane":37,"../core/math/Polygon3":39,"../core/math/Vector2":41,"../core/math/Vertex3":44}],16:[function(require,module,exports){
+=======
+},{"../core/CSG":27,"../core/constants":34,"../core/math/OrthoNormalBasis":38,"../core/math/Plane":40,"../core/math/Polygon3":42,"../core/math/Vector2":44,"../core/math/Vertex3":47}],19:[function(require,module,exports){
+>>>>>>> Hou-branch
+>>>>>>> 6df7b805a6651c979c79684eb3ff99363049cf86
 
 const {EPS, angleEPS} = require('../core/constants')
 const Vertex = require('../core/math/Vertex3')
@@ -3783,7 +4541,15 @@ module.exports = {
   expandedShellOfCCSG
 }
 
+<<<<<<< HEAD
 },{"../core/CAG":28,"../core/CAGFactories":29,"../core/CSG":30,"../core/CSGFactories":31,"../core/constants":37,"../core/math/Polygon3":45,"../core/math/Vector2":47,"../core/math/Vertex3":50,"../core/utils":55}],23:[function(require,module,exports){
+=======
+<<<<<<< HEAD
+},{"../core/CAG":22,"../core/CAGFactories":23,"../core/CSG":24,"../core/CSGFactories":25,"../core/constants":31,"../core/math/Polygon3":39,"../core/math/Vector2":41,"../core/math/Vertex3":44,"../core/utils":49}],17:[function(require,module,exports){
+=======
+},{"../core/CAG":25,"../core/CAGFactories":26,"../core/CSG":27,"../core/CSGFactories":28,"../core/constants":34,"../core/math/Polygon3":42,"../core/math/Vector2":44,"../core/math/Vertex3":47,"../core/utils":52}],20:[function(require,module,exports){
+>>>>>>> Hou-branch
+>>>>>>> 6df7b805a6651c979c79684eb3ff99363049cf86
 const {EPS, defaultResolution3D} = require('../core/constants')
 const OrthoNormalBasis = require('../core/math/OrthoNormalBasis')
 const {parseOptionAs3DVector, parseOptionAsBool, parseOptionAsFloat, parseOptionAsInt} = require('./optionParsers')
@@ -4142,7 +4908,15 @@ module.exports = {
   rectangular_extrude
 }
 
+<<<<<<< HEAD
 },{"../core/CAGFactories":29,"../core/CSG":30,"../core/CSGFactories":31,"../core/connectors":36,"../core/constants":37,"../core/math/Matrix4":40,"../core/math/OrthoNormalBasis":41,"../core/math/Path2":42,"../core/math/Vector3":48,"./helpers":18,"./optionParsers":24}],24:[function(require,module,exports){
+=======
+<<<<<<< HEAD
+},{"../core/CAGFactories":23,"../core/CSG":24,"../core/CSGFactories":25,"../core/connectors":30,"../core/constants":31,"../core/math/Matrix4":34,"../core/math/OrthoNormalBasis":35,"../core/math/Path2":36,"../core/math/Vector3":42,"./helpers":12,"./optionParsers":18}],18:[function(require,module,exports){
+=======
+},{"../core/CAGFactories":26,"../core/CSG":27,"../core/CSGFactories":28,"../core/connectors":33,"../core/constants":34,"../core/math/Matrix4":37,"../core/math/OrthoNormalBasis":38,"../core/math/Path2":39,"../core/math/Vector3":45,"./helpers":15,"./optionParsers":21}],21:[function(require,module,exports){
+>>>>>>> Hou-branch
+>>>>>>> 6df7b805a6651c979c79684eb3ff99363049cf86
 const Vector3D = require('../core/math/Vector3')
 const Vector2D = require('../core/math/Vector2')
 
@@ -4220,7 +4994,15 @@ module.exports = {
   parseOptionAs3DVectorList
 }
 
+<<<<<<< HEAD
 },{"../core/math/Vector2":47,"../core/math/Vector3":48}],25:[function(require,module,exports){
+=======
+<<<<<<< HEAD
+},{"../core/math/Vector2":41,"../core/math/Vector3":42}],19:[function(require,module,exports){
+=======
+},{"../core/math/Vector2":44,"../core/math/Vector3":45}],22:[function(require,module,exports){
+>>>>>>> Hou-branch
+>>>>>>> 6df7b805a6651c979c79684eb3ff99363049cf86
 const CAG = require('../core/CAG')
 const {parseOptionAs2DVector, parseOptionAsFloat, parseOptionAsInt} = require('./optionParsers')
 const {defaultResolution2D} = require('../core/constants')
@@ -4407,7 +5189,15 @@ module.exports = {
   fromCompactBinary
 }
 
+<<<<<<< HEAD
 },{"../core/CAG":28,"../core/CAGFactories":29,"../core/constants":37,"../core/math/Path2":42,"../core/math/Vector2":47,"../core/math/Vertex2":49,"./optionParsers":24}],26:[function(require,module,exports){
+=======
+<<<<<<< HEAD
+},{"../core/CAG":22,"../core/CAGFactories":23,"../core/constants":31,"../core/math/Path2":36,"../core/math/Vector2":41,"../core/math/Vertex2":43,"./optionParsers":18}],20:[function(require,module,exports){
+=======
+},{"../core/CAG":25,"../core/CAGFactories":26,"../core/constants":34,"../core/math/Path2":39,"../core/math/Vector2":44,"../core/math/Vertex2":46,"./optionParsers":21}],23:[function(require,module,exports){
+>>>>>>> Hou-branch
+>>>>>>> 6df7b805a6651c979c79684eb3ff99363049cf86
 const {parseOption, parseOptionAs3DVector, parseOptionAs2DVector, parseOptionAs3DVectorList, parseOptionAsFloat, parseOptionAsInt} = require('./optionParsers')
 const {defaultResolution3D, defaultResolution2D, EPS} = require('../core/constants')
 const Vector3 = require('../core/math/Vector3')
@@ -4957,7 +5747,15 @@ module.exports = {
   polyhedron
 }
 
+<<<<<<< HEAD
 },{"../core/CSGFactories":31,"../core/Properties":35,"../core/connectors":36,"../core/constants":37,"../core/math/Polygon3":45,"../core/math/Vector3":48,"../core/math/Vertex3":50,"./optionParsers":24}],27:[function(require,module,exports){
+=======
+<<<<<<< HEAD
+},{"../core/CSGFactories":25,"../core/Properties":29,"../core/connectors":30,"../core/constants":31,"../core/math/Polygon3":39,"../core/math/Vector3":42,"../core/math/Vertex3":44,"./optionParsers":18}],21:[function(require,module,exports){
+=======
+},{"../core/CSGFactories":28,"../core/Properties":32,"../core/connectors":33,"../core/constants":34,"../core/math/Polygon3":42,"../core/math/Vector3":45,"../core/math/Vertex3":47,"./optionParsers":21}],24:[function(require,module,exports){
+>>>>>>> Hou-branch
+>>>>>>> 6df7b805a6651c979c79684eb3ff99363049cf86
 const Polygon = require('../core/math/Polygon3')
 const {fromPolygons} = require('../core/CSGFactories')
 const {fnSortByIndex} = require('../core/utils')
@@ -5172,7 +5970,15 @@ const _addWalls = function (walls, bottom, top, bFlipped) {
 
 module.exports = solidFromSlices
 
+<<<<<<< HEAD
 },{"../core/CSGFactories":31,"../core/math/Polygon3":45,"../core/utils":55}],28:[function(require,module,exports){
+=======
+<<<<<<< HEAD
+},{"../core/CSGFactories":25,"../core/math/Polygon3":39,"../core/utils":49}],22:[function(require,module,exports){
+=======
+},{"../core/CSGFactories":28,"../core/math/Polygon3":42,"../core/utils":52}],25:[function(require,module,exports){
+>>>>>>> Hou-branch
+>>>>>>> 6df7b805a6651c979c79684eb3ff99363049cf86
 const {Connector} = require('./connectors')
 const Vertex3D = require('./math/Vertex3')
 const Vector2D = require('./math/Vector2')
@@ -5551,7 +6357,15 @@ CAG.prototype = {
 
 module.exports = CAG
 
+<<<<<<< HEAD
 },{"../api/cagOutlinePaths":15,"../api/center":16,"../api/ops-cnc":20,"../api/ops-expandContract":22,"../api/ops-extrusions":23,"./CAGFactories":29,"./CSGFactories":31,"./connectors":36,"./math/Polygon3":45,"./math/Vector2":47,"./math/Vector3":48,"./math/Vertex3":50,"./utils/cagMeasurements":56,"./utils/cagValidation":57,"./utils/canonicalize":58,"./utils/retesellate":62}],29:[function(require,module,exports){
+=======
+<<<<<<< HEAD
+},{"../api/cagOutlinePaths":9,"../api/center":10,"../api/ops-cnc":14,"../api/ops-expandContract":16,"../api/ops-extrusions":17,"./CAGFactories":23,"./CSGFactories":25,"./connectors":30,"./math/Polygon3":39,"./math/Vector2":41,"./math/Vector3":42,"./math/Vertex3":44,"./utils/cagMeasurements":50,"./utils/cagValidation":51,"./utils/canonicalize":52,"./utils/retesellate":56}],23:[function(require,module,exports){
+=======
+},{"../api/cagOutlinePaths":12,"../api/center":13,"../api/ops-cnc":17,"../api/ops-expandContract":19,"../api/ops-extrusions":20,"./CAGFactories":26,"./CSGFactories":28,"./connectors":33,"./math/Polygon3":42,"./math/Vector2":44,"./math/Vector3":45,"./math/Vertex3":47,"./utils/cagMeasurements":53,"./utils/cagValidation":54,"./utils/canonicalize":55,"./utils/retesellate":59}],26:[function(require,module,exports){
+>>>>>>> Hou-branch
+>>>>>>> 6df7b805a6651c979c79684eb3ff99363049cf86
 const Side = require('./math/Side')
 const Vector2D = require('./math/Vector2')
 const Vertex2 = require('./math/Vertex2')
@@ -5767,7 +6581,15 @@ module.exports = {
   fromCompactBinary
 }
 
+<<<<<<< HEAD
 },{"../api/ops-booleans":19,"./CAG":28,"./constants":37,"./math/Side":46,"./math/Vector2":47,"./math/Vertex2":49,"./utils/cagValidation":57}],30:[function(require,module,exports){
+=======
+<<<<<<< HEAD
+},{"../api/ops-booleans":13,"./CAG":22,"./constants":31,"./math/Side":40,"./math/Vector2":41,"./math/Vertex2":43,"./utils/cagValidation":51}],24:[function(require,module,exports){
+=======
+},{"../api/ops-booleans":16,"./CAG":25,"./constants":34,"./math/Side":43,"./math/Vector2":44,"./math/Vertex2":46,"./utils/cagValidation":54}],27:[function(require,module,exports){
+>>>>>>> Hou-branch
+>>>>>>> 6df7b805a6651c979c79684eb3ff99363049cf86
 const Tree = require('./trees')
 const Polygon = require('./math/Polygon3')
 const Plane = require('./math/Plane')
@@ -6355,7 +7177,15 @@ CSG.prototype = {
 
 module.exports = CSG
 
+<<<<<<< HEAD
 },{"../api/center":16,"../api/ops-cnc":20,"../api/ops-cuts":21,"../api/ops-expandContract":22,"./CAG":28,"./CSGFactories":31,"./Properties":35,"./math/OrthoNormalBasis":41,"./math/Plane":43,"./math/Polygon3":45,"./trees":54,"./utils/canonicalize":58,"./utils/csgMeasurements":59,"./utils/csgProjections":60,"./utils/fixTJunctions":61,"./utils/retesellate":62}],31:[function(require,module,exports){
+=======
+<<<<<<< HEAD
+},{"../api/center":10,"../api/ops-cnc":14,"../api/ops-cuts":15,"../api/ops-expandContract":16,"./CAG":22,"./CSGFactories":25,"./Properties":29,"./math/OrthoNormalBasis":35,"./math/Plane":37,"./math/Polygon3":39,"./trees":48,"./utils/canonicalize":52,"./utils/csgMeasurements":53,"./utils/csgProjections":54,"./utils/fixTJunctions":55,"./utils/retesellate":56}],25:[function(require,module,exports){
+=======
+},{"../api/center":13,"../api/ops-cnc":17,"../api/ops-cuts":18,"../api/ops-expandContract":19,"./CAG":25,"./CSGFactories":28,"./Properties":32,"./math/OrthoNormalBasis":38,"./math/Plane":40,"./math/Polygon3":42,"./trees":51,"./utils/canonicalize":55,"./utils/csgMeasurements":56,"./utils/csgProjections":57,"./utils/fixTJunctions":58,"./utils/retesellate":59}],28:[function(require,module,exports){
+>>>>>>> Hou-branch
+>>>>>>> 6df7b805a6651c979c79684eb3ff99363049cf86
 const Vector3D = require('./math/Vector3')
 const Vertex = require('./math/Vertex3')
 const Plane = require('./math/Plane')
@@ -6478,7 +7308,15 @@ module.exports = {
   fromCompactBinary
 }
 
+<<<<<<< HEAD
 },{"./CSG":30,"./math/Plane":43,"./math/Polygon2":44,"./math/Polygon3":45,"./math/Vector3":48,"./math/Vertex3":50}],32:[function(require,module,exports){
+=======
+<<<<<<< HEAD
+},{"./CSG":24,"./math/Plane":37,"./math/Polygon2":38,"./math/Polygon3":39,"./math/Vector3":42,"./math/Vertex3":44}],26:[function(require,module,exports){
+=======
+},{"./CSG":27,"./math/Plane":40,"./math/Polygon2":41,"./math/Polygon3":42,"./math/Vector3":45,"./math/Vertex3":47}],29:[function(require,module,exports){
+>>>>>>> Hou-branch
+>>>>>>> 6df7b805a6651c979c79684eb3ff99363049cf86
 // //////////////////////////////
 // ## class fuzzyFactory
 // This class acts as a factory for objects. We can search for an object with approximately
@@ -6536,7 +7374,15 @@ FuzzyFactory.prototype = {
 
 module.exports = FuzzyFactory
 
+<<<<<<< HEAD
 },{}],33:[function(require,module,exports){
+=======
+<<<<<<< HEAD
+},{}],27:[function(require,module,exports){
+=======
+},{}],30:[function(require,module,exports){
+>>>>>>> Hou-branch
+>>>>>>> 6df7b805a6651c979c79684eb3ff99363049cf86
 const FuzzyFactory = require('./FuzzyFactory')
 const {EPS} = require('./constants')
 const Side = require('./math/Side')
@@ -6563,7 +7409,15 @@ FuzzyCAGFactory.prototype = {
 
 module.exports = FuzzyCAGFactory
 
+<<<<<<< HEAD
 },{"./FuzzyFactory":32,"./constants":37,"./math/Side":46}],34:[function(require,module,exports){
+=======
+<<<<<<< HEAD
+},{"./FuzzyFactory":26,"./constants":31,"./math/Side":40}],28:[function(require,module,exports){
+=======
+},{"./FuzzyFactory":29,"./constants":34,"./math/Side":43}],31:[function(require,module,exports){
+>>>>>>> Hou-branch
+>>>>>>> 6df7b805a6651c979c79684eb3ff99363049cf86
 const {EPS} = require('./constants')
 const Polygon = require('./math/Polygon3')
 const FuzzyFactory = require('./FuzzyFactory')
@@ -6633,7 +7487,15 @@ FuzzyCSGFactory.prototype = {
 
 module.exports = FuzzyCSGFactory
 
+<<<<<<< HEAD
 },{"./FuzzyFactory":32,"./constants":37,"./math/Polygon3":45}],35:[function(require,module,exports){
+=======
+<<<<<<< HEAD
+},{"./FuzzyFactory":26,"./constants":31,"./math/Polygon3":39}],29:[function(require,module,exports){
+=======
+},{"./FuzzyFactory":29,"./constants":34,"./math/Polygon3":42}],32:[function(require,module,exports){
+>>>>>>> Hou-branch
+>>>>>>> 6df7b805a6651c979c79684eb3ff99363049cf86
 // ////////////////////////////////////
 // # Class Properties
 // This class is used to store properties of a solid
@@ -6717,7 +7579,15 @@ Properties.addFrom = function (result, otherproperties) {
 
 module.exports = Properties
 
+<<<<<<< HEAD
 },{}],36:[function(require,module,exports){
+=======
+<<<<<<< HEAD
+},{}],30:[function(require,module,exports){
+=======
+},{}],33:[function(require,module,exports){
+>>>>>>> Hou-branch
+>>>>>>> 6df7b805a6651c979c79684eb3ff99363049cf86
 const Vector3D = require('./math/Vector3')
 const Line3D = require('./math/Line3')
 const Matrix4x4 = require('./math/Matrix4')
@@ -6939,7 +7809,15 @@ ConnectorList.prototype = {
 
 module.exports = {Connector, ConnectorList}
 
+<<<<<<< HEAD
 },{"./CSG":30,"./math/Line3":39,"./math/Matrix4":40,"./math/OrthoNormalBasis":41,"./math/Plane":43,"./math/Vector3":48}],37:[function(require,module,exports){
+=======
+<<<<<<< HEAD
+},{"./CSG":24,"./math/Line3":33,"./math/Matrix4":34,"./math/OrthoNormalBasis":35,"./math/Plane":37,"./math/Vector3":42}],31:[function(require,module,exports){
+=======
+},{"./CSG":27,"./math/Line3":36,"./math/Matrix4":37,"./math/OrthoNormalBasis":38,"./math/Plane":40,"./math/Vector3":45}],34:[function(require,module,exports){
+>>>>>>> Hou-branch
+>>>>>>> 6df7b805a6651c979c79684eb3ff99363049cf86
 const _CSGDEBUG = false
 
 /** Number of polygons per 360 degree revolution for 2D objects.
@@ -6996,7 +7874,15 @@ module.exports = {
   getTag
 }
 
+<<<<<<< HEAD
 },{}],38:[function(require,module,exports){
+=======
+<<<<<<< HEAD
+},{}],32:[function(require,module,exports){
+=======
+},{}],35:[function(require,module,exports){
+>>>>>>> Hou-branch
+>>>>>>> 6df7b805a6651c979c79684eb3ff99363049cf86
 const Vector2D = require('./Vector2')
 const {solve2Linear} = require('../utils')
 
@@ -7088,7 +7974,15 @@ Line2D.prototype = {
 
 module.exports = Line2D
 
+<<<<<<< HEAD
 },{"../utils":55,"./Vector2":47}],39:[function(require,module,exports){
+=======
+<<<<<<< HEAD
+},{"../utils":49,"./Vector2":41}],33:[function(require,module,exports){
+=======
+},{"../utils":52,"./Vector2":44}],36:[function(require,module,exports){
+>>>>>>> Hou-branch
+>>>>>>> 6df7b805a6651c979c79684eb3ff99363049cf86
 const Vector3D = require('./Vector3')
 const {EPS} = require('../constants')
 const {solve2Linear} = require('../utils')
@@ -7190,7 +8084,15 @@ Line3D.prototype = {
 
 module.exports = Line3D
 
+<<<<<<< HEAD
 },{"../constants":37,"../utils":55,"./Vector3":48}],40:[function(require,module,exports){
+=======
+<<<<<<< HEAD
+},{"../constants":31,"../utils":49,"./Vector3":42}],34:[function(require,module,exports){
+=======
+},{"../constants":34,"../utils":52,"./Vector3":45}],37:[function(require,module,exports){
+>>>>>>> Hou-branch
+>>>>>>> 6df7b805a6651c979c79684eb3ff99363049cf86
 const Vector3D = require('./Vector3')
 const Vector2D = require('./Vector2')
 const OrthoNormalBasis = require('./OrthoNormalBasis')
@@ -7476,7 +8378,15 @@ Matrix4x4.scaling = function (v) {
 
 module.exports = Matrix4x4
 
+<<<<<<< HEAD
 },{"./OrthoNormalBasis":41,"./Plane":43,"./Vector2":47,"./Vector3":48}],41:[function(require,module,exports){
+=======
+<<<<<<< HEAD
+},{"./OrthoNormalBasis":35,"./Plane":37,"./Vector2":41,"./Vector3":42}],35:[function(require,module,exports){
+=======
+},{"./OrthoNormalBasis":38,"./Plane":40,"./Vector2":44,"./Vector3":45}],38:[function(require,module,exports){
+>>>>>>> Hou-branch
+>>>>>>> 6df7b805a6651c979c79684eb3ff99363049cf86
 const Vector2D = require('./Vector2')
 const Vector3D = require('./Vector3')
 const Line2D = require('./Line2')
@@ -7683,7 +8593,15 @@ OrthoNormalBasis.prototype = {
 
 module.exports = OrthoNormalBasis
 
+<<<<<<< HEAD
 },{"./Line2":38,"./Line3":39,"./Matrix4":40,"./Plane":43,"./Vector2":47,"./Vector3":48}],42:[function(require,module,exports){
+=======
+<<<<<<< HEAD
+},{"./Line2":32,"./Line3":33,"./Matrix4":34,"./Plane":37,"./Vector2":41,"./Vector3":42}],36:[function(require,module,exports){
+=======
+},{"./Line2":35,"./Line3":36,"./Matrix4":37,"./Plane":40,"./Vector2":44,"./Vector3":45}],39:[function(require,module,exports){
+>>>>>>> Hou-branch
+>>>>>>> 6df7b805a6651c979c79684eb3ff99363049cf86
 const Vector2D = require('./Vector2')
 const {EPS, angleEPS} = require('../constants')
 const {parseOptionAs2DVector, parseOptionAsFloat, parseOptionAsInt, parseOptionAsBool} = require('../../api/optionParsers')
@@ -8156,7 +9074,15 @@ Path2D.prototype = {
 
 module.exports = Path2D
 
+<<<<<<< HEAD
 },{"../../api/optionParsers":24,"../CAG":28,"../constants":37,"./Side":46,"./Vector2":47,"./Vertex2":49}],43:[function(require,module,exports){
+=======
+<<<<<<< HEAD
+},{"../../api/optionParsers":18,"../CAG":22,"../constants":31,"./Side":40,"./Vector2":41,"./Vertex2":43}],37:[function(require,module,exports){
+=======
+},{"../../api/optionParsers":21,"../CAG":25,"../constants":34,"./Side":43,"./Vector2":44,"./Vertex2":46}],40:[function(require,module,exports){
+>>>>>>> Hou-branch
+>>>>>>> 6df7b805a6651c979c79684eb3ff99363049cf86
 const Vector3D = require('./Vector3')
 const Line3D = require('./Line3')
 const {EPS, getTag} = require('../constants')
@@ -8298,7 +9224,15 @@ Plane.prototype = {
 
 module.exports = Plane
 
+<<<<<<< HEAD
 },{"../constants":37,"./Line3":39,"./Vector3":48}],44:[function(require,module,exports){
+=======
+<<<<<<< HEAD
+},{"../constants":31,"./Line3":33,"./Vector3":42}],38:[function(require,module,exports){
+=======
+},{"../constants":34,"./Line3":36,"./Vector3":45}],41:[function(require,module,exports){
+>>>>>>> Hou-branch
+>>>>>>> 6df7b805a6651c979c79684eb3ff99363049cf86
 const CAG = require('../CAG')
 const {fromPoints} = require('../CAGFactories')
 
@@ -8320,7 +9254,15 @@ Polygon2D.prototype = CAG.prototype
 
 module.exports = Polygon2D
 
+<<<<<<< HEAD
 },{"../CAG":28,"../CAGFactories":29}],45:[function(require,module,exports){
+=======
+<<<<<<< HEAD
+},{"../CAG":22,"../CAGFactories":23}],39:[function(require,module,exports){
+=======
+},{"../CAG":25,"../CAGFactories":26}],42:[function(require,module,exports){
+>>>>>>> Hou-branch
+>>>>>>> 6df7b805a6651c979c79684eb3ff99363049cf86
 const Vector3D = require('./Vector3')
 const Vertex = require('./Vertex3')
 const Matrix4x4 = require('./Matrix4')
@@ -8696,7 +9638,15 @@ Polygon.defaultShared = new Polygon.Shared(null)
 
 module.exports = Polygon
 
+<<<<<<< HEAD
 },{"../../api/solidFromSlices":27,"../CAG":28,"../CAGFactories":29,"../CSGFactories":31,"../constants":37,"./Matrix4":40,"./Plane":43,"./Vector3":48,"./Vertex3":50}],46:[function(require,module,exports){
+=======
+<<<<<<< HEAD
+},{"../../api/solidFromSlices":21,"../CAG":22,"../CAGFactories":23,"../CSGFactories":25,"../constants":31,"./Matrix4":34,"./Plane":37,"./Vector3":42,"./Vertex3":44}],40:[function(require,module,exports){
+=======
+},{"../../api/solidFromSlices":24,"../CAG":25,"../CAGFactories":26,"../CSGFactories":28,"../constants":34,"./Matrix4":37,"./Plane":40,"./Vector3":45,"./Vertex3":47}],43:[function(require,module,exports){
+>>>>>>> Hou-branch
+>>>>>>> 6df7b805a6651c979c79684eb3ff99363049cf86
 const Vector2D = require('./Vector2')
 const Vertex = require('./Vertex2')
 const Vertex3 = require('./Vertex3')
@@ -8800,7 +9750,15 @@ Side.prototype = {
 
 module.exports = Side
 
+<<<<<<< HEAD
 },{"../constants":37,"./Polygon3":45,"./Vector2":47,"./Vertex2":49,"./Vertex3":50}],47:[function(require,module,exports){
+=======
+<<<<<<< HEAD
+},{"../constants":31,"./Polygon3":39,"./Vector2":41,"./Vertex2":43,"./Vertex3":44}],41:[function(require,module,exports){
+=======
+},{"../constants":34,"./Polygon3":42,"./Vector2":44,"./Vertex2":46,"./Vertex3":47}],44:[function(require,module,exports){
+>>>>>>> Hou-branch
+>>>>>>> 6df7b805a6651c979c79684eb3ff99363049cf86
 const {IsFloat} = require('../utils')
 
 /** Class Vector2D
@@ -8998,7 +9956,15 @@ Vector2D.prototype = {
 
 module.exports = Vector2D
 
+<<<<<<< HEAD
 },{"../utils":55,"./Vector3":48}],48:[function(require,module,exports){
+=======
+<<<<<<< HEAD
+},{"../utils":49,"./Vector3":42}],42:[function(require,module,exports){
+=======
+},{"../utils":52,"./Vector3":45}],45:[function(require,module,exports){
+>>>>>>> Hou-branch
+>>>>>>> 6df7b805a6651c979c79684eb3ff99363049cf86
 const {IsFloat} = require('../utils')
 const Vector2D = require('./Vector2')
 
@@ -9213,7 +10179,15 @@ Vector3D.prototype = {
 
 module.exports = Vector3D
 
+<<<<<<< HEAD
 },{"../utils":55,"./Vector2":47}],49:[function(require,module,exports){
+=======
+<<<<<<< HEAD
+},{"../utils":49,"./Vector2":41}],43:[function(require,module,exports){
+=======
+},{"../utils":52,"./Vector2":44}],46:[function(require,module,exports){
+>>>>>>> Hou-branch
+>>>>>>> 6df7b805a6651c979c79684eb3ff99363049cf86
 const Vector2D = require('./Vector2')
 const {getTag} = require('../constants')
 
@@ -9241,7 +10215,15 @@ Vertex.prototype = {
 
 module.exports = Vertex
 
+<<<<<<< HEAD
 },{"../constants":37,"./Vector2":47}],50:[function(require,module,exports){
+=======
+<<<<<<< HEAD
+},{"../constants":31,"./Vector2":41}],44:[function(require,module,exports){
+=======
+},{"../constants":34,"./Vector2":44}],47:[function(require,module,exports){
+>>>>>>> Hou-branch
+>>>>>>> 6df7b805a6651c979c79684eb3ff99363049cf86
 const Vector3D = require('./Vector3')
 const {getTag} = require('../constants')
 
@@ -9299,7 +10281,15 @@ Vertex.prototype = {
 
 module.exports = Vertex
 
+<<<<<<< HEAD
 },{"../constants":37,"./Vector3":48}],51:[function(require,module,exports){
+=======
+<<<<<<< HEAD
+},{"../constants":31,"./Vector3":42}],45:[function(require,module,exports){
+=======
+},{"../constants":34,"./Vector3":45}],48:[function(require,module,exports){
+>>>>>>> Hou-branch
+>>>>>>> 6df7b805a6651c979c79684eb3ff99363049cf86
 const {EPS} = require('../constants')
 const {solve2Linear} = require('../utils')
 
@@ -9325,7 +10315,15 @@ const linesIntersect = function (p0start, p0end, p1start, p1end) {
 
 module.exports = {linesIntersect}
 
+<<<<<<< HEAD
 },{"../constants":37,"../utils":55}],52:[function(require,module,exports){
+=======
+<<<<<<< HEAD
+},{"../constants":31,"../utils":49}],46:[function(require,module,exports){
+=======
+},{"../constants":34,"../utils":52}],49:[function(require,module,exports){
+>>>>>>> Hou-branch
+>>>>>>> 6df7b805a6651c979c79684eb3ff99363049cf86
 const {EPS} = require('../constants')
 const OrthoNormalBasis = require('./OrthoNormalBasis')
 const {interpolateBetween2DPointsForY, insertSorted, fnNumberSort} = require('../utils')
@@ -9669,7 +10667,15 @@ const reTesselateCoplanarPolygons = function (sourcepolygons, destpolygons) {
 
 module.exports = reTesselateCoplanarPolygons
 
+<<<<<<< HEAD
 },{"../constants":37,"../utils":55,"./Line2":38,"./OrthoNormalBasis":41,"./Polygon3":45,"./Vector2":47,"./Vertex3":50}],53:[function(require,module,exports){
+=======
+<<<<<<< HEAD
+},{"../constants":31,"../utils":49,"./Line2":32,"./OrthoNormalBasis":35,"./Polygon3":39,"./Vector2":41,"./Vertex3":44}],47:[function(require,module,exports){
+=======
+},{"../constants":34,"../utils":52,"./Line2":35,"./OrthoNormalBasis":38,"./Polygon3":42,"./Vector2":44,"./Vertex3":47}],50:[function(require,module,exports){
+>>>>>>> Hou-branch
+>>>>>>> 6df7b805a6651c979c79684eb3ff99363049cf86
 const Matrix4x4 = require('./math/Matrix4')
 const Vector3D = require('./math/Vector3')
 const Plane = require('./math/Plane')
@@ -9752,7 +10758,15 @@ module.exports = {
   addCenteringToPrototype
 }
 
+<<<<<<< HEAD
 },{"./math/Matrix4":40,"./math/Plane":43,"./math/Vector3":48}],54:[function(require,module,exports){
+=======
+<<<<<<< HEAD
+},{"./math/Matrix4":34,"./math/Plane":37,"./math/Vector3":42}],48:[function(require,module,exports){
+=======
+},{"./math/Matrix4":37,"./math/Plane":40,"./math/Vector3":45}],51:[function(require,module,exports){
+>>>>>>> Hou-branch
+>>>>>>> 6df7b805a6651c979c79684eb3ff99363049cf86
 const {_CSGDEBUG, EPS} = require('./constants')
 const Vertex = require('./math/Vertex3')
 const Polygon = require('./math/Polygon3')
@@ -10263,7 +11277,15 @@ Node.prototype = {
 
 module.exports = Tree
 
+<<<<<<< HEAD
 },{"./constants":37,"./math/Polygon3":45,"./math/Vertex3":50}],55:[function(require,module,exports){
+=======
+<<<<<<< HEAD
+},{"./constants":31,"./math/Polygon3":39,"./math/Vertex3":44}],49:[function(require,module,exports){
+=======
+},{"./constants":34,"./math/Polygon3":42,"./math/Vertex3":47}],52:[function(require,module,exports){
+>>>>>>> Hou-branch
+>>>>>>> 6df7b805a6651c979c79684eb3ff99363049cf86
 function fnNumberSort (a, b) {
   return a - b
 }
@@ -10367,7 +11389,15 @@ module.exports = {
   isCSG
 }
 
+<<<<<<< HEAD
 },{}],56:[function(require,module,exports){
+=======
+<<<<<<< HEAD
+},{}],50:[function(require,module,exports){
+=======
+},{}],53:[function(require,module,exports){
+>>>>>>> Hou-branch
+>>>>>>> 6df7b805a6651c979c79684eb3ff99363049cf86
 const Vector2D = require('../math/Vector2')
 
 // see http://local.wasp.uwa.edu.au/~pbourke/geometry/polyarea/ :
@@ -10401,7 +11431,15 @@ const getBounds = function (cag) {
 
 module.exports = {area, getBounds}
 
+<<<<<<< HEAD
 },{"../math/Vector2":47}],57:[function(require,module,exports){
+=======
+<<<<<<< HEAD
+},{"../math/Vector2":41}],51:[function(require,module,exports){
+=======
+},{"../math/Vector2":44}],54:[function(require,module,exports){
+>>>>>>> Hou-branch
+>>>>>>> 6df7b805a6651c979c79684eb3ff99363049cf86
 const {areaEPS} = require('../constants')
 const {linesIntersect} = require('../math/lineUtils')
 
@@ -10503,7 +11541,15 @@ module.exports = {
   contains
 }
 
+<<<<<<< HEAD
 },{"../constants":37,"../math/lineUtils":51}],58:[function(require,module,exports){
+=======
+<<<<<<< HEAD
+},{"../constants":31,"../math/lineUtils":45}],52:[function(require,module,exports){
+=======
+},{"../constants":34,"../math/lineUtils":48}],55:[function(require,module,exports){
+>>>>>>> Hou-branch
+>>>>>>> 6df7b805a6651c979c79684eb3ff99363049cf86
 const {EPS} = require('../constants')
 const FuzzyCSGFactory = require('../FuzzyFactory3d')
 const FuzzyCAGFactory = require('../FuzzyFactory2d')
@@ -10589,7 +11635,15 @@ const CAGFromCAGFuzzyFactory = function (factory, sourcecag) {
 
 module.exports = canonicalize
 
+<<<<<<< HEAD
 },{"../CAGFactories":29,"../CSGFactories":31,"../FuzzyFactory2d":33,"../FuzzyFactory3d":34,"../constants":37}],59:[function(require,module,exports){
+=======
+<<<<<<< HEAD
+},{"../CAGFactories":23,"../CSGFactories":25,"../FuzzyFactory2d":27,"../FuzzyFactory3d":28,"../constants":31}],53:[function(require,module,exports){
+=======
+},{"../CAGFactories":26,"../CSGFactories":28,"../FuzzyFactory2d":30,"../FuzzyFactory3d":31,"../constants":34}],56:[function(require,module,exports){
+>>>>>>> Hou-branch
+>>>>>>> 6df7b805a6651c979c79684eb3ff99363049cf86
 const Vector3D = require('../math/Vector3')
 
 /**
@@ -10639,7 +11693,15 @@ const area = function (csg) {
 
 module.exports = {bounds, volume, area}
 
+<<<<<<< HEAD
 },{"../math/Vector3":48}],60:[function(require,module,exports){
+=======
+<<<<<<< HEAD
+},{"../math/Vector3":42}],54:[function(require,module,exports){
+=======
+},{"../math/Vector3":45}],57:[function(require,module,exports){
+>>>>>>> Hou-branch
+>>>>>>> 6df7b805a6651c979c79684eb3ff99363049cf86
 const CAG = require('../CAG') // FIXME: circular dependency !
 const {EPS} = require('../constants')
 
@@ -10664,7 +11726,15 @@ const projectToOrthoNormalBasis = function (csg, orthobasis) {
 
 module.exports = {projectToOrthoNormalBasis}
 
+<<<<<<< HEAD
 },{"../CAG":28,"../constants":37}],61:[function(require,module,exports){
+=======
+<<<<<<< HEAD
+},{"../CAG":22,"../constants":31}],55:[function(require,module,exports){
+=======
+},{"../CAG":25,"../constants":34}],58:[function(require,module,exports){
+>>>>>>> Hou-branch
+>>>>>>> 6df7b805a6651c979c79684eb3ff99363049cf86
 const {EPS} = require('../constants')
 const Polygon = require('../math/Polygon3')
 const Plane = require('../math/Plane')
@@ -10982,7 +12052,15 @@ const fixTJunctions = function (fromPolygons, csg) {
 
 module.exports = fixTJunctions
 
+<<<<<<< HEAD
 },{"../constants":37,"../math/Plane":43,"../math/Polygon3":45}],62:[function(require,module,exports){
+=======
+<<<<<<< HEAD
+},{"../constants":31,"../math/Plane":37,"../math/Polygon3":39}],56:[function(require,module,exports){
+=======
+},{"../constants":34,"../math/Plane":40,"../math/Polygon3":42}],59:[function(require,module,exports){
+>>>>>>> Hou-branch
+>>>>>>> 6df7b805a6651c979c79684eb3ff99363049cf86
 const FuzzyCSGFactory = require('../FuzzyFactory3d')
 const reTesselateCoplanarPolygons = require('../math/reTesselateCoplanarPolygons')
 const {fromPolygons} = require('../CSGFactories')
@@ -11031,7 +12109,15 @@ const reTesselate = function (csg) {
 
 module.exports = reTesselate
 
+<<<<<<< HEAD
 },{"../CSGFactories":31,"../FuzzyFactory3d":34,"../math/reTesselateCoplanarPolygons":52}],63:[function(require,module,exports){
+=======
+<<<<<<< HEAD
+},{"../CSGFactories":25,"../FuzzyFactory3d":28,"../math/reTesselateCoplanarPolygons":46}],57:[function(require,module,exports){
+=======
+},{"../CSGFactories":28,"../FuzzyFactory3d":31,"../math/reTesselateCoplanarPolygons":49}],60:[function(require,module,exports){
+>>>>>>> Hou-branch
+>>>>>>> 6df7b805a6651c979c79684eb3ff99363049cf86
 /* converts input data to array if it is not already an array */
 function toArray (data) {
   if (!data) return []
@@ -11041,7 +12127,15 @@ function toArray (data) {
 
 module.exports = toArray
 
+<<<<<<< HEAD
 },{}],64:[function(require,module,exports){
+=======
+<<<<<<< HEAD
+},{}],58:[function(require,module,exports){
+=======
+},{}],61:[function(require,module,exports){
+>>>>>>> Hou-branch
+>>>>>>> 6df7b805a6651c979c79684eb3ff99363049cf86
 /*
 ## License
 
@@ -11232,7 +12326,15 @@ addCenteringToPrototype(CAG.prototype, ['x', 'y'])
 
 module.exports = {CSG, CAG}
 
+<<<<<<< HEAD
 },{"./src/CAG":65,"./src/CAGFactories":66,"./src/CSG":67,"./src/CSGFactories":68,"./src/Properties":72,"./src/connectors":73,"./src/constants":74,"./src/debugHelpers":75,"./src/math/Line2":76,"./src/math/Line3":77,"./src/math/Matrix4":78,"./src/math/OrthoNormalBasis":79,"./src/math/Path2":80,"./src/math/Plane":81,"./src/math/Polygon2":82,"./src/math/Polygon3":83,"./src/math/Side":84,"./src/math/Vector2":85,"./src/math/Vector3":86,"./src/math/Vertex2":87,"./src/math/Vertex3":88,"./src/mutators":91,"./src/primitives2d":93,"./src/primitives3d":94}],65:[function(require,module,exports){
+=======
+<<<<<<< HEAD
+},{"./src/CAG":59,"./src/CAGFactories":60,"./src/CSG":61,"./src/CSGFactories":62,"./src/Properties":66,"./src/connectors":67,"./src/constants":68,"./src/debugHelpers":69,"./src/math/Line2":70,"./src/math/Line3":71,"./src/math/Matrix4":72,"./src/math/OrthoNormalBasis":73,"./src/math/Path2":74,"./src/math/Plane":75,"./src/math/Polygon2":76,"./src/math/Polygon3":77,"./src/math/Side":78,"./src/math/Vector2":79,"./src/math/Vector3":80,"./src/math/Vertex2":81,"./src/math/Vertex3":82,"./src/mutators":85,"./src/primitives2d":87,"./src/primitives3d":88}],59:[function(require,module,exports){
+=======
+},{"./src/CAG":62,"./src/CAGFactories":63,"./src/CSG":64,"./src/CSGFactories":65,"./src/Properties":69,"./src/connectors":70,"./src/constants":71,"./src/debugHelpers":72,"./src/math/Line2":73,"./src/math/Line3":74,"./src/math/Matrix4":75,"./src/math/OrthoNormalBasis":76,"./src/math/Path2":77,"./src/math/Plane":78,"./src/math/Polygon2":79,"./src/math/Polygon3":80,"./src/math/Side":81,"./src/math/Vector2":82,"./src/math/Vector3":83,"./src/math/Vertex2":84,"./src/math/Vertex3":85,"./src/mutators":88,"./src/primitives2d":90,"./src/primitives3d":91}],62:[function(require,module,exports){
+>>>>>>> Hou-branch
+>>>>>>> 6df7b805a6651c979c79684eb3ff99363049cf86
 const {EPS, angleEPS, areaEPS, defaultResolution3D} = require('./constants')
 const {Connector} = require('./connectors')
 const OrthoNormalBasis = require('./math/OrthoNormalBasis')
@@ -12050,7 +13152,15 @@ CAG.prototype = {
 
 module.exports = CAG
 
+<<<<<<< HEAD
 },{"./CSG":67,"./FuzzyFactory2d":70,"./connectors":73,"./constants":74,"./math/OrthoNormalBasis":79,"./math/Path2":80,"./math/Polygon3":83,"./math/Side":84,"./math/Vector2":85,"./math/Vector3":86,"./math/Vertex2":87,"./math/Vertex3":88,"./math/lineUtils":89,"./optionParsers":92}],66:[function(require,module,exports){
+=======
+<<<<<<< HEAD
+},{"./CSG":61,"./FuzzyFactory2d":64,"./connectors":67,"./constants":68,"./math/OrthoNormalBasis":73,"./math/Path2":74,"./math/Polygon3":77,"./math/Side":78,"./math/Vector2":79,"./math/Vector3":80,"./math/Vertex2":81,"./math/Vertex3":82,"./math/lineUtils":83,"./optionParsers":86}],60:[function(require,module,exports){
+=======
+},{"./CSG":64,"./FuzzyFactory2d":67,"./connectors":70,"./constants":71,"./math/OrthoNormalBasis":76,"./math/Path2":77,"./math/Polygon3":80,"./math/Side":81,"./math/Vector2":82,"./math/Vector3":83,"./math/Vertex2":84,"./math/Vertex3":85,"./math/lineUtils":86,"./optionParsers":89}],63:[function(require,module,exports){
+>>>>>>> Hou-branch
+>>>>>>> 6df7b805a6651c979c79684eb3ff99363049cf86
 const CAG = require('./CAG')
 const Side = require('./math/Side')
 const Vector2D = require('./math/Vector2')
@@ -12110,7 +13220,15 @@ module.exports = {
   //fromFakeCSG
 }
 
+<<<<<<< HEAD
 },{"./CAG":65,"./math/Path2":80,"./math/Side":84,"./math/Vector2":85,"./math/Vertex2":87}],67:[function(require,module,exports){
+=======
+<<<<<<< HEAD
+},{"./CAG":59,"./math/Path2":74,"./math/Side":78,"./math/Vector2":79,"./math/Vertex2":81}],61:[function(require,module,exports){
+=======
+},{"./CAG":62,"./math/Path2":77,"./math/Side":81,"./math/Vector2":82,"./math/Vertex2":84}],64:[function(require,module,exports){
+>>>>>>> Hou-branch
+>>>>>>> 6df7b805a6651c979c79684eb3ff99363049cf86
 const {fnNumberSort} = require('./utils')
 const FuzzyCSGFactory = require('./FuzzyFactory3d')
 const Tree = require('./trees')
@@ -13081,7 +14199,15 @@ const CSGFromCSGFuzzyFactory = function (factory, sourcecsg) {
 
 module.exports = CSG
 
+<<<<<<< HEAD
 },{"./CAG":65,"./FuzzyFactory3d":71,"./Properties":72,"./connectors":73,"./constants":74,"./math/Matrix4":78,"./math/OrthoNormalBasis":79,"./math/Plane":81,"./math/Polygon3":83,"./math/Vector2":85,"./math/Vector3":86,"./math/Vertex3":88,"./math/polygonUtils":90,"./trees":95,"./utils":96,"./utils/fixTJunctions":97}],68:[function(require,module,exports){
+=======
+<<<<<<< HEAD
+},{"./CAG":59,"./FuzzyFactory3d":65,"./Properties":66,"./connectors":67,"./constants":68,"./math/Matrix4":72,"./math/OrthoNormalBasis":73,"./math/Plane":75,"./math/Polygon3":77,"./math/Vector2":79,"./math/Vector3":80,"./math/Vertex3":82,"./math/polygonUtils":84,"./trees":89,"./utils":90,"./utils/fixTJunctions":91}],62:[function(require,module,exports){
+=======
+},{"./CAG":62,"./FuzzyFactory3d":68,"./Properties":69,"./connectors":70,"./constants":71,"./math/Matrix4":75,"./math/OrthoNormalBasis":76,"./math/Plane":78,"./math/Polygon3":80,"./math/Vector2":82,"./math/Vector3":83,"./math/Vertex3":85,"./math/polygonUtils":87,"./trees":92,"./utils":93,"./utils/fixTJunctions":94}],65:[function(require,module,exports){
+>>>>>>> Hou-branch
+>>>>>>> 6df7b805a6651c979c79684eb3ff99363049cf86
 const Vector3D = require('./math/Vector3')
 const Vertex = require('./math/Vertex3')
 const Plane = require('./math/Plane')
@@ -13194,6 +14320,7 @@ module.exports = {
   fromCompactBinary
 }
 
+<<<<<<< HEAD
 },{"./CSG":67,"./math/Plane":81,"./math/Polygon2":82,"./math/Polygon3":83,"./math/Vector3":86,"./math/Vertex3":88}],69:[function(require,module,exports){
 arguments[4][32][0].apply(exports,arguments)
 },{"dup":32}],70:[function(require,module,exports){
@@ -13203,6 +14330,29 @@ arguments[4][34][0].apply(exports,arguments)
 },{"./FuzzyFactory":69,"./constants":74,"./math/Polygon3":83,"dup":34}],72:[function(require,module,exports){
 arguments[4][35][0].apply(exports,arguments)
 },{"dup":35}],73:[function(require,module,exports){
+=======
+<<<<<<< HEAD
+},{"./CSG":61,"./math/Plane":75,"./math/Polygon2":76,"./math/Polygon3":77,"./math/Vector3":80,"./math/Vertex3":82}],63:[function(require,module,exports){
+arguments[4][26][0].apply(exports,arguments)
+},{"dup":26}],64:[function(require,module,exports){
+arguments[4][27][0].apply(exports,arguments)
+},{"./FuzzyFactory":63,"./constants":68,"./math/Side":78,"dup":27}],65:[function(require,module,exports){
+arguments[4][28][0].apply(exports,arguments)
+},{"./FuzzyFactory":63,"./constants":68,"./math/Polygon3":77,"dup":28}],66:[function(require,module,exports){
+arguments[4][29][0].apply(exports,arguments)
+},{"dup":29}],67:[function(require,module,exports){
+=======
+},{"./CSG":64,"./math/Plane":78,"./math/Polygon2":79,"./math/Polygon3":80,"./math/Vector3":83,"./math/Vertex3":85}],66:[function(require,module,exports){
+arguments[4][29][0].apply(exports,arguments)
+},{"dup":29}],67:[function(require,module,exports){
+arguments[4][30][0].apply(exports,arguments)
+},{"./FuzzyFactory":66,"./constants":71,"./math/Side":81,"dup":30}],68:[function(require,module,exports){
+arguments[4][31][0].apply(exports,arguments)
+},{"./FuzzyFactory":66,"./constants":71,"./math/Polygon3":80,"dup":31}],69:[function(require,module,exports){
+arguments[4][32][0].apply(exports,arguments)
+},{"dup":32}],70:[function(require,module,exports){
+>>>>>>> Hou-branch
+>>>>>>> 6df7b805a6651c979c79684eb3ff99363049cf86
 const Vector3D = require('./math/Vector3')
 const Line3D = require('./math/Line3')
 const Matrix4x4 = require('./math/Matrix4')
@@ -13424,9 +14574,21 @@ ConnectorList.prototype = {
 
 module.exports = {Connector, ConnectorList}
 
+<<<<<<< HEAD
 },{"./CSG":67,"./math/Line3":77,"./math/Matrix4":78,"./math/OrthoNormalBasis":79,"./math/Plane":81,"./math/Vector3":86}],74:[function(require,module,exports){
 arguments[4][37][0].apply(exports,arguments)
 },{"dup":37}],75:[function(require,module,exports){
+=======
+<<<<<<< HEAD
+},{"./CSG":61,"./math/Line3":71,"./math/Matrix4":72,"./math/OrthoNormalBasis":73,"./math/Plane":75,"./math/Vector3":80}],68:[function(require,module,exports){
+arguments[4][31][0].apply(exports,arguments)
+},{"dup":31}],69:[function(require,module,exports){
+=======
+},{"./CSG":64,"./math/Line3":74,"./math/Matrix4":75,"./math/OrthoNormalBasis":76,"./math/Plane":78,"./math/Vector3":83}],71:[function(require,module,exports){
+arguments[4][34][0].apply(exports,arguments)
+},{"dup":34}],72:[function(require,module,exports){
+>>>>>>> Hou-branch
+>>>>>>> 6df7b805a6651c979c79684eb3ff99363049cf86
 const CSG = require('./CSG')
 const {cube} = require('./primitives3d')
 
@@ -13461,6 +14623,7 @@ const toPointCloud = function (csg, cuberadius) {
 
 module.exports = {toPointCloud}
 
+<<<<<<< HEAD
 },{"./CSG":67,"./primitives3d":94}],76:[function(require,module,exports){
 arguments[4][38][0].apply(exports,arguments)
 },{"../utils":96,"./Vector2":85,"dup":38}],77:[function(require,module,exports){
@@ -13468,6 +14631,25 @@ arguments[4][39][0].apply(exports,arguments)
 },{"../constants":74,"../utils":96,"./Vector3":86,"dup":39}],78:[function(require,module,exports){
 arguments[4][40][0].apply(exports,arguments)
 },{"./OrthoNormalBasis":79,"./Plane":81,"./Vector2":85,"./Vector3":86,"dup":40}],79:[function(require,module,exports){
+=======
+<<<<<<< HEAD
+},{"./CSG":61,"./primitives3d":88}],70:[function(require,module,exports){
+arguments[4][32][0].apply(exports,arguments)
+},{"../utils":90,"./Vector2":79,"dup":32}],71:[function(require,module,exports){
+arguments[4][33][0].apply(exports,arguments)
+},{"../constants":68,"../utils":90,"./Vector3":80,"dup":33}],72:[function(require,module,exports){
+arguments[4][34][0].apply(exports,arguments)
+},{"./OrthoNormalBasis":73,"./Plane":75,"./Vector2":79,"./Vector3":80,"dup":34}],73:[function(require,module,exports){
+=======
+},{"./CSG":64,"./primitives3d":91}],73:[function(require,module,exports){
+arguments[4][35][0].apply(exports,arguments)
+},{"../utils":93,"./Vector2":82,"dup":35}],74:[function(require,module,exports){
+arguments[4][36][0].apply(exports,arguments)
+},{"../constants":71,"../utils":93,"./Vector3":83,"dup":36}],75:[function(require,module,exports){
+arguments[4][37][0].apply(exports,arguments)
+},{"./OrthoNormalBasis":76,"./Plane":78,"./Vector2":82,"./Vector3":83,"dup":37}],76:[function(require,module,exports){
+>>>>>>> Hou-branch
+>>>>>>> 6df7b805a6651c979c79684eb3ff99363049cf86
 const Vector2D = require('./Vector2')
 const Vector3D = require('./Vector3')
 const Line2D = require('./Line2')
@@ -13671,7 +14853,15 @@ OrthoNormalBasis.prototype = {
 
 module.exports = OrthoNormalBasis
 
+<<<<<<< HEAD
 },{"./Line2":76,"./Line3":77,"./Matrix4":78,"./Plane":81,"./Vector2":85,"./Vector3":86}],80:[function(require,module,exports){
+=======
+<<<<<<< HEAD
+},{"./Line2":70,"./Line3":71,"./Matrix4":72,"./Plane":75,"./Vector2":79,"./Vector3":80}],74:[function(require,module,exports){
+=======
+},{"./Line2":73,"./Line3":74,"./Matrix4":75,"./Plane":78,"./Vector2":82,"./Vector3":83}],77:[function(require,module,exports){
+>>>>>>> Hou-branch
+>>>>>>> 6df7b805a6651c979c79684eb3ff99363049cf86
 const Vector2D = require('./Vector2')
 const {EPS, angleEPS} = require('../constants')
 const {parseOptionAs2DVector, parseOptionAsFloat, parseOptionAsInt, parseOptionAsBool} = require('../optionParsers')
@@ -14145,9 +15335,21 @@ Path2D.prototype = {
 
 module.exports = Path2D
 
+<<<<<<< HEAD
 },{"../CAG":65,"../constants":74,"../optionParsers":92,"./Side":84,"./Vector2":85,"./Vertex2":87}],81:[function(require,module,exports){
 arguments[4][43][0].apply(exports,arguments)
 },{"../constants":74,"./Line3":77,"./Vector3":86,"dup":43}],82:[function(require,module,exports){
+=======
+<<<<<<< HEAD
+},{"../CAG":59,"../constants":68,"../optionParsers":86,"./Side":78,"./Vector2":79,"./Vertex2":81}],75:[function(require,module,exports){
+arguments[4][37][0].apply(exports,arguments)
+},{"../constants":68,"./Line3":71,"./Vector3":80,"dup":37}],76:[function(require,module,exports){
+=======
+},{"../CAG":62,"../constants":71,"../optionParsers":89,"./Side":81,"./Vector2":82,"./Vertex2":84}],78:[function(require,module,exports){
+arguments[4][40][0].apply(exports,arguments)
+},{"../constants":71,"./Line3":74,"./Vector3":83,"dup":40}],79:[function(require,module,exports){
+>>>>>>> Hou-branch
+>>>>>>> 6df7b805a6651c979c79684eb3ff99363049cf86
 const CAG = require('../CAG')
 
 /*
@@ -14168,7 +15370,15 @@ Polygon2D.prototype = CAG.prototype
 
 module.exports = Polygon2D
 
+<<<<<<< HEAD
 },{"../CAG":65}],83:[function(require,module,exports){
+=======
+<<<<<<< HEAD
+},{"../CAG":59}],77:[function(require,module,exports){
+=======
+},{"../CAG":62}],80:[function(require,module,exports){
+>>>>>>> Hou-branch
+>>>>>>> 6df7b805a6651c979c79684eb3ff99363049cf86
 const Vector3D = require('./Vector3')
 const Vertex = require('./Vertex3')
 const Matrix4x4 = require('./Matrix4')
@@ -14745,7 +15955,15 @@ Polygon.defaultShared = new Polygon.Shared(null)
 
 module.exports = Polygon
 
+<<<<<<< HEAD
 },{"../CAG":65,"../CAGFactories":66,"../CSG":67,"../constants":74,"../utils":96,"./Matrix4":78,"./Plane":81,"./Vector3":86,"./Vertex3":88}],84:[function(require,module,exports){
+=======
+<<<<<<< HEAD
+},{"../CAG":59,"../CAGFactories":60,"../CSG":61,"../constants":68,"../utils":90,"./Matrix4":72,"./Plane":75,"./Vector3":80,"./Vertex3":82}],78:[function(require,module,exports){
+=======
+},{"../CAG":62,"../CAGFactories":63,"../CSG":64,"../constants":71,"../utils":93,"./Matrix4":75,"./Plane":78,"./Vector3":83,"./Vertex3":85}],81:[function(require,module,exports){
+>>>>>>> Hou-branch
+>>>>>>> 6df7b805a6651c979c79684eb3ff99363049cf86
 const Vector2D = require('./Vector2')
 const Vertex = require('./Vertex2')
 const Vertex3 = require('./Vertex3')
@@ -14849,7 +16067,15 @@ Side.prototype = {
 
 module.exports = Side
 
+<<<<<<< HEAD
 },{"../constants":74,"./Polygon3":83,"./Vector2":85,"./Vertex2":87,"./Vertex3":88}],85:[function(require,module,exports){
+=======
+<<<<<<< HEAD
+},{"../constants":68,"./Polygon3":77,"./Vector2":79,"./Vertex2":81,"./Vertex3":82}],79:[function(require,module,exports){
+=======
+},{"../constants":71,"./Polygon3":80,"./Vector2":82,"./Vertex2":84,"./Vertex3":85}],82:[function(require,module,exports){
+>>>>>>> Hou-branch
+>>>>>>> 6df7b805a6651c979c79684eb3ff99363049cf86
 const {IsFloat} = require('../utils')
 
 /** Class Vector2D
@@ -15047,6 +16273,7 @@ Vector2D.prototype = {
 
 module.exports = Vector2D
 
+<<<<<<< HEAD
 },{"../utils":96,"./Vector3":86}],86:[function(require,module,exports){
 arguments[4][48][0].apply(exports,arguments)
 },{"../utils":96,"./Vector2":85,"dup":48}],87:[function(require,module,exports){
@@ -15054,6 +16281,25 @@ arguments[4][49][0].apply(exports,arguments)
 },{"../constants":74,"./Vector2":85,"dup":49}],88:[function(require,module,exports){
 arguments[4][50][0].apply(exports,arguments)
 },{"../constants":74,"./Vector3":86,"dup":50}],89:[function(require,module,exports){
+=======
+<<<<<<< HEAD
+},{"../utils":90,"./Vector3":80}],80:[function(require,module,exports){
+arguments[4][42][0].apply(exports,arguments)
+},{"../utils":90,"./Vector2":79,"dup":42}],81:[function(require,module,exports){
+arguments[4][43][0].apply(exports,arguments)
+},{"../constants":68,"./Vector2":79,"dup":43}],82:[function(require,module,exports){
+arguments[4][44][0].apply(exports,arguments)
+},{"../constants":68,"./Vector3":80,"dup":44}],83:[function(require,module,exports){
+=======
+},{"../utils":93,"./Vector3":83}],83:[function(require,module,exports){
+arguments[4][45][0].apply(exports,arguments)
+},{"../utils":93,"./Vector2":82,"dup":45}],84:[function(require,module,exports){
+arguments[4][46][0].apply(exports,arguments)
+},{"../constants":71,"./Vector2":82,"dup":46}],85:[function(require,module,exports){
+arguments[4][47][0].apply(exports,arguments)
+},{"../constants":71,"./Vector3":83,"dup":47}],86:[function(require,module,exports){
+>>>>>>> Hou-branch
+>>>>>>> 6df7b805a6651c979c79684eb3ff99363049cf86
 const {EPS} = require('../constants')
 const {solve2Linear} = require('../utils')
 
@@ -15080,7 +16326,15 @@ const linesIntersect = function (p0start, p0end, p1start, p1end) {
 
 module.exports = {linesIntersect}
 
+<<<<<<< HEAD
 },{"../constants":74,"../utils":96}],90:[function(require,module,exports){
+=======
+<<<<<<< HEAD
+},{"../constants":68,"../utils":90}],84:[function(require,module,exports){
+=======
+},{"../constants":71,"../utils":93}],87:[function(require,module,exports){
+>>>>>>> Hou-branch
+>>>>>>> 6df7b805a6651c979c79684eb3ff99363049cf86
 const {EPS} = require('../constants')
 const OrthoNormalBasis = require('./OrthoNormalBasis')
 const {interpolateBetween2DPointsForY, insertSorted, fnNumberSort} = require('../utils')
@@ -15424,9 +16678,21 @@ const reTesselateCoplanarPolygons = function (sourcepolygons, destpolygons) {
 
 module.exports = {reTesselateCoplanarPolygons}
 
+<<<<<<< HEAD
 },{"../constants":74,"../utils":96,"./Line2":76,"./OrthoNormalBasis":79,"./Polygon3":83,"./Vector2":85,"./Vertex3":88}],91:[function(require,module,exports){
 arguments[4][53][0].apply(exports,arguments)
 },{"./math/Matrix4":78,"./math/Plane":81,"./math/Vector3":86,"dup":53}],92:[function(require,module,exports){
+=======
+<<<<<<< HEAD
+},{"../constants":68,"../utils":90,"./Line2":70,"./OrthoNormalBasis":73,"./Polygon3":77,"./Vector2":79,"./Vertex3":82}],85:[function(require,module,exports){
+arguments[4][47][0].apply(exports,arguments)
+},{"./math/Matrix4":72,"./math/Plane":75,"./math/Vector3":80,"dup":47}],86:[function(require,module,exports){
+=======
+},{"../constants":71,"../utils":93,"./Line2":73,"./OrthoNormalBasis":76,"./Polygon3":80,"./Vector2":82,"./Vertex3":85}],88:[function(require,module,exports){
+arguments[4][50][0].apply(exports,arguments)
+},{"./math/Matrix4":75,"./math/Plane":78,"./math/Vector3":83,"dup":50}],89:[function(require,module,exports){
+>>>>>>> Hou-branch
+>>>>>>> 6df7b805a6651c979c79684eb3ff99363049cf86
 const Vector3D = require('./math/Vector3')
 const Vector2D = require('./math/Vector2')
 
@@ -15504,7 +16770,15 @@ module.exports = {
   parseOptionAs3DVectorList
 }
 
+<<<<<<< HEAD
 },{"./math/Vector2":85,"./math/Vector3":86}],93:[function(require,module,exports){
+=======
+<<<<<<< HEAD
+},{"./math/Vector2":79,"./math/Vector3":80}],87:[function(require,module,exports){
+=======
+},{"./math/Vector2":82,"./math/Vector3":83}],90:[function(require,module,exports){
+>>>>>>> Hou-branch
+>>>>>>> 6df7b805a6651c979c79684eb3ff99363049cf86
 const CAG = require('./CAG')
 const {parseOptionAs2DVector, parseOptionAsFloat, parseOptionAsInt} = require('./optionParsers')
 const {defaultResolution2D} = require('./constants')
@@ -15690,7 +16964,15 @@ module.exports = {
   fromCompactBinary
 }
 
+<<<<<<< HEAD
 },{"./CAG":65,"./CAGFactories":66,"./constants":74,"./math/Path2":80,"./math/Vector2":85,"./optionParsers":92}],94:[function(require,module,exports){
+=======
+<<<<<<< HEAD
+},{"./CAG":59,"./CAGFactories":60,"./constants":68,"./math/Path2":74,"./math/Vector2":79,"./optionParsers":86}],88:[function(require,module,exports){
+=======
+},{"./CAG":62,"./CAGFactories":63,"./constants":71,"./math/Path2":77,"./math/Vector2":82,"./optionParsers":89}],91:[function(require,module,exports){
+>>>>>>> Hou-branch
+>>>>>>> 6df7b805a6651c979c79684eb3ff99363049cf86
 const CSG = require('./CSG')
 const {parseOption, parseOptionAs3DVector, parseOptionAs2DVector, parseOptionAs3DVectorList, parseOptionAsFloat, parseOptionAsInt} = require('./optionParsers')
 const {defaultResolution3D, defaultResolution2D, EPS} = require('./constants')
@@ -16240,7 +17522,15 @@ module.exports = {
   polyhedron
 }
 
+<<<<<<< HEAD
 },{"./CSG":67,"./Properties":72,"./connectors":73,"./constants":74,"./math/Polygon3":83,"./math/Vector3":86,"./math/Vertex3":88,"./optionParsers":92}],95:[function(require,module,exports){
+=======
+<<<<<<< HEAD
+},{"./CSG":61,"./Properties":66,"./connectors":67,"./constants":68,"./math/Polygon3":77,"./math/Vector3":80,"./math/Vertex3":82,"./optionParsers":86}],89:[function(require,module,exports){
+=======
+},{"./CSG":64,"./Properties":69,"./connectors":70,"./constants":71,"./math/Polygon3":80,"./math/Vector3":83,"./math/Vertex3":85,"./optionParsers":89}],92:[function(require,module,exports){
+>>>>>>> Hou-branch
+>>>>>>> 6df7b805a6651c979c79684eb3ff99363049cf86
 const {_CSGDEBUG, EPS} = require('./constants')
 const Vertex = require('./math/Vertex3')
 const Polygon = require('./math/Polygon3')
@@ -16752,7 +18042,15 @@ Node.prototype = {
 
 module.exports = Tree
 
+<<<<<<< HEAD
 },{"./constants":74,"./math/Polygon3":83,"./math/Vertex3":88}],96:[function(require,module,exports){
+=======
+<<<<<<< HEAD
+},{"./constants":68,"./math/Polygon3":77,"./math/Vertex3":82}],90:[function(require,module,exports){
+=======
+},{"./constants":71,"./math/Polygon3":80,"./math/Vertex3":85}],93:[function(require,module,exports){
+>>>>>>> Hou-branch
+>>>>>>> 6df7b805a6651c979c79684eb3ff99363049cf86
 function fnNumberSort (a, b) {
   return a - b
 }
@@ -16825,9 +18123,21 @@ module.exports = {
   interpolateBetween2DPointsForY
 }
 
+<<<<<<< HEAD
 },{}],97:[function(require,module,exports){
 arguments[4][61][0].apply(exports,arguments)
 },{"../constants":74,"../math/Plane":81,"../math/Polygon3":83,"dup":61}],98:[function(require,module,exports){
+=======
+<<<<<<< HEAD
+},{}],91:[function(require,module,exports){
+arguments[4][55][0].apply(exports,arguments)
+},{"../constants":68,"../math/Plane":75,"../math/Polygon3":77,"dup":55}],92:[function(require,module,exports){
+=======
+},{}],94:[function(require,module,exports){
+arguments[4][58][0].apply(exports,arguments)
+},{"../constants":71,"../math/Plane":78,"../math/Polygon3":80,"dup":58}],95:[function(require,module,exports){
+>>>>>>> Hou-branch
+>>>>>>> 6df7b805a6651c979c79684eb3ff99363049cf86
 // color table from http://www.w3.org/TR/css3-color/
 const cssColors = {
 // basic color keywords
@@ -17274,7 +18584,15 @@ module.exports = {
   rgb2html
 }
 
+<<<<<<< HEAD
 },{}],99:[function(require,module,exports){
+=======
+<<<<<<< HEAD
+},{}],93:[function(require,module,exports){
+=======
+},{}],96:[function(require,module,exports){
+>>>>>>> Hou-branch
+>>>>>>> 6df7b805a6651c979c79684eb3ff99363049cf86
 function echo () {
   console.warn('echo() will be deprecated in the near future: please use console.log/warn/error instead')
   var s = '', a = arguments
@@ -17291,7 +18609,15 @@ module.exports = {
   echo
 }
 
+<<<<<<< HEAD
 },{}],100:[function(require,module,exports){
+=======
+<<<<<<< HEAD
+},{}],94:[function(require,module,exports){
+=======
+},{}],97:[function(require,module,exports){
+>>>>>>> Hou-branch
+>>>>>>> 6df7b805a6651c979c79684eb3ff99363049cf86
 const { CSG } = require('@jscad/csg')
 
 // FIXME: this is to have more readable/less extremely verbose code below
@@ -17353,7 +18679,15 @@ const cagToPointsArray = input => {
 const degToRad = deg => (Math.PI / 180) * deg
 
 module.exports = {cagToPointsArray, clamp, rightMultiply1x3VectorToArray, polygonFromPoints}
+<<<<<<< HEAD
 },{"@jscad/csg":64}],101:[function(require,module,exports){
+=======
+<<<<<<< HEAD
+},{"@jscad/csg":58}],95:[function(require,module,exports){
+=======
+},{"@jscad/csg":61}],98:[function(require,module,exports){
+>>>>>>> Hou-branch
+>>>>>>> 6df7b805a6651c979c79684eb3ff99363049cf86
 
 const primitives3d = require('./primitives3d')
 const primitives2d = require('./primitives2d')
@@ -17389,7 +18723,15 @@ const exportedApi = {
 
 module.exports = exportedApi
 
+<<<<<<< HEAD
 },{"./color":98,"./debug":99,"./log":102,"./maths":103,"./ops-booleans":104,"./ops-extrusions":105,"./ops-transformations":106,"./primitives2d":107,"./primitives3d":108,"./text":109,"@jscad/csg":64}],102:[function(require,module,exports){
+=======
+<<<<<<< HEAD
+},{"./color":92,"./debug":93,"./log":96,"./maths":97,"./ops-booleans":98,"./ops-extrusions":99,"./ops-transformations":100,"./primitives2d":101,"./primitives3d":102,"./text":103,"@jscad/csg":58}],96:[function(require,module,exports){
+=======
+},{"./color":95,"./debug":96,"./log":99,"./maths":100,"./ops-booleans":101,"./ops-extrusions":102,"./ops-transformations":103,"./primitives2d":104,"./primitives3d":105,"./text":106,"@jscad/csg":61}],99:[function(require,module,exports){
+>>>>>>> Hou-branch
+>>>>>>> 6df7b805a6651c979c79684eb3ff99363049cf86
 function log (txt) {
   var timeInMs = Date.now()
   var prevtime// OpenJsCad.log.prevLogTime
@@ -17416,7 +18758,15 @@ module.exports = {
   status
 }
 
+<<<<<<< HEAD
 },{}],103:[function(require,module,exports){
+=======
+<<<<<<< HEAD
+},{}],97:[function(require,module,exports){
+=======
+},{}],100:[function(require,module,exports){
+>>>>>>> Hou-branch
+>>>>>>> 6df7b805a6651c979c79684eb3ff99363049cf86
 // -- Math functions (360 deg based vs 2pi)
 function sin (a) {
   return Math.sin(a / 360 * Math.PI * 2)
@@ -17527,7 +18877,15 @@ module.exports = {
   round
 }
 
+<<<<<<< HEAD
 },{}],104:[function(require,module,exports){
+=======
+<<<<<<< HEAD
+},{}],98:[function(require,module,exports){
+=======
+},{}],101:[function(require,module,exports){
+>>>>>>> Hou-branch
+>>>>>>> 6df7b805a6651c979c79684eb3ff99363049cf86
 const { CAG } = require('@jscad/csg')
 
 // -- 3D boolean operations
@@ -17631,7 +18989,15 @@ module.exports = {
   intersection
 }
 
+<<<<<<< HEAD
 },{"@jscad/csg":64}],105:[function(require,module,exports){
+=======
+<<<<<<< HEAD
+},{"@jscad/csg":58}],99:[function(require,module,exports){
+=======
+},{"@jscad/csg":61}],102:[function(require,module,exports){
+>>>>>>> Hou-branch
+>>>>>>> 6df7b805a6651c979c79684eb3ff99363049cf86
 const { CSG, CAG } = require('@jscad/csg')
 const {cagToPointsArray, clamp, rightMultiply1x3VectorToArray, polygonFromPoints} = require('./helpers')
 // -- 2D to 3D primitives
@@ -17847,7 +19213,15 @@ module.exports = {
   rectangular_extrude
 }
 
+<<<<<<< HEAD
 },{"./helpers":100,"@jscad/csg":64}],106:[function(require,module,exports){
+=======
+<<<<<<< HEAD
+},{"./helpers":94,"@jscad/csg":58}],100:[function(require,module,exports){
+=======
+},{"./helpers":97,"@jscad/csg":61}],103:[function(require,module,exports){
+>>>>>>> Hou-branch
+>>>>>>> 6df7b805a6651c979c79684eb3ff99363049cf86
 const { CSG, CAG } = require('@jscad/csg')
 const { union } = require('./ops-booleans')
 // -- 3D transformations (OpenSCAD like notion)
@@ -18260,7 +19634,15 @@ module.exports = {
   chain_hull
 }
 
+<<<<<<< HEAD
 },{"./ops-booleans":104,"@jscad/csg":64}],107:[function(require,module,exports){
+=======
+<<<<<<< HEAD
+},{"./ops-booleans":98,"@jscad/csg":58}],101:[function(require,module,exports){
+=======
+},{"./ops-booleans":101,"@jscad/csg":61}],104:[function(require,module,exports){
+>>>>>>> Hou-branch
+>>>>>>> 6df7b805a6651c979c79684eb3ff99363049cf86
 const { CAG } = require('@jscad/csg')
 
 // -- 2D primitives (OpenSCAD like notion)
@@ -18377,7 +19759,15 @@ module.exports = {
   triangle
 }
 
+<<<<<<< HEAD
 },{"@jscad/csg":64}],108:[function(require,module,exports){
+=======
+<<<<<<< HEAD
+},{"@jscad/csg":58}],102:[function(require,module,exports){
+=======
+},{"@jscad/csg":61}],105:[function(require,module,exports){
+>>>>>>> Hou-branch
+>>>>>>> 6df7b805a6651c979c79684eb3ff99363049cf86
 // -- 3D primitives (OpenSCAD like notion)
 const { CSG } = require('@jscad/csg')
 const { circle } = require('./primitives2d')
@@ -18768,7 +20158,15 @@ module.exports = {
   polyhedron
 }
 
+<<<<<<< HEAD
 },{"./ops-extrusions":105,"./ops-transformations":106,"./primitives2d":107,"@jscad/csg":64}],109:[function(require,module,exports){
+=======
+<<<<<<< HEAD
+},{"./ops-extrusions":99,"./ops-transformations":100,"./primitives2d":101,"@jscad/csg":58}],103:[function(require,module,exports){
+=======
+},{"./ops-extrusions":102,"./ops-transformations":103,"./primitives2d":104,"@jscad/csg":61}],106:[function(require,module,exports){
+>>>>>>> Hou-branch
+>>>>>>> 6df7b805a6651c979c79684eb3ff99363049cf86
 
 /** Construct a with, segments tupple from a character
  * @param {Float} x - x offset
@@ -19407,7 +20805,12 @@ module.exports = {
   vector_text
 }
 
+<<<<<<< HEAD
 },{}],110:[function(require,module,exports){
+=======
+<<<<<<< HEAD
+},{}],104:[function(require,module,exports){
+>>>>>>> 6df7b805a6651c979c79684eb3ff99363049cf86
 "use strict;"
 
 const scadApi = require('@jscad/scad-api')
@@ -19458,4 +20861,11 @@ function rebuildMakeSeat ( NewSeatSizex , NewSeatSizey , NewSeatSizez , mode){
 }
 
 module.exports = rebuildMakeSeat
+<<<<<<< HEAD
 },{"./csgToGeometries":8,"@jscad/csg":14,"@jscad/scad-api":101}]},{},[13]);
+=======
+},{"./csgToGeometries":6,"@jscad/csg":8,"@jscad/scad-api":95}]},{},[7]);
+=======
+},{}]},{},[10]);
+>>>>>>> Hou-branch
+>>>>>>> 6df7b805a6651c979c79684eb3ff99363049cf86

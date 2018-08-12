@@ -69,6 +69,7 @@ Processor.prototype = {
 				}else if(scope.furnitures.length == 1){
 					//possible actions with one furniture
 					scope.chair_add = new Chair_Add(scope.main);
+					scope.chair_add.init();
 					scope.transformFunctions.CHAIR_ADD = scope.chair_add;
 
 					scope.chair_rebuild = new Chair_Rebuild(scope.main);
