@@ -227,8 +227,7 @@ Main.prototype = {
 		this.processor = new Processor(scope);
 
 
-		//test
-		// model
+		// //test
 		// var loader = new THREE.GLTFLoader();
 		// loader.load(
 		// 	'models/vitra-chair.glb',
@@ -517,6 +516,12 @@ Main.prototype = {
 				child.material.needsUpdate = true;
 				child.castShadow = true;
 
+
+				//
+				var edges = new THREE.EdgesGeometry( child.geometry );
+				var line = new THREE.LineSegments( edges, new THREE.LineBasicMaterial( { color: 0xff0000 } ) );
+
+				scope.scene.add( line );
 			}
 
 		} );
@@ -576,6 +581,10 @@ Main.prototype = {
 
 				objects.push(child);
 				//scope.addHelper( child ); //to visualize helpers
+
+
+				//test
+
 
 			}
 
@@ -1251,8 +1260,8 @@ Main.prototype = {
 		$('.operations.operation_chair_align').hide();
 		$('.operations.operation_chair_add').hide();
 		$('.operations.operation_chair_rebuild').hide();
-		
-		
+
+
 		this.processor.init();
 		//this.processor.executeDesign();
 

@@ -113,6 +113,54 @@ function Furniture(furniture) {
 		return this.furniture.getObjectByName(name);
 	}
 
+
+	this.getComponentInName = function(name, tag) {
+
+		var group = this.getComponentByName(name);
+
+		if(group == undefined) 
+		{
+			console.log("no such group component");
+			return;
+		}
+
+		//chair: check has labels seat and back
+		if((labeledComponents.includes("back") == false) || (labeledComponents.includes("back") == false))
+		{
+			console.log("missing labels");
+			return;
+		}
+
+		//see if the group component's direction is in the corrected posiiton
+		//no further rotation is made
+		var refAxis = this.normalAxises[name];
+		if(refAxis.equals(this.refNormalAxises[name]) == false)
+		{
+			console.log("position info not corrected, further action is needed...");
+			return;
+		}
+
+		var count = group.children.length;
+		if(count == 0) {
+			console.log("component has no child, check the name again...");
+			return group;
+		}
+
+		var groupComponents = {};
+		for(var i = 0; i < count; i++) {
+			var child = group.children[i];
+			var id = child.id;
+			var x = 0;
+
+		}
+
+
+	}
+
+
+
+
+
 	this.getComponentPosition = function(name) {
 		var component = this.getComponentByName(name);
 		var worldPosition = new THREE.Vector3();
@@ -243,6 +291,7 @@ function Furniture(furniture) {
 		return corners;
 
 	}
+
 
 
 	////////////////////////////////////////////////////////////

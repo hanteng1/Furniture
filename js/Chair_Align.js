@@ -3,7 +3,7 @@
 //align in one line
 //add seat
 const cadMakeSeat = require('./cadMakeSeat')
-
+const computeConvexHull = require('./computeConvexHull')
 
 function Chair_Align (main) {
 
