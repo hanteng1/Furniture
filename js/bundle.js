@@ -607,7 +607,7 @@ Chair_Rebuild.prototype = {
 		this.remove(group,'stand');
 
 		//load new leg
-		this.loadLegModel('../models/Legs/Leg1.dae', furniture, SeatPosi, SeatSize);
+		this.loadLegModel('../models/Legs/Leg4.dae', furniture, SeatPosi, SeatSize);
 		
 
 	},
@@ -634,7 +634,7 @@ Chair_Rebuild.prototype = {
 		loader.load( ModelPath , function ( collada ) {
 			LegModel = collada.scene;
 			//scope.main.scene.add(LegModel);
-			//LegModel.position.set(0,0,0);
+			LegModel.position.set(0,0,0);
 			LegModel.name = 'stand';
 
 			//calculate the leg inverse metrix
@@ -647,16 +647,16 @@ Chair_Rebuild.prototype = {
 			
 			group.add(LegModel);
 
-			//leg1
+			/*leg1
 			LegModel.scale.set(9,9,9);
 			var LegSize = furniture.getComponentSize('stand');
 			LegModel.position.set(SeatPosi.x - LegSize.x/2, SeatPosi.y + LegSize.z/2 , SeatPosi.z - LegSize.y);
-			
-			/*Leg4
+			*/
+			//Leg4
 			LegModel.scale.set(40,40,40);
 			var LegSize = furniture.getComponentSize('stand');
-			LegModel.position.set(SeatPosi.x - LegSize.x/2, SeatPosi.y - LegSize.z , SeatPosi.z - LegSize.y);
-			*/
+			LegModel.position.set(SeatPosi.x - LegSize.z/2, SeatPosi.y  , SeatPosi.z - LegSize.y);
+			
 
 
 
