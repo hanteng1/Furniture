@@ -1,27 +1,27 @@
+/*
+
 const chairCreatBoard = require('./chairCreatBoard')
+const chairCutBack = require('./chairCutBack')
+*/
+const Chair_Add_Board = require('./Chair_Add_Board')
+const Chair_Add_Hook = require('./Chair_Add_Hook')
 
 function Chair_Add (main) {
  	this.main = main;
 	this.furnitures = main.furnitures;
 
-	this.reference = null;  //midframe, seat, mixed
-
-
+	/*
 	this.parameters = {
 		CHAIR_ADD_POSITION: 0,
 		CHAIR_ADD_WIDTH: 0, 
 		CHAIR_ADD_HEIGHT: 0
 	};
-
-	//number of furnitures
-	var count = 0;
-
- 	
+	*/
 }
 
 
 Chair_Add.prototype = {
-
+	/*
 	checkHasSeat: function(furniture) {		
 		return furniture.hasComponent('seat');
 	},
@@ -33,6 +33,27 @@ Chair_Add.prototype = {
 	changeParameterValue: function(pname, value) {
 		this.parameters[pname] = value;
 		this.execute();
+	},
+
+	checkNeedCut: function(furniture){
+		var back = furniture.getObjectByName("back");
+		var seat = furniture.getObjectByName("seat");
+		var center_back = this.getPartCenter(back);
+		var center_seat = this.getPartCenter(seat);
+		var size_back = this.getPartSize(back);
+		var size_seat = this.getPartSize(seat);
+
+		var back_bottom = center_back.y - (size_back.y/2);
+		var seat_bottom = center_seat.y - (size_seat.y/2);
+
+		if(back_bottom >= seat_bottom){
+			//don't need cut
+			return false;
+		}
+		else{
+			//need cut
+			return true;
+		}
 	},
 
 	plantLoader: function(board){
@@ -71,15 +92,21 @@ Chair_Add.prototype = {
 	},
 
 	createHook: function(scene, child, hook, position, offset){		
-		var pos = new THREE.Vector3(position.x + 3 * offset, position.y, position.z + 10);
+		var pos = new THREE.Vector3(position.x + offset, position.y, position.z + 10);
 		var raycaster = new THREE.Raycaster();
 		raycaster.set(pos, new THREE.Vector3(0,0,-1));
 		var intersects = raycaster.intersectObject(child);
 		if(intersects.length > 0){
 			var hook_clone = hook.clone();
+
+			var child_matrix_inverse = new THREE.Matrix4();
+			child_matrix_inverse.getInverse(child.matrixWorld, true);
+			hook_clone.applyMatrix(child_matrix_inverse);
+
 			hook_clone.position.set(intersects[0].point.x, intersects[0].point.y, intersects[0].point.z);
-			console.log(hook_clone.position);
-			scene.add( hook_clone );
+			child.worldToLocal(hook_clone.position);
+
+			child.add( hook_clone );
 		}
 	},
 
@@ -95,9 +122,9 @@ Chair_Add.prototype = {
 		box.setFromObject(child);
 		box.getCenter(center_child);
 
-		this.createHook(scene, child, hook, center_child, size_hook.x * (-1) );
+		this.createHook(scene, child, hook, center_child, size_hook.x * (-3) );
 		this.createHook(scene, child, hook, center_child, size_hook.x * 0 );
-		this.createHook(scene, child, hook, center_child, size_hook.x * 1);		
+		this.createHook(scene, child, hook, center_child, size_hook.x * 3);		
 	},
 
 	hookLoader: function(back){
@@ -144,6 +171,8 @@ Chair_Add.prototype = {
 		
 	},
 
+	*/
+	/*
 	creatWall: function(position, width, height, depth){
 		var geometry = new THREE.BoxGeometry( width, height, depth );
 		var texture = new THREE.TextureLoader().load( 'images/material/wall_2.jpg' );
@@ -152,7 +181,9 @@ Chair_Add.prototype = {
 		wall.position.set(position.x, position.y, position.z);
 		return wall;
 	},
+	*/
 
+	/*
 	creatBoard: function(obj, width, height, depth){
 		//creat board x , depth > height
 		while(this.hasChildren(obj))
@@ -171,6 +202,16 @@ Chair_Add.prototype = {
 		
 	},
 
+	findAllChildren: function(array, obj){
+	  if(obj.children.length > 0){
+	    for (var i = 0; i < obj.children.length; i++) {
+	      this.findAllChildren(array, obj.children[i]);
+	    }
+	  }
+	  else
+	    array.push(obj);		
+	},
+
 	updateBack: function(back){
 		back.updateMatrix();
 		back.updateMatrixWorld(true);
@@ -186,17 +227,13 @@ Chair_Add.prototype = {
 		return box_size;
 	},
 
-	getObjCenter: function(component){
+	getPartCenter: function(part){
 		var box = new THREE.Box3();
-		box.setFromObject(component);
-		var pos = new THREE.Vector3();
-		if(box.isEmpty() === false)
-		{
-			box.getCenter(pos);
-		}else{
-			console.log("error on getting center point");
-		}
-		return pos;
+		box.setFromObject(part);
+		var box_center = new THREE.Vector3();
+		box.getCenter (box_center);
+
+		return box_center;
 	},
 
 	addBoard: function(furniture_clone){
@@ -224,7 +261,7 @@ Chair_Add.prototype = {
 		
 		//get chair back world position and back world matrix's inverse
 		var component = furniture_clone.getObjectByName('back');		
-		var pos = this.getObjCenter(component);
+		var pos = this.getPartCenter(component);
 		var size_board = this.getPartSize(board);
 		
 		var back_matrix_inverse = new THREE.Matrix4();
@@ -272,7 +309,7 @@ Chair_Add.prototype = {
 
 		//get chair back world position and back world matrix's inverse
 		var component = group.getObjectByName('back');		
-		var pos = this.getObjCenter(component);
+		var pos = this.getPartCenter(component);
 		var size_board = this.getPartSize(board);
 		
 		var segPosition = this.parameters.CHAIR_ADD_POSITION;
@@ -303,37 +340,103 @@ Chair_Add.prototype = {
 		this.hookLoader(back);
 			
 	},
+
+	*/
 	//////////////////////////////////////////////////////////////////////////
 
 	execute: function(){
+		if(this.checkHasBack(this.furnitures[0]) && this.checkHasSeat(this.furnitures[0])){
+			Chair_Add_Board(this.main);
+			Chair_Add_Hook(this.main);
+		}
+
+
+
+	/*
 		var hasBoard = false;
 		var hasHook = false;		
-
+		var flagCutLeg = false;
 		if(this.checkHasBack(this.furnitures[0]) && this.checkHasSeat(this.furnitures[0])){
 			if(!this.hasBoard){
+				
 				var furniture_clone_board = new THREE.Object3D();
 				furniture_clone_board = this.furnitures[0].getFurniture().clone();
 				furniture_clone_board.name = "add_board";
-
+				
+				this.flagCutLeg = this.checkNeedCut(furniture_clone_board);
+				*/
+				/*
 				this.addBoard(furniture_clone_board);
 				
 				var clone_size = this.getPartSize(furniture_clone_board);
 				var wallPosition = new THREE.Vector3();
-				wallPosition = this.getObjCenter(furniture_clone_board);
+				wallPosition = this.getPartCenter(furniture_clone_board);
 				wallPosition.z -= clone_size.z;
 				wallPosition.x += 25;
 				var wall = this.creatWall(wallPosition, 100, 50, 10);
 				
 				this.main.scene.add(furniture_clone_board);
+
+
 				this.main.scene.add(wall);
 
 				this.hasBoard = true;
+				*/
+//-------------------------------------------------------------------------------
+				/*
+				if(this.flagCutLeg){
+					var back = this.main.scene.getObjectByName("back");
+
+					var parts = new Array();
+					this.findAllChildren(parts, back);
+					
+					var positions = new Array();
+					var values_x = new Array();
+					for (var i = 0; i < parts.length - 1; i++) {
+						positions.push(this.getPartCenter(parts[i]));
+						values_x.push( this.getPartCenter(parts[i]).x ); 
+					}
+					
+					//left
+					var min = values_x[0];
+					var id_left = 0;
+					for (var i = 0; i < values_x.length; i++) {
+						if(min > values_x[i]){
+							min = values_x[i];
+							id_left = i;
+						}				
+					}					
+
+					//right
+					var max = values_x[0];
+					var id_right = 0;
+					for (var i = 0; i < values_x.length; i++) {
+						if(max < values_x[i]){
+							max = values_x[i];
+							id_right = i;
+						}				
+					}
+					
+
+					//cutBack(parts[id_left], pos);
+
+					//var pos = positions[positions.length - 1].y;
+					var geometry = chairCutBack(parts[id_right]);
+					var material = back.children[0].material[0];
+					var test = new THREE.Mesh( geometry, material );
+					test.position.set(0,0,0);
+					this.main.scene.add(test);
+				}
+				*/
+//-------------------------------------------------------------------------------
+			/*
 			}
 			else{
 				var furniture_clone_board = this.main.scene.getObjectByName("add_board");
-				this.setBoard(furniture_clone_board);	
+				this.setBoard(furniture_clone_board);
 			}
-			
+			*/
+			/*
 			if(!this.hasHook){
 				var furniture_clone_hook = new THREE.Object3D();
 				furniture_clone_hook = this.furnitures[0].getFurniture().clone();
@@ -346,14 +449,25 @@ Chair_Add.prototype = {
 
 			}
 			else{
+				var add_hook = this.main.scene.getObjectByName("add_hook");
+				var back = add_hook.getObjectByName("back");
+				var part = back.children[0];
+				var box = new THREE.Box3();
+				box.setFromObject(part);
 
+				var helper = new THREE.Box3Helper( box, 0xffff00 );
+				this.main.scene.add(helper);
+				// add_hook(back) --> part --> hook
+				
 			}
-			
+			*/
+
+		/*
 		}
 		else
 			alert("Please mark seat and back");		
 	}
-
+	*/
 }
 
 
