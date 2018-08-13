@@ -900,7 +900,10 @@ Main.prototype = {
 
 
 	//trif's block
-
+	applyPutwall: function() {
+		window.print()
+		this.processor.putwall();
+	}
 
 
 

@@ -167,7 +167,11 @@ Ui.prototype = {
 
 		//trif's block
 
+		$('.ui.blue.submit.button.Testbtn').click(function(){
 
+			scope.main.applyPutwall();
+
+		});
 
 
 		//end of trif's block
