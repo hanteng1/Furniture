@@ -80,6 +80,10 @@ function Main()
 	//house environment
 	this.house = new THREE.Object3D();
 
+
+	//mesh simplify
+	this.modifer = new THREE.SimplifyModifier();
+
 	// function loadModelObj(objFilePath)
 	// {
 
@@ -1273,26 +1277,63 @@ Main.prototype = {
 		var back_left = this.furnitures[0].getComponentInName("back", "left");
 
 		//visualize
-		this.selectionBox.setFromObject( back_left );
-		this.selectionBox.visible = true;
+		// this.selectionBox.setFromObject( back_left );
+		// this.selectionBox.visible = true;
 
-		var points = computeConvexHull(back_left, "yz");
+		// var points = computeConvexHull(back_left, "yz");
 
-		//draw points
-		var material = new THREE.LineBasicMaterial( { color: 0x0000ff } );
-		var geometry = new THREE.Geometry();
+		// //draw points
+		// var material = new THREE.LineBasicMaterial( { color: 0x0000ff } );
+		// var geometry = new THREE.Geometry();
 
-		for(var i =0; i < points.length; i++) {
-			var point = points[i];
-			var tempP = new THREE.Vector3(0, point[0], point[1]);
-			geometry.vertices.push(tempP);
+		// for(var i =0; i < points.length; i++) {
+		// 	var point = points[i];
+		// 	var tempP = new THREE.Vector3(0, point[0], point[1]);
+		// 	geometry.vertices.push(tempP);
+		// }
+
+		// var line = new THREE.Line( geometry, material );
+
+		// this.scene.add( line );
+
+
+
+		//test mesh simplify
+		if(back_left.isMesh)
+		{
+
+			var verticesAttribute = back_left.geometry.getAttribute('position');
+			var verticesArray = verticesAttribute.array;
+			var itemSize = verticesAttribute.itemSize;
+			var verticesNum = verticesArray.length / itemSize;
+
+			var beforeLength = verticesNum;
+
+			console.log(beforeLength);
+
+			var simplified = this.modifer.modify( back_left.geometry,  beforeLength * 0.5 | 0 );
+			console.log('simplified', simplified.faces.length, simplified.vertices.length);
+			var wireframe = new THREE.MeshBasicMaterial({
+				color: Math.random() * 0xffffff,
+				wireframe: true
+			});
+			var materialNormal = new THREE.MeshNormalMaterial({
+				transparent: true,
+				opacity: 0.7
+			});
+			var mesh = THREE.SceneUtils.createMultiMaterialObject( simplified, [
+					//material,
+					wireframe,
+					materialNormal
+				]);
+
+			this.scene.add( mesh );
+		}else
+		{
+			console.log("not mesh");
 		}
 
-		var line = new THREE.Line( geometry, material );
-
-		this.scene.add( line );
-
-
+		
 
 	}
 

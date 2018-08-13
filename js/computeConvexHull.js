@@ -57,7 +57,6 @@ function collectPointOnFace(component, face) {
 		geometry.verticesNeedUpdate = true;
 		geometry.applyMatrix(matrix);
 
-
 		var pointsArray = [];
 		var verticesAttribute = geometry.getAttribute('position');
 		var verticesArray = verticesAttribute.array;
