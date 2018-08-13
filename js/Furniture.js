@@ -501,6 +501,31 @@ function Furniture(furniture) {
 	}
 
 
+	this.changeComponentLabel = function(prevLabel, curLabel) {
+
+		//console.log("changing name from " + prevLabel + "  to  " + curLabel );
+
+		var itemLabel = $('#' + prevLabel + `${this.index}`);
+
+		itemLabel.find(".content").html('<span>' + curLabel + '</span>');
+		itemLabel.find("span").css("text-decoration", "none");
+
+		itemLabel.attr("id", curLabel + `${this.index}`);
+
+		var index = this.listedComponents.indexOf(prevLabel);
+		if (index > -1) {
+			this.listedComponents.splice(index, 1);
+		}
+
+		this.listedComponents.push(curLabel);
+
+		index = this.labeledComponents.indexOf(prevLabel);
+		if (index > -1) {
+			this.labeledComponents.splice(index, 1);
+		}
+
+	}
+
 
 	//add a bounding box to track labeled component: center, size
 	//add it when a component is labelled
@@ -759,7 +784,13 @@ function Furniture(furniture) {
 		//console.log(name)
 		//console.log(vector);
 
-		var targetVector = this.refNormalAxises[name];
+		//deal with name string, if there is -, get the last
+		var names = name.split("-");
+		//console.log(names);
+
+		var usingName = names[names.length - 1];
+
+		var targetVector = this.refNormalAxises[usingName];
 		if(targetVector !== undefined) {
 			//compare the vectors and define an rotation matrix
 			if(targetVector.equals(vector)) {
@@ -796,8 +827,8 @@ function Furniture(furniture) {
 
 
 			//add the actual normal axis
-			this.normalAxises[name] = new THREE.Vector3();
-			this.normalAxises[name].copy(targetVector);
+			this.normalAxises[usingName] = new THREE.Vector3();
+			this.normalAxises[usingName].copy(targetVector);
 
 
 			//add the corners
@@ -810,7 +841,6 @@ function Furniture(furniture) {
 
 
 	this.setRotationWithNormalAxis = function(name, vector) {
-
 
 		if(name in this.normalAxises) {
 			var originVector = this.normalAxises[name];
