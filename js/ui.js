@@ -233,7 +233,7 @@ Ui.prototype = {
 
 		//chair_add_flip
 		$('#operation_chair_add_flip').click(function() {
-			
+			scope.processor.executeDesign("CHAIR_ADD", "flip");
 		});
 
 		//chair_rebuild_seat

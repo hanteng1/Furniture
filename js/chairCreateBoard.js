@@ -7,7 +7,7 @@ const {union, difference, intersection} = scadApi.booleanOps
 const {translate, rotate} = scadApi.transformations
 const csgToGeometries = require('./csgToGeometries')
 
-function chairCreatBoard(width, height, depth) {
+function chairCreateBoard(width, height, depth) {
 	var board = cube({size:[width, height, depth]});
 	var obj = board.expand(0.3, 16);
 
@@ -17,4 +17,4 @@ function chairCreatBoard(width, height, depth) {
 }
 
 
-module.exports = chairCreatBoard
+module.exports = chairCreateBoard
