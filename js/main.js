@@ -1294,12 +1294,12 @@ Main.prototype = {
 		$('.operations.operation_chair_rebuild').hide();
 
 
-		//this.processor.init();
+		this.processor.init();
 		//this.processor.executeDesign();
 
 
 		//test
-		var back_left = this.furnitures[0].getComponentInName("back", "left");
+		//var back_left = this.furnitures[0].getComponentInName("back", "left");
 
 		//visualize
 		// this.selectionBox.setFromObject( back_left );
@@ -1324,45 +1324,48 @@ Main.prototype = {
 
 
 		//test mesh simplify
-		if(back_left.isMesh)
-		{
+		// if(back_left.isMesh)
+		// {
 
-			var verticesAttribute = back_left.geometry.getAttribute('position');
-			var verticesArray = verticesAttribute.array;
-			var itemSize = verticesAttribute.itemSize;
-			var verticesNum = verticesArray.length / itemSize;
+		// 	var verticesAttribute = back_left.geometry.getAttribute('position');
+		// 	var verticesArray = verticesAttribute.array;
+		// 	var itemSize = verticesAttribute.itemSize;
+		// 	var verticesNum = verticesArray.length / itemSize;
 
-			var beforeLength = verticesNum;
+		// 	var beforeLength = verticesNum;
 
-			console.log(beforeLength);
+		// 	console.log(beforeLength);
 
-			var simplified = this.modifer.modify( back_left.geometry,  beforeLength * 0.5 | 0 );
-			console.log('simplified', simplified.faces.length, simplified.vertices.length);
-			var wireframe = new THREE.MeshBasicMaterial({
-				color: Math.random() * 0xffffff,
-				wireframe: true
-			});
-			var materialNormal = new THREE.MeshNormalMaterial({
-				transparent: true,
-				opacity: 0.7
-			});
+		// 	var simplified = this.modifer.modify( back_left.geometry,  beforeLength * 0.5 | 0 );
+		// 	console.log('simplified', simplified.faces.length, simplified.vertices.length);
+			
+		// 	var wireframe = new THREE.MeshBasicMaterial({
+		// 		color: Math.random() * 0xffffff,
+		// 		wireframe: true
+		// 	});
+
+
+		// 	var materialNormal = new THREE.MeshNormalMaterial({
+		// 		transparent: true,
+		// 		opacity: 0.7
+		// 	});
 			
 
-			//go to cut
-			var cutResultGeometry = cadCutByPlane(simplified);
-
-			
-			var mesh = THREE.SceneUtils.createMultiMaterialObject( cutResultGeometry, [
-					//material,
-					wireframe,
-					materialNormal
-				]);
-
-			this.scene.add( mesh );
+		// 	//go to cut
+		// 	var cutResultGeometry = cadCutByPlane(simplified);
 
 
+		// 	var mesh = THREE.SceneUtils.createMultiMaterialObject( cutResultGeometry, [
+		// 			//material,
+		// 			wireframe,
+		// 			materialNormal
+		// 		]);
 
-		}
+		// 	this.scene.add( mesh );
+
+
+
+		// }
 
 		
 
