@@ -3,13 +3,19 @@
 const {log, status} = require('./log')
 const { CSG, CAG, isCSG, isCAG } = require('@jscad/csg')
 const scadApi = require('@jscad/scad-api')
-const {cube, sphere, cylinder, polyhedron} = scadApi.primitives3d
+//const {cube, sphere, cylinder, polyhedron} = scadApi.primitives3d
 const {union, difference, intersection} = scadApi.booleanOps
 const {translate} = scadApi.transformations
 
 function geometryToCsgs (initialGeometry){
 	var pointsArray = [];
 	var polygonsArray = [];
+
+	//make sure it is bufferedgeometry
+	if ( initialGeometry instanceof THREE.Geometry && initialGeometry.vertices && initialGeometry.faces ) {
+		console.log('converting Geometry to BufferGeometry');
+		initialGeometry = new THREE.BufferGeometry().fromGeometry( initialGeometry );
+	}
 
 	var verticesAttribute = initialGeometry.getAttribute('position');
 	var verticesArray = verticesAttribute.array;
@@ -53,11 +59,11 @@ function geometryToCsgs (initialGeometry){
 			newDivPolygonsArray.push(divPolygon);
 		}
 
-		csgs.push(union(
-			polyhedron({points: divPointsArray, 
+		csgs.push(
+			CSG.polyhedron({points: divPointsArray, 
 				//correct the div polygon array
-				polygons: divPolygonsArray.map(polygon => polygon.map(x => x - i * divisionSize * 3)) 
-			}))
+				faces: divPolygonsArray.map(polygon => polygon.map(x => x - i * divisionSize * 3)) 
+			})
 		);
 	}
 
