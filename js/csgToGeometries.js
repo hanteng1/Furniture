@@ -49,15 +49,15 @@ function csgToGeometries(initial_csg) {
         color.push(1.0)
       } // opaque
 
-      console.log("");
-      console.log(j);
-      console.log(polygon.vertices);
+      //console.log("");
+      //console.log(j);
+      //console.log(polygon.vertices);
 
       //get indices of the vertices array
       var indices = polygon.vertices.map(function (vertex) {
         var vertextag = vertex.getTag()
 
-        console.log(vertextag);
+        //console.log(vertextag);
 
         var vertexindex = vertexTag2Index[vertextag]
 
@@ -81,7 +81,7 @@ function csgToGeometries(initial_csg) {
         return vertexindex
       });
 
-      console.log(indices);
+      //console.log(indices);
 
       for (var i = 2; i < indices.length; i++) {
         triangles.push([indices[0], indices[i - 1], indices[i]])

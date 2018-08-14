@@ -125,7 +125,7 @@ function Furniture(furniture) {
 		}
 
 		//chair: check has labels seat and back
-		if((labeledComponents.includes("back") == false) || (labeledComponents.includes("back") == false))
+		if((this.labeledComponents.includes("back") == false) || (this.labeledComponents.includes("seat") == false))
 		{
 			console.log("missing labels");
 			return;
@@ -146,19 +146,65 @@ function Furniture(furniture) {
 			return group;
 		}
 
-		var groupComponents = {};
+		var groupComponents = [];
 		for(var i = 0; i < count; i++) {
 			var child = group.children[i];
 			var id = child.id;
-			var x = 0;
+			var childCenter = this.getObjCenterPosition(child);
+			var childObj = {cId: id, cCenter: childCenter};
+			groupComponents.push(childObj);
+		}
 
+		//order the group components
+		var targetId = -1;
+
+		if(tag == "left" || tag == "right")
+		{
+			//order by x
+			groupComponents.sort(function(a, b){return a.cCenter.x - b.cCenter.x});
+
+			if(tag == "left")
+			{
+				var targetId = groupComponents[0].cId;
+			}else if(tag == "right") {
+				var targetId = groupComponents[count - 1].cId;
+			}
+
+		}else if(tag == "top" || tag == "bottom"){
+
+			//order by y
+			groupComponents.sort(function(a, b){return a.cCenter.y - b.cCenter.y});
+
+			if(tag == "bottom")
+			{
+				var targetId = groupComponents[0].cId;
+			}else if(tag == "top") {
+				var targetId = groupComponents[count - 1].cId;
+			}
+
+		}else if(tag == "front" || tag == "back"){
+
+			//order by z
+			groupComponents.sort(function(a, b){return a.cCenter.z - b.cCenter.z});
+
+			if(tag == "back")
+			{
+				var targetId = groupComponents[0].cId;
+			}else if(tag == "front") {
+				var targetId = groupComponents[count - 1].cId;
+			}
+		}else
+		{
+			console.log("tag name not matched");
+			return;
 		}
 
 
+		var targetComponent = group.getObjectById(targetId);
+
+		return targetComponent;
+
 	}
-
-
-
 
 
 	this.getComponentPosition = function(name) {
@@ -174,6 +220,21 @@ function Furniture(furniture) {
 
 		var box = new THREE.Box3();
 		box.setFromObject(component);
+		var center = new THREE.Vector3();
+		if(box.isEmpty() === false)
+		{
+			box.getCenter(center);
+		}else{
+			console.log("error on getting center point");
+		}
+
+		return center;
+	}
+
+	this.getObjCenterPosition = function(obj) {
+
+		var box = new THREE.Box3();
+		box.setFromObject(obj);
 		var center = new THREE.Vector3();
 		if(box.isEmpty() === false)
 		{
@@ -440,6 +501,31 @@ function Furniture(furniture) {
 	}
 
 
+	this.changeComponentLabel = function(prevLabel, curLabel) {
+
+		//console.log("changing name from " + prevLabel + "  to  " + curLabel );
+
+		var itemLabel = $('#' + prevLabel + `${this.index}`);
+
+		itemLabel.find(".content").html('<span>' + curLabel + '</span>');
+		itemLabel.find("span").css("text-decoration", "none");
+
+		itemLabel.attr("id", curLabel + `${this.index}`);
+
+		var index = this.listedComponents.indexOf(prevLabel);
+		if (index > -1) {
+			this.listedComponents.splice(index, 1);
+		}
+
+		this.listedComponents.push(curLabel);
+
+		index = this.labeledComponents.indexOf(prevLabel);
+		if (index > -1) {
+			this.labeledComponents.splice(index, 1);
+		}
+
+	}
+
 
 	//add a bounding box to track labeled component: center, size
 	//add it when a component is labelled
@@ -698,7 +784,13 @@ function Furniture(furniture) {
 		//console.log(name)
 		//console.log(vector);
 
-		var targetVector = this.refNormalAxises[name];
+		//deal with name string, if there is -, get the last
+		var names = name.split("-");
+		//console.log(names);
+
+		var usingName = names[names.length - 1];
+
+		var targetVector = this.refNormalAxises[usingName];
 		if(targetVector !== undefined) {
 			//compare the vectors and define an rotation matrix
 			if(targetVector.equals(vector)) {
@@ -735,8 +827,8 @@ function Furniture(furniture) {
 
 
 			//add the actual normal axis
-			this.normalAxises[name] = new THREE.Vector3();
-			this.normalAxises[name].copy(targetVector);
+			this.normalAxises[usingName] = new THREE.Vector3();
+			this.normalAxises[usingName].copy(targetVector);
 
 
 			//add the corners
@@ -749,7 +841,6 @@ function Furniture(furniture) {
 
 
 	this.setRotationWithNormalAxis = function(name, vector) {
-
 
 		if(name in this.normalAxises) {
 			var originVector = this.normalAxises[name];

@@ -14,6 +14,13 @@
 
 const Processor = require('./Processor')
 
+const computeConvexHull = require('./computeConvexHull')
+
+
+//test cut
+const cadCutByPlane = require('./cadCutByPlane')
+
+
 function Main()
 {
 
@@ -77,6 +84,10 @@ function Main()
 
 	//house environment
 	this.house = new THREE.Object3D();
+
+
+	//mesh simplify
+	this.modifer = new THREE.SimplifyModifier();
 
 	// function loadModelObj(objFilePath)
 	// {
@@ -578,6 +589,7 @@ Main.prototype = {
 				child.material.envMap = scope.envMap;
 				child.material.needsUpdate = true;
 				child.castShadow = true;
+				child.name = "";
 
 				objects.push(child);
 				//scope.addHelper( child ); //to visualize helpers
@@ -987,13 +999,32 @@ Main.prototype = {
 
 		//set the selected to the label
 		//the obj is labeled if it has a name
-		this.selected.name = label;
 
 		//console.log(this.selected.name);
-		this.furniture.addComponentLabel(label);
 
-		//attach the normal axis
-		this.addNormalAxis(this.furniture, this.selected);
+		if( this.selected.name !== "" && this.selected.name !== label) {
+
+			var prevName = this.selected.name;
+			var curName = prevName + '-' + label;
+			this.selected.name = curName;
+
+			//change the component label
+			this.furniture.changeComponentLabel(prevName, curName);
+
+			//enable normal axis
+			this.addNormalAxis(this.furniture, this.selected);
+
+		}else{
+			this.selected.name = label;
+
+			//console.log(this.selected.name);
+			this.furniture.addComponentLabel(label);
+
+			//attach the normal axis
+			this.addNormalAxis(this.furniture, this.selected);
+		}
+
+		
 	},
 
 
@@ -1265,6 +1296,81 @@ Main.prototype = {
 
 		this.processor.init();
 		//this.processor.executeDesign();
+
+
+		//test
+		//var back_left = this.furnitures[0].getComponentInName("back", "left");
+
+		//visualize
+		// this.selectionBox.setFromObject( back_left );
+		// this.selectionBox.visible = true;
+
+		// var points = computeConvexHull(back_left, "yz");
+
+		// //draw points
+		// var material = new THREE.LineBasicMaterial( { color: 0x0000ff } );
+		// var geometry = new THREE.Geometry();
+
+		// for(var i =0; i < points.length; i++) {
+		// 	var point = points[i];
+		// 	var tempP = new THREE.Vector3(0, point[0], point[1]);
+		// 	geometry.vertices.push(tempP);
+		// }
+
+		// var line = new THREE.Line( geometry, material );
+
+		// this.scene.add( line );
+
+
+
+		//test mesh simplify
+		// if(back_left.isMesh)
+		// {
+
+		// 	var verticesAttribute = back_left.geometry.getAttribute('position');
+		// 	var verticesArray = verticesAttribute.array;
+		// 	var itemSize = verticesAttribute.itemSize;
+		// 	var verticesNum = verticesArray.length / itemSize;
+
+		// 	var beforeLength = verticesNum;
+
+		// 	console.log(beforeLength);
+
+		// 	var simplified = this.modifer.modify( back_left.geometry,  beforeLength * 0.5 | 0 );
+		// 	console.log('simplified', simplified.faces.length, simplified.vertices.length);
+			
+		// 	var wireframe = new THREE.MeshBasicMaterial({
+		// 		color: Math.random() * 0xffffff,
+		// 		wireframe: true
+		// 	});
+
+
+		// 	var materialNormal = new THREE.MeshNormalMaterial({
+		// 		transparent: true,
+		// 		opacity: 0.7
+		// 	});
+			
+
+		// 	//go to cut
+		// 	var cutResultGeometry = cadCutByPlane(simplified);
+
+
+		// 	var mesh = THREE.SceneUtils.createMultiMaterialObject( cutResultGeometry, [
+		// 			//material,
+		// 			wireframe,
+		// 			materialNormal
+		// 		]);
+
+		// 	this.scene.add( mesh );
+
+
+
+		// }
+
+		
+
+
+		
 
 	}
 
