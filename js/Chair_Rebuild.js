@@ -76,10 +76,14 @@ Chair_Rebuild.prototype = {
 		if(name == 'seat'){
 			this.changeTexture(this.furnitures[0]);
 		}
-		
 		else if(name == 'leg'){
 			this.ChangeLeg(this.furnitures[0]);
 		}
+		else if(name == 'back'){
+			this.backConnect(this.furnitures);
+			
+		}
+
 	},
 	changeTexture: function(furniture){
 		$('#parameter_control_chair_rebuild').show();
@@ -223,8 +227,8 @@ Chair_Rebuild.prototype = {
 		//load new leg
 		this.loadLegModel('../models/Legs/Leg2.dae', furniture, SeatPosi, SeatSize);
 		
-
 	},
+
 	remove: function(group, name){
 		for (var i = group.children.length - 1; i >= 0 ; i--) {				
 			var str = group.children[i].name;
@@ -287,7 +291,52 @@ Chair_Rebuild.prototype = {
 			
 
 		} );
+	},
+
+	backConnect: function( furnitures ){
+		
+		//rotate chair
+		furnitures[0].setRotationWithNormalAxis("back", new THREE.Vector3( 1 , 0 , 0 ) );
+		furnitures[1].setRotationWithNormalAxis("back", new THREE.Vector3( -1, 0 , 0 ) );
+
+		furnitures[0].setRotationWithNormalAxis("back", new THREE.Vector3( 1 , -1 , 0 ) );
+		furnitures[1].setRotationWithNormalAxis("back", new THREE.Vector3( -1, -1 , 0 ) );
+		//get funiture
+		var f1 = furnitures[0].getFurniture();
+		var f2 = furnitures[1].getFurniture();
+		//get back
+		var f1back = furnitures[0].getComponentByName('back');
+		var f2back = furnitures[1].getComponentByName('back');
+
+		//get back center
+		var box = new THREE.Box3();
+		var BackCenter = new THREE.Vector3();
+		f1BackCenter = new THREE.Vector3();
+		f2BackCenter = new THREE.Vector3();
+		box.setFromObject(f1back);
+		box.getCenter(f1BackCenter);
+		box.setFromObject(f2back);
+		box.getCenter(f2BackCenter);
+
+		//get back size
+		var BackSize = new THREE.Vector3();
+		box.getSize(BackSize);
+		
+		var diff = new THREE.Vector3(f1BackCenter.x - f2BackCenter.x ,
+									 f1BackCenter.y - f2BackCenter.y ,
+									 f1BackCenter.z - f2BackCenter.z );
+
+		//get chair position
+		var f1Position = furnitures[0].getPosition();
+		var f2Position = furnitures[1].getPosition();
+
+		//move chair position
+		f2.position.set(f2Position.x + diff.x - BackSize.x,
+						f2Position.y + diff.y,
+						f2Position.z + diff.z );
+
 	}
+
 
 
 }

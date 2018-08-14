@@ -218,7 +218,10 @@ Ui.prototype = {
 
 		//chair_align_flip
 		$( "#operation_chair_align_flip" ).click(function() {
-			
+
+			//wei hsiang start
+			scope.processor.executeDesign("CHAIR_REBUILD", "back");
+			//wei hsiang end
 		});
 
 		//chair_add_plate
