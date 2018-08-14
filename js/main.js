@@ -65,6 +65,10 @@ function Main()
 	//arrays of Furniture
 	this.furnitures = [];  
 
+	//this is to store the furnitures before any chance
+	//simply copy of the this.furnitures
+	this.furnituresDataSet = [];
+
 	//store pieces of mesh
 	//set to current selected furniture
 	this.furniture = null;
@@ -177,8 +181,6 @@ Main.prototype = {
 		// directlight.shadow.camera.right = 1.2;
 		this.scene.add( directlight );
 		this.addHelper(directlight);
-
-
 
 		var path = './skybox/';
 		var format = '.jpg';
@@ -1246,9 +1248,151 @@ Main.prototype = {
 	},
 
 
+	//make and update furnitures dataset
+	//this.furnituresDataSet = [];
+	updateFurnitureDataSet: function() {
+
+		if(this.furnitures.length ==0 )
+		{
+			console.log("no furniture loaded");
+			return;
+		}
+
+		//make it empty
+		this.furnituresDataSet.length = 0;
+
+		for(var i = 0; i < this.furnitures.length; i++) {
+
+			var furniture = this.furnitures[i];
+			var new_furnitureObj = new THREE.Object3D();
+			new_furnitureObj.copy(furniture.getFurniture(), true);
+			var new_furniture = new Furniture(new_furnitureObj);
+
+			new_furniture.setCategory("straight_chair");
+			new_furniture.setIndex(furniture.index);
+			this.furnituresDataSet.push(new_furniture);
+
+			//scope.main.scene.add(scope.main.furnitures[scope.main.furnitures.length - 1].getFurniture());
+
+			//update the menu interface
+			//new_furniture.addCard();
+
+			//copy the state
+			new_furniture.updatePosition(furniture.position);
+			new_furniture.updateDirection();
+			new_furniture.updateQuaternion(furniture.quaternion);
+
+			//copy the components and labeled state
+			new_furniture.updateListedComponents(furniture.listedComponents);
+			new_furniture.updateLabeledComponents(furniture.labeledComponents);
+
+			//copy the already labeled normal axis
+			//Object.assign(new_furniture.normalAxises, furniture.normalAxises);
+			for (let key in furniture.normalAxises) {
+				new_furniture.normalAxises[key] = new THREE.Vector3();
+				new_furniture.normalAxises[key].copy(furniture.normalAxises[key]);
+			}
+
+		}
+
+	},
+
+
+	resetFurnitures: function() {
+		//clean the scene and copy back the furnitures from the dataset
+		for(var i = this.scene.children.length - 1; i > -1; i -- ){ 
+			var object =  this.scene.children[i];	
+			
+			if(object.isObject3D){
+
+				if ( object instanceof THREE.Camera ) {
+
+				} else if ( object instanceof THREE.PointLight ) {
+
+				} else if ( object instanceof THREE.DirectionalLight ) {
+
+				} else if ( object instanceof THREE.SpotLight ) {					
+
+				} else if ( object instanceof THREE.HemisphereLight ) {
+
+				}else if ( object instanceof THREE.AmbientLight ) {
+
+				}else if ( object instanceof THREE.GridHelper ) {
+
+				}else if ( object instanceof THREE.TransformControls ){
+
+				}else if( object instanceof AddAxis){
+
+				}else if( object instanceof THREE.BoxHelper){
+
+				}else{
+					this.removeFromScene(object); 
+				}
+			}
+		}
+
+		//clear cards
+		$('#cards').empty();
+
+		//hide suggested design
+		//hide all the parameter operations
+		$('#label').hide();
+
+		$('#parameter_control_chair_align').hide();
+		$('#parameter_control_chair_rebuild').hide();
+		$('#parameter_control_chair_add').hide();
+
+		$('.operations.operation_chair_align').hide();
+		$('.operations.operation_chair_add').hide();
+		$('.operations.operation_chair_rebuild').hide();
+
+		this.furnitures.length = 0;	
+
+		//add the furnitures and their cards
+		for(var j = 0; j < this.furnituresDataSet.length; j ++) {
+			var furniture = this.furnituresDataSet[j];
+			var new_furnitureObj = new THREE.Object3D();
+			new_furnitureObj.copy(furniture.getFurniture(), true);
+			var new_furniture = new Furniture(new_furnitureObj);
+
+			new_furniture.setCategory("straight_chair");
+			new_furniture.setIndex(furniture.index);
+			this.furnitures.push(new_furniture);
+
+			this.scene.add(new_furniture.getFurniture());
+
+			//update the menu interface
+			new_furniture.addCard();
+
+			//copy the state
+			new_furniture.updatePosition(furniture.position);
+			new_furniture.updateDirection();
+			new_furniture.updateQuaternion(furniture.quaternion);
+
+			//copy the components and labeled state
+			new_furniture.updateListedComponents(furniture.listedComponents);
+			new_furniture.updateLabeledComponents(furniture.labeledComponents);
+
+			//copy the already labeled normal axis
+			//Object.assign(new_furniture.normalAxises, furniture.normalAxises);
+			for (let key in furniture.normalAxises) {
+				new_furniture.normalAxises[key] = new THREE.Vector3();
+				new_furniture.normalAxises[key].copy(furniture.normalAxises[key]);
+			}
+
+		}
+
+
+	},
+
 
 	//here to put all the operations available
 	applyDesign: function() {
+
+		//make copies the furnitures that are already set and labeled
+		if(this.furnitures.length != this.furnituresDataSet.length){
+			this.updateFurnitureDataSet();
+		}
 
 		//assume the furnitures are annoted well and get ready
 		//add the corners to the labeled and axised components

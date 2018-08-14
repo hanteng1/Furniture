@@ -92,6 +92,11 @@ Ui.prototype = {
 		});
 
 
+		//reset the scene
+		$('.ui.blue.submit.button.reset').click(function(){
+			scope.main.resetFurnitures();
+		});
+
 		//duplicate a model
 		$('.ui.blue.submit.button.duplicate').click(function(){
 			
