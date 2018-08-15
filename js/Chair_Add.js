@@ -1,6 +1,9 @@
 const chairCreateBoard = require('./chairCreateBoard')
 const chairCutBack = require('./chairCutBack')
 
+//test cut
+const cadCutByPlane = require('./cadCutByPlane')
+
 function Chair_Add (main) {
  	this.main = main;
 	this.furnitures = main.furnitures;
@@ -50,22 +53,77 @@ Chair_Add.prototype = {
 
 		for (var i = furniture.children.length - 1; i >= 0 ; i--) {				
 			var str = furniture.children[i].name;
-			if (str != "back" && str != "seat") {
+			if (str == "") {
 				array.push(furniture.children[i]);
 				array_centerPosition.push(this.getPartCenter(furniture.children[i]));
 				array_size.push(this.getPartSize(furniture.children[i]));
 			}
 		}
-
-		var checkPoint = seat_centr.y - seat_size.y/2;
+		/*
+		var checkPoint = seat_centr.y;
 		for (var i = 0; i < array.length; i++) {
 			var point = array_centerPosition[i].y;
-			if(point <= checkPoint && point >= checkPoint - 2)
+			if(point < checkPoint + seat_size.y/2 && point > checkPoint - seat_size.y/2)
 				array[i].name = "midframe";
+		}
+		*/
+		console.log(seat_centr);
+		console.log(seat_size);
+		var checkBox = new THREE.Box3();
+		checkBox.setFromObject(seat);
+		for (var i = 0; i < array.length; i++) {
+			var box = new THREE.Box3();
+			box.setFromObject(array[i]);
+			if(checkBox.intersectsBox(box)){
+				var point = array_centerPosition[i].y;
+				console.log(array_centerPosition[i]);
+				if(point >= (seat_centr.y - seat_size.y) && point <= (seat_centr.y + seat_size.y))
+					console.log(array_centerPosition[i]);
+					array[i].name = "midframe";
+			}
 		}
 	},
 
-	checkNeedCut: function(furniture){
+	checkHasLeg: function(furniture) {	
+		var seat = furniture.getObjectByName("seat");	
+		var seat_centr = this.getPartCenter(seat);
+		var seat_size = this.getPartSize(seat);
+		var array = new Array();
+		var array_centerPosition = new Array();
+		var array_size = new Array();
+
+		for (var i = furniture.children.length - 1; i >= 0 ; i--) {				
+			var str = furniture.children[i].name;
+			if (str == "") {
+				array.push(furniture.children[i]);
+				array_centerPosition.push(this.getPartCenter(furniture.children[i]));
+				array_size.push(this.getPartSize(furniture.children[i]));
+			}
+		}
+		/*
+		var checkPoint1 = seat_centr.z + seat_size.z/3;
+		var checkPoint2 = seat_centr.y;
+		for (var i = 0; i < array.length; i++) {
+			var point1 = array_centerPosition[i].z;
+			if(checkPoint1 <= point1){							
+				var point2 = array_centerPosition[i].y + array_size[i].y/2;
+				if(point2 <= checkPoint2 + seat_size.y && point2 >= checkPoint2 - seat_size.y)
+					array[i].name = "leg";
+			}
+		}
+		*/
+		var checkBox = new THREE.Box3();
+		checkBox.setFromObject(seat);
+		for (var i = 0; i < array.length; i++) {
+			var box = new THREE.Box3();
+			box.setFromObject(array[i]);
+			if(checkBox.intersectsBox(box))
+				array[i].name = "leg";
+		}
+		
+	},
+
+	checkBackNeedCut: function(furniture){
 		var back = furniture.getObjectByName("back");
 		var seat = furniture.getObjectByName("seat");
 		var center_back = this.getPartCenter(back);
@@ -97,10 +155,10 @@ Chair_Add.prototype = {
 	    	return Math.floor(value);
 	},	
 
-	remove: function(group, name){
+	remove: function(group){
 		for (var i = group.children.length - 1; i >= 0 ; i--) {				
 			var str = group.children[i].name;
-			if (str != name) {
+			if (str == "") {
 				group.remove(group.children[i]);
 			}	
 		}
@@ -119,6 +177,15 @@ Chair_Add.prototype = {
 		for (var i = group.children.length - 1; i >= 0 ; i--) {				
 			var str = group.children[i].name;
 			if (str != name1 && str != name2 && str != name3) {
+				group.remove(group.children[i]);
+			}	
+		}
+	},
+
+	remove4: function(group, name1, name2, name3, name4){
+		for (var i = group.children.length - 1; i >= 0 ; i--) {				
+			var str = group.children[i].name;
+			if (str != name1 && str != name2 && str != name3 && str != name4) {
 				group.remove(group.children[i]);
 			}	
 		}
@@ -379,7 +446,7 @@ Chair_Add.prototype = {
 			furniture_clone_board = this.furnitures[0].getFurniture().clone();
 			furniture_clone_board.name = "add_board";
 			
-			this.flagCutLeg = this.checkNeedCut(furniture_clone_board);
+			this.flagCutLeg = this.checkBackNeedCut(furniture_clone_board);
 			
 			this.addBoard(furniture_clone_board);
 			
@@ -621,13 +688,14 @@ Chair_Add.prototype = {
 		hang = this.furnitures[0].getFurniture().clone();
 		console.log(this.furnitures[0].getFurniture());
 		this.checkHasMidFrame(hang);
-		console.log(hang);
+		this.checkHasLeg(hang);
 		hang.name = "add_hang";
+		console.log(hang);
 		hang.position.set(-100, 25, 0);
 		this.main.scene.add(hang);
 		var hang_size = this.getPartSize(hang);
 		var hang_centerPosition = this.getPartCenter(hang);
-
+		
 		
 		//base
 		var baseMaterial = new THREE.MeshBasicMaterial({ color: 0x606060 });
@@ -660,7 +728,7 @@ Chair_Add.prototype = {
 		this.main.scene.add(horizontalCube);
 
 		//remove unknow part
-		this.remove3(hang, "back", "seat", "midframe");
+		//this.remove(hang);
 
 		//step1: a1) create two boards. b) get seat four angles.
 		//		 a2) get two positions on each boards.
@@ -740,8 +808,122 @@ Chair_Add.prototype = {
 		wallPosition2.setX(board2_LeftRopePosition.x);
 		this.createRope(board2_LeftRopePosition, wallPosition2);
 
-	},
+		//-----------------------------------cut leg start------------------------------------------
+		var legs = new Array();
+		var legs_center = new Array();
+		var legs_size = new Array();
+		for (var i = 0; i < hang.children.length; i++) {
+			console.log(hang.children[i].type);
+			if(hang.children[i].type == "Mesh"){
+				if (hang.children[i].name == "leg") {
+					legs.push(hang.children[i]);
 
+					legs_center.push(this.getPartCenter(hang.children[i]));
+					legs_size.push(this.getPartSize(hang.children[i]));
+				}
+			}						
+		}
+		console.log(legs);
+		
+		//get material
+		while(this.hasChildren(legs[0]))
+			legs[0] = legs[0].children[0];
+		var legMaterial = new THREE.MeshBasicMaterial();
+		if (Array.isArray(legs[0].material))
+			legMaterial = legs[0].material[0].clone();
+		else
+			legMaterial = legs[0].material.clone();
+		
+		/*
+		for (var i = 0; i < legs.length; i++) {
+			//reduce vector
+			//var i = 2;
+			var part = legs[i];
+			var box = new THREE.Box3();
+			box.setFromObject(part);
+			var helper = new THREE.Box3Helper( box, 0xffff00 );
+			this.main.scene.add(helper);
+			
+			var verticesAttribute = legs[i].geometry.getAttribute('position');
+			var verticesArray = verticesAttribute.array;
+			var itemSize = verticesAttribute.itemSize;
+			var verticesNum = verticesArray.length / itemSize;
+			var beforeLength = verticesNum;
+			var modifer = new THREE.SimplifyModifier();
+			var simplified = modifer.modify( legs[i].geometry,  beforeLength * 0.5 | 0 );
+			console.log(simplified);
+			//cut
+			offset = board2_center.y - legs_center[i].y + legs_size[i].y/2;		
+			var cutResultGeometry = chairCutBack(simplified, offset);
+			var newleg = new THREE.Mesh( cutResultGeometry, legMaterial );
+			hang.remove(legs[i]);
+			hang.add(newleg);
+			
+		}
+		*/
+		//-----------------------------------cut leg end------------------------------------------
+
+		
+		//-----------------------------------cut back start------------------------------------------
+		/*
+		var BackNeedCut = this.checkBackNeedCut(hang);
+		//console.log(BackNeedCut);
+		if(BackNeedCut){
+			var parts = new Array();
+			this.findAllChildren(parts, back);
+			console.log(parts);
+			var backMaterial = new THREE.MeshBasicMaterial();
+			if (Array.isArray(parts[0].material))
+				backMaterial = parts[0].material[0].clone();
+			else
+				backMaterial = parts[0].material.clone();
+
+			var values_x = new Array();
+			for (var i = 0; i < parts.length; i++) {
+				values_x.push( this.getPartCenter(parts[i]).x ); 
+			}
+			console.log(values_x);
+			//left
+			var min = values_x[0];
+			var id_left = 0;
+			for (var i = 0; i < values_x.length; i++) {
+				if(min > values_x[i]){
+					min = values_x[i];
+					id_left = i;
+				}				
+			}					
+
+			//right
+			var max = values_x[0];
+			var id_right = 0;
+			for (var i = 0; i < values_x.length; i++) {
+				if(max < values_x[i]){
+					max = values_x[i];
+					id_right = i;
+				}				
+			}
+			console.log(min + " " + max);
+			var center = this.getPartCenter(parts[id_left]);
+			var size = this.getPartSize(parts[id_left]);
+			offset -= board2_size.y/2; 
+			var backGeometry1 = chairCutBack(parts[id_left].geometry, offset);
+			var test1 = new THREE.Mesh( backGeometry1, backMaterial );
+
+			back.remove(parts[id_left]);
+			hang.add(test1);
+
+			var backGeometry2 = chairCutBack(parts[id_right].geometry, offset);
+			var test2 = new THREE.Mesh( backGeometry2, backMaterial );
+
+			back.remove(parts[id_right]);
+			hang.add(test2);
+
+		}
+		*/
+		//-----------------------------------cut back end------------------------------------------
+		
+		
+	},
 //-------------------------------end hang event----------------------------------------
 
 /////////////////////////////////////////////////////////////////////////////////////////////
