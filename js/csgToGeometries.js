@@ -86,7 +86,7 @@ function csgToGeometries(initial_csg) {
       for (var i = 2; i < indices.length; i++) {
         triangles.push([indices[0], indices[i - 1], indices[i]])
         //triangleUVs.push([0, i - 1, i]);
-        triangleUVs.push([0, 1, 2]);
+        //triangleUVs.push([0, 1, 2]);
       }
 
       // if too many vertices, start a new mesh;
@@ -140,9 +140,9 @@ function csgToGeometries(initial_csg) {
       var vertex_1 = vertices[triangles[i][1]];
       var vertex_2 = vertices[triangles[i][2]];
 
-      var uv_0 = uvs[triangleUVs[i][0]];
-      var uv_1 = uvs[triangleUVs[i][1]];
-      var uv_2 = uvs[triangleUVs[i][2]];
+      //var uv_0 = uvs[triangleUVs[i][0]];
+      //var uv_1 = uvs[triangleUVs[i][1]];
+      //var uv_2 = uvs[triangleUVs[i][2]];
 
       temp_vertices.push(vertex_0[0]);
       temp_vertices.push(vertex_0[1]);
@@ -154,18 +154,18 @@ function csgToGeometries(initial_csg) {
       temp_vertices.push(vertex_2[1]);
       temp_vertices.push(vertex_2[2]);
 
-      temp_uvs.push(uv_0[0]);
-      temp_uvs.push(uv_0[1]);
-      temp_uvs.push(uv_1[0]);
-      temp_uvs.push(uv_1[1]);
-      temp_uvs.push(uv_2[0]);
-      temp_uvs.push(uv_2[1]);
+      // temp_uvs.push(uv_0[0]);
+      // temp_uvs.push(uv_0[1]);
+      // temp_uvs.push(uv_1[0]);
+      // temp_uvs.push(uv_1[1]);
+      // temp_uvs.push(uv_2[0]);
+      // temp_uvs.push(uv_2[1]);
 
     }
     var geo_vertices = new Float32Array(temp_vertices);
     geometry.addAttribute('position', new THREE.BufferAttribute(geo_vertices, 3));
-    var geo_uvs = new Float32Array(temp_uvs);
-    geometry.addAttribute('uv', new THREE.BufferAttribute(geo_uvs, 2));
+    //var geo_uvs = new Float32Array(temp_uvs);
+    //geometry.addAttribute('uv', new THREE.BufferAttribute(geo_uvs, 2));
 
     geometry.computeBoundingBox();
     geometry.computeVertexNormals();

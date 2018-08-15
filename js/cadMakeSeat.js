@@ -35,22 +35,30 @@ function cadMakeSeat (innerRace, outerRace, offsetY, textures) {
       twiststeps: 0        // create 10 slices
     });
 
+    //expansion... /be careful to use .. very expensive
+    csg = csg.expand(0.4, 8); 
+
     //get the geometry
     //be careful if there are too many vertices gerneated...
     var geometry = csgToGeometries(csg)[0];
 
+    //make it to geometry
+    geometry = new THREE.Geometry().fromBufferGeometry( geometry );
+    assignUVs(geometry);
+
+    //console.log(testgeo.faceVertexUvs);
 
     //simplify the geometry.. seems not necessary
-    var modifer = new THREE.SimplifyModifier();
-    var verticesAttribute = geometry.getAttribute('position');
-    var verticesArray = verticesAttribute.array;
-    var itemSize = verticesAttribute.itemSize;
-    var verticesNum = verticesArray.length / itemSize;
-    geometry = modifer.modify( geometry,  verticesNum * 0.5 | 0 );
+    // var modifer = new THREE.SimplifyModifier();
+    // var verticesAttribute = geometry.getAttribute('position');
+    // var verticesArray = verticesAttribute.array;
+    // var itemSize = verticesAttribute.itemSize;
+    // var verticesNum = verticesArray.length / itemSize;
+    // geometry = modifer.modify( geometry,  verticesNum * 0.5 | 0 );
 
 
     //texture
-    //var material = new THREE.MeshLambertMaterial( { map: textures["cherry"]});
+    var material = new THREE.MeshLambertMaterial( { map: textures["linen"]});
     //var material = new THREE.MeshBasicMaterial( {  wireframe: true});
     //var mesh = new THREE.Mesh(geometry, material);
 
@@ -67,9 +75,9 @@ function cadMakeSeat (innerRace, outerRace, offsetY, textures) {
 
 
     var mesh = THREE.SceneUtils.createMultiMaterialObject( geometry, [
-         //material,
-         wireframe,
-         materialNormal
+         material//,
+         //wireframe,
+         //materialNormal
      ]);
 
 
@@ -88,6 +96,32 @@ function cadMakeSeat (innerRace, outerRace, offsetY, textures) {
 
     return mesh;
 
+}
+
+
+function assignUVs(geometry) {
+
+    geometry.faceVertexUvs[0] = [];
+
+    geometry.faces.forEach(function(face) {
+
+        var components = ['x', 'y', 'z'].sort(function(a, b) {
+            return Math.abs(face.normal[a]) > Math.abs(face.normal[b]);
+        });
+
+        var v1 = geometry.vertices[face.a];
+        var v2 = geometry.vertices[face.b];
+        var v3 = geometry.vertices[face.c];
+
+        geometry.faceVertexUvs[0].push([
+            new THREE.Vector2(v1[components[0]], v1[components[1]]),
+            new THREE.Vector2(v2[components[0]], v2[components[1]]),
+            new THREE.Vector2(v3[components[0]], v3[components[1]])
+        ]);
+
+    });
+
+    geometry.uvsNeedUpdate = true;
 }
 
 

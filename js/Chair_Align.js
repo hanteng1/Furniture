@@ -43,8 +43,11 @@ Chair_Align.prototype = {
 	    };
 
 	    var textureLoader = new THREE.TextureLoader( manager );
-	    this.textures["fabric_canyon"] = textureLoader.load( '../model/Fabric-Canyon.jpg' );
-	    this.textures["cherry"] = textureLoader.load( '../model/Cherry_Kaffe_Vert.jpg' );
+	    this.textures["linen"] = textureLoader.load( '../images/linen_cloth.jpg' );
+
+	    this.textures["linen"].repeat.set(0.1, 0.1);
+		this.textures["linen"].wrapS = this.textures["linen"].wrapT = THREE.MirroredRepeatWrapping;
+
 
 	},
 
