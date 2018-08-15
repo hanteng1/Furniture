@@ -40,10 +40,16 @@ function cadMakeSeat (innerRace, outerRace, offsetY, textures) {
     var geometry = csgToGeometries(csg)[0];
 
 
+    //simplify the geometry
+    var modifer = new THREE.SimplifyModifier();
+    var verticesAttribute = geometry.getAttribute('position');
+    var verticesArray = verticesAttribute.array;
+    var itemSize = verticesAttribute.itemSize;
+    var verticesNum = verticesArray.length / itemSize;
+    geometry = modifer.modify( geometry,  verticesNum * 0.5 | 0 );
+
     //texture
-    //don't do it here.. do it once
-    
-   var material = new THREE.MeshLambertMaterial( { map: textures["cherry"]});
+    var material = new THREE.MeshLambertMaterial( { map: textures["cherry"]});
     //var material = new THREE.MeshBasicMaterial( {  wireframe: true});
     var mesh = new THREE.Mesh(geometry, material);
 

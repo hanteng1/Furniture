@@ -688,6 +688,13 @@ THREE.SimplifyModifier.prototype.modify =
 			) );
 		}
 
+
+		newGeo.computeFaceNormals();
+		newGeo.computeVertexNormals();
+
+
+		console.log(newGeo.faceVertexUvs);
+
 		return newGeo;
 
 	}
