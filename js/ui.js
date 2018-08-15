@@ -92,6 +92,11 @@ Ui.prototype = {
 		});
 
 
+		//reset the scene
+		$('.ui.blue.submit.button.reset').click(function(){
+			scope.main.resetFurnitures();
+		});
+
 		//duplicate a model
 		$('.ui.blue.submit.button.duplicate').click(function(){
 			
@@ -218,7 +223,10 @@ Ui.prototype = {
 
 		//chair_align_flip
 		$( "#operation_chair_align_flip" ).click(function() {
-			
+
+			//wei hsiang start
+			scope.processor.executeDesign("CHAIR_REBUILD", "back");
+			//wei hsiang end
 		});
 
 		//chair_add_plate

@@ -658,14 +658,13 @@ THREE.SimplifyModifier.prototype.modify =
 		// simplify_mesh(geometry.faces.length * 0.5 | 0, 7);
 		// simplify_mesh(geometry.faces.length - 2, 4);
 
+		//console.log('old vertices ' + geometry.vertices.length, 'old faces ' + geometry.faces.length);
+
 		console.time('simplify')
 		simplify_mesh(150, 7);
 		console.timeEnd('simplify')
 
-
-		console.log('old vertices ' + geometry.vertices.length, 'old faces ' + geometry.faces.length);
-
-		console.log('new vertices ' + vertices.length, 'old faces ' + triangles.length);
+		//console.log('new vertices ' + vertices.length, 'old faces ' + triangles.length);
 
 
 		// TODO convert to buffer geometry.
@@ -687,6 +686,12 @@ THREE.SimplifyModifier.prototype.modify =
 				tri.v[2]
 			) );
 		}
+
+
+		//whether these are necessary
+		//newGeo.computeFaceNormals();
+		//newGeo.computeVertexNormals();
+		//console.log(newGeo.faceVertexUvs);
 
 		return newGeo;
 

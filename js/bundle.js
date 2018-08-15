@@ -917,7 +917,11 @@ Chair_Add.prototype = {
 }
 
 module.exports = Chair_Add
+<<<<<<< HEAD
 },{"./cadCutByPlane":5,"./chairCreateBoard":7,"./chairCutBack":8}],2:[function(require,module,exports){
+=======
+},{"./chairCreatBoard":7,"./chairCutBack":8}],2:[function(require,module,exports){
+>>>>>>> master
 "use strict;"
 //chair align related functions
 //align in one line
@@ -1228,6 +1232,7 @@ module.exports = Chair_Align
 "use strict;"
 
 const rebuildMakeSeat = require('./rebuildMakeSeat');
+const rebuildMakeLeg = require('./rebuildMakeLeg');
 
 function Chair_Rebuild (main) {
 
@@ -1298,9 +1303,19 @@ Chair_Rebuild.prototype = {
 		}
 
 	},
-	execute: function(){
-		this.changeTexture(this.furnitures[0]);
-		
+	execute: function(name){
+
+		if(name == 'seat'){
+			this.changeTexture(this.furnitures[0]);
+		}
+		else if(name == 'leg'){
+			this.ChangeLeg(this.furnitures[0]);
+		}
+		else if(name == 'back'){
+			//this.backConnect1(this.furnitures);
+			this.backConnect2(this.furnitures);
+		}
+
 	},
 	changeTexture: function(furniture){
 		$('#parameter_control_chair_rebuild').show();
@@ -1429,13 +1444,235 @@ Chair_Rebuild.prototype = {
 		NewSeat.position.set(NewSeatPosi.x - NewSeatSize.x/2, NewSeatPosi.y + NewSeatSize.z/2, NewSeatPosi.z );
 		group.add(NewSeat);
 
+	},
+	ChangeLeg: function(furniture){
+		//get the furniture group
+		var group = furniture.getFurniture();
+
+		//get seat size
+		var SeatSize = furniture.getComponentSize('seat');
+		var SeatPosi = furniture.getComponentCenterPosition('seat');
+
+		//remove leg
+		this.remove(group,'stand');
+
+		//load new leg
+		this.loadLegModel('../models/Legs/Leg2.dae', furniture, SeatPosi, SeatSize);
+		
+	},
+
+	remove: function(group, name){
+		for (var i = group.children.length - 1; i >= 0 ; i--) {				
+			var str = group.children[i].name;
+			if (str == name) {
+				group.remove(group.children[i]);
+			}	
+		}
+	},
+	
+	loadLegModel: function( ModelPath, furniture, SeatPosi, SeatSize ){
+		
+		var group = furniture.getFurniture();
+		var scope=this;
+		var LegModel;
+		
+		// loading manager
+		var loadingManager = new THREE.LoadingManager( function() {} );
+		
+		// collada
+		var loader = new THREE.ColladaLoader( loadingManager );
+		loader.load( ModelPath , function ( collada ) {
+			
+			LegModel = collada.scene;
+			scope.main.scene.add(LegModel);
+
+			LegModel.name = 'stand';
+			LegModel.scale.set(9,9,9);
+
+			var box = new THREE.Box3();
+			box.setFromObject(LegModel);
+			var LegCenter = new THREE.Vector3();
+			box.getCenter(LegCenter);
+
+			var diff = new THREE.Vector3( SeatPosi.x - LegCenter.x ,
+									  	  SeatPosi.y - LegCenter.y ,
+									  	  SeatPosi.z - LegCenter.z );
+			
+			var LegPosi = LegModel.position;
+			LegModel.position.set(LegPosi.x + diff.x  ,
+								  LegPosi.y + diff.y - LegCenter.y ,
+								  LegPosi.z + diff.z );
+
+			LegPosi = LegModel.position;
+			
+			//calculate the leg inverse metrix
+			var inverseMatrix = new THREE.Matrix4();
+			inverseMatrix.getInverse(group.matrixWorld, true);
+			LegModel.applyMatrix(inverseMatrix);
+
+			//add new leg to original model
+			//group.worldToLocal(LegPosi);
+			box.setFromObject(LegModel);
+			box.getCenter(LegCenter);
+
+			LegModel.position.set( LegPosi.x - LegCenter.x - SeatSize.x/2 , 
+								   LegPosi.y - LegCenter.y + SeatSize.z/2 , 
+								   SeatPosi.y - LegCenter.z*2);
+			
+			group.add(LegModel);
+			
+
+		} );
+	},
+
+	backConnect1: function( furnitures ){
+		
+		//rotate chair
+		furnitures[0].setRotationWithNormalAxis("back", new THREE.Vector3( 1 , 0 , 0 ) );
+		furnitures[1].setRotationWithNormalAxis("back", new THREE.Vector3( -1, 0 , 0 ) );
+
+		furnitures[0].setRotationWithNormalAxis("back", new THREE.Vector3( 1 , -1.3 , 0 ) );
+		furnitures[1].setRotationWithNormalAxis("back", new THREE.Vector3( -1, -1.3 , 0 ) );
+		
+		//get funiture
+		var f1 = furnitures[0].getFurniture();
+		var f2 = furnitures[1].getFurniture();
+		//get back
+		var f1back = furnitures[0].getComponentByName('seat-back');
+		var f2back = furnitures[1].getComponentByName('seat-back');
+
+		//remove leg
+		this.Notremove(f1,'seat-back');
+		this.Notremove(f2,'seat-back');
+
+		//get back center
+		var box = new THREE.Box3();
+		var BackCenter = new THREE.Vector3();
+		f1BackCenter = new THREE.Vector3();
+		f2BackCenter = new THREE.Vector3();
+		box.setFromObject(f1back);
+		box.getCenter(f1BackCenter);
+		box.setFromObject(f2back);
+		box.getCenter(f2BackCenter);
+
+		//get back size
+		var BackSize = new THREE.Vector3();
+		box.getSize(BackSize);
+		
+		var diff = new THREE.Vector3(f1BackCenter.x - f2BackCenter.x ,
+									 f1BackCenter.y - f2BackCenter.y ,
+									 f1BackCenter.z - f2BackCenter.z );
+
+		//get chair position
+		var f1Position = furnitures[0].getPosition();
+		var f2Position = furnitures[1].getPosition();
+
+		//move chair position
+		f2.position.set(f2Position.x + diff.x - BackSize.x,
+						f2Position.y + diff.y,
+						f2Position.z + diff.z );
+
+	},
+
+	Notremove: function(group, name){
+		for (var i = group.children.length - 1; i >= 0 ; i--) {				
+			var str = group.children[i].name;
+			if (str != name) {
+				group.remove(group.children[i]);
+			}	
+		}
+	},
+
+	backConnect2: function( furnitures ){
+		//rotate chair
+		furnitures[0].setRotationWithNormalAxis("back", new THREE.Vector3( 1 , 0 , 0 ) );
+		furnitures[1].setRotationWithNormalAxis("back", new THREE.Vector3( -1, 0 , 0 ) );
+
+		furnitures[0].setRotationWithNormalAxis("seat", new THREE.Vector3( 0 , 1 , 0 ) );
+		furnitures[1].setRotationWithNormalAxis("seat", new THREE.Vector3( 0, -1 , 0 ) );
+
+		//get funiture
+		var f1 = furnitures[0].getFurniture();
+		var f2 = furnitures[1].getFurniture();
+		//remove leg
+		this.Notremove(f1,'seat-back');
+		this.Notremove(f2,'seat-back');
+
+		//get back
+		var f1back = furnitures[0].getComponentByName('seat-back');
+		var f2back = furnitures[1].getComponentByName('seat-back');
+		//get back center
+		var box = new THREE.Box3();
+		var BackCenter = new THREE.Vector3();
+		var f1BackCenter = new THREE.Vector3();
+		var f2BackCenter = new THREE.Vector3();
+		box.setFromObject(f1back);
+		box.getCenter(f1BackCenter);
+		box.setFromObject(f2back);
+		box.getCenter(f2BackCenter);
+
+		//get back size
+		var BackSize = new THREE.Vector3();
+		box.getSize(BackSize);
+		//get two back diff position
+		var diff = new THREE.Vector3(f1BackCenter.x - f2BackCenter.x ,
+									 f1BackCenter.y - f2BackCenter.y ,
+									 f1BackCenter.z - f2BackCenter.z );
+
+		//get chair position
+		var f1Position = furnitures[0].getPosition();
+		var f2Position = furnitures[1].getPosition();
+
+		//move chair position
+		f2.position.set(f2Position.x + diff.x ,
+						f2Position.y + diff.y - BackSize.y,
+						f2Position.z + diff.z );
+		
+		// creat leg geometry
+		var LegGeometry = rebuildMakeLeg ( BackSize.z/20 , BackSize.y );
+		var texture = new THREE.TextureLoader().load( 'images/material/material2.jpg' );
+		var newmaterial = new THREE.MeshBasicMaterial( { map: texture } );
+		//creat leg model
+		var Leg1Model = new THREE.Mesh( LegGeometry, newmaterial );
+		var Leg2Model = new THREE.Mesh( LegGeometry, newmaterial );
+
+		//get leg and f2 center
+		var LegCenter = new THREE.Vector3();
+		box.setFromObject(Leg1Model);
+		box.getCenter(LegCenter);
+		box.setFromObject(f2);
+		box.getCenter(f2BackCenter);
+		diff = new THREE.Vector3(f2BackCenter.x - LegCenter.x ,
+								 f2BackCenter.y - LegCenter.y ,
+								 f2BackCenter.z - LegCenter.z );
+		//get leg position
+		var Leg1Posit = Leg1Model.position;
+		var Leg2Posit = Leg2Model.position;
+		//set leg position
+		Leg1Model.position.set( Leg1Posit.x + f2BackCenter.x + BackSize.x/3 ,
+							    Leg1Posit.y + f2BackCenter.y - BackSize.y/2 ,
+							    Leg1Posit.z + f2BackCenter.z + BackSize.z/3);
+		Leg2Model.position.set( Leg2Posit.x + f2BackCenter.x + BackSize.x/3 ,
+							    Leg2Posit.y + f2BackCenter.y - BackSize.y/2 ,
+							    Leg2Posit.z + f2BackCenter.z - BackSize.z/3);
+
+
+		var scope=this;
+		scope.main.scene.add(Leg1Model);
+		scope.main.scene.add(Leg2Model);
+
 	}
+
 
 
 }
 module.exports = Chair_Rebuild
 
+<<<<<<< HEAD
 },{"./rebuildMakeSeat":115}],4:[function(require,module,exports){
+=======
+},{"./rebuildMakeLeg":115,"./rebuildMakeSeat":116}],4:[function(require,module,exports){
+>>>>>>> master
 "use strict;"
 //this is to handle the new design approaches
 //that without the need of cad operations
@@ -1512,16 +1749,23 @@ Processor.prototype = {
 
 					scope.chair_rebuild = new Chair_Rebuild(scope.main);
 					scope.transformFunctions.CHAIR_REBUILD = scope.chair_rebuild;
+
 					
 					$('.operations.operation_chair_add').show();
 					$('.operations.operation_chair_rebuild').show();
 
 				}else if( scope.furnitures.length > 1) {
 					//possible actions with many furnitures
+					
 					scope.chair_align = new Chair_Align(scope.main);
 					scope.chair_align.init();
 					scope.transformFunctions.CHAIR_ALIGN = scope.chair_align;
-
+					
+					//wei hsiang start
+					scope.chair_rebuild = new Chair_Rebuild(scope.main);
+					scope.transformFunctions.CHAIR_REBUILD = scope.chair_rebuild;
+					//wei hsiang end
+					
 					$('.operations.operation_chair_align').show();
 				}
 
@@ -1550,7 +1794,7 @@ Processor.prototype = {
 		var scope = this;
 
 		if(tfname in this.transformFunctions) {
-			this.transformFunctions[tfname].execute();
+			this.transformFunctions[tfname].execute(tfvalue);
 		}
 
 	},
@@ -1688,14 +1932,40 @@ function cadMakeSeat (innerRace, outerRace, offsetY, textures) {
     var geometry = csgToGeometries(csg)[0];
 
 
-    //texture
-    //don't do it here.. do it once
-    
-   var material = new THREE.MeshLambertMaterial( { map: textures["cherry"]});
-    //var material = new THREE.MeshBasicMaterial( {  wireframe: true});
-    var mesh = new THREE.Mesh(geometry, material);
+    //simplify the geometry.. seems not necessary
+    var modifer = new THREE.SimplifyModifier();
+    var verticesAttribute = geometry.getAttribute('position');
+    var verticesArray = verticesAttribute.array;
+    var itemSize = verticesAttribute.itemSize;
+    var verticesNum = verticesArray.length / itemSize;
+    geometry = modifer.modify( geometry,  verticesNum * 0.5 | 0 );
 
-    mesh.castShadow = true;
+
+    //texture
+    //var material = new THREE.MeshLambertMaterial( { map: textures["cherry"]});
+    //var material = new THREE.MeshBasicMaterial( {  wireframe: true});
+    //var mesh = new THREE.Mesh(geometry, material);
+
+     var wireframe = new THREE.MeshBasicMaterial({
+         color: Math.random() * 0xffffff,
+         wireframe: true
+     });
+
+
+     var materialNormal = new THREE.MeshNormalMaterial({
+         transparent: true,
+         opacity: 0.7
+     });
+
+
+    var mesh = THREE.SceneUtils.createMultiMaterialObject( geometry, [
+         //material,
+         wireframe,
+         materialNormal
+     ]);
+
+
+    mesh.castShadow = true; 
     mesh.receiveShadow = true;
 
     //todo.. can we set it in the csgtogeometry function? the normal vectors are meshed up
@@ -1735,7 +2005,11 @@ function chairCreateBoard(width, height, depth) {
 }
 
 
+<<<<<<< HEAD
 module.exports = chairCreateBoard
+=======
+module.exports = chairCreatBoard
+>>>>>>> master
 },{"./csgToGeometries":11,"@jscad/csg":19,"@jscad/scad-api":106}],8:[function(require,module,exports){
 "use strict;"
 
@@ -1774,6 +2048,7 @@ module.exports = chairCutBack
 
 const hull = require('./hull')
 
+<<<<<<< HEAD
 
 
 /**
@@ -1796,6 +2071,110 @@ function computeConvexHull(component, face) {
 	var points = collectPointOnFace(component, face);
 	//console.log(points);
 
+	var concaveHull = hull(points, 20);
+
+	console.log(concaveHull);
+
+	return concaveHull;
+
+
+}
+
+
+//array.concat()
+function collectPointOnFace(component, face) {
+
+	var points = [];
+
+	if(component.children.length > 0) {
+		console.log("component has children");
+
+		for(var i = 0; i < component.children.length; i++)
+		{
+			points = points.concat(collectPointOnFace(component.children[i], face));
+		}
+
+	}else
+	{
+		//ismesh
+		//flip the component geometry
+		var geometry = component.geometry.clone();
+		var matrix = component.matrixWorld.clone();
+
+		geometry.verticesNeedUpdate = true;
+		geometry.applyMatrix(matrix);
+
+		var pointsArray = [];
+		var verticesAttribute = geometry.getAttribute('position');
+		var verticesArray = verticesAttribute.array;
+		var itemSize = verticesAttribute.itemSize;
+		var verticesNum = verticesArray.length / itemSize;
+
+		for(var i = 0; i < verticesNum; i++)
+		{
+			var vertex = [verticesArray[i * itemSize + 0], 
+			   verticesArray[i * itemSize + 1],
+			   verticesArray[i * itemSize + 2]];
+
+			pointsArray.push(vertex);
+		}
+
+		//to the face
+		for(var i = 0; i < pointsArray.length; i++) {
+			var vertex = pointsArray[i];
+
+			if(face == "xy")
+			{
+				var fv = [vertex[0], vertex[1]];
+				points.push(fv);
+			}else if(face == "xz"){
+				var fv = [vertex[0], vertex[2]];
+				points.push(fv);
+			}else if(face == "yz"){
+				var fv = [vertex[1], vertex[2]];
+				points.push(fv);
+			}
+		}
+
+	}
+
+
+	return points;
+}
+
+
+
+module.exports = computeConvexHull
+},{"./hull":15}],10:[function(require,module,exports){
+function _cross(o, a, b) {
+    return (a[0] - o[0]) * (b[1] - o[1]) - (a[1] - o[1]) * (b[0] - o[0]);
+}
+=======
+
+
+/**
+face: xy, xz, yz
+**/
+>>>>>>> master
+
+function computeConvexHull(component, face) {
+
+	if(component == undefined) {
+		console.log("componennt undefined");
+		return;
+	}
+
+	if(face !== "xy" && face !== "yz" && face !== "xz")
+	{
+		console.log("face undefined");
+		return;
+	}
+
+	var points = collectPointOnFace(component, face);
+	//console.log(points);
+
+<<<<<<< HEAD
+=======
 	var concaveHull = hull(points, 20);
 
 	console.log(concaveHull);
@@ -1912,6 +2291,7 @@ function convex(pointset) {
 
 module.exports = convex;
 
+>>>>>>> master
 },{}],11:[function(require,module,exports){
 "use strict;"
 
@@ -2594,6 +2974,10 @@ function Main()
 	//arrays of Furniture
 	this.furnitures = [];  
 
+	//this is to store the furnitures before any chance
+	//simply copy of the this.furnitures
+	this.furnituresDataSet = [];
+
 	//store pieces of mesh
 	//set to current selected furniture
 	this.furniture = null;
@@ -2707,8 +3091,6 @@ Main.prototype = {
 		this.scene.add( directlight );
 		this.addHelper(directlight);
 
-
-
 		var path = './skybox/';
 		var format = '.jpg';
 		this.envMap = new THREE.CubeTextureLoader().load( [
@@ -2766,8 +3148,11 @@ Main.prototype = {
 		//initialize processor
 		this.processor = new Processor(scope);
 
+		
+
 
 		// //test
+
 		// var loader = new THREE.GLTFLoader();
 		// loader.load(
 		// 	'models/vitra-chair.glb',
@@ -2779,6 +3164,7 @@ Main.prototype = {
 		// 			Math.PI*0.2
 		// 		);
 		// } );
+
 
 	},
 
@@ -3775,19 +4161,162 @@ Main.prototype = {
 	},
 
 
+	//make and update furnitures dataset
+	//this.furnituresDataSet = [];
+	updateFurnitureDataSet: function() {
+
+		if(this.furnitures.length ==0 )
+		{
+			console.log("no furniture loaded");
+			return;
+		}
+
+		//make it empty
+		this.furnituresDataSet.length = 0;
+
+		for(var i = 0; i < this.furnitures.length; i++) {
+
+			var furniture = this.furnitures[i];
+			var new_furnitureObj = new THREE.Object3D();
+			new_furnitureObj.copy(furniture.getFurniture(), true);
+			var new_furniture = new Furniture(new_furnitureObj);
+
+			new_furniture.setCategory("straight_chair");
+			new_furniture.setIndex(furniture.index);
+			this.furnituresDataSet.push(new_furniture);
+
+			//scope.main.scene.add(scope.main.furnitures[scope.main.furnitures.length - 1].getFurniture());
+
+			//update the menu interface
+			//new_furniture.addCard();
+
+			//copy the state
+			new_furniture.updatePosition(furniture.position);
+			new_furniture.updateDirection();
+			new_furniture.updateQuaternion(furniture.quaternion);
+
+			//copy the components and labeled state
+			new_furniture.updateListedComponents(furniture.listedComponents);
+			new_furniture.updateLabeledComponents(furniture.labeledComponents);
+
+			//copy the already labeled normal axis
+			//Object.assign(new_furniture.normalAxises, furniture.normalAxises);
+			for (let key in furniture.normalAxises) {
+				new_furniture.normalAxises[key] = new THREE.Vector3();
+				new_furniture.normalAxises[key].copy(furniture.normalAxises[key]);
+			}
+
+		}
+
+	},
+
+
+	resetFurnitures: function() {
+		//clean the scene and copy back the furnitures from the dataset
+		for(var i = this.scene.children.length - 1; i > -1; i -- ){ 
+			var object =  this.scene.children[i];	
+			
+			if(object.isObject3D){
+
+				if ( object instanceof THREE.Camera ) {
+
+				} else if ( object instanceof THREE.PointLight ) {
+
+				} else if ( object instanceof THREE.DirectionalLight ) {
+
+				} else if ( object instanceof THREE.SpotLight ) {					
+
+				} else if ( object instanceof THREE.HemisphereLight ) {
+
+				}else if ( object instanceof THREE.AmbientLight ) {
+
+				}else if ( object instanceof THREE.GridHelper ) {
+
+				}else if ( object instanceof THREE.TransformControls ){
+
+				}else if( object instanceof AddAxis){
+
+				}else if( object instanceof THREE.BoxHelper){
+
+				}else{
+					this.removeFromScene(object); 
+				}
+			}
+		}
+
+		//clear cards
+		$('#cards').empty();
+
+		//hide suggested design
+		//hide all the parameter operations
+		$('#label').hide();
+
+		$('#parameter_control_chair_align').hide();
+		$('#parameter_control_chair_rebuild').hide();
+		$('#parameter_control_chair_add').hide();
+
+		$('.operations.operation_chair_align').hide();
+		$('.operations.operation_chair_add').hide();
+		$('.operations.operation_chair_rebuild').hide();
+
+		this.furnitures.length = 0;	
+
+		//add the furnitures and their cards
+		for(var j = 0; j < this.furnituresDataSet.length; j ++) {
+			var furniture = this.furnituresDataSet[j];
+			var new_furnitureObj = new THREE.Object3D();
+			new_furnitureObj.copy(furniture.getFurniture(), true);
+			var new_furniture = new Furniture(new_furnitureObj);
+
+			new_furniture.setCategory("straight_chair");
+			new_furniture.setIndex(furniture.index);
+			this.furnitures.push(new_furniture);
+
+			this.scene.add(new_furniture.getFurniture());
+
+			//update the menu interface
+			new_furniture.addCard();
+
+			//copy the state
+			new_furniture.updatePosition(furniture.position);
+			new_furniture.updateDirection();
+			new_furniture.updateQuaternion(furniture.quaternion);
+
+			//copy the components and labeled state
+			new_furniture.updateListedComponents(furniture.listedComponents);
+			new_furniture.updateLabeledComponents(furniture.labeledComponents);
+
+			//copy the already labeled normal axis
+			//Object.assign(new_furniture.normalAxises, furniture.normalAxises);
+			for (let key in furniture.normalAxises) {
+				new_furniture.normalAxises[key] = new THREE.Vector3();
+				new_furniture.normalAxises[key].copy(furniture.normalAxises[key]);
+			}
+
+		}
+
+
+	},
+
 
 	//here to put all the operations available
 	applyDesign: function() {
 
+		//make copies the furnitures that are already set and labeled
+		if(this.furnitures.length != this.furnituresDataSet.length){
+			this.updateFurnitureDataSet();
+		}
+
 		//assume the furnitures are annoted well and get ready
 		//add the corners to the labeled and axised components
+		
 		for(var i = 0; i < this.furnitures.length; i++) {
 			this.furnitures[i].addCorners();
 			this.furnitures[i].addtoPoint();
 
 			//this.scene.add(this.furnitures[i].points);
 		}
-
+		
 
 		//testing
 		// for(var i = 0; i < this.furnitures.length; i++) {
@@ -20649,6 +21178,32 @@ module.exports = {
 }
 
 },{}],115:[function(require,module,exports){
+<<<<<<< HEAD
+=======
+"use strict;"
+
+const scadApi = require('@jscad/scad-api')
+const { CSG, CAG, isCSG, isCAG } = require('@jscad/csg')
+const {cube, sphere, cylinder} = scadApi.primitives3d
+const {union, difference, intersection} = scadApi.booleanOps
+const {translate, rotate} = scadApi.transformations
+const csgToGeometries = require('./csgToGeometries')
+
+
+function rebuildMakeLeg ( Leg_r , Leg_h ){
+
+	var Leg = cylinder({r: Leg_r  , 
+                        h: Leg_h} );
+	Leg = Leg.rotateX(-90);
+	var geometry = csgToGeometries(Leg)[0];
+	return geometry;
+
+}
+
+
+module.exports = rebuildMakeLeg
+},{"./csgToGeometries":11,"@jscad/csg":19,"@jscad/scad-api":106}],116:[function(require,module,exports){
+>>>>>>> master
 "use strict;"
 
 const scadApi = require('@jscad/scad-api')
@@ -20663,6 +21218,7 @@ function rebuildMakeSeat ( NewSeatSizex , NewSeatSizey , NewSeatSizez , mode){
 	if (mode == "NormalSeat"){
 		//var seat = geometryToCsgs(geometry);
 		var seat = cube({size:[NewSeatSizex , NewSeatSizey , NewSeatSizez]});
+		
 		var obj = seat.expand(0.3, 16);
 
 		var geometry = csgToGeometries(obj)[0];

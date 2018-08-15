@@ -110,7 +110,7 @@ a {
   height: 1em;
   display: block;
   font-size: 1.71428571em !important;
-  margin: 0em auto 0.5rem !important;
+  margin: 0em auto 0.5em !important;
 }
 
 .ui.inverted.segment .operations {

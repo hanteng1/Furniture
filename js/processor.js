@@ -74,16 +74,23 @@ Processor.prototype = {
 
 					scope.chair_rebuild = new Chair_Rebuild(scope.main);
 					scope.transformFunctions.CHAIR_REBUILD = scope.chair_rebuild;
+
 					
 					$('.operations.operation_chair_add').show();
 					$('.operations.operation_chair_rebuild').show();
 
 				}else if( scope.furnitures.length > 1) {
 					//possible actions with many furnitures
+					
 					scope.chair_align = new Chair_Align(scope.main);
 					scope.chair_align.init();
 					scope.transformFunctions.CHAIR_ALIGN = scope.chair_align;
-
+					
+					//wei hsiang start
+					scope.chair_rebuild = new Chair_Rebuild(scope.main);
+					scope.transformFunctions.CHAIR_REBUILD = scope.chair_rebuild;
+					//wei hsiang end
+					
 					$('.operations.operation_chair_align').show();
 				}
 
@@ -112,7 +119,7 @@ Processor.prototype = {
 		var scope = this;
 
 		if(tfname in this.transformFunctions) {
-			this.transformFunctions[tfname].execute();
+			this.transformFunctions[tfname].execute(tfvalue);
 		}
 
 	},
