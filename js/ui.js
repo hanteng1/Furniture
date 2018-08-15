@@ -76,6 +76,14 @@ Ui.prototype = {
 						//stand
 						scope.assignLabel("stand");
 						break;
+					case "l_6":
+						//stand
+						scope.assignLabel("cabinetTop");
+						break;
+					case "l_7":
+						//stand
+						scope.assignLabel("cabinetFront");
+						break;
 					
 				}
 			}

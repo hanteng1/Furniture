@@ -5,6 +5,7 @@
 const Chair_Align = require('./Chair_Align');
 const Chair_Add = require('./Chair_Add');
 const Chair_Rebuild = require('./Chair_Rebuild');
+const Dresser_Add = require('./Dresser_Add');
 
 
 function Processor(main) {
@@ -26,7 +27,7 @@ function Processor(main) {
 
 	//zhuen's block
 	this.chair_add = undefined;
-
+	this.dresser_add = undefined;
 
 	//end of zhuen's block
 
@@ -68,16 +69,18 @@ Processor.prototype = {
 
 				}else if(scope.furnitures.length == 1){
 					//possible actions with one furniture
-					scope.chair_add = new Chair_Add(scope.main);
-					scope.chair_add.init();
-					scope.transformFunctions.CHAIR_ADD = scope.chair_add;
+					//scope.chair_add = new Chair_Add(scope.main);
+					//scope.chair_add.init();
+					//scope.transformFunctions.CHAIR_ADD = scope.chair_add;
 
-					scope.chair_rebuild = new Chair_Rebuild(scope.main);
-					scope.transformFunctions.CHAIR_REBUILD = scope.chair_rebuild;
+					//scope.chair_rebuild = new Chair_Rebuild(scope.main);
+					//scope.transformFunctions.CHAIR_REBUILD = scope.chair_rebuild;
 
+					scope.dresser_add = new Dresser_Add(scope.main);					
+					scope.transformFunctions.DRESSER_ADD = scope.dresser_add;
 					
-					$('.operations.operation_chair_add').show();
-					$('.operations.operation_chair_rebuild').show();
+					//$('.operations.operation_chair_add').show();
+					//$('.operations.operation_chair_rebuild').show();
 
 				}else if( scope.furnitures.length > 1) {
 					//possible actions with many furnitures
@@ -98,7 +101,26 @@ Processor.prototype = {
 				break;
 
 			case "cabinent" :
+				if(scope.furnitures.length == 0) {
+			
+					return;
 
+				}else if(scope.furnitures.length == 1){
+					//possible actions with one furniture					
+					// scope.dresser_add = new Dresser_Add(scope.main);
+					// scope.dresser_add.init();
+					// scope.transformFunctions.DRESSER_ADD = scope.dresser_add;
+					
+					
+
+				}else if( scope.furnitures.length > 1) {
+					//possible actions with many furnitures
+					
+					
+					//wei hsiang end
+					
+					
+				}
 
 				break;
 
