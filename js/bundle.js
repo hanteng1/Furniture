@@ -1201,11 +1201,7 @@ Chair_Rebuild.prototype = {
 }
 module.exports = Chair_Rebuild
 
-<<<<<<< HEAD
 },{"./rebuildMakeLeg":115,"./rebuildMakeSeat":116}],4:[function(require,module,exports){
-=======
-},{"./rebuildMakeSeat":115}],4:[function(require,module,exports){
->>>>>>> master
 "use strict;"
 //this is to handle the new design approaches
 //that without the need of cad operations
@@ -1465,7 +1461,7 @@ function cadMakeSeat (innerRace, outerRace, offsetY, textures) {
     var geometry = csgToGeometries(csg)[0];
 
 
-    //simplify the geometry
+    //simplify the geometry.. seems not necessary
     var modifer = new THREE.SimplifyModifier();
     var verticesAttribute = geometry.getAttribute('position');
     var verticesArray = verticesAttribute.array;
@@ -1473,12 +1469,32 @@ function cadMakeSeat (innerRace, outerRace, offsetY, textures) {
     var verticesNum = verticesArray.length / itemSize;
     geometry = modifer.modify( geometry,  verticesNum * 0.5 | 0 );
 
-    //texture
-    var material = new THREE.MeshLambertMaterial( { map: textures["cherry"]});
-    //var material = new THREE.MeshBasicMaterial( {  wireframe: true});
-    var mesh = new THREE.Mesh(geometry, material);
 
-    mesh.castShadow = true;
+    //texture
+    //var material = new THREE.MeshLambertMaterial( { map: textures["cherry"]});
+    //var material = new THREE.MeshBasicMaterial( {  wireframe: true});
+    //var mesh = new THREE.Mesh(geometry, material);
+
+     var wireframe = new THREE.MeshBasicMaterial({
+         color: Math.random() * 0xffffff,
+         wireframe: true
+     });
+
+
+     var materialNormal = new THREE.MeshNormalMaterial({
+         transparent: true,
+         opacity: 0.7
+     });
+
+
+    var mesh = THREE.SceneUtils.createMultiMaterialObject( geometry, [
+         //material,
+         wireframe,
+         materialNormal
+     ]);
+
+
+    mesh.castShadow = true; 
     mesh.receiveShadow = true;
 
     //todo.. can we set it in the csgtogeometry function? the normal vectors are meshed up
@@ -3712,14 +3728,14 @@ Main.prototype = {
 
 		//assume the furnitures are annoted well and get ready
 		//add the corners to the labeled and axised components
-		/*
+		
 		for(var i = 0; i < this.furnitures.length; i++) {
 			this.furnitures[i].addCorners();
 			this.furnitures[i].addtoPoint();
 
 			//this.scene.add(this.furnitures[i].points);
 		}
-		*/
+		
 
 		//testing
 		// for(var i = 0; i < this.furnitures.length; i++) {
@@ -20581,7 +20597,6 @@ module.exports = {
 }
 
 },{}],115:[function(require,module,exports){
-<<<<<<< HEAD
 "use strict;"
 
 const scadApi = require('@jscad/scad-api')
@@ -20605,8 +20620,6 @@ function rebuildMakeLeg ( Leg_r , Leg_h ){
 
 module.exports = rebuildMakeLeg
 },{"./csgToGeometries":11,"@jscad/csg":19,"@jscad/scad-api":106}],116:[function(require,module,exports){
-=======
->>>>>>> master
 "use strict;"
 
 const scadApi = require('@jscad/scad-api')

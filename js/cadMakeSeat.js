@@ -40,7 +40,7 @@ function cadMakeSeat (innerRace, outerRace, offsetY, textures) {
     var geometry = csgToGeometries(csg)[0];
 
 
-    //simplify the geometry
+    //simplify the geometry.. seems not necessary
     var modifer = new THREE.SimplifyModifier();
     var verticesAttribute = geometry.getAttribute('position');
     var verticesArray = verticesAttribute.array;
@@ -48,12 +48,32 @@ function cadMakeSeat (innerRace, outerRace, offsetY, textures) {
     var verticesNum = verticesArray.length / itemSize;
     geometry = modifer.modify( geometry,  verticesNum * 0.5 | 0 );
 
-    //texture
-    var material = new THREE.MeshLambertMaterial( { map: textures["cherry"]});
-    //var material = new THREE.MeshBasicMaterial( {  wireframe: true});
-    var mesh = new THREE.Mesh(geometry, material);
 
-    mesh.castShadow = true;
+    //texture
+    //var material = new THREE.MeshLambertMaterial( { map: textures["cherry"]});
+    //var material = new THREE.MeshBasicMaterial( {  wireframe: true});
+    //var mesh = new THREE.Mesh(geometry, material);
+
+     var wireframe = new THREE.MeshBasicMaterial({
+         color: Math.random() * 0xffffff,
+         wireframe: true
+     });
+
+
+     var materialNormal = new THREE.MeshNormalMaterial({
+         transparent: true,
+         opacity: 0.7
+     });
+
+
+    var mesh = THREE.SceneUtils.createMultiMaterialObject( geometry, [
+         //material,
+         wireframe,
+         materialNormal
+     ]);
+
+
+    mesh.castShadow = true; 
     mesh.receiveShadow = true;
 
     //todo.. can we set it in the csgtogeometry function? the normal vectors are meshed up

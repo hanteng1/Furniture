@@ -1400,14 +1400,14 @@ Main.prototype = {
 
 		//assume the furnitures are annoted well and get ready
 		//add the corners to the labeled and axised components
-		/*
+		
 		for(var i = 0; i < this.furnitures.length; i++) {
 			this.furnitures[i].addCorners();
 			this.furnitures[i].addtoPoint();
 
 			//this.scene.add(this.furnitures[i].points);
 		}
-		*/
+		
 
 		//testing
 		// for(var i = 0; i < this.furnitures.length; i++) {
