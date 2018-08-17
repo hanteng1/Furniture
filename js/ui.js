@@ -206,6 +206,7 @@ Ui.prototype = {
 		$('.operations.operation_chair_add').hide();
 		$('.operations.operation_chair_rebuild').hide();
 
+		$('.operations.operation_dresser_add').hide();
 
 
 	},
@@ -267,6 +268,13 @@ Ui.prototype = {
 		//chair_rebuild_leg
 		$('#operation_chair_rebuild_leg').click(function() {
 			scope.processor.executeDesign("CHAIR_REBUILD", "leg");
+		});
+
+
+
+		//dresser
+		$('#operation_dresser_add_cut_chair').click(function() {
+			scope.processor.executeDesign("DRESSER_ADD", "cut_chair");
 		});
 
 	},

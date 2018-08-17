@@ -555,7 +555,7 @@ function Furniture(furniture) {
 	this.addCorners = function() {
 
 		for(var i = 0; i < this.labeledComponents.length; i++) {
-			//console.log(this.labeledComponents[i]);
+			console.log(this.labeledComponents[i]);
 			this.addCornersByName(this.labeledComponents[i]);
 		}
 	}
