@@ -218,15 +218,21 @@ Ui.prototype = {
 
 		//chair_align_horizontal
 		$( "#operation_chair_align_horizontal" ).click(function() {
-			
+			console.log("chair_align_horizontal");
+			scope.processor.executeDesign("CHAIR_ALIGN", "horizontal");
+			//no parameter for now
 		});
 
 		//chair_align_flip
 		$( "#operation_chair_align_flip" ).click(function() {
 
-			//wei hsiang start
-			scope.processor.executeDesign("CHAIR_REBUILD", "back");
-			//wei hsiang end
+			// //wei hsiang start
+			// scope.processor.executeDesign("CHAIR_REBUILD", "back");
+			// //wei hsiang end
+
+			console.log("chair_align_flip");
+			scope.processor.executeDesign("CHAIR_ALIGN", "flip");
+
 		});
 
 		//chair_add_plate
