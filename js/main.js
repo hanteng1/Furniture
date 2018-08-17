@@ -815,10 +815,15 @@ Main.prototype = {
 	removeFromScene: function(object){
 		this.scene.remove(object);
 		
-		if(object.geometry !== undefined)
+		if(object.geometry !== undefined) {
 			object.geometry.dispose();
-		if(object.material !== undefined)
-			object.material.dispose();
+		}
+		if(object.material !== undefined) {
+
+			console.log(object.material);
+
+			//object.material.dispose();
+		}
 		object = undefined;
 	},
 
@@ -1155,6 +1160,7 @@ Main.prototype = {
 
 	onKeyDown: function(event) {
 		var keyCode = event.which;
+
 		//event.ctrlKey && 
 		if(keyCode == 69 && this.onCtrlE == false && this.furniture != undefined){  
 			this.onCtrlE = true;
@@ -1182,6 +1188,10 @@ Main.prototype = {
 
 		}else if(keyCode == 37) {
 			//addAxis(this.furniture, this.scene);
+		}else if(keyCode == 8) {
+
+			//delete
+
 		}
 
 
@@ -1247,7 +1257,38 @@ Main.prototype = {
 
 			$('#label').hide();
 
+		}else {
+
+			var keyCode = event.which;
+
+			if(keyCode == 8) {
+				//delete the selected furniture
+				if(this.furniture == undefined) {
+					return;
+				}else {
+					
+					var cardIndex = this.furniture.index;
+
+					//todo.. to check a better way
+					//this.removeObject(this.furniture.getFurniture());
+					this.removeFromScene(this.furniture.getFurniture());
+
+					//remove the card
+					$(`#card${cardIndex}`).remove();	
+
+					this.furnitures.splice(cardIndex - 1, 1);
+
+					this.furniture = undefined;
+					this.select(null);
+
+
+				}
+
+			}
 		}
+
+
+
 
 		document.removeEventListener( 'keyup', this.onKeyUp.bind(this), false );
 	},
@@ -1300,6 +1341,18 @@ Main.prototype = {
 
 		}
 
+	},
+
+
+	removeObject: function(object) {
+
+		if(object.children.length > 0) {
+			for(var i = 0; i < object.children.length; i ++) {
+				this.removeObject(object.children[i]);
+			}
+		}else{
+			this.removeFromScene(object);
+		}
 	},
 
 
@@ -1402,14 +1455,14 @@ Main.prototype = {
 
 		//assume the furnitures are annoted well and get ready
 		//add the corners to the labeled and axised components
-		/*
+		
 		for(var i = 0; i < this.furnitures.length; i++) {
 			this.furnitures[i].addCorners();
 			this.furnitures[i].addtoPoint();
 
 			//this.scene.add(this.furnitures[i].points);
 		}
-		*/
+		
 
 		//testing
 		// for(var i = 0; i < this.furnitures.length; i++) {
@@ -1517,9 +1570,6 @@ Main.prototype = {
 
 
 		// }
-
-		
-
 
 		
 

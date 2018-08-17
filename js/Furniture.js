@@ -39,8 +39,6 @@ function Furniture(furniture) {
 	//actual normal axis
 	this.normalAxises = {};
 
-
-
 	//added bounding box
 	this.boundingBoxes = {};
 
@@ -55,9 +53,6 @@ function Furniture(furniture) {
 	this.labeledComponents = [];
 	//array of names of components identified
 	this.listedComponents = [];
-	
-
-
 
 
 
@@ -400,6 +395,7 @@ function Furniture(furniture) {
 		var cards = document.getElementById("cards");
 		var card = document.createElement("div");
 		card.className = 'card';
+		card.setAttribute("id", "card" + `${this.index}`);
 		cards.appendChild(card);
 
 		//add title
@@ -788,7 +784,6 @@ function Furniture(furniture) {
 		//deal with name string, if there is -, get the last
 		var names = name.split("-");
 		//console.log(names);
-
 		var usingName = names[names.length - 1];
 
 		var targetVector = this.refNormalAxises[usingName];
@@ -831,6 +826,8 @@ function Furniture(furniture) {
 			this.normalAxises[usingName] = new THREE.Vector3();
 			this.normalAxises[usingName].copy(targetVector);
 
+			//todo.. will this change the other normal vectors?
+
 
 			//add the corners
 			//do not add it here.. there are explode and collapse operations
@@ -864,13 +861,22 @@ function Furniture(furniture) {
 					//make the rotation
 					this.furniture.applyQuaternion(tempQuaternion);
 
+					//this may change the other normal vectors
+					for(let key in this.normalAxises){
+						if(key !== name){
+							this.normalAxises[key].applyQuaternion(tempQuaternion);
+							this.normalAxises[key].normalize();
+						}
+					}
+
+					this.normalAxises[name].copy(vector);
+
 
 					//make the rotation for the existing boundingbox
 					//todo...
 					// if(this.points !== undefined)
 					// 	this.points.applyQuaternion(tempQuaternion);
 					
-
 
 					//store the rotation info to the qua
 					this.quaternion = this.furniture.quaternion;
@@ -881,7 +887,7 @@ function Furniture(furniture) {
 
 				}
 
-				this.normalAxises[name].copy(vector);
+				
 
 			}
 		}

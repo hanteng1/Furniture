@@ -8,18 +8,18 @@ const {translate, rotate} = scadApi.transformations
 const csgToGeometries = require('./csgToGeometries')
 const {geometryToCsgs, unionCsgs} = require('./geometryToCsgs')
 
-function chairCutBack(back) {
+function chairCutBack(back, offest) {
 
-  var obj = geometryToCsgs(back.geometry);
+  var obj = geometryToCsgs(back);
 
   //console.log(obj);
 
-  var plane = CSG.Plane.fromNormalAndPoint([0, 0, 1], [0, 0, 0.5]);
+  var plane = CSG.Plane.fromNormalAndPoint([0, 0, 1], [0, 0, 0 + offest]);
 
   //console.log(plane);
 
-  //var half_part = obj[0].cutByPlane(plane);
-  var half_part = obj[0];
+  var half_part = obj[0].cutByPlane(plane.flipped());
+  //var half_part = obj[0];
 
   //console.log(half_part);
 
