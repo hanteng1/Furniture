@@ -180,6 +180,7 @@ Cabinet_kallax.prototype = {
 									  furniture.position.z);
 		var fCenter = furnitures.getFurnitureCenter();
 		var fSize = furnitures.getSize();
+<<<<<<< HEAD
 		var posi = new THREE.Vector3();
 
 		posi = new THREE.Vector3( fCenter.x - fSize.x/2 ,
@@ -204,6 +205,13 @@ Cabinet_kallax.prototype = {
 
 	},
 	loadModel: function( ModelPath , angle , Posi ){
+=======
+
+
+
+	},
+	loadModel: function( ModelPath , angle ){
+>>>>>>> master
 		
 		var scope=this;
 		var Model;
@@ -224,6 +232,11 @@ Cabinet_kallax.prototype = {
 			Model.rotateOnWorldAxis(new THREE.Vector3(0,1,0) , angle * Math.PI/180);
 			
 			Model.name = 'angle';
+<<<<<<< HEAD
+=======
+			
+			Model.position.set(0 , 0 , 0 );
+>>>>>>> master
 			
 			Model.position.set( Posi.x , Posi.y , Posi.z );
 			console.log(Posi);
@@ -1782,11 +1795,41 @@ function Chair_Rebuild (main) {
 
 	this.reference = null;
 
+	this.textures = {};
+
+	this.init();
 }
 
 
 Chair_Rebuild.prototype = {
 
+
+	init: function() {
+
+		var manager = new THREE.LoadingManager();
+	    manager.onProgress = function ( item, loaded, total ) {
+	        console.log( item, loaded, total );
+	    };
+
+	    var textureLoader = new THREE.TextureLoader( manager );
+	    
+	    this.textures["material1"] = textureLoader.load( '../images/linen_cloth.jpg' );
+	    this.textures["material1"].repeat.set(0.1, 0.1);
+		this.textures["material1"].wrapS = this.textures["material1"].wrapT = THREE.MirroredRepeatWrapping;
+
+		this.textures["material2"] = textureLoader.load( '../images/material/material2.jpg' );
+	    this.textures["material2"].repeat.set(0.1, 0.1);
+		this.textures["material2"].wrapS = this.textures["material2"].wrapT = THREE.MirroredRepeatWrapping;
+
+		this.textures["material3"] = textureLoader.load( '../images/material/material4.jpg' );
+	    this.textures["material3"].repeat.set(0.1, 0.1);
+		this.textures["material3"].wrapS = this.textures["material3"].wrapT = THREE.MirroredRepeatWrapping;
+
+		this.textures["material4"] = textureLoader.load( '../images/material/material5.jpg' );
+	    this.textures["material4"].repeat.set(0.1, 0.1);
+		this.textures["material4"].wrapS = this.textures["material4"].wrapT = THREE.MirroredRepeatWrapping;
+
+	},
 
 	checkHasFrame: function(furniture) {
 		
@@ -1844,6 +1887,7 @@ Chair_Rebuild.prototype = {
 		}
 
 	},
+
 	execute: function(name){
 
 		if(name == 'seat'){
@@ -1858,6 +1902,7 @@ Chair_Rebuild.prototype = {
 		}
 
 	},
+
 	changeTexture: function(furniture){
 		$('#parameter_control_chair_rebuild').show();
 		var group = furniture.getFurniture();
@@ -1868,7 +1913,7 @@ Chair_Rebuild.prototype = {
 
 		var group = furniture.getFurniture();
 		var mode = "NormalSeat"
-		var texture = new THREE.TextureLoader().load( 'images/material/material1.jpg' );
+		var texture = this.textures["material1"];
 		var main = this;
 		main.changeseatmodel(furniture,SeatSize,SeatPosi, texture, mode);
 		
@@ -1883,7 +1928,7 @@ Chair_Rebuild.prototype = {
 			}
 			//change material function
 			var seat = furniture.getComponentByName('seat');
-			texture = new THREE.TextureLoader().load( 'images/material/material1.jpg' );
+			texture = main.textures["material1"];
 			// immediately use the texture for material creation
 			newmaterial = new THREE.MeshBasicMaterial( { map: texture } );
 			seat.material = newmaterial;
@@ -1898,7 +1943,7 @@ Chair_Rebuild.prototype = {
 			}
 			//change material function
 			var seat = furniture.getComponentByName('seat');
-			texture = new THREE.TextureLoader().load( 'images/material/material2.jpg' );
+			texture = main.textures["material2"];
 			// immediately use the texture for material creation
 			newmaterial = new THREE.MeshBasicMaterial( { map: texture } );
 			seat.material = newmaterial;
@@ -1913,7 +1958,7 @@ Chair_Rebuild.prototype = {
 			}
 			//change material function
 			var seat = furniture.getComponentByName('seat');
-			texture = new THREE.TextureLoader().load( 'images/material/material3.jpg' );
+			texture = main.textures["material3"];
 			// immediately use the texture for material creation
 			newmaterial = new THREE.MeshBasicMaterial( { map: texture } );
 			seat.material = newmaterial;
@@ -1928,7 +1973,7 @@ Chair_Rebuild.prototype = {
 			}
 			//change material function
 			var seat = furniture.getComponentByName('seat');
-			texture = new THREE.TextureLoader().load( 'images/material/material4.jpg' );
+			texture = main.textures["material4"];
 			// immediately use the texture for material creation
 			newmaterial = new THREE.MeshBasicMaterial( { map: texture } );
 			seat.material = newmaterial;
@@ -1943,7 +1988,7 @@ Chair_Rebuild.prototype = {
 			}
 			//change material function
 			var seat = furniture.getComponentByName('seat');
-			texture = new THREE.TextureLoader().load( 'images/material/material2.jpg' );
+			texture = main.textures["material2"];
 			// immediately use the texture for material creation
 			newmaterial = new THREE.MeshBasicMaterial( { map: texture } );
 			seat.material = newmaterial;
@@ -3411,8 +3456,8 @@ function Main()
 
 	//category
 	//todo: an floating window to select category
-	//this.category = "chair";
-	this.category = "cabinet";
+	this.category = "chair";
+	//this.category = "cabinet";
 
 	//only stores data
 	this.container = document.getElementById('container');
@@ -21747,6 +21792,9 @@ function rebuildMakeSeat ( NewSeatSizex , NewSeatSizey , NewSeatSizez , mode){
 		var obj = seat.expand(0.3, 16);
 
 		var geometry = csgToGeometries(obj)[0];
+		geometry = new THREE.Geometry().fromBufferGeometry( geometry );
+    	assignUVs(geometry);
+		
 		return geometry;
 	}
 	if (mode == "ThinBoard"){
@@ -21775,8 +21823,39 @@ function rebuildMakeSeat ( NewSeatSizex , NewSeatSizey , NewSeatSizez , mode){
 	    example_cube = difference(example_cube,cube5);
 
 	    var geometry = csgToGeometries(example_cube)[0];
+
+
+	    geometry = new THREE.Geometry().fromBufferGeometry( geometry );
+    	assignUVs(geometry);
+
 		return geometry;
 	}
+}
+
+
+function assignUVs(geometry) {
+
+    geometry.faceVertexUvs[0] = [];
+
+    geometry.faces.forEach(function(face) {
+
+        var components = ['x', 'y', 'z'].sort(function(a, b) {
+            return Math.abs(face.normal[a]) > Math.abs(face.normal[b]);
+        });
+
+        var v1 = geometry.vertices[face.a];
+        var v2 = geometry.vertices[face.b];
+        var v3 = geometry.vertices[face.c];
+
+        geometry.faceVertexUvs[0].push([
+            new THREE.Vector2(v1[components[0]], v1[components[1]]),
+            new THREE.Vector2(v2[components[0]], v2[components[1]]),
+            new THREE.Vector2(v3[components[0]], v3[components[1]])
+        ]);
+
+    });
+
+    geometry.uvsNeedUpdate = true;
 }
 
 module.exports = rebuildMakeSeat

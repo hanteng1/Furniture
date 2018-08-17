@@ -10,11 +10,41 @@ function Chair_Rebuild (main) {
 
 	this.reference = null;
 
+	this.textures = {};
+
+	this.init();
 }
 
 
 Chair_Rebuild.prototype = {
 
+
+	init: function() {
+
+		var manager = new THREE.LoadingManager();
+	    manager.onProgress = function ( item, loaded, total ) {
+	        console.log( item, loaded, total );
+	    };
+
+	    var textureLoader = new THREE.TextureLoader( manager );
+	    
+	    this.textures["material1"] = textureLoader.load( '../images/linen_cloth.jpg' );
+	    this.textures["material1"].repeat.set(0.1, 0.1);
+		this.textures["material1"].wrapS = this.textures["material1"].wrapT = THREE.MirroredRepeatWrapping;
+
+		this.textures["material2"] = textureLoader.load( '../images/material/material2.jpg' );
+	    this.textures["material2"].repeat.set(0.1, 0.1);
+		this.textures["material2"].wrapS = this.textures["material2"].wrapT = THREE.MirroredRepeatWrapping;
+
+		this.textures["material3"] = textureLoader.load( '../images/material/material4.jpg' );
+	    this.textures["material3"].repeat.set(0.1, 0.1);
+		this.textures["material3"].wrapS = this.textures["material3"].wrapT = THREE.MirroredRepeatWrapping;
+
+		this.textures["material4"] = textureLoader.load( '../images/material/material5.jpg' );
+	    this.textures["material4"].repeat.set(0.1, 0.1);
+		this.textures["material4"].wrapS = this.textures["material4"].wrapT = THREE.MirroredRepeatWrapping;
+
+	},
 
 	checkHasFrame: function(furniture) {
 		
@@ -72,6 +102,7 @@ Chair_Rebuild.prototype = {
 		}
 
 	},
+
 	execute: function(name){
 
 		if(name == 'seat'){
@@ -86,6 +117,7 @@ Chair_Rebuild.prototype = {
 		}
 
 	},
+
 	changeTexture: function(furniture){
 		$('#parameter_control_chair_rebuild').show();
 		var group = furniture.getFurniture();
@@ -96,7 +128,7 @@ Chair_Rebuild.prototype = {
 
 		var group = furniture.getFurniture();
 		var mode = "NormalSeat"
-		var texture = new THREE.TextureLoader().load( 'images/material/material1.jpg' );
+		var texture = this.textures["material1"];
 		var main = this;
 		main.changeseatmodel(furniture,SeatSize,SeatPosi, texture, mode);
 		
@@ -111,7 +143,7 @@ Chair_Rebuild.prototype = {
 			}
 			//change material function
 			var seat = furniture.getComponentByName('seat');
-			texture = new THREE.TextureLoader().load( 'images/material/material1.jpg' );
+			texture = main.textures["material1"];
 			// immediately use the texture for material creation
 			newmaterial = new THREE.MeshBasicMaterial( { map: texture } );
 			seat.material = newmaterial;
@@ -126,7 +158,7 @@ Chair_Rebuild.prototype = {
 			}
 			//change material function
 			var seat = furniture.getComponentByName('seat');
-			texture = new THREE.TextureLoader().load( 'images/material/material2.jpg' );
+			texture = main.textures["material2"];
 			// immediately use the texture for material creation
 			newmaterial = new THREE.MeshBasicMaterial( { map: texture } );
 			seat.material = newmaterial;
@@ -141,7 +173,7 @@ Chair_Rebuild.prototype = {
 			}
 			//change material function
 			var seat = furniture.getComponentByName('seat');
-			texture = new THREE.TextureLoader().load( 'images/material/material3.jpg' );
+			texture = main.textures["material3"];
 			// immediately use the texture for material creation
 			newmaterial = new THREE.MeshBasicMaterial( { map: texture } );
 			seat.material = newmaterial;
@@ -156,7 +188,7 @@ Chair_Rebuild.prototype = {
 			}
 			//change material function
 			var seat = furniture.getComponentByName('seat');
-			texture = new THREE.TextureLoader().load( 'images/material/material4.jpg' );
+			texture = main.textures["material4"];
 			// immediately use the texture for material creation
 			newmaterial = new THREE.MeshBasicMaterial( { map: texture } );
 			seat.material = newmaterial;
@@ -171,7 +203,7 @@ Chair_Rebuild.prototype = {
 			}
 			//change material function
 			var seat = furniture.getComponentByName('seat');
-			texture = new THREE.TextureLoader().load( 'images/material/material2.jpg' );
+			texture = main.textures["material2"];
 			// immediately use the texture for material creation
 			newmaterial = new THREE.MeshBasicMaterial( { map: texture } );
 			seat.material = newmaterial;
