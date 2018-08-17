@@ -26,7 +26,8 @@ function Main()
 
 	//category
 	//todo: an floating window to select category
-	this.category = "chair";
+	//this.category = "chair";
+	this.category = "cabinet";
 
 	//only stores data
 	this.container = document.getElementById('container');
@@ -1349,6 +1350,7 @@ Main.prototype = {
 		$('.operations.operation_chair_align').hide();
 		$('.operations.operation_chair_add').hide();
 		$('.operations.operation_chair_rebuild').hide();
+		$('.operations.operation_cabinet_kallax').hide();
 
 		this.furnitures.length = 0;	
 
@@ -1441,7 +1443,7 @@ Main.prototype = {
 		$('.operations.operation_chair_align').hide();
 		$('.operations.operation_chair_add').hide();
 		$('.operations.operation_chair_rebuild').hide();
-
+		$('.operations.operation_cabinet_kallax').hide();
 
 		this.processor.init();
 		//this.processor.executeDesign();

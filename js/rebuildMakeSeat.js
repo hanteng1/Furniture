@@ -25,17 +25,17 @@ function rebuildMakeSeat ( NewSeatSizex , NewSeatSizey , NewSeatSizez , mode){
 	    var z=NewSeatSizez;
 	    var example_cube = cube({size:[x,y,z]});
 	    
-	    var cube1 = cube({size:[x*0.04, y, z]});
-	    var cube2 = cube({size:[x*0.04, y, z]});
-	    var cube3 = cube({size:[x*0.04, y, z]});
-	    var cube4 = cube({size:[x*0.04, y, z]});
-	    var cube5 = cube({size:[x*0.04, y, z]});
+	    var cube1 = cube({size:[x , y, z*0.04]});
+	    var cube2 = cube({size:[x , y, z*0.04]});
+	    var cube3 = cube({size:[x , y, z*0.04]});
+	    var cube4 = cube({size:[x , y, z*0.04]});
+	    var cube5 = cube({size:[x , y, z*0.04]});
 	    
-	    cube1 = cube1.translate([x*0.0, 0, 0]);
-	    cube2 = cube1.translate([x*0.2, 0, 0]);
-	    cube3 = cube1.translate([x*0.4, 0, 0]);
-	    cube4 = cube1.translate([x*0.6, 0, 0]);
-	    cube5 = cube1.translate([x*0.8, 0, 0]);
+	    cube1 = cube1.translate([0 , 0, z*0.2]);
+	    cube2 = cube2.translate([0 , 0, z*0.4]);
+	    cube3 = cube3.translate([0 , 0, z*0.6]);
+	    cube4 = cube4.translate([0 , 0, z*0.8]);
+	    cube5 = cube5.translate([0 , 0, z*1.0]);
 	    
 	    example_cube = difference(example_cube,cube1);
 	    example_cube = difference(example_cube,cube2);

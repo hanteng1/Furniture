@@ -92,11 +92,6 @@ Chair_Rebuild.prototype = {
 		var seat = furniture.getComponentByName('seat');
 		var SeatSize = furniture.getComponentSize('seat');
 		var SeatPosi = furniture.getComponentCenterPosition('seat');
-		var saveposi = new THREE.Vector3(0,0,0);
-		//save pisition
-		saveposi.x = SeatPosi.x;
-		saveposi.y = SeatPosi.y;
-		saveposi.z = SeatPosi.z;
 
 
 		var group = furniture.getFurniture();
@@ -104,18 +99,15 @@ Chair_Rebuild.prototype = {
 		var texture = new THREE.TextureLoader().load( 'images/material/material1.jpg' );
 		var main = this;
 		main.changeseatmodel(furniture,SeatSize,SeatPosi, texture, mode);
-		SeatPosi.x = saveposi.x;
-		SeatPosi.y = saveposi.y;
-		SeatPosi.z = saveposi.z;
+		
 
 		$( ".item.ui.image.label.1" ).click(function() {
 			//change seat
 			if (mode == "ThinBoard"){
 				mode = "NormalSeat";
+				SeatPosi = furniture.getComponentCenterPosition('seat');
 				main.changeseatmodel(furniture,SeatSize,SeatPosi, texture, mode);
-				SeatPosi.x = saveposi.x;
-				SeatPosi.y = saveposi.y;
-				SeatPosi.z = saveposi.z;
+				
 			}
 			//change material function
 			var seat = furniture.getComponentByName('seat');
@@ -123,16 +115,14 @@ Chair_Rebuild.prototype = {
 			// immediately use the texture for material creation
 			newmaterial = new THREE.MeshBasicMaterial( { map: texture } );
 			seat.material = newmaterial;
-			console.log(SeatPosi);
 		});
 		$( ".item.ui.image.label.2" ).click(function() {
 			//change seat
 			if (mode == "ThinBoard"){
 				mode = "NormalSeat";
+				SeatPosi = furniture.getComponentCenterPosition('seat');
 				main.changeseatmodel(furniture,SeatSize,SeatPosi, texture, mode);
-				SeatPosi.x = saveposi.x;
-				SeatPosi.y = saveposi.y;
-				SeatPosi.z = saveposi.z;
+				
 			}
 			//change material function
 			var seat = furniture.getComponentByName('seat');
@@ -145,10 +135,9 @@ Chair_Rebuild.prototype = {
 			//change seat
 			if (mode == "ThinBoard"){
 				mode = "NormalSeat";
+				SeatPosi = furniture.getComponentCenterPosition('seat');
 				main.changeseatmodel(furniture,SeatSize,SeatPosi, texture, mode);
-				SeatPosi.x = saveposi.x;
-				SeatPosi.y = saveposi.y;
-				SeatPosi.z = saveposi.z;
+				
 			}
 			//change material function
 			var seat = furniture.getComponentByName('seat');
@@ -161,10 +150,9 @@ Chair_Rebuild.prototype = {
 			//change seat
 			if (mode == "ThinBoard"){
 				mode = "NormalSeat";
+				SeatPosi = furniture.getComponentCenterPosition('seat');
 				main.changeseatmodel(furniture,SeatSize,SeatPosi, texture, mode);
-				SeatPosi.x = saveposi.x;
-				SeatPosi.y = saveposi.y;
-				SeatPosi.z = saveposi.z;
+				
 			}
 			//change material function
 			var seat = furniture.getComponentByName('seat');
@@ -177,10 +165,9 @@ Chair_Rebuild.prototype = {
 			//change seat
 			if (mode == "NormalSeat"){
 				mode = "ThinBoard";
+				SeatPosi = furniture.getComponentCenterPosition('seat');
 				main.changeseatmodel(furniture,SeatSize,SeatPosi, texture, mode);
-				SeatPosi.x = saveposi.x;
-				SeatPosi.y = saveposi.y;
-				SeatPosi.z = saveposi.z;
+
 			}
 			//change material function
 			var seat = furniture.getComponentByName('seat');
@@ -188,7 +175,6 @@ Chair_Rebuild.prototype = {
 			// immediately use the texture for material creation
 			newmaterial = new THREE.MeshBasicMaterial( { map: texture } );
 			seat.material = newmaterial;
-			console.log(SeatPosi);
 			
 		});
 
@@ -205,14 +191,25 @@ Chair_Rebuild.prototype = {
 		var NewSeat = new THREE.Mesh( geometry, newmaterial );
 		NewSeat.name = 'seat';
 
+		
+		NewSeat.position.set(NewSeatPosi.x - NewSeatSize.x/2,
+							 NewSeatPosi.y - NewSeatSize.y/2,
+							 NewSeatPosi.z - NewSeatSize.z/2);
+		var SeatPosi = new THREE.Vector3(NewSeat.position.x ,
+										 NewSeat.position.y ,
+										 NewSeat.position.z);
+		NewSeatPosi = NewSeat.position;
+		
 		var inverseMatrix = new THREE.Matrix4();
 		inverseMatrix.getInverse(group.matrixWorld, true);
 		NewSeat.applyMatrix(inverseMatrix);
 		
-		group.worldToLocal(NewSeatPosi);
-		NewSeat.position.set(NewSeatPosi.x - NewSeatSize.x/2, NewSeatPosi.y + NewSeatSize.z/2, NewSeatPosi.z );
+		group.worldToLocal(SeatPosi);
 		group.add(NewSeat);
-
+		NewSeat.position.set(SeatPosi.x , 
+							 SeatPosi.y ,
+							 SeatPosi.z );
+		
 	},
 	ChangeLeg: function(furniture){
 		//get the furniture group

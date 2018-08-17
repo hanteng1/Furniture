@@ -76,6 +76,18 @@ Ui.prototype = {
 						//stand
 						scope.assignLabel("stand");
 						break;
+					case "l_6":
+						//stand
+						scope.assignLabel("cabinetTop");
+						break;
+					case "l_7":
+						//stand
+						scope.assignLabel("cabinetFront");
+						break;
+					case "l_8":
+						//stand
+						scope.assignLabel("cabinetBroad");
+						break;
 					
 				}
 			}
@@ -197,7 +209,8 @@ Ui.prototype = {
 		$('.operations.operation_chair_align').hide();
 		$('.operations.operation_chair_add').hide();
 		$('.operations.operation_chair_rebuild').hide();
-
+		$('.operations.operation_cabinet_kallax').hide();
+		
 
 
 	},
@@ -259,6 +272,21 @@ Ui.prototype = {
 		//chair_rebuild_leg
 		$('#operation_chair_rebuild_leg').click(function() {
 			scope.processor.executeDesign("CHAIR_REBUILD", "leg");
+		});
+
+		//cabinet_kallax_chair
+		$('#operation_cabinet_kallax_chair').click(function() {
+			scope.processor.executeDesign("CABINET_LALLAX", "chair");
+		});
+
+		//cabinet_kallax_bed
+		$('#operation_cabinet_kallax_bed').click(function() {
+			scope.processor.executeDesign("CABINET_LALLAX", "bed");
+		});
+
+		//cabinet_kallax_table
+		$('#operation_cabinet_kallax_table').click(function() {
+			scope.processor.executeDesign("CABINET_LALLAX", "table");
 		});
 
 	},

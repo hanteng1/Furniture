@@ -5,6 +5,7 @@
 const Chair_Align = require('./Chair_Align');
 const Chair_Add = require('./Chair_Add');
 const Chair_Rebuild = require('./Chair_Rebuild');
+const Cabinet_kallax = require('./Cabinet_kallax');
 
 
 function Processor(main) {
@@ -34,7 +35,7 @@ function Processor(main) {
 
 	//weixiang's bloack
 	this.chair_rebuild = undefined;
-
+	this.cabinet_kallax = undefined;
 
 	//end of weixiang's block
 
@@ -97,8 +98,25 @@ Processor.prototype = {
 
 				break;
 
-			case "cabinent" :
+			case "cabinet" :
+				if(scope.furnitures.length == 0) {
+			
+					return;
 
+				}else if(scope.furnitures.length == 1){
+					//possible actions with one furniture
+					scope.cabinet_kallax = new Cabinet_kallax(scope.main);
+					scope.transformFunctions.CABINET_LALLAX = scope.cabinet_kallax;
+					
+					$('.operations.operation_cabinet_kallax').show();
+
+				}else if( scope.furnitures.length > 1) {
+					//possible actions with many furnitures
+					scope.cabinet_kallax = new Cabinet_kallax(scope.main);
+					scope.transformFunctions.CABINET_LALLAX = scope.cabinet_kallax;
+					
+					$('.operations.operation_cabinet_kallax').show();
+				}
 
 				break;
 

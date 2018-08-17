@@ -26,11 +26,12 @@ function Furniture(furniture) {
 		//for chairs
 		seat: new THREE.Vector3(0, 1, 0),
 		back: new THREE.Vector3(0, 0, 1),
-		midframe: new THREE.Vector3(0, 0, 1)
-
+		midframe: new THREE.Vector3(0, 0, 1),
 
 		//for cabinet
-
+		cabinetTop: new THREE.Vector3(0, 1, 0),
+		cabinetFront: new THREE.Vector3(0, 0, 1),
+		cabinetBroad: new THREE.Vector3(0, 1, 0)
 		//for table
 	};
 
