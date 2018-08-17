@@ -145,7 +145,6 @@ Chair_Align.prototype = {
 			//flip
 			this.flip(this.furnitures);
 
-
 			//seat
 			this.addSeat(this.furnitures, this.reference, this.textures);
 

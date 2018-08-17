@@ -38,8 +38,6 @@ function Furniture(furniture) {
 	//actual normal axis
 	this.normalAxises = {};
 
-
-
 	//added bounding box
 	this.boundingBoxes = {};
 
@@ -54,9 +52,6 @@ function Furniture(furniture) {
 	this.labeledComponents = [];
 	//array of names of components identified
 	this.listedComponents = [];
-	
-
-
 
 
 
@@ -399,6 +394,7 @@ function Furniture(furniture) {
 		var cards = document.getElementById("cards");
 		var card = document.createElement("div");
 		card.className = 'card';
+		card.setAttribute("id", "card" + `${this.index}`);
 		cards.appendChild(card);
 
 		//add title
