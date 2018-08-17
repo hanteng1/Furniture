@@ -135,11 +135,30 @@ Cabinet_kallax.prototype = {
 									  furniture.position.z);
 		var fCenter = furnitures.getFurnitureCenter();
 		var fSize = furnitures.getSize();
+		var posi = new THREE.Vector3();
 
+		posi = new THREE.Vector3( fCenter.x - fSize.x/2 ,
+								  fCenter.y + fSize.y/2, 
+								  fCenter.z );
+		this.loadModel( ModelPath , 0 , posi);
 
+		posi = new THREE.Vector3( fCenter.x ,
+								  fCenter.y + fSize.y/2 , 
+								  fCenter.z + fSize.z/2 );
+		this.loadModel( ModelPath , 90 , posi);
+
+		posi = new THREE.Vector3( fCenter.x + fSize.x/2 ,
+								  fCenter.y + fSize.y/2, 
+								  fCenter.z );
+		this.loadModel( ModelPath , 180 , posi);
+
+		posi = new THREE.Vector3( fCenter.x ,
+								  fCenter.y + fSize.y/2 , 
+								  fCenter.z - fSize.z/2 );
+		this.loadModel( ModelPath , 270 , posi);
 
 	},
-	loadModel: function( ModelPath , angle ){
+	loadModel: function( ModelPath , angle , Posi ){
 		
 		var scope=this;
 		var Model;
@@ -161,8 +180,8 @@ Cabinet_kallax.prototype = {
 			
 			Model.name = 'angle';
 			
-			Model.position.set(0 , 0 , 0 );
-			
+			Model.position.set( Posi.x , Posi.y , Posi.z );
+			console.log(Posi);
 		} );
 	}
 

@@ -1,5 +1,4 @@
 (function(){function r(e,n,t){function o(i,f){if(!n[i]){if(!e[i]){var c="function"==typeof require&&require;if(!f&&c)return c(i,!0);if(u)return u(i,!0);var a=new Error("Cannot find module '"+i+"'");throw a.code="MODULE_NOT_FOUND",a}var p=n[i]={exports:{}};e[i][0].call(p.exports,function(r){var n=e[i][1][r];return o(n||r)},p,p.exports,r,e,n,t)}return n[i].exports}for(var u="function"==typeof require&&require,i=0;i<t.length;i++)o(t[i]);return o}return r})()({1:[function(require,module,exports){
-<<<<<<< HEAD
 "use strict;"
 
 const scadApi = require('@jscad/scad-api')
@@ -168,11 +167,43 @@ Cabinet_kallax.prototype = {
 
 		var AnglePosi = new THREE.Vector3(0,0,0);
 
-		this.loadModel( '../models/angle.dae' , AnglePosi );
+		this.addAngle(  furnitures[0] );
+		this.addAngle(  furnitures[1] );
 
 
 	},
-	loadModel: function( ModelPath , ModelPosi ){
+	addAngle: function(furnitures){
+		var ModelPath = '../models/angle.dae';
+		var furniture = furnitures.getFurniture();
+		var fPosi = new THREE.Vector3(furniture.position.x ,
+									  furniture.position.y ,
+									  furniture.position.z);
+		var fCenter = furnitures.getFurnitureCenter();
+		var fSize = furnitures.getSize();
+		var posi = new THREE.Vector3();
+
+		posi = new THREE.Vector3( fCenter.x - fSize.x/2 ,
+								  fCenter.y + fSize.y/2, 
+								  fCenter.z );
+		this.loadModel( ModelPath , 0 , posi);
+
+		posi = new THREE.Vector3( fCenter.x ,
+								  fCenter.y + fSize.y/2 , 
+								  fCenter.z + fSize.z/2 );
+		this.loadModel( ModelPath , 90 , posi);
+
+		posi = new THREE.Vector3( fCenter.x + fSize.x/2 ,
+								  fCenter.y + fSize.y/2, 
+								  fCenter.z );
+		this.loadModel( ModelPath , 180 , posi);
+
+		posi = new THREE.Vector3( fCenter.x ,
+								  fCenter.y + fSize.y/2 , 
+								  fCenter.z - fSize.z/2 );
+		this.loadModel( ModelPath , 270 , posi);
+
+	},
+	loadModel: function( ModelPath , angle , Posi ){
 		
 		var scope=this;
 		var Model;
@@ -185,42 +216,18 @@ Cabinet_kallax.prototype = {
 		loader.load( ModelPath , function ( collada ) {
 			
 			Model = collada.scene;
+
 			scope.main.scene.add(Model);
 			Model.scale.set(1,1,1);
+
 			Model.rotateOnWorldAxis(new THREE.Vector3(0,0,1) , 180 * Math.PI/180);
-			//scope.rotateAroundWorldAxis(Model, new THREE.Vector3(1,0,0), 90 * Math.PI/180);
+			Model.rotateOnWorldAxis(new THREE.Vector3(0,1,0) , angle * Math.PI/180);
+			
 			Model.name = 'angle';
 			
-			Model.position.set(ModelPosi.x ,
-							   ModelPosi.y ,
-							   ModelPosi.z );
-
-			/*
-			var box = new THREE.Box3();
-			box.setFromObject(LegModel);
-			var LegCenter = new THREE.Vector3();
-			box.getCenter(LegCenter);
-
-			var diff = new THREE.Vector3( SeatPosi.x - LegCenter.x ,
-									  	  SeatPosi.y - LegCenter.y ,
-									  	  SeatPosi.z - LegCenter.z );
-			
-			var LegPosi = LegModel.position;
-			LegModel.position.set(LegPosi.x + diff.x  ,
-								  LegPosi.y + diff.y - LegCenter.y ,
-								  LegPosi.z + diff.z );
-			*/
-			
+			Model.position.set( Posi.x , Posi.y , Posi.z );
+			console.log(Posi);
 		} );
-	},
-	rotateAroundWorldAxis: function(object, axis, radians){
-		var rotWorldMatrix;
-		rotWorldMatrix = new THREE.Matrix4();
-    	rotWorldMatrix.makeRotationAxis(axis.normalize(), radians);
-    	rotWorldMatrix.multiplySelf(object.matrix);        // pre-multiply
-    	object.matrix = rotWorldMatrix;
-    	object.rotation.getRotationFromMatrix(object.matrix, object.scale);
-
 	}
 
 
@@ -228,10 +235,7 @@ Cabinet_kallax.prototype = {
 
 module.exports = Cabinet_kallax
 },{"./CabinetMakeBroad":1,"./CabinetMakeSeat":2}],4:[function(require,module,exports){
-const chairCreatBoard = require('./chairCreatBoard')
-=======
 const chairCreateBoard = require('./chairCreateBoard')
->>>>>>> master
 const chairCutBack = require('./chairCutBack')
 
 //test cut
@@ -1149,11 +1153,7 @@ Chair_Add.prototype = {
 }
 
 module.exports = Chair_Add
-<<<<<<< HEAD
-},{"./chairCreatBoard":10,"./chairCutBack":11}],5:[function(require,module,exports){
-=======
-},{"./cadCutByPlane":5,"./chairCreateBoard":7,"./chairCutBack":8}],2:[function(require,module,exports){
->>>>>>> master
+},{"./cadCutByPlane":8,"./chairCreateBoard":10,"./chairCutBack":11}],5:[function(require,module,exports){
 "use strict;"
 //chair align related functions
 //align in one line
@@ -1769,11 +1769,7 @@ module.exports = Chair_Align
 
 
 
-<<<<<<< HEAD
-},{"./cadMakeSeat":9,"./computeConvexHull":12}],6:[function(require,module,exports){
-=======
-},{"./cadMakeSeat":6,"./chairCutBack":8,"./computeConvexHull":9}],3:[function(require,module,exports){
->>>>>>> master
+},{"./cadMakeSeat":9,"./chairCutBack":11,"./computeConvexHull":12}],6:[function(require,module,exports){
 "use strict;"
 
 const rebuildMakeSeat = require('./rebuildMakeSeat');
@@ -2210,11 +2206,7 @@ Chair_Rebuild.prototype = {
 }
 module.exports = Chair_Rebuild
 
-<<<<<<< HEAD
 },{"./rebuildMakeLeg":118,"./rebuildMakeSeat":119}],7:[function(require,module,exports){
-=======
-},{"./rebuildMakeLeg":115,"./rebuildMakeSeat":116}],4:[function(require,module,exports){
->>>>>>> master
 "use strict;"
 //this is to handle the new design approaches
 //that without the need of cad operations
@@ -2599,13 +2591,8 @@ function chairCreateBoard(width, height, depth) {
 }
 
 
-<<<<<<< HEAD
-module.exports = chairCreatBoard
-},{"./csgToGeometries":14,"@jscad/csg":22,"@jscad/scad-api":109}],11:[function(require,module,exports){
-=======
 module.exports = chairCreateBoard
-},{"./csgToGeometries":11,"@jscad/csg":19,"@jscad/scad-api":106}],8:[function(require,module,exports){
->>>>>>> master
+},{"./csgToGeometries":14,"@jscad/csg":22,"@jscad/scad-api":109}],11:[function(require,module,exports){
 "use strict;"
 
 const scadApi = require('@jscad/scad-api')
@@ -21718,11 +21705,7 @@ module.exports = {
   vector_text
 }
 
-<<<<<<< HEAD
 },{}],118:[function(require,module,exports){
-=======
-},{}],115:[function(require,module,exports){
->>>>>>> master
 "use strict;"
 
 const scadApi = require('@jscad/scad-api')
@@ -21745,11 +21728,7 @@ function rebuildMakeLeg ( Leg_r , Leg_h ){
 
 
 module.exports = rebuildMakeLeg
-<<<<<<< HEAD
 },{"./csgToGeometries":14,"@jscad/csg":22,"@jscad/scad-api":109}],119:[function(require,module,exports){
-=======
-},{"./csgToGeometries":11,"@jscad/csg":19,"@jscad/scad-api":106}],116:[function(require,module,exports){
->>>>>>> master
 "use strict;"
 
 const scadApi = require('@jscad/scad-api')
