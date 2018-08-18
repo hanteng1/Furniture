@@ -2,6 +2,8 @@
 
 const rebuildMakeSeat = require('./rebuildMakeSeat');
 const rebuildMakeLeg = require('./rebuildMakeLeg');
+const computeConvexHull = require('./computeConvexHull');
+const cadExtrudeShape = require('./cadExtrudeShape');
 
 function Chair_Rebuild (main) {
 
@@ -105,6 +107,8 @@ Chair_Rebuild.prototype = {
 
 	execute: function(name){
 
+		console.log(name);
+
 		if(name == 'seat'){
 			this.changeTexture(this.furnitures[0]);
 		}
@@ -114,9 +118,122 @@ Chair_Rebuild.prototype = {
 		else if(name == 'back'){
 			//this.backConnect1(this.furnitures);
 			this.backConnect2(this.furnitures);
+		}else if(name == 'backrest') {
+			this.addBackRest(this.furnitures[0]);
 		}
 
 	},
+
+
+	addBackRest: function(furniture) {
+
+		console.log("function called");
+
+		//get back and its contour
+		var back_left = furniture.getComponentInName("back", "left");
+		var back_left_points = computeConvexHull(back_left, "yz"); //2d points
+
+		//make it 3d
+		var x_pos = furniture.getComponentCenterPosition("back").x - furniture.getComponentSize("back").x / 2;		
+
+		var back_left_3d = [];
+		for(var i = 0; i < back_left_points.length; i++) {
+			var point = back_left_points[i];
+			back_left_3d.push([x_pos, point[0], point[1]]);
+		}
+
+
+		// //visualize
+		// var material = new THREE.LineBasicMaterial( { color: 0x0000ff } );
+		// var back_left_geometry = new THREE.Geometry();
+
+		// for(var i =0; i < back_left_points.length; i++) {
+		// 	var point = back_left_points[i];
+		// 	var tempP = new THREE.Vector3(x_pos, point[0], point[1]);
+		// 	back_left_geometry.vertices.push(tempP);
+		// }
+
+		// var back_left_line = new THREE.Line( back_left_geometry, material );
+
+		// this.main.scene.add( back_left_line );
+
+		//get top and its contour
+		var back_whole = furniture.getComponentByName("back");
+		var back_whole_points = computeConvexHull(back_whole, "xy"); //2d points
+
+		var z_pos = furniture.getComponentCenterPosition("back").z - furniture.getComponentSize("back").z / 2;
+
+		// var back_whole_geometry = new THREE.Geometry();
+
+		// for(var i =0; i < back_whole_points.length; i++) {
+		// 	var point = back_whole_points[i];
+		// 	var tempP = new THREE.Vector3(point[0], point[1], z_pos);
+		// 	back_whole_geometry.vertices.push(tempP);
+		// }
+
+		// var back_whole_line = new THREE.Line( back_whole_geometry, material );
+		// this.main.scene.add( back_whole_line );
+
+		//get back top line ,, based on the vector directions and clockwise
+		//assumption. sull returns points with the point at the top-right (largest x and largest y)
+		var back_top_points = [];  //2d points for now
+		var angle_offset = 20;
+
+		for(var i = 0; i < back_whole_points.length - 1; i ++) {
+			var point_1 = back_whole_points[i];
+			var point_2 = back_whole_points[i + 1];
+
+			var test_vector = new THREE.Vector2(back_whole_points[i + 1][0] - back_whole_points[i][0], 
+												back_whole_points[i + 1][1] - back_whole_points[i][1]);
+			
+			//console.log(test_vector);
+			var test_angle = test_vector.angle() * 180 / Math.PI;
+
+			//console.log(test_angle);
+
+			if(test_angle > 180 - angle_offset && test_angle < 180 + angle_offset)
+			{
+				if(!back_top_points.includes(point_1)){
+					back_top_points.push(point_1);
+				}
+
+				if(!back_top_points.includes(point_2)) {
+					back_top_points.push(point_2);
+				}
+			}
+		}
+
+		// console.log(back_top_points);
+
+		// var back_top_geometry = new THREE.Geometry();
+
+		// for(var i =0; i < back_top_points.length; i++) {
+		// 	var point = back_top_points[i];
+		// 	var tempP = new THREE.Vector3(point[0], point[1], z_pos);
+		// 	back_top_geometry.vertices.push(tempP);
+		// }
+
+		// var back_top_line = new THREE.Line( back_top_geometry, material );
+		// this.main.scene.add( back_top_line );
+
+
+		var back_extrude_3d = [];
+		for(var i = 0; i < back_top_points.length; i++) {
+			var point = back_top_points[i];
+			back_extrude_3d.push([point[0], point[1], z_pos]);
+		}
+
+		//generate shape
+		var geometry = cadExtrudeShape(back_left_3d, back_extrude_3d);
+		var texture = this.textures["material1"];
+		var material = new THREE.MeshBasicMaterial( {map: texture} );
+
+		var backRest = new THREE.Mesh( geometry, material );
+
+		this.main.scene.add( backRest );
+
+	},
+
 
 	changeTexture: function(furniture){
 		$('#parameter_control_chair_rebuild').show();

@@ -272,7 +272,8 @@ Ui.prototype = {
 
 		//chair_rebuild_back
 		$('#operation_chair_rebuild_back').click(function() {
-			scope.processor.executeDesign("CHAIR_REBUILD", "back");
+			console.log("chair_rebuild_back_rest");
+			scope.processor.executeDesign("CHAIR_REBUILD", "backrest");
 		});
 
 		//chair_rebuild_leg

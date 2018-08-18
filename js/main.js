@@ -820,9 +820,8 @@ Main.prototype = {
 		}
 		if(object.material !== undefined) {
 
-			console.log(object.material);
-
-			//object.material.dispose();
+			//console.log(object.material);
+			object.material.dispose();
 		}
 		object = undefined;
 	},
