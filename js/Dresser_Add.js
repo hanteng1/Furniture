@@ -3,6 +3,8 @@
 const dresserCutSpace = require('./dresserCutSpace')
 const chairCreateBoard = require('./chairCreateBoard')
 const CreateRod = require('./CreateRod')
+const CreateDoor = require('./CreateDoor')
+const CreateChain = require('./CreateChain')
 
 function Dresser_Add (main){
 	this.main = main;
@@ -12,6 +14,29 @@ function Dresser_Add (main){
 
 
 Dresser_Add.prototype = {
+
+	loadDoorHinge: function() {
+		var doorHinge;
+		var scene = this.main.scene;
+		var Dresser_Add = this;
+		var loadingManager = new THREE.LoadingManager( function() {
+			scene.add(doorHinge);
+			console.log(doorHinge);
+			var left = doorHinge.children[0].children[0].getObjectByName("left");
+			console.log(left);
+			var box = new THREE.Box3();
+			box.setFromObject(left);
+			var boxHelper = new THREE.Box3Helper(box, 0x000000);
+			scene.add(boxHelper);
+		} );
+		var loader = new THREE.ColladaLoader( loadingManager );			
+			loader.load( "./models/hinge/DoorHinge.dae", function ( collada ) {
+			doorHinge = collada.scene;
+			doorHinge.name = "doorHinge";
+			doorHinge.scale.x = 0.5; doorHinge.scale.y = 0.5; doorHinge.scale.z = 0.5;
+			
+		} );
+	},
 
 	loadClothesHanger: function(rod) {
 		var clothesHanger;
@@ -413,7 +438,108 @@ Dresser_Add.prototype = {
 	addDoorEvent: function() {
 		// body...
 		var furniture_addDoor = new THREE.Object3D();
-		furniture_addDoor = this.furnitures[0].getFurniture().clone();
+		furniture_addDoor = this.furnitures[0].getFurniture();
+		this.main.scene.add(furniture_addDoor);
+
+		this.markCabinet(furniture_addDoor);		
+		this.markDrawer(furniture_addDoor);
+
+		console.log("furniture_addDoor");
+		console.log(furniture_addDoor);
+
+		var parameter = 6;
+		var spaceBox = this.removeDrawersByColumn(furniture_addDoor, parameter);
+		var spaceSize = new THREE.Vector3();
+		var spaceCenter = new THREE.Vector3();
+
+
+		spaceBox.getSize(spaceSize);
+		spaceBox.getCenter(spaceCenter);
+		furniture_addDoor.localToWorld(spaceCenter);
+
+		this.addShelf(furniture_addDoor, spaceCenter, spaceSize);
+		// if(mode == "leftToRight"){
+			spaceCenter.y = spaceCenter.y + spaceSize.y/4;
+			spaceSize.y = spaceSize.y/2;
+			this.addShelf(furniture_addDoor, spaceCenter, spaceSize);
+		// }
+		
+
+		var dresser = furniture_addDoor.getObjectByName("Dresser");
+		// var box = new THREE.Box3();
+		// box.setFromObject(dresser);
+		// var boxHelper = new THREE.Box3Helper(box, 0x000000);
+		// this.main.scene.add(boxHelper);
+		var dresserSize = this.getPartSize(dresser);
+		var dresserCenter = this.getPartCenter(dresser);
+		var doorMaterial = this.getPartMaterial(dresser);
+
+		//left to right
+		// if(mode == "leftToRight"){
+			// var doorGeometry = CreateDoor(dresserSize.y, dresserSize.x);
+			// var door = new THREE.Mesh(doorGeometry, doorMaterial);
+			// var doorSize = this.getPartSize(door);
+
+			// var angle = 30/180*Math.PI;
+			// var offsetX = doorSize.x/2 * Math.cos(angle);
+			// var offsetZ = doorSize.x/2 * Math.sin(angle);
+			// // var doorpos = new THREE.Vector3(dresserCenter.x , dresserCenter.y, dresserCenter.z + dresserSize.z/2);
+			// var doorpos = new THREE.Vector3(dresserCenter.x + doorSize.x/2 - offsetX, dresserCenter.y, dresserCenter.z + dresserSize.z/2 + offsetZ);
+			// // door.position.set(dresserCenter.x + doorSize.x/2 - offsetX, dresserCenter.y, dresserCenter.z + dresserSize.z/2 + offsetZ);
+			
+
+			// var inverse = new THREE.Matrix4();
+			// inverse.getInverse(furniture_addDoor.matrixWorld);
+			// door.applyMatrix(inverse);
+			// furniture_addDoor.worldToLocal(doorpos);
+			// door.position.set(doorpos.x, doorpos.y, doorpos.z);
+			// furniture_addDoor.add(door);
+			// door.rotateY(angle);
+		// }
+		
+		
+
+		//up to down
+		// if(mode == "upToDown"){
+			var doorGeometry = CreateDoor(dresserSize.x, dresserSize.y);
+			var door = new THREE.Mesh(doorGeometry, doorMaterial);			
+			door.rotateZ(-90/180*Math.PI);
+			var doorSize = this.getPartSize(door);	
+			var angle = 30/180*Math.PI;
+			var offsetY = doorSize.y/2 * Math.cos(angle);
+			var offsetZ = doorSize.y/2 * Math.sin(angle);
+			var doorpos = new THREE.Vector3(dresserCenter.x, dresserCenter.y - doorSize.y/2 + offsetY , dresserCenter.z + dresserSize.z/2 + offsetZ);
+			
+
+			var inverse = new THREE.Matrix4();
+			inverse.getInverse(furniture_addDoor.matrixWorld);
+			door.applyMatrix(inverse);
+			furniture_addDoor.worldToLocal(doorpos);
+			door.position.set(doorpos.x, doorpos.y, doorpos.z);
+			furniture_addDoor.add(door);
+			door.rotateY(angle);
+
+			var doorCenter = this.getPartCenter(door);
+			doorSize = this.getPartSize(door);
+			// var chainGeometry = CreateChain(offsetZ*2*10);			
+			// var chain1 = new THREE.Mesh(chainGeometry, doorMaterial);
+			// var chain2 = chain1.clone();
+			// var chain1pos = new THREE.Vector3(doorCenter.x + doorSize.x/2 - 0.1,doorCenter.y + doorSize.y/2 - 1, doorCenter.z - 1);
+			// var chain2pos = new THREE.Vector3(doorCenter.x - doorSize.x/2 + 0.1,doorCenter.y + doorSize.y/2 - 1, doorCenter.z - 1);
+			// chain1.applyMatrix(inverse);
+			// chain2.applyMatrix(inverse);
+			// furniture_addDoor.worldToLocal(chain1pos);
+			// furniture_addDoor.worldToLocal(chain2pos);
+			// chain1.position.set(chain1pos.x, chain1pos.y, chain1pos.z);
+			// chain2.position.set(chain2pos.x, chain2pos.y, chain2pos.z);
+			// furniture_addDoor.add(chain1);
+			// furniture_addDoor.add(chain2);
+
+			this.loadDoorHinge();
+		// }
+
+
+		
 	},
 
 	addRodEvent: function(){
@@ -503,7 +629,7 @@ Dresser_Add.prototype = {
 
 	removeDrawersEvent: function() {
 		var furniture_removeDrawer = new THREE.Object3D();
-		furniture_removeDrawer = this.furnitures[0].getFurniture().clone();
+		furniture_removeDrawer = this.furnitures[0].getFurniture();
 		this.main.scene.add(furniture_removeDrawer);
 
 		this.markCabinet(furniture_removeDrawer);		
@@ -531,9 +657,9 @@ Dresser_Add.prototype = {
 		if(this.checkHasTopFront(this.furnitures[0])){
 			//this.cutToChairEvent();
 			// this.addLegEvent();
-			// this.addDoorEvent();
+			this.addDoorEvent();
 			// this.addRodEvent();
-			this.addSpiceRackEvent();
+			//this.addSpiceRackEvent();
 			// this.addDrawerEvent();
 			// this.changeHandlesEvent();
 			// this.removeDrawersEvent();
