@@ -8,14 +8,14 @@ const {translate, rotate} = scadApi.transformations
 const csgToGeometries = require('./csgToGeometries')
 const {geometryToCsgs, unionCsgs} = require('./geometryToCsgs')
 
-function dresserCutSpace(cabinet, center, radius) {
-
-  var obj = geometryToCsgs(cabinet);
-  
-  var plane = CSG.Plane.fromNormalAndPoint([0, 0, 1], [0, 0, 0 + radius.z]);
-  
+function dresserCutSpace(dresser, position, size, scale) {
+  var obj = geometryToCsgs(dresser);
+  // console.log(obj);
+  // console.log(position);
+  // console.log(size);
+  // console.log(scale);
+  var plane = CSG.Plane.fromNormalAndPoint([0, 1, 0], [0, 1, 0]);
   var half_part = obj[0].cutByPlane(plane);
-
   var geometry = csgToGeometries(half_part)[0];  
 
   return geometry;

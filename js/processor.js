@@ -99,6 +99,13 @@ Processor.prototype = {
 					//wei hsiang end
 					
 					$('.operations.operation_chair_align').show();
+
+
+					//zhuen's block
+					scope.dresser_add = new Dresser_Add(scope.main);		
+					scope.transformFunctions.DRESSER_ADD = scope.dresser_add;
+					$('.operations.operation_dresser_add').show();
+					//end of zhuen's block
 				}
 
 
