@@ -104,6 +104,19 @@ Ui.prototype = {
 		});
 
 
+		//enable house environment
+		$('.ui.toggle.checkbox.house').checkbox({
+			onChecked: function() {
+      			//enable house environment
+      			scope.main.enableHouseEnvironment();
+
+    		},
+    		onUnchecked: function() {
+      			//disable house environment
+      			scope.main.disableHouseEnvironment();
+    		}
+		});
+
 		//reset the scene
 		$('.ui.blue.submit.button.reset').click(function(){
 			scope.main.resetFurnitures();
@@ -251,6 +264,8 @@ Ui.prototype = {
 		//chair_add_plate
 		$('#operation_chair_add_plate').click(function() {
 			scope.processor.executeDesign("CHAIR_ADD", "plate");
+
+			$('#parameter_control_chair_add').show();
 		});
 
 		//chair_add_hook
@@ -259,8 +274,8 @@ Ui.prototype = {
 		});
 
 		//chair_add_flip
-		$('#operation_chair_add_flip').click(function() {
-			scope.processor.executeDesign("CHAIR_ADD", "flip");
+		$('#operation_chair_add_hang').click(function() {
+			scope.processor.executeDesign("CHAIR_ADD", "hang");
 		});
 
 		//chair_rebuild_seat

@@ -89,7 +89,7 @@ function Main()
 
 	//house environment
 	this.house = new THREE.Object3D();
-
+	this.gridHelper;
 
 	//mesh simplify
 	this.modifer = new THREE.SimplifyModifier();
@@ -193,9 +193,9 @@ Main.prototype = {
 
 		this.scene.background = new THREE.Color(.95,.95,.95);
 
-		var gridHelper = new THREE.GridHelper( 1000, 20 ) ;//size, divisions
-		this.scene.add( gridHelper );
-		//this.addHouseEnvironment();
+		this.gridHelper = new THREE.GridHelper( 1000, 20 ) ;//size, divisions
+		this.scene.add( this.gridHelper );
+		this.loadHouseEnvironment();
 		
 		this.renderer.setPixelRatio( window.devicePixelRatio );
 		this.renderer.setSize( window.innerWidth, window.innerHeight );
@@ -261,7 +261,17 @@ Main.prototype = {
 	},
 
 
-	addHouseEnvironment: function() {
+	enableHouseEnvironment: function() {
+		this.scene.remove(this.gridHelper);
+		this.scene.add(this.house);
+	},
+
+	disableHouseEnvironment: function() {
+		this.scene.remove(this.house);
+		this.scene.add(this.gridHelper);
+	},
+
+	loadHouseEnvironment: function() {
 
 		var scope = this;
 
@@ -517,7 +527,7 @@ Main.prototype = {
 			
 		});
 
-		this.scene.add(this.house);
+		//this.scene.add(this.house);
 
 	},
 
