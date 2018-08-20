@@ -26,8 +26,8 @@ function Main()
 
 	//category
 	//todo: an floating window to select category
-	this.category = "chair";
-	//this.category = "cabinet";
+	//this.category = "chair";
+	this.category = "cabinet";
 
 	//only stores data
 	this.container = document.getElementById('container');
@@ -1399,11 +1399,13 @@ Main.prototype = {
 		$('#parameter_control_chair_align').hide();
 		$('#parameter_control_chair_rebuild').hide();
 		$('#parameter_control_chair_add').hide();
+		$('#parameter_control_cabinet_bed').hide();
 
 		$('.operations.operation_chair_align').hide();
 		$('.operations.operation_chair_add').hide();
 		$('.operations.operation_chair_rebuild').hide();
-		$('.operations.operation_cabinet_kallax').hide();
+		$('.operations.operation_cabinet_kallax_one').hide();
+		$('.operations.operation_cabinet_kallax_two').hide();
 
 		this.furnitures.length = 0;	
 
@@ -1492,11 +1494,13 @@ Main.prototype = {
 		$('#parameter_control_chair_align').hide();
 		$('#parameter_control_chair_rebuild').hide();
 		$('#parameter_control_chair_add').hide();
+		$('#parameter_control_cabinet_bed').hide();
 
 		$('.operations.operation_chair_align').hide();
 		$('.operations.operation_chair_add').hide();
 		$('.operations.operation_chair_rebuild').hide();
-		$('.operations.operation_cabinet_kallax').hide();
+		$('.operations.operation_cabinet_kallax_one').hide();
+		$('.operations.operation_cabinet_kallax_two').hide();
 
 		this.processor.init();
 		//this.processor.executeDesign();

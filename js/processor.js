@@ -108,14 +108,14 @@ Processor.prototype = {
 					scope.cabinet_kallax = new Cabinet_kallax(scope.main);
 					scope.transformFunctions.CABINET_LALLAX = scope.cabinet_kallax;
 					
-					$('.operations.operation_cabinet_kallax').show();
+					$('.operations.operation_cabinet_kallax_one').show();
 
 				}else if( scope.furnitures.length > 1) {
 					//possible actions with many furnitures
 					scope.cabinet_kallax = new Cabinet_kallax(scope.main);
 					scope.transformFunctions.CABINET_LALLAX = scope.cabinet_kallax;
 					
-					$('.operations.operation_cabinet_kallax').show();
+					$('.operations.operation_cabinet_kallax_two').show();
 				}
 
 				break;

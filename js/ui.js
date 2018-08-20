@@ -205,11 +205,13 @@ Ui.prototype = {
 		$('#parameter_control_chair_align').hide();
 		$('#parameter_control_chair_rebuild').hide();
 		$('#parameter_control_chair_add').hide();
+		$('#parameter_control_cabinet_bed').hide();
 
 		$('.operations.operation_chair_align').hide();
 		$('.operations.operation_chair_add').hide();
 		$('.operations.operation_chair_rebuild').hide();
-		$('.operations.operation_cabinet_kallax').hide();
+		$('.operations.operation_cabinet_kallax_one').hide();
+		$('.operations.operation_cabinet_kallax_two').hide();
 		
 
 
@@ -288,6 +290,7 @@ Ui.prototype = {
 		//cabinet_kallax_bed
 		$('#operation_cabinet_kallax_bed').click(function() {
 			scope.processor.executeDesign("CABINET_LALLAX", "bed");
+			$('#parameter_control_cabinet_bed').show();
 		});
 
 		//cabinet_kallax_table

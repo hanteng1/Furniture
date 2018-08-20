@@ -2,6 +2,8 @@
 
 const CabinetMakeSeat = require('./CabinetMakeSeat');
 const CabinetMakeBroad = require('./CabinetMakeBroad');
+const CabinetMakeBedBroad = require('./CabinetMakeBedBroad');
+const rebuildMakeSeat = require('./rebuildMakeSeat');
 
 function Cabinet_kallax (main){
 
@@ -16,11 +18,14 @@ Cabinet_kallax.prototype = {
 
 	execute: function(name){
 
-		if (name == 'seat'){
+		if (name == 'chair'){
 			this.ToSeat(this.furnitures[0]);
 		}
 		else if (name == 'table'){
 			this.ToTable(this.furnitures);
+		}
+		else if (name == 'bed'){
+			this.SelectBed();
 		}
 
 	},
@@ -108,12 +113,14 @@ Cabinet_kallax.prototype = {
 		var BroadPosi = new THREE.Vector3( (f1Center.x + f2Center.x)/2 - BroadSize.x/2,
 											f1Center.y + f1Size.y/2    ,
 										   (f1Center.z + f2Center.z)/2 - BroadSize.z/2);
-
+		//creat broad 
 		var geometry = CabinetMakeBroad( BroadSize.x , BroadSize.y , BroadSize.z );
-		var texture = new THREE.TextureLoader().load( 'images/material/material7.jpg' );
+		var texture = new THREE.TextureLoader().load( 'images/material/material5.jpg' );
+		texture.repeat.set(0.1, 0.1);
+		texture.wrapS = texture.wrapT = THREE.MirroredRepeatWrapping;
 		var newmaterial = new THREE.MeshBasicMaterial( {map: texture} );
 		var NewBroad = new THREE.Mesh( geometry, newmaterial );
-
+		//set broad position
 		NewBroad.position.set(BroadPosi.x , BroadPosi.y , BroadPosi.z);
 
 		//show broad
@@ -124,6 +131,7 @@ Cabinet_kallax.prototype = {
 
 		this.addAngle(  furnitures[0] );
 		this.addAngle(  furnitures[1] );
+		
 
 
 	},
@@ -140,25 +148,25 @@ Cabinet_kallax.prototype = {
 		posi = new THREE.Vector3( fCenter.x - fSize.x/2 ,
 								  fCenter.y + fSize.y/2, 
 								  fCenter.z );
-		this.loadModel( ModelPath , 0 , posi);
+		this.loadModel( ModelPath , 0 , posi , furniture);
 
 		posi = new THREE.Vector3( fCenter.x ,
 								  fCenter.y + fSize.y/2 , 
 								  fCenter.z + fSize.z/2 );
-		this.loadModel( ModelPath , 90 , posi);
+		this.loadModel( ModelPath , 90 , posi , furniture);
 
 		posi = new THREE.Vector3( fCenter.x + fSize.x/2 ,
 								  fCenter.y + fSize.y/2, 
 								  fCenter.z );
-		this.loadModel( ModelPath , 180 , posi);
+		this.loadModel( ModelPath , 180 , posi , furniture);
 
 		posi = new THREE.Vector3( fCenter.x ,
 								  fCenter.y + fSize.y/2 , 
 								  fCenter.z - fSize.z/2 );
-		this.loadModel( ModelPath , 270 , posi);
+		this.loadModel( ModelPath , 270 , posi , furniture);
 
 	},
-	loadModel: function( ModelPath , angle , Posi ){
+	loadModel: function( ModelPath , angle , Posi , group ){
 		
 		var scope=this;
 		var Model;
@@ -181,9 +189,319 @@ Cabinet_kallax.prototype = {
 			Model.name = 'angle';
 			
 			Model.position.set( Posi.x , Posi.y , Posi.z );
-			console.log(Posi);
+			
 		} );
+	},
+
+	SelectBed: function(){
+		var mode = '';
+		var main = this;
+		$( ".item.ui.image.label.twin_bed" ).click(function() {
+			
+			if (mode != 'twin' ){
+				mode = 'twin';
+				main.reset();
+				main.ToBed( main.furnitures , mode );
+			}
+
+		});
+		$( ".item.ui.image.label.queen_bed" ).click(function() {
+			
+			if (mode != 'queen' ){
+				mode = 'queen';
+				main.reset();
+				main.ToBed( main.furnitures , mode );
+			}
+
+		});
+
+	}, 
+
+	ToBed: function(furnitures , mode){
+
+		var scope = this;
+		var funiture1 = furnitures[0].getFurniture();
+		var funiture2 = furnitures[1].getFurniture();
+
+		//get funiture position
+		var f1Posi = new THREE.Vector3(funiture1.position.x ,
+									   funiture1.position.y ,
+									   funiture1.position.z);
+
+		var f2Posi = new THREE.Vector3(funiture2.position.x ,
+									   funiture2.position.y ,
+									   funiture2.position.z);
+		//get funiture size
+		var fSize = furnitures[0].getSize();
+		//set funiture2 position
+		funiture2.position.set(funiture1.position.x + fSize.x, 
+							   funiture2.position.y ,
+							   funiture1.position.z);
+		//get funiture center
+		var f1Center = furnitures[0].getFurnitureCenter();
+		var f2Center = furnitures[1].getFurnitureCenter();
+		var BroadSize = new THREE.Vector3();
+		var BroadPosi = new THREE.Vector3();
+
+		if (mode == "queen"){
+
+			if ( (Math.abs(f1Center.x - f2Center.x)+ fSize.x ) < 60 ){
+				var i=1
+				while ((Math.abs(f1Center.x - f2Center.x) + fSize.x ) < 60) {
+					funiture2.position.set(funiture2.position.x + i, 
+								   		   funiture2.position.y ,
+										   funiture1.position.z  );
+					//get funiture center
+					f1Center = furnitures[0].getFurnitureCenter();
+					f2Center = furnitures[1].getFurnitureCenter();
+				}
+			}
+			//get broad size
+			BroadSize = new THREE.Vector3( Math.abs(f1Center.x - f2Center.x)+fSize.x , 
+										   0.5 ,  
+										   Math.abs(f1Center.z - f2Center.z)+fSize.z );
+			//get broad position
+			BroadPosi = new THREE.Vector3( (f1Center.x + f2Center.x)/2 - BroadSize.x/2,
+											f1Center.y + fSize.y/2 ,
+										   (f1Center.z + f2Center.z)/2 - BroadSize.z/2);
+			this.loadQueenBed(f1Center , f2Center , BroadSize , BroadPosi);
+
+		}
+		else if (mode == "twin"){
+			if ( (Math.abs(f1Center.x - f2Center.x)+ fSize.x ) < 44 ){
+				var i=1
+				while ((Math.abs(f1Center.x - f2Center.x) + fSize.x ) < 44) {
+					funiture2.position.set(funiture2.position.x + i, 
+								   		   funiture2.position.y ,
+										   funiture1.position.z  );
+					//get funiture center
+					f1Center = furnitures[0].getFurnitureCenter();
+					f2Center = furnitures[1].getFurnitureCenter();
+				}
+			}
+			//get broad size
+			BroadSize = new THREE.Vector3( Math.abs(f1Center.x - f2Center.x)+fSize.x , 
+										   0.5 ,  
+										   Math.abs(f1Center.z - f2Center.z)+fSize.z );
+			//get broad position
+			BroadPosi = new THREE.Vector3( (f1Center.x + f2Center.x)/2 - BroadSize.x/2,
+											f1Center.y + fSize.y/2 ,
+										   (f1Center.z + f2Center.z)/2 - BroadSize.z/2);
+			this.loadTwinBed(f1Center , f2Center , BroadSize , BroadPosi);
+		}
+
+		var geometry = CabinetMakeBedBroad( BroadSize.x , BroadSize.y , BroadSize.z );
+		var texture = new THREE.TextureLoader().load( 'images/material/material8.jpg' );
+		texture.repeat.set(0.1, 0.1);
+		texture.wrapS = texture.wrapT = THREE.MirroredRepeatWrapping;
+		var newmaterial = new THREE.MeshBasicMaterial( {map: texture} );
+		var NewBroad = new THREE.Mesh( geometry, newmaterial );
+
+		NewBroad.position.set(BroadPosi.x , BroadPosi.y , BroadPosi.z);
+
+		//show broad
+		scope.main.scene.add(NewBroad);
+
+		if (mode == "queen" && fSize.z < 81-(BroadSize.y+1)){
+			//set texture info
+			texture = new THREE.TextureLoader().load( 'images/material/material5.jpg' );
+			texture.repeat.set(0.1, 0.1);
+			texture.wrapS = texture.wrapT = THREE.MirroredRepeatWrapping;
+			newmaterial = new THREE.MeshBasicMaterial( {map: texture} );
+
+			//creat broad 
+			geometry = CabinetMakeBroad( BroadSize.x , BroadSize.y + 1 , 81 - BroadSize.z );			
+			Broad1 = new THREE.Mesh( geometry, newmaterial );
+			Broad2 = new THREE.Mesh( geometry, newmaterial );
+			
+			geometry = CabinetMakeBroad( BroadSize.x , fSize.y - (BroadSize.y+1)*2 +0.5 , BroadSize.y + 1 );
+			Broad3 = new THREE.Mesh( geometry, newmaterial );
+			Broad4 = new THREE.Mesh( geometry, newmaterial );
+
+			//set broad position
+			Broad1.position.set(BroadPosi.x , BroadPosi.y - 1, BroadPosi.z - (81 - BroadSize.z) );
+			Broad2.position.set(BroadPosi.x , 0				 , BroadPosi.z - (81 - BroadSize.z) );
+			Broad3.position.set(BroadPosi.x , BroadSize.y + 1, BroadPosi.z - (81 - BroadSize.z) );
+			Broad4.position.set(BroadPosi.x , BroadSize.y + 1, BroadPosi.z - (BroadSize.y + 1) );
+
+			scope.main.scene.add(Broad1);
+			scope.main.scene.add(Broad2);
+			scope.main.scene.add(Broad3);
+			scope.main.scene.add(Broad4);
+
+		}
+		else if (mode == "twin" && fSize.z < 75-(BroadSize.y+1) ){
+			//set texture info
+			texture = new THREE.TextureLoader().load( 'images/material/material5.jpg' );
+			texture.repeat.set(0.1, 0.1);
+			texture.wrapS = texture.wrapT = THREE.MirroredRepeatWrapping;
+			newmaterial = new THREE.MeshBasicMaterial( {map: texture} );
+
+			//creat broad 
+			geometry = CabinetMakeBroad( BroadSize.x , BroadSize.y + 1 , 75 - BroadSize.z );			
+			Broad1 = new THREE.Mesh( geometry, newmaterial );
+			Broad2 = new THREE.Mesh( geometry, newmaterial );
+			
+			geometry = CabinetMakeBroad( BroadSize.x , fSize.y - (BroadSize.y+1)*2 +0.5 , BroadSize.y + 1 );
+			Broad3 = new THREE.Mesh( geometry, newmaterial );
+			Broad4 = new THREE.Mesh( geometry, newmaterial );
+
+			//set broad position
+			Broad1.position.set(BroadPosi.x , BroadPosi.y - 1, BroadPosi.z - (75 - BroadSize.z) );
+			Broad2.position.set(BroadPosi.x , 0				 , BroadPosi.z - (75 - BroadSize.z) );
+			Broad3.position.set(BroadPosi.x , BroadSize.y + 1, BroadPosi.z - (75 - BroadSize.z) );
+			Broad4.position.set(BroadPosi.x , BroadSize.y + 1, BroadPosi.z - (BroadSize.y + 1) );
+
+			scope.main.scene.add(Broad1);
+			scope.main.scene.add(Broad2);
+			scope.main.scene.add(Broad3);
+			scope.main.scene.add(Broad4);
+
+		}
+
+	},
+
+	loadQueenBed: function( f1Center , f2Center , BroadSize , BroadPosi ){
+		var ModelPath = '../models/mattress_queen.dae';
+		var scope=this;
+		var Model;
+		
+		// loading manager
+		var loadingManager = new THREE.LoadingManager( function() {} );
+		
+		// collada
+		var loader = new THREE.ColladaLoader( loadingManager );
+		loader.load( ModelPath , function ( collada ) {
+			
+			Model = collada.scene;
+
+			scope.main.scene.add(Model);
+			Model.scale.set(40,40,40);
+			Model.rotateOnWorldAxis(new THREE.Vector3(0,1,0) , 90 * Math.PI/180);
+
+			
+			var box 		= new THREE.Box3();
+			var bedCenter	= new THREE.Vector3( ( f1Center.x + f2Center.x )/2 ,
+												 ( f1Center.y + f2Center.y )/2 ,
+												 ( f1Center.z + f2Center.z )/2 );
+
+			Model.position.set( bedCenter.x + BroadSize.x/2, 
+								BroadPosi.y + 0.5 , 
+								bedCenter.z + BroadSize.z/2);
+		} );
+	},
+	loadTwinBed: function(f1Center , f2Center , BroadSize , BroadPosi){
+		var ModelPath = '../models/mattress_twin.dae';
+		var scope=this;
+		var Model;
+		
+		// loading manager
+		var loadingManager = new THREE.LoadingManager( function() {} );
+		
+		// collada
+		var loader = new THREE.ColladaLoader( loadingManager );
+		loader.load( ModelPath , function ( collada ) {
+			
+			Model = collada.scene;
+
+			scope.main.scene.add(Model);
+			Model.scale.set(40,40,40);
+			Model.rotateOnWorldAxis(new THREE.Vector3(0,1,0) , 90 * Math.PI/180);
+
+			var box 		= new THREE.Box3();
+			var bedCenter	= new THREE.Vector3( ( f1Center.x + f2Center.x )/2 ,
+												 ( f1Center.y + f2Center.y )/2 ,
+												 ( f1Center.z + f2Center.z )/2 );
+			Model.position.set( bedCenter.x + BroadSize.x/2, 
+								BroadPosi.y + 0.5 , 
+								bedCenter.z + BroadSize.z/2);
+			/*
+			var box 		= new THREE.Box3();
+			var bedCenter	= new THREE.Vector3( ( f1Center.x + f2Center.x )/2 ,
+												 ( f1Center.y + f2Center.y )/2 ,
+												 ( f1Center.z + f2Center.z )/2 );
+			var bedSize 	= new THREE.Vector3();
+
+			Model.position.set( bedCenter.x + BroadSize.x/2, 
+								BroadPosi.y + 0.5 , 
+								bedCenter.z + BroadSize.z/2);
+			*/
+		});
+	},
+
+	reset: function(){
+
+		var main = this.main;
+
+		//clean the scene and copy back the furnitures from the dataset
+		for(var i = main.scene.children.length - 1; i > -1; i -- ){ 
+			var object =  main.scene.children[i];	
+			
+			if(object.isObject3D){
+
+				if ( object instanceof THREE.Camera ) {
+
+				} else if ( object instanceof THREE.PointLight ) {
+
+				} else if ( object instanceof THREE.DirectionalLight ) {
+
+				} else if ( object instanceof THREE.SpotLight ) {					
+
+				} else if ( object instanceof THREE.HemisphereLight ) {
+
+				}else if ( object instanceof THREE.AmbientLight ) {
+
+				}else if ( object instanceof THREE.GridHelper ) {
+
+				}else if ( object instanceof THREE.TransformControls ){
+
+				}else if( object instanceof AddAxis){
+
+				}else if( object instanceof THREE.BoxHelper){
+
+				}else{
+					main.removeFromScene(object); 
+				}
+			}
+		}
+
+		main.furnitures.length = 0;	
+
+		//add the furnitures and their cards
+		for(var j = 0; j < main.furnituresDataSet.length; j ++) {
+			var furniture = main.furnituresDataSet[j];
+			var new_furnitureObj = new THREE.Object3D();
+			new_furnitureObj.copy(furniture.getFurniture(), true);
+			var new_furniture = new Furniture(new_furnitureObj);
+
+			new_furniture.setCategory("straight_chair");
+			new_furniture.setIndex(furniture.index);
+			main.furnitures.push(new_furniture);
+
+			main.scene.add(new_furniture.getFurniture());
+
+			//copy the state
+			new_furniture.updatePosition(furniture.position);
+			new_furniture.updateDirection();
+			new_furniture.updateQuaternion(furniture.quaternion);
+
+			//copy the components and labeled state
+			new_furniture.updateListedComponents(furniture.listedComponents);
+			new_furniture.updateLabeledComponents(furniture.labeledComponents);
+
+			//copy the already labeled normal axis
+			//Object.assign(new_furniture.normalAxises, furniture.normalAxises);
+			for (let key in furniture.normalAxises) {
+				new_furniture.normalAxises[key] = new THREE.Vector3();
+				new_furniture.normalAxises[key].copy(furniture.normalAxises[key]);
+			}
+
+		}
+
+
+
 	}
+
 
 
 }

@@ -230,7 +230,7 @@ Chair_Rebuild.prototype = {
 		var SeatPosi = new THREE.Vector3(NewSeat.position.x ,
 										 NewSeat.position.y ,
 										 NewSeat.position.z);
-		NewSeatPosi = NewSeat.position;
+		//NewSeatPosi = NewSeat.position;
 		
 		var inverseMatrix = new THREE.Matrix4();
 		inverseMatrix.getInverse(group.matrixWorld, true);
