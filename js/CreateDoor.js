@@ -8,7 +8,7 @@ const {translate, rotate} = scadApi.transformations
 const csgToGeometries = require('./csgToGeometries')
 
 function CreateDoor(h, w) {
-    var board = cube({size:[0.8, h - 2, w - 2], center:true});
+    var board = cube({size:[0.8, h - 1, w - 1], center:true});
 	var obj = board.expand(0.1, 16);
 	var path = new CSG.Path2D([[-0.25, w/8+w/10], [-0.25, w/8], [-0.25-w/20, w/8-w/15], 
 		[-0.25-w/20, -1*w/8+w/15], [-0.25, -1*w/8], [-0.25, -1*w/8-w/10]], /*closed=*/false);

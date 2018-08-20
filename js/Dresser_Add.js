@@ -5,6 +5,7 @@ const chairCreateBoard = require('./chairCreateBoard')
 const CreateRod = require('./CreateRod')
 const CreateDoor = require('./CreateDoor')
 const CreateChain = require('./CreateChain')
+const CreateHinge = require('./CreateHinge')
 
 function Dresser_Add (main){
 	this.main = main;
@@ -14,30 +15,6 @@ function Dresser_Add (main){
 
 
 Dresser_Add.prototype = {
-
-	loadDoorHinge: function() {
-		var doorHinge;
-		var scene = this.main.scene;
-		var Dresser_Add = this;
-		var loadingManager = new THREE.LoadingManager( function() {
-			scene.add(doorHinge);
-			console.log(doorHinge);
-			var left = doorHinge.children[0].children[0].getObjectByName("left");
-			console.log(left);
-			var box = new THREE.Box3();
-			box.setFromObject(left);
-			var boxHelper = new THREE.Box3Helper(box, 0x000000);
-			scene.add(boxHelper);
-		} );
-		var loader = new THREE.ColladaLoader( loadingManager );			
-			loader.load( "./models/hinge/DoorHinge.dae", function ( collada ) {
-			doorHinge = collada.scene;
-			doorHinge.name = "doorHinge";
-			doorHinge.scale.x = 0.5; doorHinge.scale.y = 0.5; doorHinge.scale.z = 0.5;
-			
-		} );
-	},
-
 	loadClothesHanger: function(rod) {
 		var clothesHanger;
 		var scene = this.main.scene;
@@ -457,7 +434,11 @@ Dresser_Add.prototype = {
 		spaceBox.getCenter(spaceCenter);
 		furniture_addDoor.localToWorld(spaceCenter);
 
+
 		this.addShelf(furniture_addDoor, spaceCenter, spaceSize);
+
+		var mode = "upToDown";
+
 		// if(mode == "leftToRight"){
 			spaceCenter.y = spaceCenter.y + spaceSize.y/4;
 			spaceSize.y = spaceSize.y/2;
@@ -468,48 +449,34 @@ Dresser_Add.prototype = {
 		var dresser = furniture_addDoor.getObjectByName("Dresser");
 		// var box = new THREE.Box3();
 		// box.setFromObject(dresser);
-		// var boxHelper = new THREE.Box3Helper(box, 0x000000);
+		furniture_addDoor.localToWorld(spaceBox);
+		spaceBox.getSize(spaceSize);
+		spaceBox.getCenter(spaceCenter);
+		// var boxHelper = new THREE.Box3Helper(spaceBox, 0x000000);
 		// this.main.scene.add(boxHelper);
 		var dresserSize = this.getPartSize(dresser);
 		var dresserCenter = this.getPartCenter(dresser);
 		var doorMaterial = this.getPartMaterial(dresser);
+		var boardwidth = (dresserSize.x - spaceSize.x)/2;
+
 
 		//left to right
-		// if(mode == "leftToRight"){
-			// var doorGeometry = CreateDoor(dresserSize.y, dresserSize.x);
-			// var door = new THREE.Mesh(doorGeometry, doorMaterial);
-			// var doorSize = this.getPartSize(door);
+		if(mode == "leftToRight"){
+			var doorGeometry = CreateDoor(dresserSize.y, dresserSize.x + 1);
+			var door = new THREE.Mesh(doorGeometry, doorMaterial);
+			var doorSize = this.getPartSize(door);
+			var RAngle = 120;
+			var angle = RAngle/180*Math.PI;
+			var offsetX = dresserSize.x/2 * Math.cos(angle);
 
-			// var angle = 30/180*Math.PI;
-			// var offsetX = doorSize.x/2 * Math.cos(angle);
-			// var offsetZ = doorSize.x/2 * Math.sin(angle);
-			// // var doorpos = new THREE.Vector3(dresserCenter.x , dresserCenter.y, dresserCenter.z + dresserSize.z/2);
-			// var doorpos = new THREE.Vector3(dresserCenter.x + doorSize.x/2 - offsetX, dresserCenter.y, dresserCenter.z + dresserSize.z/2 + offsetZ);
-			// // door.position.set(dresserCenter.x + doorSize.x/2 - offsetX, dresserCenter.y, dresserCenter.z + dresserSize.z/2 + offsetZ);
-			
+			if(RAngle <= 60)
+				var offsetZ = dresserSize.z/2 * Math.sin(angle) + 0.4 / Math.cos(angle);
+			else
+				var offsetZ = dresserSize.z/2 * Math.sin(angle) + 0.7;
 
-			// var inverse = new THREE.Matrix4();
-			// inverse.getInverse(furniture_addDoor.matrixWorld);
-			// door.applyMatrix(inverse);
-			// furniture_addDoor.worldToLocal(doorpos);
-			// door.position.set(doorpos.x, doorpos.y, doorpos.z);
-			// furniture_addDoor.add(door);
-			// door.rotateY(angle);
-		// }
-		
-		
-
-		//up to down
-		// if(mode == "upToDown"){
-			var doorGeometry = CreateDoor(dresserSize.x, dresserSize.y);
-			var door = new THREE.Mesh(doorGeometry, doorMaterial);			
-			door.rotateZ(-90/180*Math.PI);
-			var doorSize = this.getPartSize(door);	
-			var angle = 30/180*Math.PI;
-			var offsetY = doorSize.y/2 * Math.cos(angle);
-			var offsetZ = doorSize.y/2 * Math.sin(angle);
-			var doorpos = new THREE.Vector3(dresserCenter.x, dresserCenter.y - doorSize.y/2 + offsetY , dresserCenter.z + dresserSize.z/2 + offsetZ);
-			
+			var doorpos = new THREE.Vector3(dresserCenter.x + dresserSize.x/2 - offsetX, dresserCenter.y, 
+				dresserCenter.z + dresserSize.z/2  + offsetZ + 0.8);
+			var tmp = new THREE.Vector3(doorpos.x, doorpos.y, doorpos.z);
 
 			var inverse = new THREE.Matrix4();
 			inverse.getInverse(furniture_addDoor.matrixWorld);
@@ -519,8 +486,54 @@ Dresser_Add.prototype = {
 			furniture_addDoor.add(door);
 			door.rotateY(angle);
 
-			var doorCenter = this.getPartCenter(door);
-			doorSize = this.getPartSize(door);
+			var hingeGeometry = CreateHinge(RAngle-90, mode);			
+			var hinge1 = new THREE.Mesh(hingeGeometry, doorMaterial);
+			var hinge2 = hinge1.clone();
+			var hinge1pos = new THREE.Vector3(dresserCenter.x + dresserSize.x/2 - boardwidth - 0.3, 
+				dresserCenter.y + dresserSize.y/4, dresserCenter.z + dresserSize.z/2);
+			var hinge2pos = new THREE.Vector3(dresserCenter.x + dresserSize.x/2 - boardwidth - 0.3, 
+				dresserCenter.y - dresserSize.y/4, dresserCenter.z + dresserSize.z/2);
+
+			hinge1.applyMatrix(inverse);
+			hinge2.applyMatrix(inverse);
+			furniture_addDoor.worldToLocal(hinge1pos);
+			furniture_addDoor.worldToLocal(hinge2pos);
+			hinge1.position.set(hinge1pos.x, hinge1pos.y, hinge1pos.z);
+			hinge2.position.set(hinge2pos.x, hinge2pos.y, hinge2pos.z);
+			furniture_addDoor.add(hinge1);
+			furniture_addDoor.add(hinge2);
+		}
+		
+		
+
+		//up to down
+		if(mode == "upToDown"){
+			console.log("123");
+			var doorGeometry = CreateDoor(dresserSize.x, dresserSize.y);
+			var door = new THREE.Mesh(doorGeometry, doorMaterial);			
+			door.rotateZ(-90/180*Math.PI);
+			var doorSize = this.getPartSize(door);
+			var RAngle = 60;
+			var angle = RAngle/180*Math.PI;
+			var offsetY = doorSize.y/2 * Math.cos(angle);
+			if(RAngle <= 30)
+				var offsetZ = doorSize.y/2 * Math.sin(angle) + 0.8 * Math.sin(angle);
+			else
+				var offsetZ = doorSize.y/2 * Math.sin(angle);
+			var doorpos = new THREE.Vector3(dresserCenter.x, dresserCenter.y - doorSize.y/2 + offsetY , dresserCenter.z + dresserSize.z/2 + offsetZ);
+			var tmp = new THREE.Vector3();
+			tmp.set(doorpos.x, doorpos.y, doorpos.z);
+
+			var inverse = new THREE.Matrix4();
+			inverse.getInverse(furniture_addDoor.matrixWorld);
+			door.applyMatrix(inverse);
+			furniture_addDoor.worldToLocal(doorpos);
+			door.position.set(doorpos.x, doorpos.y, doorpos.z);
+			furniture_addDoor.add(door);
+			door.rotateY(angle);
+
+			// var doorCenter = this.getPartCenter(door);
+			// doorSize = this.getPartSize(door);
 			// var chainGeometry = CreateChain(offsetZ*2*10);			
 			// var chain1 = new THREE.Mesh(chainGeometry, doorMaterial);
 			// var chain2 = chain1.clone();
@@ -535,8 +548,27 @@ Dresser_Add.prototype = {
 			// furniture_addDoor.add(chain1);
 			// furniture_addDoor.add(chain2);
 
-			this.loadDoorHinge();
-		// }
+			var hingeGeometry = CreateHinge(RAngle-90, mode);			
+			var hinge1 = new THREE.Mesh(hingeGeometry, doorMaterial);			
+
+			// var offest = ((dresserSize.y - 1)/2) * (-1) *Math.cos(angle) + 0.8;
+			var hinge1pos = new THREE.Vector3(spaceCenter.x + spaceSize.x/4, 
+				spaceCenter.y - spaceSize.y/2 + 0.7, spaceCenter.z + spaceSize.z/2 );
+
+			var hinge2 = hinge1.clone();
+			var hinge2pos = new THREE.Vector3(spaceCenter.x - spaceSize.x/4, 
+				spaceCenter.y - spaceSize.y/2 + 0.7, spaceCenter.z + spaceSize.z/2 );
+
+			hinge1.applyMatrix(inverse);
+			furniture_addDoor.worldToLocal(hinge1pos);
+			hinge1.position.set(hinge1pos.x, hinge1pos.y, hinge1pos.z);
+			furniture_addDoor.add(hinge1);
+
+			hinge2.applyMatrix(inverse);
+			furniture_addDoor.worldToLocal(hinge2pos);
+			hinge2.position.set(hinge2pos.x, hinge2pos.y, hinge2pos.z);
+			furniture_addDoor.add(hinge2);
+		}
 
 
 		
