@@ -1,6 +1,6 @@
 "use strict;"
 
-THREE.FirstPersonControls = function ( object, domElement ) {
+THREE.MControls = function ( object, domElement ) {
 
 	this.object = object;
 	this.target = new THREE.Vector3( 0, 0, 0 );
@@ -237,7 +237,7 @@ THREE.FirstPersonControls = function ( object, domElement ) {
 		if ( this.moveUp ) this.object.translateY( actualMoveSpeed );
 		if ( this.moveDown ) this.object.translateY( - actualMoveSpeed );
 
-		var actualLookSpeed = 0.05;//this.lookSpeed;
+		var actualLookSpeed = this.lookSpeed;
 
 		if ( ! this.activeLook ) {
 
@@ -255,11 +255,11 @@ THREE.FirstPersonControls = function ( object, domElement ) {
 
 		this.lon += this.mouseX * actualLookSpeed;
 
-		console.log("mousex " + this.mouseX);
-		console.log("lookspeed" + actualLookSpeed);
-		console.log(this.mouseX * actualLookSpeed);
-
 		if ( this.lookVertical ) this.lat -= this.mouseY * actualLookSpeed * verticalLookRatio;
+
+
+		//console.log(this.lon + " , " + this.lat);
+
 
 		this.lat = Math.max( - 85, Math.min( 85, this.lat ) );
 		this.phi = THREE.Math.degToRad( 90 - this.lat );

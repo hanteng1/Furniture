@@ -98,74 +98,8 @@ function Main()
 	this.clock;
 
 
-	this.pointerlockControl;
-	this.pointerlockRayCaster;
-	this.pointerlockControlsEnabled = false;
-	this.pl_moveForward = false;
-	this.pl_moveBackward = false;
-	this.pl_moveLeft = false;
-	this.pl_moveRight = false;
-	this.pl_canJump = false;
-	this.pl_prevTime = performance.now();
-	this.pl_velocity = new THREE.Vector3();
-	this.pl_direction = new THREE.Vector3();
-	this.pl_vertex = new THREE.Vector3();
-	this.pl_color = new THREE.Color();
-
-
 	//mesh simplify
 	this.modifer = new THREE.SimplifyModifier();
-
-	// function loadModelObj(objFilePath)
-	// {
-
-	// 	var onProgress = function ( xhr ) {
-	// 		if ( xhr.lengthComputable ) {
-	// 			var percentComplete = xhr.loaded / xhr.total * 100;
-	// 			console.log( Math.round(percentComplete, 2) + '% downloaded' );
-	// 		}
-	// 	};
-	// 	var onError = function ( xhr ) {};
-	// 	var loader = new THREE.OBJLoader();
-	// 	loader.load(objFilePath, function(object){
-	// 		var material = new THREE.MeshPhongMaterial( { color: 0xff5533, specular: 0x111111, shininess: 200 });
-	// 		object.traverse(function(child){
-
-	// 			log('child');
-
-	// 			if(child instanceof THREE.Mesh){
-	// 				child.material = material;
-	// 				child.position.set(0, 0, 0);
-	// 				child.scale.set(1, 1, 1);
-	// 				child.castShadow = true;
-	// 				child.receiveShadow = true;
-
-	// 				//scene.add(child);
-	// 			}
-	// 		});
-
-	// 		scene.add(object);
-	// 	}, onProgress, onError);
-	// }
-
-
-	// function setupAttributes(geometry)
-	// {
-	// 	//todo: bring back quads
-	// 	var vectors = [
-	// 		new THREE.Vector3(1, 0, 0),
-	// 		new THREE.Vector3(0, 1, 0),
-	// 		new THREE.Vector3(0, 0, 1)
-	// 	];
-
-	// 	var position = geometry.attributes.position;
-	// 	var centers = new Float32Array( position.count * 3 );
-	// 	for ( var i = 0, l = position.count; i < l; i ++ ) {
-	// 		vectors[ i % 3 ].toArray( centers, i * 3 );
-	// 	}
-	// 	geometry.addAttribute( 'center', new THREE.BufferAttribute( centers, 3 ) );
-	// }
-
 
 }
 
@@ -248,64 +182,16 @@ Main.prototype = {
 
 		//first person control
 		this.clock = new THREE.Clock();
-		this.firstPersonControl = new THREE.FirstPersonControls(this.camera, this.renderer.domElement);
-        this.firstPersonControl.lookSpeed = 0.4;
+		this.firstPersonControl = new THREE.MControls(this.camera, this.renderer.domElement);
+        this.firstPersonControl.lookSpeed = 0.05;
         this.firstPersonControl.movementSpeed = 20;
         this.firstPersonControl.noFly = true;
         this.firstPersonControl.lookVertical = true;
         this.firstPersonControl.constrainVertical = true;
         this.firstPersonControl.verticalMin = 1.0;
         this.firstPersonControl.verticalMax = 2.0;
-        this.firstPersonControl.lon = -150;
-        this.firstPersonControl.lat = 120;
-
-
-		//var blocker = document.getElementById( 'blocker' );
-		//var instructions = document.getElementById( 'instructions' );
-		// var havePointerLock = 'pointerLockElement' in document || 'mozPointerLockElement' in document || 'webkitPointerLockElement' in document;
-		// if ( havePointerLock ) {
-		// 	var element = document.body;
-		// 	var pointerlockchange = function ( event ) {
-		// 		if ( document.pointerLockElement === element || document.mozPointerLockElement === element || document.webkitPointerLockElement === element ) {
-		// 			scope.pointerlockControlsEnabled = true;
-		// 			scope.pointerlockControl.enabled = true;
-		// 			blocker.style.display = 'none';
-		// 		} else {
-		// 			scope.pointerlockControl.enabled = false;
-		// 			blocker.style.display = 'block';
-		// 			instructions.style.display = '';
-		// 		}
-		// 	};
-		// 	var pointerlockerror = function ( event ) {
-		// 		console.log("error");
-		// 		instructions.style.display = '';
-		// 	};
-		// 	// Hook pointer lock state change events
-		// 	document.addEventListener( 'pointerlockchange', pointerlockchange, false );
-		// 	document.addEventListener( 'mozpointerlockchange', pointerlockchange, false );
-		// 	document.addEventListener( 'webkitpointerlockchange', pointerlockchange, false );
-
-		// 	document.addEventListener( 'pointerlockerror', pointerlockerror, false );
-		// 	document.addEventListener( 'mozpointerlockerror', pointerlockerror, false );
-		// 	document.addEventListener( 'webkitpointerlockerror', pointerlockerror, false );
-
-		// 	instructions.addEventListener( 'click', function ( event ) {
-		// 		instructions.style.display = 'none';
-		// 		// Ask the browser to lock the pointer
-		// 		element.requestPointerLock = element.requestPointerLock || element.mozRequestPointerLock || element.webkitRequestPointerLock;
-		// 		element.requestPointerLock();
-		// 	}, false );
-
-
-		// } else {
-		// 	console.log('Your browser doesn\'t seem to support Pointer Lock API');
-		// }
-
-		// this.pointerlockControl = new THREE.PointerLockControls( this.camera );
-		// this.scene.add( this.pointerlockControl.getObject() );
-
-		this.pointerlockRayCaster = new THREE.Raycaster( new THREE.Vector3(), new THREE.Vector3( 0, - 1, 0 ), 0, 10 );
-
+        this.firstPersonControl.lon = -110;
+        this.firstPersonControl.lat = -50;
 
 
 		this.transformControls = new THREE.TransformControls(this.camera, this.renderer.domElement);
@@ -325,24 +211,6 @@ Main.prototype = {
 
 		//initialize processor
 		this.processor = new Processor(scope);
-
-		
-
-
-		// //test
-
-		// var loader = new THREE.GLTFLoader();
-		// loader.load(
-		// 	'models/vitra-chair.glb',
-		// 	function ( gltf ) {
-		// 		scope.gltfLoadedCallback(
-		// 			gltf,
-		// 			scope.envMap,
-		// 			new THREE.Vector3(-1.5,0,-0.5),
-		// 			Math.PI*0.2
-		// 		);
-		// } );
-
 
 	},
 
@@ -388,10 +256,10 @@ Main.prototype = {
 		var groundTexture = new THREE.TextureLoader().load("../images/floor.jpg");
 		groundTexture.wrapS = groundTexture.wrapT = THREE.RepeatWrapping;
     	groundTexture.offset.set( 0, 0 );
-    	groundTexture.repeat.set( 10, 10 );
+    	groundTexture.repeat.set( 10, 16 );
 
 		var ground = new THREE.Mesh(
-			new THREE.PlaneBufferGeometry( 100, 100, 10, 10),
+			new THREE.PlaneBufferGeometry( 100, 160, 10, 16),
 			new THREE.MeshPhongMaterial( {wireframe: false, map: groundTexture, specular: 0x101010} )
 		);
 		ground.rotation.x = - Math.PI / 2;
@@ -411,7 +279,7 @@ Main.prototype = {
 			new THREE.MeshPhongMaterial( {map: purpleWallTexture, specular: 0x101010} )
 		);
 
-    	purple_wall.position.copy(new THREE.Vector3(0, 15, -50));
+    	purple_wall.position.copy(new THREE.Vector3(0, 15, -80));
 		purple_wall.receiveShadow = true;
 		//scope.scene.add(purple_wall);
 		this.house.add(purple_wall);
@@ -420,15 +288,15 @@ Main.prototype = {
 		var whiteWallTexture = new THREE.TextureLoader().load("../images/white_wall.jpg");
 		whiteWallTexture.wrapS = whiteWallTexture.wrapT = THREE.RepeatWrapping;
     	whiteWallTexture.offset.set( 0, 0 );
-    	whiteWallTexture.repeat.set( 1, 3 );
+    	whiteWallTexture.repeat.set( 4, 3 );
 
 		//left wall
 		var left_wall = new THREE.Mesh(
-			new THREE.BoxBufferGeometry( 3, 30, 10, 1, 3, 1),
+			new THREE.BoxBufferGeometry( 3, 30, 40, 1, 3, 4),
 			new THREE.MeshPhongMaterial( {map: whiteWallTexture, specular: 0x101010} )
 		);
 
-    	left_wall.position.copy(new THREE.Vector3(-50, 15, -45));
+    	left_wall.position.copy(new THREE.Vector3(-50, 15, -60));
 		left_wall.receiveShadow = true;
 		//scope.scene.add(left_wall);
 		this.house.add(left_wall);
@@ -444,6 +312,17 @@ Main.prototype = {
 			//scope.scene.add(fcWindow);
 			scope.house.add(fcWindow);
 		});
+
+		whiteWallTexture.repeat.set( 3, 3 );
+		var left_window_wall = new THREE.Mesh(
+			new THREE.BoxBufferGeometry( 3, 30, 30, 1, 3, 3),
+			new THREE.MeshPhongMaterial( {map: whiteWallTexture, specular: 0x101010} )
+		);
+
+		left_window_wall.position.copy(new THREE.Vector3(-50, 15, 31));
+		left_window_wall.receiveShadow = true;
+		//scope.scene.add(left_wall);
+		this.house.add(left_window_wall);
 		
 
 		//left window left
@@ -453,7 +332,7 @@ Main.prototype = {
 			new THREE.MeshPhongMaterial( {map: whiteWallTexture, specular: 0x101010} )
 		);
 
-    	left_window_left_wall.position.copy(new THREE.Vector3(-20, 15, 50 - (90 - 55.5)/2));
+    	left_window_left_wall.position.copy(new THREE.Vector3(-20, 15, 80 - (90 - 55.5)/2));
 		left_window_left_wall.receiveShadow = true;
 		//scope.scene.add(left_window_left_wall);
 		this.house.add(left_window_left_wall);
@@ -465,20 +344,20 @@ Main.prototype = {
 			new THREE.MeshPhongMaterial( {map: whiteWallTexture, specular: 0x101010} )
 		);
 
-    	left_wall_left_wall.position.copy(new THREE.Vector3(-35, 15, 50 - (90 - 55.5) + 1.5));
+    	left_wall_left_wall.position.copy(new THREE.Vector3(-35, 15, 80 - (90 - 55.5) + 1.5));
 		left_wall_left_wall.receiveShadow = true;
 		//scope.scene.add(left_wall_left_wall);
 		this.house.add(left_wall_left_wall);
 
 
 		//right wall
-		whiteWallTexture.repeat.set(3, 5);
+		whiteWallTexture.repeat.set(3, 8);
 		var right_wall = new THREE.Mesh(
-			new THREE.BoxBufferGeometry( 3, 30, 50, 1, 3, 5),
+			new THREE.BoxBufferGeometry( 3, 30, 80, 1, 3, 8),
 			new THREE.MeshPhongMaterial( {map: whiteWallTexture, specular: 0x101010} )
 		);
 
-    	right_wall.position.copy(new THREE.Vector3(50, 15, -25));
+    	right_wall.position.copy(new THREE.Vector3(50, 15, -40));
 		right_wall.receiveShadow = true;
 		//scope.scene.add(right_wall);
 		this.house.add(right_wall);
@@ -508,21 +387,21 @@ Main.prototype = {
 		this.house.add(right_door_top_wall);
 
 		//right door right
-		whiteWallTexture.repeat.set(3, 4);
+		whiteWallTexture.repeat.set(3, 7);
 		var right_door_right_wall = new THREE.Mesh(
-			new THREE.BoxBufferGeometry( 3, 30, 50 - 8.85, 1, 3, 4),
+			new THREE.BoxBufferGeometry( 3, 30, 80 - 8.85, 1, 3, 7),
 			new THREE.MeshPhongMaterial( {map: whiteWallTexture, specular: 0x101010} )
 		);
 
-    	right_door_right_wall.position.copy(new THREE.Vector3(50, 15, 8.85 + (50 - 8.858) / 2));
+    	right_door_right_wall.position.copy(new THREE.Vector3(50, 15, 8.85 + (80 - 8.858) / 2));
 		right_door_right_wall.receiveShadow = true;
 		//scope.scene.add(right_door_right_wall);
 		this.house.add(right_door_right_wall);
 
 		//ceiling
-		whiteWallTexture.repeat.set(10, 10);
+		whiteWallTexture.repeat.set(10, 16);
 		var ceiling = new THREE.Mesh(
-			new THREE.PlaneBufferGeometry( 100, 100, 10, 10),
+			new THREE.PlaneBufferGeometry( 100, 160, 10, 16),
 			new THREE.MeshPhongMaterial( {map: whiteWallTexture, specular: 0x101010} )
 		);
 		ceiling.position.y = 30;
@@ -536,7 +415,7 @@ Main.prototype = {
 		loader.load( '../models/wall_window.dae', function ( collada ) {
 			var wWindow = collada.scene;
 			wWindow.scale.copy(new THREE.Vector3(0.25, 0.25, 0.25));
-			wWindow.position.copy(new THREE.Vector3(-40, 0, 55));
+			wWindow.position.copy(new THREE.Vector3(-40, 0, 85));
 			//wWindow.rotation.z = - Math.PI / 2;
 			wWindow.rotation.x = - Math.PI / 2;
 			//scope.scene.add(wWindow);
@@ -566,7 +445,7 @@ Main.prototype = {
 			// });
 
 			apsad.scale.copy(new THREE.Vector3(0.4, 0.4, 0.4));
-			apsad.position.copy(new THREE.Vector3(-40, 0, -40));
+			apsad.position.copy(new THREE.Vector3(-40, 0, -70));
 			apsad.rotation.x = - Math.PI / 2;
 			scope.house.add(apsad);
 			
@@ -586,7 +465,7 @@ Main.prototype = {
 			// });
 
 			wall_art.scale.copy(new THREE.Vector3(0.02, 0.02, 0.02));
-			wall_art.position.copy(new THREE.Vector3(0, 15, -49));
+			wall_art.position.copy(new THREE.Vector3(0, 15, -79));
 			wall_art.rotation.z = Math.PI / 2;
 			scope.house.add(wall_art);
 			
@@ -649,49 +528,6 @@ Main.prototype = {
 	animate: function()
 	{
 		requestAnimationFrame(this.animate.bind(this));
-
-
-
-		//var delta = this.clock.getDelta();
-		//console.log(delta);
-		//this.firstPersonControl.update(delta);
-
-
-		// if(this.pointerlockControlsEnabled == true) {
-		// 	this.pointerlockRayCaster.ray.origin.copy( this.pointerlockControl.getObject().position );
-		// 	this.pointerlockRayCaster.ray.origin.y -= 10;
-			
-		// 	//var intersections = this.pointerlockRayCaster.intersectObjects( objects );
-		// 	//var onObject = intersections.length > 0;
-			
-		// 	var time = performance.now();
-		// 	var delta = ( time - this.pl_prevTime ) / 1000;
-		// 	this.pl_velocity.x -= this.pl_velocity.x * 10.0 * delta;
-		// 	this.pl_velocity.z -= this.pl_velocity.z * 10.0 * delta;
-		// 	this.pl_velocity.y -= 9.8 * 100.0 * delta; // 100.0 = mass
-		// 	this.pl_direction.z = Number( this.pl_moveForward ) - Number( this.pl_moveBackward );
-		// 	this.pl_direction.x = Number( this.pl_moveLeft ) - Number( this.pl_moveRight );
-		// 	this.pl_direction.normalize(); // this ensures consistent movements in all directions
-		// 	if ( this.pl_moveForward || this.pl_moveBackward ) this.pl_velocity.z -= this.pl_direction.z * 400.0 * delta;
-		// 	if ( this.pl_moveLeft || this.pl_moveRight ) this.pl_velocity.x -= this.pl_direction.x * 400.0 * delta;
-			
-		// 	// if ( onObject === true ) {
-		// 	// 	velocity.y = Math.max( 0, velocity.y );
-		// 	// 	canJump = true;
-		// 	// }
-			
-		// 	this.pointerlockControl.getObject().translateX( this.pl_velocity.x * delta );
-		// 	this.pointerlockControl.getObject().translateY( this.pl_velocity.y * delta );
-		// 	this.pointerlockControl.getObject().translateZ( this.pl_velocity.z * delta );
-		// 	if ( this.pointerlockControl.getObject().position.y < 10 ) {
-		// 		this.pl_velocity.y = 0;
-		// 		this.pointerlockControl.getObject().position.y = 10;
-		// 		this.pl_canJump = true;
-		// 	}
-		// 	this.pl_prevTime = time;
-		// }
-
-
 		this.render();
 		this.stats.update();
 	},
