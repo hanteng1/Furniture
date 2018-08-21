@@ -250,6 +250,16 @@ function Furniture(furniture) {
 		this.index = index;
 	}
 
+	//set to the property scale
+	this.setScale = function() {
+
+		var loadedSize = this.getSize();
+		console.log(loadedSize);
+
+
+	}
+
+
 	this.getFurniture = function(){
 		return this.furniture;
 	}

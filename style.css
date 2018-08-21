@@ -134,6 +134,18 @@ a {
   top: 0;
 }
 
+.ui.compact.modelsize {
+  position: fixed;
+  opacity: 1.0;
+  -moz-opacity: 1.0;
+  top: 0%;
+  left: 50%;
+  /* bring your own prefixes */
+  transform: translate(-50%, 0%);
+}
+
+
+
 #blocker {
   position: absolute;
   width: 100%;
