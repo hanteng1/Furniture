@@ -39,7 +39,7 @@ function Main()
 	this.helpers = {};
 	//this.sceneHelpers = new THREE.Scene();
 	this.stats = new Stats();
-	this.camera = new THREE.PerspectiveCamera (45, window.innerWidth / window.innerHeight, 1, 10000);
+	this.camera;
 	this.renderer = new THREE.WebGLRenderer( { antialias: true } );
 	this.control = null;
 
@@ -90,6 +90,28 @@ function Main()
 	//house environment
 	this.house = new THREE.Object3D();
 	this.gridHelper;
+
+	//two controls
+	this.orbitControl;
+	
+	this.firstPersonControl;
+	this.clock;
+
+
+	this.pointerlockControl;
+	this.pointerlockRayCaster;
+	this.pointerlockControlsEnabled = false;
+	this.pl_moveForward = false;
+	this.pl_moveBackward = false;
+	this.pl_moveLeft = false;
+	this.pl_moveRight = false;
+	this.pl_canJump = false;
+	this.pl_prevTime = performance.now();
+	this.pl_velocity = new THREE.Vector3();
+	this.pl_direction = new THREE.Vector3();
+	this.pl_vertex = new THREE.Vector3();
+	this.pl_color = new THREE.Color();
+
 
 	//mesh simplify
 	this.modifer = new THREE.SimplifyModifier();
@@ -156,8 +178,9 @@ Main.prototype = {
 		if(!Detector.webgl)
 			Detector.addGetWebGLMessage();
 
-		this.camera.position.set(0, 30, 50);
-		this.camera.lookAt(new THREE.Vector3(0, 30, -50));
+		this.camera = new THREE.PerspectiveCamera (45, window.innerWidth / window.innerHeight, 1, 10000);
+		this.camera.position.set(0, 17, 10); //height at 1.7m
+		//this.camera.lookAt(new THREE.Vector3(0, 10, 200));
 
 		var ambientLight = new THREE.AmbientLight( 0xeeeeee, 0.4);
 		this.scene.add(ambientLight);
@@ -214,12 +237,75 @@ Main.prototype = {
 		document.addEventListener('keydown', this.onKeyDown.bind(this), false);
 
 
-		this.controls = new THREE.OrbitControls( this.camera, this.renderer.domElement );
-		this.controls.addEventListener( 'change', this.render.bind(this) );
-		this.controls.minDistance = 1;
-		this.controls.maxDistance = 10000;
-		this.controls.enablePan = true;
-		//this.controls.target.set(0, 0.5, - 0.2);
+		//orbit control
+		// this.orbitControl = new THREE.OrbitControls( this.camera, this.renderer.domElement );
+		// this.orbitControl.addEventListener( 'change', this.render.bind(this) );
+		// this.orbitControl.minDistance = 1;
+		// this.orbitControl.maxDistance = 10000;
+		// this.orbitControl.enablePan = true;
+		// //this.controls.target.set(0, 0.5, - 0.2);
+
+
+		//first person control
+		this.clock = new THREE.Clock();
+		this.firstPersonControl = new THREE.FirstPersonControls(this.camera, this.renderer.domElement);
+        this.firstPersonControl.lookSpeed = 0.4;
+        this.firstPersonControl.movementSpeed = 20;
+        this.firstPersonControl.noFly = true;
+        this.firstPersonControl.lookVertical = true;
+        this.firstPersonControl.constrainVertical = true;
+        this.firstPersonControl.verticalMin = 1.0;
+        this.firstPersonControl.verticalMax = 2.0;
+        this.firstPersonControl.lon = -150;
+        this.firstPersonControl.lat = 120;
+
+
+		//var blocker = document.getElementById( 'blocker' );
+		//var instructions = document.getElementById( 'instructions' );
+		// var havePointerLock = 'pointerLockElement' in document || 'mozPointerLockElement' in document || 'webkitPointerLockElement' in document;
+		// if ( havePointerLock ) {
+		// 	var element = document.body;
+		// 	var pointerlockchange = function ( event ) {
+		// 		if ( document.pointerLockElement === element || document.mozPointerLockElement === element || document.webkitPointerLockElement === element ) {
+		// 			scope.pointerlockControlsEnabled = true;
+		// 			scope.pointerlockControl.enabled = true;
+		// 			blocker.style.display = 'none';
+		// 		} else {
+		// 			scope.pointerlockControl.enabled = false;
+		// 			blocker.style.display = 'block';
+		// 			instructions.style.display = '';
+		// 		}
+		// 	};
+		// 	var pointerlockerror = function ( event ) {
+		// 		console.log("error");
+		// 		instructions.style.display = '';
+		// 	};
+		// 	// Hook pointer lock state change events
+		// 	document.addEventListener( 'pointerlockchange', pointerlockchange, false );
+		// 	document.addEventListener( 'mozpointerlockchange', pointerlockchange, false );
+		// 	document.addEventListener( 'webkitpointerlockchange', pointerlockchange, false );
+
+		// 	document.addEventListener( 'pointerlockerror', pointerlockerror, false );
+		// 	document.addEventListener( 'mozpointerlockerror', pointerlockerror, false );
+		// 	document.addEventListener( 'webkitpointerlockerror', pointerlockerror, false );
+
+		// 	instructions.addEventListener( 'click', function ( event ) {
+		// 		instructions.style.display = 'none';
+		// 		// Ask the browser to lock the pointer
+		// 		element.requestPointerLock = element.requestPointerLock || element.mozRequestPointerLock || element.webkitRequestPointerLock;
+		// 		element.requestPointerLock();
+		// 	}, false );
+
+
+		// } else {
+		// 	console.log('Your browser doesn\'t seem to support Pointer Lock API');
+		// }
+
+		// this.pointerlockControl = new THREE.PointerLockControls( this.camera );
+		// this.scene.add( this.pointerlockControl.getObject() );
+
+		this.pointerlockRayCaster = new THREE.Raycaster( new THREE.Vector3(), new THREE.Vector3( 0, - 1, 0 ), 0, 10 );
+
 
 
 		this.transformControls = new THREE.TransformControls(this.camera, this.renderer.domElement);
@@ -563,6 +649,49 @@ Main.prototype = {
 	animate: function()
 	{
 		requestAnimationFrame(this.animate.bind(this));
+
+
+
+		//var delta = this.clock.getDelta();
+		//console.log(delta);
+		//this.firstPersonControl.update(delta);
+
+
+		// if(this.pointerlockControlsEnabled == true) {
+		// 	this.pointerlockRayCaster.ray.origin.copy( this.pointerlockControl.getObject().position );
+		// 	this.pointerlockRayCaster.ray.origin.y -= 10;
+			
+		// 	//var intersections = this.pointerlockRayCaster.intersectObjects( objects );
+		// 	//var onObject = intersections.length > 0;
+			
+		// 	var time = performance.now();
+		// 	var delta = ( time - this.pl_prevTime ) / 1000;
+		// 	this.pl_velocity.x -= this.pl_velocity.x * 10.0 * delta;
+		// 	this.pl_velocity.z -= this.pl_velocity.z * 10.0 * delta;
+		// 	this.pl_velocity.y -= 9.8 * 100.0 * delta; // 100.0 = mass
+		// 	this.pl_direction.z = Number( this.pl_moveForward ) - Number( this.pl_moveBackward );
+		// 	this.pl_direction.x = Number( this.pl_moveLeft ) - Number( this.pl_moveRight );
+		// 	this.pl_direction.normalize(); // this ensures consistent movements in all directions
+		// 	if ( this.pl_moveForward || this.pl_moveBackward ) this.pl_velocity.z -= this.pl_direction.z * 400.0 * delta;
+		// 	if ( this.pl_moveLeft || this.pl_moveRight ) this.pl_velocity.x -= this.pl_direction.x * 400.0 * delta;
+			
+		// 	// if ( onObject === true ) {
+		// 	// 	velocity.y = Math.max( 0, velocity.y );
+		// 	// 	canJump = true;
+		// 	// }
+			
+		// 	this.pointerlockControl.getObject().translateX( this.pl_velocity.x * delta );
+		// 	this.pointerlockControl.getObject().translateY( this.pl_velocity.y * delta );
+		// 	this.pointerlockControl.getObject().translateZ( this.pl_velocity.z * delta );
+		// 	if ( this.pointerlockControl.getObject().position.y < 10 ) {
+		// 		this.pl_velocity.y = 0;
+		// 		this.pointerlockControl.getObject().position.y = 10;
+		// 		this.pl_canJump = true;
+		// 	}
+		// 	this.pl_prevTime = time;
+		// }
+
+
 		this.render();
 		this.stats.update();
 	},

@@ -106,6 +106,7 @@ Ui.prototype = {
 
 		//enable house environment
 		$('.ui.toggle.checkbox.house').checkbox({
+
 			onChecked: function() {
       			//enable house environment
       			scope.main.enableHouseEnvironment();
@@ -116,6 +117,8 @@ Ui.prototype = {
       			scope.main.disableHouseEnvironment();
     		}
 		});
+
+		$('.ui.toggle.checkbox.house').checkbox("check");
 
 		//reset the scene
 		$('.ui.blue.submit.button.reset').click(function(){
