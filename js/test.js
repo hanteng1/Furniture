@@ -1,285 +1,81 @@
-
-const {log, status} = require('./log')
-const csgToGeometries =  require('./csgToGeometries')
-const {geometryToCsgs, unionCsgs} = require('./geometryToCsgs')
-const {hinge, addHinge} = require('./processor')
-const scadApi = require('@jscad/scad-api')
-const { CSG, CAG, isCSG, isCAG } = require('@jscad/csg')
-const {cube, sphere, cylinder} = scadApi.primitives3d
-const {union, difference, intersection} = scadApi.booleanOps
-const {translate, rotate} = scadApi.transformations
-
-// NOTE : all the functions below are taken from the official examples of OpenJSCAD.org
-
 /**
- * jscadLogo - description
- * function that generate the openjscad logo
- * @param  {type} size=10 description
- * @return {type}         description
+ * @author zz85 / http://www.lab4games.net/zz85/blog
+ * @author alteredq / http://alteredqualia.com/
+ *
+ * Text = 3D Text
+ *
+ * parameters = {
+ *  font: <THREE.Font>, // font
+ *
+ *  size: <float>, // size of the text
+ *  height: <float>, // thickness to extrude text
+ *  curveSegments: <int>, // number of points on the curves
+ *
+ *  bevelEnabled: <bool>, // turn on bevel
+ *  bevelThickness: <float>, // how deep into text bevel goes
+ *  bevelSize: <float> // how far from text outline is bevel
+ * }
  */
-function jscadLogo (size = 10) {
-  return union(
-      difference(
-         cube({size: 3, center: true}),
-         sphere({r: 2, center: true})
-      ),
-      intersection(
-          sphere({r: 1.3, center: true}),
-          cube({size: 2.1, center: true})
-      )
-   ).translate([0, 0, 1.5]).scale(size)
-}
 
-function coneWithCutouts () {
-  return intersection(
-    difference(
-      union(
-        cube({size: [30, 30, 30], center: true}),
-        translate([0, 0, -25],
-        cube({size: [15, 15, 50], center: true}))
-      ),
-      union(
-        cube({size: [50, 10, 10], center: true}),
-        cube({size: [10, 50, 10], center: true}),
-        cube({size: [10, 10, 50], center: true})
-      )
-    ),
-    translate([0, 0, 5], cylinder({h: 50, r1: 20, r2: 5, center: true})))
-}
+import { Geometry } from '../core/Geometry.js';
+import { ExtrudeBufferGeometry } from './ExtrudeGeometry.js';
 
-var mGeometries = [];
-var scene = null;
+// TextGeometry
 
-function setCsg(){
-  var mConeWithCutouts = new coneWithCutouts();
+function TextGeometry( text, parameters ) {
 
-  if(isCAG(mConeWithCutouts) || isCSG (mConeWithCutouts)) {
-    if(0 && mConeWithCutouts.length){
-      for(var i=0; i < mConeWithCutouts.length; i++){
-        mGeometries.concat(csgToGeometries(mConeWithCutouts[i]));
-      }
-    }else {
-      mGeometries = csgToGeometries(mConeWithCutouts);
-    }  
-  }
+	Geometry.call( this );
 
-  var material = new THREE.MeshLambertMaterial();
-  //add geometries to scene
-  for(var i = 0; i < mGeometries.length; i++)
-  {
-    var mesh = new THREE.Mesh( mGeometries[i], material );
-    scene.add(mesh);
-  }
+	this.type = 'TextGeometry';
 
-  //var hingeMesh = new THREE.Mesh(hinge(), material);
-  //scene.add(hingeMesh);
+	this.parameters = {
+		text: text,
+		parameters: parameters
+	};
+
+	this.fromBufferGeometry( new TextBufferGeometry( text, parameters ) );
+	this.mergeVertices();
 
 }
 
+TextGeometry.prototype = Object.create( Geometry.prototype );
+TextGeometry.prototype.constructor = TextGeometry;
 
-function init(){
-  let a = 1;
-  if(!Detector.webgl) Detector.addGetWebGLMessage();
+// TextBufferGeometry
 
-  var container = document.getElementById('container');
+function TextBufferGeometry( text, parameters ) {
 
-  var camera = new THREE.PerspectiveCamera (45, window.innerWidth / window.innerHeight, 1, 10000);
-  camera.position.set( 250, 400, 650 );
-  camera.lookAt(new THREE.Vector3());
+	parameters = parameters || {};
 
-  scene = new THREE.Scene();
-  scene.background = new THREE.Color(0xf0f0f0);
+	var font = parameters.font;
 
-  var ambientLight = new THREE.AmbientLight( 0xccccc, 0.4);
-  scene.add(ambientLight);
+	if ( ! ( font && font.isFont ) ) {
 
-  var pointLight = new THREE.PointLight(0xffffff, 0.8);
-  camera.add(pointLight);
-  scene.add(camera);
+		console.error( 'THREE.TextGeometry: font parameter is not an instance of THREE.Font.' );
+		return new Geometry();
 
-  var gridHelper = new THREE.GridHelper( 1000, 20 ) ;//size, divisions
-  scene.add( gridHelper );
+	}
 
-  var renderer = new THREE.WebGLRenderer( { antialias: true } );
-  renderer.setPixelRatio( window.devicePixelRatio );
-  renderer.setSize( window.innerWidth, window.innerHeight );
-  container.appendChild( renderer.domElement );
-    
-  var stats = new Stats();
-   //container.appendChild( stats.dom )
-  window.addEventListener( 'resize', onWindowResize, false );
+	var shapes = font.generateShapes( text, parameters.size );
 
-  var controls = new THREE.OrbitControls( camera, renderer.domElement );
-  controls.addEventListener( 'change', render );
-  controls.minDistance = 1;
-  controls.maxDistance = 10000;
-  controls.enablePan = true;
+	// translate parameters to ExtrudeGeometry API
 
-  loadModelStl();
-  animate();
+	parameters.depth = parameters.height !== undefined ? parameters.height : 50;
 
-  //setCsg();
+	// defaults
 
-  //do some opration on the object
+	if ( parameters.bevelThickness === undefined ) parameters.bevelThickness = 10;
+	if ( parameters.bevelSize === undefined ) parameters.bevelSize = 8;
+	if ( parameters.bevelEnabled === undefined ) parameters.bevelEnabled = false;
 
+	ExtrudeBufferGeometry.call( this, shapes, parameters );
 
-  function animate(){
-    requestAnimationFrame(animate);
-    render();
-    stats.update();
-  }
+	this.type = 'TextBufferGeometry';
 
-  function render()
-  {
-    renderer.render(scene, camera);
-  }
-
-
-  var loadedObject = null;
-  function loadModelObj(){
-    var material = new THREE.MeshLambertMaterial()
-    var loader = new THREE.OBJLoader()
-    loader.load('../models/Polantis_Stickley_Chair_01.obj', function(object){
-      loadedObject = object;
-      loadedObject.traverse( function ( child ) {
-        if ( child instanceof THREE.Mesh ) {
-          child.material = material;
-          
-          var childCsg = geometryToCsg(child.geometry);
-          //child.geometry = addHinge(child.geometry);
-          child.geometry = csgToGeometries(childCsg)[0];
-
-        }
-      });
-     //object.position.y = - 95;
-    loadedObject.scale.set(0.2, 0.2, 0.2);
-    scene.add( loadedObject );
-
-    });
-  }
-
-
-  function loadModelStl()
-  {
-    var loader = new THREE.STLLoader();
-    loader.load('../models/Ikea_Alex_Desk.stl', function(geometry) {
-      var material = new THREE.MeshPhongMaterial( { color: 0xff5533, specular: 0x111111, shininess: 200 });
-      //var material = new THREE.MeshBasicMaterial( { wireframe: true } );
-      var mesh = new THREE.Mesh(geometry, material);
-      mesh.position.set( 0, 0, 0 );
-      mesh.rotation.set( - Math.PI / 2, 0, 0 );
-      mesh.scale.set(1, 1, 1);
-      mesh.castShadow = true;
-      mesh.receiveShadow = true;
-
-      scene.add(mesh);
-
-
-      testModel(mesh.geometry);
-
-    });
-
-  }
-
-
-  //only use csg to compute modification (e.g., union, difference, aligh)
-  function testModel(initialGeo)
-  {
-    //to test conversion and basic operations
-    var toCsgs = geometryToCsgs(initialGeo);
-    //var toCsg = unionCsgs(toCsgs).rotateX(-90).translate([100, 0, 0]);  //.rotateX(90).rotateY(180)
-
-    for(var itrc = 0; itrc < toCsgs.length; itrc++)
-    {
-      var toGeos = csgToGeometries(toCsgs[itrc].rotateX(-90).translate([100, 0, 0]));
-      //var material = new THREE.MeshPhongMaterial( { color: 0xff5533, specular: 0x111111, shininess: 200 });
-      var material = new THREE.MeshBasicMaterial( { wireframe: true } );
-
-      //log("togeos length " + toGeos.length);
-      for(var i = 0; i < toGeos.length; i++)
-      {
-        //var mesh = new THREE.Mesh(toGeos[i], material);
-
-        var toGeo = toGeos[i].toNonIndexed();
-        setupAttributes(toGeo);
-
-        material = new THREE.ShaderMaterial( {
-            uniforms: {},
-            vertexShader: document.getElementById( 'vertexShader' ).textContent,
-            fragmentShader: document.getElementById( 'fragmentShader' ).textContent
-        });
-
-        material.extensions.derivatives = true;
-        var mesh = new THREE.Mesh(toGeo, material);
-
-        scene.add(mesh);
-      }
-    }
-
-
-    function testHinge(initialGeo)
-    {
-      
-    }
-
-    
-
-
-    
-
-
-    // for(var i = 0; i < toCsgs.length; i++)
-    // {
-    //   var toCsg = toCsgs[i].rotateX(90).rotateY(180).translate([150, 30, 0]);
-    
-    //   var toGeos = csgToGeometries(toCsg);
-    //   var material = new THREE.MeshPhongMaterial( { color: 0xff5533, specular: 0x111111, shininess: 200 });
-
-    //   for(var i = 0; i < toGeos.length; i++)
-    //   {
-    //     var mesh = new THREE.Mesh(toGeos[i], material);
-    //     scene.add(mesh);
-    //   }
-    // }
-    
-  }
-
-
-  function setupAttributes( geometry ) {
-        // TODO: Bring back quads
-        var vectors = [
-          new THREE.Vector3( 1, 0, 0 ),
-          new THREE.Vector3( 0, 1, 0 ),
-          new THREE.Vector3( 0, 0, 1 )
-        ];
-        var position = geometry.attributes.position;
-        var centers = new Float32Array( position.count * 3 );
-        for ( var i = 0, l = position.count; i < l; i ++ ) {
-          vectors[ i % 3 ].toArray( centers, i * 3 );
-        }
-        geometry.addAttribute( 'center', new THREE.BufferAttribute( centers, 3 ) );
-    }
-
-
-  function onWindowResize() {
-    camera.aspect = window.innerWidth / window.innerHeight;
-    camera.updateProjectionMatrix();
-    renderer.setSize( window.innerWidth, window.innerHeight );
-  }
 }
 
-
-document.addEventListener('DOMContentLoaded', function(event){
-  init();
-})
+TextBufferGeometry.prototype = Object.create( ExtrudeBufferGeometry.prototype );
+TextBufferGeometry.prototype.constructor = TextBufferGeometry;
 
 
-
-
-
-
-// now any other project can re-use these
-// module.exports = {
-//   jscadLogo,
-//   coneWithCutouts
-// }
+export { TextGeometry, TextBufferGeometry };

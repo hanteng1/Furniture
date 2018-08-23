@@ -4,6 +4,8 @@ const CabinetMakeSeat = require('./CabinetMakeSeat');
 const CabinetMakeBroad = require('./CabinetMakeBroad');
 const CabinetMakeBedBroad = require('./CabinetMakeBedBroad');
 const rebuildMakeSeat = require('./rebuildMakeSeat');
+const MarkSize = require('./MarkSize');
+const MarkBetweenSize = require('./MarkBetweenSize');
 
 function Cabinet_kallax (main){
 
@@ -244,7 +246,7 @@ Cabinet_kallax.prototype = {
 		var BroadPosi = new THREE.Vector3();
 
 		if (mode == "queen"){
-
+			//set bed width
 			if ( (Math.abs(f1Center.x - f2Center.x)+ fSize.x ) < 60 ){
 				var i=1
 				while ((Math.abs(f1Center.x - f2Center.x) + fSize.x ) < 60) {
@@ -266,6 +268,7 @@ Cabinet_kallax.prototype = {
 										   (f1Center.z + f2Center.z)/2 - BroadSize.z/2);
 			this.loadQueenBed(f1Center , f2Center , BroadSize , BroadPosi);
 
+			
 		}
 		else if (mode == "twin"){
 			if ( (Math.abs(f1Center.x - f2Center.x)+ fSize.x ) < 44 ){
@@ -289,7 +292,33 @@ Cabinet_kallax.prototype = {
 										   (f1Center.z + f2Center.z)/2 - BroadSize.z/2);
 			this.loadTwinBed(f1Center , f2Center , BroadSize , BroadPosi);
 		}
-
+		//show bed size text
+		this.loadText( (Math.round(BroadSize.x*100)/100).toString() , 
+						new THREE.Vector3((f1Center.x + f2Center.x)/2 ,
+														fSize.y	,
+														fSize.z + 1), 
+					   0 );
+		this.loadLine(	new THREE.Vector3(  funiture1.position.x , 
+											fSize.y ,
+											fSize.z + 1),
+				 		new THREE.Vector3(	funiture2.position.x + fSize.x, 
+											fSize.y ,
+											fSize.z + 1)
+				 	);
+		/*
+		this.loadText( (Math.round((BroadSize.x - fSize.x*2)*100)/100).toString() , 
+						new THREE.Vector3((f1Center.x + f2Center.x)/2 ,
+														0	,
+														fSize.z + 1), 
+					   0 );
+		this.loadLine(	new THREE.Vector3(  funiture1.position.x + fSize.x, 
+											0 ,
+											fSize.z + 1),
+				 		new THREE.Vector3(	funiture2.position.x , 
+											0 ,
+											fSize.z + 1)
+				 	);
+		*/
 		var geometry = CabinetMakeBedBroad( BroadSize.x , BroadSize.y , BroadSize.z );
 		var texture = new THREE.TextureLoader().load( 'images/material/material8.jpg' );
 		texture.repeat.set(0.1, 0.1);
@@ -302,6 +331,7 @@ Cabinet_kallax.prototype = {
 		//show broad
 		scope.main.scene.add(NewBroad);
 
+		//creat other 4 broads
 		if (mode == "queen" && fSize.z < 81-(BroadSize.y+1)){
 			//set texture info
 			texture = new THREE.TextureLoader().load( 'images/material/material5.jpg' );
@@ -329,6 +359,31 @@ Cabinet_kallax.prototype = {
 			scope.main.scene.add(Broad3);
 			scope.main.scene.add(Broad4);
 
+			//show bed size text
+			this.loadText( (Math.round( 81 *100)/100).toString() , 
+							new THREE.Vector3(	funiture2.position.x + fSize.x+1,
+															fSize.y	,
+															f2Center.z ), 
+						   90 );
+			this.loadLine(	new THREE.Vector3(  funiture2.position.x + fSize.x+1, 
+												fSize.y ,
+												funiture2.position.z + fSize.z),
+					 		new THREE.Vector3(	funiture2.position.x + fSize.x+1, 
+												fSize.y ,
+												funiture2.position.z + fSize.z-81)
+					 	);
+			this.loadText( (Math.round( (81 - BroadSize.z) *100)/100).toString() , 
+							new THREE.Vector3(	funiture2.position.x + fSize.x+1,
+															0	,
+												BroadPosi.z - (81 - BroadSize.z)/2 ), 
+						   90 );
+			this.loadLine(	new THREE.Vector3(  funiture2.position.x + fSize.x+1, 
+												0 ,
+												funiture2.position.z  ),
+					 		new THREE.Vector3(	funiture2.position.x + fSize.x+1, 
+												0 ,
+												funiture2.position.z + fSize.z-81)
+					 	);
 		}
 		else if (mode == "twin" && fSize.z < 75-(BroadSize.y+1) ){
 			//set texture info
@@ -356,8 +411,44 @@ Cabinet_kallax.prototype = {
 			scope.main.scene.add(Broad2);
 			scope.main.scene.add(Broad3);
 			scope.main.scene.add(Broad4);
+			//show bed size text
+			this.loadText( (Math.round( 75 *100)/100).toString() , 
+							new THREE.Vector3(	funiture2.position.x + fSize.x+1,
+															fSize.y	,
+															f2Center.z ), 
+						   90 );
+			this.loadLine(	new THREE.Vector3(  funiture2.position.x + fSize.x+1, 
+												fSize.y ,
+												funiture2.position.z + fSize.z),
+					 		new THREE.Vector3(	funiture2.position.x + fSize.x+1, 
+												fSize.y ,
+												funiture2.position.z + fSize.z-75)
+					 	);
+			this.loadText( (Math.round( (75 - BroadSize.z) *100)/100).toString() , 
+							new THREE.Vector3(	funiture2.position.x + fSize.x+1,
+															0	,
+												BroadPosi.z - (75 - BroadSize.z)/2 ), 
+						   90 );
+			this.loadLine(	new THREE.Vector3(  funiture2.position.x + fSize.x+1, 
+												0 ,
+												funiture2.position.z  ),
+					 		new THREE.Vector3(	funiture2.position.x + fSize.x+1, 
+												0 ,
+												funiture2.position.z + fSize.z-75)
+					 	);
 
 		}
+		
+		var group = new THREE.Group();
+		group.add( Broad1 );
+		group.add( Broad2 );
+		group.add( Broad3 );
+		group.add( Broad4 );
+		scope.main.scene.add(group);
+		MarkSize(this.main , group );
+		//MarkSize(this.main , funiture2 );
+		MarkBetweenSize(this.main ,funiture1 ,funiture2 );
+
 
 	},
 
@@ -390,6 +481,7 @@ Cabinet_kallax.prototype = {
 								bedCenter.z + BroadSize.z/2);
 		} );
 	},
+
 	loadTwinBed: function(f1Center , f2Center , BroadSize , BroadPosi){
 		var ModelPath = '../models/mattress_twin.dae';
 		var scope=this;
@@ -495,10 +587,60 @@ Cabinet_kallax.prototype = {
 				new_furniture.normalAxises[key] = new THREE.Vector3();
 				new_furniture.normalAxises[key].copy(furniture.normalAxises[key]);
 			}
-
 		}
 
+	},
 
+	loadText: function( text , position , rotat ){
+
+		var main = this.main;
+
+		var loader = new THREE.FontLoader();
+		var font = loader.load(
+			// resource URL
+			'three.js-master/examples/fonts/helvetiker_regular.typeface.json',
+
+			// onLoad callback
+			function ( font ) {
+				var geometry = new THREE.TextGeometry( text , {
+					font: font ,
+					size: 1,
+					height: 0.05,
+					curveSegments: 12,
+					bevelEnabled: false,
+					bevelThickness: 5,
+					bevelSize: 4,
+					bevelSegments: 1
+				} );
+
+				var material = new THREE.MeshBasicMaterial( { color: 0x000000 } );
+				var mesh = new THREE.Mesh( geometry, material );
+
+				mesh.position.set( position.x , position.y +0.5 , position.z );
+				mesh.rotateOnWorldAxis(new THREE.Vector3(0,1,0) , rotat * Math.PI/180);
+				main.scene.add( mesh );
+			}
+		);
+		
+	},
+
+	loadLine: function(point1 , point2){
+
+		var material = new THREE.LineBasicMaterial({
+			color: 0x000000,
+			linewidth: 10,
+			linecap: 'round', //ignored by WebGLRenderer
+			linejoin:  'round' //ignored by WebGLRenderer
+		});
+
+		var geometry = new THREE.Geometry();
+		geometry.vertices.push(
+			new THREE.Vector3( point1.x , point1.y , point1.z ),
+			new THREE.Vector3( point2.x , point2.y , point2.z )
+		);
+
+		var line = new THREE.Line( geometry, material );
+		this.main.scene.add( line );
 
 	}
 
