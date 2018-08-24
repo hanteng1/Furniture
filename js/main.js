@@ -521,6 +521,10 @@ Main.prototype = {
 	animate: function()
 	{
 		requestAnimationFrame(this.animate.bind(this));
+
+		this.customControl.applyTransition();
+
+
 		this.render();
 		this.stats.update();
 	},

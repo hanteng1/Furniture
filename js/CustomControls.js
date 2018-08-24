@@ -12,6 +12,8 @@ THREE.CustomControls = function ( object, domElement ) {
 	// Set to false to disable this control
 	this.enabled = true;
 
+	this.transiting = false;
+
 
 	//////////////////////////////target rotating view
 
@@ -63,9 +65,11 @@ THREE.CustomControls = function ( object, domElement ) {
 	this.position0 = this.object.position.clone();
 	this.zoom0 = this.object.zoom;
 
-
-
 	//////////////////////////////first person view
+
+	//attention, this is different from target
+	this.fp_target = new THREE.Vector3( 0, 0, 0 );
+
 	this.movementSpeed = 1.0;
 	this.lookSpeed = 0.0005;
 
@@ -123,10 +127,9 @@ THREE.CustomControls = function ( object, domElement ) {
 
 	this.saveState = function () {
 
-		scope.target0.copy( scope.target );
-		scope.position0.copy( scope.object.position );
-		scope.zoom0 = scope.object.zoom;
-
+		this.target0.copy( this.target );
+		this.position0.copy( this.object.position );
+		this.zoom0 = this.object.zoom;
 	};
 
 	//take care of reset later
@@ -152,13 +155,80 @@ THREE.CustomControls = function ( object, domElement ) {
 
 		//copy target position
 		//scope.target
-	}
+
+		scope.target.copy(scope.fp_target);
+		scope.tg_update();
+
+		scope.target.copy(new THREE.Vector3(0, 0, -30));
+	};
 
 
 	this.switchView2FP = function() {
 		scope.targetFocused = false;
+
+		//switch back to the original position
+		scope.transiting = true;
 		
+	};
+
+
+	this.applyTransition = function() {
+		
+		if(scope.transiting == true) {
+
+			scope.transiteCamera(scope.position0, -110, -50);
+
+		}
+
 	}
+
+
+	this.transiteCamera = function(targetPos, targetLon, targetLat) {
+
+		//position
+		var curPosition = new THREE.Vector3();
+		curPosition = scope.object.position;
+
+		//look at
+		var curLookatDir = new THREE.Vector3();
+		scope.object.getWorldDirection( curLookatDir );
+
+		//target lookatDir
+		this.lon = targetLon
+		if ( this.lookVertical ) this.lat = targetLat;
+
+		this.lat = Math.max( - 85, Math.min( 85, this.lat ) );
+		
+		this.phi = THREE.Math.degToRad( 90 - this.lat );
+		this.theta = THREE.Math.degToRad( this.lon );
+
+		if ( this.constrainVertical ) {
+			this.phi = THREE.Math.mapLinear( this.phi, 0, Math.PI, this.verticalMin, this.verticalMax );
+		}
+
+		var targetLookatDir = new THREE.Vector3();
+
+		targetLookatDir.x = targetPos.x + 100 * Math.sin( this.phi ) * Math.cos( this.theta );
+		targetLookatDir.y = targetPos.y + 100 * Math.cos( this.phi );
+		targetLookatDir.z = targetPos.z + 100 * Math.sin( this.phi ) * Math.sin( this.theta );
+
+
+		var lerpIndex = 0.1;
+
+		curLookatDir.lerp(targetLookatDir, lerpIndex);
+		//set position
+		curPosition.lerp(targetPos, lerpIndex);
+		//set lookat
+		scope.object.lookAt( curLookatDir );
+
+
+		if(curLookatDir.angleTo(targetLookatDir) < 0.034 && curPosition.distanceTo(targetPos) < 1) {
+			
+			scope.transiting = false;
+		}
+
+	};
+
 
 
 	this.tg_update = function () {
@@ -175,10 +245,20 @@ THREE.CustomControls = function ( object, domElement ) {
 
 			var position = scope.object.position;
 
+			console.log("camera position");
+			console.log(position);
+
+
+			console.log("target position");
+			console.log(scope.target);
+
 			offset.copy( position ).sub( scope.target );
 
 			// rotate offset to "y-axis-is-up" space
 			offset.applyQuaternion( quat );
+
+			console.log("offset");
+			console.log(offset);
 
 			// angle from z-axis around y-axis
 			spherical.setFromVector3( offset );
@@ -324,7 +404,7 @@ THREE.CustomControls = function ( object, domElement ) {
 
 		}
 
-		var targetPosition = this.target,
+		var targetPosition = this.fp_target,
 			position = this.object.position;
 
 		targetPosition.x = position.x + 100 * Math.sin( this.phi ) * Math.cos( this.theta );
