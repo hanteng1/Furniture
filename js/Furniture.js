@@ -251,12 +251,10 @@ function Furniture(furniture) {
 	}
 
 	//set to the property scale
-	this.setScale = function() {
+	this.setLoadMatrix = function(loadMatrix) {
 
-		var loadedSize = this.getSize();
-		console.log(loadedSize);
-
-
+		this.getFurniture().applyMatrix(loadMatrix);
+				
 	}
 
 

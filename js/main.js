@@ -581,29 +581,6 @@ Main.prototype = {
 
 		}
 
-		//add the compoennts
-		var objects = [];
-		object.traverse( function ( child ) {
-
-			if ( child.geometry !== undefined ) {
-				//child.material.envMap = scope.envMap;
-				child.material.needsUpdate = true;
-				child.castShadow = true;
-				child.name = "";
-
-				//make the scale
-				child.applyMatrix(loadMatrix);
-				child.verticesNeedUpdate = true;
-
-				objects.push(child);
-				//scope.addHelper( child ); //to visualize helpers
-
-			}
-
-			//if ( child.material !== undefined ) scope.addMaterial( child.material );
-		} );
-
-
 		//visualize
 		var defaultLength = parseFloat(length).toFixed(1);
 		var defaultWidth = parseFloat(width).toFixed(1);
@@ -617,16 +594,32 @@ Main.prototype = {
 		console.log($('#model_size_initialization').find(".fluid.ui.button"));
 
 		$('#model_size_initialization').find("button")[0].onclick =function() {
-			scope.addObject(objects);
+			scope.addObject(object, loadMatrix);
 			$('#model_size_initialization').slideUp(200);
 		};
 
 	},
 
 	//function to load model into the scene
-	addObject: function ( objects ) {
+	addObject: function ( object, loadMatrix ) {
 
-		var scope = this;
+		//add the compoennts
+		var objects = [];
+		object.traverse( function ( child ) {
+
+			if ( child.geometry !== undefined ) {
+				//child.material.envMap = scope.envMap;
+				child.material.needsUpdate = true;
+				child.castShadow = true;
+				child.name = "";
+
+				objects.push(child);
+				//scope.addHelper( child ); //to visualize helpers
+
+			}
+
+			//if ( child.material !== undefined ) scope.addMaterial( child.material );
+		} );
 
 		//add this to array and visualize its
 		var furnitureObj = new THREE.Object3D();
@@ -639,7 +632,7 @@ Main.prototype = {
 		furniture.setCategory("straight_chair");
 		furniture.setIndex(this.furnitures.length + 1);
 
-		furniture.setScale();
+		furniture.setLoadMatrix(loadMatrix);
 
 		this.furnitures.push(furniture);
 
@@ -1074,6 +1067,7 @@ Main.prototype = {
 
 	handleClick: function()
 	{
+
 		if ( this.onDownPosition.distanceTo( this.onUpPosition ) === 0 ) {
 
 			if(this.onCtrlE == false) {
@@ -1086,11 +1080,16 @@ Main.prototype = {
 						this.furniture = this.furnitures[i];
 						this.select(this.furniture.getFurniture());
 
+						//control switch from first-person to target orbit
+						this.customControl.switchView2TG();
+
 						break;
 					} else {
 						//it also calls select, to detach
 						this.select( null );
 						this.furniture = null;
+
+						this.customControl.switchView2FP();
 					}
 				}
 			}else{

@@ -145,6 +145,22 @@ THREE.CustomControls = function ( object, domElement ) {
 
 	};
 
+
+	//switch views
+	this.switchView2TG = function() {
+		scope.targetFocused = true;
+
+		//copy target position
+		//scope.target
+	}
+
+
+	this.switchView2FP = function() {
+		scope.targetFocused = false;
+		
+	}
+
+
 	this.tg_update = function () {
 		var offset = new THREE.Vector3();
 
@@ -458,6 +474,10 @@ THREE.CustomControls = function ( object, domElement ) {
 
 
 
+
+
+
+
 	function onMouseDown( event ) {
 
 		if ( scope.enabled === false ) return;
@@ -502,7 +522,7 @@ THREE.CustomControls = function ( object, domElement ) {
 
 		}
 
-		console.log(state);
+		//console.log(state);
 
 		if ( state !== STATE.NONE ) {
 
