@@ -91,11 +91,8 @@ function Main()
 	this.house = new THREE.Object3D();
 	this.gridHelper;
 
-	//two controls
-	this.orbitControl;
-	
-	this.firstPersonControl;
-	this.clock;
+	// controls
+	this.customControl;
 
 
 	//mesh simplify
@@ -172,26 +169,22 @@ Main.prototype = {
 
 
 		//orbit control
-		// this.orbitControl = new THREE.OrbitControls( this.camera, this.renderer.domElement );
-		// this.orbitControl.addEventListener( 'change', this.render.bind(this) );
-		// this.orbitControl.minDistance = 1;
-		// this.orbitControl.maxDistance = 10000;
-		// this.orbitControl.enablePan = true;
-		// //this.controls.target.set(0, 0.5, - 0.2);
+		this.customControl = new THREE.CustomControls( this.camera, this.renderer.domElement );
+		this.customControl.addEventListener( 'change', this.render.bind(this) );
+		this.customControl.minDistance = 1;
+		this.customControl.maxDistance = 10000;
+		//this.customControl.enablePan = true;
+		//this.customControl.target.set(0, 0.5, - 0.2);
 
-
-		//first person control
-		this.clock = new THREE.Clock();
-		this.firstPersonControl = new THREE.MControls(this.camera, this.renderer.domElement);
-        this.firstPersonControl.lookSpeed = 0.05;
-        this.firstPersonControl.movementSpeed = 20;
-        this.firstPersonControl.noFly = true;
-        this.firstPersonControl.lookVertical = true;
-        this.firstPersonControl.constrainVertical = true;
-        this.firstPersonControl.verticalMin = 1.0;
-        this.firstPersonControl.verticalMax = 2.0;
-        this.firstPersonControl.lon = -110;
-        this.firstPersonControl.lat = -50;
+		this.customControl.lookSpeed = 0.05;
+        this.customControl.movementSpeed = 20;
+        this.customControl.noFly = true;
+        this.customControl.lookVertical = true;
+        this.customControl.constrainVertical = true;
+        this.customControl.verticalMin = 1.0;
+        this.customControl.verticalMax = 2.0;
+        this.customControl.lon = -110;
+        this.customControl.lat = -50;
 
 
 		this.transformControls = new THREE.TransformControls(this.camera, this.renderer.domElement);
