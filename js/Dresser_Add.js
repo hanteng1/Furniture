@@ -512,6 +512,9 @@ Dresser_Add.prototype = {
 
 	removeDrawersByColumn: function(furniture, removeNumber, count) {
 		this.countDrawerByColumn(furniture, count);
+
+		console.log(count);
+
 		var drawers = new Array();
 		for (var i = 0; i < furniture.children.length; i++)
 			if(furniture.children[i].name == "drawer")
@@ -520,6 +523,8 @@ Dresser_Add.prototype = {
 		var centers = new Array();
 		for (var i = 0; i < drawers.length; i++)
 			centers.push(Math.floor(this.getPartCenter(drawers[i]).y * 100)/100);
+		
+		console.log(centers);
 
 		if(removeNumber <= count.length){
 			for(var i = 0; i < removeNumber; i++)
@@ -532,89 +537,15 @@ Dresser_Add.prototype = {
 	},
 
 	cutToChairEvent: function() {
-
 		var furniture_cutToChair = new THREE.Object3D();
-		furniture_cutToChair = this.furnitures[0].getFurniture().clone();
-		this.main.scene.add(furniture_cutToChair);
+		furniture_cutToChair = this.furnitures[0].getFurniture();
 
-		this.markCabinet(furniture_cutToChair);		
+		this.markCabinet(furniture_cutToChair);
 		this.markDrawer(furniture_cutToChair);
-		// console.log("furniture_cutToChair");
-		// console.log(furniture_cutToChair);
-		if(!this.hasRemovedDrawers){
-			var spaceBox = this.removeDrawersByColumn(furniture_cutToChair, this.parameter);
-			this.hasRemovedDrawers = true;
-		}
-		else
-			spaceBox = this.getInsideSpace(furniture_cutToChair);	
-		
-		var size = new THREE.Vector3();
-		var position = new THREE.Vector3();
-
-
 		var dresser = furniture_cutToChair.getObjectByName("Dresser");
-		// console.log("dresser");
-		// console.log(dresser);
-
-		// var geometry = new THREE.BoxGeometry( size.x, size.y, size.z );
-		// var material = new THREE.MeshBasicMaterial( {color: 0x000000} );
-		// var cube = new THREE.Mesh( geometry, material );
-		// var dresser_matrix = new THREE.Matrix4();
-		// dresser_matrix.getInverse(dresser.matrixWorld, true);
-		// cube.applyMatrix(dresser_matrix);
-		// cube.position.set(position.x, position.y, position.z);
-		// dresser.worldToLocal(cube.position);
-		// dresser.add(cube);
-
-		// console.log("cube");
-		// console.log(cube);
-		// var verticesAttribute = dresser.geometry.getAttribute('position');
-		// var verticesArray = verticesAttribute.array;
-		// var itemSize = verticesAttribute.itemSize;
-		// var verticesNum = verticesArray.length / itemSize;
-		// var beforeLength = verticesNum;
-		// var modifer = new THREE.SimplifyModifier();
-		// var simplified = modifer.modify( dresser.geometry,  beforeLength * 0.5 | 0 );
-		// console.log(simplified);
-
-		// if(dresser.children.length > 0){
-		// 	var tmp = dresser.children[0];
-		// 	while(this.hasChildren(tmp))
-		// 		tmp = tmp.children[0];
-		// }
-		// else{
-		// 	var tmp = new THREE.Object3D;
-		// 	tmp = dresser;
-		// }
+		this.hasBottom(dresser);
+		this.hasBack(dresser);
 		
-		// var dresserMaterial = new THREE.MeshBasicMaterial();
-		// if (Array.isArray(tmp.material))
-		// 	dresserMaterial = tmp.material[0].clone();
-		// else
-		// 	dresserMaterial = tmp.material.clone();
-
-		// console.log("simplified");
-		// console.log(simplified);
-		// var cutResultGeometry = dresserCutSpace(simplified, position, size, cube.scale);
-		// var cutResultGeometry = dresserCutSpace(simplified);
-		
-
-		// var newDresser = new THREE.Mesh( cutResultGeometry, dresserMaterial );
-		// var scale = dresser.scale;
-		// newDresser.scale.set(scale.x, scale.y, scale.z);
-		// console.log(newDresser);
-		// newDresser.applyMatrix(dresser.matrixWorld);
-		// newDresser.position.set(position.x, position.y, position.z);
-		// furniture_cutToChair.worldToLocal(newDresser.position);
-		//furniture_cutToChair.remove(cube);
-		// this.main.scene.remove(furniture_cutToChair);
-
-		// var test = new THREE.Box3();
-		// test.setFromObject(newDresser);
-		// var testHelper = new THREE.Box3Helper(test, 0x000000);
-		// this.main.scene.add(testHelper);
-
-		// this.main.scene.add(newDresser);	
 	},
 
 	addLegEvent: function() {
@@ -974,9 +905,14 @@ Dresser_Add.prototype = {
 		//remove drawers and count drawers
 		var columns = new Array();
 		this.removeDrawersByColumn(furniture_addDrawer, this.drawerParameter, columns);
-
-		if(columns.length < this.drawerParameter)
+		if(columns.length < this.drawerParameter){
 			this.drawerParameter = columns.length;
+			var tmp = [];
+			this.removeDrawersByColumn(furniture_addDrawer, this.drawerParameter, tmp);
+		}
+
+		console.log(this.drawerParameter);
+		console.log(columns);
 
 		//get work space
 		var space = this.getInsideSpace(furniture_addDrawer);
@@ -1047,14 +983,11 @@ Dresser_Add.prototype = {
 				tmp.getCenter(spaceCenter);
 				tmp.getSize(spaceSize);
 
-
 				drawer1.applyMatrix(inverse);
 				drawer1.position.set(spaceCenter.x + 0.75, spaceCenter.y - spaceSize.y/2,
 				 spaceCenter.z - spaceSize.z/2 + move);
 				furniture_addDrawer.worldToLocal(drawer1.position);
 				furniture_addDrawer.add(drawer1);
-
-
 
 				var MidBoardgeometry = chairCreateBoard(1, spaceSize.y - 0.6, spaceSize.z - 0.6);
 				var drawerMidBoard = new THREE.Mesh(MidBoardgeometry, material);
@@ -1072,7 +1005,6 @@ Dresser_Add.prototype = {
 				furniture_addDrawer.add(drawer2);
 			}
 		}
-		
 	},
 
 	removeDrawersEvent: function() {
@@ -1085,12 +1017,17 @@ Dresser_Add.prototype = {
 		this.hasBottom(dresser);
 		this.hasBack(dresser);
 
-		// console.log("furniture_removeDrawer");
-		// console.log(furniture_removeDrawer);
+		console.log("furniture_removeDrawer");
+		console.log(furniture_removeDrawer);
 
 		var count = new Array();
-		if(!this.hasRemovedDrawers){
+		if(!this.hasRemovedDrawers){			
 			this.removeDrawersByColumn(furniture_removeDrawer, this.parameter, count);
+			if(count.length < this.parameter){
+				this.parameter = count.length;
+				var tmp = [];
+				this.removeDrawersByColumn(furniture_removeDrawer, this.parameter, tmp);
+			}
 			this.hasRemovedDrawers = true;
 		}
 
@@ -1108,8 +1045,6 @@ Dresser_Add.prototype = {
 		var offest = spaceSize.y / this.parameter;
 		var tmp = spaceCenter.y + spaceSize.y/2;
 		for (var i = 0; i < this.parameter; i++) {
-			console.log(spaceSize);
-			console.log(spaceCenter);
 			this.addShelf(furniture_removeDrawer, spaceCenter, spaceSize);
 			spaceSize.y -= offest;
 			spaceCenter.y = tmp - spaceSize.y/2;
@@ -1118,7 +1053,7 @@ Dresser_Add.prototype = {
 
 	execute: function() {
 		if(this.checkHasTopFront(this.furnitures[0])){
-			//this.cutToChairEvent();
+			// this.cutToChairEvent();
 			// this.addDoorEvent();
 			// this.addLegEvent();	
 			// this.addRodEvent();
