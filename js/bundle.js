@@ -917,7 +917,7 @@ Chair_Add.prototype = {
 }
 
 module.exports = Chair_Add
-},{"./cadCutByPlane":10,"./chairCreateBoard":12,"./chairCutBack":13}],2:[function(require,module,exports){
+},{"./cadCutByPlane":14,"./chairCreateBoard":16,"./chairCutBack":17}],2:[function(require,module,exports){
 "use strict;"
 //chair align related functions
 //align in one line
@@ -1224,7 +1224,7 @@ module.exports = Chair_Align
 
 
 
-},{"./cadMakeSeat":11,"./computeConvexHull":14}],3:[function(require,module,exports){
+},{"./cadMakeSeat":15,"./computeConvexHull":18}],3:[function(require,module,exports){
 "use strict;"
 
 const rebuildMakeSeat = require('./rebuildMakeSeat');
@@ -1664,7 +1664,31 @@ Chair_Rebuild.prototype = {
 }
 module.exports = Chair_Rebuild
 
-},{"./rebuildMakeLeg":121,"./rebuildMakeSeat":122}],4:[function(require,module,exports){
+},{"./rebuildMakeLeg":125,"./rebuildMakeSeat":126}],4:[function(require,module,exports){
+"use strict;"
+
+const scadApi = require('@jscad/scad-api')
+const { CSG, CAG, isCSG, isCAG } = require('@jscad/csg')
+const {cube, sphere, cylinder} = scadApi.primitives3d
+const {union, difference, intersection} = scadApi.booleanOps
+const {translate, rotate} = scadApi.transformations
+const csgToGeometries = require('./csgToGeometries')
+
+function CreateBlum(width, length, height) {
+	var blum1 = cube([length-0.8,0.2,0.2]).translate([0.2,-0.2,height/2-1]);
+    var blum2 = cube([length-0.8,0.2,0.2]).translate([0.2,-0.2,height/2-1.5]);
+    var blum3 = cube([length-0.8,0.2,0.2]).translate([0.2,width-0.5,height/2-1]);
+    var blum4 = cube([length-0.8,0.2,0.2]).translate([0.2,width-0.5,height/2-1.5]);
+    obj = union(blum1, blum2, blum3, blum4);
+    // obj = obj.center();
+    obj = obj.rotateX(-90);
+    obj = obj.rotateY(-90);
+	var geometry = csgToGeometries(obj)[0];
+	return geometry;
+}
+
+module.exports = CreateBlum
+},{"./csgToGeometries":20,"@jscad/csg":29,"@jscad/scad-api":116}],5:[function(require,module,exports){
 "use strict;"
 
 const scadApi = require('@jscad/scad-api')
@@ -1703,7 +1727,7 @@ function CreateChain(length) {
 }
 
 module.exports = CreateChain
-},{"./csgToGeometries":16,"@jscad/csg":25,"@jscad/scad-api":112}],5:[function(require,module,exports){
+},{"./csgToGeometries":20,"@jscad/csg":29,"@jscad/scad-api":116}],6:[function(require,module,exports){
 "use strict;"
 
 const scadApi = require('@jscad/scad-api')
@@ -1732,7 +1756,65 @@ function CreateDoor(h, w) {
 }
 
 module.exports = CreateDoor
-},{"./csgToGeometries":16,"@jscad/csg":25,"@jscad/scad-api":112}],6:[function(require,module,exports){
+},{"./csgToGeometries":20,"@jscad/csg":29,"@jscad/scad-api":116}],7:[function(require,module,exports){
+"use strict;"
+
+const scadApi = require('@jscad/scad-api')
+const { CSG, CAG, isCSG, isCAG } = require('@jscad/csg')
+const {cube, sphere, cylinder} = scadApi.primitives3d
+const {union, difference, intersection} = scadApi.booleanOps
+const {translate, rotate} = scadApi.transformations
+const csgToGeometries = require('./csgToGeometries')
+
+function CreateDrawer(width, length, height) {
+    
+    // var width = 10, length = 15, height = 5;
+    var obj = cube([length, width-1, 0.5]);
+    var obj1 = cube([length, 0.5, height-1]);
+    var obj2 = cube([0.5, width-1, height-1]);
+    var obj3 = cube([length ,0.5, height-1]).translate([0 ,width-1, 0]);
+    var obj4 = cube([0.5, width, height]).translate([length-0.5, -0.25, 0]);
+    
+    var path = new CSG.Path2D([[-0.25, width/8+width/10], [-0.25, width/8], 
+    [-0.25-width/20, width/8-width/15], [-0.25-width/20, -1*width/8+width/15], 
+    [-0.25, -1*width/8], [-0.25, -1*width/8-width/10]],false);
+	var handle = path.rectangularExtrude(0.2, 1, 10, true);
+	//handle = handle.center();
+	handle = handle.rotateY(180);
+	
+	
+	handle = handle.translate([length-0.2,width/2,(height+1)/2]);
+    obj = union(obj, obj1, obj2, obj3, obj4, handle);
+    // obj = obj.center();
+    obj = obj.rotateX(-90);
+    obj = obj.rotateY(-90);
+
+    var geometry = csgToGeometries(obj)[0];
+	return geometry;
+}
+
+module.exports = CreateDrawer
+},{"./csgToGeometries":20,"@jscad/csg":29,"@jscad/scad-api":116}],8:[function(require,module,exports){
+"use strict;"
+
+const scadApi = require('@jscad/scad-api')
+const { CSG, CAG, isCSG, isCAG } = require('@jscad/csg')
+const {cube, sphere, cylinder} = scadApi.primitives3d
+const {union, difference, intersection} = scadApi.booleanOps
+const {translate, rotate} = scadApi.transformations
+const csgToGeometries = require('./csgToGeometries')
+
+function CreateDresserLeg() {
+    var leg = cylinder({start: [0,0,0], end: [0,0,5], r1: 1, r2: 2, fn: 50});
+
+    leg = leg.center();
+    leg = leg.rotateX(-90);
+    var geometry = csgToGeometries(leg)[0];
+	return geometry;
+}
+
+module.exports = CreateDresserLeg
+},{"./csgToGeometries":20,"@jscad/csg":29,"@jscad/scad-api":116}],9:[function(require,module,exports){
 "use strict;"
 
 const scadApi = require('@jscad/scad-api')
@@ -1783,7 +1865,7 @@ function CreateHinge(RAngle, mode) {
 }
 
 module.exports = CreateHinge
-},{"./csgToGeometries":16,"@jscad/csg":25,"@jscad/scad-api":112}],7:[function(require,module,exports){
+},{"./csgToGeometries":20,"@jscad/csg":29,"@jscad/scad-api":116}],10:[function(require,module,exports){
 "use strict;"
 
 const scadApi = require('@jscad/scad-api')
@@ -1794,10 +1876,20 @@ const {translate, rotate} = scadApi.transformations
 const csgToGeometries = require('./csgToGeometries')
 
 function CreateRod(length) {
-	var mid = cylinder({r: 0.5, h: length});
-	var right = cylinder({start: [0,0,length-0.2], end: [0,0,length], r1: 0.5, r2: 1, fn: 50});
-	var left = cylinder({start: [0,0,0.2], end: [0,0,0], r1: 0.5, r2: 1, fn: 50});
-	
+    var mid = cylinder({r: 0.5, h: length});
+
+	var left = cylinder({start: [0,0,0.2], 
+	    end: [0,0,0], r1: 1, r2: 1, fn: 50});
+	var s1 = difference(sphere({r: 0.2, center:true}),
+	    cube({size: 1, center:true}).translate([0,0,-0.4])).translate([0.7,0,0.1]);
+	var s2 = s1.translate([-1.1,-0.65,0]);
+    var s3 = s1.translate([-1.1,0.65,0]);
+    left = union(left, s1, s2, s3);
+    
+    var right = left.center();
+    right = left.rotateX(180);
+    right = right.translate([0,0,length]);
+    
 	var rod = union(left, mid, right);
 	rod = rod.rotateY(90);
 	rod = rod.center();
@@ -1808,7 +1900,33 @@ function CreateRod(length) {
 }
 
 module.exports = CreateRod
-},{"./csgToGeometries":16,"@jscad/csg":25,"@jscad/scad-api":112}],8:[function(require,module,exports){
+},{"./csgToGeometries":20,"@jscad/csg":29,"@jscad/scad-api":116}],11:[function(require,module,exports){
+"use strict;"
+
+const scadApi = require('@jscad/scad-api')
+const { CSG, CAG, isCSG, isCAG } = require('@jscad/csg')
+const {cube, sphere, cylinder} = scadApi.primitives3d
+const {union, difference, intersection} = scadApi.booleanOps
+const {translate, rotate} = scadApi.transformations
+const csgToGeometries = require('./csgToGeometries')
+
+function CreateSpiceRack(length) {
+
+    var mid = cylinder({r: 0.4, h: length});
+	var right = cube({size: [3, 3.5, 1], center: true}).translate([-0.3, 0.5, length]);
+	var left = cube({size: [3, 3.5, 1], center: true}).translate([-0.3, 0.5, 0]);
+	var bottom = cube({size: [1, 3.5, length + 1], center: true}).translate([-1.8, 0.5, length/2]);	
+	
+	var spiceRack = union(mid, right, left, bottom);	
+	spiceRack = spiceRack.center();	
+	spiceRack = spiceRack.rotateZ(90);
+    var geometry = csgToGeometries(spiceRack)[0];
+
+	return geometry;
+}
+
+module.exports = CreateSpiceRack
+},{"./csgToGeometries":20,"@jscad/csg":29,"@jscad/scad-api":116}],12:[function(require,module,exports){
 "use strict;"
 
 const dresserCutSpace = require('./dresserCutSpace')
@@ -1817,11 +1935,29 @@ const CreateRod = require('./CreateRod')
 const CreateDoor = require('./CreateDoor')
 const CreateChain = require('./CreateChain')
 const CreateHinge = require('./CreateHinge')
+const CreateSpiceRack = require('./CreateSpiceRack')
+const CreateDresserLeg = require('./CreateDresserLeg')
+const CreateDrawer = require('./CreateDrawer')
+const CreateBlum = require('./CreateBlum')
 
 function Dresser_Add (main){
 	this.main = main;
 	this.furnitures = main.furnitures;
 
+	// remove drawer flag
+	this.hasRemovedDrawers = false;
+	// remove drawers number 
+	this.parameter = 3;
+
+	// door event
+	// this.mode = "upToDown";
+	this.mode = "leftToRight";
+	this.RAngle = 70;
+
+	// add drawer
+	// this.drawerMode = "vertical";
+	this.drawerMode = "horizontal";
+	this.drawerParameter = 3;
 }
 
 
@@ -1868,35 +2004,95 @@ Dresser_Add.prototype = {
 		return false;
 	},
 
-	hasChildren: function(obj){
+	hasChildren: function(obj) {
 		if (obj.children.length != 0)
 			return true;
 		return false;		
 	},
 
-	addShelf: function(furniture, spaceCenter, spaceSize){
-		var dresser = furniture.getObjectByName("Dresser");
+	addBottom: function(dresser, size, center) {
+		var material = this.getPartMaterial(dresser);
+		var geometry = chairCreateBoard(size.x - 0.6, 0.1, size.z - 0.6);
+		var bottom = new THREE.Mesh(geometry, material);
+		bottom.name = "Dresser_part_bottom";
+		var tmp = new THREE.Vector3(center.x - size.x/2, center.y - size.y/2, center.z - size.z/2);
+		var inverse = new THREE.Matrix4();
+		inverse.getInverse(dresser.matrixWorld);
+		dresser.worldToLocal(tmp);
+		bottom.applyMatrix(inverse);
+		bottom.position.set(tmp.x, tmp.y, tmp.z);
+		dresser.add(bottom);
+	},
 
+	hasBottom: function(obj){
+		var dresser = obj.getObjectByName("Dresser");
+		var center = this.getPartCenter(dresser);
+		var size = this.getPartSize(dresser);
+		var origin = new THREE.Vector3(center.x, center.y - size.y, center.z);
+		var direction = new THREE.Vector3(0,1,0);
+		var intersects = this.getPointByRay(dresser, origin, direction);
+		// console.log(intersects.length);
+		if(intersects.length > 0){
+			var pos = intersects[0].point;
+			if(pos.y > center.y){
+				console.log("add bottom");				
+				this.addBottom(dresser, size, center);
+			}
+			return;
+		}
+		console.log("bottom ray miss");
+		this.addBottom(dresser, size, center);
+	},
+
+	addBack: function(dresser, size, center) {
+		var material = this.getPartMaterial(dresser);
+		var geometry = chairCreateBoard(size.x - 0.6, size.y - 0.6, 0.1);
+		var back = new THREE.Mesh(geometry, material);
+		back.name = "Dresser_part_back";
+		var tmp = new THREE.Vector3(center.x - size.x/2 + 0.3, center.y - size.y/2 + 0.3, center.z - size.z/2);
+		var inverse = new THREE.Matrix4();
+		inverse.getInverse(dresser.matrixWorld);
+		dresser.worldToLocal(tmp);
+		back.applyMatrix(inverse);
+		back.position.set(tmp.x, tmp.y, tmp.z);
+		dresser.add(back);
+	},
+
+	hasBack: function(obj){
+		var dresser = obj.getObjectByName("Dresser");
+		var center = this.getPartCenter(dresser);
+		var size = this.getPartSize(dresser);
+		var origin = new THREE.Vector3(center.x, center.y, center.z - size.z);
+		var direction = new THREE.Vector3(0,0,1);
+		var intersects = this.getPointByRay(dresser, origin, direction);
+		// console.log(intersects.length);
+		if(intersects.length > 0){
+			var pos = intersects[0].point;
+			if(pos.z > center.z){
+				console.log("add back");				
+				this.addBack(dresser, size, center);
+			}
+			return;
+		}
+		console.log("back ray miss");
+		this.addBack(dresser, size, center);
+	},
+
+	addShelf: function(furniture, spaceCenter, spaceSize) {
+		var dresser = furniture.getObjectByName("Dresser");
 		// console.log("dresser");
 		// console.log(dresser);
+		// var raycaster = new THREE.Raycaster();
+		// var pos = spaceCenter.clone();
+		// pos.y = pos.y + spaceSize.y;
+		// raycaster.set(pos, new THREE.Vector3(0,-1,0));
 
-		var raycaster = new THREE.Raycaster();
-		var pos = spaceCenter.clone();
-		pos.y = pos.y - spaceSize.y/2;
-		raycaster.set(pos, new THREE.Vector3(0,-1,0));
-
-		var intersects = raycaster.intersectObject(dresser);
-		if(intersects.length > 0){
-			// console.log("intersects[0].point");
-			// console.log(intersects[0].point);
-			// console.log("pos.y");
-			// console.log(pos.y);
-			if(intersects[0].point.y > pos.y - 0.1){
-				console.log("Dresser shelf exit.");
-				return;
-			}
-		}
-		console.log("Dresser no shelf.");
+		// var intersects = raycaster.intersectObjects(dresser.children);
+		// if(intersects.length > 2){
+		// 	console.log("Dresser shelf exit.");
+		// 	return;
+		// }
+		// console.log("Dresser no shelf.");
 
 		//get dresser material case1: no children case2: has children
 
@@ -1906,14 +2102,37 @@ Dresser_Add.prototype = {
 		var shelf = new THREE.Mesh(geometry, material);
 		var shelfSize = this.getPartSize(shelf);
 		var shelf_inverse = new THREE.Matrix4();
-		shelf_inverse.getInverse(furniture.matrixWorld);
+		shelf_inverse.getInverse(dresser.matrixWorld);
 		shelf.applyMatrix(shelf_inverse);
 
-		shelf.position.set(pos.x - shelfSize.x/2 + 0.3, pos.y, pos.z - shelfSize.z/2);
-		furniture.worldToLocal(shelf.position);
+		shelf.position.set(spaceCenter.x - spaceSize.x/2, spaceCenter.y - spaceSize.y/2, 
+			spaceCenter.z - spaceSize.z/2);
+		dresser.worldToLocal(shelf.position);
 
-		furniture.add(shelf);
-		// this.main.scene.add(shelf);
+		dresser.add(shelf);
+	},
+
+	createTheDrawer: function(drawerMaterial, blumsMaterial, size){
+		if(this.drawerMode == "vertical"){
+			var geometry = CreateDrawer(size.x, size.z, size.y/2);
+			var drawer = new THREE.Mesh(geometry, drawerMaterial);
+			drawer.name = "drawer";
+
+			var blumsGeometry = CreateBlum(size.x, size.z, size.y/2);
+			var blums = new THREE.Mesh(blumsGeometry, blumsMaterial);
+			blums.name = "blums";
+		}
+		else if(this.drawerMode == "horizontal"){
+			var geometry = CreateDrawer(size.x/2 - 0.5, size.z, size.y);
+			var drawer = new THREE.Mesh(geometry, drawerMaterial);
+			drawer.name = "drawer";
+
+			var blumsGeometry = CreateBlum(size.x/2 - 0.5, size.z, size.y);
+			var blums = new THREE.Mesh(blumsGeometry, blumsMaterial);
+			blums.name = "blums";
+		}
+		drawer.add(blums);
+		return drawer;
 	},
 
 	getPartCenter: function(obj) {
@@ -1924,7 +2143,7 @@ Dresser_Add.prototype = {
 		return vector;
 	},
 
-	getPartSize: function(obj){
+	getPartSize: function(obj) {
 		var vector = new THREE.Vector3();
 		var box = new THREE.Box3();
 		box.setFromObject(obj);
@@ -1932,7 +2151,110 @@ Dresser_Add.prototype = {
 		return vector;
 	},
 
-	getAllChildren: function(obj, array){
+	getPointByRay: function(obj, origin, direction) {
+		var raycaster = new THREE.Raycaster();
+		raycaster.set(origin, direction);
+		if(obj.children.length > 0){
+			var array = new Array();
+			this.getAllChildren(obj, array);
+			var intersects = raycaster.intersectObjects(array);
+		}
+		else
+			var intersects = raycaster.intersectObject(obj);
+		return intersects;
+	},
+
+	getInsideSpace: function(obj) {
+		var dresser = obj.getObjectByName("Dresser");
+		var center = this.getPartCenter(dresser);
+		var size = this.getPartSize(dresser);
+		var space = new THREE.Box3();
+		space.setFromObject(dresser);
+		var maxX, maxY, maxZ, minX, minY, minZ;		
+
+		var originRL = new THREE.Vector3(center.x + size.x, center.y, center.z);
+		var directionRL = new THREE.Vector3(-1,0,0);
+		var rayRL = this.getPointByRay(dresser, originRL, directionRL);
+		if(rayRL.length > 0){
+			minX = rayRL[rayRL.length - 1].point;
+			space.min.x = minX.x;		
+		}
+		else
+			console.log("rayRL miss");
+
+		var originLR = new THREE.Vector3(center.x - size.x, center.y, center.z);
+		var directionLR = new THREE.Vector3(1,0,0);
+		var rayLR = this.getPointByRay(dresser, originLR, directionLR);
+		if(rayLR.length > 0){
+			maxX = rayLR[rayLR.length - 1].point;
+			space.max.x = maxX.x;
+		}
+		else
+			console.log("rayLR miss");	
+
+		var originFB = new THREE.Vector3(center.x, center.y, center.z + size.z);
+		var directionFB = new THREE.Vector3(0,0,-1);
+		var rayFB = this.getPointByRay(dresser, originFB, directionFB);
+		if(rayFB.length > 0){
+			minZ = rayFB[rayFB.length - 1].point;
+			space.min.z = minZ.z;
+		}
+		else
+			console.log("rayFB miss");
+
+		originFB = new THREE.Vector3(space.max.x + 0.1, center.y, center.z + size.z);
+		var rayFB = this.getPointByRay(dresser, originFB, directionFB);
+		if(rayFB.length > 0){
+			maxZ = rayFB[0].point;
+			space.max.z = maxZ.z;
+		}
+		else
+			console.log("rayFB(2) miss");
+
+		var originUD = new THREE.Vector3(center.x, center.y, space.max.z + 0.1);
+		var directionUD = new THREE.Vector3(0,-1,0);
+		var rayUD = this.getPointByRay(dresser, originUD, directionUD);
+		if(rayUD.length > 0){
+			minY = rayUD[0].point;
+			space.min.y = minY.y;
+		}
+		else{
+			console.log("rayUD1 miss");
+			rayUD = [];
+			originUD = new THREE.Vector3(center.x, center.y, space.max.z - 0.1);
+			rayUD = this.getPointByRay(dresser, originUD, directionUD);
+			if(rayUD.length > 0){
+				maxY = rayUD[0].point;
+				space.max.y = maxY.y;
+			}
+			else
+				console.log("rayUD2 miss");
+		}
+
+		var originDU = new THREE.Vector3(center.x, center.y, space.max.z + 0.1);
+		var directionDU = new THREE.Vector3(0,1,0);
+		var rayDU = this.getPointByRay(dresser, originDU, directionDU);
+		if(rayDU.length > 0){
+			maxY = rayDU[0].point;
+			space.max.y = maxY.y;
+		}
+		else{
+			console.log("rayDU1 miss");
+			rayDU = [];
+			originDU = new THREE.Vector3(center.x, center.y, space.max.z - 0.1);
+			rayDU = this.getPointByRay(dresser, originDU, directionDU);
+			if(rayDU.length > 0){
+				maxY = rayDU[0].point;
+				space.max.y = maxY.y;
+			}
+			else
+				console.log("rayDU2 miss");
+		}
+
+		return space;
+	},
+
+	getAllChildren: function(obj, array) {
 		if (obj.children.length > 0) {
 			for (var i = 0; i < obj.children.length; i++) {
 				if(obj.children[i].type == "Mesh" || obj.children[i].type == "Object3D"){
@@ -1944,7 +2266,7 @@ Dresser_Add.prototype = {
 			array.push(obj);			
 	},
 
-	getAllCorners: function(obj){
+	getAllCorners: function(obj) {
 		// 0-----1   4-----5
 		// | up  |   | down|
 		// |     |   |     |
@@ -1955,57 +2277,61 @@ Dresser_Add.prototype = {
 		var size = this.getPartSize(obj);
 
 		//0
-		var point = new THREE.Vector3();
-		var x = center.x - size.x/2;
-		var y = center.y + size.y/2;
-		var z = center.z - size.z/2;
-		point.set(x,y,z);
-		corners.push(point);
+		var point0 = new THREE.Vector3();
+		point0.x = center.x - size.x/2;
+		point0.y = center.y + size.y/2;
+		point0.z = center.z - size.z/2;
+		corners.push(point0);
+
 		//1
-		x = center.x + size.x/2;
-		y = center.y + size.y/2;
-		z = center.z - size.z/2;
-		point.set(x,y,z);
-		corners.push(point);
+		var point1 = new THREE.Vector3();
+		point1.x = center.x + size.x/2;
+		point1.y = center.y + size.y/2;
+		point1.z = center.z - size.z/2;
+		corners.push(point1);
+
 		//2
-		x = center.x + size.x/2;
-		y = center.y + size.y/2;
-		z = center.z + size.z/2;
-		point.set(x,y,z);
-		corners.push(point);
+		var point2 = new THREE.Vector3();
+		point2.x = center.x + size.x/2;
+		point2.y = center.y + size.y/2;
+		point2.z = center.z + size.z/2;
+		corners.push(point2);
+
 		//3
-		x = center.x - size.x/2;
-		y = center.y + size.y/2;
-		z = center.z + size.z/2;
-		point.set(x,y,z);
-		corners.push(point);
+		var point3 = new THREE.Vector3();
+		point3.x = center.x - size.x/2;
+		point3.y = center.y + size.y/2;
+		point3.z = center.z + size.z/2;
+		corners.push(point3);
+
 		//4
-		x = center.x - size.x/2;
-		y = center.y - size.y/2;
-		z = center.z - size.z/2;
-		point.set(x,y,z);
-		corners.push(point);
+		var point4 = new THREE.Vector3();
+		point4.x = center.x - size.x/2;
+		point4.y = center.y - size.y/2;
+		point4.z = center.z - size.z/2;
+		corners.push(point4);
 
 		//5
-		x = center.x + size.x/2;
-		y = center.y - size.y/2;
-		z = center.z - size.z/2;
-		point.set(x,y,z);
-		corners.push(point);
+		var point5 = new THREE.Vector3();
+		point5.x = center.x + size.x/2;
+		point5.y = center.y - size.y/2;
+		point5.z = center.z - size.z/2;
+		corners.push(point5);
 
 		//6
-		x = center.x + size.x/2;
-		y = center.y - size.y/2;
-		z = center.z + size.z/2;
-		point.set(x,y,z);
-		corners.push(point);
+		var point6 = new THREE.Vector3();
+		point6.x = center.x + size.x/2;
+		point6.y = center.y - size.y/2;
+		point6.z = center.z + size.z/2;
+		corners.push(point6);
 
 		//7
-		x = center.x - size.x/2;
-		y = center.y - size.y/2;
-		z = center.z + size.z/2;
-		point.set(x,y,z);
-		corners.push(point);
+		var point7 = new THREE.Vector3();
+		point7.x = center.x - size.x/2;
+		point7.y = center.y - size.y/2;
+		point7.z = center.z + size.z/2;
+		corners.push(point7);
+
 		return corners;
 	},
 
@@ -2030,21 +2356,30 @@ Dresser_Add.prototype = {
 		return material;
 	},
 
-	markCabinet: function(furniture){
+	markCabinet: function(furniture) {
 		var obj = furniture.getObjectByName("cabinetTop-cabinetFront");
 		if(typeof obj == 'undefined')
 			obj = furniture.getObjectByName("cabinetFront-cabinetTop");
-		
+
+		if(typeof obj == 'undefined'){
+			obj = furniture.getObjectByName("Dresser");
+			if (typeof obj == 'undefined')
+				console.log("markCabinet fail: Can't find key word.");
+			else
+				console.log("have marked Cabinet.");
+			return;
+		}			
+			
+
 		if(obj.children.length > 0){
 			for (var i = 0; i < obj.children.length; i++) {
 				obj.children[i].name = "Dresser_part";
 			}
 		}		
-		obj.name = "Dresser";
-			
+		obj.name = "Dresser";	
 	},
 
-	markDrawer: function(furniture){
+	markDrawer: function(furniture) {
 		var children = new Array();
 		this.getAllChildren( furniture, children );
 		// console.log(children);
@@ -2084,90 +2419,42 @@ Dresser_Add.prototype = {
 		}		
 	},
 
-	removeDrawersByColumn: function(furniture, removeNumber, count){
+	countDrawerByColumn: function(furniture, count) {
 		var drawers = new Array();
-		for (var i = 0; i < furniture.children.length; i++) {
+		for (var i = 0; i < furniture.children.length; i++)
 			if(furniture.children[i].name == "drawer")
 				drawers.push(furniture.children[i]);
-		}
 		
 		var centers = new Array();
-		for (var i = 0; i < drawers.length; i++) {
+		for (var i = 0; i < drawers.length; i++)
 			centers.push(Math.floor(this.getPartCenter(drawers[i]).y * 100)/100);
-		}
 
 		var centers_clone = centers.slice(0);
 		centers_clone.sort(function(a, b){return b-a});
-		// console.log("centers_clone");
-		// console.log(centers_clone);
 
 		count.push(centers_clone[0]);
 		for (var i = 1; i < centers_clone.length; i++) {
 			if(centers_clone[i] <= centers_clone[i-1] - 2)
 				count.push(centers_clone[i]);
 		}
-		console.log("count");
-		console.log(count);
+	},
+
+	removeDrawersByColumn: function(furniture, removeNumber, count) {
+		this.countDrawerByColumn(furniture, count);
+		var drawers = new Array();
+		for (var i = 0; i < furniture.children.length; i++)
+			if(furniture.children[i].name == "drawer")
+				drawers.push(furniture.children[i]);
+		
+		var centers = new Array();
+		for (var i = 0; i < drawers.length; i++)
+			centers.push(Math.floor(this.getPartCenter(drawers[i]).y * 100)/100);
 
 		if(removeNumber <= count.length){
-			var tmp = new Array();
-			for(var i = 0; i < removeNumber; i++){
-				for (var j = 0; j < centers.length; j++) {
-					if(count[i] >= centers[j] && count[i]-2 <= centers[j]){
-						var box = new THREE.Box3();
-						box.setFromObject(drawers[j]);
-						tmp.push(box);
-					}
-				}
-			}
-
-			var space = new THREE.Box3();
-			for (var i = 0; i < tmp.length; i++) {
-				space.union(tmp[i]);
-			}
-			
-			var spaceSize = new THREE.Vector3();
-			var spaceCenter = new THREE.Vector3();
-			space.getSize(spaceSize);
-			space.getCenter(spaceCenter);
-
-			//test depth
-			var furnitureSize = this.getPartSize(furniture);
-			if(spaceSize.z < furnitureSize.z/2){
-				var dresser = furniture.getObjectByName("Dresser");
-				// console.log("dresser");
-				// console.log(dresser);
-				var raycaster = new THREE.Raycaster();
-				raycaster.set(spaceCenter, new THREE.Vector3(0,0,-1));
-				if(dresser.children.length > 0)
-					var intersects = raycaster.intersectObjects(dresser.children);
-				else
-					var intersects = raycaster.intersectObject(dresser);
-				if(intersects.length > 0){
-					var newDepth = intersects[0].point;
-					space.min.z = newDepth.z;
-				}
-				else{
-					console.log("ray miss");
-				}
-				
-			}
-
-			// var boxHelper = new THREE.Box3Helper(space, 0x000000);
-			// this.main.scene.add(boxHelper);
-
-			for(var i = 0; i < removeNumber; i++){
-				for (var j = 0; j < centers.length; j++) {
-					if(count[i] >= centers[j] && count[i]-2 <= centers[j]){
-						// console.log("remove!!");
+			for(var i = 0; i < removeNumber; i++)
+				for (var j = 0; j < centers.length; j++)
+					if(count[i] >= centers[j] && count[i]-2 <= centers[j])
 						furniture.remove(drawers[j]);
-					}
-				}				
-			}
-			// var inverse = new THREE.Matrix4();
-			// inverse.getInverse(furniture.matrixWorld);
-			// space.applyMatrix4(inverse);
-			return space;
 		}
 		else
 			console.log("Remove columns fail.");
@@ -2183,9 +2470,12 @@ Dresser_Add.prototype = {
 		this.markDrawer(furniture_cutToChair);
 		// console.log("furniture_cutToChair");
 		// console.log(furniture_cutToChair);
-
-		var parameter = 4;
-		var spaceBox = this.removeDrawersByColumn(furniture_cutToChair, parameter);
+		if(!this.hasRemovedDrawers){
+			var spaceBox = this.removeDrawersByColumn(furniture_cutToChair, this.parameter);
+			this.hasRemovedDrawers = true;
+		}
+		else
+			spaceBox = this.getInsideSpace(furniture_cutToChair);	
 		
 		var size = new THREE.Vector3();
 		var position = new THREE.Vector3();
@@ -2253,100 +2543,122 @@ Dresser_Add.prototype = {
 		// var testHelper = new THREE.Box3Helper(test, 0x000000);
 		// this.main.scene.add(testHelper);
 
-		// this.main.scene.add(newDresser);
-		
+		// this.main.scene.add(newDresser);	
 	},
 
 	addLegEvent: function() {
-		// body...
 		var furniture_addLeg = new THREE.Object3D();
-		furniture_addLeg = this.furnitures[0].getFurniture().clone();
+		furniture_addLeg = this.furnitures[0].getFurniture();
 
+		this.markCabinet(furniture_addLeg);
+		this.markDrawer(furniture_addLeg);
+		var dresser = furniture_addLeg.getObjectByName("Dresser");
+		this.hasBottom(furniture_addLeg);
+		this.hasBack(furniture_addLeg);
+		
+		// 0-----1   4-----5
+		// | up  |   | down|
+		// |     |   |     |
+		// 3-----2   7-----6
+		var corners = this.getAllCorners(dresser);
+
+		var inverse = new THREE.Matrix4();
+		inverse.getInverse(furniture_addLeg.matrixWorld);
+		
+		var material = this.getPartMaterial(dresser);
+		var legGeometry = CreateDresserLeg();
+		var leg = new THREE.Mesh(legGeometry, material);
+		leg.name = "leg";
+		var legsArray = [4];
+		for(var i=0; i<4; i++)
+			legsArray[i] = leg.clone();
+
+		var dresserSize = this.getPartSize(dresser);
+		var legSize = this.getPartSize(leg);
+		var direction = new THREE.Vector3(0,1,0);
+		for(var i=4; i<=7; i++){
+			var pos = corners[i];
+			// console.log(corners[i]);
+			pos.y -= 10;
+			if(i == 4 || i == 7)
+				pos.x += dresserSize.x/5;
+			if(i == 5 || i == 6)
+				pos.x -= dresserSize.x/5;
+			if(i == 4 || i == 5)
+				pos.z += dresserSize.z/5;
+			if(i == 6 || i == 7)
+				pos.z -= dresserSize.z/5;
+			// console.log(corners[i]);
+			var ray = this.getPointByRay(dresser, pos, direction);
+			if(ray.length > 0){
+				var pos = new THREE.Vector3(ray[0].point.x, ray[0].point.y - legSize.y/2, ray[0].point.z);
+
+				legsArray[i-4].applyMatrix(inverse);
+				furniture_addLeg.worldToLocal(pos);
+				legsArray[i-4].position.set(pos.x, pos.y, pos.z);
+				furniture_addLeg.add(legsArray[i-4]);
+			}
+			else{
+				console.log("Ray miss");
+			}
+		}		
 	},
 
 	addDoorEvent: function() {
-		// body...
 		var furniture_addDoor = new THREE.Object3D();
 		furniture_addDoor = this.furnitures[0].getFurniture();
-		this.main.scene.add(furniture_addDoor);
 
 		this.markCabinet(furniture_addDoor);		
 		this.markDrawer(furniture_addDoor);
-
-		console.log("furniture_addDoor");
-		console.log(furniture_addDoor);
 		var dresser = furniture_addDoor.getObjectByName("Dresser");
+		this.hasBottom(dresser);
+		this.hasBack(dresser);
+		// console.log("furniture_addDoor");
+		// console.log(furniture_addDoor);
 		var dresserSize = this.getPartSize(dresser);
 		var dresserCenter = this.getPartCenter(dresser);
 		var doorMaterial = this.getPartMaterial(dresser);
-		var parameter = 5;
+
 		var count = new Array();
-		var spaceBox = this.removeDrawersByColumn(furniture_addDoor, parameter, count);
-		if(parameter > count.length){
-			spaceBox = this.removeDrawersByColumn(furniture_addDoor, count.length, count);
+		
+		if(!this.hasRemovedDrawers){
+			spaceBox = this.removeDrawersByColumn(furniture_addDoor, this.parameter, count);
+			if(this.parameter > count.length){
+				var tmp = new Array();
+				this.parameter = count.length;
+				this.removeDrawersByColumn(furniture_addDoor, this.parameter, tmp);				
+			}
+			this.hasRemovedDrawers = true;
 		}
+
+		var spaceBox = new THREE.Box3();
+		spaceBox = this.getInsideSpace(furniture_addDoor);
+		if(this.parameter < count.length){
+			var offest = (spaceBox.max.y - spaceBox.min.y) / count.length;
+			spaceBox.min.y += offest * (count.length - this.parameter);
+		}
+
 		var spaceSize = new THREE.Vector3();
 		var spaceCenter = new THREE.Vector3();
-
-
 		spaceBox.getSize(spaceSize);
 		spaceBox.getCenter(spaceCenter);
 
-		// the first point is on the right outside surface. the last point is on the left inside surface.
-		var raycaster1 = new THREE.Raycaster();
-		var pos1 = new THREE.Vector3(dresserCenter.x + dresserSize.x, dresserCenter.y, dresserCenter.z);
-		raycaster1.set(pos1, new THREE.Vector3(-1,0,0));
-		var intersects1 = raycaster1.intersectObjects(dresser.children);
-		var outsideRight = intersects1[0].point;
-		var insideLeft = intersects1[intersects1.length - 1].point;
-		if(intersects1.length > 0){
-			var resizeX = insideLeft;
-			spaceBox.min.x = resizeX.x;			
-		}
-		
-		// the first point is on the left outside surface. the last point is on the right inside surface.
-		var raycaster2 = new THREE.Raycaster();
-		var pos2 = new THREE.Vector3(dresserCenter.x - dresserSize.x, dresserCenter.y, dresserCenter.z);
-		raycaster2.set(pos2, new THREE.Vector3(1,0,0));
-		var intersects2 = raycaster2.intersectObjects(dresser.children);
-		var outsideLeft = intersects2[0].point;
-		var insideRight = intersects2[intersects2.length - 1].point;
-		if(intersects2.length > 0){
-			var resizeX = insideRight;
-			spaceBox.max.x = resizeX.x;			
-		}
-
-		var pos = new THREE.Vector3(spaceCenter.x + spaceSize.x/2 - 0.1, spaceCenter.y, spaceCenter.z + spaceSize.z);
-		var raycaster = new THREE.Raycaster();
-		raycaster.set(pos, new THREE.Vector3(0,0,-1));
-		var intersects = raycaster.intersectObjects(dresser.children);
-		if(intersects.length > 0){
-			var resizeZ = intersects[0].point;
-			spaceBox.max.z = resizeZ.z;			
-		}
-		spaceBox.getSize(spaceSize);
-		spaceBox.getCenter(spaceCenter);
-
+		spaceCenter.y = spaceCenter.y + spaceSize.y/4;
+		spaceSize.y = spaceSize.y/2;
 		this.addShelf(furniture_addDoor, spaceCenter, spaceSize);
 
-		var mode = "leftToRight";
-
-		// if(mode == "leftToRight"){
-			spaceCenter.y = spaceCenter.y + spaceSize.y/4;
-			spaceSize.y = spaceSize.y/2;
-			this.addShelf(furniture_addDoor, spaceCenter, spaceSize);
-		// }
 		
 		spaceBox.getSize(spaceSize);
 		spaceBox.getCenter(spaceCenter);
 
 		//left to right
-		if(mode == "leftToRight"){
+		if(this.mode == "leftToRight"){
 			var doorGeometry = CreateDoor(spaceSize.y, spaceSize.x + 1);
 			var door = new THREE.Mesh(doorGeometry, doorMaterial);
+			door.name = "door";
 			var doorSize = this.getPartSize(door);
-			var RAngle = 70;
-			var angle = RAngle/180*Math.PI;
+
+			var angle = this.RAngle/180*Math.PI;
 
 			var offsetZ = spaceSize.x/2 * Math.sin(angle) + 0.8 * Math.cos(angle);
 
@@ -2365,8 +2677,9 @@ Dresser_Add.prototype = {
 			furniture_addDoor.add(door);
 			door.rotateY(angle);
 
-			var hingeGeometry = CreateHinge(RAngle-90, mode);			
+			var hingeGeometry = CreateHinge(this.RAngle-90, this.mode);			
 			var hinge1 = new THREE.Mesh(hingeGeometry, doorMaterial);
+			hinge1.name = "hinge";
 			var hinge2 = hinge1.clone();
 			var hinge1pos = new THREE.Vector3(spaceCenter.x + spaceSize.x/2 - 0.3, 
 				spaceCenter.y + spaceSize.y/4, spaceCenter.z + spaceSize.z/2);
@@ -2382,25 +2695,22 @@ Dresser_Add.prototype = {
 			furniture_addDoor.add(hinge1);
 			furniture_addDoor.add(hinge2);
 		}
-		
-		
 
 		//up to down
-		if(mode == "upToDown"){
-			console.log("123");
-			var doorGeometry = CreateDoor(dresserSize.x, dresserSize.y);
-			var door = new THREE.Mesh(doorGeometry, doorMaterial);			
+		if(this.mode == "upToDown"){
+			var doorGeometry = CreateDoor(spaceSize.x, spaceSize.y);
+			var door = new THREE.Mesh(doorGeometry, doorMaterial);	
+			door.name = "door";		
 			door.rotateZ(-90/180*Math.PI);
 			var doorSize = this.getPartSize(door);
-			var RAngle = 60;
-			var angle = RAngle/180*Math.PI;
-			var offsetY = doorSize.y/2 * Math.cos(angle);
-			if(RAngle <= 30)
-				var offsetZ = doorSize.y/2 * Math.sin(angle) + 0.8 * Math.sin(angle);
-			else
-				var offsetZ = doorSize.y/2 * Math.sin(angle);
-			var doorpos = new THREE.Vector3(dresserCenter.x, 
-				dresserCenter.y - doorSize.y/2 + offsetY , dresserCenter.z + dresserSize.z/2 + offsetZ);
+			
+			var angle = this.RAngle/180*Math.PI ;
+			var offsetY = doorSize.y/2 * Math.cos(angle) - 0.8 * Math.sin(angle);
+			
+			var offsetZ = doorSize.y/2 * Math.sin(angle) + 0.8 * Math.cos(angle);
+
+			var doorpos = new THREE.Vector3(spaceCenter.x, 
+				spaceCenter.y - doorSize.y/2 + offsetY , spaceCenter.z + spaceSize.z/2 + offsetZ);
 			var tmp = new THREE.Vector3();
 			tmp.set(doorpos.x, doorpos.y, doorpos.z);
 
@@ -2410,29 +2720,11 @@ Dresser_Add.prototype = {
 			furniture_addDoor.worldToLocal(doorpos);
 			door.position.set(doorpos.x, doorpos.y, doorpos.z);
 			furniture_addDoor.add(door);
-			door.rotateY(angle);
+			door.rotateY(angle);		
 
-			// var doorCenter = this.getPartCenter(door);
-			// doorSize = this.getPartSize(door);
-			// var chainGeometry = CreateChain(offsetZ*2*10);			
-			// var chain1 = new THREE.Mesh(chainGeometry, doorMaterial);
-			// var chain2 = chain1.clone();
-			// var chain1pos = new THREE.Vector3(doorCenter.x + doorSize.x/2 - 0.1,
-			// doorCenter.y + doorSize.y/2 - 1, doorCenter.z - 1);
-			// var chain2pos = new THREE.Vector3(doorCenter.x - doorSize.x/2 + 0.1,
-			// doorCenter.y + doorSize.y/2 - 1, doorCenter.z - 1);
-			// chain1.applyMatrix(inverse);
-			// chain2.applyMatrix(inverse);
-			// furniture_addDoor.worldToLocal(chain1pos);
-			// furniture_addDoor.worldToLocal(chain2pos);
-			// chain1.position.set(chain1pos.x, chain1pos.y, chain1pos.z);
-			// chain2.position.set(chain2pos.x, chain2pos.y, chain2pos.z);
-			// furniture_addDoor.add(chain1);
-			// furniture_addDoor.add(chain2);
-
-			var hingeGeometry = CreateHinge(RAngle-90, mode);			
+			var hingeGeometry = CreateHinge(this.RAngle-90, this.mode);			
 			var hinge1 = new THREE.Mesh(hingeGeometry, doorMaterial);			
-
+			hinge1.name = "hinge";
 			// var offest = ((dresserSize.y - 1)/2) * (-1) *Math.cos(angle) + 0.8;
 			var hinge1pos = new THREE.Vector3(spaceCenter.x + spaceSize.x/4, 
 				spaceCenter.y - spaceSize.y/2 + 0.7, spaceCenter.z + spaceSize.z/2 );
@@ -2451,36 +2743,63 @@ Dresser_Add.prototype = {
 			hinge2.position.set(hinge2pos.x, hinge2pos.y, hinge2pos.z);
 			furniture_addDoor.add(hinge2);
 		}
-
-
-		
 	},
 
-	addRodEvent: function(){
-		console.log("this.furnitures.length");
-		console.log(this.furnitures.length);
+	addRodEvent: function() {
 		if(this.furnitures.length == 1){
 			var furniture_addRod = this.furnitures[0].getFurniture();
 			this.markCabinet(furniture_addRod);		
 			this.markDrawer(furniture_addRod);
+			var dresser = furniture_addRod.getObjectByName("Dresser");
+			this.hasBottom(furniture_addRod);
+			this.hasBack(furniture_addRod);
 
-			var parameter = 6;
 			var count = new Array();
-			var spaceBox = this.removeDrawersByColumn(furniture_addRod, parameter, count);
-			if(count.length < parameter){
-				spaceBox = this.removeDrawersByColumn(furniture_addRod, count.length, count);
+			if(!this.hasRemovedDrawers){
+				this.removeDrawersByColumn(furniture_addRod, this.parameter, count);
+				if(count.length < this.parameter){
+					this.parameter = count.length;
+					var tmp = [];
+					this.removeDrawersByColumn(furniture_addRod, this.parameter, tmp);
+				}
+				this.hasRemovedDrawers = true;
 			}
+
+			var spaceBox = this.getInsideSpace(furniture_addRod);
+
+			if(this.parameter < count.length){
+				var offest = (spaceBox.max.y - spaceBox.min.y) / count.length;
+				spaceBox.min.y += offest * (count.length - this.parameter);
+			}
+
+			var dresserSize = this.getPartSize(dresser);
+			var dresserCenter = this.getPartCenter(dresser);
+			var originRight = new THREE.Vector3(dresserCenter.x + dresserSize.x, 
+				dresserCenter.y, dresserCenter.z);
+			var rayRiToLe = this.getPointByRay(dresser, originRight, new THREE.Vector3(-1,0,0));
+			if(rayRiToLe.length > 0)
+				var insideLeft = rayRiToLe[rayRiToLe.length - 1].point;
+			else
+				console.log("insideLeft miss.");
+
+			var originLeft = new THREE.Vector3(dresserCenter.x - dresserSize.x, 
+				dresserCenter.y, dresserCenter.z);
+			var rayLeToRi = this.getPointByRay(dresser, originLeft, new THREE.Vector3(1,0,0));
+			if(rayLeToRi.length > 0)
+				var insideRight = rayLeToRi[rayLeToRi.length - 1].point;
+			else
+				console.log("insideRight miss.");
+
+			spaceBox.max.x = insideRight.x;
+			spaceBox.min.x = insideLeft.x;
 
 			var spaceSize = new THREE.Vector3();
 			var spaceCenter = new THREE.Vector3();
 
-
 			spaceBox.getSize(spaceSize);
 			spaceBox.getCenter(spaceCenter);
 			
-			this.addShelf(furniture_addRod, spaceCenter, spaceSize);
-
-			var dresser = furniture_addRod.getObjectByName("Dresser");
+			//add rod
 			var rodMaterial = this.getPartMaterial(dresser);
 			var rodGeometry = CreateRod(spaceSize.x);
 			var rod = new THREE.Mesh(rodGeometry, rodMaterial);
@@ -2523,55 +2842,201 @@ Dresser_Add.prototype = {
 				this.loadClothesHanger(rod);
 				
 			}
-		}
-		
+		}	
 	},
 
-	addSpiceRackEvent: function(){
+	addSpiceRackEvent: function() {
 		var furniture_addSpiceRack = new THREE.Object3D();
 		furniture_addSpiceRack = this.furnitures[0].getFurniture();
+		var dresser = furniture_addSpiceRack.getObjectByName("Dresser");
+		var furnitureSize = this.getPartSize(dresser);
+		var furnitureCenter = this.getPartCenter(dresser);
 
-		var furnitureSize = this.getPartSize(furniture_addSpiceRack);
+		this.markCabinet(furniture_addSpiceRack);
+		this.markDrawer(furniture_addSpiceRack);
+
+		var inverse = new THREE.Matrix4();
+		inverse.getInverse(furniture_addSpiceRack.matrixWorld);
+
+		
+		var material = this.getPartMaterial(dresser);
+		var spiceRackGeometry = CreateSpiceRack(furnitureSize.z * 2 / 3);
+		var spiceRackRight = new THREE.Mesh(spiceRackGeometry, material);
+		var spiceRackLeft = spiceRackRight.clone();
+		var spiceRackSize = this.getPartSize(spiceRackRight);
+		var spiceRackRightPosition = new THREE.Vector3(furnitureCenter.x + furnitureSize.x/2 + 
+			spiceRackSize.x/2, furnitureCenter.y, furnitureCenter.z);
+
+		spiceRackRight.applyMatrix(inverse);
+		furniture_addSpiceRack.worldToLocal(spiceRackRightPosition);
+		spiceRackRight.position.set(spiceRackRightPosition.x, 
+			spiceRackRightPosition.y, spiceRackRightPosition.z);
+		furniture_addSpiceRack.add(spiceRackRight);
+
+		
+		var spiceRackLeftPosition = new THREE.Vector3(furnitureCenter.x - furnitureSize.x/2 - spiceRackSize.x/2, 
+			furnitureCenter.y, furnitureCenter.z);
+		
+		spiceRackLeft.applyMatrix(inverse);
+		furniture_addSpiceRack.worldToLocal(spiceRackLeftPosition);		
+		spiceRackLeft.rotateOnWorldAxis ( new THREE.Vector3(0, 1, 0), Math.PI );
+		spiceRackLeft.position.set(spiceRackLeftPosition.x, 
+			spiceRackLeftPosition.y, spiceRackLeftPosition.z);
+		furniture_addSpiceRack.add(spiceRackLeft);
 	},
 
 	addDrawerEvent: function() {
 		// body...
 		var furniture_addDrawer = new THREE.Object3D();
-		furniture_addDrawer = this.furnitures[0].getFurniture().clone();
-	},
+		furniture_addDrawer = this.furnitures[0].getFurniture();
 
-	changeHandlesEvent: function() {
-		// body...
-		var furniture_changeHandles = new THREE.Object3D();
-		furniture_changeHandles = this.furnitures[0].getFurniture().clone();
+		this.markCabinet(furniture_addDrawer);
+		this.markDrawer(furniture_addDrawer);
+		this.hasBottom(furniture_addDrawer);
+		this.hasBack(furniture_addDrawer);
+
+		var dresser = furniture_addDrawer.getObjectByName("Dresser");
+		var material = this.getPartMaterial(dresser);
+		var inverse = new THREE.Matrix4();
+		inverse.getInverse(furniture_addDrawer.matrixWorld);
+
+		//remove drawers and count drawers
+		var columns = new Array();
+		this.removeDrawersByColumn(furniture_addDrawer, this.drawerParameter, columns);
+
+		if(columns.length < this.drawerParameter)
+			this.drawerParameter = columns.length;
+
+		//get work space
+		var space = this.getInsideSpace(furniture_addDrawer);
+		var offest = (space.max.y - space.min.y) / columns.length;
+		space.min.y += offest * (columns.length - this.drawerParameter);
+		console.log("space");
+		console.log(space);
+
+		//create the drawer object
+		var theDrawerBox = new THREE.Box3();
+		theDrawerBox.copy(space);	
+		theDrawerBox.min.y += offest * (this.drawerParameter - 1);
+		console.log("theDrawerBox");
+		console.log(theDrawerBox);
+
+		var theDrawerSize = new THREE.Vector3();
+		theDrawerBox.getSize(theDrawerSize);
+		console.log("theDrawerSize");
+		console.log(theDrawerSize);
+
+		var theDrawer = this.createTheDrawer(material, material, theDrawerSize);
+		console.log("theDrawer");
+		console.log(theDrawer);
+
+		if(this.drawerMode == "vertical"){
+			var drawerSize = this.getPartSize(theDrawer);
+			var tmp = new THREE.Box3();
+			for (var i = 0, move = 3; i < this.drawerParameter; i++) {
+				tmp.copy(space);				
+				tmp.max.y -= offest * i; 
+				tmp.min.y += offest * (this.drawerParameter - i - 1);
+
+				var drawer1 = theDrawer.clone();
+				var drawer2 = theDrawer.clone();
+
+				var spaceCenter = new THREE.Vector3();
+				var spaceSize = new THREE.Vector3();
+				tmp.getCenter(spaceCenter);
+				tmp.getSize(spaceSize);
+				var drawerpos = new THREE.Vector3(spaceCenter.x - drawerSize.x/2 + 0.25, spaceCenter.y,
+				 spaceCenter.z - spaceSize.z/2 + move);
+				drawer1.applyMatrix(inverse);
+				drawer1.position.set(drawerpos.x, drawerpos.y, drawerpos.z);
+				furniture_addDrawer.worldToLocal(drawer1.position);
+				
+				var drawer2pos = new THREE.Vector3(spaceCenter.x - drawerSize.x/2 + 0.25, 
+					spaceCenter.y - spaceSize.y/2, spaceCenter.z - spaceSize.z/2 + move + 2);
+				drawer2.applyMatrix(inverse);
+				drawer2.position.set(drawer2pos.x, drawer2pos.y, drawer2pos.z);
+				furniture_addDrawer.worldToLocal(drawer2.position);
+				furniture_addDrawer.add(drawer1);
+				furniture_addDrawer.add(drawer2);
+			}			
+		}
+		else if(this.drawerMode == "horizontal"){
+			var drawerSize = this.getPartSize(theDrawer);
+			var tmp = new THREE.Box3();
+			for (var i = 0, move = 3; i < this.drawerParameter; i++) {
+				tmp.copy(space);				
+				tmp.max.y -= offest * i; 
+				tmp.min.y += offest * (this.drawerParameter - i - 1);
+
+				var drawer1 = theDrawer.clone();
+				var drawer2 = theDrawer.clone();
+
+				var spaceCenter = new THREE.Vector3();
+				var spaceSize = new THREE.Vector3();
+				tmp.getCenter(spaceCenter);
+				tmp.getSize(spaceSize);
+
+
+				drawer1.applyMatrix(inverse);
+				drawer1.position.set(spaceCenter.x + 0.75, spaceCenter.y - spaceSize.y/2,
+				 spaceCenter.z - spaceSize.z/2 + move);
+				furniture_addDrawer.worldToLocal(drawer1.position);
+				furniture_addDrawer.add(drawer1);
+
+
+
+				var MidBoardgeometry = chairCreateBoard(1, spaceSize.y - 0.6, spaceSize.z - 0.6);
+				var drawerMidBoard = new THREE.Mesh(MidBoardgeometry, material);
+				drawerMidBoard.name = "drawerMidBoard";
+				drawerMidBoard.applyMatrix(inverse);
+				drawerMidBoard.position.set(spaceCenter.x - 0.5, spaceCenter.y - spaceSize.y/2,
+				 spaceCenter.z - spaceSize.z/2);
+				furniture_addDrawer.worldToLocal(drawerMidBoard.position);
+				furniture_addDrawer.add(drawerMidBoard);
+
+				drawer2.applyMatrix(inverse);
+				drawer2.position.set(spaceCenter.x - spaceSize.x/2 + 0.25, spaceCenter.y - spaceSize.y/2,
+				 spaceCenter.z - spaceSize.z/2 + move +2);
+				furniture_addDrawer.worldToLocal(drawer2.position);
+				furniture_addDrawer.add(drawer2);
+			}
+		}
+		
 	},
 
 	removeDrawersEvent: function() {
 		var furniture_removeDrawer = new THREE.Object3D();
 		furniture_removeDrawer = this.furnitures[0].getFurniture();
-		this.main.scene.add(furniture_removeDrawer);
 
 		this.markCabinet(furniture_removeDrawer);		
 		this.markDrawer(furniture_removeDrawer);
+		var dresser = furniture_removeDrawer.getObjectByName("Dresser");
+		this.hasBottom(dresser);
+		this.hasBack(dresser);
 
-		console.log("furniture_removeDrawer");
-		console.log(furniture_removeDrawer);
+		// console.log("furniture_removeDrawer");
+		// console.log(furniture_removeDrawer);
 
-		var parameter = 2;
 		var count = new Array();
-		var spaceBox = this.removeDrawersByColumn(furniture_removeDrawer, parameter, count);
-		// var boxHelper = new THREE.Box3Helper(spaceBox, 0x000000);
-		// this.main.scene.add(boxHelper);
+		if(!this.hasRemovedDrawers){
+			this.removeDrawersByColumn(furniture_removeDrawer, this.parameter, count);
+			this.hasRemovedDrawers = true;
+		}
+
+		var spaceBox = this.getInsideSpace(furniture_removeDrawer);
+		if(this.parameter < count.length){
+			var offest = (spaceBox.max.y - spaceBox.min.y) / count.length;
+			spaceBox.min.y += offest * (count.length - this.parameter);
+		}
 
 		var spaceSize = new THREE.Vector3();
 		var spaceCenter = new THREE.Vector3();
 		spaceBox.getSize(spaceSize);
 		spaceBox.getCenter(spaceCenter);
-		console.log(count.length);
-		var offest = spaceSize.y / parameter;
-		console.log(offest);
+
+		var offest = spaceSize.y / this.parameter;
 		var tmp = spaceCenter.y + spaceSize.y/2;
-		for (var i = 0; i < parameter; i++) {
+		for (var i = 0; i < this.parameter; i++) {
 			console.log(spaceSize);
 			console.log(spaceCenter);
 			this.addShelf(furniture_removeDrawer, spaceCenter, spaceSize);
@@ -2580,17 +3045,15 @@ Dresser_Add.prototype = {
 		}
 	},
 
-	execute: function(){
-		// console.log(this.furnitures[0]);
+	execute: function() {
 		if(this.checkHasTopFront(this.furnitures[0])){
 			//this.cutToChairEvent();
-			// this.addLegEvent();
-			this.addDoorEvent();
+			// this.addDoorEvent();
+			// this.addLegEvent();	
 			// this.addRodEvent();
-			//this.addSpiceRackEvent();
+			// this.addSpiceRackEvent();
 			// this.addDrawerEvent();
-			// this.changeHandlesEvent();
-			//this.removeDrawersEvent();
+			this.removeDrawersEvent();
 		}
 		else{
 			alert("Please mark cabinetTop and cabinetFront");
@@ -2600,7 +3063,7 @@ Dresser_Add.prototype = {
 }
 
 module.exports = Dresser_Add
-},{"./CreateChain":4,"./CreateDoor":5,"./CreateHinge":6,"./CreateRod":7,"./chairCreateBoard":12,"./dresserCutSpace":17}],9:[function(require,module,exports){
+},{"./CreateBlum":4,"./CreateChain":5,"./CreateDoor":6,"./CreateDrawer":7,"./CreateDresserLeg":8,"./CreateHinge":9,"./CreateRod":10,"./CreateSpiceRack":11,"./chairCreateBoard":16,"./dresserCutSpace":21}],13:[function(require,module,exports){
 "use strict;"
 //this is to handle the new design approaches
 //that without the need of cad operations
@@ -2801,7 +3264,7 @@ Processor.prototype = {
 
 module.exports = Processor
 
-},{"./Chair_Add":1,"./Chair_Align":2,"./Chair_Rebuild":3,"./Dresser_Add":8}],10:[function(require,module,exports){
+},{"./Chair_Add":1,"./Chair_Align":2,"./Chair_Rebuild":3,"./Dresser_Add":12}],14:[function(require,module,exports){
 "use strict;"
 
 const scadApi = require('@jscad/scad-api')
@@ -2847,7 +3310,7 @@ function cadCutByPlane (geometry) {
 module.exports = cadCutByPlane
 
 
-},{"./csgToGeometries":16,"./geometryToCsgs":19,"@jscad/csg":25,"@jscad/scad-api":112}],11:[function(require,module,exports){
+},{"./csgToGeometries":20,"./geometryToCsgs":23,"@jscad/csg":29,"@jscad/scad-api":116}],15:[function(require,module,exports){
 "use strict;"
 
 const scadApi = require('@jscad/scad-api')
@@ -2943,7 +3406,7 @@ function cadMakeSeat (innerRace, outerRace, offsetY, textures) {
 
 
 module.exports = cadMakeSeat
-},{"./csgToGeometries":16,"@jscad/csg":25,"@jscad/scad-api":112}],12:[function(require,module,exports){
+},{"./csgToGeometries":20,"@jscad/csg":29,"@jscad/scad-api":116}],16:[function(require,module,exports){
 "use strict;"
 
 const scadApi = require('@jscad/scad-api')
@@ -2964,7 +3427,7 @@ function chairCreateBoard(width, height, depth) {
 
 
 module.exports = chairCreateBoard
-},{"./csgToGeometries":16,"@jscad/csg":25,"@jscad/scad-api":112}],13:[function(require,module,exports){
+},{"./csgToGeometries":20,"@jscad/csg":29,"@jscad/scad-api":116}],17:[function(require,module,exports){
 "use strict;"
 
 const scadApi = require('@jscad/scad-api')
@@ -2997,7 +3460,7 @@ function chairCutBack(back, offest) {
 
 
 module.exports = chairCutBack
-},{"./csgToGeometries":16,"./geometryToCsgs":19,"@jscad/csg":25,"@jscad/scad-api":112}],14:[function(require,module,exports){
+},{"./csgToGeometries":20,"./geometryToCsgs":23,"@jscad/csg":29,"@jscad/scad-api":116}],18:[function(require,module,exports){
 "use strict;"
 
 const hull = require('./hull')
@@ -3098,7 +3561,7 @@ function collectPointOnFace(component, face) {
 
 
 module.exports = computeConvexHull
-},{"./hull":21}],15:[function(require,module,exports){
+},{"./hull":25}],19:[function(require,module,exports){
 function _cross(o, a, b) {
     return (a[0] - o[0]) * (b[1] - o[1]) - (a[1] - o[1]) * (b[0] - o[0]);
 }
@@ -3140,7 +3603,7 @@ function convex(pointset) {
 
 module.exports = convex;
 
-},{}],16:[function(require,module,exports){
+},{}],20:[function(require,module,exports){
 "use strict;"
 
 const { CSG, CAG, isCSG, isCAG } = require('@jscad/csg')
@@ -3323,7 +3786,7 @@ function csgToGeometries(initial_csg) {
 
 
 module.exports = csgToGeometries
-},{"@jscad/csg":25}],17:[function(require,module,exports){
+},{"@jscad/csg":29}],21:[function(require,module,exports){
 "use strict;"
 
 const scadApi = require('@jscad/scad-api')
@@ -3349,7 +3812,7 @@ function dresserCutSpace(dresser, position, size, scale) {
 
 
 module.exports = dresserCutSpace
-},{"./csgToGeometries":16,"./geometryToCsgs":19,"@jscad/csg":25,"@jscad/scad-api":112}],18:[function(require,module,exports){
+},{"./csgToGeometries":20,"./geometryToCsgs":23,"@jscad/csg":29,"@jscad/scad-api":116}],22:[function(require,module,exports){
 module.exports = {
 
     toXy: function(pointset, format) {
@@ -3375,7 +3838,7 @@ module.exports = {
     }
 
 }
-},{}],19:[function(require,module,exports){
+},{}],23:[function(require,module,exports){
 "use strict;"
 
 const {log, status} = require('./log')
@@ -3456,7 +3919,7 @@ function unionCsgs(csgs) {
 
 
 module.exports = {geometryToCsgs, unionCsgs};
-},{"./log":23,"@jscad/csg":25,"@jscad/scad-api":112}],20:[function(require,module,exports){
+},{"./log":27,"@jscad/csg":29,"@jscad/scad-api":116}],24:[function(require,module,exports){
 function Grid(points, cellSize) {
     this._cells = [];
     this._cellSize = cellSize;
@@ -3532,7 +3995,7 @@ function grid(points, cellSize) {
 }
 
 module.exports = grid;
-},{}],21:[function(require,module,exports){
+},{}],25:[function(require,module,exports){
 /*
  (c) 2014-2016, Andrii Heonia
  Hull.js, a JavaScript library for concave hull generation by set of points.
@@ -3736,7 +4199,7 @@ var MAX_CONCAVE_ANGLE_COS = Math.cos(90 / (180 / Math.PI)); // angle = 90 deg
 var MAX_SEARCH_BBOX_SIZE_PERCENT = 0.6;
 
 module.exports = hull;
-},{"./convex.js":15,"./format.js":18,"./grid.js":20,"./intersect.js":22}],22:[function(require,module,exports){
+},{"./convex.js":19,"./format.js":22,"./grid.js":24,"./intersect.js":26}],26:[function(require,module,exports){
 function ccw(x1, y1, x2, y2, x3, y3) {           
     var cw = ((y3 - y1) * (x2 - x1)) - ((y2 - y1) * (x3 - x1));
     return cw > 0 ? true : cw < 0 ? false : true; // colinear
@@ -3752,7 +4215,7 @@ function intersect(seg1, seg2) {
 }
 
 module.exports = intersect;
-},{}],23:[function(require,module,exports){
+},{}],27:[function(require,module,exports){
 function log (txt) {
   var timeInMs = Date.now()
   var prevtime = undefined//OpenJsCad.log.prevLogTime
@@ -3780,7 +4243,7 @@ module.exports = {
   status
 }
 
-},{}],24:[function(require,module,exports){
+},{}],28:[function(require,module,exports){
 "use strict;"
 
 //const {log, status} = require('./log')
@@ -5319,7 +5782,7 @@ document.addEventListener('DOMContentLoaded', function(event){
 
 
 
-},{"./Processor":9,"./cadCutByPlane":10,"./computeConvexHull":14}],25:[function(require,module,exports){
+},{"./Processor":13,"./cadCutByPlane":14,"./computeConvexHull":18}],29:[function(require,module,exports){
 /*
 ## License
 
@@ -5530,7 +5993,7 @@ const globalApi = Object.assign({}, {CSG, CAG}, optionsParsers, {isCAG, isCSG})
 
 module.exports = globalApi
 
-},{"./src/api/debugHelpers":28,"./src/api/optionParsers":35,"./src/api/primitives2d":36,"./src/api/primitives3d":37,"./src/core/CAG":39,"./src/core/CAGFactories":40,"./src/core/CSG":41,"./src/core/CSGFactories":42,"./src/core/Properties":46,"./src/core/connectors":47,"./src/core/constants":48,"./src/core/math/Line2":49,"./src/core/math/Line3":50,"./src/core/math/Matrix4":51,"./src/core/math/OrthoNormalBasis":52,"./src/core/math/Path2":53,"./src/core/math/Plane":54,"./src/core/math/Polygon2":55,"./src/core/math/Polygon3":56,"./src/core/math/Side":57,"./src/core/math/Vector2":58,"./src/core/math/Vector3":59,"./src/core/math/Vertex2":60,"./src/core/math/Vertex3":61,"./src/core/mutators":64,"./src/core/utils":66}],26:[function(require,module,exports){
+},{"./src/api/debugHelpers":32,"./src/api/optionParsers":39,"./src/api/primitives2d":40,"./src/api/primitives3d":41,"./src/core/CAG":43,"./src/core/CAGFactories":44,"./src/core/CSG":45,"./src/core/CSGFactories":46,"./src/core/Properties":50,"./src/core/connectors":51,"./src/core/constants":52,"./src/core/math/Line2":53,"./src/core/math/Line3":54,"./src/core/math/Matrix4":55,"./src/core/math/OrthoNormalBasis":56,"./src/core/math/Path2":57,"./src/core/math/Plane":58,"./src/core/math/Polygon2":59,"./src/core/math/Polygon3":60,"./src/core/math/Side":61,"./src/core/math/Vector2":62,"./src/core/math/Vector3":63,"./src/core/math/Vertex2":64,"./src/core/math/Vertex3":65,"./src/core/mutators":68,"./src/core/utils":70}],30:[function(require,module,exports){
 const Path2D = require('../core/math/Path2')
 
 const cagoutlinePaths = function (_cag) {
@@ -5612,7 +6075,7 @@ const cagoutlinePaths = function (_cag) {
 
 module.exports = cagoutlinePaths
 
-},{"../core/math/Path2":53}],27:[function(require,module,exports){
+},{"../core/math/Path2":57}],31:[function(require,module,exports){
 const toArray = require('../core/utils/toArray')
 
 /**
@@ -5650,7 +6113,7 @@ const center = function (options, objects) {
 
 module.exports = center
 
-},{"../core/utils/toArray":74}],28:[function(require,module,exports){
+},{"../core/utils/toArray":78}],32:[function(require,module,exports){
 const CSG = require('../core/CSG')
 const {cube} = require('./primitives3d')
 
@@ -5685,7 +6148,7 @@ const toPointCloud = function (csg, cuberadius) {
 
 module.exports = {toPointCloud}
 
-},{"../core/CSG":41,"./primitives3d":37}],29:[function(require,module,exports){
+},{"../core/CSG":45,"./primitives3d":41}],33:[function(require,module,exports){
 const Vertex3 = require('../core/math/Vertex3')
 const Vector3 = require('../core/math/Vector3')
 const Polygon3 = require('../core/math/Polygon3')
@@ -5750,7 +6213,7 @@ const degToRad = deg => (Math.PI / 180) * deg
 
 module.exports = {cagToPointsArray, clamp, rightMultiply1x3VectorToArray, polygonFromPoints}
 
-},{"../core/math/Polygon3":56,"../core/math/Vector3":59,"../core/math/Vertex3":61}],30:[function(require,module,exports){
+},{"../core/math/Polygon3":60,"../core/math/Vector3":63,"../core/math/Vertex3":65}],34:[function(require,module,exports){
 const {isCAG} = require('../core/utils')
 // boolean operations
 
@@ -5853,7 +6316,7 @@ module.exports = {
   intersection
 }
 
-},{"../core/utils":66}],31:[function(require,module,exports){
+},{"../core/utils":70}],35:[function(require,module,exports){
 const Matrix4x4 = require('../core/math/Matrix4.js')
 const Vector3D = require('../core/math/Vector3.js')
 const {Connector} = require('../core/connectors.js')
@@ -6022,7 +6485,7 @@ const overCutInsideCorners = function (_cag, cutterradius) {
 
 module.exports = {lieFlat, getTransformationToFlatLying, getTransformationAndInverseTransformationToFlatLying, overCutInsideCorners}
 
-},{"../core/CAGFactories":40,"../core/connectors.js":47,"../core/math/Matrix4.js":51,"../core/math/Vector2":58,"../core/math/Vector3.js":59}],32:[function(require,module,exports){
+},{"../core/CAGFactories":44,"../core/connectors.js":51,"../core/math/Matrix4.js":55,"../core/math/Vector2":62,"../core/math/Vector3.js":63}],36:[function(require,module,exports){
 const {EPS} = require('../core/constants')
 const Plane = require('../core/math/Plane')
 const Vector2 = require('../core/math/Vector2')
@@ -6088,7 +6551,7 @@ const cutByPlane = function (csg, plane) {
 
 module.exports = {sectionCut, cutByPlane}
 
-},{"../core/CSG":41,"../core/constants":48,"../core/math/OrthoNormalBasis":52,"../core/math/Plane":54,"../core/math/Polygon3":56,"../core/math/Vector2":58,"../core/math/Vertex3":61}],33:[function(require,module,exports){
+},{"../core/CSG":45,"../core/constants":52,"../core/math/OrthoNormalBasis":56,"../core/math/Plane":58,"../core/math/Polygon3":60,"../core/math/Vector2":62,"../core/math/Vertex3":65}],37:[function(require,module,exports){
 
 const {EPS, angleEPS} = require('../core/constants')
 const Vertex = require('../core/math/Vertex3')
@@ -6427,7 +6890,7 @@ module.exports = {
   expandedShellOfCCSG
 }
 
-},{"../core/CAG":39,"../core/CAGFactories":40,"../core/CSG":41,"../core/CSGFactories":42,"../core/constants":48,"../core/math/Polygon3":56,"../core/math/Vector2":58,"../core/math/Vertex3":61,"../core/utils":66}],34:[function(require,module,exports){
+},{"../core/CAG":43,"../core/CAGFactories":44,"../core/CSG":45,"../core/CSGFactories":46,"../core/constants":52,"../core/math/Polygon3":60,"../core/math/Vector2":62,"../core/math/Vertex3":65,"../core/utils":70}],38:[function(require,module,exports){
 const {EPS, defaultResolution3D} = require('../core/constants')
 const OrthoNormalBasis = require('../core/math/OrthoNormalBasis')
 const {parseOptionAs3DVector, parseOptionAsBool, parseOptionAsFloat, parseOptionAsInt} = require('./optionParsers')
@@ -6786,7 +7249,7 @@ module.exports = {
   rectangular_extrude
 }
 
-},{"../core/CAGFactories":40,"../core/CSG":41,"../core/CSGFactories":42,"../core/connectors":47,"../core/constants":48,"../core/math/Matrix4":51,"../core/math/OrthoNormalBasis":52,"../core/math/Path2":53,"../core/math/Vector3":59,"./helpers":29,"./optionParsers":35}],35:[function(require,module,exports){
+},{"../core/CAGFactories":44,"../core/CSG":45,"../core/CSGFactories":46,"../core/connectors":51,"../core/constants":52,"../core/math/Matrix4":55,"../core/math/OrthoNormalBasis":56,"../core/math/Path2":57,"../core/math/Vector3":63,"./helpers":33,"./optionParsers":39}],39:[function(require,module,exports){
 const Vector3D = require('../core/math/Vector3')
 const Vector2D = require('../core/math/Vector2')
 
@@ -6864,7 +7327,7 @@ module.exports = {
   parseOptionAs3DVectorList
 }
 
-},{"../core/math/Vector2":58,"../core/math/Vector3":59}],36:[function(require,module,exports){
+},{"../core/math/Vector2":62,"../core/math/Vector3":63}],40:[function(require,module,exports){
 const CAG = require('../core/CAG')
 const {parseOptionAs2DVector, parseOptionAsFloat, parseOptionAsInt} = require('./optionParsers')
 const {defaultResolution2D} = require('../core/constants')
@@ -7051,7 +7514,7 @@ module.exports = {
   fromCompactBinary
 }
 
-},{"../core/CAG":39,"../core/CAGFactories":40,"../core/constants":48,"../core/math/Path2":53,"../core/math/Vector2":58,"../core/math/Vertex2":60,"./optionParsers":35}],37:[function(require,module,exports){
+},{"../core/CAG":43,"../core/CAGFactories":44,"../core/constants":52,"../core/math/Path2":57,"../core/math/Vector2":62,"../core/math/Vertex2":64,"./optionParsers":39}],41:[function(require,module,exports){
 const {parseOption, parseOptionAs3DVector, parseOptionAs2DVector, parseOptionAs3DVectorList, parseOptionAsFloat, parseOptionAsInt} = require('./optionParsers')
 const {defaultResolution3D, defaultResolution2D, EPS} = require('../core/constants')
 const Vector3 = require('../core/math/Vector3')
@@ -7601,7 +8064,7 @@ module.exports = {
   polyhedron
 }
 
-},{"../core/CSGFactories":42,"../core/Properties":46,"../core/connectors":47,"../core/constants":48,"../core/math/Polygon3":56,"../core/math/Vector3":59,"../core/math/Vertex3":61,"./optionParsers":35}],38:[function(require,module,exports){
+},{"../core/CSGFactories":46,"../core/Properties":50,"../core/connectors":51,"../core/constants":52,"../core/math/Polygon3":60,"../core/math/Vector3":63,"../core/math/Vertex3":65,"./optionParsers":39}],42:[function(require,module,exports){
 const Polygon = require('../core/math/Polygon3')
 const {fromPolygons} = require('../core/CSGFactories')
 const {fnSortByIndex} = require('../core/utils')
@@ -7816,7 +8279,7 @@ const _addWalls = function (walls, bottom, top, bFlipped) {
 
 module.exports = solidFromSlices
 
-},{"../core/CSGFactories":42,"../core/math/Polygon3":56,"../core/utils":66}],39:[function(require,module,exports){
+},{"../core/CSGFactories":46,"../core/math/Polygon3":60,"../core/utils":70}],43:[function(require,module,exports){
 const {Connector} = require('./connectors')
 const Vertex3D = require('./math/Vertex3')
 const Vector2D = require('./math/Vector2')
@@ -8195,7 +8658,7 @@ CAG.prototype = {
 
 module.exports = CAG
 
-},{"../api/cagOutlinePaths":26,"../api/center":27,"../api/ops-cnc":31,"../api/ops-expandContract":33,"../api/ops-extrusions":34,"./CAGFactories":40,"./CSGFactories":42,"./connectors":47,"./math/Polygon3":56,"./math/Vector2":58,"./math/Vector3":59,"./math/Vertex3":61,"./utils/cagMeasurements":67,"./utils/cagValidation":68,"./utils/canonicalize":69,"./utils/retesellate":73}],40:[function(require,module,exports){
+},{"../api/cagOutlinePaths":30,"../api/center":31,"../api/ops-cnc":35,"../api/ops-expandContract":37,"../api/ops-extrusions":38,"./CAGFactories":44,"./CSGFactories":46,"./connectors":51,"./math/Polygon3":60,"./math/Vector2":62,"./math/Vector3":63,"./math/Vertex3":65,"./utils/cagMeasurements":71,"./utils/cagValidation":72,"./utils/canonicalize":73,"./utils/retesellate":77}],44:[function(require,module,exports){
 const Side = require('./math/Side')
 const Vector2D = require('./math/Vector2')
 const Vertex2 = require('./math/Vertex2')
@@ -8411,7 +8874,7 @@ module.exports = {
   fromCompactBinary
 }
 
-},{"../api/ops-booleans":30,"./CAG":39,"./constants":48,"./math/Side":57,"./math/Vector2":58,"./math/Vertex2":60,"./utils/cagValidation":68}],41:[function(require,module,exports){
+},{"../api/ops-booleans":34,"./CAG":43,"./constants":52,"./math/Side":61,"./math/Vector2":62,"./math/Vertex2":64,"./utils/cagValidation":72}],45:[function(require,module,exports){
 const Tree = require('./trees')
 const Polygon = require('./math/Polygon3')
 const Plane = require('./math/Plane')
@@ -8999,7 +9462,7 @@ CSG.prototype = {
 
 module.exports = CSG
 
-},{"../api/center":27,"../api/ops-cnc":31,"../api/ops-cuts":32,"../api/ops-expandContract":33,"./CAG":39,"./CSGFactories":42,"./Properties":46,"./math/OrthoNormalBasis":52,"./math/Plane":54,"./math/Polygon3":56,"./trees":65,"./utils/canonicalize":69,"./utils/csgMeasurements":70,"./utils/csgProjections":71,"./utils/fixTJunctions":72,"./utils/retesellate":73}],42:[function(require,module,exports){
+},{"../api/center":31,"../api/ops-cnc":35,"../api/ops-cuts":36,"../api/ops-expandContract":37,"./CAG":43,"./CSGFactories":46,"./Properties":50,"./math/OrthoNormalBasis":56,"./math/Plane":58,"./math/Polygon3":60,"./trees":69,"./utils/canonicalize":73,"./utils/csgMeasurements":74,"./utils/csgProjections":75,"./utils/fixTJunctions":76,"./utils/retesellate":77}],46:[function(require,module,exports){
 const Vector3D = require('./math/Vector3')
 const Vertex = require('./math/Vertex3')
 const Plane = require('./math/Plane')
@@ -9122,7 +9585,7 @@ module.exports = {
   fromCompactBinary
 }
 
-},{"./CSG":41,"./math/Plane":54,"./math/Polygon2":55,"./math/Polygon3":56,"./math/Vector3":59,"./math/Vertex3":61}],43:[function(require,module,exports){
+},{"./CSG":45,"./math/Plane":58,"./math/Polygon2":59,"./math/Polygon3":60,"./math/Vector3":63,"./math/Vertex3":65}],47:[function(require,module,exports){
 // //////////////////////////////
 // ## class fuzzyFactory
 // This class acts as a factory for objects. We can search for an object with approximately
@@ -9180,7 +9643,7 @@ FuzzyFactory.prototype = {
 
 module.exports = FuzzyFactory
 
-},{}],44:[function(require,module,exports){
+},{}],48:[function(require,module,exports){
 const FuzzyFactory = require('./FuzzyFactory')
 const {EPS} = require('./constants')
 const Side = require('./math/Side')
@@ -9207,7 +9670,7 @@ FuzzyCAGFactory.prototype = {
 
 module.exports = FuzzyCAGFactory
 
-},{"./FuzzyFactory":43,"./constants":48,"./math/Side":57}],45:[function(require,module,exports){
+},{"./FuzzyFactory":47,"./constants":52,"./math/Side":61}],49:[function(require,module,exports){
 const {EPS} = require('./constants')
 const Polygon = require('./math/Polygon3')
 const FuzzyFactory = require('./FuzzyFactory')
@@ -9277,7 +9740,7 @@ FuzzyCSGFactory.prototype = {
 
 module.exports = FuzzyCSGFactory
 
-},{"./FuzzyFactory":43,"./constants":48,"./math/Polygon3":56}],46:[function(require,module,exports){
+},{"./FuzzyFactory":47,"./constants":52,"./math/Polygon3":60}],50:[function(require,module,exports){
 // ////////////////////////////////////
 // # Class Properties
 // This class is used to store properties of a solid
@@ -9361,7 +9824,7 @@ Properties.addFrom = function (result, otherproperties) {
 
 module.exports = Properties
 
-},{}],47:[function(require,module,exports){
+},{}],51:[function(require,module,exports){
 const Vector3D = require('./math/Vector3')
 const Line3D = require('./math/Line3')
 const Matrix4x4 = require('./math/Matrix4')
@@ -9583,7 +10046,7 @@ ConnectorList.prototype = {
 
 module.exports = {Connector, ConnectorList}
 
-},{"./CSG":41,"./math/Line3":50,"./math/Matrix4":51,"./math/OrthoNormalBasis":52,"./math/Plane":54,"./math/Vector3":59}],48:[function(require,module,exports){
+},{"./CSG":45,"./math/Line3":54,"./math/Matrix4":55,"./math/OrthoNormalBasis":56,"./math/Plane":58,"./math/Vector3":63}],52:[function(require,module,exports){
 const _CSGDEBUG = false
 
 /** Number of polygons per 360 degree revolution for 2D objects.
@@ -9640,7 +10103,7 @@ module.exports = {
   getTag
 }
 
-},{}],49:[function(require,module,exports){
+},{}],53:[function(require,module,exports){
 const Vector2D = require('./Vector2')
 const {solve2Linear} = require('../utils')
 
@@ -9732,7 +10195,7 @@ Line2D.prototype = {
 
 module.exports = Line2D
 
-},{"../utils":66,"./Vector2":58}],50:[function(require,module,exports){
+},{"../utils":70,"./Vector2":62}],54:[function(require,module,exports){
 const Vector3D = require('./Vector3')
 const {EPS} = require('../constants')
 const {solve2Linear} = require('../utils')
@@ -9834,7 +10297,7 @@ Line3D.prototype = {
 
 module.exports = Line3D
 
-},{"../constants":48,"../utils":66,"./Vector3":59}],51:[function(require,module,exports){
+},{"../constants":52,"../utils":70,"./Vector3":63}],55:[function(require,module,exports){
 const Vector3D = require('./Vector3')
 const Vector2D = require('./Vector2')
 const OrthoNormalBasis = require('./OrthoNormalBasis')
@@ -10120,7 +10583,7 @@ Matrix4x4.scaling = function (v) {
 
 module.exports = Matrix4x4
 
-},{"./OrthoNormalBasis":52,"./Plane":54,"./Vector2":58,"./Vector3":59}],52:[function(require,module,exports){
+},{"./OrthoNormalBasis":56,"./Plane":58,"./Vector2":62,"./Vector3":63}],56:[function(require,module,exports){
 const Vector2D = require('./Vector2')
 const Vector3D = require('./Vector3')
 const Line2D = require('./Line2')
@@ -10327,7 +10790,7 @@ OrthoNormalBasis.prototype = {
 
 module.exports = OrthoNormalBasis
 
-},{"./Line2":49,"./Line3":50,"./Matrix4":51,"./Plane":54,"./Vector2":58,"./Vector3":59}],53:[function(require,module,exports){
+},{"./Line2":53,"./Line3":54,"./Matrix4":55,"./Plane":58,"./Vector2":62,"./Vector3":63}],57:[function(require,module,exports){
 const Vector2D = require('./Vector2')
 const {EPS, angleEPS} = require('../constants')
 const {parseOptionAs2DVector, parseOptionAsFloat, parseOptionAsInt, parseOptionAsBool} = require('../../api/optionParsers')
@@ -10800,7 +11263,7 @@ Path2D.prototype = {
 
 module.exports = Path2D
 
-},{"../../api/optionParsers":35,"../CAG":39,"../constants":48,"./Side":57,"./Vector2":58,"./Vertex2":60}],54:[function(require,module,exports){
+},{"../../api/optionParsers":39,"../CAG":43,"../constants":52,"./Side":61,"./Vector2":62,"./Vertex2":64}],58:[function(require,module,exports){
 const Vector3D = require('./Vector3')
 const Line3D = require('./Line3')
 const {EPS, getTag} = require('../constants')
@@ -10942,7 +11405,7 @@ Plane.prototype = {
 
 module.exports = Plane
 
-},{"../constants":48,"./Line3":50,"./Vector3":59}],55:[function(require,module,exports){
+},{"../constants":52,"./Line3":54,"./Vector3":63}],59:[function(require,module,exports){
 const CAG = require('../CAG')
 const {fromPoints} = require('../CAGFactories')
 
@@ -10964,7 +11427,7 @@ Polygon2D.prototype = CAG.prototype
 
 module.exports = Polygon2D
 
-},{"../CAG":39,"../CAGFactories":40}],56:[function(require,module,exports){
+},{"../CAG":43,"../CAGFactories":44}],60:[function(require,module,exports){
 const Vector3D = require('./Vector3')
 const Vertex = require('./Vertex3')
 const Matrix4x4 = require('./Matrix4')
@@ -11340,7 +11803,7 @@ Polygon.defaultShared = new Polygon.Shared(null)
 
 module.exports = Polygon
 
-},{"../../api/solidFromSlices":38,"../CAG":39,"../CAGFactories":40,"../CSGFactories":42,"../constants":48,"./Matrix4":51,"./Plane":54,"./Vector3":59,"./Vertex3":61}],57:[function(require,module,exports){
+},{"../../api/solidFromSlices":42,"../CAG":43,"../CAGFactories":44,"../CSGFactories":46,"../constants":52,"./Matrix4":55,"./Plane":58,"./Vector3":63,"./Vertex3":65}],61:[function(require,module,exports){
 const Vector2D = require('./Vector2')
 const Vertex = require('./Vertex2')
 const Vertex3 = require('./Vertex3')
@@ -11444,7 +11907,7 @@ Side.prototype = {
 
 module.exports = Side
 
-},{"../constants":48,"./Polygon3":56,"./Vector2":58,"./Vertex2":60,"./Vertex3":61}],58:[function(require,module,exports){
+},{"../constants":52,"./Polygon3":60,"./Vector2":62,"./Vertex2":64,"./Vertex3":65}],62:[function(require,module,exports){
 const {IsFloat} = require('../utils')
 
 /** Class Vector2D
@@ -11642,7 +12105,7 @@ Vector2D.prototype = {
 
 module.exports = Vector2D
 
-},{"../utils":66,"./Vector3":59}],59:[function(require,module,exports){
+},{"../utils":70,"./Vector3":63}],63:[function(require,module,exports){
 const {IsFloat} = require('../utils')
 const Vector2D = require('./Vector2')
 
@@ -11857,7 +12320,7 @@ Vector3D.prototype = {
 
 module.exports = Vector3D
 
-},{"../utils":66,"./Vector2":58}],60:[function(require,module,exports){
+},{"../utils":70,"./Vector2":62}],64:[function(require,module,exports){
 const Vector2D = require('./Vector2')
 const {getTag} = require('../constants')
 
@@ -11885,7 +12348,7 @@ Vertex.prototype = {
 
 module.exports = Vertex
 
-},{"../constants":48,"./Vector2":58}],61:[function(require,module,exports){
+},{"../constants":52,"./Vector2":62}],65:[function(require,module,exports){
 const Vector3D = require('./Vector3')
 const {getTag} = require('../constants')
 
@@ -11943,7 +12406,7 @@ Vertex.prototype = {
 
 module.exports = Vertex
 
-},{"../constants":48,"./Vector3":59}],62:[function(require,module,exports){
+},{"../constants":52,"./Vector3":63}],66:[function(require,module,exports){
 const {EPS} = require('../constants')
 const {solve2Linear} = require('../utils')
 
@@ -11969,7 +12432,7 @@ const linesIntersect = function (p0start, p0end, p1start, p1end) {
 
 module.exports = {linesIntersect}
 
-},{"../constants":48,"../utils":66}],63:[function(require,module,exports){
+},{"../constants":52,"../utils":70}],67:[function(require,module,exports){
 const {EPS} = require('../constants')
 const OrthoNormalBasis = require('./OrthoNormalBasis')
 const {interpolateBetween2DPointsForY, insertSorted, fnNumberSort} = require('../utils')
@@ -12313,7 +12776,7 @@ const reTesselateCoplanarPolygons = function (sourcepolygons, destpolygons) {
 
 module.exports = reTesselateCoplanarPolygons
 
-},{"../constants":48,"../utils":66,"./Line2":49,"./OrthoNormalBasis":52,"./Polygon3":56,"./Vector2":58,"./Vertex3":61}],64:[function(require,module,exports){
+},{"../constants":52,"../utils":70,"./Line2":53,"./OrthoNormalBasis":56,"./Polygon3":60,"./Vector2":62,"./Vertex3":65}],68:[function(require,module,exports){
 const Matrix4x4 = require('./math/Matrix4')
 const Vector3D = require('./math/Vector3')
 const Plane = require('./math/Plane')
@@ -12396,7 +12859,7 @@ module.exports = {
   addCenteringToPrototype
 }
 
-},{"./math/Matrix4":51,"./math/Plane":54,"./math/Vector3":59}],65:[function(require,module,exports){
+},{"./math/Matrix4":55,"./math/Plane":58,"./math/Vector3":63}],69:[function(require,module,exports){
 const {_CSGDEBUG, EPS} = require('./constants')
 const Vertex = require('./math/Vertex3')
 const Polygon = require('./math/Polygon3')
@@ -12907,7 +13370,7 @@ Node.prototype = {
 
 module.exports = Tree
 
-},{"./constants":48,"./math/Polygon3":56,"./math/Vertex3":61}],66:[function(require,module,exports){
+},{"./constants":52,"./math/Polygon3":60,"./math/Vertex3":65}],70:[function(require,module,exports){
 function fnNumberSort (a, b) {
   return a - b
 }
@@ -13011,7 +13474,7 @@ module.exports = {
   isCSG
 }
 
-},{}],67:[function(require,module,exports){
+},{}],71:[function(require,module,exports){
 const Vector2D = require('../math/Vector2')
 
 // see http://local.wasp.uwa.edu.au/~pbourke/geometry/polyarea/ :
@@ -13045,7 +13508,7 @@ const getBounds = function (cag) {
 
 module.exports = {area, getBounds}
 
-},{"../math/Vector2":58}],68:[function(require,module,exports){
+},{"../math/Vector2":62}],72:[function(require,module,exports){
 const {areaEPS} = require('../constants')
 const {linesIntersect} = require('../math/lineUtils')
 
@@ -13147,7 +13610,7 @@ module.exports = {
   contains
 }
 
-},{"../constants":48,"../math/lineUtils":62}],69:[function(require,module,exports){
+},{"../constants":52,"../math/lineUtils":66}],73:[function(require,module,exports){
 const {EPS} = require('../constants')
 const FuzzyCSGFactory = require('../FuzzyFactory3d')
 const FuzzyCAGFactory = require('../FuzzyFactory2d')
@@ -13233,7 +13696,7 @@ const CAGFromCAGFuzzyFactory = function (factory, sourcecag) {
 
 module.exports = canonicalize
 
-},{"../CAGFactories":40,"../CSGFactories":42,"../FuzzyFactory2d":44,"../FuzzyFactory3d":45,"../constants":48}],70:[function(require,module,exports){
+},{"../CAGFactories":44,"../CSGFactories":46,"../FuzzyFactory2d":48,"../FuzzyFactory3d":49,"../constants":52}],74:[function(require,module,exports){
 const Vector3D = require('../math/Vector3')
 
 /**
@@ -13283,7 +13746,7 @@ const area = function (csg) {
 
 module.exports = {bounds, volume, area}
 
-},{"../math/Vector3":59}],71:[function(require,module,exports){
+},{"../math/Vector3":63}],75:[function(require,module,exports){
 const CAG = require('../CAG') // FIXME: circular dependency !
 const {EPS} = require('../constants')
 
@@ -13308,7 +13771,7 @@ const projectToOrthoNormalBasis = function (csg, orthobasis) {
 
 module.exports = {projectToOrthoNormalBasis}
 
-},{"../CAG":39,"../constants":48}],72:[function(require,module,exports){
+},{"../CAG":43,"../constants":52}],76:[function(require,module,exports){
 const {EPS} = require('../constants')
 const Polygon = require('../math/Polygon3')
 const Plane = require('../math/Plane')
@@ -13626,7 +14089,7 @@ const fixTJunctions = function (fromPolygons, csg) {
 
 module.exports = fixTJunctions
 
-},{"../constants":48,"../math/Plane":54,"../math/Polygon3":56}],73:[function(require,module,exports){
+},{"../constants":52,"../math/Plane":58,"../math/Polygon3":60}],77:[function(require,module,exports){
 const FuzzyCSGFactory = require('../FuzzyFactory3d')
 const reTesselateCoplanarPolygons = require('../math/reTesselateCoplanarPolygons')
 const {fromPolygons} = require('../CSGFactories')
@@ -13675,7 +14138,7 @@ const reTesselate = function (csg) {
 
 module.exports = reTesselate
 
-},{"../CSGFactories":42,"../FuzzyFactory3d":45,"../math/reTesselateCoplanarPolygons":63}],74:[function(require,module,exports){
+},{"../CSGFactories":46,"../FuzzyFactory3d":49,"../math/reTesselateCoplanarPolygons":67}],78:[function(require,module,exports){
 /* converts input data to array if it is not already an array */
 function toArray (data) {
   if (!data) return []
@@ -13685,7 +14148,7 @@ function toArray (data) {
 
 module.exports = toArray
 
-},{}],75:[function(require,module,exports){
+},{}],79:[function(require,module,exports){
 /*
 ## License
 
@@ -13876,7 +14339,7 @@ addCenteringToPrototype(CAG.prototype, ['x', 'y'])
 
 module.exports = {CSG, CAG}
 
-},{"./src/CAG":76,"./src/CAGFactories":77,"./src/CSG":78,"./src/CSGFactories":79,"./src/Properties":83,"./src/connectors":84,"./src/constants":85,"./src/debugHelpers":86,"./src/math/Line2":87,"./src/math/Line3":88,"./src/math/Matrix4":89,"./src/math/OrthoNormalBasis":90,"./src/math/Path2":91,"./src/math/Plane":92,"./src/math/Polygon2":93,"./src/math/Polygon3":94,"./src/math/Side":95,"./src/math/Vector2":96,"./src/math/Vector3":97,"./src/math/Vertex2":98,"./src/math/Vertex3":99,"./src/mutators":102,"./src/primitives2d":104,"./src/primitives3d":105}],76:[function(require,module,exports){
+},{"./src/CAG":80,"./src/CAGFactories":81,"./src/CSG":82,"./src/CSGFactories":83,"./src/Properties":87,"./src/connectors":88,"./src/constants":89,"./src/debugHelpers":90,"./src/math/Line2":91,"./src/math/Line3":92,"./src/math/Matrix4":93,"./src/math/OrthoNormalBasis":94,"./src/math/Path2":95,"./src/math/Plane":96,"./src/math/Polygon2":97,"./src/math/Polygon3":98,"./src/math/Side":99,"./src/math/Vector2":100,"./src/math/Vector3":101,"./src/math/Vertex2":102,"./src/math/Vertex3":103,"./src/mutators":106,"./src/primitives2d":108,"./src/primitives3d":109}],80:[function(require,module,exports){
 const {EPS, angleEPS, areaEPS, defaultResolution3D} = require('./constants')
 const {Connector} = require('./connectors')
 const OrthoNormalBasis = require('./math/OrthoNormalBasis')
@@ -14694,7 +15157,7 @@ CAG.prototype = {
 
 module.exports = CAG
 
-},{"./CSG":78,"./FuzzyFactory2d":81,"./connectors":84,"./constants":85,"./math/OrthoNormalBasis":90,"./math/Path2":91,"./math/Polygon3":94,"./math/Side":95,"./math/Vector2":96,"./math/Vector3":97,"./math/Vertex2":98,"./math/Vertex3":99,"./math/lineUtils":100,"./optionParsers":103}],77:[function(require,module,exports){
+},{"./CSG":82,"./FuzzyFactory2d":85,"./connectors":88,"./constants":89,"./math/OrthoNormalBasis":94,"./math/Path2":95,"./math/Polygon3":98,"./math/Side":99,"./math/Vector2":100,"./math/Vector3":101,"./math/Vertex2":102,"./math/Vertex3":103,"./math/lineUtils":104,"./optionParsers":107}],81:[function(require,module,exports){
 const CAG = require('./CAG')
 const Side = require('./math/Side')
 const Vector2D = require('./math/Vector2')
@@ -14754,7 +15217,7 @@ module.exports = {
   //fromFakeCSG
 }
 
-},{"./CAG":76,"./math/Path2":91,"./math/Side":95,"./math/Vector2":96,"./math/Vertex2":98}],78:[function(require,module,exports){
+},{"./CAG":80,"./math/Path2":95,"./math/Side":99,"./math/Vector2":100,"./math/Vertex2":102}],82:[function(require,module,exports){
 const {fnNumberSort} = require('./utils')
 const FuzzyCSGFactory = require('./FuzzyFactory3d')
 const Tree = require('./trees')
@@ -15725,7 +16188,7 @@ const CSGFromCSGFuzzyFactory = function (factory, sourcecsg) {
 
 module.exports = CSG
 
-},{"./CAG":76,"./FuzzyFactory3d":82,"./Properties":83,"./connectors":84,"./constants":85,"./math/Matrix4":89,"./math/OrthoNormalBasis":90,"./math/Plane":92,"./math/Polygon3":94,"./math/Vector2":96,"./math/Vector3":97,"./math/Vertex3":99,"./math/polygonUtils":101,"./trees":106,"./utils":107,"./utils/fixTJunctions":108}],79:[function(require,module,exports){
+},{"./CAG":80,"./FuzzyFactory3d":86,"./Properties":87,"./connectors":88,"./constants":89,"./math/Matrix4":93,"./math/OrthoNormalBasis":94,"./math/Plane":96,"./math/Polygon3":98,"./math/Vector2":100,"./math/Vector3":101,"./math/Vertex3":103,"./math/polygonUtils":105,"./trees":110,"./utils":111,"./utils/fixTJunctions":112}],83:[function(require,module,exports){
 const Vector3D = require('./math/Vector3')
 const Vertex = require('./math/Vertex3')
 const Plane = require('./math/Plane')
@@ -15838,15 +16301,15 @@ module.exports = {
   fromCompactBinary
 }
 
-},{"./CSG":78,"./math/Plane":92,"./math/Polygon2":93,"./math/Polygon3":94,"./math/Vector3":97,"./math/Vertex3":99}],80:[function(require,module,exports){
-arguments[4][43][0].apply(exports,arguments)
-},{"dup":43}],81:[function(require,module,exports){
-arguments[4][44][0].apply(exports,arguments)
-},{"./FuzzyFactory":80,"./constants":85,"./math/Side":95,"dup":44}],82:[function(require,module,exports){
-arguments[4][45][0].apply(exports,arguments)
-},{"./FuzzyFactory":80,"./constants":85,"./math/Polygon3":94,"dup":45}],83:[function(require,module,exports){
-arguments[4][46][0].apply(exports,arguments)
-},{"dup":46}],84:[function(require,module,exports){
+},{"./CSG":82,"./math/Plane":96,"./math/Polygon2":97,"./math/Polygon3":98,"./math/Vector3":101,"./math/Vertex3":103}],84:[function(require,module,exports){
+arguments[4][47][0].apply(exports,arguments)
+},{"dup":47}],85:[function(require,module,exports){
+arguments[4][48][0].apply(exports,arguments)
+},{"./FuzzyFactory":84,"./constants":89,"./math/Side":99,"dup":48}],86:[function(require,module,exports){
+arguments[4][49][0].apply(exports,arguments)
+},{"./FuzzyFactory":84,"./constants":89,"./math/Polygon3":98,"dup":49}],87:[function(require,module,exports){
+arguments[4][50][0].apply(exports,arguments)
+},{"dup":50}],88:[function(require,module,exports){
 const Vector3D = require('./math/Vector3')
 const Line3D = require('./math/Line3')
 const Matrix4x4 = require('./math/Matrix4')
@@ -16068,9 +16531,9 @@ ConnectorList.prototype = {
 
 module.exports = {Connector, ConnectorList}
 
-},{"./CSG":78,"./math/Line3":88,"./math/Matrix4":89,"./math/OrthoNormalBasis":90,"./math/Plane":92,"./math/Vector3":97}],85:[function(require,module,exports){
-arguments[4][48][0].apply(exports,arguments)
-},{"dup":48}],86:[function(require,module,exports){
+},{"./CSG":82,"./math/Line3":92,"./math/Matrix4":93,"./math/OrthoNormalBasis":94,"./math/Plane":96,"./math/Vector3":101}],89:[function(require,module,exports){
+arguments[4][52][0].apply(exports,arguments)
+},{"dup":52}],90:[function(require,module,exports){
 const CSG = require('./CSG')
 const {cube} = require('./primitives3d')
 
@@ -16105,13 +16568,13 @@ const toPointCloud = function (csg, cuberadius) {
 
 module.exports = {toPointCloud}
 
-},{"./CSG":78,"./primitives3d":105}],87:[function(require,module,exports){
-arguments[4][49][0].apply(exports,arguments)
-},{"../utils":107,"./Vector2":96,"dup":49}],88:[function(require,module,exports){
-arguments[4][50][0].apply(exports,arguments)
-},{"../constants":85,"../utils":107,"./Vector3":97,"dup":50}],89:[function(require,module,exports){
-arguments[4][51][0].apply(exports,arguments)
-},{"./OrthoNormalBasis":90,"./Plane":92,"./Vector2":96,"./Vector3":97,"dup":51}],90:[function(require,module,exports){
+},{"./CSG":82,"./primitives3d":109}],91:[function(require,module,exports){
+arguments[4][53][0].apply(exports,arguments)
+},{"../utils":111,"./Vector2":100,"dup":53}],92:[function(require,module,exports){
+arguments[4][54][0].apply(exports,arguments)
+},{"../constants":89,"../utils":111,"./Vector3":101,"dup":54}],93:[function(require,module,exports){
+arguments[4][55][0].apply(exports,arguments)
+},{"./OrthoNormalBasis":94,"./Plane":96,"./Vector2":100,"./Vector3":101,"dup":55}],94:[function(require,module,exports){
 const Vector2D = require('./Vector2')
 const Vector3D = require('./Vector3')
 const Line2D = require('./Line2')
@@ -16315,7 +16778,7 @@ OrthoNormalBasis.prototype = {
 
 module.exports = OrthoNormalBasis
 
-},{"./Line2":87,"./Line3":88,"./Matrix4":89,"./Plane":92,"./Vector2":96,"./Vector3":97}],91:[function(require,module,exports){
+},{"./Line2":91,"./Line3":92,"./Matrix4":93,"./Plane":96,"./Vector2":100,"./Vector3":101}],95:[function(require,module,exports){
 const Vector2D = require('./Vector2')
 const {EPS, angleEPS} = require('../constants')
 const {parseOptionAs2DVector, parseOptionAsFloat, parseOptionAsInt, parseOptionAsBool} = require('../optionParsers')
@@ -16789,9 +17252,9 @@ Path2D.prototype = {
 
 module.exports = Path2D
 
-},{"../CAG":76,"../constants":85,"../optionParsers":103,"./Side":95,"./Vector2":96,"./Vertex2":98}],92:[function(require,module,exports){
-arguments[4][54][0].apply(exports,arguments)
-},{"../constants":85,"./Line3":88,"./Vector3":97,"dup":54}],93:[function(require,module,exports){
+},{"../CAG":80,"../constants":89,"../optionParsers":107,"./Side":99,"./Vector2":100,"./Vertex2":102}],96:[function(require,module,exports){
+arguments[4][58][0].apply(exports,arguments)
+},{"../constants":89,"./Line3":92,"./Vector3":101,"dup":58}],97:[function(require,module,exports){
 const CAG = require('../CAG')
 
 /*
@@ -16812,7 +17275,7 @@ Polygon2D.prototype = CAG.prototype
 
 module.exports = Polygon2D
 
-},{"../CAG":76}],94:[function(require,module,exports){
+},{"../CAG":80}],98:[function(require,module,exports){
 const Vector3D = require('./Vector3')
 const Vertex = require('./Vertex3')
 const Matrix4x4 = require('./Matrix4')
@@ -17389,7 +17852,7 @@ Polygon.defaultShared = new Polygon.Shared(null)
 
 module.exports = Polygon
 
-},{"../CAG":76,"../CAGFactories":77,"../CSG":78,"../constants":85,"../utils":107,"./Matrix4":89,"./Plane":92,"./Vector3":97,"./Vertex3":99}],95:[function(require,module,exports){
+},{"../CAG":80,"../CAGFactories":81,"../CSG":82,"../constants":89,"../utils":111,"./Matrix4":93,"./Plane":96,"./Vector3":101,"./Vertex3":103}],99:[function(require,module,exports){
 const Vector2D = require('./Vector2')
 const Vertex = require('./Vertex2')
 const Vertex3 = require('./Vertex3')
@@ -17493,7 +17956,7 @@ Side.prototype = {
 
 module.exports = Side
 
-},{"../constants":85,"./Polygon3":94,"./Vector2":96,"./Vertex2":98,"./Vertex3":99}],96:[function(require,module,exports){
+},{"../constants":89,"./Polygon3":98,"./Vector2":100,"./Vertex2":102,"./Vertex3":103}],100:[function(require,module,exports){
 const {IsFloat} = require('../utils')
 
 /** Class Vector2D
@@ -17691,13 +18154,13 @@ Vector2D.prototype = {
 
 module.exports = Vector2D
 
-},{"../utils":107,"./Vector3":97}],97:[function(require,module,exports){
-arguments[4][59][0].apply(exports,arguments)
-},{"../utils":107,"./Vector2":96,"dup":59}],98:[function(require,module,exports){
-arguments[4][60][0].apply(exports,arguments)
-},{"../constants":85,"./Vector2":96,"dup":60}],99:[function(require,module,exports){
-arguments[4][61][0].apply(exports,arguments)
-},{"../constants":85,"./Vector3":97,"dup":61}],100:[function(require,module,exports){
+},{"../utils":111,"./Vector3":101}],101:[function(require,module,exports){
+arguments[4][63][0].apply(exports,arguments)
+},{"../utils":111,"./Vector2":100,"dup":63}],102:[function(require,module,exports){
+arguments[4][64][0].apply(exports,arguments)
+},{"../constants":89,"./Vector2":100,"dup":64}],103:[function(require,module,exports){
+arguments[4][65][0].apply(exports,arguments)
+},{"../constants":89,"./Vector3":101,"dup":65}],104:[function(require,module,exports){
 const {EPS} = require('../constants')
 const {solve2Linear} = require('../utils')
 
@@ -17724,7 +18187,7 @@ const linesIntersect = function (p0start, p0end, p1start, p1end) {
 
 module.exports = {linesIntersect}
 
-},{"../constants":85,"../utils":107}],101:[function(require,module,exports){
+},{"../constants":89,"../utils":111}],105:[function(require,module,exports){
 const {EPS} = require('../constants')
 const OrthoNormalBasis = require('./OrthoNormalBasis')
 const {interpolateBetween2DPointsForY, insertSorted, fnNumberSort} = require('../utils')
@@ -18068,9 +18531,9 @@ const reTesselateCoplanarPolygons = function (sourcepolygons, destpolygons) {
 
 module.exports = {reTesselateCoplanarPolygons}
 
-},{"../constants":85,"../utils":107,"./Line2":87,"./OrthoNormalBasis":90,"./Polygon3":94,"./Vector2":96,"./Vertex3":99}],102:[function(require,module,exports){
-arguments[4][64][0].apply(exports,arguments)
-},{"./math/Matrix4":89,"./math/Plane":92,"./math/Vector3":97,"dup":64}],103:[function(require,module,exports){
+},{"../constants":89,"../utils":111,"./Line2":91,"./OrthoNormalBasis":94,"./Polygon3":98,"./Vector2":100,"./Vertex3":103}],106:[function(require,module,exports){
+arguments[4][68][0].apply(exports,arguments)
+},{"./math/Matrix4":93,"./math/Plane":96,"./math/Vector3":101,"dup":68}],107:[function(require,module,exports){
 const Vector3D = require('./math/Vector3')
 const Vector2D = require('./math/Vector2')
 
@@ -18148,7 +18611,7 @@ module.exports = {
   parseOptionAs3DVectorList
 }
 
-},{"./math/Vector2":96,"./math/Vector3":97}],104:[function(require,module,exports){
+},{"./math/Vector2":100,"./math/Vector3":101}],108:[function(require,module,exports){
 const CAG = require('./CAG')
 const {parseOptionAs2DVector, parseOptionAsFloat, parseOptionAsInt} = require('./optionParsers')
 const {defaultResolution2D} = require('./constants')
@@ -18334,7 +18797,7 @@ module.exports = {
   fromCompactBinary
 }
 
-},{"./CAG":76,"./CAGFactories":77,"./constants":85,"./math/Path2":91,"./math/Vector2":96,"./optionParsers":103}],105:[function(require,module,exports){
+},{"./CAG":80,"./CAGFactories":81,"./constants":89,"./math/Path2":95,"./math/Vector2":100,"./optionParsers":107}],109:[function(require,module,exports){
 const CSG = require('./CSG')
 const {parseOption, parseOptionAs3DVector, parseOptionAs2DVector, parseOptionAs3DVectorList, parseOptionAsFloat, parseOptionAsInt} = require('./optionParsers')
 const {defaultResolution3D, defaultResolution2D, EPS} = require('./constants')
@@ -18884,7 +19347,7 @@ module.exports = {
   polyhedron
 }
 
-},{"./CSG":78,"./Properties":83,"./connectors":84,"./constants":85,"./math/Polygon3":94,"./math/Vector3":97,"./math/Vertex3":99,"./optionParsers":103}],106:[function(require,module,exports){
+},{"./CSG":82,"./Properties":87,"./connectors":88,"./constants":89,"./math/Polygon3":98,"./math/Vector3":101,"./math/Vertex3":103,"./optionParsers":107}],110:[function(require,module,exports){
 const {_CSGDEBUG, EPS} = require('./constants')
 const Vertex = require('./math/Vertex3')
 const Polygon = require('./math/Polygon3')
@@ -19396,7 +19859,7 @@ Node.prototype = {
 
 module.exports = Tree
 
-},{"./constants":85,"./math/Polygon3":94,"./math/Vertex3":99}],107:[function(require,module,exports){
+},{"./constants":89,"./math/Polygon3":98,"./math/Vertex3":103}],111:[function(require,module,exports){
 function fnNumberSort (a, b) {
   return a - b
 }
@@ -19469,9 +19932,9 @@ module.exports = {
   interpolateBetween2DPointsForY
 }
 
-},{}],108:[function(require,module,exports){
-arguments[4][72][0].apply(exports,arguments)
-},{"../constants":85,"../math/Plane":92,"../math/Polygon3":94,"dup":72}],109:[function(require,module,exports){
+},{}],112:[function(require,module,exports){
+arguments[4][76][0].apply(exports,arguments)
+},{"../constants":89,"../math/Plane":96,"../math/Polygon3":98,"dup":76}],113:[function(require,module,exports){
 // color table from http://www.w3.org/TR/css3-color/
 const cssColors = {
 // basic color keywords
@@ -19918,7 +20381,7 @@ module.exports = {
   rgb2html
 }
 
-},{}],110:[function(require,module,exports){
+},{}],114:[function(require,module,exports){
 function echo () {
   console.warn('echo() will be deprecated in the near future: please use console.log/warn/error instead')
   var s = '', a = arguments
@@ -19935,7 +20398,7 @@ module.exports = {
   echo
 }
 
-},{}],111:[function(require,module,exports){
+},{}],115:[function(require,module,exports){
 const { CSG } = require('@jscad/csg')
 
 // FIXME: this is to have more readable/less extremely verbose code below
@@ -19997,7 +20460,7 @@ const cagToPointsArray = input => {
 const degToRad = deg => (Math.PI / 180) * deg
 
 module.exports = {cagToPointsArray, clamp, rightMultiply1x3VectorToArray, polygonFromPoints}
-},{"@jscad/csg":75}],112:[function(require,module,exports){
+},{"@jscad/csg":79}],116:[function(require,module,exports){
 
 const primitives3d = require('./primitives3d')
 const primitives2d = require('./primitives2d')
@@ -20033,7 +20496,7 @@ const exportedApi = {
 
 module.exports = exportedApi
 
-},{"./color":109,"./debug":110,"./log":113,"./maths":114,"./ops-booleans":115,"./ops-extrusions":116,"./ops-transformations":117,"./primitives2d":118,"./primitives3d":119,"./text":120,"@jscad/csg":75}],113:[function(require,module,exports){
+},{"./color":113,"./debug":114,"./log":117,"./maths":118,"./ops-booleans":119,"./ops-extrusions":120,"./ops-transformations":121,"./primitives2d":122,"./primitives3d":123,"./text":124,"@jscad/csg":79}],117:[function(require,module,exports){
 function log (txt) {
   var timeInMs = Date.now()
   var prevtime// OpenJsCad.log.prevLogTime
@@ -20060,7 +20523,7 @@ module.exports = {
   status
 }
 
-},{}],114:[function(require,module,exports){
+},{}],118:[function(require,module,exports){
 // -- Math functions (360 deg based vs 2pi)
 function sin (a) {
   return Math.sin(a / 360 * Math.PI * 2)
@@ -20171,7 +20634,7 @@ module.exports = {
   round
 }
 
-},{}],115:[function(require,module,exports){
+},{}],119:[function(require,module,exports){
 const { CAG } = require('@jscad/csg')
 
 // -- 3D boolean operations
@@ -20275,7 +20738,7 @@ module.exports = {
   intersection
 }
 
-},{"@jscad/csg":75}],116:[function(require,module,exports){
+},{"@jscad/csg":79}],120:[function(require,module,exports){
 const { CSG, CAG } = require('@jscad/csg')
 const {cagToPointsArray, clamp, rightMultiply1x3VectorToArray, polygonFromPoints} = require('./helpers')
 // -- 2D to 3D primitives
@@ -20491,7 +20954,7 @@ module.exports = {
   rectangular_extrude
 }
 
-},{"./helpers":111,"@jscad/csg":75}],117:[function(require,module,exports){
+},{"./helpers":115,"@jscad/csg":79}],121:[function(require,module,exports){
 const { CSG, CAG } = require('@jscad/csg')
 const { union } = require('./ops-booleans')
 // -- 3D transformations (OpenSCAD like notion)
@@ -20904,7 +21367,7 @@ module.exports = {
   chain_hull
 }
 
-},{"./ops-booleans":115,"@jscad/csg":75}],118:[function(require,module,exports){
+},{"./ops-booleans":119,"@jscad/csg":79}],122:[function(require,module,exports){
 const { CAG } = require('@jscad/csg')
 
 // -- 2D primitives (OpenSCAD like notion)
@@ -21021,7 +21484,7 @@ module.exports = {
   triangle
 }
 
-},{"@jscad/csg":75}],119:[function(require,module,exports){
+},{"@jscad/csg":79}],123:[function(require,module,exports){
 // -- 3D primitives (OpenSCAD like notion)
 const { CSG } = require('@jscad/csg')
 const { circle } = require('./primitives2d')
@@ -21412,7 +21875,7 @@ module.exports = {
   polyhedron
 }
 
-},{"./ops-extrusions":116,"./ops-transformations":117,"./primitives2d":118,"@jscad/csg":75}],120:[function(require,module,exports){
+},{"./ops-extrusions":120,"./ops-transformations":121,"./primitives2d":122,"@jscad/csg":79}],124:[function(require,module,exports){
 
 /** Construct a with, segments tupple from a character
  * @param {Float} x - x offset
@@ -22051,7 +22514,7 @@ module.exports = {
   vector_text
 }
 
-},{}],121:[function(require,module,exports){
+},{}],125:[function(require,module,exports){
 "use strict;"
 
 const scadApi = require('@jscad/scad-api')
@@ -22074,7 +22537,7 @@ function rebuildMakeLeg ( Leg_r , Leg_h ){
 
 
 module.exports = rebuildMakeLeg
-},{"./csgToGeometries":16,"@jscad/csg":25,"@jscad/scad-api":112}],122:[function(require,module,exports){
+},{"./csgToGeometries":20,"@jscad/csg":29,"@jscad/scad-api":116}],126:[function(require,module,exports){
 "use strict;"
 
 const scadApi = require('@jscad/scad-api')
@@ -22126,4 +22589,4 @@ function rebuildMakeSeat ( NewSeatSizex , NewSeatSizey , NewSeatSizez , mode){
 }
 
 module.exports = rebuildMakeSeat
-},{"./csgToGeometries":16,"@jscad/csg":25,"@jscad/scad-api":112}]},{},[24]);
+},{"./csgToGeometries":20,"@jscad/csg":29,"@jscad/scad-api":116}]},{},[28]);
