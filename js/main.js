@@ -98,6 +98,10 @@ function Main()
 	//mesh simplify
 	this.modifer = new THREE.SimplifyModifier();
 
+
+	//to handle the 
+	this.handleClickToCall = false;
+
 }
 
 Main.prototype = {
@@ -523,7 +527,6 @@ Main.prototype = {
 		requestAnimationFrame(this.animate.bind(this));
 
 		this.customControl.applyTransition();
-
 
 		this.render();
 		this.stats.update();
@@ -1072,6 +1075,8 @@ Main.prototype = {
 	handleClick: function()
 	{
 
+		console.log("handleclick called");
+
 		if ( this.onDownPosition.distanceTo( this.onUpPosition ) === 0 ) {
 
 			if(this.onCtrlE == false) {
@@ -1085,6 +1090,8 @@ Main.prototype = {
 						this.select(this.furniture.getFurniture());
 
 						//control switch from first-person to target orbit
+
+						console.log("selected");
 						this.customControl.switchView2TG();
 
 						break;
@@ -1093,6 +1100,7 @@ Main.prototype = {
 						this.select( null );
 						this.furniture = null;
 
+						console.log("unselected");
 						this.customControl.switchView2FP();
 					}
 				}
@@ -1122,20 +1130,33 @@ Main.prototype = {
 	},
 
 	onMouseDown: function(event) {
-		event.preventDefault();
-		var array = this.getMousePosition( this.container, event.clientX, event.clientY );
-		this.onDownPosition.fromArray( array );
-		document.addEventListener( 'mouseup', this.onMouseUp.bind(this), false );
+
+		if(this.handleClickToCall == false)
+		{
+			event.preventDefault();
+			var array = this.getMousePosition( this.container, event.clientX, event.clientY );
+			this.onDownPosition.fromArray( array );
+			document.addEventListener( 'mouseup', this.onMouseUp.bind(this), false );
+
+			this.handleClickToCall = true;
+		}
 	},
 
 
 	onMouseUp: function(event) {
-		var array = this.getMousePosition( this.container, event.clientX, event.clientY );
-		this.onUpPosition.fromArray( array );
 
-		this.handleClick();
+		if(this.handleClickToCall == true){
 
-		document.removeEventListener( 'mouseup', this.onMouseUp.bind(this), false );
+			var array = this.getMousePosition( this.container, event.clientX, event.clientY );
+			this.onUpPosition.fromArray( array );
+
+			this.handleClick();
+
+			document.removeEventListener( 'mouseup', this.onMouseUp.bind(this), false );
+
+			this.handleClickToCall = false;
+
+		}
 	},
 
 	onTouchStart: function(event) {
