@@ -43,7 +43,7 @@ function Main()
 	this.helpers = {};
 	//this.sceneHelpers = new THREE.Scene();
 	this.stats = new Stats();
-	this.camera = new THREE.PerspectiveCamera (45, window.innerWidth / window.innerHeight, 1, 10000);
+	this.camera;
 	this.renderer = new THREE.WebGLRenderer( { antialias: true } );
 	this.control = null;
 
@@ -102,61 +102,18 @@ function Main()
 
 	//house environment
 	this.house = new THREE.Object3D();
+	this.gridHelper;
+
+	// controls
+	this.customControl;
 
 
 	//mesh simplify
 	this.modifer = new THREE.SimplifyModifier();
 
-	// function loadModelObj(objFilePath)
-	// {
 
-	// 	var onProgress = function ( xhr ) {
-	// 		if ( xhr.lengthComputable ) {
-	// 			var percentComplete = xhr.loaded / xhr.total * 100;
-	// 			console.log( Math.round(percentComplete, 2) + '% downloaded' );
-	// 		}
-	// 	};
-	// 	var onError = function ( xhr ) {};
-	// 	var loader = new THREE.OBJLoader();
-	// 	loader.load(objFilePath, function(object){
-	// 		var material = new THREE.MeshPhongMaterial( { color: 0xff5533, specular: 0x111111, shininess: 200 });
-	// 		object.traverse(function(child){
-
-	// 			log('child');
-
-	// 			if(child instanceof THREE.Mesh){
-	// 				child.material = material;
-	// 				child.position.set(0, 0, 0);
-	// 				child.scale.set(1, 1, 1);
-	// 				child.castShadow = true;
-	// 				child.receiveShadow = true;
-
-	// 				//scene.add(child);
-	// 			}
-	// 		});
-
-	// 		scene.add(object);
-	// 	}, onProgress, onError);
-	// }
-
-
-	// function setupAttributes(geometry)
-	// {
-	// 	//todo: bring back quads
-	// 	var vectors = [
-	// 		new THREE.Vector3(1, 0, 0),
-	// 		new THREE.Vector3(0, 1, 0),
-	// 		new THREE.Vector3(0, 0, 1)
-	// 	];
-
-	// 	var position = geometry.attributes.position;
-	// 	var centers = new Float32Array( position.count * 3 );
-	// 	for ( var i = 0, l = position.count; i < l; i ++ ) {
-	// 		vectors[ i % 3 ].toArray( centers, i * 3 );
-	// 	}
-	// 	geometry.addAttribute( 'center', new THREE.BufferAttribute( centers, 3 ) );
-	// }
-
+	//to handle the 
+	this.handleClickToCall = false;
 
 }
 
@@ -169,8 +126,9 @@ Main.prototype = {
 		if(!Detector.webgl)
 			Detector.addGetWebGLMessage();
 
-		this.camera.position.set(0, 30, 50);
-		this.camera.lookAt(new THREE.Vector3(0, 30, -50));
+		this.camera = new THREE.PerspectiveCamera (45, window.innerWidth / window.innerHeight, 1, 10000);
+		this.camera.position.set(0, 17, 10); //height at 1.7m
+		//this.camera.lookAt(new THREE.Vector3(0, 10, 200));
 
 		var ambientLight = new THREE.AmbientLight( 0xeeeeee, 0.4);
 		this.scene.add(ambientLight);
@@ -206,9 +164,9 @@ Main.prototype = {
 
 		this.scene.background = new THREE.Color(.95,.95,.95);
 
-		var gridHelper = new THREE.GridHelper( 1000, 20 ) ;//size, divisions
-		this.scene.add( gridHelper );
-		//this.addHouseEnvironment();
+		this.gridHelper = new THREE.GridHelper( 1000, 20 ) ;//size, divisions
+		this.scene.add( this.gridHelper );
+		this.loadHouseEnvironment();
 		
 		this.renderer.setPixelRatio( window.devicePixelRatio );
 		this.renderer.setSize( window.innerWidth, window.innerHeight );
@@ -227,12 +185,23 @@ Main.prototype = {
 		document.addEventListener('keydown', this.onKeyDown.bind(this), false);
 
 
-		this.controls = new THREE.OrbitControls( this.camera, this.renderer.domElement );
-		this.controls.addEventListener( 'change', this.render.bind(this) );
-		this.controls.minDistance = 1;
-		this.controls.maxDistance = 10000;
-		this.controls.enablePan = true;
-		//this.controls.target.set(0, 0.5, - 0.2);
+		//orbit control
+		this.customControl = new THREE.CustomControls( this.camera, this.renderer.domElement );
+		this.customControl.addEventListener( 'change', this.render.bind(this) );
+		this.customControl.minDistance = 1;
+		this.customControl.maxDistance = 10000;
+		//this.customControl.enablePan = true;
+		//this.customControl.target.set(0, 0.5, - 0.2);
+
+		this.customControl.lookSpeed = 0.05;
+        this.customControl.movementSpeed = 20;
+        this.customControl.noFly = true;
+        this.customControl.lookVertical = true;
+        this.customControl.constrainVertical = true;
+        this.customControl.verticalMin = 1.0;
+        this.customControl.verticalMax = 2.0;
+        this.customControl.lon = -110;
+        this.customControl.lat = -50;
 
 
 		this.transformControls = new THREE.TransformControls(this.camera, this.renderer.domElement);
@@ -253,28 +222,20 @@ Main.prototype = {
 		//initialize processor
 		this.processor = new Processor(scope);
 
-		
-
-
-		// //test
-
-		// var loader = new THREE.GLTFLoader();
-		// loader.load(
-		// 	'models/vitra-chair.glb',
-		// 	function ( gltf ) {
-		// 		scope.gltfLoadedCallback(
-		// 			gltf,
-		// 			scope.envMap,
-		// 			new THREE.Vector3(-1.5,0,-0.5),
-		// 			Math.PI*0.2
-		// 		);
-		// } );
-
-
 	},
 
 
-	addHouseEnvironment: function() {
+	enableHouseEnvironment: function() {
+		this.scene.remove(this.gridHelper);
+		this.scene.add(this.house);
+	},
+
+	disableHouseEnvironment: function() {
+		this.scene.remove(this.house);
+		this.scene.add(this.gridHelper);
+	},
+
+	loadHouseEnvironment: function() {
 
 		var scope = this;
 
@@ -305,10 +266,10 @@ Main.prototype = {
 		var groundTexture = new THREE.TextureLoader().load("../images/floor.jpg");
 		groundTexture.wrapS = groundTexture.wrapT = THREE.RepeatWrapping;
     	groundTexture.offset.set( 0, 0 );
-    	groundTexture.repeat.set( 10, 10 );
+    	groundTexture.repeat.set( 10, 16 );
 
 		var ground = new THREE.Mesh(
-			new THREE.PlaneBufferGeometry( 100, 100, 10, 10),
+			new THREE.PlaneBufferGeometry( 100, 160, 10, 16),
 			new THREE.MeshPhongMaterial( {wireframe: false, map: groundTexture, specular: 0x101010} )
 		);
 		ground.rotation.x = - Math.PI / 2;
@@ -328,7 +289,7 @@ Main.prototype = {
 			new THREE.MeshPhongMaterial( {map: purpleWallTexture, specular: 0x101010} )
 		);
 
-    	purple_wall.position.copy(new THREE.Vector3(0, 15, -50));
+    	purple_wall.position.copy(new THREE.Vector3(0, 15, -80));
 		purple_wall.receiveShadow = true;
 		//scope.scene.add(purple_wall);
 		this.house.add(purple_wall);
@@ -337,15 +298,15 @@ Main.prototype = {
 		var whiteWallTexture = new THREE.TextureLoader().load("../images/white_wall.jpg");
 		whiteWallTexture.wrapS = whiteWallTexture.wrapT = THREE.RepeatWrapping;
     	whiteWallTexture.offset.set( 0, 0 );
-    	whiteWallTexture.repeat.set( 1, 3 );
+    	whiteWallTexture.repeat.set( 4, 3 );
 
 		//left wall
 		var left_wall = new THREE.Mesh(
-			new THREE.BoxBufferGeometry( 3, 30, 10, 1, 3, 1),
+			new THREE.BoxBufferGeometry( 3, 30, 40, 1, 3, 4),
 			new THREE.MeshPhongMaterial( {map: whiteWallTexture, specular: 0x101010} )
 		);
 
-    	left_wall.position.copy(new THREE.Vector3(-50, 15, -45));
+    	left_wall.position.copy(new THREE.Vector3(-50, 15, -60));
 		left_wall.receiveShadow = true;
 		//scope.scene.add(left_wall);
 		this.house.add(left_wall);
@@ -361,6 +322,17 @@ Main.prototype = {
 			//scope.scene.add(fcWindow);
 			scope.house.add(fcWindow);
 		});
+
+		whiteWallTexture.repeat.set( 3, 3 );
+		var left_window_wall = new THREE.Mesh(
+			new THREE.BoxBufferGeometry( 3, 30, 30, 1, 3, 3),
+			new THREE.MeshPhongMaterial( {map: whiteWallTexture, specular: 0x101010} )
+		);
+
+		left_window_wall.position.copy(new THREE.Vector3(-50, 15, 31));
+		left_window_wall.receiveShadow = true;
+		//scope.scene.add(left_wall);
+		this.house.add(left_window_wall);
 		
 
 		//left window left
@@ -370,7 +342,7 @@ Main.prototype = {
 			new THREE.MeshPhongMaterial( {map: whiteWallTexture, specular: 0x101010} )
 		);
 
-    	left_window_left_wall.position.copy(new THREE.Vector3(-20, 15, 50 - (90 - 55.5)/2));
+    	left_window_left_wall.position.copy(new THREE.Vector3(-20, 15, 80 - (90 - 55.5)/2));
 		left_window_left_wall.receiveShadow = true;
 		//scope.scene.add(left_window_left_wall);
 		this.house.add(left_window_left_wall);
@@ -382,20 +354,20 @@ Main.prototype = {
 			new THREE.MeshPhongMaterial( {map: whiteWallTexture, specular: 0x101010} )
 		);
 
-    	left_wall_left_wall.position.copy(new THREE.Vector3(-35, 15, 50 - (90 - 55.5) + 1.5));
+    	left_wall_left_wall.position.copy(new THREE.Vector3(-35, 15, 80 - (90 - 55.5) + 1.5));
 		left_wall_left_wall.receiveShadow = true;
 		//scope.scene.add(left_wall_left_wall);
 		this.house.add(left_wall_left_wall);
 
 
 		//right wall
-		whiteWallTexture.repeat.set(3, 5);
+		whiteWallTexture.repeat.set(3, 8);
 		var right_wall = new THREE.Mesh(
-			new THREE.BoxBufferGeometry( 3, 30, 50, 1, 3, 5),
+			new THREE.BoxBufferGeometry( 3, 30, 80, 1, 3, 8),
 			new THREE.MeshPhongMaterial( {map: whiteWallTexture, specular: 0x101010} )
 		);
 
-    	right_wall.position.copy(new THREE.Vector3(50, 15, -25));
+    	right_wall.position.copy(new THREE.Vector3(50, 15, -40));
 		right_wall.receiveShadow = true;
 		//scope.scene.add(right_wall);
 		this.house.add(right_wall);
@@ -425,21 +397,21 @@ Main.prototype = {
 		this.house.add(right_door_top_wall);
 
 		//right door right
-		whiteWallTexture.repeat.set(3, 4);
+		whiteWallTexture.repeat.set(3, 7);
 		var right_door_right_wall = new THREE.Mesh(
-			new THREE.BoxBufferGeometry( 3, 30, 50 - 8.85, 1, 3, 4),
+			new THREE.BoxBufferGeometry( 3, 30, 80 - 8.85, 1, 3, 7),
 			new THREE.MeshPhongMaterial( {map: whiteWallTexture, specular: 0x101010} )
 		);
 
-    	right_door_right_wall.position.copy(new THREE.Vector3(50, 15, 8.85 + (50 - 8.858) / 2));
+    	right_door_right_wall.position.copy(new THREE.Vector3(50, 15, 8.85 + (80 - 8.858) / 2));
 		right_door_right_wall.receiveShadow = true;
 		//scope.scene.add(right_door_right_wall);
 		this.house.add(right_door_right_wall);
 
 		//ceiling
-		whiteWallTexture.repeat.set(10, 10);
+		whiteWallTexture.repeat.set(10, 16);
 		var ceiling = new THREE.Mesh(
-			new THREE.PlaneBufferGeometry( 100, 100, 10, 10),
+			new THREE.PlaneBufferGeometry( 100, 160, 10, 16),
 			new THREE.MeshPhongMaterial( {map: whiteWallTexture, specular: 0x101010} )
 		);
 		ceiling.position.y = 30;
@@ -453,7 +425,7 @@ Main.prototype = {
 		loader.load( '../models/wall_window.dae', function ( collada ) {
 			var wWindow = collada.scene;
 			wWindow.scale.copy(new THREE.Vector3(0.25, 0.25, 0.25));
-			wWindow.position.copy(new THREE.Vector3(-40, 0, 55));
+			wWindow.position.copy(new THREE.Vector3(-40, 0, 85));
 			//wWindow.rotation.z = - Math.PI / 2;
 			wWindow.rotation.x = - Math.PI / 2;
 			//scope.scene.add(wWindow);
@@ -483,7 +455,7 @@ Main.prototype = {
 			// });
 
 			apsad.scale.copy(new THREE.Vector3(0.4, 0.4, 0.4));
-			apsad.position.copy(new THREE.Vector3(-40, 0, -40));
+			apsad.position.copy(new THREE.Vector3(-40, 0, -70));
 			apsad.rotation.x = - Math.PI / 2;
 			scope.house.add(apsad);
 			
@@ -503,7 +475,7 @@ Main.prototype = {
 			// });
 
 			wall_art.scale.copy(new THREE.Vector3(0.02, 0.02, 0.02));
-			wall_art.position.copy(new THREE.Vector3(0, 15, -49));
+			wall_art.position.copy(new THREE.Vector3(0, 15, -79));
 			wall_art.rotation.z = Math.PI / 2;
 			scope.house.add(wall_art);
 			
@@ -530,7 +502,7 @@ Main.prototype = {
 			
 		});
 
-		this.scene.add(this.house);
+		//this.scene.add(this.house);
 
 	},
 
@@ -566,6 +538,9 @@ Main.prototype = {
 	animate: function()
 	{
 		requestAnimationFrame(this.animate.bind(this));
+
+		this.customControl.applyTransition();
+
 		this.render();
 		this.stats.update();
 	},
@@ -582,31 +557,78 @@ Main.prototype = {
 		this.renderer.setSize( window.innerWidth, window.innerHeight );
 	},
 
-	//function to load model into the scene
-	addObject: function ( object ) {
 
+	preAddObject: function(object) {
+		
 		var scope = this;
+
+		//predict the length, width, height
+		var loadedScale = new THREE.Vector3();
+		object.getWorldScale(loadedScale);
+
+		console.log(loadedScale);
+
+		var box = new THREE.Box3();
+		box.setFromObject(object);
+		var box_size = new THREE.Vector3();
+		box.getSize(box_size);
+
+		console.log(box_size);
+
+		//a series test to decide the most suitable predicted sizes
+		//assume we are using dae files.. and the z is height.. need a rotation?
+
+		var size = []; size.push(box_size.x, box_size.y, box_size.z);
+		size.sort(function(a, b){return a - b});
+
+		//in case of chair
+		var length = size[0];
+		var width = size[1];
+		var height = size[2];
+
+		var loadMatrix = new THREE.Matrix4();
+
+		if( height > 0.5 && height < 1.5) {
+			//keep the size and ignore the scale
+			if(loadedScale.x != 1) {
+				var location = new THREE.Vector3(0, 0, -30);
+				var quaternion = new THREE.Quaternion().setFromUnitVectors(new THREE.Vector3(0, 0, 1), new THREE.Vector3(0, 1, 0));
+				var scale = new THREE.Vector3(loadedScale.x * 10, loadedScale.y * 10, loadedScale.z * 10)
+
+				loadMatrix.compose(location, quaternion, scale);
+		
+			}
+
+		}
+
+		//visualize
+		var defaultLength = parseFloat(length).toFixed(1);
+		var defaultWidth = parseFloat(width).toFixed(1);
+		var defaultHeight = parseFloat(height).toFixed(1);
+		$('#model_size_initialization').slideDown(300);
+		$('#model_size_initialization').find("input")[0].setAttribute("placeholder", "Length " + `${defaultLength}` + " m");
+		$('#model_size_initialization').find("input")[1].setAttribute("placeholder", "Width " + `${defaultWidth}` + " m");
+		$('#model_size_initialization').find("input")[2].setAttribute("placeholder", "Height " + `${defaultHeight}` + " m");
+
+		//this.addObject(object);
+		console.log($('#model_size_initialization').find(".fluid.ui.button"));
+
+		$('#model_size_initialization').find("button")[0].onclick =function() {
+			scope.addObject(object, loadMatrix);
+			$('#model_size_initialization').slideUp(200);
+		};
+
+	},
+
+	//function to load model into the scene
+	addObject: function ( object, loadMatrix ) {
+
+		//add the compoennts
 		var objects = [];
-
-
-		//test a material
-		// var manager = new THREE.LoadingManager();
-	 //    manager.onProgress = function ( item, loaded, total ) {
-	 //        console.log( item, loaded, total );
-	 //    };
-
-	 //    var textureLoader = new THREE.TextureLoader( manager );
-	 //    var texture = textureLoader.load( '../model/Fabric-Canyon.jpg' );
-	 //    var material = new THREE.MeshBasicMaterial( { wireframe: true});
-
-
 		object.traverse( function ( child ) {
 
 			if ( child.geometry !== undefined ) {
-				//scope.addGeometry( child.geometry );
-
-				//scope.objects.push(child);
-				child.material.envMap = scope.envMap;
+				//child.material.envMap = scope.envMap;
 				child.material.needsUpdate = true;
 				child.castShadow = true;
 				child.name = "";
@@ -614,22 +636,10 @@ Main.prototype = {
 				objects.push(child);
 				//scope.addHelper( child ); //to visualize helpers
 
-
-				//test
-
-
 			}
 
 			//if ( child.material !== undefined ) scope.addMaterial( child.material );
 		} );
-
-
-		// for(var i = 0; i < this.objects.length; i++)
-		// {
-		// 	this.furniture.add(this.objects[i]);
-		// }
-		// this.scene.add( this.furniture );s
-		// this.select( this.furniture );
 
 		//add this to array and visualize its
 		var furnitureObj = new THREE.Object3D();
@@ -641,6 +651,9 @@ Main.prototype = {
 		//furniture.setObjects(objects);
 		furniture.setCategory("straight_chair");
 		furniture.setIndex(this.furnitures.length + 1);
+
+		furniture.setLoadMatrix(loadMatrix);
+
 		this.furnitures.push(furniture);
 
 		this.scene.add(this.furnitures[this.furnitures.length - 1].getFurniture());
@@ -865,9 +878,8 @@ Main.prototype = {
 		}
 		if(object.material !== undefined) {
 
-			console.log(object.material);
-
-			//object.material.dispose();
+			//console.log(object.material);
+			object.material.dispose();
 		}
 		object = undefined;
 	},
@@ -1107,6 +1119,9 @@ Main.prototype = {
 
 	handleClick: function()
 	{
+
+		console.log("handleclick called");
+
 		if ( this.onDownPosition.distanceTo( this.onUpPosition ) === 0 ) {
 
 			if(this.onCtrlE == false && this.onCtrl == false) {
@@ -1120,15 +1135,25 @@ Main.prototype = {
 
 						this.furniture = this.furnitures[i];
 						this.select(this.furniture.getFurniture());
+<<<<<<< HEAD
 						
 						objselect = false;
 						$('.ui.blue.submit.button.getsize').show();
 						
+=======
+
+						//control switch from first-person to target orbit
+
+						console.log("selected");
+						this.customControl.switchView2TG();
+
+>>>>>>> master
 						break;
 					} else {
 						//it also calls select, to detach
 						this.select( null );
 						this.furniture = null;
+<<<<<<< HEAD
 						objselect = true;
 						$('.ui.blue.submit.button.getsize').hide();
 						//this.RemoveSizeLabel();
@@ -1153,6 +1178,11 @@ Main.prototype = {
 							$('.ui.blue.submit.button.getsize').hide();
 							//this.RemoveSizeLabel();
 						}
+=======
+
+						console.log("unselected");
+						this.customControl.switchView2FP();
+>>>>>>> master
 					}
 				}
 
@@ -1224,20 +1254,33 @@ Main.prototype = {
 	},
 
 	onMouseDown: function(event) {
-		event.preventDefault();
-		var array = this.getMousePosition( this.container, event.clientX, event.clientY );
-		this.onDownPosition.fromArray( array );
-		document.addEventListener( 'mouseup', this.onMouseUp.bind(this), false );
+
+		if(this.handleClickToCall == false)
+		{
+			event.preventDefault();
+			var array = this.getMousePosition( this.container, event.clientX, event.clientY );
+			this.onDownPosition.fromArray( array );
+			document.addEventListener( 'mouseup', this.onMouseUp.bind(this), false );
+
+			this.handleClickToCall = true;
+		}
 	},
 
 
 	onMouseUp: function(event) {
-		var array = this.getMousePosition( this.container, event.clientX, event.clientY );
-		this.onUpPosition.fromArray( array );
 
-		this.handleClick();
+		if(this.handleClickToCall == true){
 
-		document.removeEventListener( 'mouseup', this.onMouseUp.bind(this), false );
+			var array = this.getMousePosition( this.container, event.clientX, event.clientY );
+			this.onUpPosition.fromArray( array );
+
+			this.handleClick();
+
+			document.removeEventListener( 'mouseup', this.onMouseUp.bind(this), false );
+
+			this.handleClickToCall = false;
+
+		}
 	},
 
 	onTouchStart: function(event) {

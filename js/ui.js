@@ -104,6 +104,22 @@ Ui.prototype = {
 		});
 
 
+		//enable house environment
+		$('.ui.toggle.checkbox.house').checkbox({
+
+			onChecked: function() {
+      			//enable house environment
+      			scope.main.enableHouseEnvironment();
+
+    		},
+    		onUnchecked: function() {
+      			//disable house environment
+      			scope.main.disableHouseEnvironment();
+    		}
+		});
+
+		$('.ui.toggle.checkbox.house').checkbox("check");
+
 		//reset the scene
 		$('.ui.blue.submit.button.reset').click(function(){
 			scope.main.resetFurnitures();
@@ -185,35 +201,12 @@ Ui.prototype = {
 		this.rangeSlider();
 
 
-
-
-		//zhuen's block
-
-
-
-		//end of zhuen's block
-
-
-
-		//weixiang's bloack
-
-
-
-		//end of weixiang's block
-
-
-
-
-		//trif's block
-
-
-
-
-		//end of trif's block
-
+		
 
 
 		//in the end, hide all the needed items
+		$('#model_size_initialization').hide();
+
 		$('#label').hide();
 
 		$('#parameter_control_chair_align').hide();
@@ -269,6 +262,8 @@ Ui.prototype = {
 		//chair_add_plate
 		$('#operation_chair_add_plate').click(function() {
 			scope.processor.executeDesign("CHAIR_ADD", "plate");
+
+			$('#parameter_control_chair_add').show();
 		});
 
 		//chair_add_hook
@@ -277,8 +272,8 @@ Ui.prototype = {
 		});
 
 		//chair_add_flip
-		$('#operation_chair_add_flip').click(function() {
-			scope.processor.executeDesign("CHAIR_ADD", "flip");
+		$('#operation_chair_add_hang').click(function() {
+			scope.processor.executeDesign("CHAIR_ADD", "hang");
 		});
 
 		//chair_rebuild_seat
@@ -290,7 +285,8 @@ Ui.prototype = {
 
 		//chair_rebuild_back
 		$('#operation_chair_rebuild_back').click(function() {
-			scope.processor.executeDesign("CHAIR_REBUILD", "back");
+			console.log("chair_rebuild_back_rest");
+			scope.processor.executeDesign("CHAIR_REBUILD", "backrest");
 		});
 
 		//chair_rebuild_leg
@@ -404,7 +400,7 @@ Ui.prototype = {
 					var object = new THREE.OBJLoader().parse( contents );
 					object.name = filename;
 					//add to the scene
-					scope.main.addObject(object);  //this.main becomes undefined
+					scope.main.preAddObject(object);  //this.main becomes undefined
 				}, false );
 				reader.readAsText( file );
 
@@ -421,7 +417,7 @@ Ui.prototype = {
 					var collada = loader.parse( contents );
 
 					collada.scene.name = filename;
-					scope.main.addObject(collada.scene ); 
+					scope.main.preAddObject(collada.scene ); 
 
 				}, false );
 				reader.readAsText( file );
@@ -437,7 +433,7 @@ Ui.prototype = {
 
 					var loader = new THREE.GLTFLoader();
 					var gltf = loader.parse(contents);
-					scope.main.addObject(gltf.scene ); 
+					scope.main.preAddObject(gltf.scene ); 
 
 				}, false );
 

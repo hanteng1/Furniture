@@ -250,6 +250,14 @@ function Furniture(furniture) {
 		this.index = index;
 	}
 
+	//set to the property scale
+	this.setLoadMatrix = function(loadMatrix) {
+
+		this.getFurniture().applyMatrix(loadMatrix);
+				
+	}
+
+
 	this.getFurniture = function(){
 		return this.furniture;
 	}
