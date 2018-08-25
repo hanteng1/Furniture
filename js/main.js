@@ -30,8 +30,8 @@ function Main()
 
 	//category
 	//todo: an floating window to select category
-	//this.category = "chair";
-	this.category = "cabinet";
+	this.category = "chair";
+	//this.category = "cabinet";
 
 	//only stores data
 	this.container = document.getElementById('container');
@@ -592,6 +592,7 @@ Main.prototype = {
 			//keep the size and ignore the scale
 			if(loadedScale.x != 1) {
 				var location = new THREE.Vector3(0, 0, -30);
+				//var location = new THREE.Vector3();
 				//this will cause errors in addAxis
 				//var quaternion = new THREE.Quaternion().setFromUnitVectors(new THREE.Vector3(0, 0, 1), new THREE.Vector3(0, 1, 0));
 				var quaternion = new THREE.Quaternion();
@@ -1122,7 +1123,7 @@ Main.prototype = {
 	handleClick: function()
 	{
 
-		console.log("handleclick called");
+		//console.log("handleclick called");
 
 		if ( this.onDownPosition.distanceTo( this.onUpPosition ) === 0 ) {
 
@@ -1146,7 +1147,7 @@ Main.prototype = {
 
 						//control switch from first-person to target orbit
 
-						console.log("selected");
+						//console.log("selected");
 						this.customControl.switchView2TG();
 
 
@@ -1187,7 +1188,7 @@ Main.prototype = {
 					}
 					
 					if (SomethingSelected == false){
-						console.log("unselected");
+						//console.log("unselected");
 						this.customControl.switchView2FP();
 					}
 					
@@ -1562,6 +1563,9 @@ Main.prototype = {
 
 				}else if( object instanceof THREE.BoxHelper){
 
+
+				}else if(object == this.house) {
+
 				}else{
 					this.removeFromScene(object); 
 				}
@@ -1645,10 +1649,8 @@ Main.prototype = {
 		//add the corners to the labeled and axised components
 		
 		for(var i = 0; i < this.furnitures.length; i++) {
-			//this.furnitures[i].addCorners();
+			this.furnitures[i].addCorners();
 			this.furnitures[i].addtoPoint();
-
-			//this.scene.add(this.furnitures[i].points);
 		}
 		
 
