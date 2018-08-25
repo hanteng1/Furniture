@@ -608,6 +608,7 @@ Chair_Rebuild.prototype = {
 			///console.log(simplified);
 			//cut
 			offset = furObj.getComponentCenterPosition('midframe').y - furObj.getComponentSize('midframe').y;		
+			offset = offset*4.5;
 			var cutResultGeometry = chairCutBack(simplified, offset);
 			var newleg = new THREE.Mesh( cutResultGeometry, legMaterial );
 			furniture.remove(legs[i]);
@@ -673,7 +674,7 @@ Chair_Rebuild.prototype = {
 			scope.main.scene.add(LegModel);
 			scope.main.Sceneobjects.push(LegModel);
 			LegModel.name = 'stand';
-			LegModel.scale.set(9,9,9);
+			LegModel.scale.set(2.5,2.5,2.5);
 
 			var box = new THREE.Box3();
 			box.setFromObject(LegModel);
@@ -689,7 +690,9 @@ Chair_Rebuild.prototype = {
 								  LegPosi.y + diff.y - LegCenter.y ,
 								  LegPosi.z + diff.z );
 
-			LegPosi = LegModel.position;
+			LegPosi = new THREE.Vector3(LegModel.position.x,
+										LegModel.position.y,
+										LegModel.position.z);
 			
 			//calculate the leg inverse metrix
 			var inverseMatrix = new THREE.Matrix4();
@@ -697,16 +700,13 @@ Chair_Rebuild.prototype = {
 			LegModel.applyMatrix(inverseMatrix);
 
 			//add new leg to original model
-			//group.worldToLocal(LegPosi);
+			group.worldToLocal(LegPosi);
 			box.setFromObject(LegModel);
 			box.getCenter(LegCenter);
+			
 
-			LegModel.position.set( LegPosi.x - LegCenter.x - SeatSize.x/2 , 
-								   LegPosi.y - LegCenter.y + SeatSize.z/2 , 
-								   SeatPosi.y - LegCenter.z*2);
-			
 			group.add(LegModel);
-			
+			LegModel.position.set(LegPosi.x , LegPosi.y, LegPosi.z);
 
 		} );
 	},

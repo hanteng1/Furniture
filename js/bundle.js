@@ -2866,6 +2866,7 @@ Chair_Rebuild.prototype = {
 			///console.log(simplified);
 			//cut
 			offset = furObj.getComponentCenterPosition('midframe').y - furObj.getComponentSize('midframe').y;		
+			offset = offset*4.5;
 			var cutResultGeometry = chairCutBack(simplified, offset);
 			var newleg = new THREE.Mesh( cutResultGeometry, legMaterial );
 			furniture.remove(legs[i]);
@@ -2931,7 +2932,7 @@ Chair_Rebuild.prototype = {
 			scope.main.scene.add(LegModel);
 			scope.main.Sceneobjects.push(LegModel);
 			LegModel.name = 'stand';
-			LegModel.scale.set(9,9,9);
+			LegModel.scale.set(2.5,2.5,2.5);
 
 			var box = new THREE.Box3();
 			box.setFromObject(LegModel);
@@ -2947,7 +2948,9 @@ Chair_Rebuild.prototype = {
 								  LegPosi.y + diff.y - LegCenter.y ,
 								  LegPosi.z + diff.z );
 
-			LegPosi = LegModel.position;
+			LegPosi = new THREE.Vector3(LegModel.position.x,
+										LegModel.position.y,
+										LegModel.position.z);
 			
 			//calculate the leg inverse metrix
 			var inverseMatrix = new THREE.Matrix4();
@@ -2955,16 +2958,13 @@ Chair_Rebuild.prototype = {
 			LegModel.applyMatrix(inverseMatrix);
 
 			//add new leg to original model
-			//group.worldToLocal(LegPosi);
+			group.worldToLocal(LegPosi);
 			box.setFromObject(LegModel);
 			box.getCenter(LegCenter);
+			
 
-			LegModel.position.set( LegPosi.x - LegCenter.x - SeatSize.x/2 , 
-								   LegPosi.y - LegCenter.y + SeatSize.z/2 , 
-								   SeatPosi.y - LegCenter.z*2);
-			
 			group.add(LegModel);
-			
+			LegModel.position.set(LegPosi.x , LegPosi.y, LegPosi.z);
 
 		} );
 	},
@@ -5140,7 +5140,7 @@ function MarkSize( main , TargetObj ){
 
 }
 function loadText(main , num , position , rotat){
-	var text = (Math.round(num*10)/100).toString();
+	var text = (Math.round(num)/100).toString();
 	var loader = new THREE.FontLoader();
 	var font = loader.load(
 		// resource URL
@@ -6506,8 +6506,8 @@ function Main()
 
 	//category
 	//todo: an floating window to select category
-	//this.category = "chair";
-	this.category = "cabinet";
+	this.category = "chair";
+	//this.category = "cabinet";
 
 	//only stores data
 	this.container = document.getElementById('container');
@@ -7071,7 +7071,10 @@ Main.prototype = {
 			//keep the size and ignore the scale
 			if(loadedScale.x != 1) {
 				var location = new THREE.Vector3(0, 0, -30);
-				var quaternion = new THREE.Quaternion().setFromUnitVectors(new THREE.Vector3(0, 0, 1), new THREE.Vector3(0, 1, 0));
+				//this will cause errors in addAxis
+				//var quaternion = new THREE.Quaternion().setFromUnitVectors(new THREE.Vector3(0, 0, 1), new THREE.Vector3(0, 1, 0));
+				var quaternion = new THREE.Quaternion();
+
 				var scale = new THREE.Vector3(loadedScale.x * 10, loadedScale.y * 10, loadedScale.z * 10)
 
 				loadMatrix.compose(location, quaternion, scale);
@@ -7535,7 +7538,6 @@ Main.prototype = {
 		this.addMultiSelection(groupObj);
 
 	},
-
 
 
 	//label a selected part
