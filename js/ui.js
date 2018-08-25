@@ -306,6 +306,7 @@ Ui.prototype = {
 		//dresser
 		$('#operation_dresser_add_cut_chair').click(function() {
 			scope.processor.executeDesign("DRESSER_ADD", "cut_chair");
+		});
 
 		//cabinet_kallax_chair
 		$('#operation_cabinet_kallax_chair').click(function() {
