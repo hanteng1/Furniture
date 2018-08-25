@@ -1162,6 +1162,7 @@ Main.prototype = {
 				
 				//if furniture isn't selected ,select object
 				if (objselect == true){
+					var SomethingSelected =false;
 					for(var i = 0; i < this.Sceneobjects.length ; i++){
 						var intersects = this.getIntersect( this.onUpPosition, this.Sceneobjects[i]);
 
@@ -1170,6 +1171,7 @@ Main.prototype = {
 							this.furniture = this.Sceneobjects[i];
 							this.select(this.Sceneobjects[i]);
 							$('.ui.blue.submit.button.getsize').show();
+							SomethingSelected = true;
 							break;
 						} else {
 							//it also calls select, to detach
@@ -1177,13 +1179,16 @@ Main.prototype = {
 							this.select( null );
 							$('.ui.blue.submit.button.getsize').hide();
 							//this.RemoveSizeLabel();
+
 						}
 
-
+					}
+					
+					if (SomethingSelected == false){
 						console.log("unselected");
 						this.customControl.switchView2FP();
-
 					}
+					
 				}
 
 
