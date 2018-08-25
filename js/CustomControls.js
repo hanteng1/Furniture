@@ -163,6 +163,9 @@ THREE.CustomControls = function ( object, domElement ) {
 			//scope.target
 
 			scope.target.copy(scope.fp_target);
+
+			//problem
+			//it will make a sudden jump
 			scope.tg_update();
 
 			scope.target.copy(new THREE.Vector3(0, 0, -30));
@@ -204,11 +207,15 @@ THREE.CustomControls = function ( object, domElement ) {
 			scope.lerpStartPos.copy(scope.object.position);
 
 			//look at, problem. this is normalize
+
+			//this is where the problem is
+			//direction is not the lookatdir
+
 			scope.lerpStartLookatDir = new THREE.Vector3();
 			scope.object.getWorldDirection( scope.lerpStartLookatDir );
 			scope.lerpStartLookatDir.multiplyScalar(90);
 
-			console.log(scope.lerpStartLookatDir);
+			//console.log(scope.lerpStartLookatDir);
 
 			scope.transiting = true;
 		}
@@ -427,9 +434,7 @@ THREE.CustomControls = function ( object, domElement ) {
 		targetPosition.x = position.x + 100 * Math.sin( this.phi ) * Math.cos( this.theta );
 		targetPosition.y = position.y + 100 * Math.cos( this.phi );
 		targetPosition.z = position.z + 100 * Math.sin( this.phi ) * Math.sin( this.theta );
-
-
-		console.log(targetPosition);
+		//console.log(targetPosition);
 
 		this.object.lookAt( targetPosition );
 

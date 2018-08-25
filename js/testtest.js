@@ -1,16 +1,28 @@
 function testtest(){
 
 	
-	var path = [];
+	// function a() {
+ //    	alert('A');
+	// }
+	// //alerts 'A', returns undefined
 
-	path.push([1, 1]);
-	path.push([2, 2]);
-	path.push([3, 3]);
+	// function b() {
+	//     alert('B');
+	//     return a;
+	// }
+	// //alerts 'B', returns function a
 
-	path = path.map(point => {point[0] -= 1; point[1] -= 1; return point});
+	// this.c = function () {
+	//     alert('C');
+	//     return a;
+	// }();
+	// //alerts 'C', alerts 'A', returns undefined
 
-	console.log(path);
+	// //alert("Function 'a' returns " + a());
+	// //alert("Function 'b' returns " + b());
+	// //alert("Function 'c' returns " + c());
 
+	// this.c(); //only calls a very interesting
 
 };
 
