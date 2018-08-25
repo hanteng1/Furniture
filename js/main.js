@@ -592,7 +592,10 @@ Main.prototype = {
 			//keep the size and ignore the scale
 			if(loadedScale.x != 1) {
 				var location = new THREE.Vector3(0, 0, -30);
-				var quaternion = new THREE.Quaternion().setFromUnitVectors(new THREE.Vector3(0, 0, 1), new THREE.Vector3(0, 1, 0));
+				//this will cause errors in addAxis
+				//var quaternion = new THREE.Quaternion().setFromUnitVectors(new THREE.Vector3(0, 0, 1), new THREE.Vector3(0, 1, 0));
+				var quaternion = new THREE.Quaternion();
+
 				var scale = new THREE.Vector3(loadedScale.x * 10, loadedScale.y * 10, loadedScale.z * 10)
 
 				loadMatrix.compose(location, quaternion, scale);
@@ -1057,7 +1060,6 @@ Main.prototype = {
 		this.addMultiSelection(groupObj);
 
 	},
-
 
 
 	//label a selected part
