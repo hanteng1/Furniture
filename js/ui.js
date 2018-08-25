@@ -162,7 +162,21 @@ Ui.prototype = {
 			scope.main.applyDesign();
 
 		});
+		$('.ui.blue.submit.button.getsize').click(function(){
 
+			scope.main.LabelSize();
+
+		});
+		$('.ui.red.submit.button.removesize').click(function(){
+
+			scope.main.RemoveSizeLabel();
+			
+		});
+		$('.ui.blue.submit.button.getdis').click(function(){
+
+			scope.main.GetDistance();
+			
+		});
 
 		//chair_align controller function
 		this.designButtons();
@@ -212,7 +226,9 @@ Ui.prototype = {
 		$('.operations.operation_chair_rebuild').hide();
 		$('.operations.operation_cabinet_kallax_one').hide();
 		$('.operations.operation_cabinet_kallax_two').hide();
-		
+		$('.ui.blue.submit.button.getsize').hide();
+		$('.ui.red.submit.button.removesize').hide();
+		$('.ui.blue.submit.button.getdis').hide();
 
 
 	},

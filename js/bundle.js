@@ -168,7 +168,7 @@ function Cabinet_kallax (main){
 
 	this.main = main;
 	this.furnitures = main.furnitures;
-
+	this.Sceneobjects = main.Sceneobjects;
 	this.reference = null;
 
 }
@@ -281,7 +281,7 @@ Cabinet_kallax.prototype = {
 		var NewBroad = new THREE.Mesh( geometry, newmaterial );
 		//set broad position
 		NewBroad.position.set(BroadPosi.x , BroadPosi.y , BroadPosi.z);
-
+		this.main.Sceneobjects.push(NewBroad);
 		//show broad
 		var scope = this;
 		scope.main.scene.add(NewBroad);
@@ -449,33 +449,8 @@ Cabinet_kallax.prototype = {
 										   (f1Center.z + f2Center.z)/2 - BroadSize.z/2);
 			this.loadTwinBed(f1Center , f2Center , BroadSize , BroadPosi);
 		}
-		//show bed size text
-		this.loadText( (Math.round(BroadSize.x*100)/100).toString() , 
-						new THREE.Vector3((f1Center.x + f2Center.x)/2 ,
-														fSize.y	,
-														fSize.z + 1), 
-					   0 );
-		this.loadLine(	new THREE.Vector3(  funiture1.position.x , 
-											fSize.y ,
-											fSize.z + 1),
-				 		new THREE.Vector3(	funiture2.position.x + fSize.x, 
-											fSize.y ,
-											fSize.z + 1)
-				 	);
-		/*
-		this.loadText( (Math.round((BroadSize.x - fSize.x*2)*100)/100).toString() , 
-						new THREE.Vector3((f1Center.x + f2Center.x)/2 ,
-														0	,
-														fSize.z + 1), 
-					   0 );
-		this.loadLine(	new THREE.Vector3(  funiture1.position.x + fSize.x, 
-											0 ,
-											fSize.z + 1),
-				 		new THREE.Vector3(	funiture2.position.x , 
-											0 ,
-											fSize.z + 1)
-				 	);
-		*/
+
+		
 		var geometry = CabinetMakeBedBroad( BroadSize.x , BroadSize.y , BroadSize.z );
 		var texture = new THREE.TextureLoader().load( 'images/material/material8.jpg' );
 		texture.repeat.set(0.1, 0.1);
@@ -487,7 +462,7 @@ Cabinet_kallax.prototype = {
 
 		//show broad
 		scope.main.scene.add(NewBroad);
-
+		scope.main.Sceneobjects.push(NewBroad);
 		//creat other 4 broads
 		if (mode == "queen" && fSize.z < 81-(BroadSize.y+1)){
 			//set texture info
@@ -510,37 +485,7 @@ Cabinet_kallax.prototype = {
 			Broad2.position.set(BroadPosi.x , 0				 , BroadPosi.z - (81 - BroadSize.z) );
 			Broad3.position.set(BroadPosi.x , BroadSize.y + 1, BroadPosi.z - (81 - BroadSize.z) );
 			Broad4.position.set(BroadPosi.x , BroadSize.y + 1, BroadPosi.z - (BroadSize.y + 1) );
-
-			scope.main.scene.add(Broad1);
-			scope.main.scene.add(Broad2);
-			scope.main.scene.add(Broad3);
-			scope.main.scene.add(Broad4);
-
-			//show bed size text
-			this.loadText( (Math.round( 81 *100)/100).toString() , 
-							new THREE.Vector3(	funiture2.position.x + fSize.x+1,
-															fSize.y	,
-															f2Center.z ), 
-						   90 );
-			this.loadLine(	new THREE.Vector3(  funiture2.position.x + fSize.x+1, 
-												fSize.y ,
-												funiture2.position.z + fSize.z),
-					 		new THREE.Vector3(	funiture2.position.x + fSize.x+1, 
-												fSize.y ,
-												funiture2.position.z + fSize.z-81)
-					 	);
-			this.loadText( (Math.round( (81 - BroadSize.z) *100)/100).toString() , 
-							new THREE.Vector3(	funiture2.position.x + fSize.x+1,
-															0	,
-												BroadPosi.z - (81 - BroadSize.z)/2 ), 
-						   90 );
-			this.loadLine(	new THREE.Vector3(  funiture2.position.x + fSize.x+1, 
-												0 ,
-												funiture2.position.z  ),
-					 		new THREE.Vector3(	funiture2.position.x + fSize.x+1, 
-												0 ,
-												funiture2.position.z + fSize.z-81)
-					 	);
+			
 		}
 		else if (mode == "twin" && fSize.z < 75-(BroadSize.y+1) ){
 			//set texture info
@@ -564,36 +509,6 @@ Cabinet_kallax.prototype = {
 			Broad3.position.set(BroadPosi.x , BroadSize.y + 1, BroadPosi.z - (75 - BroadSize.z) );
 			Broad4.position.set(BroadPosi.x , BroadSize.y + 1, BroadPosi.z - (BroadSize.y + 1) );
 
-			scope.main.scene.add(Broad1);
-			scope.main.scene.add(Broad2);
-			scope.main.scene.add(Broad3);
-			scope.main.scene.add(Broad4);
-			//show bed size text
-			this.loadText( (Math.round( 75 *100)/100).toString() , 
-							new THREE.Vector3(	funiture2.position.x + fSize.x+1,
-															fSize.y	,
-															f2Center.z ), 
-						   90 );
-			this.loadLine(	new THREE.Vector3(  funiture2.position.x + fSize.x+1, 
-												fSize.y ,
-												funiture2.position.z + fSize.z),
-					 		new THREE.Vector3(	funiture2.position.x + fSize.x+1, 
-												fSize.y ,
-												funiture2.position.z + fSize.z-75)
-					 	);
-			this.loadText( (Math.round( (75 - BroadSize.z) *100)/100).toString() , 
-							new THREE.Vector3(	funiture2.position.x + fSize.x+1,
-															0	,
-												BroadPosi.z - (75 - BroadSize.z)/2 ), 
-						   90 );
-			this.loadLine(	new THREE.Vector3(  funiture2.position.x + fSize.x+1, 
-												0 ,
-												funiture2.position.z  ),
-					 		new THREE.Vector3(	funiture2.position.x + fSize.x+1, 
-												0 ,
-												funiture2.position.z + fSize.z-75)
-					 	);
-
 		}
 		
 		var group = new THREE.Group();
@@ -602,9 +517,7 @@ Cabinet_kallax.prototype = {
 		group.add( Broad3 );
 		group.add( Broad4 );
 		scope.main.scene.add(group);
-		MarkSize(this.main , group );
-		//MarkSize(this.main , funiture2 );
-		MarkBetweenSize(this.main ,funiture1 ,funiture2 );
+		scope.main.Sceneobjects.push(group);
 
 
 	},
@@ -624,6 +537,7 @@ Cabinet_kallax.prototype = {
 			Model = collada.scene;
 
 			scope.main.scene.add(Model);
+			scope.main.Sceneobjects.push(Model);
 			Model.scale.set(40,40,40);
 			Model.rotateOnWorldAxis(new THREE.Vector3(0,1,0) , 90 * Math.PI/180);
 
@@ -652,7 +566,7 @@ Cabinet_kallax.prototype = {
 		loader.load( ModelPath , function ( collada ) {
 			
 			Model = collada.scene;
-
+			scope.main.Sceneobjects.push(Model);
 			scope.main.scene.add(Model);
 			Model.scale.set(40,40,40);
 			Model.rotateOnWorldAxis(new THREE.Vector3(0,1,0) , 90 * Math.PI/180);
@@ -664,17 +578,7 @@ Cabinet_kallax.prototype = {
 			Model.position.set( bedCenter.x + BroadSize.x/2, 
 								BroadPosi.y + 0.5 , 
 								bedCenter.z + BroadSize.z/2);
-			/*
-			var box 		= new THREE.Box3();
-			var bedCenter	= new THREE.Vector3( ( f1Center.x + f2Center.x )/2 ,
-												 ( f1Center.y + f2Center.y )/2 ,
-												 ( f1Center.z + f2Center.z )/2 );
-			var bedSize 	= new THREE.Vector3();
-
-			Model.position.set( bedCenter.x + BroadSize.x/2, 
-								BroadPosi.y + 0.5 , 
-								bedCenter.z + BroadSize.z/2);
-			*/
+			
 		});
 	},
 
@@ -745,6 +649,12 @@ Cabinet_kallax.prototype = {
 				new_furniture.normalAxises[key].copy(furniture.normalAxises[key]);
 			}
 		}
+
+		for(var i = main.selectionBoxes.length-1; i >-1 ; i--)
+		{
+			main.removeFromScene(main.selectionBoxes[i]);
+		}
+		main.Sceneobjects=[];
 
 	},
 
@@ -2627,7 +2537,7 @@ Chair_Rebuild.prototype = {
 			
 			LegModel = collada.scene;
 			scope.main.scene.add(LegModel);
-
+			scope.main.Sceneobjects.push(LegModel);
 			LegModel.name = 'stand';
 			LegModel.scale.set(9,9,9);
 
@@ -2777,7 +2687,9 @@ Chair_Rebuild.prototype = {
 		//creat leg model
 		var Leg1Model = new THREE.Mesh( LegGeometry, newmaterial );
 		var Leg2Model = new THREE.Mesh( LegGeometry, newmaterial );
-
+		this.main.Sceneobjects.push(Leg1Model);
+		this.main.Sceneobjects.push(Leg2Model);
+		
 		//get leg and f2 center
 		var LegCenter = new THREE.Vector3();
 		box.setFromObject(Leg1Model);
@@ -2827,41 +2739,27 @@ function MarkBetweenSize( main , TargetObj1 , TargetObj2 ){
 	var num = 1;
 
 	//detect the funiture component
-	for(var i = main.scene.children.length - 1; i > -1; i -- ){ 
-		var object =  main.scene.children[i];	
+	for(var i = main.furnitures.length - 1; i > -1; i -- ){ 
+		var object =  main.furnitures[i].getFurniture();
 		
 		if(object.isObject3D){
+			//get object center
+			Box.setFromObject(object);
+			Box.getCenter(objCenter1);
 
-			if ( object instanceof THREE.Camera ) {
-
-			} else if ( object instanceof THREE.PointLight ) {
-
-			} else if ( object instanceof THREE.DirectionalLight ) {
-
-			} else if ( object instanceof THREE.SpotLight ) {					
-
-			} else if ( object instanceof THREE.HemisphereLight ) {
-
-			} else if ( object instanceof THREE.AmbientLight ) {
-
-			} else if ( object instanceof THREE.GridHelper ) {
-
-			} else if ( object instanceof THREE.TransformControls ){
-
-			} else if ( object instanceof AddAxis){
-
-			} else if ( object instanceof THREE.BoxHelper){
-
-			} else{
-				//get object center
-				Box.setFromObject(object);
-				Box.getCenter(objCenter1);
-
-				PosArr.push(objCenter1.x);
-				PosArr.push(objCenter1.y);
-				PosArr.push(objCenter1.z);
-			}
+			PosArr.push(objCenter1.x);
+			PosArr.push(objCenter1.y);
+			PosArr.push(objCenter1.z);
 		}
+	}
+	for(var i = main.Sceneobjects.length - 1; i > -1; i -- ){
+		//get object center
+		Box.setFromObject(object);
+		Box.getCenter(objCenter1);
+
+		PosArr.push(objCenter1.x);
+		PosArr.push(objCenter1.y);
+		PosArr.push(objCenter1.z);
 	}
 
 	//set funiture bounding box , box center
@@ -3182,6 +3080,7 @@ function loadText(main , text , position , rotat){
 			mesh.position.set( position.x , position.y +0.5 , position.z );
 			mesh.rotateOnWorldAxis(new THREE.Vector3(0,1,0) , rotat * Math.PI/180);
 			main.scene.add( mesh );
+			main.SizeObj.push(mesh);
 		}
 	);
 
@@ -3203,7 +3102,7 @@ function loadLine( main , point1 , point2){
 
 		var line = new THREE.Line( geometry, material );
 		main.scene.add( line );
-
+		main.SizeObj.push(line);
 	}
 
 module.exports = MarkBetweenSize;
@@ -3223,41 +3122,27 @@ function MarkSize( main , TargetObj ){
 	var PosArr		= [];
 
 	//detect the funiture component
-	for(var i = main.scene.children.length - 1; i > -1; i -- ){ 
-		var object =  main.scene.children[i];	
+	for(var i = main.furnitures.length - 1; i > -1; i -- ){ 
+		var object =  main.furnitures[i].getFurniture();
 		
 		if(object.isObject3D){
+			//get object center
+			Box.setFromObject(object);
+			Box.getCenter(objCenter);
 
-			if ( object instanceof THREE.Camera ) {
-
-			} else if ( object instanceof THREE.PointLight ) {
-
-			} else if ( object instanceof THREE.DirectionalLight ) {
-
-			} else if ( object instanceof THREE.SpotLight ) {					
-
-			} else if ( object instanceof THREE.HemisphereLight ) {
-
-			} else if ( object instanceof THREE.AmbientLight ) {
-
-			} else if ( object instanceof THREE.GridHelper ) {
-
-			} else if ( object instanceof THREE.TransformControls ){
-
-			} else if ( object instanceof AddAxis){
-
-			} else if ( object instanceof THREE.BoxHelper){
-
-			} else{
-				//get object center
-				Box.setFromObject(object);
-				Box.getCenter(objCenter);
-
-				PosArr.push(objCenter.x);
-				PosArr.push(objCenter.y);
-				PosArr.push(objCenter.z);
-			}
+			PosArr.push(objCenter.x);
+			PosArr.push(objCenter.y);
+			PosArr.push(objCenter.z);
 		}
+	}
+	for(var i = main.Sceneobjects.length - 1; i > -1; i -- ){
+		//get object center
+		Box.setFromObject(object);
+		Box.getCenter(objCenter);
+
+		PosArr.push(objCenter.x);
+		PosArr.push(objCenter.y);
+		PosArr.push(objCenter.z);
 	}
 
 	//set funiture bounding box , box center
@@ -3496,7 +3381,7 @@ function MarkSize( main , TargetObj ){
 									  objCenter.y - objSize.y/2 ,
 									  objCenter.z + objSize.z/2) );
 	}
-	else{
+	else{//left to the user
 		//show size number
 		loadText( 	main , 
 					(Math.round(objSize.z*100)/100).toString() ,
@@ -3518,11 +3403,11 @@ function MarkSize( main , TargetObj ){
 									  objCenter.z - objSize.z/2) , 
 					new THREE.Vector3(objCenter.x - objSize.x/2 -1.5,
 									  objCenter.y - objSize.y/2 ,
-									  objCenter.z + objSize.z/2) );
+									  objCenter.z - objSize.z/2) );
 		loadLine( 	main , 
 					new THREE.Vector3(objCenter.x - objSize.x/2 -0.5,
 									  objCenter.y - objSize.y/2 ,
-									  objCenter.z - objSize.z/2) , 
+									  objCenter.z + objSize.z/2) , 
 					new THREE.Vector3(objCenter.x - objSize.x/2 -1.5,
 									  objCenter.y - objSize.y/2 ,
 									  objCenter.z + objSize.z/2) );
@@ -3555,6 +3440,7 @@ function loadText(main , text , position , rotat){
 			mesh.position.set( position.x , position.y +0.5 , position.z );
 			mesh.rotateOnWorldAxis(new THREE.Vector3(0,1,0) , rotat * Math.PI/180);
 			main.scene.add( mesh );
+			main.SizeObj.push( mesh );
 		}
 	);
 
@@ -3576,7 +3462,7 @@ function loadLine( main , point1 , point2){
 
 		var line = new THREE.Line( geometry, material );
 		main.scene.add( line );
-
+		main.SizeObj.push(line);
 	}
 
 module.exports = MarkSize;
@@ -4780,6 +4666,10 @@ const computeConvexHull = require('./computeConvexHull')
 //test cut
 const cadCutByPlane = require('./cadCutByPlane')
 
+//Wei Hsiang start
+const MarkSize = require('./MarkSize')
+const MarkBetweenSize = require('./MarkBetweenSize')
+//Wei Hsiang end
 
 function Main()
 {
@@ -4821,10 +4711,19 @@ function Main()
 	this.onUpPosition = new THREE.Vector2();
 	this.onDoubleClickPosition = new THREE.Vector2();
 	this.onCtrlE = false;
-
+	this.onCtrl = false;
 	//store the furniture object and transformation info
 	//arrays of Furniture
 	this.furnitures = [];  
+
+	//arrays of scene objects
+	this.Sceneobjects = [];
+
+	//arrays of size onject
+	this.SizeObj = [];
+	
+	//arrays of select two object
+	this.DistanceObj = [];
 
 	//this is to store the furnitures before any chance
 	//simply copy of the this.furnitures
@@ -5505,7 +5404,11 @@ Main.prototype = {
 		}else{
 			//multi select for merge
 			this.addMultiSelection(this.selected);
-		}		
+		}	
+
+		if (this.onCtrl == true){
+			this.SelectTwo(object);
+		}	
 
 	},
 
@@ -5571,6 +5474,34 @@ Main.prototype = {
 		}
 	},
 
+	SelectTwo: function(object){
+		//this.selectionBox.visible = false;
+		//this.transformControls.detach();
+		
+		if ( object !== null && object !== this.scene 
+			&& object !== this.camera && this.DistanceObj.length<3) {
+			this.box.setFromObject( object );
+			if ( this.box.isEmpty() === false ) {
+				var selectionBox = new THREE.BoxHelper();
+				selectionBox.setFromObject( object );
+				selectionBox.material.depthTest = false;
+				selectionBox.material.transparent = true;
+				selectionBox.visible = true;
+
+				this.DistanceObj.push(selectionBox);
+				this.selectionBoxes.push(selectionBox);
+				this.scene.add( selectionBox );
+
+				this.selected = object;
+
+			}
+		}else {
+			this.selected = null;
+		}
+		if(this.DistanceObj.length == 2){
+			$('.ui.blue.submit.button.getdis').show();
+		}
+	},
 
 	removeFromScene: function(object){
 		this.scene.remove(object);
@@ -5824,7 +5755,9 @@ Main.prototype = {
 	{
 		if ( this.onDownPosition.distanceTo( this.onUpPosition ) === 0 ) {
 
-			if(this.onCtrlE == false) {
+			if(this.onCtrlE == false && this.onCtrl == false) {
+
+				var objselect = true;
 				//only select the furniture
 				for(var i = 0; i < this.furnitures.length; i++) {
 					var intersects = this.getIntersect( this.onUpPosition, this.furnitures[i].getFurniture());
@@ -5833,15 +5766,44 @@ Main.prototype = {
 
 						this.furniture = this.furnitures[i];
 						this.select(this.furniture.getFurniture());
-
+						
+						objselect = false;
+						$('.ui.blue.submit.button.getsize').show();
+						
 						break;
 					} else {
 						//it also calls select, to detach
 						this.select( null );
 						this.furniture = null;
+						objselect = true;
+						$('.ui.blue.submit.button.getsize').hide();
+						//this.RemoveSizeLabel();
 					}
 				}
-			}else{
+				
+				//if furniture isn't selected ,select object
+				if (objselect == true){
+					for(var i = 0; i < this.Sceneobjects.length ; i++){
+						var intersects = this.getIntersect( this.onUpPosition, this.Sceneobjects[i]);
+
+						if ( intersects.length > 0 ) {
+							
+							this.furniture = this.Sceneobjects[i];
+							this.select(this.Sceneobjects[i]);
+							$('.ui.blue.submit.button.getsize').show();
+							break;
+						} else {
+							//it also calls select, to detach
+							this.furniture = null;
+							this.select( null );
+							$('.ui.blue.submit.button.getsize').hide();
+							//this.RemoveSizeLabel();
+						}
+					}
+				}
+
+
+			}else if (this.onCtrlE == true && this.onCtrl == false){
 				//select from explode objects, this.furniture should not be null
 				var intersects = this.getIntersects( this.onUpPosition, this.furniture.getObjects());
 
@@ -5862,6 +5824,47 @@ Main.prototype = {
 					//it also calls select, to detach
 					this.select( null );
 				}
+			}
+			//select two obj for getting distance
+			else if(this.onCtrl == true){
+				console.log('select two');
+				var objselect = true;
+				//only select the furniture
+				for(var i = 0; i < this.furnitures.length; i++) {
+					var intersects = this.getIntersect( this.onUpPosition, this.furnitures[i].getFurniture());
+
+					if ( intersects.length > 0 ) {
+
+						this.furniture = this.furnitures[i];
+						this.select(this.furniture.getFurniture());
+						
+						objselect = false;
+						break;
+					} else {
+						//it also calls select, to detach
+						this.select( null );
+						this.furniture = null;
+						objselect = true;
+					}
+				}
+				//if furniture isn't selected ,select object
+				if (objselect == true){
+					for(var i = 0; i < this.Sceneobjects.length ; i++){
+						var intersects = this.getIntersect( this.onUpPosition, this.Sceneobjects[i]);
+
+						if ( intersects.length > 0 ) {
+							
+							this.furniture = this.Sceneobjects[i];
+							this.select(this.Sceneobjects[i]);
+							break;
+						} else {
+							//it also calls select, to detach
+							this.furniture = null;
+							this.select( null );
+						}
+					}
+				}
+
 			}
 		}
 	},
@@ -5952,6 +5955,10 @@ Main.prototype = {
 
 			//delete
 
+		}else if(keyCode == 17 && this.onCtrl == false) {//press Ctrl button
+
+			this.onCtrl = true;
+			console.log('Ctrl down');
 		}
 
 
@@ -6041,12 +6048,20 @@ Main.prototype = {
 					this.furniture = undefined;
 					this.select(null);
 
-
 				}
 
 			}
 		}
 
+		if(this.onCtrl == true){
+			this.onCtrl = false;
+			console.log('Ctrl up');
+			this.DistanceObj = [];
+			for(var i = 0; i < this.selectionBoxes.length; i++)
+				{
+					this.removeFromScene(this.selectionBoxes[i]);
+				}
+		}
 
 
 
@@ -6166,6 +6181,9 @@ Main.prototype = {
 		$('.operations.operation_chair_rebuild').hide();
 		$('.operations.operation_cabinet_kallax_one').hide();
 		$('.operations.operation_cabinet_kallax_two').hide();
+		$('.ui.blue.submit.button.getsize').hide();
+		$('.ui.red.submit.button.removesize').hide();
+		$('.ui.blue.submit.button.getdis').hide();
 
 		this.furnitures.length = 0;	
 
@@ -6202,7 +6220,11 @@ Main.prototype = {
 			}
 
 		}
-
+		for(var i = this.selectionBoxes.length-1; i >-1 ; i--)
+		{
+			this.removeFromScene(this.selectionBoxes[i]);
+		}
+		this.Sceneobjects=[];
 
 	},
 
@@ -6261,6 +6283,9 @@ Main.prototype = {
 		$('.operations.operation_chair_rebuild').hide();
 		$('.operations.operation_cabinet_kallax_one').hide();
 		$('.operations.operation_cabinet_kallax_two').hide();
+		$('.ui.blue.submit.button.getsize').hide();
+		$('.ui.red.submit.button.removesize').hide();
+		$('.ui.blue.submit.button.getdis').hide();
 
 		this.processor.init();
 		//this.processor.executeDesign();
@@ -6337,6 +6362,38 @@ Main.prototype = {
 
 		
 
+	},
+
+	LabelSize: function(){
+
+		try {
+    		MarkSize(this, this.furniture);
+		}
+		catch(err) {
+    		MarkSize(this, this.furniture.getFurniture());
+		}
+		//show the remove button
+		$('.ui.red.submit.button.removesize').show();
+
+	},
+
+	RemoveSizeLabel: function(){
+		for(var i = this.SizeObj.length - 1; i > -1; i -- ){ 
+				
+			var object =  this.SizeObj[i];
+			this.removeFromScene(object);
+
+		}
+		//hide the remove button
+		$('.ui.red.submit.button.removesize').hide();
+	},
+	GetDistance: function(){
+
+		MarkBetweenSize(this , this.DistanceObj[0] , this.DistanceObj[1]);
+		this.DistanceObj = [];
+		$('.ui.blue.submit.button.getdis').hide();
+		$('.ui.red.submit.button.removesize').show();
+
 	}
 
 };
@@ -6352,7 +6409,7 @@ document.addEventListener('DOMContentLoaded', function(event){
 
 
 
-},{"./Processor":10,"./cadCutByPlane":11,"./computeConvexHull":15}],25:[function(require,module,exports){
+},{"./MarkBetweenSize":8,"./MarkSize":9,"./Processor":10,"./cadCutByPlane":11,"./computeConvexHull":15}],25:[function(require,module,exports){
 /*
 ## License
 

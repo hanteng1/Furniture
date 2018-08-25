@@ -11,7 +11,7 @@ function Cabinet_kallax (main){
 
 	this.main = main;
 	this.furnitures = main.furnitures;
-
+	this.Sceneobjects = main.Sceneobjects;
 	this.reference = null;
 
 }
@@ -124,7 +124,7 @@ Cabinet_kallax.prototype = {
 		var NewBroad = new THREE.Mesh( geometry, newmaterial );
 		//set broad position
 		NewBroad.position.set(BroadPosi.x , BroadPosi.y , BroadPosi.z);
-
+		this.main.Sceneobjects.push(NewBroad);
 		//show broad
 		var scope = this;
 		scope.main.scene.add(NewBroad);
@@ -292,33 +292,8 @@ Cabinet_kallax.prototype = {
 										   (f1Center.z + f2Center.z)/2 - BroadSize.z/2);
 			this.loadTwinBed(f1Center , f2Center , BroadSize , BroadPosi);
 		}
-		//show bed size text
-		this.loadText( (Math.round(BroadSize.x*100)/100).toString() , 
-						new THREE.Vector3((f1Center.x + f2Center.x)/2 ,
-														fSize.y	,
-														fSize.z + 1), 
-					   0 );
-		this.loadLine(	new THREE.Vector3(  funiture1.position.x , 
-											fSize.y ,
-											fSize.z + 1),
-				 		new THREE.Vector3(	funiture2.position.x + fSize.x, 
-											fSize.y ,
-											fSize.z + 1)
-				 	);
-		/*
-		this.loadText( (Math.round((BroadSize.x - fSize.x*2)*100)/100).toString() , 
-						new THREE.Vector3((f1Center.x + f2Center.x)/2 ,
-														0	,
-														fSize.z + 1), 
-					   0 );
-		this.loadLine(	new THREE.Vector3(  funiture1.position.x + fSize.x, 
-											0 ,
-											fSize.z + 1),
-				 		new THREE.Vector3(	funiture2.position.x , 
-											0 ,
-											fSize.z + 1)
-				 	);
-		*/
+
+		
 		var geometry = CabinetMakeBedBroad( BroadSize.x , BroadSize.y , BroadSize.z );
 		var texture = new THREE.TextureLoader().load( 'images/material/material8.jpg' );
 		texture.repeat.set(0.1, 0.1);
@@ -330,7 +305,7 @@ Cabinet_kallax.prototype = {
 
 		//show broad
 		scope.main.scene.add(NewBroad);
-
+		scope.main.Sceneobjects.push(NewBroad);
 		//creat other 4 broads
 		if (mode == "queen" && fSize.z < 81-(BroadSize.y+1)){
 			//set texture info
@@ -353,37 +328,7 @@ Cabinet_kallax.prototype = {
 			Broad2.position.set(BroadPosi.x , 0				 , BroadPosi.z - (81 - BroadSize.z) );
 			Broad3.position.set(BroadPosi.x , BroadSize.y + 1, BroadPosi.z - (81 - BroadSize.z) );
 			Broad4.position.set(BroadPosi.x , BroadSize.y + 1, BroadPosi.z - (BroadSize.y + 1) );
-
-			scope.main.scene.add(Broad1);
-			scope.main.scene.add(Broad2);
-			scope.main.scene.add(Broad3);
-			scope.main.scene.add(Broad4);
-
-			//show bed size text
-			this.loadText( (Math.round( 81 *100)/100).toString() , 
-							new THREE.Vector3(	funiture2.position.x + fSize.x+1,
-															fSize.y	,
-															f2Center.z ), 
-						   90 );
-			this.loadLine(	new THREE.Vector3(  funiture2.position.x + fSize.x+1, 
-												fSize.y ,
-												funiture2.position.z + fSize.z),
-					 		new THREE.Vector3(	funiture2.position.x + fSize.x+1, 
-												fSize.y ,
-												funiture2.position.z + fSize.z-81)
-					 	);
-			this.loadText( (Math.round( (81 - BroadSize.z) *100)/100).toString() , 
-							new THREE.Vector3(	funiture2.position.x + fSize.x+1,
-															0	,
-												BroadPosi.z - (81 - BroadSize.z)/2 ), 
-						   90 );
-			this.loadLine(	new THREE.Vector3(  funiture2.position.x + fSize.x+1, 
-												0 ,
-												funiture2.position.z  ),
-					 		new THREE.Vector3(	funiture2.position.x + fSize.x+1, 
-												0 ,
-												funiture2.position.z + fSize.z-81)
-					 	);
+			
 		}
 		else if (mode == "twin" && fSize.z < 75-(BroadSize.y+1) ){
 			//set texture info
@@ -407,36 +352,6 @@ Cabinet_kallax.prototype = {
 			Broad3.position.set(BroadPosi.x , BroadSize.y + 1, BroadPosi.z - (75 - BroadSize.z) );
 			Broad4.position.set(BroadPosi.x , BroadSize.y + 1, BroadPosi.z - (BroadSize.y + 1) );
 
-			scope.main.scene.add(Broad1);
-			scope.main.scene.add(Broad2);
-			scope.main.scene.add(Broad3);
-			scope.main.scene.add(Broad4);
-			//show bed size text
-			this.loadText( (Math.round( 75 *100)/100).toString() , 
-							new THREE.Vector3(	funiture2.position.x + fSize.x+1,
-															fSize.y	,
-															f2Center.z ), 
-						   90 );
-			this.loadLine(	new THREE.Vector3(  funiture2.position.x + fSize.x+1, 
-												fSize.y ,
-												funiture2.position.z + fSize.z),
-					 		new THREE.Vector3(	funiture2.position.x + fSize.x+1, 
-												fSize.y ,
-												funiture2.position.z + fSize.z-75)
-					 	);
-			this.loadText( (Math.round( (75 - BroadSize.z) *100)/100).toString() , 
-							new THREE.Vector3(	funiture2.position.x + fSize.x+1,
-															0	,
-												BroadPosi.z - (75 - BroadSize.z)/2 ), 
-						   90 );
-			this.loadLine(	new THREE.Vector3(  funiture2.position.x + fSize.x+1, 
-												0 ,
-												funiture2.position.z  ),
-					 		new THREE.Vector3(	funiture2.position.x + fSize.x+1, 
-												0 ,
-												funiture2.position.z + fSize.z-75)
-					 	);
-
 		}
 		
 		var group = new THREE.Group();
@@ -445,9 +360,7 @@ Cabinet_kallax.prototype = {
 		group.add( Broad3 );
 		group.add( Broad4 );
 		scope.main.scene.add(group);
-		MarkSize(this.main , group );
-		//MarkSize(this.main , funiture2 );
-		MarkBetweenSize(this.main ,funiture1 ,funiture2 );
+		scope.main.Sceneobjects.push(group);
 
 
 	},
@@ -467,6 +380,7 @@ Cabinet_kallax.prototype = {
 			Model = collada.scene;
 
 			scope.main.scene.add(Model);
+			scope.main.Sceneobjects.push(Model);
 			Model.scale.set(40,40,40);
 			Model.rotateOnWorldAxis(new THREE.Vector3(0,1,0) , 90 * Math.PI/180);
 
@@ -495,7 +409,7 @@ Cabinet_kallax.prototype = {
 		loader.load( ModelPath , function ( collada ) {
 			
 			Model = collada.scene;
-
+			scope.main.Sceneobjects.push(Model);
 			scope.main.scene.add(Model);
 			Model.scale.set(40,40,40);
 			Model.rotateOnWorldAxis(new THREE.Vector3(0,1,0) , 90 * Math.PI/180);
@@ -507,17 +421,7 @@ Cabinet_kallax.prototype = {
 			Model.position.set( bedCenter.x + BroadSize.x/2, 
 								BroadPosi.y + 0.5 , 
 								bedCenter.z + BroadSize.z/2);
-			/*
-			var box 		= new THREE.Box3();
-			var bedCenter	= new THREE.Vector3( ( f1Center.x + f2Center.x )/2 ,
-												 ( f1Center.y + f2Center.y )/2 ,
-												 ( f1Center.z + f2Center.z )/2 );
-			var bedSize 	= new THREE.Vector3();
-
-			Model.position.set( bedCenter.x + BroadSize.x/2, 
-								BroadPosi.y + 0.5 , 
-								bedCenter.z + BroadSize.z/2);
-			*/
+			
 		});
 	},
 
@@ -588,6 +492,12 @@ Cabinet_kallax.prototype = {
 				new_furniture.normalAxises[key].copy(furniture.normalAxises[key]);
 			}
 		}
+
+		for(var i = main.selectionBoxes.length-1; i >-1 ; i--)
+		{
+			main.removeFromScene(main.selectionBoxes[i]);
+		}
+		main.Sceneobjects=[];
 
 	},
 

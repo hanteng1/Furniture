@@ -283,7 +283,7 @@ Chair_Rebuild.prototype = {
 			
 			LegModel = collada.scene;
 			scope.main.scene.add(LegModel);
-
+			scope.main.Sceneobjects.push(LegModel);
 			LegModel.name = 'stand';
 			LegModel.scale.set(9,9,9);
 
@@ -433,7 +433,9 @@ Chair_Rebuild.prototype = {
 		//creat leg model
 		var Leg1Model = new THREE.Mesh( LegGeometry, newmaterial );
 		var Leg2Model = new THREE.Mesh( LegGeometry, newmaterial );
-
+		this.main.Sceneobjects.push(Leg1Model);
+		this.main.Sceneobjects.push(Leg2Model);
+		
 		//get leg and f2 center
 		var LegCenter = new THREE.Vector3();
 		box.setFromObject(Leg1Model);

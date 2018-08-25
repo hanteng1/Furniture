@@ -14,41 +14,27 @@ function MarkBetweenSize( main , TargetObj1 , TargetObj2 ){
 	var num = 1;
 
 	//detect the funiture component
-	for(var i = main.scene.children.length - 1; i > -1; i -- ){ 
-		var object =  main.scene.children[i];	
+	for(var i = main.furnitures.length - 1; i > -1; i -- ){ 
+		var object =  main.furnitures[i].getFurniture();
 		
 		if(object.isObject3D){
+			//get object center
+			Box.setFromObject(object);
+			Box.getCenter(objCenter1);
 
-			if ( object instanceof THREE.Camera ) {
-
-			} else if ( object instanceof THREE.PointLight ) {
-
-			} else if ( object instanceof THREE.DirectionalLight ) {
-
-			} else if ( object instanceof THREE.SpotLight ) {					
-
-			} else if ( object instanceof THREE.HemisphereLight ) {
-
-			} else if ( object instanceof THREE.AmbientLight ) {
-
-			} else if ( object instanceof THREE.GridHelper ) {
-
-			} else if ( object instanceof THREE.TransformControls ){
-
-			} else if ( object instanceof AddAxis){
-
-			} else if ( object instanceof THREE.BoxHelper){
-
-			} else{
-				//get object center
-				Box.setFromObject(object);
-				Box.getCenter(objCenter1);
-
-				PosArr.push(objCenter1.x);
-				PosArr.push(objCenter1.y);
-				PosArr.push(objCenter1.z);
-			}
+			PosArr.push(objCenter1.x);
+			PosArr.push(objCenter1.y);
+			PosArr.push(objCenter1.z);
 		}
+	}
+	for(var i = main.Sceneobjects.length - 1; i > -1; i -- ){
+		//get object center
+		Box.setFromObject(object);
+		Box.getCenter(objCenter1);
+
+		PosArr.push(objCenter1.x);
+		PosArr.push(objCenter1.y);
+		PosArr.push(objCenter1.z);
 	}
 
 	//set funiture bounding box , box center
@@ -369,6 +355,7 @@ function loadText(main , text , position , rotat){
 			mesh.position.set( position.x , position.y +0.5 , position.z );
 			mesh.rotateOnWorldAxis(new THREE.Vector3(0,1,0) , rotat * Math.PI/180);
 			main.scene.add( mesh );
+			main.SizeObj.push(mesh);
 		}
 	);
 
@@ -390,7 +377,7 @@ function loadLine( main , point1 , point2){
 
 		var line = new THREE.Line( geometry, material );
 		main.scene.add( line );
-
+		main.SizeObj.push(line);
 	}
 
 module.exports = MarkBetweenSize;

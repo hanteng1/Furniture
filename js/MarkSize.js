@@ -11,41 +11,27 @@ function MarkSize( main , TargetObj ){
 	var PosArr		= [];
 
 	//detect the funiture component
-	for(var i = main.scene.children.length - 1; i > -1; i -- ){ 
-		var object =  main.scene.children[i];	
+	for(var i = main.furnitures.length - 1; i > -1; i -- ){ 
+		var object =  main.furnitures[i].getFurniture();
 		
 		if(object.isObject3D){
+			//get object center
+			Box.setFromObject(object);
+			Box.getCenter(objCenter);
 
-			if ( object instanceof THREE.Camera ) {
-
-			} else if ( object instanceof THREE.PointLight ) {
-
-			} else if ( object instanceof THREE.DirectionalLight ) {
-
-			} else if ( object instanceof THREE.SpotLight ) {					
-
-			} else if ( object instanceof THREE.HemisphereLight ) {
-
-			} else if ( object instanceof THREE.AmbientLight ) {
-
-			} else if ( object instanceof THREE.GridHelper ) {
-
-			} else if ( object instanceof THREE.TransformControls ){
-
-			} else if ( object instanceof AddAxis){
-
-			} else if ( object instanceof THREE.BoxHelper){
-
-			} else{
-				//get object center
-				Box.setFromObject(object);
-				Box.getCenter(objCenter);
-
-				PosArr.push(objCenter.x);
-				PosArr.push(objCenter.y);
-				PosArr.push(objCenter.z);
-			}
+			PosArr.push(objCenter.x);
+			PosArr.push(objCenter.y);
+			PosArr.push(objCenter.z);
 		}
+	}
+	for(var i = main.Sceneobjects.length - 1; i > -1; i -- ){
+		//get object center
+		Box.setFromObject(object);
+		Box.getCenter(objCenter);
+
+		PosArr.push(objCenter.x);
+		PosArr.push(objCenter.y);
+		PosArr.push(objCenter.z);
 	}
 
 	//set funiture bounding box , box center
@@ -284,7 +270,7 @@ function MarkSize( main , TargetObj ){
 									  objCenter.y - objSize.y/2 ,
 									  objCenter.z + objSize.z/2) );
 	}
-	else{
+	else{//left to the user
 		//show size number
 		loadText( 	main , 
 					(Math.round(objSize.z*100)/100).toString() ,
@@ -306,11 +292,11 @@ function MarkSize( main , TargetObj ){
 									  objCenter.z - objSize.z/2) , 
 					new THREE.Vector3(objCenter.x - objSize.x/2 -1.5,
 									  objCenter.y - objSize.y/2 ,
-									  objCenter.z + objSize.z/2) );
+									  objCenter.z - objSize.z/2) );
 		loadLine( 	main , 
 					new THREE.Vector3(objCenter.x - objSize.x/2 -0.5,
 									  objCenter.y - objSize.y/2 ,
-									  objCenter.z - objSize.z/2) , 
+									  objCenter.z + objSize.z/2) , 
 					new THREE.Vector3(objCenter.x - objSize.x/2 -1.5,
 									  objCenter.y - objSize.y/2 ,
 									  objCenter.z + objSize.z/2) );
@@ -343,6 +329,7 @@ function loadText(main , text , position , rotat){
 			mesh.position.set( position.x , position.y +0.5 , position.z );
 			mesh.rotateOnWorldAxis(new THREE.Vector3(0,1,0) , rotat * Math.PI/180);
 			main.scene.add( mesh );
+			main.SizeObj.push( mesh );
 		}
 	);
 
@@ -364,7 +351,7 @@ function loadLine( main , point1 , point2){
 
 		var line = new THREE.Line( geometry, material );
 		main.scene.add( line );
-
+		main.SizeObj.push(line);
 	}
 
 module.exports = MarkSize;

@@ -20,6 +20,10 @@ const computeConvexHull = require('./computeConvexHull')
 //test cut
 const cadCutByPlane = require('./cadCutByPlane')
 
+//Wei Hsiang start
+const MarkSize = require('./MarkSize')
+const MarkBetweenSize = require('./MarkBetweenSize')
+//Wei Hsiang end
 
 function Main()
 {
@@ -61,10 +65,19 @@ function Main()
 	this.onUpPosition = new THREE.Vector2();
 	this.onDoubleClickPosition = new THREE.Vector2();
 	this.onCtrlE = false;
-
+	this.onCtrl = false;
 	//store the furniture object and transformation info
 	//arrays of Furniture
 	this.furnitures = [];  
+
+	//arrays of scene objects
+	this.Sceneobjects = [];
+
+	//arrays of size onject
+	this.SizeObj = [];
+	
+	//arrays of select two object
+	this.DistanceObj = [];
 
 	//this is to store the furnitures before any chance
 	//simply copy of the this.furnitures
@@ -745,7 +758,11 @@ Main.prototype = {
 		}else{
 			//multi select for merge
 			this.addMultiSelection(this.selected);
-		}		
+		}	
+
+		if (this.onCtrl == true){
+			this.SelectTwo(object);
+		}	
 
 	},
 
@@ -811,6 +828,34 @@ Main.prototype = {
 		}
 	},
 
+	SelectTwo: function(object){
+		//this.selectionBox.visible = false;
+		//this.transformControls.detach();
+		
+		if ( object !== null && object !== this.scene 
+			&& object !== this.camera && this.DistanceObj.length<3) {
+			this.box.setFromObject( object );
+			if ( this.box.isEmpty() === false ) {
+				var selectionBox = new THREE.BoxHelper();
+				selectionBox.setFromObject( object );
+				selectionBox.material.depthTest = false;
+				selectionBox.material.transparent = true;
+				selectionBox.visible = true;
+
+				this.DistanceObj.push(selectionBox);
+				this.selectionBoxes.push(selectionBox);
+				this.scene.add( selectionBox );
+
+				this.selected = object;
+
+			}
+		}else {
+			this.selected = null;
+		}
+		if(this.DistanceObj.length == 2){
+			$('.ui.blue.submit.button.getdis').show();
+		}
+	},
 
 	removeFromScene: function(object){
 		this.scene.remove(object);
@@ -1064,7 +1109,9 @@ Main.prototype = {
 	{
 		if ( this.onDownPosition.distanceTo( this.onUpPosition ) === 0 ) {
 
-			if(this.onCtrlE == false) {
+			if(this.onCtrlE == false && this.onCtrl == false) {
+
+				var objselect = true;
 				//only select the furniture
 				for(var i = 0; i < this.furnitures.length; i++) {
 					var intersects = this.getIntersect( this.onUpPosition, this.furnitures[i].getFurniture());
@@ -1073,15 +1120,44 @@ Main.prototype = {
 
 						this.furniture = this.furnitures[i];
 						this.select(this.furniture.getFurniture());
-
+						
+						objselect = false;
+						$('.ui.blue.submit.button.getsize').show();
+						
 						break;
 					} else {
 						//it also calls select, to detach
 						this.select( null );
 						this.furniture = null;
+						objselect = true;
+						$('.ui.blue.submit.button.getsize').hide();
+						//this.RemoveSizeLabel();
 					}
 				}
-			}else{
+				
+				//if furniture isn't selected ,select object
+				if (objselect == true){
+					for(var i = 0; i < this.Sceneobjects.length ; i++){
+						var intersects = this.getIntersect( this.onUpPosition, this.Sceneobjects[i]);
+
+						if ( intersects.length > 0 ) {
+							
+							this.furniture = this.Sceneobjects[i];
+							this.select(this.Sceneobjects[i]);
+							$('.ui.blue.submit.button.getsize').show();
+							break;
+						} else {
+							//it also calls select, to detach
+							this.furniture = null;
+							this.select( null );
+							$('.ui.blue.submit.button.getsize').hide();
+							//this.RemoveSizeLabel();
+						}
+					}
+				}
+
+
+			}else if (this.onCtrlE == true && this.onCtrl == false){
 				//select from explode objects, this.furniture should not be null
 				var intersects = this.getIntersects( this.onUpPosition, this.furniture.getObjects());
 
@@ -1102,6 +1178,47 @@ Main.prototype = {
 					//it also calls select, to detach
 					this.select( null );
 				}
+			}
+			//select two obj for getting distance
+			else if(this.onCtrl == true){
+				console.log('select two');
+				var objselect = true;
+				//only select the furniture
+				for(var i = 0; i < this.furnitures.length; i++) {
+					var intersects = this.getIntersect( this.onUpPosition, this.furnitures[i].getFurniture());
+
+					if ( intersects.length > 0 ) {
+
+						this.furniture = this.furnitures[i];
+						this.select(this.furniture.getFurniture());
+						
+						objselect = false;
+						break;
+					} else {
+						//it also calls select, to detach
+						this.select( null );
+						this.furniture = null;
+						objselect = true;
+					}
+				}
+				//if furniture isn't selected ,select object
+				if (objselect == true){
+					for(var i = 0; i < this.Sceneobjects.length ; i++){
+						var intersects = this.getIntersect( this.onUpPosition, this.Sceneobjects[i]);
+
+						if ( intersects.length > 0 ) {
+							
+							this.furniture = this.Sceneobjects[i];
+							this.select(this.Sceneobjects[i]);
+							break;
+						} else {
+							//it also calls select, to detach
+							this.furniture = null;
+							this.select( null );
+						}
+					}
+				}
+
 			}
 		}
 	},
@@ -1192,6 +1309,10 @@ Main.prototype = {
 
 			//delete
 
+		}else if(keyCode == 17 && this.onCtrl == false) {//press Ctrl button
+
+			this.onCtrl = true;
+			console.log('Ctrl down');
 		}
 
 
@@ -1281,12 +1402,20 @@ Main.prototype = {
 					this.furniture = undefined;
 					this.select(null);
 
-
 				}
 
 			}
 		}
 
+		if(this.onCtrl == true){
+			this.onCtrl = false;
+			console.log('Ctrl up');
+			this.DistanceObj = [];
+			for(var i = 0; i < this.selectionBoxes.length; i++)
+				{
+					this.removeFromScene(this.selectionBoxes[i]);
+				}
+		}
 
 
 
@@ -1406,6 +1535,9 @@ Main.prototype = {
 		$('.operations.operation_chair_rebuild').hide();
 		$('.operations.operation_cabinet_kallax_one').hide();
 		$('.operations.operation_cabinet_kallax_two').hide();
+		$('.ui.blue.submit.button.getsize').hide();
+		$('.ui.red.submit.button.removesize').hide();
+		$('.ui.blue.submit.button.getdis').hide();
 
 		this.furnitures.length = 0;	
 
@@ -1442,7 +1574,11 @@ Main.prototype = {
 			}
 
 		}
-
+		for(var i = this.selectionBoxes.length-1; i >-1 ; i--)
+		{
+			this.removeFromScene(this.selectionBoxes[i]);
+		}
+		this.Sceneobjects=[];
 
 	},
 
@@ -1501,6 +1637,9 @@ Main.prototype = {
 		$('.operations.operation_chair_rebuild').hide();
 		$('.operations.operation_cabinet_kallax_one').hide();
 		$('.operations.operation_cabinet_kallax_two').hide();
+		$('.ui.blue.submit.button.getsize').hide();
+		$('.ui.red.submit.button.removesize').hide();
+		$('.ui.blue.submit.button.getdis').hide();
 
 		this.processor.init();
 		//this.processor.executeDesign();
@@ -1576,6 +1715,38 @@ Main.prototype = {
 		// }
 
 		
+
+	},
+
+	LabelSize: function(){
+
+		try {
+    		MarkSize(this, this.furniture);
+		}
+		catch(err) {
+    		MarkSize(this, this.furniture.getFurniture());
+		}
+		//show the remove button
+		$('.ui.red.submit.button.removesize').show();
+
+	},
+
+	RemoveSizeLabel: function(){
+		for(var i = this.SizeObj.length - 1; i > -1; i -- ){ 
+				
+			var object =  this.SizeObj[i];
+			this.removeFromScene(object);
+
+		}
+		//hide the remove button
+		$('.ui.red.submit.button.removesize').hide();
+	},
+	GetDistance: function(){
+
+		MarkBetweenSize(this , this.DistanceObj[0] , this.DistanceObj[1]);
+		this.DistanceObj = [];
+		$('.ui.blue.submit.button.getdis').hide();
+		$('.ui.red.submit.button.removesize').show();
 
 	}
 
