@@ -1135,25 +1135,25 @@ Main.prototype = {
 
 						this.furniture = this.furnitures[i];
 						this.select(this.furniture.getFurniture());
-<<<<<<< HEAD
+
 						
 						objselect = false;
 						$('.ui.blue.submit.button.getsize').show();
 						
-=======
+
 
 						//control switch from first-person to target orbit
 
 						console.log("selected");
 						this.customControl.switchView2TG();
 
->>>>>>> master
+
 						break;
 					} else {
 						//it also calls select, to detach
 						this.select( null );
 						this.furniture = null;
-<<<<<<< HEAD
+
 						objselect = true;
 						$('.ui.blue.submit.button.getsize').hide();
 						//this.RemoveSizeLabel();
@@ -1178,11 +1178,11 @@ Main.prototype = {
 							$('.ui.blue.submit.button.getsize').hide();
 							//this.RemoveSizeLabel();
 						}
-=======
+
 
 						console.log("unselected");
 						this.customControl.switchView2FP();
->>>>>>> master
+
 					}
 				}
 
