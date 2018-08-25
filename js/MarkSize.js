@@ -47,7 +47,7 @@ function MarkSize( main , TargetObj ){
 	if( objCenter.z >= FuniCenter.z ){
 		//show size number
 		loadText( 	main , 
-					(Math.round(objSize.x*100)/100).toString() ,
+					objSize.x ,
 					new THREE.Vector3(objCenter.x ,
 									  objCenter.y - objSize.y/2 ,
 									  objCenter.z + objSize.z/2 + 1), 
@@ -78,7 +78,7 @@ function MarkSize( main , TargetObj ){
 		if ( objCenter.x > FuniCenter.x ){
 			//show high
 			loadText( 	main , 
-						(Math.round(objSize.y*100)/100).toString() ,
+						objSize.y ,
 						new THREE.Vector3(objCenter.x + objSize.x/2 +1,
 										  objCenter.y ,
 										  objCenter.z + objSize.z/2 +1, ), 
@@ -111,7 +111,7 @@ function MarkSize( main , TargetObj ){
 		else{//left to the user
 			//show high
 			loadText( 	main , 
-						(Math.round(objSize.y*100)/100).toString() ,
+						objSize.y ,
 						new THREE.Vector3(objCenter.x - objSize.x/2 -1,
 										  objCenter.y ,
 										  objCenter.z + objSize.z/2 +1, ), 
@@ -144,7 +144,7 @@ function MarkSize( main , TargetObj ){
 	else{// back to the user
 		//show size number
 		loadText( 	main , 
-					(Math.round(objSize.x*100)/100).toString() ,
+					objSize.x ,
 					new THREE.Vector3(objCenter.x ,
 									  objCenter.y - objSize.y/2 ,
 									  objCenter.z - objSize.z/2 - 1), 
@@ -176,7 +176,7 @@ function MarkSize( main , TargetObj ){
 		if ( objCenter.x > FuniCenter.x ){
 			//show high
 			loadText( 	main , 
-						(Math.round(objSize.y*100)/100).toString() ,
+						objSize.y ,
 						new THREE.Vector3(objCenter.x + objSize.x/2 +1,
 										  objCenter.y ,
 										  objCenter.z - objSize.z/2 -1 ), 
@@ -207,7 +207,7 @@ function MarkSize( main , TargetObj ){
 		else{//left to the user
 			//show high
 			loadText( 	main , 
-						(Math.round(objSize.y*100)/100).toString() ,
+						objSize.y ,
 						new THREE.Vector3(objCenter.x - objSize.x/2 -1,
 										  objCenter.y ,
 										  objCenter.z - objSize.z/2 -1, ), 
@@ -242,7 +242,7 @@ function MarkSize( main , TargetObj ){
 	if ( objCenter.x > FuniCenter.x ){
 		//show size number
 		loadText( 	main , 
-					(Math.round(objSize.z*100)/100).toString() ,
+					objSize.z ,
 					new THREE.Vector3(objCenter.x + objSize.x/2 +1,
 									  objCenter.y - objSize.y/2 ,
 									  objCenter.z ), 
@@ -273,7 +273,7 @@ function MarkSize( main , TargetObj ){
 	else{//left to the user
 		//show size number
 		loadText( 	main , 
-					(Math.round(objSize.z*100)/100).toString() ,
+					objSize.z ,
 					new THREE.Vector3(objCenter.x - objSize.x/2 -1,
 									  objCenter.y - objSize.y/2 ,
 									  objCenter.z ), 
@@ -303,8 +303,8 @@ function MarkSize( main , TargetObj ){
 	}
 
 }
-function loadText(main , text , position , rotat){
-
+function loadText(main , num , position , rotat){
+	var text = (Math.round(num*10)/100).toString();
 	var loader = new THREE.FontLoader();
 	var font = loader.load(
 		// resource URL
@@ -314,7 +314,7 @@ function loadText(main , text , position , rotat){
 		function ( font ) {
 			var geometry = new THREE.TextGeometry( text , {
 				font: font ,
-				size: 1,
+				size: 0.5,
 				height: 0.05,
 				curveSegments: 12,
 				bevelEnabled: false,

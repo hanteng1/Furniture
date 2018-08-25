@@ -6,8 +6,6 @@ const Chair_Align = require('./Chair_Align');
 const Chair_Add = require('./Chair_Add');
 const Chair_Rebuild = require('./Chair_Rebuild');
 const Cabinet_kallax = require('./Cabinet_kallax');
-
-
 const Dresser_Add = require('./Dresser_Add');
 
 

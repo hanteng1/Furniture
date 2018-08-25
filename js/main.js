@@ -79,6 +79,9 @@ function Main()
 	//arrays of select two object
 	this.DistanceObj = [];
 
+	//Obj for get size
+	this.GetSizeObj = [];
+
 	//this is to store the furnitures before any chance
 	//simply copy of the this.furnitures
 	this.furnituresDataSet = [];
@@ -763,19 +766,18 @@ Main.prototype = {
 
 		this.selected = object;
 
-		if(this.onCtrlE == false)
+		if(this.onCtrlE == false && this.onCtrl == false)
 		{
 			//single select
 			this.addTransformControl(this.furniture, this.selected);
 			//this.addNormalAxis(this.selected);
-		}else{
+		}else if(this.onCtrlE == true && this.onCtrl == false){
 			//multi select for merge
 			this.addMultiSelection(this.selected);
 		}	
-
-		if (this.onCtrl == true){
+		else if (this.onCtrl == true){
 			this.SelectTwo(object);
-		}	
+		}
 
 	},
 
@@ -1136,17 +1138,14 @@ Main.prototype = {
 						this.furniture = this.furnitures[i];
 						this.select(this.furniture.getFurniture());
 
-						
 						objselect = false;
+						this.GetSizeObj.push( this.furniture.getFurniture() );
 						$('.ui.blue.submit.button.getsize').show();
 						
-
-
 						//control switch from first-person to target orbit
 
 						console.log("selected");
 						this.customControl.switchView2TG();
-
 
 						break;
 					} else {
@@ -1155,6 +1154,7 @@ Main.prototype = {
 						this.furniture = null;
 
 						objselect = true;
+						this.GetSizeObj = [];
 						$('.ui.blue.submit.button.getsize').hide();
 						//this.RemoveSizeLabel();
 					}
@@ -1170,6 +1170,7 @@ Main.prototype = {
 							
 							this.furniture = this.Sceneobjects[i];
 							this.select(this.Sceneobjects[i]);
+							this.GetSizeObj.push( this.Sceneobjects[i] );
 							$('.ui.blue.submit.button.getsize').show();
 							SomethingSelected = true;
 							break;
@@ -1178,12 +1179,13 @@ Main.prototype = {
 							this.furniture = null;
 							this.select( null );
 							$('.ui.blue.submit.button.getsize').hide();
+							this.GetSizeObj = [];
 							//this.RemoveSizeLabel();
 
 						}
 
 					}
-					
+					//if not select anything
 					if (SomethingSelected == false){
 						console.log("unselected");
 						this.customControl.switchView2FP();
@@ -1208,6 +1210,9 @@ Main.prototype = {
 						this.select( object.userData.object );
 					} else {
 						this.select( object );
+						//push object to label size
+						this.GetSizeObj.push(object);
+						$('.ui.blue.submit.button.getsize').show();
 					}
 				} else {
 					//it also calls select, to detach
@@ -1216,7 +1221,7 @@ Main.prototype = {
 			}
 			//select two obj for getting distance
 			else if(this.onCtrl == true){
-				console.log('select two');
+				//console.log('select two');
 				var objselect = true;
 				//only select the furniture
 				for(var i = 0; i < this.furnitures.length; i++) {
@@ -1333,6 +1338,11 @@ Main.prototype = {
 			if(this.furniture  != null )
 				this.explode(this.furniture);
 			
+			//hide the GetSize button
+			$('.ui.blue.submit.button.getsize').hide();
+			//clear the object for getting size
+			this.GetSizeObj = [];
+
 		}else if(keyCode == 87) {
 
 			// if(this.transformControls.visible == true)
@@ -1362,7 +1372,6 @@ Main.prototype = {
 			this.onCtrl = true;
 			console.log('Ctrl down');
 		}
-
 
 
 		// else if(keyCode == 37){
@@ -1425,6 +1434,12 @@ Main.prototype = {
 
 
 			$('#label').hide();
+
+			//hide the GetSize , RemoveSize button
+			$('.ui.blue.submit.button.getsize').hide();
+			this.RemoveSizeLabel();
+			//clear the object for getting size
+			this.GetSizeObj = [];
 
 		}else {
 
@@ -1768,14 +1783,19 @@ Main.prototype = {
 
 	LabelSize: function(){
 
-		try {
-    		MarkSize(this, this.furniture);
+		if(this.GetSizeObj.length > 0 ){
+
+			for(var i =0 ; i< this.GetSizeObj.length ; i++){
+				MarkSize(this, this.GetSizeObj[i]);
+			}
+
+			//show the remove button
+			$('.ui.red.submit.button.removesize').show();
+
 		}
-		catch(err) {
-    		MarkSize(this, this.furniture.getFurniture());
+		else{
+			console.log('this.GetSizeObj is null');
 		}
-		//show the remove button
-		$('.ui.red.submit.button.removesize').show();
 
 	},
 
@@ -1784,8 +1804,9 @@ Main.prototype = {
 				
 			var object =  this.SizeObj[i];
 			this.removeFromScene(object);
-
 		}
+		this.SizeObj = [];
+		this.GetSizeObj = [];
 		//hide the remove button
 		$('.ui.red.submit.button.removesize').hide();
 	},
