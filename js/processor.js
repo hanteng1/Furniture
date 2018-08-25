@@ -5,6 +5,7 @@
 const Chair_Align = require('./Chair_Align');
 const Chair_Add = require('./Chair_Add');
 const Chair_Rebuild = require('./Chair_Rebuild');
+const Cabinet_kallax = require('./Cabinet_kallax');
 
 
 const Dresser_Add = require('./Dresser_Add');
@@ -37,7 +38,7 @@ function Processor(main) {
 
 	//weixiang's bloack
 	this.chair_rebuild = undefined;
-
+	this.cabinet_kallax = undefined;
 
 	//end of weixiang's block
 
@@ -78,9 +79,7 @@ Processor.prototype = {
 					scope.chair_rebuild = new Chair_Rebuild(scope.main);
 					scope.transformFunctions.CHAIR_REBUILD = scope.chair_rebuild;
 					
-					scope.dresser_add = new Dresser_Add(scope.main);		
-					scope.transformFunctions.DRESSER_ADD = scope.dresser_add;
-					$('.operations.operation_dresser_add').show();
+					
 
 
 					$('.operations.operation_chair_add').show();
@@ -102,34 +101,48 @@ Processor.prototype = {
 
 
 					//zhuen's block
-					scope.dresser_add = new Dresser_Add(scope.main);		
-					scope.transformFunctions.DRESSER_ADD = scope.dresser_add;
-					$('.operations.operation_dresser_add').show();
+					
 					//end of zhuen's block
 				}
 
 
 				break;
 
-			case "cabinent" :
+			case "cabinet" :
 				if(scope.furnitures.length == 0) {
 			
 					return;
 
 				}else if(scope.furnitures.length == 1){
-					//possible actions with one furniture					
-					// scope.dresser_add = new Dresser_Add(scope.main);
-					// scope.transformFunctions.DRESSER_ADD = scope.dresser_add;
-					
+					//possible actions with one furniture
+
+					if (true) {
+						scope.cabinet_kallax = new Cabinet_kallax(scope.main);
+						scope.transformFunctions.CABINET_LALLAX = scope.cabinet_kallax;
+						
+						$('.operations.operation_cabinet_kallax_one').show();
+					}					
+					else{
+						scope.dresser_add = new Dresser_Add(scope.main);		
+						scope.transformFunctions.DRESSER_ADD = scope.dresser_add;
+						$('.operations.operation_dresser_add').show();
+					}
+
 					
 
 				}else if( scope.furnitures.length > 1) {
 					//possible actions with many furnitures
-					
-					
-					//wei hsiang end
-					
-					
+
+					if(true){
+						scope.cabinet_kallax = new Cabinet_kallax(scope.main);
+						scope.transformFunctions.CABINET_LALLAX = scope.cabinet_kallax;						
+						$('.operations.operation_cabinet_kallax_two').show();
+					}
+					else{
+						scope.dresser_add = new Dresser_Add(scope.main);		
+						scope.transformFunctions.DRESSER_ADD = scope.dresser_add;
+						$('.operations.operation_dresser_add').show();
+					}					
 				}
 
 				break;

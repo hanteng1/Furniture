@@ -84,6 +84,11 @@ Ui.prototype = {
 						//stand
 						scope.assignLabel("cabinetFront");
 						break;
+					case "l_8":
+						//stand
+						scope.assignLabel("cabinetBroad");
+						break;
+
 					
 				}
 			}
@@ -99,6 +104,22 @@ Ui.prototype = {
 			scope.main.mergeObjs();
 		});
 
+
+		//enable house environment
+		$('.ui.toggle.checkbox.house').checkbox({
+
+			onChecked: function() {
+      			//enable house environment
+      			scope.main.enableHouseEnvironment();
+
+    		},
+    		onUnchecked: function() {
+      			//disable house environment
+      			scope.main.disableHouseEnvironment();
+    		}
+		});
+
+		$('.ui.toggle.checkbox.house').checkbox("check");
 
 		//reset the scene
 		$('.ui.blue.submit.button.reset').click(function(){
@@ -158,7 +179,21 @@ Ui.prototype = {
 			scope.main.applyDesign();
 
 		});
+		$('.ui.blue.submit.button.getsize').click(function(){
 
+			scope.main.LabelSize();
+
+		});
+		$('.ui.red.submit.button.removesize').click(function(){
+
+			scope.main.RemoveSizeLabel();
+			
+		});
+		$('.ui.blue.submit.button.getdis').click(function(){
+
+			scope.main.GetDistance();
+			
+		});
 
 		//chair_align controller function
 		this.designButtons();
@@ -167,46 +202,32 @@ Ui.prototype = {
 		this.rangeSlider();
 
 
-
-
-		//zhuen's block
-
-
-
-		//end of zhuen's block
-
-
-
-		//weixiang's bloack
-
-
-
-		//end of weixiang's block
-
-
-
-
-		//trif's block
-
-
-
-
-		//end of trif's block
-
+		
 
 
 		//in the end, hide all the needed items
+		$('#model_size_initialization').hide();
+
 		$('#label').hide();
 
 		$('#parameter_control_chair_align').hide();
 		$('#parameter_control_chair_rebuild').hide();
 		$('#parameter_control_chair_add').hide();
+		$('#parameter_control_cabinet_bed').hide();
 
 		$('.operations.operation_chair_align').hide();
 		$('.operations.operation_chair_add').hide();
 		$('.operations.operation_chair_rebuild').hide();
 
+
 		$('.operations.operation_dresser_add').hide();
+
+		$('.operations.operation_cabinet_kallax_one').hide();
+		$('.operations.operation_cabinet_kallax_two').hide();
+		$('.ui.blue.submit.button.getsize').hide();
+		$('.ui.red.submit.button.removesize').hide();
+		$('.ui.blue.submit.button.getdis').hide();
+
 
 
 	},
@@ -227,20 +248,28 @@ Ui.prototype = {
 
 		//chair_align_horizontal
 		$( "#operation_chair_align_horizontal" ).click(function() {
-			
+			console.log("chair_align_horizontal");
+			scope.processor.executeDesign("CHAIR_ALIGN", "horizontal");
+			//no parameter for now
 		});
 
 		//chair_align_flip
 		$( "#operation_chair_align_flip" ).click(function() {
 
-			//wei hsiang start
-			scope.processor.executeDesign("CHAIR_REBUILD", "back");
-			//wei hsiang end
+			// //wei hsiang start
+			// scope.processor.executeDesign("CHAIR_REBUILD", "back");
+			// //wei hsiang end
+
+			console.log("chair_align_flip");
+			scope.processor.executeDesign("CHAIR_ALIGN", "flip");
+
 		});
 
 		//chair_add_plate
 		$('#operation_chair_add_plate').click(function() {
 			scope.processor.executeDesign("CHAIR_ADD", "plate");
+
+			$('#parameter_control_chair_add').show();
 		});
 
 		//chair_add_hook
@@ -249,8 +278,8 @@ Ui.prototype = {
 		});
 
 		//chair_add_flip
-		$('#operation_chair_add_flip').click(function() {
-			scope.processor.executeDesign("CHAIR_ADD", "flip");
+		$('#operation_chair_add_hang').click(function() {
+			scope.processor.executeDesign("CHAIR_ADD", "hang");
 		});
 
 		//chair_rebuild_seat
@@ -262,7 +291,8 @@ Ui.prototype = {
 
 		//chair_rebuild_back
 		$('#operation_chair_rebuild_back').click(function() {
-			scope.processor.executeDesign("CHAIR_REBUILD", "back");
+			console.log("chair_rebuild_back_rest");
+			scope.processor.executeDesign("CHAIR_REBUILD", "backrest");
 		});
 
 		//chair_rebuild_leg
@@ -272,9 +302,26 @@ Ui.prototype = {
 
 
 
+
 		//dresser
 		$('#operation_dresser_add_cut_chair').click(function() {
 			scope.processor.executeDesign("DRESSER_ADD", "cut_chair");
+
+		//cabinet_kallax_chair
+		$('#operation_cabinet_kallax_chair').click(function() {
+			scope.processor.executeDesign("CABINET_LALLAX", "chair");
+		});
+
+		//cabinet_kallax_bed
+		$('#operation_cabinet_kallax_bed').click(function() {
+			scope.processor.executeDesign("CABINET_LALLAX", "bed");
+			$('#parameter_control_cabinet_bed').show();
+		});
+
+		//cabinet_kallax_table
+		$('#operation_cabinet_kallax_table').click(function() {
+			scope.processor.executeDesign("CABINET_LALLAX", "table");
+
 		});
 
 	},
@@ -367,7 +414,7 @@ Ui.prototype = {
 					var object = new THREE.OBJLoader().parse( contents );
 					object.name = filename;
 					//add to the scene
-					scope.main.addObject(object);  //this.main becomes undefined
+					scope.main.preAddObject(object);  //this.main becomes undefined
 				}, false );
 				reader.readAsText( file );
 
@@ -384,7 +431,7 @@ Ui.prototype = {
 					var collada = loader.parse( contents );
 
 					collada.scene.name = filename;
-					scope.main.addObject(collada.scene ); 
+					scope.main.preAddObject(collada.scene ); 
 
 				}, false );
 				reader.readAsText( file );
@@ -400,7 +447,7 @@ Ui.prototype = {
 
 					var loader = new THREE.GLTFLoader();
 					var gltf = loader.parse(contents);
-					scope.main.addObject(gltf.scene ); 
+					scope.main.preAddObject(gltf.scene ); 
 
 				}, false );
 
@@ -415,33 +462,6 @@ Ui.prototype = {
 		this.main.assignLabel(label);
 
 	}
-
-
-
-	//zhuen's block
-
-
-
-	//end of zhuen's block
-
-
-
-	//weixiang's bloack
-
-
-
-	//end of weixiang's block
-
-
-
-
-	//trif's block
-
-
-
-
-	//end of trif's block
-
 }
 
 

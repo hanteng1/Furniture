@@ -1,11 +1,12 @@
 "use strict;"
 
-const scadApi = require('@jscad/scad-api')
-const { CSG, CAG, isCSG, isCAG } = require('@jscad/csg')
-const {cube, sphere, cylinder} = scadApi.primitives3d
-const {union, difference, intersection} = scadApi.booleanOps
-const {translate, rotate} = scadApi.transformations
-const csgToGeometries = require('./csgToGeometries')
+const scadApi = require('@jscad/scad-api');
+const { CSG, CAG, isCSG, isCAG } = require('@jscad/csg');
+const {cube, sphere, cylinder} = scadApi.primitives3d;
+const {union, difference, intersection} = scadApi.booleanOps;
+const {translate, rotate} = scadApi.transformations;
+const csgToGeometries = require('./csgToGeometries');
+const assignUVs = require('./assignUVs');
 
 function cadMakeSeat (innerRace, outerRace, offsetY, textures) {
 
@@ -35,22 +36,30 @@ function cadMakeSeat (innerRace, outerRace, offsetY, textures) {
       twiststeps: 0        // create 10 slices
     });
 
+    //expansion... /be careful to use .. very expensive
+    csg = csg.expand(0.4, 8); 
+
     //get the geometry
     //be careful if there are too many vertices gerneated...
     var geometry = csgToGeometries(csg)[0];
 
+    //make it to geometry
+    geometry = new THREE.Geometry().fromBufferGeometry( geometry );
+    assignUVs(geometry);
+
+    //console.log(testgeo.faceVertexUvs);
 
     //simplify the geometry.. seems not necessary
-    var modifer = new THREE.SimplifyModifier();
-    var verticesAttribute = geometry.getAttribute('position');
-    var verticesArray = verticesAttribute.array;
-    var itemSize = verticesAttribute.itemSize;
-    var verticesNum = verticesArray.length / itemSize;
-    geometry = modifer.modify( geometry,  verticesNum * 0.5 | 0 );
+    // var modifer = new THREE.SimplifyModifier();
+    // var verticesAttribute = geometry.getAttribute('position');
+    // var verticesArray = verticesAttribute.array;
+    // var itemSize = verticesAttribute.itemSize;
+    // var verticesNum = verticesArray.length / itemSize;
+    // geometry = modifer.modify( geometry,  verticesNum * 0.5 | 0 );
 
 
     //texture
-    //var material = new THREE.MeshLambertMaterial( { map: textures["cherry"]});
+    var material = new THREE.MeshLambertMaterial( { map: textures["linen"]});
     //var material = new THREE.MeshBasicMaterial( {  wireframe: true});
     //var mesh = new THREE.Mesh(geometry, material);
 
@@ -67,9 +76,9 @@ function cadMakeSeat (innerRace, outerRace, offsetY, textures) {
 
 
     var mesh = THREE.SceneUtils.createMultiMaterialObject( geometry, [
-         //material,
-         wireframe,
-         materialNormal
+         material//,
+         //wireframe,
+         //materialNormal
      ]);
 
 
@@ -89,7 +98,6 @@ function cadMakeSeat (innerRace, outerRace, offsetY, textures) {
     return mesh;
 
 }
-
 
 
 module.exports = cadMakeSeat

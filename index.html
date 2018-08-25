@@ -8,6 +8,16 @@
 	</head>
 	<body>
 
+		
+		<!-- <div id="blocker">
+			<div id="instructions">
+				<span style="font-size:40px">
+					Instructions: blablabalbalabla...
+				</span>
+			</div>
+		</div>
+		 -->
+
 		<div id="minfo">Description</div>
 
 
@@ -47,9 +57,18 @@
 				Actions
 			</h4>
 			<!--a button-->
+
+			<div class="ui toggle checkbox house" style="margin-bottom: 1.5em">
+  				<input type="checkbox" name="public">
+  				<label>Test in House Environment</label>
+			</div>
+
 			<div class="ui blue submit button reset" style="margin-bottom: 0.5em">Reset</div>
 			<div class="ui blue submit button duplicate" style="margin-bottom: 0.5em">Duplicate</div>
 			<div class="ui blue submit button newdesign" style="margin-bottom: 0.5em">Create New Design</div>
+			<div class="ui blue submit button getsize" style="margin-bottom: 0.5em">GetSize</div>
+			<div class="ui blue submit button getdis" style="margin-bottom: 0.5em">GetDistance</div>
+			<div class="ui red submit button removesize" style="margin-bottom: 0.5em">RemoveSize</div>
 
 			<!--Available Designs-->
 			<h4 class="ui horizontal divider header">
@@ -89,9 +108,9 @@
 	    						Hook
 						</button>
 
-						<button class="ui inverted secondary button" id="operation_chair_add_flip">
+						<button class="ui inverted secondary button" id="operation_chair_add_hang">
 								<i class="gamepad icon"></i>
-	    						Flip
+	    						Hang
 						</button>
  					</div>
 
@@ -104,7 +123,7 @@
 
 						<button class="ui inverted secondary button" id="operation_chair_rebuild_back">
 								<i class="gamepad icon"></i>
-	    						Back
+	    						BackRest
 						</button>
 
 						<button class="ui inverted secondary button" id="operation_chair_rebuild_leg">
@@ -113,11 +132,35 @@
 						</button>
  					</div>
 
+
  					<div class="operations operation_dresser_add">
 	 					<h3 class="ui header">Dresser</h3>
 	 					<button class="ui inverted secondary button" id="operation_dresser_add_cut_chair">
 								<i class="gamepad icon"></i>
 	    						CutChair
+	    				</button>
+	    			</div>
+
+ 					<div class="operations operation_cabinet_kallax_one">
+	 					<h3 class="ui header">Kallax</h3>
+	 					<button class="ui inverted secondary button" id="operation_cabinet_kallax_chair">
+								<i class="gamepad icon"></i>
+	    						Chair
+						</button>
+
+ 					</div>
+ 					<div class="operations operation_cabinet_kallax_two">
+	 					<h3 class="ui header">Kallax</h3>
+
+						<button class="ui inverted secondary button" id="operation_cabinet_kallax_bed">
+								<i class="gamepad icon"></i>
+	    						Bed
+						</button>
+
+						<button class="ui inverted secondary button" id="operation_cabinet_kallax_table">
+								<i class="gamepad icon"></i>
+	    						Table
+
 						</button>
  					</div>
 
@@ -170,11 +213,23 @@
 							<div class="item" data-value="l_6">
 								<div class="ui orange empty circular label"></div>
 								cabinetTop
+<<<<<<< HEAD
 							</div> 
 							<div class="item" data-value="l_7">
 								<div class="ui orange empty circular label"></div>
 								cabinetFront
 							</div> 
+=======
+							</div>
+							<div class="item" data-value="l_7">
+								<div class="ui orange empty circular label"></div>
+								cabinetFront
+							</div>
+							<div class="item" data-value="l_8">
+								<div class="ui orange empty circular label"></div>
+								cabinetBroad
+							</div>
+>>>>>>> master
 						</div>
 					</div>
 				</div>
@@ -217,7 +272,7 @@
 		<!--chair rebuild-->
 		<div class="ui compact parameters" id="parameter_control_chair_rebuild">
 			<div class="ui labeled icon menu" id = "CHAIR_REBUILD">
-			
+			 
 				<a class="item ui image label 1">
 					<img src="/images/material/material1.jpg">
 				</a>
@@ -280,10 +335,50 @@
 		<!--end of for design parameters -->
 
 
+		<!--model input size initialization-->
+		<div class="ui compact modelsize" id="model_size_initialization">
+			<div class="ui segment">
+				<div class="ui form">
+  					<div class="inline fields">
+    					<label>Size</label>
+    					<div class="field">
+      						<input type="text" placeholder="Length">
+    					</div>
+    					<div class="field">
+      						<input type="text" placeholder="Width">
+    					</div>
+    					<div class="field">
+      						<input type="text" placeholder="Height">
+    					</div>
+  					</div>
+				</div>
+
+				<button class="fluid ui button" type="submit">Confirm</button>
+
+
+			</div>
+		</div>
+
+
+
+		<!--end of model input size initialization-->
+
+
 
 
 		<!-- Weihsiang's Block, for seat texture change-->
-		
+		<div class="ui compact parameters" id="parameter_control_cabinet_bed">
+			<div class="ui labeled icon menu" id = "Kallax_Bed">
+			 
+				<a class="item ui image label twin_bed">
+					<img src="/images/material/bed/twin_bed.png">
+				</a>
+				<a class="item ui image label queen_bed">
+					<img src="/images/material/bed/queen_bed.png">
+				</a>
+
+			</div>
+		</div>
 
 		<!-- End of Weihsiang's Block-->
 
@@ -303,7 +398,6 @@
 	  	<script src="js/semantic/dist/semantic.min.js"></script>
 		<script src="three.js-master/build/three.js"></script>
 		<script type="text/javascript" src="three.js-master/examples/js/Detector.js"></script>
-		<script type="text/javascript" src="three.js-master/examples/js/controls/OrbitControls.js"></script>
 		<script type="text/javascript" src="three.js-master/examples/js/libs/stats.min.js"></script>
 		<script type="text/javascript" src="three.js-master/examples/js/CurveExtras.js"></script>
 		<script type="text/javascript" src="three.js-master/examples/js/ParametricGeometries.js"></script>
@@ -312,15 +406,13 @@
 		<script type="text/javascript" src="three.js-master/examples/js/loaders/ColladaLoader.js"></script>
 		<script type="text/javascript" src="three.js-master/examples/js/loaders/GLTFLoader.js"></script>
 		<script type="text/javascript" src="three.js-master/examples/js/utils/SceneUtils.js"></script>
+		<script type="text/javascript" src="js/CustomControls.js"></script>
 		<script type="text/javascript" src="js/Ui.js"></script>
 		<script type="text/javascript" src="js/Furniture.js"></script>
 		<script type="text/javascript" src="js/AddAxis.js"></script>
 		<script type="text/javascript" src="js/TransformControls.js"></script>
 		<script type="text/javascript" src="js/mesh_simplify.js"></script>
 
-		<!--operations-->
-		<!--<script type="text/javascript" src="js/Processor.js"></script>-->
-		<!--<script type="text/javascript" src="js/Chair_Align.js"></script>-->
 
 		<!--test-->
 		<script type="text/javascript" src="js/testtest.js"></script>

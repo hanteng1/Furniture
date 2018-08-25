@@ -1,10 +1,28 @@
 function testtest(){
 
-	var num = 741;
-	num = num * 0.5 | 0 ;
+	
+	// function a() {
+ //    	alert('A');
+	// }
+	// //alerts 'A', returns undefined
 
-	console.log(num);
+	// function b() {
+	//     alert('B');
+	//     return a;
+	// }
+	// //alerts 'B', returns function a
 
+	// this.c = function () {
+	//     alert('C');
+	//     return a;
+	// }();
+	// //alerts 'C', alerts 'A', returns undefined
+
+	// //alert("Function 'a' returns " + a());
+	// //alert("Function 'b' returns " + b());
+	// //alert("Function 'c' returns " + c());
+
+	// this.c(); //only calls a very interesting
 
 };
 

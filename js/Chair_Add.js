@@ -900,15 +900,19 @@ Chair_Add.prototype = {
 /////////////////////////////////////////////////////////////////////////////////////////////
 
 //-----------------------------------------------------------------------------------
-	execute: function(){
+	execute: function(tfname){
 
 		if(this.checkHasBack(this.furnitures[0]) && this.checkHasSeat(this.furnitures[0])){			
+			if(tfname == "plate") {
+				this.boardEvent();
+			}else if(tfname == "hook") {
+				this.hookEvent();
+			}else if(tfname == "hang") {
+				this.hangEvent();	
+			}
 			
-			$('#parameter_control_chair_add').show();
-			this.boardEvent();			
-			this.hookEvent();
-			this.flipEvent();
-			this.hangEvent();	
+			//this.flipEvent();
+			
 		}
 		else
 			alert("Please mark seat and back");		
