@@ -785,7 +785,7 @@ Chair_Add.prototype = {
 			var box = new THREE.Box3();
 			box.setFromObject(array[i]);
 			if(checkBox.intersectsBox(box)){
-				var point = array_centerPosition[i];
+				var point = array_centerPosition[i];				
 				var max = seat_centr.y + seat_size.y * 2;
 				var min = seat_centr.y - seat_size.y * 2;
 				if(point.y >= min && point.y <= max)
@@ -1150,7 +1150,7 @@ Chair_Add.prototype = {
 			this.setBoard(furniture_clone_board);
 		}
 	},
-//-------------------------------end board event--------------------------------------
+//-------------------------------end board event----------------------------------------
 
 //-------------------------------start hook event--------------------------------------
 	createHook: function(scene, child, hook, position, offset){		
@@ -1215,7 +1215,7 @@ Chair_Add.prototype = {
 		var group = furniture_clone;		
 		this.remove(group);
 		this.removeByNames(group, "seat");
-
+		this.removeByNames(group, "midframe");
 		//update chair back transfrom Matrix
 		var back = group.getObjectByName ('back');		
 		this.updateBack(back);
@@ -1250,7 +1250,7 @@ Chair_Add.prototype = {
 		// }
 	},
 
-//-------------------------------end hook event--------------------------------------
+//-------------------------------end hook event----------------------------------------
 
 //-------------------------------start flip event--------------------------------------
 	flipEvent: function(){
@@ -1336,12 +1336,12 @@ Chair_Add.prototype = {
 		}
 		
 	},
-//-------------------------------end flip event--------------------------------------
+//-------------------------------end flip event----------------------------------------
 
 
 //-------------------------------start hang event--------------------------------------
 	
-	createRope:function(boardPosition, wallPosition){
+	createRope:function(furniture, boardPosition, wallPosition){
 		var ropeNumSegments = 10;
 		var ropeLength = Math.abs(boardPosition.y - wallPosition.y);
 		var segmentLength = ropeLength / ropeNumSegments;
@@ -1373,12 +1373,14 @@ Chair_Add.prototype = {
 		var hang = new THREE.Object3D();
 		hang = this.furnitures[0].getFurniture().clone();
 		hang.name = "add_hang";
-		hang.position.set(0, 0, 0);
-		this.main.scene.add(hang);
+		this.main.scene.add( hang );
+		var wall = this.main.purpleWall;
+		var moveTo = new THREE.Vector3(wall.position.x + 10, wall.position.y - 10, wall.position.z + 10);
+		hang.position.set(moveTo.x, moveTo.y, moveTo.z);
+
 		console.log(hang);		
 		this.checkHasMidFrame(hang);
 		this.checkHasLeg(hang);
-		
 
 		var hang_size = this.getPartSize(hang);
 		var hang_centerPosition = this.getPartCenter(hang);
@@ -1439,14 +1441,14 @@ Chair_Add.prototype = {
 
 		var wallPosition1 = this.getPartSurfaceCenterPositionByRay(this.main.ceiling, "down");
 		wallPosition1.setX(board1_RightRopePosition.x);
-		this.createRope(board1_RightRopePosition, wallPosition1);
+		this.createRope(hang, board1_RightRopePosition, wallPosition1);
 
 
 		var board1_LeftRopePosition = new THREE.Vector3();
 		board1_LeftRopePosition.set(board1_center.x-offset, board1_center.y, board1_center.z);
 
 		wallPosition1.setX(board1_LeftRopePosition.x);
-		this.createRope(board1_LeftRopePosition, wallPosition1);
+		this.createRope(hang, board1_LeftRopePosition, wallPosition1);
 
 		var board2_center = this.getPartCenter(board2);
 		var board2_RightRopePosition = new THREE.Vector3();
@@ -1455,14 +1457,14 @@ Chair_Add.prototype = {
 
 		var wallPosition2 = this.getPartSurfaceCenterPositionByRay(this.main.ceiling, "down");
 		wallPosition2.setX(board2_RightRopePosition.x);
-		this.createRope(board2_RightRopePosition, wallPosition2);
+		this.createRope(hang, board2_RightRopePosition, wallPosition2);
 
 
 		var board2_LeftRopePosition = new THREE.Vector3();
 		board2_LeftRopePosition.set(board2_center.x-offset, board2_center.y, board2_center.z);
 
 		wallPosition2.setX(board2_LeftRopePosition.x);
-		this.createRope(board2_LeftRopePosition, wallPosition2);
+		this.createRope(hang, board2_LeftRopePosition, wallPosition2);
 
 		//-----------------------------------cut leg start------------------------------------------
 		var legs = new Array();
@@ -1480,10 +1482,12 @@ Chair_Add.prototype = {
 				}
 			}						
 		}
-		console.log(legs.length);
-		//get material		
+		console.log(legs);
+		//get material
+		console.log(this.hasChildren(legs[0]));
 		while(this.hasChildren(legs[0]))
 			legs[0] = legs[0].children[0];
+
 		var legMaterial = new THREE.Material();
 		if (Array.isArray(legs[0].material))
 			legMaterial = legs[0].material[0].clone();
@@ -1493,27 +1497,26 @@ Chair_Add.prototype = {
 		
 		for (var i = 0; i < legs.length; i++) {
 			// reduce vector
-			var i = 0;
-			var part = legs[i];
-			var box = new THREE.Box3();
-			box.setFromObject(part);
-			var helper = new THREE.Box3Helper( box, 0xffff00 );
-			this.main.scene.add(helper);
+			// var box = new THREE.Box3();
+			// box.setFromObject(legs[i]);
+			// var helper = new THREE.Box3Helper( box, 0xffff00 );
+			// this.main.scene.add(helper);
 			
-			// var verticesAttribute = legs[i].geometry.getAttribute('position');
-			// var verticesArray = verticesAttribute.array;
-			// var itemSize = verticesAttribute.itemSize;
-			// var verticesNum = verticesArray.length / itemSize;
-			// var beforeLength = verticesNum;
-			// var modifer = new THREE.SimplifyModifier();
-			// var simplified = modifer.modify( legs[i].geometry,  beforeLength * 0.5 | 0 );
-			// console.log(simplified);
-			// cut
-			// offset = board2_center.y - legs_center[i].y + legs_size[i].y/2;		
-			// var cutResultGeometry = chairCutBack(simplified, offset);
-			// var newleg = new THREE.Mesh( cutResultGeometry, legMaterial );
-			// hang.remove(legs[i]);
-			// hang.add(newleg);
+			var verticesAttribute = legs[i].geometry.getAttribute('position');
+			var verticesArray = verticesAttribute.array;
+			var itemSize = verticesAttribute.itemSize;
+			var verticesNum = verticesArray.length / itemSize;
+			var beforeLength = verticesNum;
+			var modifer = new THREE.SimplifyModifier();
+			var simplified = modifer.modify( legs[i].geometry,  beforeLength * 0.5 | 0 );
+			console.log(simplified);
+			// cut			
+			var offset = (board2_center.y - legs_center[i].y + legs_size[i].y/2) / hang.scale.y;
+			
+			var cutResultGeometry = chairCutBack(simplified, offset);
+			var newleg = new THREE.Mesh( cutResultGeometry, legMaterial );
+			hang.remove(legs[i]);
+			hang.add(newleg);
 			
 		}
 		
@@ -1522,63 +1525,60 @@ Chair_Add.prototype = {
 		
 		//-----------------------------------cut back start------------------------------------------
 		
-		// var BackNeedCut = this.checkBackNeedCut(hang);
-		// console.log(BackNeedCut);
-		// if(BackNeedCut){
-		// 	var parts = new Array();
-		// 	this.findAllChildren(parts, back);
-		// 	console.log(parts);
-		// 	var backMaterial = new THREE.MeshBasicMaterial();
-		// 	if (Array.isArray(parts[0].material))
-		// 		backMaterial = parts[0].material[0].clone();
-		// 	else
-		// 		backMaterial = parts[0].material.clone();
+		var BackNeedCut = this.checkBackNeedCut(hang);
+		console.log(BackNeedCut);
+		if(BackNeedCut){
+			var parts = new Array();
+			this.findAllChildren(parts, back);
+			console.log(parts);
+			var backMaterial = new THREE.MeshBasicMaterial();
+			if (Array.isArray(parts[0].material))
+				backMaterial = parts[0].material[0].clone();
+			else
+				backMaterial = parts[0].material.clone();
 
-		// 	var values_x = new Array();
-		// 	for (var i = 0; i < parts.length; i++) {
-		// 		values_x.push( this.getPartCenter(parts[i]).x ); 
-		// 	}
-		// 	console.log(values_x);
-		// 	// left
-		// 	var min = values_x[0];
-		// 	var id_left = 0;
-		// 	for (var i = 0; i < values_x.length; i++) {
-		// 		if(min > values_x[i]){
-		// 			min = values_x[i];
-		// 			id_left = i;
-		// 		}				
-		// 	}					
+			var values_x = new Array();
+			for (var i = 0; i < parts.length; i++) {
+				values_x.push( this.getPartCenter(parts[i]).x ); 
+			}
+			console.log(values_x);
+			// left
+			var min = values_x[0];
+			var id_left = 0;
+			for (var i = 0; i < values_x.length; i++) {
+				if(min > values_x[i]){
+					min = values_x[i];
+					id_left = i;
+				}				
+			}					
 
-		// 	//right
-		// 	var max = values_x[0];
-		// 	var id_right = 0;
-		// 	for (var i = 0; i < values_x.length; i++) {
-		// 		if(max < values_x[i]){
-		// 			max = values_x[i];
-		// 			id_right = i;
-		// 		}				
-		// 	}
-		// 	console.log(min + " " + max);
-		// 	var center = this.getPartCenter(parts[id_left]);
-		// 	var size = this.getPartSize(parts[id_left]);
-		// 	offset -= board2_size.y/2; 
-		// 	var backGeometry1 = chairCutBack(parts[id_left].geometry, offset);
-		// 	var test1 = new THREE.Mesh( backGeometry1, backMaterial );
+			//right
+			var max = values_x[0];
+			var id_right = 0;
+			for (var i = 0; i < values_x.length; i++) {
+				if(max < values_x[i]){
+					max = values_x[i];
+					id_right = i;
+				}				
+			}
+			console.log(min + " " + max);
+			var center = this.getPartCenter(parts[id_left]);
+			var size = this.getPartSize(parts[id_left]);
+			offset -= board2_size.y/2; 
+			var backGeometry1 = chairCutBack(parts[id_left].geometry, offset);
+			var test1 = new THREE.Mesh( backGeometry1, backMaterial );
 
-		// 	back.remove(parts[id_left]);
-		// 	hang.add(test1);
+			back.remove(parts[id_left]);
+			hang.add(test1);
 
-		// 	var backGeometry2 = chairCutBack(parts[id_right].geometry, offset);
-		// 	var test2 = new THREE.Mesh( backGeometry2, backMaterial );
+			var backGeometry2 = chairCutBack(parts[id_right].geometry, offset);
+			var test2 = new THREE.Mesh( backGeometry2, backMaterial );
 
-		// 	back.remove(parts[id_right]);
-		// 	hang.add(test2);
+			back.remove(parts[id_right]);
+			hang.add(test2);
 
-		// }
-		
+		}
 		//-----------------------------------cut back end------------------------------------------
-		
-		
 	},
 //-------------------------------end hang event----------------------------------------
 
@@ -5647,6 +5647,7 @@ function chairCutBack(back, offest) {
   //console.log(plane);
 
   var half_part = obj[0].cutByPlane(plane.flipped());
+  // var half_part = obj[0].cutByPlane(plane);
   //var half_part = obj[0];
 
   //console.log(half_part);
@@ -7055,7 +7056,10 @@ Main.prototype = {
 			//keep the size and ignore the scale
 			if(loadedScale.x != 1) {
 				var location = new THREE.Vector3(0, 0, -30);
-				var quaternion = new THREE.Quaternion().setFromUnitVectors(new THREE.Vector3(0, 0, 1), new THREE.Vector3(0, 1, 0));
+				//this will cause errors in addAxis
+				//var quaternion = new THREE.Quaternion().setFromUnitVectors(new THREE.Vector3(0, 0, 1), new THREE.Vector3(0, 1, 0));
+				var quaternion = new THREE.Quaternion();
+
 				var scale = new THREE.Vector3(loadedScale.x * 10, loadedScale.y * 10, loadedScale.z * 10)
 
 				loadMatrix.compose(location, quaternion, scale);
@@ -7520,7 +7524,6 @@ Main.prototype = {
 		this.addMultiSelection(groupObj);
 
 	},
-
 
 
 	//label a selected part

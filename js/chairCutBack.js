@@ -19,6 +19,7 @@ function chairCutBack(back, offest) {
   //console.log(plane);
 
   var half_part = obj[0].cutByPlane(plane.flipped());
+  // var half_part = obj[0].cutByPlane(plane);
   //var half_part = obj[0];
 
   //console.log(half_part);
