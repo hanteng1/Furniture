@@ -30,8 +30,8 @@ function Main()
 
 	//category
 	//todo: an floating window to select category
-	//this.category = "chair";
-	this.category = "cabinet";
+	this.category = "chair";
+	// this.category = "cabinet";
 
 	//only stores data
 	this.container = document.getElementById('container');
@@ -114,6 +114,11 @@ function Main()
 
 	//to handle the 
 	this.handleClickToCall = false;
+
+
+	//---------------------test get wall------------------------------------------------
+	this.purpleWall = new THREE.Object3D();
+	this.ceiling = new THREE.Object3D();
 
 }
 
@@ -294,6 +299,14 @@ Main.prototype = {
 		//scope.scene.add(purple_wall);
 		this.house.add(purple_wall);
 
+		//---------------------test get wall------------------------------------------------
+
+
+		this.purpleWall = purple_wall;
+		console.log("main purple_wall");
+		console.log(purple_wall);
+
+		//----------------------------------------------------------------------------------
 
 		var whiteWallTexture = new THREE.TextureLoader().load("../images/white_wall.jpg");
 		whiteWallTexture.wrapS = whiteWallTexture.wrapT = THREE.RepeatWrapping;
@@ -420,6 +433,12 @@ Main.prototype = {
 		//scope.scene.add(ceiling);
 		this.house.add(ceiling);
 
+
+		//---------------------test get wall------------------------------------------------
+		
+		this.ceiling = ceiling;
+
+		//---------------------test get wall------------------------------------------------
 
 		//the other side, 70 window
 		loader.load( '../models/wall_window.dae', function ( collada ) {

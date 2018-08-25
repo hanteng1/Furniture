@@ -987,13 +987,14 @@ Chair_Add.prototype = {
 	},
 
 //-------------------------------start board event--------------------------------------
-	plantLoader: function(board){
+	plantLoader: function(group){
 		var plant;
 
 		// loading manager
 		var scene = this.main.scene;
 		var loadingManager = new THREE.LoadingManager( function() {
-			scene.add( plant );
+			var board = group.getObjectByName("board");
+			var scale = group.scale;
 
 			var box = new THREE.Box3();
 			box.setFromObject(plant);
@@ -1020,7 +1021,7 @@ Chair_Add.prototype = {
 		loader.load( "./models/plant1.dae", function ( collada ) {
 			plant = collada.scene;
 			plant.name = "plant";
-			plant.scale.x = 0.05; plant.scale.y = 0.05; plant.scale.z = 0.05;
+			plant.scale.x = 0.02; plant.scale.y = 0.02; plant.scale.z = 0.02;
 			
 
 		} );
@@ -1045,12 +1046,17 @@ Chair_Add.prototype = {
 	},
 
 	addBoard: function(furniture_clone){
-		var moveTo = new THREE.Vector3(75, 25, 0);
-		
+		var wall = this.main.purpleWall;
+		var moveTo = new THREE.Vector3(wall.position.x + 10, wall.position.y - 5, wall.position.z + 10);
+
+		console.log(furniture_clone);
+		var scale = furniture_clone.scale;
+		console.log(scale);
 		//remove other part
 		var group = furniture_clone;		
 		this.remove(group);
 		this.removeByNames(group, "seat");
+		this.removeByNames(group, "midframe");
 		//update chair back transfrom Matrix
 		var back = group.getObjectByName ('back');		
 		this.updateBack(back);		
@@ -1066,7 +1072,9 @@ Chair_Add.prototype = {
 
 		var board = this.createBoard(back, width, height/10, depth/2);
 		board.name = "board";
-		
+
+		this.plantLoader(group);
+
 		//get chair back world position and back world matrix's inverse
 		var component = furniture_clone.getObjectByName('back');		
 		var pos = this.getPartCenter(component);
@@ -1081,7 +1089,7 @@ Chair_Add.prototype = {
 		board.position.set(pos.x - size_board.x/2, pos.y, pos.z);		
 		back.worldToLocal(board.position);	
 
-		//add borad to furniture
+		//add board to furniture
 		group.add(board);
 
 		//change max and min value
@@ -1090,18 +1098,15 @@ Chair_Add.prototype = {
 		position_id.min = this.computeNumber((size_back.y / 2) * (-1));
 
 		var position_id = document.getElementById("CHAIR_ADD_WIDTH");
-		position_id.max = this.computeNumber(size_board.z * 2 / 3);
+		position_id.max = this.computeNumber(size_board.z / 3 * 5);
 
 		var position_id = document.getElementById("CHAIR_ADD_HEIGHT");
-		position_id.max = this.computeNumber(size_board.z * 2 / 3);
-
+		position_id.max = this.computeNumber(size_board.z / 3 * 2.5);		
 		group.position.set(moveTo.x, moveTo.y, moveTo.z);
-
-		this.plantLoader(board);
+		
 	},
 
 	setBoard: function(furniture_clone){
-		var moveTo = new THREE.Vector3(75, 25, 0);
 
 		var group = furniture_clone;
 		var board = group.getObjectByName('board');
@@ -1112,8 +1117,9 @@ Chair_Add.prototype = {
 		var segWidth = this.parameters.CHAIR_ADD_WIDTH;
 		var segHeight = this.parameters.CHAIR_ADD_HEIGHT;
 
-		board.scale.x = 1 + 0.05 * parseInt(segWidth);
-		board.scale.z = 1 + 0.05 * parseInt(segHeight);
+		console.log(board.scale);
+		board.scale.x = 4 + 0.05 * parseInt(segWidth);
+		board.scale.z = 4 + 0.05 * parseInt(segHeight);
 
 		//get chair back world position and back world matrix's inverse
 		var component = group.getObjectByName('back');		
@@ -1130,21 +1136,13 @@ Chair_Add.prototype = {
 	boardEvent: function(){
 		if(!this.hasBoard){			
 			var furniture_clone_board = new THREE.Object3D();
-			furniture_clone_board = this.furnitures[0].getFurniture().clone();
+			furniture_clone_board = this.furnitures[0].getFurniture();
 			furniture_clone_board.name = "add_board";
 			
 			this.flagCutLeg = this.checkBackNeedCut(furniture_clone_board);
 			
-			this.addBoard(furniture_clone_board);
-			
-			var clone_size = this.getPartSize(furniture_clone_board);
-			var wallPosition = new THREE.Vector3();
-			wallPosition = this.getPartCenter(furniture_clone_board);
-			wallPosition.z -= clone_size.z;
-			wallPosition.x += 25;
-			var wall = this.createWall(wallPosition, 200, 50, 10);				
+			this.addBoard(furniture_clone_board);				
 			this.main.scene.add(furniture_clone_board);
-			this.main.scene.add(wall);
 			this.hasBoard = true;
 		}
 		else{
@@ -1155,27 +1153,6 @@ Chair_Add.prototype = {
 //-------------------------------end board event--------------------------------------
 
 //-------------------------------start hook event--------------------------------------
-	hookLoader: function(back){
-		
-		var hook;
-		// loading manager
-		var scene = this.main.scene;
-		var chair_add = this;
-		var loadingManager = new THREE.LoadingManager( function() {
-			for (var i = 0; i < back.children.length; i++) {
-				chair_add.createColumnHook(scene, back.children[i], hook);
-			}		
-		} );
-
-		// collada
-		var loader = new THREE.ColladaLoader( loadingManager );
-		loader.load( "./models/hook/source/B01020/B01020.dae", function ( collada ) {
-			hook = collada.scene;
-			hook.name = "hook";			
-			hook.scale.x = 0.025; hook.scale.y = 0.025; hook.scale.z = 0.025;
-		} );
-	},
-
 	createHook: function(scene, child, hook, position, offset){		
 		var pos = new THREE.Vector3(position.x + offset, position.y, position.z + 10);
 		var raycaster = new THREE.Raycaster();
@@ -1208,12 +1185,32 @@ Chair_Add.prototype = {
 		box.getCenter(center_child);
 
 		this.createHook(scene, child, hook, center_child, size_hook.x * (-3) );
-		this.createHook(scene, child, hook, center_child, size_hook.x * 0 );
+		// this.createHook(scene, child, hook, center_child, size_hook.x * 0 );
 		this.createHook(scene, child, hook, center_child, size_hook.x * 3);		
 	},
 
+	hookLoader: function(back){		
+		var hook;
+		// loading manager
+		var scene = this.main.scene;
+		var chair_add = this;
+		var loadingManager = new THREE.LoadingManager( function() {
+			for (var i = 0; i < back.children.length; i++) {
+				chair_add.createColumnHook(scene, back.children[i], hook);
+			}		
+		} );
+		// collada
+		var loader = new THREE.ColladaLoader( loadingManager );
+		loader.load( "./models/hook/source/B01020/B01020.dae", function ( collada ) {
+			hook = collada.scene;
+			hook.name = "hook";			
+			hook.scale.x = 0.01; hook.scale.y = 0.01; hook.scale.z = 0.01;
+		} );
+	},
+
 	addHook: function(furniture_clone){
-		var moveTo = new THREE.Vector3(125, 25, 0);
+		var wall = this.main.purpleWall;
+		var moveTo = new THREE.Vector3(wall.position.x + 10, wall.position.y - 5, wall.position.z + 10);
 		//remove other part
 		var group = furniture_clone;		
 		this.remove(group);
@@ -1233,25 +1230,24 @@ Chair_Add.prototype = {
 		$('#parameter_control_chair_add').hide();
 		if(!this.hasHook){
 			var furniture_clone_hook = new THREE.Object3D();
-			furniture_clone_hook = this.furnitures[0].getFurniture().clone();
+			furniture_clone_hook = this.furnitures[0].getFurniture();
 			furniture_clone_hook.name = "add_hook";
 
 			this.addHook(furniture_clone_hook);
 
 			this.main.scene.add(furniture_clone_hook);
 			this.hasHook = true;
-
 		}
-		else{
-			var add_hook = this.main.scene.getObjectByName("add_hook");
-			var back = add_hook.getObjectByName("back");
+		// else{
+		// 	var add_hook = this.main.scene.getObjectByName("add_hook");
+		// 	var back = add_hook.getObjectByName("back");
 
-			var part = back.children[0];
-			var box = new THREE.Box3();
-			box.setFromObject(part);
-			var helper = new THREE.Box3Helper( box, 0xffff00 );
-			this.main.scene.add(helper);				
-		}
+		// 	var part = back.children[0];
+		// 	var box = new THREE.Box3();
+		// 	box.setFromObject(part);
+		// 	var helper = new THREE.Box3Helper( box, 0xffff00 );
+		// 	this.main.scene.add(helper);				
+		// }
 	},
 
 //-------------------------------end hook event--------------------------------------
@@ -1301,7 +1297,7 @@ Chair_Add.prototype = {
 			board.position.set(pos.x + size_board.x/2, pos.y, pos.z);		
 			back.worldToLocal(board.position);	
 
-			//add borad to furniture
+			//add board to furniture
 			furniture_clone_flip.add(board);
 
 			furniture_clone_flip.position.set(moveTo.x, moveTo.y + size.y, moveTo.z - size.z);
@@ -1377,7 +1373,7 @@ Chair_Add.prototype = {
 		var hang = new THREE.Object3D();
 		hang = this.furnitures[0].getFurniture().clone();
 		hang.name = "add_hang";
-		hang.position.set(-100, 25, 0);
+		hang.position.set(0, 0, 0);
 		this.main.scene.add(hang);
 		console.log(hang);		
 		this.checkHasMidFrame(hang);
@@ -1386,42 +1382,11 @@ Chair_Add.prototype = {
 
 		var hang_size = this.getPartSize(hang);
 		var hang_centerPosition = this.getPartCenter(hang);
-		
-		
-		//base
-		var baseMaterial = new THREE.MeshBasicMaterial({ color: 0x606060 });
-		var baseGeometry = new THREE.BoxGeometry( 25, 10, 25 );	
-		var base = new THREE.Mesh( baseGeometry, baseMaterial );
-		base.name = "base";
-		var base_size = this.getPartSize(base);
-		base.position.set(hang_centerPosition.x - 40, 0, hang_centerPosition.z);
-		this.main.scene.add(base);
-
-		//vertical cube
-		var verticalCubeMaterial = new THREE.MeshBasicMaterial({ color: 0x606060 });
-		var verticalCubeGeometry = new THREE.BoxGeometry( 15, hang_centerPosition.y + hang_size.y * 2 , 15 );	
-		var verticalCube = new THREE.Mesh( verticalCubeGeometry, verticalCubeMaterial );
-		verticalCube.name = "verticalCube";
-		var verticalCube_size = this.getPartSize(verticalCube);
-		verticalCube.position.set(base.position.x, verticalCube_size.y/2, base.position.z);
-		var verticalCube_centerPosition = this.getPartCenter(verticalCube);
-		this.main.scene.add(verticalCube);
-		
-
-		//horizontal cube
-		var horizontalCubeMaterial = new THREE.MeshBasicMaterial({ color: 0x606060 });
-		var horizontalCubeGeometry = new THREE.BoxGeometry( (Math.abs(base.position.x - hang.position.x)+
-															base_size.x+hang_size.x)*1.25, 15, 15 );	
-		var horizontalCube = new THREE.Mesh( horizontalCubeGeometry, horizontalCubeMaterial );
-		horizontalCube.name = "horizontalCube";
-		horizontalCube.position.set((base.position.x+hang.position.x)/2, 
-			verticalCube_centerPosition.y + verticalCube_size.y/2, base.position.z);
-		this.main.scene.add(horizontalCube);
 
 		//remove unknow part
 		this.remove(hang);
 
-		//step1: a1) create two boards. b) get seat four angles.
+		//step1: a1) create two boards.
 		//		 a2) get two positions on each boards.
 
 		//(a)
@@ -1433,7 +1398,7 @@ Chair_Add.prototype = {
 		var seat_size = this.getPartSize(seat);
 		var seat_center = this.getPartCenter(seat);
 
-		var midframe = hang.getObjectByName("midframe");
+		var midframe = hang.getObjectByName("midframe");		
 		var midframe_size = this.getPartSize(midframe);
 		var midframe_center = this.getPartCenter(midframe);
 
@@ -1472,7 +1437,7 @@ Chair_Add.prototype = {
 		var offset = (board1_size.x + seat_size.x)/4;
 		board1_RightRopePosition.set(board1_center.x+offset, board1_center.y, board1_center.z);
 
-		var wallPosition1 = this.getPartSurfaceCenterPositionByRay(horizontalCube, "down");
+		var wallPosition1 = this.getPartSurfaceCenterPositionByRay(this.main.ceiling, "down");
 		wallPosition1.setX(board1_RightRopePosition.x);
 		this.createRope(board1_RightRopePosition, wallPosition1);
 
@@ -1488,7 +1453,7 @@ Chair_Add.prototype = {
 		offset = (board2_size.x + seat_size.x)/4;
 		board2_RightRopePosition.set(board2_center.x+offset, board2_center.y, board2_center.z);
 
-		var wallPosition2 = this.getPartSurfaceCenterPositionByRay(horizontalCube, "down");
+		var wallPosition2 = this.getPartSurfaceCenterPositionByRay(this.main.ceiling, "down");
 		wallPosition2.setX(board2_RightRopePosition.x);
 		this.createRope(board2_RightRopePosition, wallPosition2);
 
@@ -1503,22 +1468,23 @@ Chair_Add.prototype = {
 		var legs = new Array();
 		var legs_center = new Array();
 		var legs_size = new Array();
+
+		console.log(hang.children.length);
 		for (var i = 0; i < hang.children.length; i++) {
 			console.log(hang.children[i].type);
 			if(hang.children[i].type == "Mesh"){
 				if (hang.children[i].name == "leg") {
 					legs.push(hang.children[i]);
-
 					legs_center.push(this.getPartCenter(hang.children[i]));
 					legs_size.push(this.getPartSize(hang.children[i]));
 				}
 			}						
 		}
-		
-		//get material
+		console.log(legs.length);
+		//get material		
 		while(this.hasChildren(legs[0]))
 			legs[0] = legs[0].children[0];
-		var legMaterial = new THREE.MeshBasicMaterial();
+		var legMaterial = new THREE.Material();
 		if (Array.isArray(legs[0].material))
 			legMaterial = legs[0].material[0].clone();
 		else
@@ -1526,28 +1492,28 @@ Chair_Add.prototype = {
 		
 		
 		for (var i = 0; i < legs.length; i++) {
-			//reduce vector
-			//var i = 0;
-			//var part = legs[i];
-			//var box = new THREE.Box3();
-			//box.setFromObject(part);
-			//var helper = new THREE.Box3Helper( box, 0xffff00 );
-			//this.main.scene.add(helper);
+			// reduce vector
+			var i = 0;
+			var part = legs[i];
+			var box = new THREE.Box3();
+			box.setFromObject(part);
+			var helper = new THREE.Box3Helper( box, 0xffff00 );
+			this.main.scene.add(helper);
 			
-			var verticesAttribute = legs[i].geometry.getAttribute('position');
-			var verticesArray = verticesAttribute.array;
-			var itemSize = verticesAttribute.itemSize;
-			var verticesNum = verticesArray.length / itemSize;
-			var beforeLength = verticesNum;
-			var modifer = new THREE.SimplifyModifier();
-			var simplified = modifer.modify( legs[i].geometry,  beforeLength * 0.5 | 0 );
-			console.log(simplified);
-			//cut
-			offset = board2_center.y - legs_center[i].y + legs_size[i].y/2;		
-			var cutResultGeometry = chairCutBack(simplified, offset);
-			var newleg = new THREE.Mesh( cutResultGeometry, legMaterial );
-			hang.remove(legs[i]);
-			hang.add(newleg);
+			// var verticesAttribute = legs[i].geometry.getAttribute('position');
+			// var verticesArray = verticesAttribute.array;
+			// var itemSize = verticesAttribute.itemSize;
+			// var verticesNum = verticesArray.length / itemSize;
+			// var beforeLength = verticesNum;
+			// var modifer = new THREE.SimplifyModifier();
+			// var simplified = modifer.modify( legs[i].geometry,  beforeLength * 0.5 | 0 );
+			// console.log(simplified);
+			// cut
+			// offset = board2_center.y - legs_center[i].y + legs_size[i].y/2;		
+			// var cutResultGeometry = chairCutBack(simplified, offset);
+			// var newleg = new THREE.Mesh( cutResultGeometry, legMaterial );
+			// hang.remove(legs[i]);
+			// hang.add(newleg);
 			
 		}
 		
@@ -1556,59 +1522,59 @@ Chair_Add.prototype = {
 		
 		//-----------------------------------cut back start------------------------------------------
 		
-		var BackNeedCut = this.checkBackNeedCut(hang);
-		console.log(BackNeedCut);
-		if(BackNeedCut){
-			var parts = new Array();
-			this.findAllChildren(parts, back);
-			console.log(parts);
-			var backMaterial = new THREE.MeshBasicMaterial();
-			if (Array.isArray(parts[0].material))
-				backMaterial = parts[0].material[0].clone();
-			else
-				backMaterial = parts[0].material.clone();
+		// var BackNeedCut = this.checkBackNeedCut(hang);
+		// console.log(BackNeedCut);
+		// if(BackNeedCut){
+		// 	var parts = new Array();
+		// 	this.findAllChildren(parts, back);
+		// 	console.log(parts);
+		// 	var backMaterial = new THREE.MeshBasicMaterial();
+		// 	if (Array.isArray(parts[0].material))
+		// 		backMaterial = parts[0].material[0].clone();
+		// 	else
+		// 		backMaterial = parts[0].material.clone();
 
-			var values_x = new Array();
-			for (var i = 0; i < parts.length; i++) {
-				values_x.push( this.getPartCenter(parts[i]).x ); 
-			}
-			console.log(values_x);
-			//left
-			var min = values_x[0];
-			var id_left = 0;
-			for (var i = 0; i < values_x.length; i++) {
-				if(min > values_x[i]){
-					min = values_x[i];
-					id_left = i;
-				}				
-			}					
+		// 	var values_x = new Array();
+		// 	for (var i = 0; i < parts.length; i++) {
+		// 		values_x.push( this.getPartCenter(parts[i]).x ); 
+		// 	}
+		// 	console.log(values_x);
+		// 	// left
+		// 	var min = values_x[0];
+		// 	var id_left = 0;
+		// 	for (var i = 0; i < values_x.length; i++) {
+		// 		if(min > values_x[i]){
+		// 			min = values_x[i];
+		// 			id_left = i;
+		// 		}				
+		// 	}					
 
-			//right
-			var max = values_x[0];
-			var id_right = 0;
-			for (var i = 0; i < values_x.length; i++) {
-				if(max < values_x[i]){
-					max = values_x[i];
-					id_right = i;
-				}				
-			}
-			console.log(min + " " + max);
-			var center = this.getPartCenter(parts[id_left]);
-			var size = this.getPartSize(parts[id_left]);
-			offset -= board2_size.y/2; 
-			var backGeometry1 = chairCutBack(parts[id_left].geometry, offset);
-			var test1 = new THREE.Mesh( backGeometry1, backMaterial );
+		// 	//right
+		// 	var max = values_x[0];
+		// 	var id_right = 0;
+		// 	for (var i = 0; i < values_x.length; i++) {
+		// 		if(max < values_x[i]){
+		// 			max = values_x[i];
+		// 			id_right = i;
+		// 		}				
+		// 	}
+		// 	console.log(min + " " + max);
+		// 	var center = this.getPartCenter(parts[id_left]);
+		// 	var size = this.getPartSize(parts[id_left]);
+		// 	offset -= board2_size.y/2; 
+		// 	var backGeometry1 = chairCutBack(parts[id_left].geometry, offset);
+		// 	var test1 = new THREE.Mesh( backGeometry1, backMaterial );
 
-			back.remove(parts[id_left]);
-			hang.add(test1);
+		// 	back.remove(parts[id_left]);
+		// 	hang.add(test1);
 
-			var backGeometry2 = chairCutBack(parts[id_right].geometry, offset);
-			var test2 = new THREE.Mesh( backGeometry2, backMaterial );
+		// 	var backGeometry2 = chairCutBack(parts[id_right].geometry, offset);
+		// 	var test2 = new THREE.Mesh( backGeometry2, backMaterial );
 
-			back.remove(parts[id_right]);
-			hang.add(test2);
+		// 	back.remove(parts[id_right]);
+		// 	hang.add(test2);
 
-		}
+		// }
 		
 		//-----------------------------------cut back end------------------------------------------
 		
@@ -4432,12 +4398,12 @@ Dresser_Add.prototype = {
 	execute: function() {
 		if(this.checkHasTopFront(this.furnitures[0])){
 			// this.cutToChairEvent();
-			// this.addDoorEvent();
-			// this.addLegEvent();	
-			// this.addRodEvent();
-			// this.addSpiceRackEvent();
+			this.addDoorEvent();
+			this.addLegEvent();	
+			this.addRodEvent();
+			this.addSpiceRackEvent();
 			// this.addDrawerEvent();
-			this.removeDrawersEvent();
+			// this.removeDrawersEvent();
 		}
 		else{
 			alert("Please mark cabinetTop and cabinetFront");
@@ -5311,7 +5277,7 @@ Processor.prototype = {
 				}else if(scope.furnitures.length == 1){
 					//possible actions with one furniture
 
-					if (true) {
+					if (false) {
 						scope.cabinet_kallax = new Cabinet_kallax(scope.main);
 						scope.transformFunctions.CABINET_LALLAX = scope.cabinet_kallax;
 						
@@ -5328,7 +5294,7 @@ Processor.prototype = {
 				}else if( scope.furnitures.length > 1) {
 					//possible actions with many furnitures
 
-					if(true){
+					if(false){
 						scope.cabinet_kallax = new Cabinet_kallax(scope.main);
 						scope.transformFunctions.CABINET_LALLAX = scope.cabinet_kallax;						
 						$('.operations.operation_cabinet_kallax_two').show();
@@ -5650,7 +5616,7 @@ const csgToGeometries = require('./csgToGeometries')
 
 function chairCreateBoard(width, height, depth) {
 	var board = cube({size:[width, height, depth]});
-	var obj = board.expand(0.3, 16);
+	var obj = board.expand(0.12, 16);
 
 	var geometry = csgToGeometries(obj)[0];
 
@@ -6508,8 +6474,8 @@ function Main()
 
 	//category
 	//todo: an floating window to select category
-	//this.category = "chair";
-	this.category = "cabinet";
+	this.category = "chair";
+	// this.category = "cabinet";
 
 	//only stores data
 	this.container = document.getElementById('container');
@@ -6592,6 +6558,11 @@ function Main()
 
 	//to handle the 
 	this.handleClickToCall = false;
+
+
+	//---------------------test get wall------------------------------------------------
+	this.purpleWall = new THREE.Object3D();
+	this.ceiling = new THREE.Object3D();
 
 }
 
@@ -6772,6 +6743,14 @@ Main.prototype = {
 		//scope.scene.add(purple_wall);
 		this.house.add(purple_wall);
 
+		//---------------------test get wall------------------------------------------------
+
+
+		this.purpleWall = purple_wall;
+		console.log("main purple_wall");
+		console.log(purple_wall);
+
+		//----------------------------------------------------------------------------------
 
 		var whiteWallTexture = new THREE.TextureLoader().load("../images/white_wall.jpg");
 		whiteWallTexture.wrapS = whiteWallTexture.wrapT = THREE.RepeatWrapping;
@@ -6898,6 +6877,12 @@ Main.prototype = {
 		//scope.scene.add(ceiling);
 		this.house.add(ceiling);
 
+
+		//---------------------test get wall------------------------------------------------
+		
+		this.ceiling = ceiling;
+
+		//---------------------test get wall------------------------------------------------
 
 		//the other side, 70 window
 		loader.load( '../models/wall_window.dae', function ( collada ) {

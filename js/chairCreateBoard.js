@@ -9,7 +9,7 @@ const csgToGeometries = require('./csgToGeometries')
 
 function chairCreateBoard(width, height, depth) {
 	var board = cube({size:[width, height, depth]});
-	var obj = board.expand(0.3, 16);
+	var obj = board.expand(0.12, 16);
 
 	var geometry = csgToGeometries(obj)[0];
 

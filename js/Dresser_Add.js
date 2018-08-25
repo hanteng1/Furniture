@@ -1054,12 +1054,12 @@ Dresser_Add.prototype = {
 	execute: function() {
 		if(this.checkHasTopFront(this.furnitures[0])){
 			// this.cutToChairEvent();
-			// this.addDoorEvent();
-			// this.addLegEvent();	
-			// this.addRodEvent();
-			// this.addSpiceRackEvent();
+			this.addDoorEvent();
+			this.addLegEvent();	
+			this.addRodEvent();
+			this.addSpiceRackEvent();
 			// this.addDrawerEvent();
-			this.removeDrawersEvent();
+			// this.removeDrawersEvent();
 		}
 		else{
 			alert("Please mark cabinetTop and cabinetFront");
