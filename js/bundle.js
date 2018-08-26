@@ -2096,6 +2096,7 @@ Chair_Align.prototype = {
 				///console.log(simplified);
 				//cut
 				offset = furnitures[ij].getComponentCenterPosition('midframe').y - furnitures[ij].getComponentSize('midframe').y;		
+				offset = offset*4.5;
 				var cutResultGeometry = chairCutBack(simplified, offset);
 				var newleg = new THREE.Mesh( cutResultGeometry, legMaterial );
 				furniture.remove(legs[i]);
@@ -7068,10 +7069,7 @@ Main.prototype = {
 			//keep the size and ignore the scale
 			if(loadedScale.x != 1) {
 				var location = new THREE.Vector3(0, 0, -30);
-<<<<<<< HEAD
-=======
 				//var location = new THREE.Vector3();
->>>>>>> master
 				//this will cause errors in addAxis
 				//var quaternion = new THREE.Quaternion().setFromUnitVectors(new THREE.Vector3(0, 0, 1), new THREE.Vector3(0, 1, 0));
 				var quaternion = new THREE.Quaternion();

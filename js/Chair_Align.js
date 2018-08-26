@@ -454,6 +454,7 @@ Chair_Align.prototype = {
 				///console.log(simplified);
 				//cut
 				offset = furnitures[ij].getComponentCenterPosition('midframe').y - furnitures[ij].getComponentSize('midframe').y;		
+				offset = offset*4.5;
 				var cutResultGeometry = chairCutBack(simplified, offset);
 				var newleg = new THREE.Mesh( cutResultGeometry, legMaterial );
 				furniture.remove(legs[i]);
