@@ -1148,7 +1148,7 @@ Main.prototype = {
 						//control switch from first-person to target orbit
 
 						//console.log("selected");
-						this.customControl.switchView2TG();
+						//this.customControl.switchView2TG();
 
 
 						break;
@@ -1189,7 +1189,7 @@ Main.prototype = {
 					
 					if (SomethingSelected == false){
 						//console.log("unselected");
-						this.customControl.switchView2FP();
+						//this.customControl.switchView2FP();
 					}
 					
 				}
@@ -1312,10 +1312,18 @@ Main.prototype = {
 	},
 
 	onDoubleClick: function(event) {
-		// var array = this.getMousePosition( this.container, event.clientX, event.clientY );
-		// this.onDoubleClickPosition.fromArray( array );
+		var array = this.getMousePosition( this.container, event.clientX, event.clientY );
+		this.onDoubleClickPosition.fromArray( array );
 
-		// var intersects = this.getIntersects( this.onDoubleClickPosition, this.objects );
+		//console.log("double clicked");
+
+		//this.customControl.switchView2TG();
+		//this.customControl.switchView2FP();
+
+		//var intersects = this.getIntersects( this.onDoubleClickPosition, this.objects );
+		// for(var i = 0; i < this.furnitures.length; i++) {
+		// 	var intersects = this.getIntersect( this.onUpPosition, this.furnitures[i].getFurniture());
+		// }
 
 		// if ( intersects.length > 0 ) {
 
@@ -1324,6 +1332,14 @@ Main.prototype = {
 		// 	//focused
 
 		// }
+
+		if(this.furniture !== null) {
+
+			this.customControl.switchView2TG();
+		}else {
+			this.customControl.switchView2FP();
+		}
+
 	},
 
 	onKeyDown: function(event) {
@@ -1467,8 +1483,6 @@ Main.prototype = {
 					this.removeFromScene(this.selectionBoxes[i]);
 				}
 		}
-
-
 
 		document.removeEventListener( 'keyup', this.onKeyUp.bind(this), false );
 	},
