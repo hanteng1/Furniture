@@ -595,6 +595,7 @@ Main.prototype = {
 			//keep the size and ignore the scale
 			if(loadedScale.x != 1) {
 				var location = new THREE.Vector3(0, 0, -30);
+				//var location = new THREE.Vector3();
 				//this will cause errors in addAxis
 				//var quaternion = new THREE.Quaternion().setFromUnitVectors(new THREE.Vector3(0, 0, 1), new THREE.Vector3(0, 1, 0));
 				var quaternion = new THREE.Quaternion();
@@ -1124,7 +1125,7 @@ Main.prototype = {
 	handleClick: function()
 	{
 
-		console.log("handleclick called");
+		//console.log("handleclick called");
 
 		if ( this.onDownPosition.distanceTo( this.onUpPosition ) === 0 ) {
 
@@ -1146,8 +1147,8 @@ Main.prototype = {
 						
 						//control switch from first-person to target orbit
 
-						console.log("selected");
-						this.customControl.switchView2TG();
+						//console.log("selected");
+						//this.customControl.switchView2TG();
 
 						break;
 					} else {
@@ -1189,8 +1190,8 @@ Main.prototype = {
 					}
 					//if not select anything
 					if (SomethingSelected == false){
-						console.log("unselected");
-						this.customControl.switchView2FP();
+						//console.log("unselected");
+						//this.customControl.switchView2FP();
 					}
 					
 				}
@@ -1316,10 +1317,18 @@ Main.prototype = {
 	},
 
 	onDoubleClick: function(event) {
-		// var array = this.getMousePosition( this.container, event.clientX, event.clientY );
-		// this.onDoubleClickPosition.fromArray( array );
+		var array = this.getMousePosition( this.container, event.clientX, event.clientY );
+		this.onDoubleClickPosition.fromArray( array );
 
-		// var intersects = this.getIntersects( this.onDoubleClickPosition, this.objects );
+		//console.log("double clicked");
+
+		//this.customControl.switchView2TG();
+		//this.customControl.switchView2FP();
+
+		//var intersects = this.getIntersects( this.onDoubleClickPosition, this.objects );
+		// for(var i = 0; i < this.furnitures.length; i++) {
+		// 	var intersects = this.getIntersect( this.onUpPosition, this.furnitures[i].getFurniture());
+		// }
 
 		// if ( intersects.length > 0 ) {
 
@@ -1328,6 +1337,14 @@ Main.prototype = {
 		// 	//focused
 
 		// }
+
+		if(this.furniture !== null) {
+
+			this.customControl.switchView2TG();
+		}else {
+			this.customControl.switchView2FP();
+		}
+
 	},
 
 	onKeyDown: function(event) {
@@ -1483,8 +1500,6 @@ Main.prototype = {
 			$('.ui.blue.submit.button.getdis').hide();
 		}
 
-
-
 		document.removeEventListener( 'keyup', this.onKeyUp.bind(this), false );
 	},
 
@@ -1578,6 +1593,9 @@ Main.prototype = {
 
 				}else if( object instanceof THREE.BoxHelper){
 
+
+				}else if(object == this.house) {
+
 				}else{
 					this.removeFromScene(object); 
 				}
@@ -1661,10 +1679,8 @@ Main.prototype = {
 		//add the corners to the labeled and axised components
 		
 		for(var i = 0; i < this.furnitures.length; i++) {
-			//this.furnitures[i].addCorners();
+			this.furnitures[i].addCorners();
 			this.furnitures[i].addtoPoint();
-
-			//this.scene.add(this.furnitures[i].points);
 		}
 		
 

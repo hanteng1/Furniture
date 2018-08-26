@@ -1659,7 +1659,7 @@ function Chair_Align (main) {
 
 	this.parameters = {
 
-		DISTANCE: 30,
+		DISTANCE: 5,
 		ANGLE: 0
 
 	};
@@ -1978,7 +1978,7 @@ Chair_Align.prototype = {
 		//make it based on x axis
 		var segAngleR = segAngle/180*Math.PI * (-1);
 
-		var destVector = new THREE.Vector3(0, refHeight, 0);
+		var destVector = new THREE.Vector3(0, refHeight, -30);
 		var segVector = new THREE.Vector3(segDistance, 0, 0);
 		
 		var refAxis = new THREE.Vector3(0, 1, 0);
@@ -5271,9 +5271,6 @@ Processor.prototype = {
 
 					scope.chair_rebuild = new Chair_Rebuild(scope.main);
 					scope.transformFunctions.CHAIR_REBUILD = scope.chair_rebuild;
-					
-					
-
 
 					$('.operations.operation_chair_add').show();
 					$('.operations.operation_chair_rebuild').show();
@@ -5286,8 +5283,8 @@ Processor.prototype = {
 					scope.transformFunctions.CHAIR_ALIGN = scope.chair_align;
 					
 					//wei hsiang start
-					scope.chair_rebuild = new Chair_Rebuild(scope.main);
-					scope.transformFunctions.CHAIR_REBUILD = scope.chair_rebuild;
+					//scope.chair_rebuild = new Chair_Rebuild(scope.main);
+					//scope.transformFunctions.CHAIR_REBUILD = scope.chair_rebuild;
 					//wei hsiang end
 					
 					$('.operations.operation_chair_align').show();
@@ -5566,13 +5563,13 @@ function cadMakeSeat (innerRace, outerRace, offsetY, textures) {
     path = path.close();
     var cag = path.innerToCAG();
     var csg = cag.extrude({
-      offset: [0.5, 0, 2],   // direction for extrusion
+      offset: [0, 0, 0.2],   // direction for extrusion
       twistangle: 0,       // top surface is rotated 30 degrees 
       twiststeps: 0        // create 10 slices
     });
 
     //expansion... /be careful to use .. very expensive
-    csg = csg.expand(0.4, 8); 
+    //csg = csg.expand(0.4, 8); 
 
     //get the geometry
     //be careful if there are too many vertices gerneated...
@@ -5621,7 +5618,7 @@ function cadMakeSeat (innerRace, outerRace, offsetY, textures) {
     mesh.receiveShadow = true;
 
     //todo.. can we set it in the csgtogeometry function? the normal vectors are meshed up
-    mesh.translateY(offsetY + 2);
+    mesh.translateY(offsetY + 0.2);
     //rotate from y - z
     var tempQuaternion = new THREE.Quaternion();
     tempQuaternion.setFromUnitVectors(new THREE.Vector3(0, 1, 0), new THREE.Vector3(0, 0, 1));
@@ -7071,6 +7068,10 @@ Main.prototype = {
 			//keep the size and ignore the scale
 			if(loadedScale.x != 1) {
 				var location = new THREE.Vector3(0, 0, -30);
+<<<<<<< HEAD
+=======
+				//var location = new THREE.Vector3();
+>>>>>>> master
 				//this will cause errors in addAxis
 				//var quaternion = new THREE.Quaternion().setFromUnitVectors(new THREE.Vector3(0, 0, 1), new THREE.Vector3(0, 1, 0));
 				var quaternion = new THREE.Quaternion();
@@ -7600,7 +7601,7 @@ Main.prototype = {
 	handleClick: function()
 	{
 
-		console.log("handleclick called");
+		//console.log("handleclick called");
 
 		if ( this.onDownPosition.distanceTo( this.onUpPosition ) === 0 ) {
 
@@ -7622,8 +7623,8 @@ Main.prototype = {
 						
 						//control switch from first-person to target orbit
 
-						console.log("selected");
-						this.customControl.switchView2TG();
+						//console.log("selected");
+						//this.customControl.switchView2TG();
 
 						break;
 					} else {
@@ -7665,8 +7666,8 @@ Main.prototype = {
 					}
 					//if not select anything
 					if (SomethingSelected == false){
-						console.log("unselected");
-						this.customControl.switchView2FP();
+						//console.log("unselected");
+						//this.customControl.switchView2FP();
 					}
 					
 				}
@@ -7792,10 +7793,18 @@ Main.prototype = {
 	},
 
 	onDoubleClick: function(event) {
-		// var array = this.getMousePosition( this.container, event.clientX, event.clientY );
-		// this.onDoubleClickPosition.fromArray( array );
+		var array = this.getMousePosition( this.container, event.clientX, event.clientY );
+		this.onDoubleClickPosition.fromArray( array );
 
-		// var intersects = this.getIntersects( this.onDoubleClickPosition, this.objects );
+		//console.log("double clicked");
+
+		//this.customControl.switchView2TG();
+		//this.customControl.switchView2FP();
+
+		//var intersects = this.getIntersects( this.onDoubleClickPosition, this.objects );
+		// for(var i = 0; i < this.furnitures.length; i++) {
+		// 	var intersects = this.getIntersect( this.onUpPosition, this.furnitures[i].getFurniture());
+		// }
 
 		// if ( intersects.length > 0 ) {
 
@@ -7804,6 +7813,14 @@ Main.prototype = {
 		// 	//focused
 
 		// }
+
+		if(this.furniture !== null) {
+
+			this.customControl.switchView2TG();
+		}else {
+			this.customControl.switchView2FP();
+		}
+
 	},
 
 	onKeyDown: function(event) {
@@ -7959,8 +7976,6 @@ Main.prototype = {
 			$('.ui.blue.submit.button.getdis').hide();
 		}
 
-
-
 		document.removeEventListener( 'keyup', this.onKeyUp.bind(this), false );
 	},
 
@@ -8054,6 +8069,9 @@ Main.prototype = {
 
 				}else if( object instanceof THREE.BoxHelper){
 
+
+				}else if(object == this.house) {
+
 				}else{
 					this.removeFromScene(object); 
 				}
@@ -8137,10 +8155,8 @@ Main.prototype = {
 		//add the corners to the labeled and axised components
 		
 		for(var i = 0; i < this.furnitures.length; i++) {
-			//this.furnitures[i].addCorners();
+			this.furnitures[i].addCorners();
 			this.furnitures[i].addtoPoint();
-
-			//this.scene.add(this.furnitures[i].points);
 		}
 		
 
