@@ -17,7 +17,7 @@ function Chair_Align (main) {
 
 	this.parameters = {
 
-		DISTANCE: 30,
+		DISTANCE: 5,
 		ANGLE: 0
 
 	};
@@ -336,7 +336,7 @@ Chair_Align.prototype = {
 		//make it based on x axis
 		var segAngleR = segAngle/180*Math.PI * (-1);
 
-		var destVector = new THREE.Vector3(0, refHeight, 0);
+		var destVector = new THREE.Vector3(0, refHeight, -30);
 		var segVector = new THREE.Vector3(segDistance, 0, 0);
 		
 		var refAxis = new THREE.Vector3(0, 1, 0);
@@ -454,6 +454,7 @@ Chair_Align.prototype = {
 				///console.log(simplified);
 				//cut
 				offset = furnitures[ij].getComponentCenterPosition('midframe').y - furnitures[ij].getComponentSize('midframe').y;		
+				offset = offset*4.5;
 				var cutResultGeometry = chairCutBack(simplified, offset);
 				var newleg = new THREE.Mesh( cutResultGeometry, legMaterial );
 				furniture.remove(legs[i]);

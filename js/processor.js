@@ -6,8 +6,6 @@ const Chair_Align = require('./Chair_Align');
 const Chair_Add = require('./Chair_Add');
 const Chair_Rebuild = require('./Chair_Rebuild');
 const Cabinet_kallax = require('./Cabinet_kallax');
-
-
 const Dresser_Add = require('./Dresser_Add');
 
 
@@ -78,9 +76,6 @@ Processor.prototype = {
 
 					scope.chair_rebuild = new Chair_Rebuild(scope.main);
 					scope.transformFunctions.CHAIR_REBUILD = scope.chair_rebuild;
-					
-					
-
 
 					$('.operations.operation_chair_add').show();
 					$('.operations.operation_chair_rebuild').show();
@@ -93,8 +88,8 @@ Processor.prototype = {
 					scope.transformFunctions.CHAIR_ALIGN = scope.chair_align;
 					
 					//wei hsiang start
-					scope.chair_rebuild = new Chair_Rebuild(scope.main);
-					scope.transformFunctions.CHAIR_REBUILD = scope.chair_rebuild;
+					//scope.chair_rebuild = new Chair_Rebuild(scope.main);
+					//scope.transformFunctions.CHAIR_REBUILD = scope.chair_rebuild;
 					//wei hsiang end
 					
 					$('.operations.operation_chair_align').show();

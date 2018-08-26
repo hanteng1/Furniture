@@ -256,7 +256,9 @@ function Furniture(furniture) {
 	this.setLoadMatrix = function(loadMatrix) {
 
 		this.getFurniture().applyMatrix(loadMatrix);
-				
+
+		//this.getFurniture().updateMatrix();
+
 	}
 
 
@@ -659,10 +661,9 @@ function Furniture(furniture) {
 		geometry.addAttribute( 'color', new THREE.Float32BufferAttribute( colors, 3 ) );
 		geometry.computeBoundingSphere();
 		//
-		var material = new THREE.PointsMaterial( { size: 5, vertexColors: THREE.VertexColors } );
+		var material = new THREE.PointsMaterial( { size: 1, vertexColors: THREE.VertexColors } );
 		this.points = new THREE.Points( geometry, material );
 		//here is its very initial positions... this is not changed while being transformed..
-
 
 		this.points.name = "points";
 
@@ -670,9 +671,7 @@ function Furniture(furniture) {
 		var inverseMatrixWorld = new THREE.Matrix4();
 		inverseMatrixWorld.getInverse(this.furniture.matrixWorld.clone(), true);
 		this.points.applyMatrix(inverseMatrixWorld);
-
 		this.furniture.add(this.points);
-
 	}
 
 

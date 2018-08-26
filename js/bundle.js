@@ -538,7 +538,7 @@ Cabinet_kallax.prototype = {
 
 			scope.main.scene.add(Model);
 			scope.main.Sceneobjects.push(Model);
-			Model.scale.set(40,40,40);
+			Model.scale.set(10,10,10);
 			Model.rotateOnWorldAxis(new THREE.Vector3(0,1,0) , 90 * Math.PI/180);
 
 			
@@ -568,7 +568,7 @@ Cabinet_kallax.prototype = {
 			Model = collada.scene;
 			scope.main.Sceneobjects.push(Model);
 			scope.main.scene.add(Model);
-			Model.scale.set(40,40,40);
+			Model.scale.set(1,1,1);
 			Model.rotateOnWorldAxis(new THREE.Vector3(0,1,0) , 90 * Math.PI/180);
 
 			var box 		= new THREE.Box3();
@@ -1625,7 +1625,7 @@ function Chair_Align (main) {
 
 	this.parameters = {
 
-		DISTANCE: 30,
+		DISTANCE: 5,
 		ANGLE: 0
 
 	};
@@ -1944,7 +1944,7 @@ Chair_Align.prototype = {
 		//make it based on x axis
 		var segAngleR = segAngle/180*Math.PI * (-1);
 
-		var destVector = new THREE.Vector3(0, refHeight, 0);
+		var destVector = new THREE.Vector3(0, refHeight, -30);
 		var segVector = new THREE.Vector3(segDistance, 0, 0);
 		
 		var refAxis = new THREE.Vector3(0, 1, 0);
@@ -2062,6 +2062,7 @@ Chair_Align.prototype = {
 				///console.log(simplified);
 				//cut
 				offset = furnitures[ij].getComponentCenterPosition('midframe').y - furnitures[ij].getComponentSize('midframe').y;		
+				offset = offset*4.5;
 				var cutResultGeometry = chairCutBack(simplified, offset);
 				var newleg = new THREE.Mesh( cutResultGeometry, legMaterial );
 				furniture.remove(legs[i]);
@@ -2832,6 +2833,7 @@ Chair_Rebuild.prototype = {
 			///console.log(simplified);
 			//cut
 			offset = furObj.getComponentCenterPosition('midframe').y - furObj.getComponentSize('midframe').y;		
+			offset = offset*4.5;
 			var cutResultGeometry = chairCutBack(simplified, offset);
 			var newleg = new THREE.Mesh( cutResultGeometry, legMaterial );
 			furniture.remove(legs[i]);
@@ -2897,7 +2899,7 @@ Chair_Rebuild.prototype = {
 			scope.main.scene.add(LegModel);
 			scope.main.Sceneobjects.push(LegModel);
 			LegModel.name = 'stand';
-			LegModel.scale.set(9,9,9);
+			LegModel.scale.set(2.5,2.5,2.5);
 
 			var box = new THREE.Box3();
 			box.setFromObject(LegModel);
@@ -2913,7 +2915,9 @@ Chair_Rebuild.prototype = {
 								  LegPosi.y + diff.y - LegCenter.y ,
 								  LegPosi.z + diff.z );
 
-			LegPosi = LegModel.position;
+			LegPosi = new THREE.Vector3(LegModel.position.x,
+										LegModel.position.y,
+										LegModel.position.z);
 			
 			//calculate the leg inverse metrix
 			var inverseMatrix = new THREE.Matrix4();
@@ -2921,16 +2925,13 @@ Chair_Rebuild.prototype = {
 			LegModel.applyMatrix(inverseMatrix);
 
 			//add new leg to original model
-			//group.worldToLocal(LegPosi);
+			group.worldToLocal(LegPosi);
 			box.setFromObject(LegModel);
 			box.getCenter(LegCenter);
+			
 
-			LegModel.position.set( LegPosi.x - LegCenter.x - SeatSize.x/2 , 
-								   LegPosi.y - LegCenter.y + SeatSize.z/2 , 
-								   SeatPosi.y - LegCenter.z*2);
-			
 			group.add(LegModel);
-			
+			LegModel.position.set(LegPosi.x , LegPosi.y, LegPosi.z);
 
 		} );
 	},
@@ -4474,7 +4475,7 @@ function MarkBetweenSize( main , TargetObj1 , TargetObj2 ){
 		//front the funiture
 		if(objCenter1.z >= FuniCenter.z && length>0){
 			loadText( main ,
-					( Math.round(length*100)/100).toString() ,
+					length ,
 					new THREE.Vector3((objCenter1.x + objCenter2.x)/2,
 									  objCenter1.y - objSize1.y/2 ,
 									  objCenter1.z + objSize1.z/2 + 1), 
@@ -4505,7 +4506,7 @@ function MarkBetweenSize( main , TargetObj1 , TargetObj2 ){
 		//back the funiture
 		else if(objCenter1.z < FuniCenter.z && length>0){
 			loadText( main ,
-					( Math.round(length*100)/100).toString() ,
+					length ,
 					new THREE.Vector3((objCenter1.x + objCenter2.x)/2,
 									  objCenter1.y - objSize1.y/2 ,
 									  objCenter1.z - objSize1.z/2 - 1), 
@@ -4546,7 +4547,7 @@ function MarkBetweenSize( main , TargetObj1 , TargetObj2 ){
 		//right the funiture
 		if(objCenter1.x > FuniCenter.x && length>0){
 			loadText( main ,
-					( Math.round(length*100)/100).toString() ,
+					length ,
 					new THREE.Vector3(objCenter1.x + objSize1.x/2 +1,
 									  objCenter1.y - objSize1.y/2 ,
 									  (objCenter1.z + objCenter2.z)/2 ),
@@ -4578,7 +4579,7 @@ function MarkBetweenSize( main , TargetObj1 , TargetObj2 ){
 		//left the funiture
 		else if(objCenter1.x <= FuniCenter.x && length>0){
 			loadText( main ,
-					( Math.round(length*100)/100).toString() ,
+					length ,
 					new THREE.Vector3(objCenter1.x - objSize1.x/2 -1,
 									  objCenter1.y - objSize1.y/2 ,
 									  (objCenter1.z + objCenter2.z)/2 ),
@@ -4619,7 +4620,7 @@ function MarkBetweenSize( main , TargetObj1 , TargetObj2 ){
 			//right the funiture
 			if(objCenter1.x > FuniCenter.x){
 				loadText( main ,
-						( Math.round(length*100)/100).toString() ,
+						length ,
 						new THREE.Vector3(objCenter1.x + objSize1.x/2 + 1,
 										  (objCenter1.y + objCenter2.y)/2 ,
 										  objCenter1.z + objSize1.z/2 +1),
@@ -4648,7 +4649,7 @@ function MarkBetweenSize( main , TargetObj1 , TargetObj2 ){
 			}
 			else{//right the funiture
 				loadText( main ,
-						( Math.round(length*100)/100).toString() ,
+						length ,
 						new THREE.Vector3(objCenter1.x - objSize1.x/2 - 1,
 										  (objCenter1.y + objCenter2.y)/2 ,
 										  objCenter1.z + objSize1.z/2 +1),
@@ -4682,7 +4683,7 @@ function MarkBetweenSize( main , TargetObj1 , TargetObj2 ){
 			//right the funiture
 			if(objCenter1.x > FuniCenter.x){
 				loadText( main ,
-						( Math.round(length*100)/100).toString() ,
+						length ,
 						new THREE.Vector3(objCenter1.x + objSize1.x/2 + 1,
 										  (objCenter1.y + objCenter2.y)/2 ,
 										  objCenter1.z - objSize1.z/2 -1),
@@ -4711,7 +4712,7 @@ function MarkBetweenSize( main , TargetObj1 , TargetObj2 ){
 			}
 			else{//left the funiture
 				loadText( main ,
-						( Math.round(length*100)/100).toString() ,
+						length ,
 						new THREE.Vector3(objCenter1.x - objSize1.x/2 - 1,
 										  (objCenter1.y + objCenter2.y)/2 ,
 										  objCenter1.z - objSize1.z/2 -1),
@@ -4745,8 +4746,8 @@ function MarkBetweenSize( main , TargetObj1 , TargetObj2 ){
 
 }
 
-function loadText(main , text , position , rotat){
-
+function loadText(main , num , position , rotat){
+	var text = (Math.round(num*10)/100).toString();
 	var loader = new THREE.FontLoader();
 	var font = loader.load(
 		// resource URL
@@ -4849,7 +4850,7 @@ function MarkSize( main , TargetObj ){
 	if( objCenter.z >= FuniCenter.z ){
 		//show size number
 		loadText( 	main , 
-					(Math.round(objSize.x*100)/100).toString() ,
+					objSize.x ,
 					new THREE.Vector3(objCenter.x ,
 									  objCenter.y - objSize.y/2 ,
 									  objCenter.z + objSize.z/2 + 1), 
@@ -4880,7 +4881,7 @@ function MarkSize( main , TargetObj ){
 		if ( objCenter.x > FuniCenter.x ){
 			//show high
 			loadText( 	main , 
-						(Math.round(objSize.y*100)/100).toString() ,
+						objSize.y ,
 						new THREE.Vector3(objCenter.x + objSize.x/2 +1,
 										  objCenter.y ,
 										  objCenter.z + objSize.z/2 +1, ), 
@@ -4913,7 +4914,7 @@ function MarkSize( main , TargetObj ){
 		else{//left to the user
 			//show high
 			loadText( 	main , 
-						(Math.round(objSize.y*100)/100).toString() ,
+						objSize.y ,
 						new THREE.Vector3(objCenter.x - objSize.x/2 -1,
 										  objCenter.y ,
 										  objCenter.z + objSize.z/2 +1, ), 
@@ -4946,7 +4947,7 @@ function MarkSize( main , TargetObj ){
 	else{// back to the user
 		//show size number
 		loadText( 	main , 
-					(Math.round(objSize.x*100)/100).toString() ,
+					objSize.x ,
 					new THREE.Vector3(objCenter.x ,
 									  objCenter.y - objSize.y/2 ,
 									  objCenter.z - objSize.z/2 - 1), 
@@ -4978,7 +4979,7 @@ function MarkSize( main , TargetObj ){
 		if ( objCenter.x > FuniCenter.x ){
 			//show high
 			loadText( 	main , 
-						(Math.round(objSize.y*100)/100).toString() ,
+						objSize.y ,
 						new THREE.Vector3(objCenter.x + objSize.x/2 +1,
 										  objCenter.y ,
 										  objCenter.z - objSize.z/2 -1 ), 
@@ -5009,7 +5010,7 @@ function MarkSize( main , TargetObj ){
 		else{//left to the user
 			//show high
 			loadText( 	main , 
-						(Math.round(objSize.y*100)/100).toString() ,
+						objSize.y ,
 						new THREE.Vector3(objCenter.x - objSize.x/2 -1,
 										  objCenter.y ,
 										  objCenter.z - objSize.z/2 -1, ), 
@@ -5044,7 +5045,7 @@ function MarkSize( main , TargetObj ){
 	if ( objCenter.x > FuniCenter.x ){
 		//show size number
 		loadText( 	main , 
-					(Math.round(objSize.z*100)/100).toString() ,
+					objSize.z ,
 					new THREE.Vector3(objCenter.x + objSize.x/2 +1,
 									  objCenter.y - objSize.y/2 ,
 									  objCenter.z ), 
@@ -5075,7 +5076,7 @@ function MarkSize( main , TargetObj ){
 	else{//left to the user
 		//show size number
 		loadText( 	main , 
-					(Math.round(objSize.z*100)/100).toString() ,
+					objSize.z ,
 					new THREE.Vector3(objCenter.x - objSize.x/2 -1,
 									  objCenter.y - objSize.y/2 ,
 									  objCenter.z ), 
@@ -5105,8 +5106,8 @@ function MarkSize( main , TargetObj ){
 	}
 
 }
-function loadText(main , text , position , rotat){
-
+function loadText(main , num , position , rotat){
+	var text = (Math.round(num*10)/100).toString();
 	var loader = new THREE.FontLoader();
 	var font = loader.load(
 		// resource URL
@@ -5116,7 +5117,7 @@ function loadText(main , text , position , rotat){
 		function ( font ) {
 			var geometry = new THREE.TextGeometry( text , {
 				font: font ,
-				size: 1,
+				size: 0.5,
 				height: 0.05,
 				curveSegments: 12,
 				bevelEnabled: false,
@@ -5167,8 +5168,6 @@ const Chair_Align = require('./Chair_Align');
 const Chair_Add = require('./Chair_Add');
 const Chair_Rebuild = require('./Chair_Rebuild');
 const Cabinet_kallax = require('./Cabinet_kallax');
-
-
 const Dresser_Add = require('./Dresser_Add');
 
 
@@ -5239,9 +5238,6 @@ Processor.prototype = {
 
 					scope.chair_rebuild = new Chair_Rebuild(scope.main);
 					scope.transformFunctions.CHAIR_REBUILD = scope.chair_rebuild;
-					
-					
-
 
 					$('.operations.operation_chair_add').show();
 					$('.operations.operation_chair_rebuild').show();
@@ -5254,8 +5250,8 @@ Processor.prototype = {
 					scope.transformFunctions.CHAIR_ALIGN = scope.chair_align;
 					
 					//wei hsiang start
-					scope.chair_rebuild = new Chair_Rebuild(scope.main);
-					scope.transformFunctions.CHAIR_REBUILD = scope.chair_rebuild;
+					//scope.chair_rebuild = new Chair_Rebuild(scope.main);
+					//scope.transformFunctions.CHAIR_REBUILD = scope.chair_rebuild;
 					//wei hsiang end
 					
 					$('.operations.operation_chair_align').show();
@@ -5534,13 +5530,13 @@ function cadMakeSeat (innerRace, outerRace, offsetY, textures) {
     path = path.close();
     var cag = path.innerToCAG();
     var csg = cag.extrude({
-      offset: [0.5, 0, 2],   // direction for extrusion
+      offset: [0, 0, 0.2],   // direction for extrusion
       twistangle: 0,       // top surface is rotated 30 degrees 
       twiststeps: 0        // create 10 slices
     });
 
     //expansion... /be careful to use .. very expensive
-    csg = csg.expand(0.4, 8); 
+    //csg = csg.expand(0.4, 8); 
 
     //get the geometry
     //be careful if there are too many vertices gerneated...
@@ -5589,7 +5585,7 @@ function cadMakeSeat (innerRace, outerRace, offsetY, textures) {
     mesh.receiveShadow = true;
 
     //todo.. can we set it in the csgtogeometry function? the normal vectors are meshed up
-    mesh.translateY(offsetY + 2);
+    mesh.translateY(offsetY + 0.2);
     //rotate from y - z
     var tempQuaternion = new THREE.Quaternion();
     tempQuaternion.setFromUnitVectors(new THREE.Vector3(0, 1, 0), new THREE.Vector3(0, 0, 1));
@@ -6476,7 +6472,11 @@ function Main()
 	//category
 	//todo: an floating window to select category
 	this.category = "chair";
+<<<<<<< HEAD
 	// this.category = "cabinet";
+=======
+	//this.category = "cabinet";
+>>>>>>> master
 
 	//only stores data
 	this.container = document.getElementById('container');
@@ -6523,6 +6523,9 @@ function Main()
 	
 	//arrays of select two object
 	this.DistanceObj = [];
+
+	//Obj for get size
+	this.GetSizeObj = [];
 
 	//this is to store the furnitures before any chance
 	//simply copy of the this.furnitures
@@ -7056,6 +7059,10 @@ Main.prototype = {
 			//keep the size and ignore the scale
 			if(loadedScale.x != 1) {
 				var location = new THREE.Vector3(0, 0, -30);
+<<<<<<< HEAD
+=======
+				//var location = new THREE.Vector3();
+>>>>>>> master
 				//this will cause errors in addAxis
 				//var quaternion = new THREE.Quaternion().setFromUnitVectors(new THREE.Vector3(0, 0, 1), new THREE.Vector3(0, 1, 0));
 				var quaternion = new THREE.Quaternion();
@@ -7230,19 +7237,18 @@ Main.prototype = {
 
 		this.selected = object;
 
-		if(this.onCtrlE == false)
+		if(this.onCtrlE == false && this.onCtrl == false)
 		{
 			//single select
 			this.addTransformControl(this.furniture, this.selected);
 			//this.addNormalAxis(this.selected);
-		}else{
+		}else if(this.onCtrlE == true && this.onCtrl == false){
 			//multi select for merge
 			this.addMultiSelection(this.selected);
 		}	
-
-		if (this.onCtrl == true){
+		else if (this.onCtrl == true){
 			this.SelectTwo(object);
-		}	
+		}
 
 	},
 
@@ -7586,7 +7592,7 @@ Main.prototype = {
 	handleClick: function()
 	{
 
-		console.log("handleclick called");
+		//console.log("handleclick called");
 
 		if ( this.onDownPosition.distanceTo( this.onUpPosition ) === 0 ) {
 
@@ -7602,17 +7608,14 @@ Main.prototype = {
 						this.furniture = this.furnitures[i];
 						this.select(this.furniture.getFurniture());
 
-						
 						objselect = false;
+						this.GetSizeObj.push( this.furniture.getFurniture() );
 						$('.ui.blue.submit.button.getsize').show();
 						
-
-
 						//control switch from first-person to target orbit
 
-						console.log("selected");
-						this.customControl.switchView2TG();
-
+						//console.log("selected");
+						//this.customControl.switchView2TG();
 
 						break;
 					} else {
@@ -7621,6 +7624,7 @@ Main.prototype = {
 						this.furniture = null;
 
 						objselect = true;
+						this.GetSizeObj = [];
 						$('.ui.blue.submit.button.getsize').hide();
 						//this.RemoveSizeLabel();
 					}
@@ -7636,6 +7640,7 @@ Main.prototype = {
 							
 							this.furniture = this.Sceneobjects[i];
 							this.select(this.Sceneobjects[i]);
+							this.GetSizeObj.push( this.Sceneobjects[i] );
 							$('.ui.blue.submit.button.getsize').show();
 							SomethingSelected = true;
 							break;
@@ -7644,15 +7649,16 @@ Main.prototype = {
 							this.furniture = null;
 							this.select( null );
 							$('.ui.blue.submit.button.getsize').hide();
+							this.GetSizeObj = [];
 							//this.RemoveSizeLabel();
 
 						}
 
 					}
-					
+					//if not select anything
 					if (SomethingSelected == false){
-						console.log("unselected");
-						this.customControl.switchView2FP();
+						//console.log("unselected");
+						//this.customControl.switchView2FP();
 					}
 					
 				}
@@ -7674,6 +7680,9 @@ Main.prototype = {
 						this.select( object.userData.object );
 					} else {
 						this.select( object );
+						//push object to label size
+						this.GetSizeObj.push(object);
+						$('.ui.blue.submit.button.getsize').show();
 					}
 				} else {
 					//it also calls select, to detach
@@ -7682,7 +7691,7 @@ Main.prototype = {
 			}
 			//select two obj for getting distance
 			else if(this.onCtrl == true){
-				console.log('select two');
+				//console.log('select two');
 				var objselect = true;
 				//only select the furniture
 				for(var i = 0; i < this.furnitures.length; i++) {
@@ -7775,10 +7784,18 @@ Main.prototype = {
 	},
 
 	onDoubleClick: function(event) {
-		// var array = this.getMousePosition( this.container, event.clientX, event.clientY );
-		// this.onDoubleClickPosition.fromArray( array );
+		var array = this.getMousePosition( this.container, event.clientX, event.clientY );
+		this.onDoubleClickPosition.fromArray( array );
 
-		// var intersects = this.getIntersects( this.onDoubleClickPosition, this.objects );
+		//console.log("double clicked");
+
+		//this.customControl.switchView2TG();
+		//this.customControl.switchView2FP();
+
+		//var intersects = this.getIntersects( this.onDoubleClickPosition, this.objects );
+		// for(var i = 0; i < this.furnitures.length; i++) {
+		// 	var intersects = this.getIntersect( this.onUpPosition, this.furnitures[i].getFurniture());
+		// }
 
 		// if ( intersects.length > 0 ) {
 
@@ -7787,6 +7804,14 @@ Main.prototype = {
 		// 	//focused
 
 		// }
+
+		if(this.furniture !== null) {
+
+			this.customControl.switchView2TG();
+		}else {
+			this.customControl.switchView2FP();
+		}
+
 	},
 
 	onKeyDown: function(event) {
@@ -7799,6 +7824,11 @@ Main.prototype = {
 			if(this.furniture  != null )
 				this.explode(this.furniture);
 			
+			//hide the GetSize button
+			$('.ui.blue.submit.button.getsize').hide();
+			//clear the object for getting size
+			this.GetSizeObj = [];
+
 		}else if(keyCode == 87) {
 
 			// if(this.transformControls.visible == true)
@@ -7828,7 +7858,6 @@ Main.prototype = {
 			this.onCtrl = true;
 			console.log('Ctrl down');
 		}
-
 
 
 		// else if(keyCode == 37){
@@ -7892,6 +7921,12 @@ Main.prototype = {
 
 			$('#label').hide();
 
+			//hide the GetSize , RemoveSize button
+			$('.ui.blue.submit.button.getsize').hide();
+			this.RemoveSizeLabel();
+			//clear the object for getting size
+			this.GetSizeObj = [];
+
 		}else {
 
 			var keyCode = event.which;
@@ -7929,9 +7964,8 @@ Main.prototype = {
 				{
 					this.removeFromScene(this.selectionBoxes[i]);
 				}
+			$('.ui.blue.submit.button.getdis').hide();
 		}
-
-
 
 		document.removeEventListener( 'keyup', this.onKeyUp.bind(this), false );
 	},
@@ -8026,6 +8060,9 @@ Main.prototype = {
 
 				}else if( object instanceof THREE.BoxHelper){
 
+
+				}else if(object == this.house) {
+
 				}else{
 					this.removeFromScene(object); 
 				}
@@ -8109,10 +8146,8 @@ Main.prototype = {
 		//add the corners to the labeled and axised components
 		
 		for(var i = 0; i < this.furnitures.length; i++) {
-			//this.furnitures[i].addCorners();
+			this.furnitures[i].addCorners();
 			this.furnitures[i].addtoPoint();
-
-			//this.scene.add(this.furnitures[i].points);
 		}
 		
 
@@ -8234,14 +8269,19 @@ Main.prototype = {
 
 	LabelSize: function(){
 
-		try {
-    		MarkSize(this, this.furniture);
+		if(this.GetSizeObj.length > 0 ){
+
+			for(var i =0 ; i< this.GetSizeObj.length ; i++){
+				MarkSize(this, this.GetSizeObj[i]);
+			}
+
+			//show the remove button
+			$('.ui.red.submit.button.removesize').show();
+
 		}
-		catch(err) {
-    		MarkSize(this, this.furniture.getFurniture());
+		else{
+			console.log('this.GetSizeObj is null');
 		}
-		//show the remove button
-		$('.ui.red.submit.button.removesize').show();
 
 	},
 
@@ -8250,8 +8290,9 @@ Main.prototype = {
 				
 			var object =  this.SizeObj[i];
 			this.removeFromScene(object);
-
 		}
+		this.SizeObj = [];
+		this.GetSizeObj = [];
 		//hide the remove button
 		$('.ui.red.submit.button.removesize').hide();
 	},

@@ -31,7 +31,6 @@ function Main()
 	//category
 	//todo: an floating window to select category
 	this.category = "chair";
-	// this.category = "cabinet";
 
 	//only stores data
 	this.container = document.getElementById('container');
@@ -78,6 +77,9 @@ function Main()
 	
 	//arrays of select two object
 	this.DistanceObj = [];
+
+	//Obj for get size
+	this.GetSizeObj = [];
 
 	//this is to store the furnitures before any chance
 	//simply copy of the this.furnitures
@@ -611,6 +613,7 @@ Main.prototype = {
 			//keep the size and ignore the scale
 			if(loadedScale.x != 1) {
 				var location = new THREE.Vector3(0, 0, -30);
+				//var location = new THREE.Vector3();
 				//this will cause errors in addAxis
 				//var quaternion = new THREE.Quaternion().setFromUnitVectors(new THREE.Vector3(0, 0, 1), new THREE.Vector3(0, 1, 0));
 				var quaternion = new THREE.Quaternion();
@@ -785,19 +788,18 @@ Main.prototype = {
 
 		this.selected = object;
 
-		if(this.onCtrlE == false)
+		if(this.onCtrlE == false && this.onCtrl == false)
 		{
 			//single select
 			this.addTransformControl(this.furniture, this.selected);
 			//this.addNormalAxis(this.selected);
-		}else{
+		}else if(this.onCtrlE == true && this.onCtrl == false){
 			//multi select for merge
 			this.addMultiSelection(this.selected);
 		}	
-
-		if (this.onCtrl == true){
+		else if (this.onCtrl == true){
 			this.SelectTwo(object);
-		}	
+		}
 
 	},
 
@@ -1141,7 +1143,7 @@ Main.prototype = {
 	handleClick: function()
 	{
 
-		console.log("handleclick called");
+		//console.log("handleclick called");
 
 		if ( this.onDownPosition.distanceTo( this.onUpPosition ) === 0 ) {
 
@@ -1157,17 +1159,14 @@ Main.prototype = {
 						this.furniture = this.furnitures[i];
 						this.select(this.furniture.getFurniture());
 
-						
 						objselect = false;
+						this.GetSizeObj.push( this.furniture.getFurniture() );
 						$('.ui.blue.submit.button.getsize').show();
 						
-
-
 						//control switch from first-person to target orbit
 
-						console.log("selected");
-						this.customControl.switchView2TG();
-
+						//console.log("selected");
+						//this.customControl.switchView2TG();
 
 						break;
 					} else {
@@ -1176,6 +1175,7 @@ Main.prototype = {
 						this.furniture = null;
 
 						objselect = true;
+						this.GetSizeObj = [];
 						$('.ui.blue.submit.button.getsize').hide();
 						//this.RemoveSizeLabel();
 					}
@@ -1191,6 +1191,7 @@ Main.prototype = {
 							
 							this.furniture = this.Sceneobjects[i];
 							this.select(this.Sceneobjects[i]);
+							this.GetSizeObj.push( this.Sceneobjects[i] );
 							$('.ui.blue.submit.button.getsize').show();
 							SomethingSelected = true;
 							break;
@@ -1199,15 +1200,16 @@ Main.prototype = {
 							this.furniture = null;
 							this.select( null );
 							$('.ui.blue.submit.button.getsize').hide();
+							this.GetSizeObj = [];
 							//this.RemoveSizeLabel();
 
 						}
 
 					}
-					
+					//if not select anything
 					if (SomethingSelected == false){
-						console.log("unselected");
-						this.customControl.switchView2FP();
+						//console.log("unselected");
+						//this.customControl.switchView2FP();
 					}
 					
 				}
@@ -1229,6 +1231,9 @@ Main.prototype = {
 						this.select( object.userData.object );
 					} else {
 						this.select( object );
+						//push object to label size
+						this.GetSizeObj.push(object);
+						$('.ui.blue.submit.button.getsize').show();
 					}
 				} else {
 					//it also calls select, to detach
@@ -1237,7 +1242,7 @@ Main.prototype = {
 			}
 			//select two obj for getting distance
 			else if(this.onCtrl == true){
-				console.log('select two');
+				//console.log('select two');
 				var objselect = true;
 				//only select the furniture
 				for(var i = 0; i < this.furnitures.length; i++) {
@@ -1330,10 +1335,18 @@ Main.prototype = {
 	},
 
 	onDoubleClick: function(event) {
-		// var array = this.getMousePosition( this.container, event.clientX, event.clientY );
-		// this.onDoubleClickPosition.fromArray( array );
+		var array = this.getMousePosition( this.container, event.clientX, event.clientY );
+		this.onDoubleClickPosition.fromArray( array );
 
-		// var intersects = this.getIntersects( this.onDoubleClickPosition, this.objects );
+		//console.log("double clicked");
+
+		//this.customControl.switchView2TG();
+		//this.customControl.switchView2FP();
+
+		//var intersects = this.getIntersects( this.onDoubleClickPosition, this.objects );
+		// for(var i = 0; i < this.furnitures.length; i++) {
+		// 	var intersects = this.getIntersect( this.onUpPosition, this.furnitures[i].getFurniture());
+		// }
 
 		// if ( intersects.length > 0 ) {
 
@@ -1342,6 +1355,14 @@ Main.prototype = {
 		// 	//focused
 
 		// }
+
+		if(this.furniture !== null) {
+
+			this.customControl.switchView2TG();
+		}else {
+			this.customControl.switchView2FP();
+		}
+
 	},
 
 	onKeyDown: function(event) {
@@ -1354,6 +1375,11 @@ Main.prototype = {
 			if(this.furniture  != null )
 				this.explode(this.furniture);
 			
+			//hide the GetSize button
+			$('.ui.blue.submit.button.getsize').hide();
+			//clear the object for getting size
+			this.GetSizeObj = [];
+
 		}else if(keyCode == 87) {
 
 			// if(this.transformControls.visible == true)
@@ -1383,7 +1409,6 @@ Main.prototype = {
 			this.onCtrl = true;
 			console.log('Ctrl down');
 		}
-
 
 
 		// else if(keyCode == 37){
@@ -1447,6 +1472,12 @@ Main.prototype = {
 
 			$('#label').hide();
 
+			//hide the GetSize , RemoveSize button
+			$('.ui.blue.submit.button.getsize').hide();
+			this.RemoveSizeLabel();
+			//clear the object for getting size
+			this.GetSizeObj = [];
+
 		}else {
 
 			var keyCode = event.which;
@@ -1484,9 +1515,8 @@ Main.prototype = {
 				{
 					this.removeFromScene(this.selectionBoxes[i]);
 				}
+			$('.ui.blue.submit.button.getdis').hide();
 		}
-
-
 
 		document.removeEventListener( 'keyup', this.onKeyUp.bind(this), false );
 	},
@@ -1581,6 +1611,9 @@ Main.prototype = {
 
 				}else if( object instanceof THREE.BoxHelper){
 
+
+				}else if(object == this.house) {
+
 				}else{
 					this.removeFromScene(object); 
 				}
@@ -1664,10 +1697,8 @@ Main.prototype = {
 		//add the corners to the labeled and axised components
 		
 		for(var i = 0; i < this.furnitures.length; i++) {
-			//this.furnitures[i].addCorners();
+			this.furnitures[i].addCorners();
 			this.furnitures[i].addtoPoint();
-
-			//this.scene.add(this.furnitures[i].points);
 		}
 		
 
@@ -1789,14 +1820,19 @@ Main.prototype = {
 
 	LabelSize: function(){
 
-		try {
-    		MarkSize(this, this.furniture);
+		if(this.GetSizeObj.length > 0 ){
+
+			for(var i =0 ; i< this.GetSizeObj.length ; i++){
+				MarkSize(this, this.GetSizeObj[i]);
+			}
+
+			//show the remove button
+			$('.ui.red.submit.button.removesize').show();
+
 		}
-		catch(err) {
-    		MarkSize(this, this.furniture.getFurniture());
+		else{
+			console.log('this.GetSizeObj is null');
 		}
-		//show the remove button
-		$('.ui.red.submit.button.removesize').show();
 
 	},
 
@@ -1805,8 +1841,9 @@ Main.prototype = {
 				
 			var object =  this.SizeObj[i];
 			this.removeFromScene(object);
-
 		}
+		this.SizeObj = [];
+		this.GetSizeObj = [];
 		//hide the remove button
 		$('.ui.red.submit.button.removesize').hide();
 	},

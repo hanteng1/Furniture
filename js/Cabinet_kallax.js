@@ -381,7 +381,7 @@ Cabinet_kallax.prototype = {
 
 			scope.main.scene.add(Model);
 			scope.main.Sceneobjects.push(Model);
-			Model.scale.set(40,40,40);
+			Model.scale.set(10,10,10);
 			Model.rotateOnWorldAxis(new THREE.Vector3(0,1,0) , 90 * Math.PI/180);
 
 			
@@ -411,7 +411,7 @@ Cabinet_kallax.prototype = {
 			Model = collada.scene;
 			scope.main.Sceneobjects.push(Model);
 			scope.main.scene.add(Model);
-			Model.scale.set(40,40,40);
+			Model.scale.set(1,1,1);
 			Model.rotateOnWorldAxis(new THREE.Vector3(0,1,0) , 90 * Math.PI/180);
 
 			var box 		= new THREE.Box3();
