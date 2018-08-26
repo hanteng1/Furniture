@@ -1480,6 +1480,7 @@ Main.prototype = {
 				{
 					this.removeFromScene(this.selectionBoxes[i]);
 				}
+			$('.ui.blue.submit.button.getdis').hide();
 		}
 
 

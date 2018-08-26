@@ -304,7 +304,7 @@ function MarkSize( main , TargetObj ){
 
 }
 function loadText(main , num , position , rotat){
-	var text = (Math.round(num)/100).toString();
+	var text = (Math.round(num*10)/100).toString();
 	var loader = new THREE.FontLoader();
 	var font = loader.load(
 		// resource URL

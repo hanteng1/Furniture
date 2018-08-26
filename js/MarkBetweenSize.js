@@ -58,7 +58,7 @@ function MarkBetweenSize( main , TargetObj1 , TargetObj2 ){
 		//front the funiture
 		if(objCenter1.z >= FuniCenter.z && length>0){
 			loadText( main ,
-					( Math.round(length*100)/100).toString() ,
+					length ,
 					new THREE.Vector3((objCenter1.x + objCenter2.x)/2,
 									  objCenter1.y - objSize1.y/2 ,
 									  objCenter1.z + objSize1.z/2 + 1), 
@@ -89,7 +89,7 @@ function MarkBetweenSize( main , TargetObj1 , TargetObj2 ){
 		//back the funiture
 		else if(objCenter1.z < FuniCenter.z && length>0){
 			loadText( main ,
-					( Math.round(length*100)/100).toString() ,
+					length ,
 					new THREE.Vector3((objCenter1.x + objCenter2.x)/2,
 									  objCenter1.y - objSize1.y/2 ,
 									  objCenter1.z - objSize1.z/2 - 1), 
@@ -130,7 +130,7 @@ function MarkBetweenSize( main , TargetObj1 , TargetObj2 ){
 		//right the funiture
 		if(objCenter1.x > FuniCenter.x && length>0){
 			loadText( main ,
-					( Math.round(length*100)/100).toString() ,
+					length ,
 					new THREE.Vector3(objCenter1.x + objSize1.x/2 +1,
 									  objCenter1.y - objSize1.y/2 ,
 									  (objCenter1.z + objCenter2.z)/2 ),
@@ -162,7 +162,7 @@ function MarkBetweenSize( main , TargetObj1 , TargetObj2 ){
 		//left the funiture
 		else if(objCenter1.x <= FuniCenter.x && length>0){
 			loadText( main ,
-					( Math.round(length*100)/100).toString() ,
+					length ,
 					new THREE.Vector3(objCenter1.x - objSize1.x/2 -1,
 									  objCenter1.y - objSize1.y/2 ,
 									  (objCenter1.z + objCenter2.z)/2 ),
@@ -203,7 +203,7 @@ function MarkBetweenSize( main , TargetObj1 , TargetObj2 ){
 			//right the funiture
 			if(objCenter1.x > FuniCenter.x){
 				loadText( main ,
-						( Math.round(length*100)/100).toString() ,
+						length ,
 						new THREE.Vector3(objCenter1.x + objSize1.x/2 + 1,
 										  (objCenter1.y + objCenter2.y)/2 ,
 										  objCenter1.z + objSize1.z/2 +1),
@@ -232,7 +232,7 @@ function MarkBetweenSize( main , TargetObj1 , TargetObj2 ){
 			}
 			else{//right the funiture
 				loadText( main ,
-						( Math.round(length*100)/100).toString() ,
+						length ,
 						new THREE.Vector3(objCenter1.x - objSize1.x/2 - 1,
 										  (objCenter1.y + objCenter2.y)/2 ,
 										  objCenter1.z + objSize1.z/2 +1),
@@ -266,7 +266,7 @@ function MarkBetweenSize( main , TargetObj1 , TargetObj2 ){
 			//right the funiture
 			if(objCenter1.x > FuniCenter.x){
 				loadText( main ,
-						( Math.round(length*100)/100).toString() ,
+						length ,
 						new THREE.Vector3(objCenter1.x + objSize1.x/2 + 1,
 										  (objCenter1.y + objCenter2.y)/2 ,
 										  objCenter1.z - objSize1.z/2 -1),
@@ -295,7 +295,7 @@ function MarkBetweenSize( main , TargetObj1 , TargetObj2 ){
 			}
 			else{//left the funiture
 				loadText( main ,
-						( Math.round(length*100)/100).toString() ,
+						length ,
 						new THREE.Vector3(objCenter1.x - objSize1.x/2 - 1,
 										  (objCenter1.y + objCenter2.y)/2 ,
 										  objCenter1.z - objSize1.z/2 -1),
@@ -329,8 +329,8 @@ function MarkBetweenSize( main , TargetObj1 , TargetObj2 ){
 
 }
 
-function loadText(main , text , position , rotat){
-
+function loadText(main , num , position , rotat){
+	var text = (Math.round(num*10)/100).toString();
 	var loader = new THREE.FontLoader();
 	var font = loader.load(
 		// resource URL
