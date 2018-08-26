@@ -9,10 +9,10 @@ const csgToGeometries = require('./csgToGeometries')
 
 function CreateSpiceRack(length) {
 
-    var mid = cylinder({r: 0.4, h: length});
-	var right = cube({size: [3, 3.5, 1], center: true}).translate([-0.3, 0.5, length]);
-	var left = cube({size: [3, 3.5, 1], center: true}).translate([-0.3, 0.5, 0]);
-	var bottom = cube({size: [1, 3.5, length + 1], center: true}).translate([-1.8, 0.5, length/2]);	
+    var mid = cylinder({r: 0.05, h: length});
+	var right = cube({size: [0.4, 0.5, 0.1], center: true}).translate([-0.03, 0.09, length]);
+	var left = cube({size: [0.4, 0.5, 0.1], center: true}).translate([-0.03, 0.09, 0]);
+	var bottom = cube({size: [0.1, 0.5, length + 0.1], center: true}).translate([-0.18, 0.09, length/2]);
 	
 	var spiceRack = union(mid, right, left, bottom);	
 	spiceRack = spiceRack.center();	

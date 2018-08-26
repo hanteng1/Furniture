@@ -8,14 +8,14 @@ const {translate, rotate} = scadApi.transformations
 const csgToGeometries = require('./csgToGeometries')
 
 function CreateRod(length) {
-    var mid = cylinder({r: 0.5, h: length});
-
-	var left = cylinder({start: [0,0,0.2], 
-	    end: [0,0,0], r1: 1, r2: 1, fn: 50});
-	var s1 = difference(sphere({r: 0.2, center:true}),
-	    cube({size: 1, center:true}).translate([0,0,-0.4])).translate([0.7,0,0.1]);
-	var s2 = s1.translate([-1.1,-0.65,0]);
-    var s3 = s1.translate([-1.1,0.65,0]);
+    var mid = cylinder({r: 0.2, h: length});
+    
+    var left = cylinder({start: [0,0,0.2], 
+	    end: [0,0,0], r1: 0.5, r2: 0.5, fn: 50});
+	var s1 = difference(sphere({r: 0.11, center:true}),
+	    cube({size: 0.55, center:true}).translate([0,0,-0.22])).translate([0.35,0,0.15]);
+	var s2 = s1.translate([-0.5,-0.3,0]);
+    var s3 = s1.translate([-0.5,0.3,0]);
     left = union(left, s1, s2, s3);
     
     var right = left.center();
@@ -25,7 +25,6 @@ function CreateRod(length) {
 	var rod = union(left, mid, right);
 	rod = rod.rotateY(90);
 	rod = rod.center();
-
 	var geometry = csgToGeometries(rod)[0];
 
 	return geometry;

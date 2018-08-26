@@ -19,11 +19,12 @@ function Dresser_Add (main){
 	this.hasRemovedDrawers = false;
 	// remove drawers number 
 	this.parameter = 3;
+	this.countDrawer = 0;
 
 	// door event
-	// this.mode = "upToDown";
-	this.mode = "leftToRight";
-	this.RAngle = 70;
+	this.mode = "upToDown";
+	// this.mode = "leftToRight";
+	this.RAngle = 0;
 
 	// add drawer
 	// this.drawerMode = "vertical";
@@ -49,7 +50,7 @@ Dresser_Add.prototype = {
 			var rodCenter = Dresser_Add.getPartCenter(rod);
 			var rodSize = Dresser_Add.getPartSize(rod);
 
-			clothesHanger.position.set(rodCenter.x, rodCenter.y - clothesHangerSize.y + rodSize.y/2, rodCenter.z);
+			clothesHanger.position.set(rodCenter.x, rodCenter.y - clothesHangerSize.y + 0.3, rodCenter.z);
 			rod.worldToLocal(clothesHanger.position);
 
 			rod.add(clothesHanger);
@@ -58,7 +59,7 @@ Dresser_Add.prototype = {
 			loader.load( "./models/chothesHanger/model.dae", function ( collada ) {
 			clothesHanger = collada.scene;
 			clothesHanger.name = "clothesHanger";
-			clothesHanger.scale.x = 0.75; clothesHanger.scale.y = 0.75; clothesHanger.scale.z = 0.75;
+			clothesHanger.scale.x = 0.24; clothesHanger.scale.y = 0.24; clothesHanger.scale.z = 0.24;
 			
 		} );
 	},
@@ -68,8 +69,11 @@ Dresser_Add.prototype = {
 		// console.log(obj);
 		var str1 = "cabinetTop-cabinetFront";
 		var str2 = "cabinetFront-cabinetTop";
-		for (var i = 0; i < obj.children.length; i++) {
-			if(obj.children[i].name == str1 || obj.children[i].name == str2)
+		var str3 = "Dresser";
+		console.log("checkHasTopFront");
+		for (var i = 0; i < obj.children.length; i++) {			
+			console.log(obj.children[i].name);
+			if(obj.children[i].name == str1 || obj.children[i].name == str2 || obj.children[i].name == str3)
 				return true;			
 		}
 		return false;
@@ -83,7 +87,7 @@ Dresser_Add.prototype = {
 
 	addBottom: function(dresser, size, center) {
 		var material = this.getPartMaterial(dresser);
-		var geometry = chairCreateBoard(size.x - 0.6, 0.1, size.z - 0.6);
+		var geometry = chairCreateBoard(size.x, 0.1, size.z);
 		var bottom = new THREE.Mesh(geometry, material);
 		bottom.name = "Dresser_part_bottom";
 		var tmp = new THREE.Vector3(center.x - size.x/2, center.y - size.y/2, center.z - size.z/2);
@@ -117,10 +121,10 @@ Dresser_Add.prototype = {
 
 	addBack: function(dresser, size, center) {
 		var material = this.getPartMaterial(dresser);
-		var geometry = chairCreateBoard(size.x - 0.6, size.y - 0.6, 0.1);
+		var geometry = chairCreateBoard(size.x - 0.2, size.y - 0.2, 0.1);
 		var back = new THREE.Mesh(geometry, material);
 		back.name = "Dresser_part_back";
-		var tmp = new THREE.Vector3(center.x - size.x/2 + 0.3, center.y - size.y/2 + 0.3, center.z - size.z/2);
+		var tmp = new THREE.Vector3(center.x - size.x/2 + 0.12, center.y - size.y/2 + 0.12, center.z - size.z/2);
 		var inverse = new THREE.Matrix4();
 		inverse.getInverse(dresser.matrixWorld);
 		dresser.worldToLocal(tmp);
@@ -151,33 +155,17 @@ Dresser_Add.prototype = {
 
 	addShelf: function(furniture, spaceCenter, spaceSize) {
 		var dresser = furniture.getObjectByName("Dresser");
-		// console.log("dresser");
-		// console.log(dresser);
-		// var raycaster = new THREE.Raycaster();
-		// var pos = spaceCenter.clone();
-		// pos.y = pos.y + spaceSize.y;
-		// raycaster.set(pos, new THREE.Vector3(0,-1,0));
-
-		// var intersects = raycaster.intersectObjects(dresser.children);
-		// if(intersects.length > 2){
-		// 	console.log("Dresser shelf exit.");
-		// 	return;
-		// }
-		// console.log("Dresser no shelf.");
-
-		//get dresser material case1: no children case2: has children
-
 		var material = this.getPartMaterial(dresser);
 
-		var geometry = chairCreateBoard(spaceSize.x - 0.6, 0.1, spaceSize.z - 0.6);
+		var geometry = chairCreateBoard(spaceSize.x - 0.2, 0.1, spaceSize.z - 0.2);
 		var shelf = new THREE.Mesh(geometry, material);
 		var shelfSize = this.getPartSize(shelf);
 		var shelf_inverse = new THREE.Matrix4();
 		shelf_inverse.getInverse(dresser.matrixWorld);
 		shelf.applyMatrix(shelf_inverse);
 
-		shelf.position.set(spaceCenter.x - spaceSize.x/2, spaceCenter.y - spaceSize.y/2, 
-			spaceCenter.z - spaceSize.z/2);
+		shelf.position.set(spaceCenter.x - spaceSize.x/2 + 0.12, spaceCenter.y - spaceSize.y/2, 
+			spaceCenter.z - spaceSize.z/2 + 0.12);
 		dresser.worldToLocal(shelf.position);
 
 		dresser.add(shelf);
@@ -194,11 +182,11 @@ Dresser_Add.prototype = {
 			blums.name = "blums";
 		}
 		else if(this.drawerMode == "horizontal"){
-			var geometry = CreateDrawer(size.x/2 - 0.5, size.z, size.y);
+			var geometry = CreateDrawer(size.x/2 - 0.05, size.z, size.y);
 			var drawer = new THREE.Mesh(geometry, drawerMaterial);
 			drawer.name = "drawer";
 
-			var blumsGeometry = CreateBlum(size.x/2 - 0.5, size.z, size.y);
+			var blumsGeometry = CreateBlum(size.x/2 - 0.05, size.z, size.y);
 			var blums = new THREE.Mesh(blumsGeometry, blumsMaterial);
 			blums.name = "blums";
 		}
@@ -273,7 +261,7 @@ Dresser_Add.prototype = {
 		else
 			console.log("rayFB miss");
 
-		originFB = new THREE.Vector3(space.max.x + 0.1, center.y, center.z + size.z);
+		originFB = new THREE.Vector3(space.max.x + 0.01, center.y, center.z + size.z);
 		var rayFB = this.getPointByRay(dresser, originFB, directionFB);
 		if(rayFB.length > 0){
 			maxZ = rayFB[0].point;
@@ -282,7 +270,7 @@ Dresser_Add.prototype = {
 		else
 			console.log("rayFB(2) miss");
 
-		var originUD = new THREE.Vector3(center.x, center.y, space.max.z + 0.1);
+		var originUD = new THREE.Vector3(center.x, center.y, space.max.z + 0.01);
 		var directionUD = new THREE.Vector3(0,-1,0);
 		var rayUD = this.getPointByRay(dresser, originUD, directionUD);
 		if(rayUD.length > 0){
@@ -292,7 +280,7 @@ Dresser_Add.prototype = {
 		else{
 			console.log("rayUD1 miss");
 			rayUD = [];
-			originUD = new THREE.Vector3(center.x, center.y, space.max.z - 0.1);
+			originUD = new THREE.Vector3(center.x, center.y, space.max.z - 0.01);
 			rayUD = this.getPointByRay(dresser, originUD, directionUD);
 			if(rayUD.length > 0){
 				maxY = rayUD[0].point;
@@ -302,7 +290,7 @@ Dresser_Add.prototype = {
 				console.log("rayUD2 miss");
 		}
 
-		var originDU = new THREE.Vector3(center.x, center.y, space.max.z + 0.1);
+		var originDU = new THREE.Vector3(center.x, center.y, space.max.z + 0.01);
 		var directionDU = new THREE.Vector3(0,1,0);
 		var rayDU = this.getPointByRay(dresser, originDU, directionDU);
 		if(rayDU.length > 0){
@@ -505,7 +493,7 @@ Dresser_Add.prototype = {
 
 		count.push(centers_clone[0]);
 		for (var i = 1; i < centers_clone.length; i++) {
-			if(centers_clone[i] <= centers_clone[i-1] - 2)
+			if(centers_clone[i] <= centers_clone[i-1] - 0.3)
 				count.push(centers_clone[i]);
 		}
 	},
@@ -545,6 +533,8 @@ Dresser_Add.prototype = {
 		var dresser = furniture_cutToChair.getObjectByName("Dresser");
 		this.hasBottom(dresser);
 		this.hasBack(dresser);
+
+		this.getInsideSpace(furniture_cutToChair);
 		
 	},
 
@@ -599,11 +589,12 @@ Dresser_Add.prototype = {
 				furniture_addLeg.worldToLocal(pos);
 				legsArray[i-4].position.set(pos.x, pos.y, pos.z);
 				furniture_addLeg.add(legsArray[i-4]);
-			}
+			}			
 			else{
 				console.log("Ray miss");
-			}
+			}			
 		}		
+		furniture_addLeg.position.y += legSize.y;		
 	},
 
 	addDoorEvent: function() {
@@ -631,13 +622,18 @@ Dresser_Add.prototype = {
 				this.removeDrawersByColumn(furniture_addDoor, this.parameter, tmp);				
 			}
 			this.hasRemovedDrawers = true;
+			this.countDrawer = count.length;
 		}
 
 		var spaceBox = new THREE.Box3();
 		spaceBox = this.getInsideSpace(furniture_addDoor);
-		if(this.parameter < count.length){
-			var offest = (spaceBox.max.y - spaceBox.min.y) / count.length;
-			spaceBox.min.y += offest * (count.length - this.parameter);
+
+		var box = new THREE.Box3Helper(spaceBox, 0x000000);
+		this.main.scene.add(box);
+
+		if(this.parameter < this.countDrawer){
+			var offest = (spaceBox.max.y - spaceBox.min.y) / this.countDrawer;
+			spaceBox.min.y += offest * (this.countDrawer - this.parameter);
 		}
 
 		var spaceSize = new THREE.Vector3();
@@ -647,7 +643,7 @@ Dresser_Add.prototype = {
 
 		spaceCenter.y = spaceCenter.y + spaceSize.y/4;
 		spaceSize.y = spaceSize.y/2;
-		this.addShelf(furniture_addDoor, spaceCenter, spaceSize);
+		// this.addShelf(furniture_addDoor, spaceCenter, spaceSize);
 
 		
 		spaceBox.getSize(spaceSize);
@@ -655,17 +651,18 @@ Dresser_Add.prototype = {
 
 		//left to right
 		if(this.mode == "leftToRight"){
-			var doorGeometry = CreateDoor(spaceSize.y, spaceSize.x + 1);
+			
+			var doorGeometry = CreateDoor(spaceSize.y, spaceSize.x);
 			var door = new THREE.Mesh(doorGeometry, doorMaterial);
 			door.name = "door";
 			var doorSize = this.getPartSize(door);
 
 			var angle = this.RAngle/180*Math.PI;
 
-			var offsetZ = spaceSize.x/2 * Math.sin(angle) + 0.8 * Math.cos(angle);
+			var offsetZ = spaceSize.x/2 * Math.sin(angle) + 0.128 * Math.cos(angle);
 
 			
-			var offsetX = -1 * spaceSize.x/2 * Math.cos(angle) + 0.5 * Math.sin(angle);
+			var offsetX = -1 * spaceSize.x/2 * Math.cos(angle) + 0.02 * Math.sin(angle);
 			
 
 			var doorpos = new THREE.Vector3(spaceCenter.x + spaceSize.x/2 + offsetX, spaceCenter.y, 
@@ -683,10 +680,10 @@ Dresser_Add.prototype = {
 			var hinge1 = new THREE.Mesh(hingeGeometry, doorMaterial);
 			hinge1.name = "hinge";
 			var hinge2 = hinge1.clone();
-			var hinge1pos = new THREE.Vector3(spaceCenter.x + spaceSize.x/2 - 0.3, 
-				spaceCenter.y + spaceSize.y/4, spaceCenter.z + spaceSize.z/2);
-			var hinge2pos = new THREE.Vector3(spaceCenter.x + spaceSize.x/2 - 0.3, 
-				spaceCenter.y - spaceSize.y/4, spaceCenter.z + spaceSize.z/2);
+			var hinge1pos = new THREE.Vector3(spaceCenter.x + spaceSize.x/2 - 0.12, 
+				spaceCenter.y + spaceSize.y/4, spaceCenter.z + spaceSize.z/2 );
+			var hinge2pos = new THREE.Vector3(spaceCenter.x + spaceSize.x/2 - 0.12, 
+				spaceCenter.y - spaceSize.y/4, spaceCenter.z + spaceSize.z/2 );
 
 			hinge1.applyMatrix(inverse);
 			hinge2.applyMatrix(inverse);
@@ -707,9 +704,9 @@ Dresser_Add.prototype = {
 			var doorSize = this.getPartSize(door);
 			
 			var angle = this.RAngle/180*Math.PI ;
-			var offsetY = doorSize.y/2 * Math.cos(angle) - 0.8 * Math.sin(angle);
+			var offsetY = doorSize.y/2 * Math.cos(angle) - 0.03 * Math.sin(angle);
 			
-			var offsetZ = doorSize.y/2 * Math.sin(angle) + 0.8 * Math.cos(angle);
+			var offsetZ = doorSize.y/2 * Math.sin(angle) + 0.1 * Math.cos(angle);
 
 			var doorpos = new THREE.Vector3(spaceCenter.x, 
 				spaceCenter.y - doorSize.y/2 + offsetY , spaceCenter.z + spaceSize.z/2 + offsetZ);
@@ -729,11 +726,11 @@ Dresser_Add.prototype = {
 			hinge1.name = "hinge";
 			// var offest = ((dresserSize.y - 1)/2) * (-1) *Math.cos(angle) + 0.8;
 			var hinge1pos = new THREE.Vector3(spaceCenter.x + spaceSize.x/4, 
-				spaceCenter.y - spaceSize.y/2 + 0.7, spaceCenter.z + spaceSize.z/2 );
+				spaceCenter.y - spaceSize.y/2 + 0.5, spaceCenter.z + spaceSize.z/2 - 0.05);
 
 			var hinge2 = hinge1.clone();
 			var hinge2pos = new THREE.Vector3(spaceCenter.x - spaceSize.x/4, 
-				spaceCenter.y - spaceSize.y/2 + 0.7, spaceCenter.z + spaceSize.z/2 );
+				spaceCenter.y - spaceSize.y/2 + 0.1, spaceCenter.z + spaceSize.z/2 - 0.05);
 
 			hinge1.applyMatrix(inverse);
 			furniture_addDoor.worldToLocal(hinge1pos);
@@ -765,35 +762,16 @@ Dresser_Add.prototype = {
 					this.removeDrawersByColumn(furniture_addRod, this.parameter, tmp);
 				}
 				this.hasRemovedDrawers = true;
+				this.countDrawer = count.length;
 			}
+
 
 			var spaceBox = this.getInsideSpace(furniture_addRod);
 
-			if(this.parameter < count.length){
-				var offest = (spaceBox.max.y - spaceBox.min.y) / count.length;
-				spaceBox.min.y += offest * (count.length - this.parameter);
+			if(this.parameter < this.countDrawer){
+				var offest = (spaceBox.max.y - spaceBox.min.y) / this.countDrawer;
+				spaceBox.min.y += offest * (this.countDrawer - this.parameter);
 			}
-
-			var dresserSize = this.getPartSize(dresser);
-			var dresserCenter = this.getPartCenter(dresser);
-			var originRight = new THREE.Vector3(dresserCenter.x + dresserSize.x, 
-				dresserCenter.y, dresserCenter.z);
-			var rayRiToLe = this.getPointByRay(dresser, originRight, new THREE.Vector3(-1,0,0));
-			if(rayRiToLe.length > 0)
-				var insideLeft = rayRiToLe[rayRiToLe.length - 1].point;
-			else
-				console.log("insideLeft miss.");
-
-			var originLeft = new THREE.Vector3(dresserCenter.x - dresserSize.x, 
-				dresserCenter.y, dresserCenter.z);
-			var rayLeToRi = this.getPointByRay(dresser, originLeft, new THREE.Vector3(1,0,0));
-			if(rayLeToRi.length > 0)
-				var insideRight = rayLeToRi[rayLeToRi.length - 1].point;
-			else
-				console.log("insideRight miss.");
-
-			spaceBox.max.x = insideRight.x;
-			spaceBox.min.x = insideLeft.x;
 
 			var spaceSize = new THREE.Vector3();
 			var spaceCenter = new THREE.Vector3();
@@ -826,7 +804,7 @@ Dresser_Add.prototype = {
 				var furniture_addRod = this.furnitures[i].getFurniture();
 				this.markCabinet(furniture_addRod);		
 				this.markDrawer(furniture_addRod);
-				furniture_addRod.position.set(offest, 0, 0);
+				furniture_addRod.position.set(offest, 0, -30);
 			}
 
 			//add rod
@@ -839,7 +817,7 @@ Dresser_Add.prototype = {
 				var rodGeometry = CreateRod(furnitureSize.x);
 				var rod = new THREE.Mesh(rodGeometry, rodMaterial);
 				rod.name = "rod";
-				rod.position.set(offest, furnitureCenter.y + furnitureSize.y/4, 0);
+				rod.position.set(offest, furnitureCenter.y + furnitureSize.y/4, -30);
 				this.main.scene.add(rod);
 				this.loadClothesHanger(rod);
 				
@@ -850,7 +828,12 @@ Dresser_Add.prototype = {
 	addSpiceRackEvent: function() {
 		var furniture_addSpiceRack = new THREE.Object3D();
 		furniture_addSpiceRack = this.furnitures[0].getFurniture();
+		this.markCabinet(furniture_addSpiceRack);		
+		this.markDrawer(furniture_addSpiceRack);
 		var dresser = furniture_addSpiceRack.getObjectByName("Dresser");
+		this.hasBottom(furniture_addSpiceRack);
+		this.hasBack(furniture_addSpiceRack);
+		
 		var furnitureSize = this.getPartSize(dresser);
 		var furnitureCenter = this.getPartCenter(dresser);
 
@@ -940,7 +923,7 @@ Dresser_Add.prototype = {
 		if(this.drawerMode == "vertical"){
 			var drawerSize = this.getPartSize(theDrawer);
 			var tmp = new THREE.Box3();
-			for (var i = 0, move = 3; i < this.drawerParameter; i++) {
+			for (var i = 0, move = 0.3; i < this.drawerParameter; i++) {
 				tmp.copy(space);				
 				tmp.max.y -= offest * i; 
 				tmp.min.y += offest * (this.drawerParameter - i - 1);
@@ -959,7 +942,7 @@ Dresser_Add.prototype = {
 				furniture_addDrawer.worldToLocal(drawer1.position);
 				
 				var drawer2pos = new THREE.Vector3(spaceCenter.x - drawerSize.x/2 + 0.25, 
-					spaceCenter.y - spaceSize.y/2, spaceCenter.z - spaceSize.z/2 + move + 2);
+					spaceCenter.y - spaceSize.y/2, spaceCenter.z - spaceSize.z/2 + move + 0.2);
 				drawer2.applyMatrix(inverse);
 				drawer2.position.set(drawer2pos.x, drawer2pos.y, drawer2pos.z);
 				furniture_addDrawer.worldToLocal(drawer2.position);
@@ -970,7 +953,7 @@ Dresser_Add.prototype = {
 		else if(this.drawerMode == "horizontal"){
 			var drawerSize = this.getPartSize(theDrawer);
 			var tmp = new THREE.Box3();
-			for (var i = 0, move = 3; i < this.drawerParameter; i++) {
+			for (var i = 0, move = 0.3; i < this.drawerParameter; i++) {
 				tmp.copy(space);				
 				tmp.max.y -= offest * i; 
 				tmp.min.y += offest * (this.drawerParameter - i - 1);
@@ -1000,7 +983,7 @@ Dresser_Add.prototype = {
 
 				drawer2.applyMatrix(inverse);
 				drawer2.position.set(spaceCenter.x - spaceSize.x/2 + 0.25, spaceCenter.y - spaceSize.y/2,
-				 spaceCenter.z - spaceSize.z/2 + move +2);
+				 spaceCenter.z - spaceSize.z/2 + move + 0.2);
 				furniture_addDrawer.worldToLocal(drawer2.position);
 				furniture_addDrawer.add(drawer2);
 			}
@@ -1051,15 +1034,29 @@ Dresser_Add.prototype = {
 		}
 	},
 
-	execute: function() {
+	execute: function(tfname) {
 		if(this.checkHasTopFront(this.furnitures[0])){
-			// this.cutToChairEvent();
-			this.addDoorEvent();
-			this.addLegEvent();	
-			this.addRodEvent();
-			this.addSpiceRackEvent();
-			// this.addDrawerEvent();
-			// this.removeDrawersEvent();
+			if(tfname == "cut_chair") {
+				this.cutToChairEvent();
+			}
+			else if(tfname == "add_door") {
+				this.addDoorEvent();
+			}
+			else if(tfname == "add_leg") {
+				this.addLegEvent();
+			}
+			else if(tfname == "add_rod") {
+				this.addRodEvent();
+			}
+			else if(tfname == "add_spice_rack") {
+				this.addSpiceRackEvent();
+			}
+			else if(tfname == "add_drawer") {
+				this.addDrawerEvent();
+			}
+			else if(tfname == "remove_drawers") {
+				this.removeDrawersEvent();
+			}
 		}
 		else{
 			alert("Please mark cabinetTop and cabinetFront");

@@ -8,13 +8,14 @@ const {translate, rotate} = scadApi.transformations
 const csgToGeometries = require('./csgToGeometries')
 
 function CreateDoor(h, w) {
-    var board = cube({size:[0.8, h - 1, w - 1], center:true});
-	var obj = board.expand(0.1, 16);
-	var path = new CSG.Path2D([[-0.25, w/8+w/10], [-0.25, w/8], [-0.25-w/20, w/8-w/15], 
-		[-0.25-w/20, -1*w/8+w/15], [-0.25, -1*w/8], [-0.25, -1*w/8-w/10]], /*closed=*/false);
-	var handle = path.rectangularExtrude(0.2, 1, 16, true);
-	//var handle = rectangular_extrude([ [-0.25,1], [-0.5,0.5], [-0.5,0], [-0.25,-0.5] ],  {w: 0.1, h: 0.2});
-    handle = handle.translate([-0.3,0, -1*w/2 + w/8]);
+    var tmp = 0.05;
+   	var board = cube({size:[0.03, h, w], center:true});
+   	var obj = board.expand(0.04, 16);
+    var path = new CSG.Path2D([[tmp, w/8+w/10], [tmp, w/8], [tmp-w/20, w/8-w/15], 
+    	[tmp-w/20, -1*w/8+w/15], [tmp, -1*w/8], [tmp, -1*w/8-w/10]], /*closed=*/false);
+    var handle = path.rectangularExtrude(0.08, 0.2, 16, true);
+    //var handle = rectangular_extrude([ [-0.25,1], [-0.5,0.5], [-0.5,0], [-0.25,-0.5] ],  {w: 0.1, h: 0.2});
+    handle = handle.translate([-0.12,0, -1*w/2 + w/8]);
     obj = union(obj, handle);
     obj = obj.rotateY(90);
 
@@ -22,7 +23,6 @@ function CreateDoor(h, w) {
 
 	return geometry;
 
-
 }
 
-module.exports = CreateDoor
+module.exports = CreateDoor 

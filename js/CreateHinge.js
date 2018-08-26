@@ -35,8 +35,10 @@ function CreateHinge(RAngle, mode) {
     c4 = c4.scale([0.5,0.5,0.5]);
     var c = cylinder({start: [0,-2.1,0], end: [0,2.4,0], r1: 0.3, r2: 0.3, fn: 50});
    	c = c.scale([0.5,0.5,0.5]);
+
     var hinge = union(left, c, c1, c3, c2, c4, right);
-    
+    hinge = hinge.scale([0.3,0.3,0.3]);
+
     // left to right (1) // up to down (2) + (1)
     if(mode == "upToDown") 
     	hinge = hinge.rotateX(-90); // (2)
