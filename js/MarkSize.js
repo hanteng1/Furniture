@@ -25,6 +25,7 @@ function MarkSize( main , TargetObj ){
 		}
 	}
 	for(var i = main.Sceneobjects.length - 1; i > -1; i -- ){
+		var object =  main.Sceneobjects[i];
 		//get object center
 		Box.setFromObject(object);
 		Box.getCenter(objCenter);
@@ -36,7 +37,7 @@ function MarkSize( main , TargetObj ){
 
 	//set funiture bounding box , box center
 	FuniBox.setFromArray( PosArr );
-	Box.getCenter(FuniCenter);
+	FuniBox.getCenter(FuniCenter);
 	
 	//get object center
 	Box.setFromObject(TargetObj);
@@ -314,7 +315,7 @@ function loadText(main , num , position , rotat){
 		function ( font ) {
 			var geometry = new THREE.TextGeometry( text , {
 				font: font ,
-				size: 0.5,
+				size: 0.3,
 				height: 0.05,
 				curveSegments: 12,
 				bevelEnabled: false,

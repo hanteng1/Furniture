@@ -265,9 +265,9 @@ Cabinet_kallax.prototype = {
 		var f1Size = furnitures[0].getSize();
 		var f2Size = furnitures[1].getSize();
 		//get broad size
-		var BroadSize = new THREE.Vector3( Math.abs(f1Center.x - f2Center.x)+f1Size.x +3 , 
-										 	1 ,  
-										   Math.abs(f1Center.z - f2Center.z)+f2Size.z +3 );
+		var BroadSize = new THREE.Vector3( Math.abs(f1Center.x - f2Center.x)+f1Size.x +0.75 , 
+										 	0.25 ,  
+										   Math.abs(f1Center.z - f2Center.z)+f2Size.z +0.75 );
 		//get broad position
 		var BroadPosi = new THREE.Vector3( (f1Center.x + f2Center.x)/2 - BroadSize.x/2,
 											f1Center.y + f1Size.y/2    ,
@@ -340,7 +340,7 @@ Cabinet_kallax.prototype = {
 			Model = collada.scene;
 
 			scope.main.scene.add(Model);
-			Model.scale.set(1,1,1);
+			Model.scale.set( 0.25 , 0.25 , 0.25 );
 
 			Model.rotateOnWorldAxis(new THREE.Vector3(0,0,1) , 180 * Math.PI/180);
 			Model.rotateOnWorldAxis(new THREE.Vector3(0,1,0) , angle * Math.PI/180);
@@ -404,9 +404,9 @@ Cabinet_kallax.prototype = {
 
 		if (mode == "queen"){
 			//set bed width
-			if ( (Math.abs(f1Center.x - f2Center.x)+ fSize.x ) < 60 ){
-				var i=1
-				while ((Math.abs(f1Center.x - f2Center.x) + fSize.x ) < 60) {
+			if ( (Math.abs(f1Center.x - f2Center.x)+ fSize.x ) < 15 ){
+				var i=0.5
+				while ((Math.abs(f1Center.x - f2Center.x) + fSize.x ) < 15 ) {
 					funiture2.position.set(funiture2.position.x + i, 
 								   		   funiture2.position.y ,
 										   funiture1.position.z  );
@@ -417,8 +417,9 @@ Cabinet_kallax.prototype = {
 			}
 			//get broad size
 			BroadSize = new THREE.Vector3( Math.abs(f1Center.x - f2Center.x)+fSize.x , 
-										   0.5 ,  
+										   0.25 ,  
 										   Math.abs(f1Center.z - f2Center.z)+fSize.z );
+			//console.log(BroadSize.x);
 			//get broad position
 			BroadPosi = new THREE.Vector3( (f1Center.x + f2Center.x)/2 - BroadSize.x/2,
 											f1Center.y + fSize.y/2 ,
@@ -428,9 +429,9 @@ Cabinet_kallax.prototype = {
 			
 		}
 		else if (mode == "twin"){
-			if ( (Math.abs(f1Center.x - f2Center.x)+ fSize.x ) < 44 ){
-				var i=1
-				while ((Math.abs(f1Center.x - f2Center.x) + fSize.x ) < 44) {
+			if ( (Math.abs(f1Center.x - f2Center.x)+ fSize.x ) < 11 ){
+				var i=0.5
+				while ((Math.abs(f1Center.x - f2Center.x) + fSize.x ) < 11) {
 					funiture2.position.set(funiture2.position.x + i, 
 								   		   funiture2.position.y ,
 										   funiture1.position.z  );
@@ -441,12 +442,13 @@ Cabinet_kallax.prototype = {
 			}
 			//get broad size
 			BroadSize = new THREE.Vector3( Math.abs(f1Center.x - f2Center.x)+fSize.x , 
-										   0.5 ,  
+										   0.25 ,  
 										   Math.abs(f1Center.z - f2Center.z)+fSize.z );
 			//get broad position
 			BroadPosi = new THREE.Vector3( (f1Center.x + f2Center.x)/2 - BroadSize.x/2,
 											f1Center.y + fSize.y/2 ,
 										   (f1Center.z + f2Center.z)/2 - BroadSize.z/2);
+			
 			this.loadTwinBed(f1Center , f2Center , BroadSize , BroadPosi);
 		}
 
@@ -464,7 +466,7 @@ Cabinet_kallax.prototype = {
 		scope.main.scene.add(NewBroad);
 		scope.main.Sceneobjects.push(NewBroad);
 		//creat other 4 broads
-		if (mode == "queen" && fSize.z < 81-(BroadSize.y+1)){
+		if (mode == "queen" && fSize.z < 20 -(BroadSize.y+0.5)){
 			//set texture info
 			texture = new THREE.TextureLoader().load( 'images/material/material5.jpg' );
 			texture.repeat.set(0.1, 0.1);
@@ -472,22 +474,22 @@ Cabinet_kallax.prototype = {
 			newmaterial = new THREE.MeshBasicMaterial( {map: texture} );
 
 			//creat broad 
-			geometry = CabinetMakeBroad( BroadSize.x , BroadSize.y + 1 , 81 - BroadSize.z );			
+			geometry = CabinetMakeBroad( BroadSize.x , BroadSize.y + 0.25 , 20 - BroadSize.z );			
 			Broad1 = new THREE.Mesh( geometry, newmaterial );
 			Broad2 = new THREE.Mesh( geometry, newmaterial );
 			
-			geometry = CabinetMakeBroad( BroadSize.x , fSize.y - (BroadSize.y+1)*2 +0.5 , BroadSize.y + 1 );
+			geometry = CabinetMakeBroad( BroadSize.x , fSize.y - (BroadSize.y+0.25)*2 +0.25 , BroadSize.y + 0.25 );
 			Broad3 = new THREE.Mesh( geometry, newmaterial );
 			Broad4 = new THREE.Mesh( geometry, newmaterial );
 
 			//set broad position
-			Broad1.position.set(BroadPosi.x , BroadPosi.y - 1, BroadPosi.z - (81 - BroadSize.z) );
-			Broad2.position.set(BroadPosi.x , 0				 , BroadPosi.z - (81 - BroadSize.z) );
-			Broad3.position.set(BroadPosi.x , BroadSize.y + 1, BroadPosi.z - (81 - BroadSize.z) );
-			Broad4.position.set(BroadPosi.x , BroadSize.y + 1, BroadPosi.z - (BroadSize.y + 1) );
+			Broad1.position.set(BroadPosi.x , BroadPosi.y - 0.25, BroadPosi.z - (20 - BroadSize.z) );
+			Broad2.position.set(BroadPosi.x , 0				 , BroadPosi.z - (20 - BroadSize.z) );
+			Broad3.position.set(BroadPosi.x , BroadSize.y + 0.25, BroadPosi.z - (20 - BroadSize.z) );
+			Broad4.position.set(BroadPosi.x , BroadSize.y + 0.25, BroadPosi.z - (BroadSize.y + 0.25 ) );
 			
 		}
-		else if (mode == "twin" && fSize.z < 75-(BroadSize.y+1) ){
+		else if (mode == "twin" && fSize.z < 18.75-(BroadSize.y+0.5) ){
 			//set texture info
 			texture = new THREE.TextureLoader().load( 'images/material/material5.jpg' );
 			texture.repeat.set(0.1, 0.1);
@@ -495,19 +497,19 @@ Cabinet_kallax.prototype = {
 			newmaterial = new THREE.MeshBasicMaterial( {map: texture} );
 
 			//creat broad 
-			geometry = CabinetMakeBroad( BroadSize.x , BroadSize.y + 1 , 75 - BroadSize.z );			
+			geometry = CabinetMakeBroad( BroadSize.x , BroadSize.y + 0.25 , 18.75 - BroadSize.z );			
 			Broad1 = new THREE.Mesh( geometry, newmaterial );
 			Broad2 = new THREE.Mesh( geometry, newmaterial );
 			
-			geometry = CabinetMakeBroad( BroadSize.x , fSize.y - (BroadSize.y+1)*2 +0.5 , BroadSize.y + 1 );
+			geometry = CabinetMakeBroad( BroadSize.x , fSize.y - (BroadSize.y+0.25)*2 +0.25 , BroadSize.y + 0.25 );
 			Broad3 = new THREE.Mesh( geometry, newmaterial );
 			Broad4 = new THREE.Mesh( geometry, newmaterial );
 
 			//set broad position
-			Broad1.position.set(BroadPosi.x , BroadPosi.y - 1, BroadPosi.z - (75 - BroadSize.z) );
-			Broad2.position.set(BroadPosi.x , 0				 , BroadPosi.z - (75 - BroadSize.z) );
-			Broad3.position.set(BroadPosi.x , BroadSize.y + 1, BroadPosi.z - (75 - BroadSize.z) );
-			Broad4.position.set(BroadPosi.x , BroadSize.y + 1, BroadPosi.z - (BroadSize.y + 1) );
+			Broad1.position.set(BroadPosi.x , BroadPosi.y - 0.25, BroadPosi.z - (18.75 - BroadSize.z) );
+			Broad2.position.set(BroadPosi.x , 0				 , BroadPosi.z - (18.75 - BroadSize.z) );
+			Broad3.position.set(BroadPosi.x , BroadSize.y + 0.25, BroadPosi.z - (18.75 - BroadSize.z) );
+			Broad4.position.set(BroadPosi.x , BroadSize.y + 0.25, BroadPosi.z - (BroadSize.y + 0.25) );
 
 		}
 		
@@ -516,9 +518,9 @@ Cabinet_kallax.prototype = {
 		group.add( Broad2 );
 		group.add( Broad3 );
 		group.add( Broad4 );
-		scope.main.scene.add(group);
+		scope.main.scene.add( group );
 		scope.main.Sceneobjects.push(group);
-
+		
 
 	},
 
@@ -548,7 +550,7 @@ Cabinet_kallax.prototype = {
 												 ( f1Center.z + f2Center.z )/2 );
 
 			Model.position.set( bedCenter.x + BroadSize.x/2, 
-								BroadPosi.y + 0.5 , 
+								BroadPosi.y + 0.25 , 
 								bedCenter.z + BroadSize.z/2);
 		} );
 	},
@@ -568,7 +570,7 @@ Cabinet_kallax.prototype = {
 			Model = collada.scene;
 			scope.main.Sceneobjects.push(Model);
 			scope.main.scene.add(Model);
-			Model.scale.set(1,1,1);
+			Model.scale.set(10,10,10);
 			Model.rotateOnWorldAxis(new THREE.Vector3(0,1,0) , 90 * Math.PI/180);
 
 			var box 		= new THREE.Box3();
@@ -576,7 +578,7 @@ Cabinet_kallax.prototype = {
 												 ( f1Center.y + f2Center.y )/2 ,
 												 ( f1Center.z + f2Center.z )/2 );
 			Model.position.set( bedCenter.x + BroadSize.x/2, 
-								BroadPosi.y + 0.5 , 
+								BroadPosi.y + 0.25 , 
 								bedCenter.z + BroadSize.z/2);
 			
 		});
@@ -602,17 +604,19 @@ Cabinet_kallax.prototype = {
 
 				} else if ( object instanceof THREE.HemisphereLight ) {
 
-				}else if ( object instanceof THREE.AmbientLight ) {
+				} else if ( object instanceof THREE.AmbientLight ) {
 
-				}else if ( object instanceof THREE.GridHelper ) {
+				} else if ( object instanceof THREE.GridHelper ) {
 
-				}else if ( object instanceof THREE.TransformControls ){
+				} else if ( object instanceof THREE.TransformControls ){
 
-				}else if( object instanceof AddAxis){
+				} else if ( object instanceof AddAxis){
 
-				}else if( object instanceof THREE.BoxHelper){
+				} else if ( object instanceof THREE.BoxHelper){
 
-				}else{
+				} else if (object == main.house){
+
+				} else{
 					main.removeFromScene(object); 
 				}
 			}
@@ -656,62 +660,7 @@ Cabinet_kallax.prototype = {
 		}
 		main.Sceneobjects=[];
 
-	},
-
-	loadText: function( text , position , rotat ){
-
-		var main = this.main;
-
-		var loader = new THREE.FontLoader();
-		var font = loader.load(
-			// resource URL
-			'three.js-master/examples/fonts/helvetiker_regular.typeface.json',
-
-			// onLoad callback
-			function ( font ) {
-				var geometry = new THREE.TextGeometry( text , {
-					font: font ,
-					size: 1,
-					height: 0.05,
-					curveSegments: 12,
-					bevelEnabled: false,
-					bevelThickness: 5,
-					bevelSize: 4,
-					bevelSegments: 1
-				} );
-
-				var material = new THREE.MeshBasicMaterial( { color: 0x000000 } );
-				var mesh = new THREE.Mesh( geometry, material );
-
-				mesh.position.set( position.x , position.y +0.5 , position.z );
-				mesh.rotateOnWorldAxis(new THREE.Vector3(0,1,0) , rotat * Math.PI/180);
-				main.scene.add( mesh );
-			}
-		);
-		
-	},
-
-	loadLine: function(point1 , point2){
-
-		var material = new THREE.LineBasicMaterial({
-			color: 0x000000,
-			linewidth: 10,
-			linecap: 'round', //ignored by WebGLRenderer
-			linejoin:  'round' //ignored by WebGLRenderer
-		});
-
-		var geometry = new THREE.Geometry();
-		geometry.vertices.push(
-			new THREE.Vector3( point1.x , point1.y , point1.z ),
-			new THREE.Vector3( point2.x , point2.y , point2.z )
-		);
-
-		var line = new THREE.Line( geometry, material );
-		this.main.scene.add( line );
-
 	}
-
-
 
 }
 
@@ -4436,15 +4385,20 @@ function MarkBetweenSize( main , TargetObj1 , TargetObj2 ){
 		
 		if(object.isObject3D){
 			//get object center
+			
 			Box.setFromObject(object);
 			Box.getCenter(objCenter1);
 
 			PosArr.push(objCenter1.x);
 			PosArr.push(objCenter1.y);
 			PosArr.push(objCenter1.z);
+			
 		}
 	}
 	for(var i = main.Sceneobjects.length - 1; i > -1; i -- ){
+
+		var object =  main.Sceneobjects[i];
+		
 		//get object center
 		Box.setFromObject(object);
 		Box.getCenter(objCenter1);
@@ -4452,11 +4406,12 @@ function MarkBetweenSize( main , TargetObj1 , TargetObj2 ){
 		PosArr.push(objCenter1.x);
 		PosArr.push(objCenter1.y);
 		PosArr.push(objCenter1.z);
+		
 	}
 
 	//set funiture bounding box , box center
 	FuniBox.setFromArray( PosArr );
-	Box.getCenter(FuniCenter);
+	FuniBox.getCenter(FuniCenter);
 	
 	//get object center
 	Box.setFromObject( TargetObj1 );
@@ -4466,6 +4421,8 @@ function MarkBetweenSize( main , TargetObj1 , TargetObj2 ){
 	Box.getCenter(objCenter2);
 	Box.getSize(objSize2);
 
+	console.log(objCenter1.z);
+	console.log(FuniCenter.z);
 	//calculate x
 	if( objCenter1.x != objCenter2.x ){
 		var length = Math.abs(objCenter1.x - objCenter2.x)-objSize1.x/2-objSize2.x/2;
@@ -4757,7 +4714,7 @@ function loadText(main , num , position , rotat){
 		function ( font ) {
 			var geometry = new THREE.TextGeometry( text , {
 				font: font ,
-				size: 1,
+				size: 0.3,
 				height: 0.05,
 				curveSegments: 12,
 				bevelEnabled: false,
@@ -4828,6 +4785,7 @@ function MarkSize( main , TargetObj ){
 		}
 	}
 	for(var i = main.Sceneobjects.length - 1; i > -1; i -- ){
+		var object =  main.Sceneobjects[i];
 		//get object center
 		Box.setFromObject(object);
 		Box.getCenter(objCenter);
@@ -4839,7 +4797,7 @@ function MarkSize( main , TargetObj ){
 
 	//set funiture bounding box , box center
 	FuniBox.setFromArray( PosArr );
-	Box.getCenter(FuniCenter);
+	FuniBox.getCenter(FuniCenter);
 	
 	//get object center
 	Box.setFromObject(TargetObj);
@@ -5117,7 +5075,7 @@ function loadText(main , num , position , rotat){
 		function ( font ) {
 			var geometry = new THREE.TextGeometry( text , {
 				font: font ,
-				size: 0.5,
+				size: 0.3,
 				height: 0.05,
 				curveSegments: 12,
 				bevelEnabled: false,
@@ -5290,7 +5248,7 @@ Processor.prototype = {
 				}else if( scope.furnitures.length > 1) {
 					//possible actions with many furnitures
 
-					if(false){
+					if(true){
 						scope.cabinet_kallax = new Cabinet_kallax(scope.main);
 						scope.transformFunctions.CABINET_LALLAX = scope.cabinet_kallax;						
 						$('.operations.operation_cabinet_kallax_two').show();
@@ -6471,12 +6429,8 @@ function Main()
 
 	//category
 	//todo: an floating window to select category
-	this.category = "chair";
-<<<<<<< HEAD
-	// this.category = "cabinet";
-=======
-	//this.category = "cabinet";
->>>>>>> master
+	//this.category = "chair";
+	this.category = "cabinet";
 
 	//only stores data
 	this.container = document.getElementById('container');
@@ -7059,10 +7013,7 @@ Main.prototype = {
 			//keep the size and ignore the scale
 			if(loadedScale.x != 1) {
 				var location = new THREE.Vector3(0, 0, -30);
-<<<<<<< HEAD
-=======
 				//var location = new THREE.Vector3();
->>>>>>> master
 				//this will cause errors in addAxis
 				//var quaternion = new THREE.Quaternion().setFromUnitVectors(new THREE.Vector3(0, 0, 1), new THREE.Vector3(0, 1, 0));
 				var quaternion = new THREE.Quaternion();
