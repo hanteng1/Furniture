@@ -5143,10 +5143,6 @@ function Model_Painting( main ){
     this.main = main;
     this.furnitures = main.furnitures;
 
-    this.reference = null;
-
-    this.textures = {};
-
     this.paint_mode = false;
 }
 
@@ -5160,42 +5156,56 @@ Model_Painting.prototype = {
 
         $( ".item.ui.image.label.1" ).click(function() {
             var texture = textureLoader.load( '../images/material/material1.jpg' );
+            texture.repeat.set(0.1, 0.1);
+            texture.wrapS = texture.wrapT = THREE.MirroredRepeatWrapping;
             var newmaterial = new THREE.MeshBasicMaterial( {map: texture} );
             main.ChangeTexture( newmaterial );
             
         });
         $( ".item.ui.image.label.2" ).click(function() {
             var texture = textureLoader.load( '../images/material/material2.jpg' );
+            texture.repeat.set(0.1, 0.1);
+            texture.wrapS = texture.wrapT = THREE.MirroredRepeatWrapping;
             var newmaterial = new THREE.MeshBasicMaterial( {map: texture} );
             main.ChangeTexture( newmaterial );
             
         });
         $( ".item.ui.image.label.3" ).click(function() {
             var texture = textureLoader.load( '../images/material/material3.jpg' );
+            texture.repeat.set(0.1, 0.1);
+            texture.wrapS = texture.wrapT = THREE.MirroredRepeatWrapping;
             var newmaterial = new THREE.MeshBasicMaterial( {map: texture} );
             main.ChangeTexture( newmaterial );
             
         });
         $( ".item.ui.image.label.4" ).click(function() {
             var texture = textureLoader.load( '../images/material/material4.jpg' );
+            texture.repeat.set(0.1, 0.1);
+            texture.wrapS = texture.wrapT = THREE.MirroredRepeatWrapping;
             var newmaterial = new THREE.MeshBasicMaterial( {map: texture} );
             main.ChangeTexture( newmaterial );
             
         });
         $( ".item.ui.image.label.5" ).click(function() {
             var texture = textureLoader.load( '../images/material/material5.jpg' );
+            texture.repeat.set(0.1, 0.1);
+            texture.wrapS = texture.wrapT = THREE.MirroredRepeatWrapping;
             var newmaterial = new THREE.MeshBasicMaterial( {map: texture} );
             main.ChangeTexture( newmaterial );
             
         });
         $( ".item.ui.image.label.7" ).click(function() {
             var texture = textureLoader.load( '../images/material/material7.jpg' );
+            texture.repeat.set(0.1, 0.1);
+            texture.wrapS = texture.wrapT = THREE.MirroredRepeatWrapping;
             var newmaterial = new THREE.MeshBasicMaterial( {map: texture} );
             main.ChangeTexture( newmaterial );
             
         });
         $( ".item.ui.image.label.9" ).click(function() {
             var texture = textureLoader.load( '../images/material/material9.jpg' );
+            texture.repeat.set(0.1, 0.1);
+            texture.wrapS = texture.wrapT = THREE.MirroredRepeatWrapping;
             var newmaterial = new THREE.MeshBasicMaterial( {map: texture} );
             main.ChangeTexture( newmaterial );
             
@@ -5305,17 +5315,6 @@ function Model_wrap( main , furniture , label , texture ){
 
 	var z_pos = furniture.getComponentCenterPosition(label).z - furniture.getComponentSize(label).z / 2;
 
-	// var back_whole_geometry = new THREE.Geometry();
-
-	// for(var i =0; i < back_whole_points.length; i++) {
-	// 	var point = back_whole_points[i];
-	// 	var tempP = new THREE.Vector3(point[0], point[1], z_pos);
-	// 	back_whole_geometry.vertices.push(tempP);
-	// }
-
-	// var back_whole_line = new THREE.Line( back_whole_geometry, material );
-	// this.main.scene.add( back_whole_line );
-
 	//get back top line ,, based on the vector directions and clockwise
 	//assumption. sull returns points with the point at the top-right (largest x and largest y)
 	var back_top_points = [];  //2d points for now
@@ -5352,7 +5351,6 @@ function Model_wrap( main , furniture , label , texture ){
 	}
 	console.log("step 2");
 	// console.log(back_top_points);
-
 
 	var back_extrude_3d = [];
 	for(var i = 0; i < back_top_points.length; i++) {

@@ -24,17 +24,6 @@ function Model_wrap( main , furniture , label , texture ){
 
 	var z_pos = furniture.getComponentCenterPosition(label).z - furniture.getComponentSize(label).z / 2;
 
-	// var back_whole_geometry = new THREE.Geometry();
-
-	// for(var i =0; i < back_whole_points.length; i++) {
-	// 	var point = back_whole_points[i];
-	// 	var tempP = new THREE.Vector3(point[0], point[1], z_pos);
-	// 	back_whole_geometry.vertices.push(tempP);
-	// }
-
-	// var back_whole_line = new THREE.Line( back_whole_geometry, material );
-	// this.main.scene.add( back_whole_line );
-
 	//get back top line ,, based on the vector directions and clockwise
 	//assumption. sull returns points with the point at the top-right (largest x and largest y)
 	var back_top_points = [];  //2d points for now
@@ -71,7 +60,6 @@ function Model_wrap( main , furniture , label , texture ){
 	}
 	console.log("step 2");
 	// console.log(back_top_points);
-
 
 	var back_extrude_3d = [];
 	for(var i = 0; i < back_top_points.length; i++) {

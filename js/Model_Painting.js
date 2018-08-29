@@ -6,10 +6,6 @@ function Model_Painting( main ){
     this.main = main;
     this.furnitures = main.furnitures;
 
-    this.reference = null;
-
-    this.textures = {};
-
     this.paint_mode = false;
 }
 
@@ -23,42 +19,56 @@ Model_Painting.prototype = {
 
         $( ".item.ui.image.label.1" ).click(function() {
             var texture = textureLoader.load( '../images/material/material1.jpg' );
+            texture.repeat.set(0.1, 0.1);
+            texture.wrapS = texture.wrapT = THREE.MirroredRepeatWrapping;
             var newmaterial = new THREE.MeshBasicMaterial( {map: texture} );
             main.ChangeTexture( newmaterial );
             
         });
         $( ".item.ui.image.label.2" ).click(function() {
             var texture = textureLoader.load( '../images/material/material2.jpg' );
+            texture.repeat.set(0.1, 0.1);
+            texture.wrapS = texture.wrapT = THREE.MirroredRepeatWrapping;
             var newmaterial = new THREE.MeshBasicMaterial( {map: texture} );
             main.ChangeTexture( newmaterial );
             
         });
         $( ".item.ui.image.label.3" ).click(function() {
             var texture = textureLoader.load( '../images/material/material3.jpg' );
+            texture.repeat.set(0.1, 0.1);
+            texture.wrapS = texture.wrapT = THREE.MirroredRepeatWrapping;
             var newmaterial = new THREE.MeshBasicMaterial( {map: texture} );
             main.ChangeTexture( newmaterial );
             
         });
         $( ".item.ui.image.label.4" ).click(function() {
             var texture = textureLoader.load( '../images/material/material4.jpg' );
+            texture.repeat.set(0.1, 0.1);
+            texture.wrapS = texture.wrapT = THREE.MirroredRepeatWrapping;
             var newmaterial = new THREE.MeshBasicMaterial( {map: texture} );
             main.ChangeTexture( newmaterial );
             
         });
         $( ".item.ui.image.label.5" ).click(function() {
             var texture = textureLoader.load( '../images/material/material5.jpg' );
+            texture.repeat.set(0.1, 0.1);
+            texture.wrapS = texture.wrapT = THREE.MirroredRepeatWrapping;
             var newmaterial = new THREE.MeshBasicMaterial( {map: texture} );
             main.ChangeTexture( newmaterial );
             
         });
         $( ".item.ui.image.label.7" ).click(function() {
             var texture = textureLoader.load( '../images/material/material7.jpg' );
+            texture.repeat.set(0.1, 0.1);
+            texture.wrapS = texture.wrapT = THREE.MirroredRepeatWrapping;
             var newmaterial = new THREE.MeshBasicMaterial( {map: texture} );
             main.ChangeTexture( newmaterial );
             
         });
         $( ".item.ui.image.label.9" ).click(function() {
             var texture = textureLoader.load( '../images/material/material9.jpg' );
+            texture.repeat.set(0.1, 0.1);
+            texture.wrapS = texture.wrapT = THREE.MirroredRepeatWrapping;
             var newmaterial = new THREE.MeshBasicMaterial( {map: texture} );
             main.ChangeTexture( newmaterial );
             
