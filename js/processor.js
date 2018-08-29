@@ -7,7 +7,7 @@ const Chair_Add = require('./Chair_Add');
 const Chair_Rebuild = require('./Chair_Rebuild');
 const Cabinet_kallax = require('./Cabinet_kallax');
 const Dresser_Add = require('./Dresser_Add');
-
+const Model_Painting = require('./Model_Painting');
 
 function Processor(main) {
 	this.main = main;
@@ -37,7 +37,7 @@ function Processor(main) {
 	//weixiang's bloack
 	this.chair_rebuild = undefined;
 	this.cabinet_kallax = undefined;
-
+	this.model_painting = undefined;
 	//end of weixiang's block
 
 
@@ -111,7 +111,7 @@ Processor.prototype = {
 				}else if(scope.furnitures.length == 1){
 					//possible actions with one furniture
 
-					if (false) {
+					if (true) {
 						scope.cabinet_kallax = new Cabinet_kallax(scope.main);
 						scope.transformFunctions.CABINET_LALLAX = scope.cabinet_kallax;
 						
@@ -137,7 +137,7 @@ Processor.prototype = {
 						scope.dresser_add = new Dresser_Add(scope.main);		
 						scope.transformFunctions.DRESSER_ADD = scope.dresser_add;
 						$('.operations.operation_dresser_add').show();
-					}					
+					}
 				}
 
 				break;
@@ -145,6 +145,13 @@ Processor.prototype = {
 
 			case "table" :
 
+				break;
+
+			case "tool" :
+				scope.model_painting = new Model_Painting(scope.main);
+				scope.transformFunctions.MODEL_PAINTING = scope.model_painting;
+				$('.operations.operation_tool').show();
+				
 				break;
 
 		};

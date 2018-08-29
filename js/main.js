@@ -31,7 +31,8 @@ function Main()
 	//category
 	//todo: an floating window to select category
 	//this.category = "chair";
-	this.category = "cabinet";
+	//this.category = "cabinet";
+	this.category = "tool";
 
 	//only stores data
 	this.container = document.getElementById('container');
@@ -1164,10 +1165,6 @@ Main.prototype = {
 						this.GetSizeObj.push( this.furniture.getFurniture() );
 						$('.ui.blue.submit.button.getsize').show();
 						
-						//control switch from first-person to target orbit
-
-						//console.log("selected");
-						//this.customControl.switchView2TG();
 
 						break;
 					} else {
@@ -1641,6 +1638,8 @@ Main.prototype = {
 		$('.ui.blue.submit.button.getsize').hide();
 		$('.ui.red.submit.button.removesize').hide();
 		$('.ui.blue.submit.button.getdis').hide();
+		$('.operations.operation_tool').hide();
+		$('#parameter_control_tool_painting').hide();
 
 		this.furnitures.length = 0;	
 
@@ -1741,6 +1740,8 @@ Main.prototype = {
 		$('.ui.blue.submit.button.getsize').hide();
 		$('.ui.red.submit.button.removesize').hide();
 		$('.ui.blue.submit.button.getdis').hide();
+		$('.operations.operation_tool').hide();
+		$('#parameter_control_tool_painting').hide();
 
 		this.processor.init();
 		//this.processor.executeDesign();

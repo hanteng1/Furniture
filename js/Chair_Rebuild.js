@@ -4,7 +4,9 @@ const rebuildMakeSeat = require('./rebuildMakeSeat');
 const rebuildMakeLeg = require('./rebuildMakeLeg');
 const computeConvexHull = require('./computeConvexHull');
 const cadExtrudeShape = require('./cadExtrudeShape');
-const chairCutBack = require('./chairCutBack')
+const chairCutBack = require('./chairCutBack');
+const Model_wrap = require('./Model_wrap');
+const Model_Painting = require('./Model_Painting');
 
 function Chair_Rebuild (main) {
 
@@ -259,18 +261,6 @@ Chair_Rebuild.prototype = {
 			back_extrude_3d.push([point[0], point[1], z_pos]);
 		}
 
-		// var back_top_geometry = new THREE.Geometry();
-
-		// for(var i =0; i < back_extrude_3d.length; i++) {
-		// 	var point = back_extrude_3d[i];
-		// 	var tempP = new THREE.Vector3(point[0], point[1], point[2]);
-		// 	back_top_geometry.vertices.push(tempP);
-		// }
-
-		// var back_top_line = new THREE.Line( back_top_geometry, material );
-		// this.main.scene.add( back_top_line );
-
-
 		//generate shape
 		var geometry = cadExtrudeShape(back_left_3d, back_extrude_3d);
 		var texture = this.textures["material1"];
@@ -290,13 +280,13 @@ Chair_Rebuild.prototype = {
 		var SeatSize = furniture.getComponentSize('seat');
 		var SeatPosi = furniture.getComponentCenterPosition('seat');
 
-
 		var group = furniture.getFurniture();
 		var mode = "NormalSeat"
 		var texture = this.textures["material1"];
 		var main = this;
-		main.changeseatmodel(furniture,SeatSize,SeatPosi, texture, mode);
-		
+		//main.changeseatmodel(furniture,SeatSize,SeatPosi, texture, mode);
+		console.log(seat);
+		Model_Painting( seat , texture);
 
 		$( ".item.ui.image.label.1" ).click(function() {
 			//change seat
@@ -368,7 +358,7 @@ Chair_Rebuild.prototype = {
 			}
 			//change material function
 			var seat = furniture.getComponentByName('seat');
-			texture = main.textures["material2"];
+			texture = main.textures["material4"];
 			// immediately use the texture for material creation
 			newmaterial = new THREE.MeshBasicMaterial( { map: texture } );
 			seat.material = newmaterial;
@@ -423,7 +413,7 @@ Chair_Rebuild.prototype = {
 
 
 		//load new leg
-		this.loadLegModel('../models/Legs/Leg2.dae', furniture, SeatPosi, SeatSize);
+		this.loadLegModel('../models/Legs/Leg1.dae', furniture, SeatPosi, SeatSize);
 		
 	},
 
@@ -749,8 +739,7 @@ Chair_Rebuild.prototype = {
 									 f1BackCenter.y - f2BackCenter.y ,
 									 f1BackCenter.z - f2BackCenter.z );
 
-		//get chair position
-		var f1Position = furnitures[0].getPosition();
+		//get chair 2 position
 		var f2Position = furnitures[1].getPosition();
 
 		//move chair position

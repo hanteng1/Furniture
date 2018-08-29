@@ -219,7 +219,6 @@ Ui.prototype = {
 		$('.operations.operation_chair_add').hide();
 		$('.operations.operation_chair_rebuild').hide();
 
-
 		$('.operations.operation_dresser_add').hide();
 
 		$('.operations.operation_cabinet_kallax_one').hide();
@@ -227,8 +226,8 @@ Ui.prototype = {
 		$('.ui.blue.submit.button.getsize').hide();
 		$('.ui.red.submit.button.removesize').hide();
 		$('.ui.blue.submit.button.getdis').hide();
-
-
+		$('.operations.operation_tool').hide();
+		$('#parameter_control_tool_painting').hide();
 
 	},
 
@@ -324,6 +323,12 @@ Ui.prototype = {
 			scope.processor.executeDesign("CABINET_LALLAX", "table");
 
 		});
+
+		$('#operation_Painting').click(function() {
+			scope.processor.executeDesign("MODEL_PAINTING", "painting");
+
+		});
+
 
 	},
 

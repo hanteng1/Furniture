@@ -50,6 +50,8 @@ Cabinet_kallax.prototype = {
 		//creat seat
 		var geometry = CabinetMakeSeat( CabiSize.x , CabiSize.z );
 		var texture = new THREE.TextureLoader().load( 'images/material/material2.jpg' );
+		texture.repeat.set(1, 1);
+		texture.wrapS = texture.wrapT = THREE.MirroredRepeatWrapping;
 		var newmaterial = new THREE.MeshBasicMaterial( {map: texture} );
 		var Seat = new THREE.Mesh( geometry, newmaterial );
 		Seat.name = 'seat';

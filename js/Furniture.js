@@ -28,7 +28,6 @@ function Furniture(furniture) {
 		back: new THREE.Vector3(0, 0, 1),
 		midframe: new THREE.Vector3(0, 0, 1),
 
-
 		//for cabinet
 		cabinetTop: new THREE.Vector3(0, 1, 0),
 		cabinetFront: new THREE.Vector3(0, 0, 1),
