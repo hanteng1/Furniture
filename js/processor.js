@@ -7,6 +7,7 @@ const Chair_Add = require('./Chair_Add');
 const Chair_Rebuild = require('./Chair_Rebuild');
 const Cabinet_kallax = require('./Cabinet_kallax');
 const Dresser_Add = require('./Dresser_Add');
+const Table = require('./Table');
 
 
 function Processor(main) {
@@ -30,6 +31,7 @@ function Processor(main) {
 	this.chair_add = undefined;
 	this.dresser_add = undefined;
 
+	this.table = undefined;
 	//end of zhuen's block
 
 
@@ -144,6 +146,28 @@ Processor.prototype = {
 
 
 			case "table" :
+				if(scope.furnitures.length == 0) {
+			
+					return;
+
+				}
+				else if(scope.furnitures.length == 1){
+					//possible actions with one furniture					
+					
+					scope.table = new Table(scope.main);
+					scope.transformFunctions.TABLE = scope.table;						
+					$('.operations.operation_table').show();
+
+				}
+				else if( scope.furnitures.length > 1) {
+					//possible actions with many furnitures
+
+					
+					scope.table = new Table(scope.main);
+					scope.transformFunctions.TABLE = scope.table;						
+					$('.operations.operation_table').show();
+
+				}
 
 				break;
 

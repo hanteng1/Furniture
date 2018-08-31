@@ -31,7 +31,8 @@ function Main()
 	//category
 	//todo: an floating window to select category
 	// this.category = "chair";
-	this.category = "cabinet";
+	// this.category = "cabinet";
+	this.category = "table";
 
 	//only stores data
 	this.container = document.getElementById('container');
@@ -621,10 +622,8 @@ Main.prototype = {
 
 				var scale = new THREE.Vector3(loadedScale.x * 10, loadedScale.y * 10, loadedScale.z * 10)
 
-				loadMatrix.compose(location, quaternion, scale);
-		
+				loadMatrix.compose(location, quaternion, scale);		
 			}
-
 		}
 
 		//visualize

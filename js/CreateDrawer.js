@@ -11,10 +11,10 @@ function CreateDrawer(width, length, height) {
     
     // var width = 10, length = 15, height = 5;
     // var width = 1, length = 1.5, height = 0.5;
-    var obj = cube([length, width-0.1, 0.05]);
+    var obj = cube([length, width-0.15, 0.05]);
     var obj1 = cube([length, 0.05, height-0.1]);
-    var obj2 = cube([0.05, width-0.1, height-0.1]);
-    var obj3 = cube([length ,0.05, height-0.1]).translate([0 ,width-0.1, 0]);
+    var obj2 = cube([0.05, width-0.15, height-0.1]);
+    var obj3 = cube([length ,0.05, height-0.1]).translate([0 ,width-0.15, 0]);
     var obj4 = cube([0.05, width, height]).translate([length-0.05, -0.05, 0]);
     
     var w = width;

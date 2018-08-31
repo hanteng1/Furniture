@@ -88,7 +88,14 @@ Ui.prototype = {
 						//stand
 						scope.assignLabel("cabinetBroad");
 						break;
-
+					case "l_9":
+						//stand
+						scope.assignLabel("tabletop");
+						break;
+					case "l_10":
+						//stand
+						scope.assignLabel("tableLeg");
+						break;
 					
 				}
 			}
@@ -224,6 +231,10 @@ Ui.prototype = {
 
 		$('.operations.operation_cabinet_kallax_one').hide();
 		$('.operations.operation_cabinet_kallax_two').hide();
+
+		$('.operations.operation_table').hide();
+
+		
 		$('.ui.blue.submit.button.getsize').hide();
 		$('.ui.red.submit.button.removesize').hide();
 		$('.ui.blue.submit.button.getdis').hide();
@@ -342,6 +353,44 @@ Ui.prototype = {
 		$('#operation_cabinet_kallax_table').click(function() {
 			scope.processor.executeDesign("CABINET_LALLAX", "table");
 
+		});
+
+
+		//table
+		$('#operation_table_stack').click(function() {
+			scope.processor.executeDesign("TABLE", "stack");
+		});
+
+		$('#operation_table_flipStack').click(function() {
+			scope.processor.executeDesign("TABLE", "flipStack");
+		});
+
+		$('#operation_table_addWheel').click(function() {
+			scope.processor.executeDesign("TABLE", "addWheel");
+		});
+
+		$('#operation_table_addBoardOnTabletop').click(function() {
+			scope.processor.executeDesign("TABLE", "addBoardOnTabletop");
+		});
+
+		$('#operation_table_addBoard').click(function() {
+			scope.processor.executeDesign("TABLE", "addBoard");
+		});
+
+		$('#operation_table_addDrawer').click(function() {
+			scope.processor.executeDesign("TABLE", "addDrawer");
+		});
+
+		$('#operation_table_addRod').click(function() {
+			scope.processor.executeDesign("TABLE", "addRod");
+		});
+
+		$('#operation_table_addSeat').click(function() {
+			scope.processor.executeDesign("TABLE", "addSeat");
+		});
+
+		$('#operation_table_addDoorBoard').click(function() {
+			scope.processor.executeDesign("TABLE", "addDoorBoard");
 		});
 
 	},
