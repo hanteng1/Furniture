@@ -328,6 +328,10 @@ Ui.prototype = {
 			scope.processor.executeDesign("MODEL_PAINTING", "painting");
 
 		});
+		$('#operation_Wrap').click(function() {
+			scope.processor.executeDesign("MODEL_WRAP", "wrap");
+			
+		});
 
 
 	},

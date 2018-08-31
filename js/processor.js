@@ -8,6 +8,7 @@ const Chair_Rebuild = require('./Chair_Rebuild');
 const Cabinet_kallax = require('./Cabinet_kallax');
 const Dresser_Add = require('./Dresser_Add');
 const Model_Painting = require('./Model_Painting');
+const Model_wrap = require('./Model_wrap');
 
 function Processor(main) {
 	this.main = main;
@@ -38,6 +39,7 @@ function Processor(main) {
 	this.chair_rebuild = undefined;
 	this.cabinet_kallax = undefined;
 	this.model_painting = undefined;
+	this.model_wrap = undefined;
 	//end of weixiang's block
 
 
@@ -150,6 +152,8 @@ Processor.prototype = {
 			case "tool" :
 				scope.model_painting = new Model_Painting(scope.main);
 				scope.transformFunctions.MODEL_PAINTING = scope.model_painting;
+				scope.model_wrap = new Model_wrap(scope.main);
+				scope.transformFunctions.MODEL_WRAP = scope.model_wrap;
 				$('.operations.operation_tool').show();
 				
 				break;

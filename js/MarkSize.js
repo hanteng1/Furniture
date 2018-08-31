@@ -353,6 +353,6 @@ function loadLine( main , point1 , point2){
 		var line = new THREE.Line( geometry, material );
 		main.scene.add( line );
 		main.SizeObj.push(line);
-	}
+}
 
 module.exports = MarkSize;

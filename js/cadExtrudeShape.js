@@ -19,7 +19,7 @@ function cadExtrudeShape (shape, path) {
 	var point_last = path[path.length - 1];
 	path = path.map(point => {point[0] -= point_last[0]; point[1] -= point_last[1]; point[2] -= point_last[2]; return point});
 
-
+	
 	var sketch = CSG.Polygon.createFromPoints(shape);
     
     var solid = sketch.solidFromSlices({
@@ -31,15 +31,15 @@ function cadExtrudeShape (shape, path) {
 			return this.translate(vec);
 		}
 	});
-
+    
     //this is not efficient
 	solid = solid.expand(0.2, 8);
-
+	
 	var geometry = csgToGeometries(solid)[0];
-
+	
 	geometry = new THREE.Geometry().fromBufferGeometry( geometry );
     assignUVs(geometry);
-
+    
 	return geometry;
 }
 

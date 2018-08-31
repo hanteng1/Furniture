@@ -83,6 +83,9 @@ function Main()
 	//Obj for get size
 	this.GetSizeObj = [];
 
+	//object for wrap 
+	this.WrapObject = [];
+
 	//this is to store the furnitures before any chance
 	//simply copy of the this.furnitures
 	this.furnituresDataSet = [];
@@ -1466,16 +1469,31 @@ Main.prototype = {
 			this.addAxis.space = 'world';
 			//make invisile visible
 			this.addAxis.setAllVisible();
-
+			
 
 			$('#label').hide();
-
+			
 			//hide the GetSize , RemoveSize button
 			$('.ui.blue.submit.button.getsize').hide();
-			this.RemoveSizeLabel();
-			//clear the object for getting size
-			this.GetSizeObj = [];
+			
+			if(this.GetSizeObj.length == this.WrapObject.length){
+				for(var i=0 ; i<this.GetSizeObj.length; i++ ){
 
+					var target = this.getCenterPosition( this.GetSizeObj[i] );
+					var source = this.getCenterPosition( this.WrapObject[i] );
+					
+					var diff   = new THREE.Vector3().subVectors(target , source );
+					this.WrapObject[i].position.set(this.WrapObject[i].position.x + diff.x ,
+										  			this.WrapObject[i].position.y + diff.y ,
+										  			this.WrapObject[i].position.z + diff.z );
+					
+				}
+			}
+			
+			//clear the object
+			this.WrapObject = [];
+			
+			this.RemoveSizeLabel();
 		}else {
 
 			var keyCode = event.which;
@@ -1856,7 +1874,24 @@ Main.prototype = {
 		$('.ui.blue.submit.button.getdis').hide();
 		$('.ui.red.submit.button.removesize').show();
 
-	}
+	},
+	getSize: function( model ) {
+        var box = new THREE.Box3();
+        box.setFromObject( model );
+        var box_size = new THREE.Vector3();
+        box.getSize(box_size);
+
+        //this includes width, height, depth
+        return box_size;
+    },
+
+    getCenterPosition: function( model ){
+    	var box = new THREE.Box3();
+		box.setFromObject( model );
+		var center = new THREE.Vector3();
+		box.getCenter(center);
+		return center;
+    }
 
 };
 

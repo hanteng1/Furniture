@@ -102,7 +102,6 @@ Model_Painting.prototype = {
                 
                 ChangeTextureObj[j].material = newmaterial;
             }
-
         }
         
     },
@@ -115,12 +114,11 @@ Model_Painting.prototype = {
                 }   
             }
         }
-        else
+        else{
             array.push(obj);    
+        }
 
     }
-
-
 
 }
 
