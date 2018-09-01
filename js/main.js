@@ -1483,9 +1483,8 @@ Main.prototype = {
 					var source = this.getCenterPosition( this.WrapObject[i] );
 					
 					var diff   = new THREE.Vector3().subVectors(target , source );
-					this.WrapObject[i].position.set(this.WrapObject[i].position.x + diff.x ,
-										  			this.WrapObject[i].position.y + diff.y ,
-										  			this.WrapObject[i].position.z + diff.z );
+					var result = new THREE.Vector3().addVectors(this.WrapObject[i].position,diff);
+					this.WrapObject[i].position.set( result.x, result.y, result.z);
 					
 				}
 			}
@@ -1658,6 +1657,7 @@ Main.prototype = {
 		$('.ui.blue.submit.button.getdis').hide();
 		$('.operations.operation_tool').hide();
 		$('#parameter_control_tool_painting').hide();
+		$('#parameter_control_tool_wrap').hide();
 
 		this.furnitures.length = 0;	
 
@@ -1760,6 +1760,7 @@ Main.prototype = {
 		$('.ui.blue.submit.button.getdis').hide();
 		$('.operations.operation_tool').hide();
 		$('#parameter_control_tool_painting').hide();
+		$('#parameter_control_tool_wrap').hide();
 
 		this.processor.init();
 		//this.processor.executeDesign();

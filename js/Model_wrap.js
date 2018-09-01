@@ -7,6 +7,7 @@ function Model_wrap(main){
 
 	this.main = main;
     this.furnitures = main.furnitures;
+    this.wrap_mode	= false; 
 
 }
 
@@ -14,20 +15,97 @@ Model_wrap.prototype = {
 
 	execute: function( name ){
 
-		var manager = new THREE.LoadingManager();
+        var main = this;
+        var manager = new THREE.LoadingManager();
         var textureLoader = new THREE.TextureLoader( manager );
-        var texture = textureLoader.load( '../images/material/material1.jpg' );
-        texture.repeat.set(0.1, 0.1);
-        texture.wrapS = texture.wrapT = THREE.MirroredRepeatWrapping;
 
-        console.log('Wrap start');
-		//this.Wrap(texture);
-		for(var i=0 ; i<this.main.GetSizeObj.length ; i++ ){
+        $( ".item.ui.image.label.wrap1" ).click(function() {
+            var texture = textureLoader.load( '../images/material/wrap/wrap1.jpg' );
+            texture.repeat.set(0.1, 0.1);
+            texture.wrapS = texture.wrapT = THREE.MirroredRepeatWrapping;
+            var newmaterial = new THREE.MeshBasicMaterial( {map: texture} );
+            for(var i=0 ; i<main.main.GetSizeObj.length ; i++ ){
+	            var model = main.main.GetSizeObj[i];
+	            main.Wrap( model , texture );
+	        }
             
-            var model = this.main.GetSizeObj[i];
+        });
+        $( ".item.ui.image.label.wrap2" ).click(function() {
+            var texture = textureLoader.load( '../images/material/wrap/wrap2.jpg' );
+            texture.repeat.set(0.1, 0.1);
+            texture.wrapS = texture.wrapT = THREE.MirroredRepeatWrapping;
+            var newmaterial = new THREE.MeshBasicMaterial( {map: texture} );
+            for(var i=0 ; i<main.main.GetSizeObj.length ; i++ ){
+	            var model = main.main.GetSizeObj[i];
+	            main.Wrap( model , texture );
+	        }
             
-            this.Wrap( model , texture );
+        });
+        $( ".item.ui.image.label.wrap3" ).click(function() {
+            var texture = textureLoader.load( '../images/material/wrap/wrap3.jpg' );
+            texture.repeat.set(0.1, 0.1);
+            texture.wrapS = texture.wrapT = THREE.MirroredRepeatWrapping;
+            var newmaterial = new THREE.MeshBasicMaterial( {map: texture} );
+            for(var i=0 ; i<main.main.GetSizeObj.length ; i++ ){
+	            var model = main.main.GetSizeObj[i];
+	            main.Wrap( model , texture );
+	        }
+            
+        });
+        $( ".item.ui.image.label.wrap4" ).click(function() {
+            var texture = textureLoader.load( '../images/material/wrap/wrap4.jpg' );
+            texture.repeat.set(0.1, 0.1);
+            texture.wrapS = texture.wrapT = THREE.MirroredRepeatWrapping;
+            var newmaterial = new THREE.MeshBasicMaterial( {map: texture} );
+            for(var i=0 ; i<main.main.GetSizeObj.length ; i++ ){
+	            var model = main.main.GetSizeObj[i];
+	            main.Wrap( model , texture );
+	        }
+            
+        });
+        $( ".item.ui.image.label.wrap5" ).click(function() {
+            var texture = textureLoader.load( '../images/material/wrap/wrap5.jpg' );
+            texture.repeat.set(0.1, 0.1);
+            texture.wrapS = texture.wrapT = THREE.MirroredRepeatWrapping;
+            var newmaterial = new THREE.MeshBasicMaterial( {map: texture} );
+            for(var i=0 ; i<main.main.GetSizeObj.length ; i++ ){
+	            var model = main.main.GetSizeObj[i];
+	            main.Wrap( model , texture );
+	        }
+            
+        });
+        $( ".item.ui.image.label.wrap6" ).click(function() {
+            var texture = textureLoader.load( '../images/material/wrap/wrap6.jpg' );
+            texture.repeat.set(0.1, 0.1);
+            texture.wrapS = texture.wrapT = THREE.MirroredRepeatWrapping;
+            var newmaterial = new THREE.MeshBasicMaterial( {map: texture} );
+            for(var i=0 ; i<main.main.GetSizeObj.length ; i++ ){
+	            var model = main.main.GetSizeObj[i];
+	            main.Wrap( model , texture );
+	        }
+            
+        });
+        $( ".item.ui.image.label.wrap7" ).click(function() {
+            var texture = textureLoader.load( '../images/material/wrap/wrap7.jpg' );
+            texture.repeat.set(0.1, 0.1);
+            texture.wrapS = texture.wrapT = THREE.MirroredRepeatWrapping;
+            var newmaterial = new THREE.MeshBasicMaterial( {map: texture} );
+            for(var i=0 ; i<main.main.GetSizeObj.length ; i++ ){
+	            var model = main.main.GetSizeObj[i];
+	            main.Wrap( model , texture );
+	        }
+            
+        });
+
+        if(this.wrap_mode == false){
+        	$('#parameter_control_tool_wrap').show();
+            this.wrap_mode = true;
         }
+        else if(this.wrap_mode == true){
+        	$('#parameter_control_tool_wrap').hide();
+            this.wrap_mode = false;
+        }
+        $('#parameter_control_tool_painting').hide();
 
 	},
 	Wrap: function( model , texture ){

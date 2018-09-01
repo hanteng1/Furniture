@@ -228,6 +228,8 @@ Ui.prototype = {
 		$('.ui.blue.submit.button.getdis').hide();
 		$('.operations.operation_tool').hide();
 		$('#parameter_control_tool_painting').hide();
+		$('#parameter_control_tool_wrap').hide();
+		
 
 	},
 
@@ -330,7 +332,7 @@ Ui.prototype = {
 		});
 		$('#operation_Wrap').click(function() {
 			scope.processor.executeDesign("MODEL_WRAP", "wrap");
-			
+
 		});
 
 
