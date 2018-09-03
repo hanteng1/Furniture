@@ -19,15 +19,20 @@ function MarkBetweenSize( main , TargetObj1 , TargetObj2 ){
 		
 		if(object.isObject3D){
 			//get object center
+			
 			Box.setFromObject(object);
 			Box.getCenter(objCenter1);
 
 			PosArr.push(objCenter1.x);
 			PosArr.push(objCenter1.y);
 			PosArr.push(objCenter1.z);
+			
 		}
 	}
 	for(var i = main.Sceneobjects.length - 1; i > -1; i -- ){
+
+		var object =  main.Sceneobjects[i];
+		
 		//get object center
 		Box.setFromObject(object);
 		Box.getCenter(objCenter1);
@@ -35,11 +40,12 @@ function MarkBetweenSize( main , TargetObj1 , TargetObj2 ){
 		PosArr.push(objCenter1.x);
 		PosArr.push(objCenter1.y);
 		PosArr.push(objCenter1.z);
+		
 	}
 
 	//set funiture bounding box , box center
 	FuniBox.setFromArray( PosArr );
-	Box.getCenter(FuniCenter);
+	FuniBox.getCenter(FuniCenter);
 	
 	//get object center
 	Box.setFromObject( TargetObj1 );
@@ -340,7 +346,7 @@ function loadText(main , num , position , rotat){
 		function ( font ) {
 			var geometry = new THREE.TextGeometry( text , {
 				font: font ,
-				size: 1,
+				size: 0.3,
 				height: 0.05,
 				curveSegments: 12,
 				bevelEnabled: false,

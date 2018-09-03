@@ -227,7 +227,6 @@ Ui.prototype = {
 		$('.operations.operation_chair_add').hide();
 		$('.operations.operation_chair_rebuild').hide();
 
-
 		$('.operations.operation_dresser_add').hide();
 
 		$('.operations.operation_cabinet_kallax_one').hide();
@@ -240,8 +239,12 @@ Ui.prototype = {
 		$('.ui.blue.submit.button.getsize').hide();
 		$('.ui.red.submit.button.removesize').hide();
 		$('.ui.blue.submit.button.getdis').hide();
-
-
+		$('.operations.operation_tool').hide();
+		$('#parameter_control_tool_painting').hide();
+		$('#parameter_control_tool_wrap').hide();
+		$('#parameter_control_tool_rotation').hide();
+		$('#parameter_control_tool_align').hide();
+		
 
 	},
 
@@ -358,6 +361,7 @@ Ui.prototype = {
 		});
 
 
+
 		//table
 		$('#operation_table_stack').click(function() {
 			scope.processor.executeDesign("TABLE", "stack");
@@ -399,6 +403,25 @@ Ui.prototype = {
 		$('#operation_desk_add_board').click(function() {
 			scope.processor.executeDesign("DESK", "addBoard");
 		});
+
+		$('#operation_Painting').click(function() {
+			scope.processor.executeDesign("MODEL_PAINTING", "painting");
+
+		});
+		$('#operation_Wrap').click(function() {
+			scope.processor.executeDesign("MODEL_WRAP", "wrap");
+
+		});
+		$('#operation_Rotation').click(function() {
+			scope.processor.executeDesign("MODEL_ROTATION", "rotation");
+
+		});
+		$('#operation_Align').click(function() {
+			scope.processor.executeDesign("MODEL_ALIGN", "align");
+
+		});
+
+
 
 	},
 

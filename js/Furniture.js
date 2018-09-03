@@ -34,6 +34,8 @@ function Furniture(furniture) {
 		cabinetFront: new THREE.Vector3(0, 0, 1),
 		cabinetBroad: new THREE.Vector3(0, 1, 0),
 
+
+
 		//for table
 		tabletop: new THREE.Vector3(0, 1, 0),
 		tableLeg: new THREE.Vector3(0, 0, 1),

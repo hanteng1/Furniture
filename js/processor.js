@@ -7,8 +7,15 @@ const Chair_Add = require('./Chair_Add');
 const Chair_Rebuild = require('./Chair_Rebuild');
 const Cabinet_kallax = require('./Cabinet_kallax');
 const Dresser_Add = require('./Dresser_Add');
+
 const Table = require('./Table');
 const Desk = require('./Desk');
+
+
+const Model_Painting = require('./Model_Painting');
+const Model_wrap = require('./Model_wrap');
+const Model_Rotation = require('./Model_Rotation');
+const Model_Align = require('./Model_Align');
 
 
 function Processor(main) {
@@ -41,6 +48,11 @@ function Processor(main) {
 	//weixiang's bloack
 	this.chair_rebuild = undefined;
 	this.cabinet_kallax = undefined;
+	this.model_painting = undefined;
+	this.model_wrap = undefined;
+	this.model_rotation = undefined;
+	this.model_align = undefined;
+
 
 	//end of weixiang's block
 
@@ -115,7 +127,7 @@ Processor.prototype = {
 				}else if(scope.furnitures.length == 1){
 					//possible actions with one furniture
 
-					if (false) {
+					if (true) {
 						scope.cabinet_kallax = new Cabinet_kallax(scope.main);
 						scope.transformFunctions.CABINET_LALLAX = scope.cabinet_kallax;
 						
@@ -132,7 +144,7 @@ Processor.prototype = {
 				}else if( scope.furnitures.length > 1) {
 					//possible actions with many furnitures
 
-					if(false){
+					if(true){
 						scope.cabinet_kallax = new Cabinet_kallax(scope.main);
 						scope.transformFunctions.CABINET_LALLAX = scope.cabinet_kallax;						
 						$('.operations.operation_cabinet_kallax_two').show();
@@ -141,7 +153,7 @@ Processor.prototype = {
 						scope.dresser_add = new Dresser_Add(scope.main);		
 						scope.transformFunctions.DRESSER_ADD = scope.dresser_add;
 						$('.operations.operation_dresser_add').show();
-					}					
+					}
 				}
 
 				break;
@@ -191,6 +203,23 @@ Processor.prototype = {
 					$('.operations.operation_desk').show();
 				}
 
+				break;
+
+			case "tool" :
+				scope.model_painting = new Model_Painting(scope.main);
+				scope.transformFunctions.MODEL_PAINTING = scope.model_painting;
+				
+				scope.model_wrap = new Model_wrap(scope.main);
+				scope.transformFunctions.MODEL_WRAP = scope.model_wrap;
+				
+				scope.model_rotation = new Model_Rotation(scope.main);
+				scope.transformFunctions.MODEL_ROTATION = scope.model_rotation;
+				
+				scope.model_align = new Model_Align(scope.main);
+				scope.transformFunctions.MODEL_ALIGN = scope.model_align;
+				
+				$('.operations.operation_tool').show();
+				
 				break;
 
 		};

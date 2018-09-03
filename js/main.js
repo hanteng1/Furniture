@@ -30,10 +30,14 @@ function Main()
 
 	//category
 	//todo: an floating window to select category
+
 	// this.category = "chair";
 	// this.category = "cabinet";
 	// this.category = "table";
-	this.category = "desk";
+	// this.category = "desk";
+
+	this.category = "tool";
+
 
 	//only stores data
 	this.container = document.getElementById('container');
@@ -83,6 +87,9 @@ function Main()
 
 	//Obj for get size
 	this.GetSizeObj = [];
+
+	//object for wrap 
+	this.WrapObject = [];
 
 	//this is to store the furnitures before any chance
 	//simply copy of the this.furnitures
@@ -880,7 +887,7 @@ Main.prototype = {
 				selectionBox.material.transparent = true;
 				selectionBox.visible = true;
 
-				this.DistanceObj.push(selectionBox);
+				this.DistanceObj.push(object);
 				this.selectionBoxes.push(selectionBox);
 				this.scene.add( selectionBox );
 
@@ -1161,13 +1168,11 @@ Main.prototype = {
 						this.select(this.furniture.getFurniture());
 
 						objselect = false;
-						this.GetSizeObj.push( this.furniture.getFurniture() );
+						//if haven't select this furniture before
+						if (this.GetSizeObj.indexOf(this.furniture.getFurniture())<0)
+							this.GetSizeObj.push( this.furniture.getFurniture() );
 						$('.ui.blue.submit.button.getsize').show();
 						
-						//control switch from first-person to target orbit
-
-						//console.log("selected");
-						//this.customControl.switchView2TG();
 
 						break;
 					} else {
@@ -1469,16 +1474,30 @@ Main.prototype = {
 			this.addAxis.space = 'world';
 			//make invisile visible
 			this.addAxis.setAllVisible();
-
+			
 
 			$('#label').hide();
-
+			
 			//hide the GetSize , RemoveSize button
 			$('.ui.blue.submit.button.getsize').hide();
-			this.RemoveSizeLabel();
-			//clear the object for getting size
-			this.GetSizeObj = [];
+			
+			if(this.GetSizeObj.length == this.WrapObject.length){
+				for(var i=0 ; i<this.GetSizeObj.length; i++ ){
 
+					var target = this.getCenterPosition( this.GetSizeObj[i] );
+					var source = this.getCenterPosition( this.WrapObject[i] );
+					
+					var diff   = new THREE.Vector3().subVectors(target , source );
+					var result = new THREE.Vector3().addVectors(this.WrapObject[i].position,diff);
+					this.WrapObject[i].position.set( result.x, result.y, result.z);
+					
+				}
+			}
+			
+			//clear the object
+			this.WrapObject = [];
+			
+			this.RemoveSizeLabel();
 		}else {
 
 			var keyCode = event.which;
@@ -1641,6 +1660,11 @@ Main.prototype = {
 		$('.ui.blue.submit.button.getsize').hide();
 		$('.ui.red.submit.button.removesize').hide();
 		$('.ui.blue.submit.button.getdis').hide();
+		$('.operations.operation_tool').hide();
+		$('#parameter_control_tool_painting').hide();
+		$('#parameter_control_tool_wrap').hide();
+		$('#parameter_control_tool_rotation').hide();
+		$('#parameter_control_tool_align').hide();
 
 		this.furnitures.length = 0;	
 
@@ -1741,6 +1765,11 @@ Main.prototype = {
 		$('.ui.blue.submit.button.getsize').hide();
 		$('.ui.red.submit.button.removesize').hide();
 		$('.ui.blue.submit.button.getdis').hide();
+		$('.operations.operation_tool').hide();
+		$('#parameter_control_tool_painting').hide();
+		$('#parameter_control_tool_wrap').hide();
+		$('#parameter_control_tool_rotation').hide();
+		$('#parameter_control_tool_align').hide();
 
 		this.processor.init();
 		//this.processor.executeDesign();
@@ -1855,7 +1884,24 @@ Main.prototype = {
 		$('.ui.blue.submit.button.getdis').hide();
 		$('.ui.red.submit.button.removesize').show();
 
-	}
+	},
+	getSize: function( model ) {
+        var box = new THREE.Box3();
+        box.setFromObject( model );
+        var box_size = new THREE.Vector3();
+        box.getSize(box_size);
+
+        //this includes width, height, depth
+        return box_size;
+    },
+
+    getCenterPosition: function( model ){
+    	var box = new THREE.Box3();
+		box.setFromObject( model );
+		var center = new THREE.Vector3();
+		box.getCenter(center);
+		return center;
+    }
 
 };
 

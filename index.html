@@ -188,6 +188,7 @@
 						</button>
  					</div>
 
+
  					<div class="operations operation_table">
 						<h3 class="ui header">Table</h3>
 						<button class="ui inverted secondary button" id="operation_table_stack">
@@ -236,6 +237,29 @@
 						</button>
  					</div>
 					
+
+ 					<div class="operations operation_tool">
+	 					<h3 class="ui header">Tool</h3>
+
+						<button class="ui inverted secondary button" id="operation_Painting">
+								<i class="gamepad icon"></i>
+	    						Painting
+						</button>
+						<button class="ui inverted secondary button" id="operation_Wrap">
+								<i class="gamepad icon"></i>
+	    						Wrap
+						</button>
+						<button class="ui inverted secondary button" id="operation_Rotation">
+								<i class="gamepad icon"></i>
+	    						Rotation
+						</button>
+						<button class="ui inverted secondary button" id="operation_Align">
+								<i class="gamepad icon"></i>
+	    						Align
+						</button>
+
+ 					</div>
+
 				</div>
 			</div>
 
@@ -318,8 +342,6 @@
 			</a>
 		</div>
 
-
-
 		<!--for design parameters -->
 
 		<!--chair align-->
@@ -369,6 +391,105 @@
 				</a>
 				<a class="item">
 					<i class="align justify icon 1"></i>
+				</a>
+
+			</div>
+		</div>
+
+		<!--painting tool-->
+		<div class="ui compact parameters" id="parameter_control_tool_painting">
+			<div class="ui labeled icon menu" >
+			 
+				<a class="item ui image label paint1">
+					<img src="/images/material/material1.jpg">
+				</a>
+				<a class="item ui image label paint2">
+					<img src="/images/material/material2.jpg">
+				</a>
+				<a class="item ui image label paint3">
+				  	<img src="/images/material/material3.jpg">
+				</a>
+				<a class="item ui image label paint4">
+				  	<img src="/images/material/material4.jpg">
+				</a>
+				<a class="item ui image label paint5">
+				  	<img src="/images/material/material5.jpg">
+				</a>
+				<a class="item ui image label paint7">
+				  	<img src="/images/material/material7.jpg">
+				</a>
+				<a class="item ui image label paint9">
+				  	<img src="/images/material/material9.jpg">
+				</a>
+
+			</div>
+		</div>
+
+		<!--wrap tool-->
+		<div class="ui compact parameters" id="parameter_control_tool_wrap">
+			<div class="ui labeled icon menu" >
+			 
+				<a class="item ui image label wrap1">
+					<img src="/images/material/wrap/wrap1.jpg">
+				</a>
+				<a class="item ui image label wrap2">
+					<img src="/images/material/wrap/wrap2.jpg">
+				</a>
+				<a class="item ui image label wrap3">
+				  	<img src="/images/material/wrap/wrap3.jpg">
+				</a>
+				<a class="item ui image label wrap4">
+				  	<img src="/images/material/wrap/wrap4.jpg">
+				</a>
+				<a class="item ui image label wrap5">
+				  	<img src="/images/material/wrap/wrap5.jpg">
+				</a>
+				<a class="item ui image label wrap6">
+				  	<img src="/images/material/wrap/wrap6.jpg">
+				</a>
+				<a class="item ui image label wrap7">
+				  	<img src="/images/material/wrap/wrap7.jpg">
+				</a>
+
+			</div>
+		</div>
+		<!--wrap tool-->
+		<div class="ui compact parameters" id="parameter_control_tool_rotation">
+			<div class="ui labeled icon menu" >
+			 
+				<a class="item ui image label rota1">
+					<img src="/images/material/rotation/PITCH1.png">
+				</a>
+				<a class="item ui image label rota2">
+					<img src="/images/material/rotation/PITCH2.png">
+				</a>
+				<a class="item ui image label rota3">
+				  	<img src="/images/material/rotation/ROLL1.png">
+				</a>
+				<a class="item ui image label rota4">
+				  	<img src="/images/material/rotation/ROLL2.png">
+				</a>
+				<a class="item ui image label rota5">
+				  	<img src="/images/material/rotation/YAW1.png">
+				</a>
+				<a class="item ui image label rota6">
+				  	<img src="/images/material/rotation/YAW2.png">
+				</a>
+
+			</div>
+		</div>
+		<!--Align tool-->
+		<div class="ui compact parameters" id="parameter_control_tool_align">
+			<div class="ui labeled icon menu" >
+			 
+				<a class="item ui image label align1">
+					<img src="/images/material/align/x.png">
+				</a>
+				<a class="item ui image label align2">
+					<img src="/images/material/align/y.png">
+				</a>
+				<a class="item ui image label align3">
+				  	<img src="/images/material/align/z.png">
 				</a>
 
 			</div>
@@ -494,10 +615,10 @@
 		<script type="text/javascript" src="js/AddAxis.js"></script>
 		<script type="text/javascript" src="js/TransformControls.js"></script>
 		<script type="text/javascript" src="js/mesh_simplify.js"></script>
-
+		<script type="text/javascript" src="js/testtest.js"></script>
 
 		<!--test-->
-		<script type="text/javascript" src="js/testtest.js"></script>
+		
 
 		<!--
 		<script type="x-shader/x-vertex" id="vertexShader">
