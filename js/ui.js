@@ -229,6 +229,8 @@ Ui.prototype = {
 		$('.operations.operation_tool').hide();
 		$('#parameter_control_tool_painting').hide();
 		$('#parameter_control_tool_wrap').hide();
+		$('#parameter_control_tool_rotation').hide();
+		$('#parameter_control_tool_align').hide();
 		
 
 	},
@@ -332,6 +334,14 @@ Ui.prototype = {
 		});
 		$('#operation_Wrap').click(function() {
 			scope.processor.executeDesign("MODEL_WRAP", "wrap");
+
+		});
+		$('#operation_Rotation').click(function() {
+			scope.processor.executeDesign("MODEL_ROTATION", "rotation");
+
+		});
+		$('#operation_Align').click(function() {
+			scope.processor.executeDesign("MODEL_ALIGN", "align");
 
 		});
 

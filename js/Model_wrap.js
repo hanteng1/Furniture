@@ -106,6 +106,8 @@ Model_wrap.prototype = {
             this.wrap_mode = false;
         }
         $('#parameter_control_tool_painting').hide();
+        $('#parameter_control_tool_rotation').hide();
+        $('#parameter_control_tool_align').hide();
 
 	},
 	Wrap: function( model , texture ){

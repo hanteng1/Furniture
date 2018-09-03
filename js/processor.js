@@ -9,6 +9,8 @@ const Cabinet_kallax = require('./Cabinet_kallax');
 const Dresser_Add = require('./Dresser_Add');
 const Model_Painting = require('./Model_Painting');
 const Model_wrap = require('./Model_wrap');
+const Model_Rotation = require('./Model_Rotation');
+const Model_Align = require('./Model_Align');
 
 function Processor(main) {
 	this.main = main;
@@ -40,6 +42,10 @@ function Processor(main) {
 	this.cabinet_kallax = undefined;
 	this.model_painting = undefined;
 	this.model_wrap = undefined;
+	this.model_rotation = undefined;
+	this.model_align = undefined;
+
+
 	//end of weixiang's block
 
 
@@ -152,8 +158,16 @@ Processor.prototype = {
 			case "tool" :
 				scope.model_painting = new Model_Painting(scope.main);
 				scope.transformFunctions.MODEL_PAINTING = scope.model_painting;
+				
 				scope.model_wrap = new Model_wrap(scope.main);
 				scope.transformFunctions.MODEL_WRAP = scope.model_wrap;
+				
+				scope.model_rotation = new Model_Rotation(scope.main);
+				scope.transformFunctions.MODEL_ROTATION = scope.model_rotation;
+				
+				scope.model_align = new Model_Align(scope.main);
+				scope.transformFunctions.MODEL_ALIGN = scope.model_align;
+				
 				$('.operations.operation_tool').show();
 				
 				break;

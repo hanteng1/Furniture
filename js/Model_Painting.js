@@ -83,6 +83,8 @@ Model_Painting.prototype = {
             this.paint_mode = false;
         }
         $('#parameter_control_tool_wrap').hide();
+        $('#parameter_control_tool_rotation').hide();
+        $('#parameter_control_tool_align').hide();
 
     },
 

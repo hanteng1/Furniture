@@ -884,7 +884,7 @@ Main.prototype = {
 				selectionBox.material.transparent = true;
 				selectionBox.visible = true;
 
-				this.DistanceObj.push(selectionBox);
+				this.DistanceObj.push(object);
 				this.selectionBoxes.push(selectionBox);
 				this.scene.add( selectionBox );
 
@@ -1165,7 +1165,9 @@ Main.prototype = {
 						this.select(this.furniture.getFurniture());
 
 						objselect = false;
-						this.GetSizeObj.push( this.furniture.getFurniture() );
+						//if haven't select this furniture before
+						if (this.GetSizeObj.indexOf(this.furniture.getFurniture())<0)
+							this.GetSizeObj.push( this.furniture.getFurniture() );
 						$('.ui.blue.submit.button.getsize').show();
 						
 
@@ -1658,6 +1660,8 @@ Main.prototype = {
 		$('.operations.operation_tool').hide();
 		$('#parameter_control_tool_painting').hide();
 		$('#parameter_control_tool_wrap').hide();
+		$('#parameter_control_tool_rotation').hide();
+		$('#parameter_control_tool_align').hide();
 
 		this.furnitures.length = 0;	
 
@@ -1761,6 +1765,8 @@ Main.prototype = {
 		$('.operations.operation_tool').hide();
 		$('#parameter_control_tool_painting').hide();
 		$('#parameter_control_tool_wrap').hide();
+		$('#parameter_control_tool_rotation').hide();
+		$('#parameter_control_tool_align').hide();
 
 		this.processor.init();
 		//this.processor.executeDesign();
