@@ -77,24 +77,25 @@ Ui.prototype = {
 						scope.assignLabel("stand");
 						break;
 					case "l_6":
-						//stand
 						scope.assignLabel("cabinetTop");
 						break;
 					case "l_7":
-						//stand
 						scope.assignLabel("cabinetFront");
 						break;
 					case "l_8":
-						//stand
 						scope.assignLabel("cabinetBroad");
 						break;
 					case "l_9":
-						//stand
 						scope.assignLabel("tabletop");
 						break;
 					case "l_10":
-						//stand
 						scope.assignLabel("tableLeg");
+						break;
+					case "l_11":
+						scope.assignLabel("desktop");
+						break;
+					case "l_12":
+						scope.assignLabel("deskDrawer");
 						break;
 					
 				}
@@ -233,6 +234,7 @@ Ui.prototype = {
 		$('.operations.operation_cabinet_kallax_two').hide();
 
 		$('.operations.operation_table').hide();
+		$('.operations.operation_desk').hide();
 
 		
 		$('.ui.blue.submit.button.getsize').hide();
@@ -391,6 +393,11 @@ Ui.prototype = {
 
 		$('#operation_table_addDoorBoard').click(function() {
 			scope.processor.executeDesign("TABLE", "addDoorBoard");
+		});
+
+		//desk
+		$('#operation_desk_add_board').click(function() {
+			scope.processor.executeDesign("DESK", "addBoard");
 		});
 
 	},

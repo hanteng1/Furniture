@@ -32,7 +32,8 @@ function Main()
 	//todo: an floating window to select category
 	// this.category = "chair";
 	// this.category = "cabinet";
-	this.category = "table";
+	// this.category = "table";
+	this.category = "desk";
 
 	//only stores data
 	this.container = document.getElementById('container');

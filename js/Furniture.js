@@ -36,7 +36,11 @@ function Furniture(furniture) {
 
 		//for table
 		tabletop: new THREE.Vector3(0, 1, 0),
-		tableLeg: new THREE.Vector3(0, 0, 1)
+		tableLeg: new THREE.Vector3(0, 0, 1),
+
+		//for desk
+		desktop: new THREE.Vector3(0, 1, 0),
+		deskDrawer: new THREE.Vector3(0, 0, 1)
 	};
 
 
