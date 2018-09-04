@@ -210,15 +210,15 @@ Main.prototype = {
 		//this.customControl.enablePan = true;
 		//this.customControl.target.set(0, 0.5, - 0.2);
 
-		this.customControl.lookSpeed = 0.05;
-        this.customControl.movementSpeed = 20;
-        this.customControl.noFly = true;
-        this.customControl.lookVertical = true;
-        this.customControl.constrainVertical = true;
-        this.customControl.verticalMin = 1.0;
-        this.customControl.verticalMax = 2.0;
-        this.customControl.lon = -110;
-        this.customControl.lat = -50;
+		//this.customControl.lookSpeed = 0.05;
+        //this.customControl.movementSpeed = 20;
+        //this.customControl.noFly = true;
+        //this.customControl.lookVertical = true;
+        //this.customControl.constrainVertical = true;
+        //this.customControl.verticalMin = 1.0;
+        //this.customControl.verticalMax = 2.0;
+        //this.customControl.lon = -110;
+        //this.customControl.lat = -50;
 
 
 		this.transformControls = new THREE.TransformControls(this.camera, this.renderer.domElement);
