@@ -2621,15 +2621,6 @@ Chair_Rebuild.prototype = {
 		
 	},
 
-	// remove: function(group, name){
-	// 	for (var i = group.children.length - 1; i >= 0 ; i--) {				
-	// 		var str = group.children[i].name;
-	// 		if (str == name) {
-	// 			group.remove(group.children[i]);
-	// 		}	
-	// 	}
-	// },
-
 
 	remove: function(group){
 		for (var i = group.children.length - 1; i >= 0 ; i--) {				
@@ -8590,7 +8581,7 @@ Main.prototype = {
 						this.select(this.furniture.getFurniture());
 
 						objselect = false;
-						//if not select this furniture before
+						//if haven't select this furniture before
 						if (this.GetSizeObj.indexOf(this.furniture.getFurniture())<0)
 							this.GetSizeObj.push( this.furniture.getFurniture() );
 						$('.ui.blue.submit.button.getsize').show();
@@ -8836,6 +8827,19 @@ Main.prototype = {
 
 			this.onCtrl = true;
 			console.log('Ctrl down');
+		
+		}else if(keyCode == 46){
+			
+			//delete furniture
+			if(this.furniture != null ){
+				this.removeFromScene(this.furniture.getFurniture());
+				if ( this.furnitures.indexOf(this.furniture) > -1 ){
+					this.furnitures.splice( this.furnitures.indexOf(this.furniture),1);
+					this.selectionBox.visible = false;
+					this.transformControls.detach();
+				}
+			}
+
 		}
 
 
@@ -9323,6 +9327,19 @@ Main.prototype = {
 		var center = new THREE.Vector3();
 		box.getCenter(center);
 		return center;
+    },
+
+    DeleteObj: function(){
+    	//this.collapse(this.furniture);
+    	//delete object in furniture
+		for(var i=0 ; i < this.GetSizeObj.length; i++){
+			var model = this.GetSizeObj[i];
+			this.furniture.getFurniture().remove(model);
+			this.explodeVectors.splice( this.furniture.getFurniture().indexOf(model) , 1 );
+		}
+		this.GetSizeObj = [];
+		$('.ui.blue.submit.button.getsize').hide();
+
     }
 
 };

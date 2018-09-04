@@ -1411,6 +1411,19 @@ Main.prototype = {
 
 			this.onCtrl = true;
 			console.log('Ctrl down');
+		
+		}else if(keyCode == 46){
+			
+			//delete furniture
+			if(this.furniture != null ){
+				this.removeFromScene(this.furniture.getFurniture());
+				if ( this.furnitures.indexOf(this.furniture) > -1 ){
+					this.furnitures.splice( this.furnitures.indexOf(this.furniture),1);
+					this.selectionBox.visible = false;
+					this.transformControls.detach();
+				}
+			}
+
 		}
 
 
@@ -1898,6 +1911,19 @@ Main.prototype = {
 		var center = new THREE.Vector3();
 		box.getCenter(center);
 		return center;
+    },
+
+    DeleteObj: function(){
+    	//this.collapse(this.furniture);
+    	//delete object in furniture
+		for(var i=0 ; i < this.GetSizeObj.length; i++){
+			var model = this.GetSizeObj[i];
+			this.furniture.getFurniture().remove(model);
+			this.explodeVectors.splice( this.furniture.getFurniture().indexOf(model) , 1 );
+		}
+		this.GetSizeObj = [];
+		$('.ui.blue.submit.button.getsize').hide();
+
     }
 
 };
