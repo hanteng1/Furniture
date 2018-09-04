@@ -16,6 +16,7 @@ const Model_Painting = require('./Model_Painting');
 const Model_wrap = require('./Model_wrap');
 const Model_Rotation = require('./Model_Rotation');
 const Model_Align = require('./Model_Align');
+const Model_Add = require('./Model_Add');
 
 
 function Processor(main) {
@@ -41,6 +42,8 @@ function Processor(main) {
 
 	this.table = undefined;
 	this.desk = undefined;
+
+	this.model_add = undefined;
 	//end of zhuen's block
 
 
@@ -218,6 +221,10 @@ Processor.prototype = {
 				scope.model_align = new Model_Align(scope.main);
 				scope.transformFunctions.MODEL_ALIGN = scope.model_align;
 				
+				//add
+				scope.model_add = new Model_Add(scope.main);
+				scope.transformFunctions.MODEL_ADD = scope.model_add;
+
 				$('.operations.operation_tool').show();
 				
 				break;

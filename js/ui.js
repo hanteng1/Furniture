@@ -244,6 +244,7 @@ Ui.prototype = {
 		$('#parameter_control_tool_wrap').hide();
 		$('#parameter_control_tool_rotation').hide();
 		$('#parameter_control_tool_align').hide();
+		$('#parameter_control_tool_add').hide();
 		
 
 	},
@@ -421,8 +422,11 @@ Ui.prototype = {
 
 		});
 
+		//add
+		$('#operation_Add').click(function() {
+			scope.processor.executeDesign("MODEL_ADD", "add");
 
-
+		});
 	},
 
 
