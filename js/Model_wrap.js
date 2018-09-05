@@ -97,17 +97,19 @@ Model_wrap.prototype = {
             
         });
 
-        if(this.wrap_mode == false){
+        if(this.wrap_mode == false && name=='wrap'){
         	$('#parameter_control_tool_wrap').show();
             this.wrap_mode = true;
+            this.main.processor.executeDesign("MODEL_ALIGN", "wrap");
+        	this.main.processor.executeDesign("MODEL_PAINTING", "wrap");
+        	this.main.processor.executeDesign("MODEL_ROTATION", "wrap");
+        	
         }
-        else if(this.wrap_mode == true){
+        else if(this.wrap_mode == true || name!='wrap'){
         	$('#parameter_control_tool_wrap').hide();
             this.wrap_mode = false;
         }
-        $('#parameter_control_tool_painting').hide();
-        $('#parameter_control_tool_rotation').hide();
-        $('#parameter_control_tool_align').hide();
+        
 
 	},
 	Wrap: function( model , texture ){

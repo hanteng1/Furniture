@@ -74,17 +74,18 @@ Model_Painting.prototype = {
             
         });
 
-        if(this.paint_mode == false){
+        if(this.paint_mode == false && name=='painting'){
             $('#parameter_control_tool_painting').show();
             this.paint_mode = true;
+            this.main.processor.executeDesign("MODEL_ALIGN", "painting");
+            this.main.processor.executeDesign("MODEL_WRAP", "painting");
+            this.main.processor.executeDesign("MODEL_ROTATION", "painting");
         }
-        else if(this.paint_mode == true){
+        else if(this.paint_mode == true || name!= 'painting'){
             $('#parameter_control_tool_painting').hide();
             this.paint_mode = false;
         }
-        $('#parameter_control_tool_wrap').hide();
-        $('#parameter_control_tool_rotation').hide();
-        $('#parameter_control_tool_align').hide();
+        
 
     },
 

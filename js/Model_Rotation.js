@@ -1,4 +1,5 @@
 "use strict;"
+const {Procedure_button , RecordPosition} = require('./Procedure_button');
 
 function Model_Rotation(main){
 
@@ -26,6 +27,7 @@ Model_Rotation.prototype = {
 	            var model = scope.main.GetSizeObj[i];
 				scope.objectRotationByAxis( model, 'x' , -90 );
 	        }
+	        
         });
         $( ".item.ui.image.label.rota3" ).click(function() {
 
@@ -33,6 +35,7 @@ Model_Rotation.prototype = {
 	            var model = scope.main.GetSizeObj[i];
 				scope.objectRotationByAxis( model, 'z' , 90 );
 	        }
+	        
         });
         $( ".item.ui.image.label.rota4" ).click(function() {
 
@@ -40,6 +43,7 @@ Model_Rotation.prototype = {
 	            var model = scope.main.GetSizeObj[i];
 				scope.objectRotationByAxis( model, 'z' , -90 );
 	        }
+	        
         });
         $( ".item.ui.image.label.rota5" ).click(function() {
 
@@ -47,6 +51,7 @@ Model_Rotation.prototype = {
 	            var model = scope.main.GetSizeObj[i];
 				scope.objectRotationByAxis( model, 'y' , 90 );
 	        }
+	        
         });
         $( ".item.ui.image.label.rota6" ).click(function() {
 
@@ -54,20 +59,24 @@ Model_Rotation.prototype = {
 	            var model = scope.main.GetSizeObj[i];
 				scope.objectRotationByAxis( model, 'y' , -90 );
 	        }
+	        
         });
 
-
-		if(this.Rotation_mode == false){
+        //show my button, hide others button
+		if(this.Rotation_mode == false && name=='rotation'){
         	$('#parameter_control_tool_rotation').show();
             this.Rotation_mode = true;
-        }
-        else if(this.Rotation_mode == true){
+            this.main.processor.executeDesign("MODEL_ALIGN", "rotation");
+        	this.main.processor.executeDesign("MODEL_PAINTING", "rotation");
+        	this.main.processor.executeDesign("MODEL_WRAP", "rotation");
+        }//hide my button
+        else if(this.Rotation_mode == true || name!='rotation'){
         	$('#parameter_control_tool_rotation').hide();
             this.Rotation_mode = false;
         }
-        $('#parameter_control_tool_painting').hide();
-        $('#parameter_control_tool_wrap').hide();
-        $('#parameter_control_tool_align').hide();
+        
+
+
 	},
 
 	objectRotationByAxis: function(obj, axis, degree){

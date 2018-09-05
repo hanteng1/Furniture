@@ -86,6 +86,12 @@ function Main()
 	//object for wrap 
 	this.WrapObject = [];
 
+
+	//Procedure objects
+	//for record objects position in every step
+	this.stepObject = [];
+
+
 	//this is to store the furnitures before any chance
 	//simply copy of the this.furnitures
 	this.furnituresDataSet = [];
@@ -1914,13 +1920,17 @@ Main.prototype = {
     },
 
     DeleteObj: function(){
-    	//this.collapse(this.furniture);
+    	this.collapse(this.furniture);
+    	var objects = this.furniture.getObjects();
+    	var furnitureObj = this.furniture.getFurniture();
+    	//this.objCenter = this.getCenterPoint(this.furniture.getFurniture());
     	//delete object in furniture
 		for(var i=0 ; i < this.GetSizeObj.length; i++){
 			var model = this.GetSizeObj[i];
-			this.furniture.getFurniture().remove(model);
-			this.explodeVectors.splice( this.furniture.getFurniture().indexOf(model) , 1 );
+			model.parent.remove(model);
 		}
+		
+		this.explode(this.furniture);
 		this.GetSizeObj = [];
 		$('.ui.blue.submit.button.getsize').hide();
 

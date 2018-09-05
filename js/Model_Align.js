@@ -42,17 +42,18 @@ Model_Align.prototype = {
         });
 
 
-		if(this.Align_mode == false){
+		if(this.Align_mode == false && name=='align'){
         	$('#parameter_control_tool_align').show();
             this.Align_mode = true;
+            this.main.processor.executeDesign("MODEL_PAINTING", "align");
+        	this.main.processor.executeDesign("MODEL_WRAP", "align");
+        	this.main.processor.executeDesign("MODEL_ROTATION", "align");
         }
-        else if(this.Align_mode == true){
+        else if(this.Align_mode == true || name!= 'align'){
         	$('#parameter_control_tool_align').hide();
             this.Align_mode = false;
         }
-        $('#parameter_control_tool_painting').hide();
-        $('#parameter_control_tool_wrap').hide();
-        $('#parameter_control_tool_rotation').hide();
+        
 	},
 
 	AlignFurniture: function( mode ){
