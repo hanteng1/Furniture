@@ -2,119 +2,115 @@
 const computeConvexHull = require('./computeConvexHull');
 const cadExtrudeShapeIntersection = require('./cadExtrudeShapeIntersection');
 const chairCutBack = require('./chairCutBack');
-const Procedure_button = require('./Procedure_button');
 
 function Model_wrap(main){
 
 	this.main = main;
     this.furnitures = main.furnitures;
     this.wrap_mode	= false; 
-    var scope = this;
-    var manager = new THREE.LoadingManager();
-    var textureLoader = new THREE.TextureLoader( manager );
-    
-    $( ".item.ui.image.label.wrap1" ).click(function() {
-        var texture = textureLoader.load( '../images/material/wrap/wrap1.jpg' );
-        texture.repeat.set(0.1, 0.1);
-        texture.wrapS = texture.wrapT = THREE.MirroredRepeatWrapping;
-        var newmaterial = new THREE.MeshBasicMaterial( {map: texture} );
-        for(var i=0 ; i<scope.main.GetSizeObj.length ; i++ ){
-            var model = scope.main.GetSizeObj[i];
-            scope.Wrap( model , texture );
-        }
-    });
-    $( ".item.ui.image.label.wrap2" ).click(function() {
-        var texture = textureLoader.load( '../images/material/wrap/wrap2.jpg' );
-        texture.repeat.set(0.1, 0.1);
-        texture.wrapS = texture.wrapT = THREE.MirroredRepeatWrapping;
-        var newmaterial = new THREE.MeshBasicMaterial( {map: texture} );
-        for(var i=0 ; i<scope.main.GetSizeObj.length ; i++ ){
-            var model = scope.main.GetSizeObj[i];
-            scope.Wrap( model , texture );
-        }
-    });
-    $( ".item.ui.image.label.wrap3" ).click(function() {
-        var texture = textureLoader.load( '../images/material/wrap/wrap3.jpg' );
-        texture.repeat.set(0.1, 0.1);
-        texture.wrapS = texture.wrapT = THREE.MirroredRepeatWrapping;
-        var newmaterial = new THREE.MeshBasicMaterial( {map: texture} );
-        for(var i=0 ; i<scope.main.GetSizeObj.length ; i++ ){
-            var model = scope.main.GetSizeObj[i];
-            scope.Wrap( model , texture );
-        }
-    });
-    $( ".item.ui.image.label.wrap4" ).click(function() {
-        var texture = textureLoader.load( '../images/material/wrap/wrap4.jpg' );
-        texture.repeat.set(0.1, 0.1);
-        texture.wrapS = texture.wrapT = THREE.MirroredRepeatWrapping;
-        var newmaterial = new THREE.MeshBasicMaterial( {map: texture} );
-        for(var i=0 ; i<scope.main.GetSizeObj.length ; i++ ){
-            var model = scope.main.GetSizeObj[i];
-            scope.Wrap( model , texture );
-        }
-    });
-    $( ".item.ui.image.label.wrap5" ).click(function() {
-        var texture = textureLoader.load( '../images/material/wrap/wrap5.jpg' );
-        texture.repeat.set(0.1, 0.1);
-        texture.wrapS = texture.wrapT = THREE.MirroredRepeatWrapping;
-        var newmaterial = new THREE.MeshBasicMaterial( {map: texture} );
-        for(var i=0 ; i<scope.main.GetSizeObj.length ; i++ ){
-            var model = scope.main.GetSizeObj[i];
-            scope.Wrap( model , texture );
-        }
-    });
-    $( ".item.ui.image.label.wrap6" ).click(function() {
-        var texture = textureLoader.load( '../images/material/wrap/wrap6.jpg' );
-        texture.repeat.set(0.1, 0.1);
-        texture.wrapS = texture.wrapT = THREE.MirroredRepeatWrapping;
-        var newmaterial = new THREE.MeshBasicMaterial( {map: texture} );
-        for(var i=0 ; i<scope.main.GetSizeObj.length ; i++ ){
-            var model = scope.main.GetSizeObj[i];
-            scope.Wrap( model , texture );
-        }
-    });
-    $( ".item.ui.image.label.wrap7" ).click(function() {
-        var texture = textureLoader.load( '../images/material/wrap/wrap7.jpg' );
-        texture.repeat.set(0.1, 0.1);
-        texture.wrapS = texture.wrapT = THREE.MirroredRepeatWrapping;
-        var newmaterial = new THREE.MeshBasicMaterial( {map: texture} );
-        for(var i=0 ; i<scope.main.GetSizeObj.length ; i++ ){
-            var model = scope.main.GetSizeObj[i];
-            scope.Wrap( model , texture );
-        }
-    });
+
 }
 
 Model_wrap.prototype = {
 
 	execute: function( name ){
 
-        if(this.wrap_mode == false && name=='wrap'){
+        var main = this;
+        var manager = new THREE.LoadingManager();
+        var textureLoader = new THREE.TextureLoader( manager );
+
+        $( ".item.ui.image.label.wrap1" ).click(function() {
+            var texture = textureLoader.load( '../images/material/wrap/wrap1.jpg' );
+            texture.repeat.set(0.1, 0.1);
+            texture.wrapS = texture.wrapT = THREE.MirroredRepeatWrapping;
+            var newmaterial = new THREE.MeshBasicMaterial( {map: texture} );
+            for(var i=0 ; i<main.main.GetSizeObj.length ; i++ ){
+	            var model = main.main.GetSizeObj[i];
+	            main.Wrap( model , texture );
+	        }
+            
+        });
+        $( ".item.ui.image.label.wrap2" ).click(function() {
+            var texture = textureLoader.load( '../images/material/wrap/wrap2.jpg' );
+            texture.repeat.set(0.1, 0.1);
+            texture.wrapS = texture.wrapT = THREE.MirroredRepeatWrapping;
+            var newmaterial = new THREE.MeshBasicMaterial( {map: texture} );
+            for(var i=0 ; i<main.main.GetSizeObj.length ; i++ ){
+	            var model = main.main.GetSizeObj[i];
+	            main.Wrap( model , texture );
+	        }
+            
+        });
+        $( ".item.ui.image.label.wrap3" ).click(function() {
+            var texture = textureLoader.load( '../images/material/wrap/wrap3.jpg' );
+            texture.repeat.set(0.1, 0.1);
+            texture.wrapS = texture.wrapT = THREE.MirroredRepeatWrapping;
+            var newmaterial = new THREE.MeshBasicMaterial( {map: texture} );
+            for(var i=0 ; i<main.main.GetSizeObj.length ; i++ ){
+	            var model = main.main.GetSizeObj[i];
+	            main.Wrap( model , texture );
+	        }
+            
+        });
+        $( ".item.ui.image.label.wrap4" ).click(function() {
+            var texture = textureLoader.load( '../images/material/wrap/wrap4.jpg' );
+            texture.repeat.set(0.1, 0.1);
+            texture.wrapS = texture.wrapT = THREE.MirroredRepeatWrapping;
+            var newmaterial = new THREE.MeshBasicMaterial( {map: texture} );
+            for(var i=0 ; i<main.main.GetSizeObj.length ; i++ ){
+	            var model = main.main.GetSizeObj[i];
+	            main.Wrap( model , texture );
+	        }
+            
+        });
+        $( ".item.ui.image.label.wrap5" ).click(function() {
+            var texture = textureLoader.load( '../images/material/wrap/wrap5.jpg' );
+            texture.repeat.set(0.1, 0.1);
+            texture.wrapS = texture.wrapT = THREE.MirroredRepeatWrapping;
+            var newmaterial = new THREE.MeshBasicMaterial( {map: texture} );
+            for(var i=0 ; i<main.main.GetSizeObj.length ; i++ ){
+	            var model = main.main.GetSizeObj[i];
+	            main.Wrap( model , texture );
+	        }
+            
+        });
+        $( ".item.ui.image.label.wrap6" ).click(function() {
+            var texture = textureLoader.load( '../images/material/wrap/wrap6.jpg' );
+            texture.repeat.set(0.1, 0.1);
+            texture.wrapS = texture.wrapT = THREE.MirroredRepeatWrapping;
+            var newmaterial = new THREE.MeshBasicMaterial( {map: texture} );
+            for(var i=0 ; i<main.main.GetSizeObj.length ; i++ ){
+	            var model = main.main.GetSizeObj[i];
+	            main.Wrap( model , texture );
+	        }
+            
+        });
+        $( ".item.ui.image.label.wrap7" ).click(function() {
+            var texture = textureLoader.load( '../images/material/wrap/wrap7.jpg' );
+            texture.repeat.set(0.1, 0.1);
+            texture.wrapS = texture.wrapT = THREE.MirroredRepeatWrapping;
+            var newmaterial = new THREE.MeshBasicMaterial( {map: texture} );
+            for(var i=0 ; i<main.main.GetSizeObj.length ; i++ ){
+	            var model = main.main.GetSizeObj[i];
+	            main.Wrap( model , texture );
+	        }
+            
+        });
+
+        if(this.wrap_mode == false){
         	$('#parameter_control_tool_wrap').show();
             this.wrap_mode = true;
-            this.main.processor.executeDesign("MODEL_ALIGN", "wrap");
-        	this.main.processor.executeDesign("MODEL_PAINTING", "wrap");
-        	this.main.processor.executeDesign("MODEL_ROTATION", "wrap");
-        	
-        	//creat procedure button
-        	if(this.main.stepOperationName != name){
-        		this.DeleteButton();
-	        	Procedure_button( this.main, this.main.stepOperationName );
-	        	//record the operation name
-	        	this.main.stepOperationName = name;
-        	}
         }
-        else if(this.wrap_mode == true || name!='wrap'){
+        else if(this.wrap_mode == true){
         	$('#parameter_control_tool_wrap').hide();
             this.wrap_mode = false;
         }
-        
+        $('#parameter_control_tool_painting').hide();
+        $('#parameter_control_tool_rotation').hide();
+        $('#parameter_control_tool_align').hide();
 
 	},
 	Wrap: function( model , texture ){
-		//console.log(model.geometry);
-		
-		this.DeleteButton();
 
 		var left_to_right = this.MakeExtrudeArray1(model, "yz" , "xy" );
 		var back_to_front = this.MakeExtrudeArray2(model, "xy" , "yz" );
@@ -128,8 +124,8 @@ Model_wrap.prototype = {
         wireframe: false} );
 		
 		var backRest = new THREE.Mesh( geometry, material );
+		
 		this.main.WrapObject.push(backRest);
-		this.main.Sceneobjects.push(backRest);
 		this.main.scene.add( backRest );
 		
 	},
@@ -381,22 +377,6 @@ Model_wrap.prototype = {
 
 
 		return [back_3d , back_extrude_3d] ;
-    },
-
-    DeleteButton: function(){
-    	//console.log(this.main.stepNumber);
-		//console.log(this.main.stepObject.length);
-		this.main.lastStep = true;
-		if (this.main.stepNumber < this.main.stepObject.length){
-			var stepLength = this.main.stepObject.length;
-
-			for(var i=parseInt(this.main.stepNumber); i<stepLength; i++){
-				var btn = document.getElementById(
-					"ui circular icon button procedure "+i.toString());
-				btn.parentNode.removeChild(btn);
-			}
-			this.main.stepObject.length = parseInt(this.main.stepNumber);
-		}
     }
 
 

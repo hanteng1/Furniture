@@ -112,11 +112,6 @@ Ui.prototype = {
 			scope.main.mergeObjs();
 		});
 
-		$( ".item.m_delete" ).click(function() {
-			//group function
-			scope.main.DeleteObj();
-		});
-
 
 		//enable house environment
 		$('.ui.toggle.checkbox.house').checkbox({
@@ -207,8 +202,11 @@ Ui.prototype = {
 			scope.main.GetDistance();
 			
 		});
+<<<<<<< HEAD
 
 		
+=======
+>>>>>>> parent of 9ffda49... Merge branch 'Wei-shiang'
 
 		//chair_align controller function
 		this.designButtons();

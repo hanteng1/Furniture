@@ -1,49 +1,11 @@
 "use strict;"
-const Procedure_button = require('./Procedure_button');
 
 function Model_Rotation(main){
 
 	this.main = main;
     this.furnitures = main.furnitures;
     this.Rotation_mode = false; 
-	var scope = this;
 
-    $( ".item.ui.image.label.rota1" ).click(function() {	
-		for(var i=0 ; i<scope.main.GetSizeObj.length ; i++ ){
-            var model = scope.main.GetSizeObj[i];
-			scope.objectRotationByAxis( model, 'x' , 90 );
-        }
-    });
-    $( ".item.ui.image.label.rota2" ).click(function() {
-		for(var i=0 ; i<scope.main.GetSizeObj.length ; i++ ){
-            var model = scope.main.GetSizeObj[i];
-			scope.objectRotationByAxis( model, 'x' , -90 );
-        }
-    });
-    $( ".item.ui.image.label.rota3" ).click(function() {
-		for(var i=0 ; i<scope.main.GetSizeObj.length ; i++ ){
-            var model = scope.main.GetSizeObj[i];
-			scope.objectRotationByAxis( model, 'z' , 90 );
-        }
-    });
-    $( ".item.ui.image.label.rota4" ).click(function() {
-		for(var i=0 ; i<scope.main.GetSizeObj.length ; i++ ){
-            var model = scope.main.GetSizeObj[i];
-			scope.objectRotationByAxis( model, 'z' , -90 );
-        }
-    });
-    $( ".item.ui.image.label.rota5" ).click(function() {
-		for(var i=0 ; i<scope.main.GetSizeObj.length ; i++ ){
-            var model = scope.main.GetSizeObj[i];
-			scope.objectRotationByAxis( model, 'y' , 90 );
-        }
-    });
-    $( ".item.ui.image.label.rota6" ).click(function() {
-		for(var i=0 ; i<scope.main.GetSizeObj.length ; i++ ){
-            var model = scope.main.GetSizeObj[i];
-			scope.objectRotationByAxis( model, 'y' , -90 );
-        }
-    });
 }
 
 Model_Rotation.prototype = {
@@ -51,35 +13,64 @@ Model_Rotation.prototype = {
 	execute: function( name ){
 		var scope = this;
 
-        //show my button, hide others button
-		if(this.Rotation_mode == false && name=='rotation'){
+		$( ".item.ui.image.label.rota1" ).click(function() {
+			
+			for(var i=0 ; i<scope.main.GetSizeObj.length ; i++ ){
+	            var model = scope.main.GetSizeObj[i];
+				scope.objectRotationByAxis( model, 'x' , 90 );
+	        }
+        });
+        $( ".item.ui.image.label.rota2" ).click(function() {
+
+			for(var i=0 ; i<scope.main.GetSizeObj.length ; i++ ){
+	            var model = scope.main.GetSizeObj[i];
+				scope.objectRotationByAxis( model, 'x' , -90 );
+	        }
+        });
+        $( ".item.ui.image.label.rota3" ).click(function() {
+
+			for(var i=0 ; i<scope.main.GetSizeObj.length ; i++ ){
+	            var model = scope.main.GetSizeObj[i];
+				scope.objectRotationByAxis( model, 'z' , 90 );
+	        }
+        });
+        $( ".item.ui.image.label.rota4" ).click(function() {
+
+			for(var i=0 ; i<scope.main.GetSizeObj.length ; i++ ){
+	            var model = scope.main.GetSizeObj[i];
+				scope.objectRotationByAxis( model, 'z' , -90 );
+	        }
+        });
+        $( ".item.ui.image.label.rota5" ).click(function() {
+
+			for(var i=0 ; i<scope.main.GetSizeObj.length ; i++ ){
+	            var model = scope.main.GetSizeObj[i];
+				scope.objectRotationByAxis( model, 'y' , 90 );
+	        }
+        });
+        $( ".item.ui.image.label.rota6" ).click(function() {
+
+			for(var i=0 ; i<scope.main.GetSizeObj.length ; i++ ){
+	            var model = scope.main.GetSizeObj[i];
+				scope.objectRotationByAxis( model, 'y' , -90 );
+	        }
+        });
+
+
+		if(this.Rotation_mode == false){
         	$('#parameter_control_tool_rotation').show();
             this.Rotation_mode = true;
-            this.main.processor.executeDesign("MODEL_ALIGN", "rotation");
-        	this.main.processor.executeDesign("MODEL_PAINTING", "rotation");
-        	this.main.processor.executeDesign("MODEL_WRAP", "rotation");
-        	
-        	//creat procedure button
-        	if(this.main.stepOperationName != name){
-        		this.DeleteButton();
-	        	Procedure_button( this.main, this.main.stepOperationName );
-	        	//record the operation name
-	        	this.main.stepOperationName = name;
-        	}
-        }//hide my button
-        else if(this.Rotation_mode == true || name!='rotation'){
+        }
+        else if(this.Rotation_mode == true){
         	$('#parameter_control_tool_rotation').hide();
             this.Rotation_mode = false;
         }
-        
-
-
+        $('#parameter_control_tool_painting').hide();
+        $('#parameter_control_tool_wrap').hide();
+        $('#parameter_control_tool_align').hide();
 	},
 
 	objectRotationByAxis: function(obj, axis, degree){
-		
-		this.DeleteButton();
-
 		var center = this.getCenterPosition(obj);
 		var size = this.getSize(obj);
 		//rotation
@@ -134,22 +125,6 @@ Model_Rotation.prototype = {
 
         //this includes width, height, depth
         return box_size;
-    },
-
-    DeleteButton: function(){
-    	//console.log(this.main.stepNumber);
-		//console.log(this.main.stepObject.length);
-		this.main.lastStep = true;
-		if (this.main.stepNumber < this.main.stepObject.length){
-			var stepLength = this.main.stepObject.length;
-
-			for(var i=parseInt(this.main.stepNumber); i<stepLength; i++){
-				var btn = document.getElementById(
-					"ui circular icon button procedure "+i.toString());
-				btn.parentNode.removeChild(btn);
-			}
-			this.main.stepObject.length = parseInt(this.main.stepNumber);
-		}
     }
 
 
