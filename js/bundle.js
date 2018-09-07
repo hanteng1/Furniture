@@ -5954,7 +5954,7 @@ Model_Add.prototype = {
 }
 
 module.exports = Model_Add
-},{"./computeConvexHull":38}],25:[function(require,module,exports){
+},{"./computeConvexHull":40}],25:[function(require,module,exports){
 "use strict;"
 const Procedure_button = require('./Procedure_button');
 
@@ -9693,15 +9693,15 @@ Main.prototype = {
 		//this.customControl.enablePan = true;
 		//this.customControl.target.set(0, 0.5, - 0.2);
 
-		this.customControl.lookSpeed = 0.05;
-        this.customControl.movementSpeed = 20;
-        this.customControl.noFly = true;
-        this.customControl.lookVertical = true;
-        this.customControl.constrainVertical = true;
-        this.customControl.verticalMin = 1.0;
-        this.customControl.verticalMax = 2.0;
-        this.customControl.lon = -110;
-        this.customControl.lat = -50;
+		//this.customControl.lookSpeed = 0.05;
+        //this.customControl.movementSpeed = 20;
+        //this.customControl.noFly = true;
+        //this.customControl.lookVertical = true;
+        //this.customControl.constrainVertical = true;
+        //this.customControl.verticalMin = 1.0;
+        //this.customControl.verticalMax = 2.0;
+        //this.customControl.lon = -110;
+        //this.customControl.lat = -50;
 
 
 		this.transformControls = new THREE.TransformControls(this.camera, this.renderer.domElement);
