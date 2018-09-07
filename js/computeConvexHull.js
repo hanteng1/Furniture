@@ -22,13 +22,13 @@ function computeConvexHull(component, face) {
 	}
 
 	var points = collectPointOnFace(component, face);
-	console.log(points);
+	//console.log(points);
 
 	var concaveHull = hull(points, 20);
 
 	console.log(concaveHull);
 
-	return points;
+	return concaveHull;
 
 
 }
@@ -75,41 +75,16 @@ function collectPointOnFace(component, face) {
 		//to the face
 		for(var i = 0; i < pointsArray.length; i++) {
 			var vertex = pointsArray[i];
-			var isExist = false;
+
 			if(face == "xy")
 			{
-				var fv = [vertex[0].toFixed(4), vertex[1].toFixed(4)];
-				isExist = false;
-				for (var j = 0; j < points.length; j++) {
-					if(points[j][0] == fv[0] && points[j][1] == fv[1]){
-						isExist = true;
-						break;
-					}
-				}
-				if(!isExist)
-					points.push(fv);					
-				
+				var fv = [vertex[0], vertex[1]];
+				points.push(fv);
 			}else if(face == "xz"){
-				var fv = [vertex[0].toFixed(4), vertex[2].toFixed(4)];
-				isExist = false;
-				for (var j = 0; j < points.length; j++) {
-					if(points[j][0] == fv[0] && points[j][1] == fv[1]){
-						isExist = true;
-						break;
-					}
-				}
-				if(!isExist)
-					points.push(fv);
+				var fv = [vertex[0], vertex[2]];
+				points.push(fv);
 			}else if(face == "yz"){
-				var fv = [vertex[1].toFixed(4), vertex[2].toFixed(4)];
-				isExist = false;
-				for (var j = 0; j < points.length; j++) {
-					if(points[j][0] == fv[0] && points[j][1] == fv[1]){
-						isExist = true;
-						break;
-					}
-				}
-				if(!isExist)
+				var fv = [vertex[1], vertex[2]];
 				points.push(fv);
 			}
 		}

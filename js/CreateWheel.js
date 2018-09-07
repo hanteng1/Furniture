@@ -13,7 +13,6 @@ function CreateWheel() {
     c2 = c1.translate([0,0,0.4]);
     var h = cylinder({r: 0.3, h: 0.3});
     h = h.translate([0,0,0.1]);
-    // touch array 0.28 * 0.28
     h2 = cylinder({r: 0.14, h: 0.5}).translate([0,0.25,0.125]);
     h2 = h2.rotateX(90);
     obj = union(c1, c2, h, h2);

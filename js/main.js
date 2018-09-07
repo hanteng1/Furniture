@@ -69,11 +69,6 @@ function Main()
 	this.mouse = new THREE.Vector2();
 	this.onDownPosition = new THREE.Vector2();
 	this.onUpPosition = new THREE.Vector2();
-
-	//----------------------Add Model-------------------------------
-	this.onMovePosition = new THREE.Vector2();
-
-
 	this.onDoubleClickPosition = new THREE.Vector2();
 	this.onCtrlE = false;
 	this.onCtrl = false;
@@ -137,7 +132,6 @@ function Main()
 	this.purpleWall = new THREE.Object3D();
 	this.ceiling = new THREE.Object3D();
 
-	
 }
 
 Main.prototype = {
@@ -198,9 +192,6 @@ Main.prototype = {
 
 		//this.container.appendChild( this.stats.dom )
 		window.addEventListener( 'resize', this.onWindowResize.bind(this), false );
-
-		//--------------------Add Model------------------------------------------
-		window.addEventListener( 'mousemove', this.onMouseMove.bind(this), false );
 
 		//mouse events
 		this.container.addEventListener('mousedown', this.onMouseDown.bind(this), false);
@@ -543,6 +534,7 @@ Main.prototype = {
 		});
 
 		//this.scene.add(this.house);
+
 	},
 
 
@@ -594,41 +586,6 @@ Main.prototype = {
 		this.camera.aspect = window.innerWidth / window.innerHeight;
 		this.camera.updateProjectionMatrix();
 		this.renderer.setSize( window.innerWidth, window.innerHeight );
-	},
-
-	//-----------------------------------Add Model--------------------------
-	onMouseMove: function ( event ) {
-		if( this.processor.model_add !== undefined){
-			if(this.processor.model_add.isCreateObject){
-				this.mouse.x = ( event.clientX / window.innerWidth ) * 2 - 1;
-				this.mouse.y = - ( event.clientY / window.innerHeight ) * 2 + 1;
-				var raycaster = new THREE.Raycaster();
-				raycaster.setFromCamera( this.mouse, this.camera );
-				var intersects = raycaster.intersectObject(this.processor.model_add.selectFurniture);
-				if(intersects.length > 0){
-					var pos = intersects[0].point;
-
-					var object = this.processor.model_add.selectObject;
-					console.log(object);
-					object.position.set(pos.x, pos.y, pos.z);
-				}
-				else
-					console.log("miss");
-			}
-		}
-		
-		
-		
-		// 
-
-		// 
-		// var line = new THREE.Line();
-		// if(intersects.length > 0){
-		// 	line.raycast(raycaster, intersects);
-		// 	this.scene.add(line);
-		// 	console.log(intersects[0].point);
-		// }
-		
 	},
 
 
@@ -1283,20 +1240,10 @@ Main.prototype = {
 						//push object to label size
 						this.GetSizeObj.push(object);
 						$('.ui.blue.submit.button.getsize').show();
-
-						//---------------Add Model------------------
-						if( this.processor.model_add !== undefined){
-							this.processor.model_add.select(object);
-						}
 					}
 				} else {
 					//it also calls select, to detach
 					this.select( null );
-				}
-
-				//---------------Add Model------------------
-				if( this.processor.model_add !== undefined){
-					this.processor.model_add.selectPlane(this.mouse, this.camera, this.onUpPosition);
 				}
 			}
 			//select two obj for getting distance
@@ -1504,40 +1451,9 @@ Main.prototype = {
 		{
 			this.onCtrlE = false;
 
-			//-------------Add Model----------------------
-			if( this.processor.model_add !== undefined){
-				var bef = this.processor.model_add.getPartCenter(this.processor.model_add.selectFurniture);
-			}
-
 			//disable explosion view 
 			if(this.furniture  != null )
 				this.collapse(this.furniture);
-
-			//-------------Add Model----------------------
-			if( this.processor.model_add !== undefined){
-				var aft = this.processor.model_add.getPartCenter(this.processor.model_add.selectFurniture);
-				
-				var offset = new THREE.Vector3( aft.x - bef.x, aft.y - bef.y, aft.z - bef.z);
-				var obj = [];
-				for (var i = 0; i < this.scene.children.length; i++) {
-					if(this.scene.children[i].name == this.processor.model_add.selectObjectName)
-						obj.push(this.scene.children[i]);
-				}
-				for (var i = 0; i < obj.length; i++) {
-					obj[i].position.x += offset.x;
-					obj[i].position.y += offset.y;
-					obj[i].position.z += offset.z;
-				}
-				
-				var furniture = this.processor.model_add.selectFurniture;
-				while(furniture.parent != this.scene)
-					furniture = furniture.parent;
-				for (var i = 0; i < obj.length; i++) {
-					var pos = new THREE.Vector3(obj[i].position.x, obj[i].position.y, obj[i].position.z);
-					this.processor.model_add.objectAddToFurniture(furniture, obj[i], pos);					
-				}
-				
-			}
 
 			if(this.selectionBoxes.length > 0)
 			{
@@ -1582,19 +1498,6 @@ Main.prototype = {
 			this.WrapObject = [];
 			
 			this.RemoveSizeLabel();
-
-			//----------------------Add Model---------------------------
-			//when "E" Up
-			if( this.processor.model_add !== undefined){
-				this.processor.model_add.deleteSelectBox(this.scene);
-				this.processor.model_add.selectObjectName = "";
-				this.processor.model_add.selectFurnitureUUID = "";
-	    		this.processor.model_add.hasSelectBox = false;
-	    		this.processor.model_add.isCreateObject = false;
-			}
-			
-
-
 		}else {
 
 			var keyCode = event.which;
