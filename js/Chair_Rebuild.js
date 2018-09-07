@@ -417,15 +417,6 @@ Chair_Rebuild.prototype = {
 		
 	},
 
-	// remove: function(group, name){
-	// 	for (var i = group.children.length - 1; i >= 0 ; i--) {				
-	// 		var str = group.children[i].name;
-	// 		if (str == name) {
-	// 			group.remove(group.children[i]);
-	// 		}	
-	// 	}
-	// },
-
 
 	remove: function(group){
 		for (var i = group.children.length - 1; i >= 0 ; i--) {				

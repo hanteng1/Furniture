@@ -82,10 +82,14 @@ function assignUVs(geometry) {
 module.exports = CabinetMakeBedBroad
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 },{"./csgToGeometries":34,"@jscad/csg":43,"@jscad/scad-api":130}],2:[function(require,module,exports){
 =======
 },{"./csgToGeometries":33,"@jscad/csg":42,"@jscad/scad-api":129}],2:[function(require,module,exports){
 >>>>>>> master
+=======
+},{"./csgToGeometries":34,"@jscad/csg":43,"@jscad/scad-api":130}],2:[function(require,module,exports){
+>>>>>>> Wei-shiang
 "use strict;"
 
 const scadApi = require('@jscad/scad-api')
@@ -135,10 +139,14 @@ function assignUVs(geometry) {
 
 module.exports = CabinetMakeBroad
 <<<<<<< HEAD
+<<<<<<< HEAD
 },{"./csgToGeometries":34,"@jscad/csg":43,"@jscad/scad-api":130}],3:[function(require,module,exports){
 =======
 },{"./csgToGeometries":33,"@jscad/csg":42,"@jscad/scad-api":129}],3:[function(require,module,exports){
 >>>>>>> master
+=======
+},{"./csgToGeometries":34,"@jscad/csg":43,"@jscad/scad-api":130}],3:[function(require,module,exports){
+>>>>>>> Wei-shiang
 "use strict;"
 
 const scadApi = require('@jscad/scad-api')
@@ -191,10 +199,14 @@ function assignUVs(geometry) {
 
 module.exports = CabinetMakeSeat
 <<<<<<< HEAD
+<<<<<<< HEAD
 },{"./csgToGeometries":34,"@jscad/csg":43,"@jscad/scad-api":130}],4:[function(require,module,exports){
 =======
 },{"./csgToGeometries":33,"@jscad/csg":42,"@jscad/scad-api":129}],4:[function(require,module,exports){
 >>>>>>> master
+=======
+},{"./csgToGeometries":34,"@jscad/csg":43,"@jscad/scad-api":130}],4:[function(require,module,exports){
+>>>>>>> Wei-shiang
 "use strict;"
 
 const CabinetMakeSeat = require('./CabinetMakeSeat');
@@ -708,10 +720,14 @@ Cabinet_kallax.prototype = {
 
 module.exports = Cabinet_kallax
 <<<<<<< HEAD
+<<<<<<< HEAD
 },{"./CabinetMakeBedBroad":1,"./CabinetMakeBroad":2,"./CabinetMakeSeat":3,"./MarkBetweenSize":22,"./MarkSize":23,"./rebuildMakeSeat":140}],5:[function(require,module,exports){
 =======
 },{"./CabinetMakeBedBroad":1,"./CabinetMakeBroad":2,"./CabinetMakeSeat":3,"./MarkBetweenSize":17,"./MarkSize":18,"./rebuildMakeSeat":139}],5:[function(require,module,exports){
 >>>>>>> master
+=======
+},{"./CabinetMakeBedBroad":1,"./CabinetMakeBroad":2,"./CabinetMakeSeat":3,"./MarkBetweenSize":17,"./MarkSize":18,"./rebuildMakeSeat":140}],5:[function(require,module,exports){
+>>>>>>> Wei-shiang
 const chairCreateBoard = require('./chairCreateBoard')
 const chairCutBack = require('./chairCutBack')
 
@@ -1601,10 +1617,14 @@ Chair_Add.prototype = {
 
 module.exports = Chair_Add
 <<<<<<< HEAD
+<<<<<<< HEAD
 },{"./cadCutByPlane":27,"./chairCreateBoard":30,"./chairCutBack":31}],6:[function(require,module,exports){
 =======
 },{"./cadCutByPlane":25,"./chairCreateBoard":29,"./chairCutBack":30}],6:[function(require,module,exports){
 >>>>>>> master
+=======
+},{"./cadCutByPlane":26,"./chairCreateBoard":30,"./chairCutBack":31}],6:[function(require,module,exports){
+>>>>>>> Wei-shiang
 "use strict;"
 //chair align related functions
 //align in one line
@@ -2222,10 +2242,14 @@ module.exports = Chair_Align
 
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 },{"./cadMakeSeat":29,"./chairCutBack":31,"./computeConvexHull":32}],7:[function(require,module,exports){
 =======
 },{"./cadMakeSeat":28,"./chairCutBack":30,"./computeConvexHull":31}],7:[function(require,module,exports){
 >>>>>>> master
+=======
+},{"./cadMakeSeat":29,"./chairCutBack":31,"./computeConvexHull":32}],7:[function(require,module,exports){
+>>>>>>> Wei-shiang
 "use strict;"
 
 const rebuildMakeSeat = require('./rebuildMakeSeat');
@@ -2644,15 +2668,6 @@ Chair_Rebuild.prototype = {
 		this.loadLegModel('../models/Legs/Leg1.dae', furniture, SeatPosi, SeatSize);
 		
 	},
-
-	// remove: function(group, name){
-	// 	for (var i = group.children.length - 1; i >= 0 ; i--) {				
-	// 		var str = group.children[i].name;
-	// 		if (str == name) {
-	// 			group.remove(group.children[i]);
-	// 		}	
-	// 	}
-	// },
 
 
 	remove: function(group){
@@ -3074,10 +3089,14 @@ Chair_Rebuild.prototype = {
 module.exports = Chair_Rebuild
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 },{"./cadExtrudeShape":28,"./chairCutBack":31,"./computeConvexHull":32,"./rebuildMakeLeg":139,"./rebuildMakeSeat":140}],8:[function(require,module,exports){
 =======
 },{"./Model_Painting":20,"./Model_wrap":22,"./cadExtrudeShape":26,"./chairCutBack":30,"./computeConvexHull":31,"./rebuildMakeLeg":138,"./rebuildMakeSeat":139}],8:[function(require,module,exports){
 >>>>>>> master
+=======
+},{"./Model_Painting":20,"./Model_wrap":22,"./cadExtrudeShape":27,"./chairCutBack":31,"./computeConvexHull":32,"./rebuildMakeLeg":139,"./rebuildMakeSeat":140}],8:[function(require,module,exports){
+>>>>>>> Wei-shiang
 "use strict;"
 
 const scadApi = require('@jscad/scad-api')
@@ -3101,10 +3120,14 @@ function CreateBlum(width, length, height) {
 
 module.exports = CreateBlum
 <<<<<<< HEAD
+<<<<<<< HEAD
 },{"./csgToGeometries":34,"@jscad/csg":43,"@jscad/scad-api":130}],9:[function(require,module,exports){
 =======
 },{"./csgToGeometries":33,"@jscad/csg":42,"@jscad/scad-api":129}],9:[function(require,module,exports){
 >>>>>>> master
+=======
+},{"./csgToGeometries":34,"@jscad/csg":43,"@jscad/scad-api":130}],9:[function(require,module,exports){
+>>>>>>> Wei-shiang
 "use strict;"
 
 const scadApi = require('@jscad/scad-api')
@@ -3144,10 +3167,14 @@ function CreateChain(length) {
 
 module.exports = CreateChain
 <<<<<<< HEAD
+<<<<<<< HEAD
 },{"./csgToGeometries":34,"@jscad/csg":43,"@jscad/scad-api":130}],10:[function(require,module,exports){
 =======
 },{"./csgToGeometries":33,"@jscad/csg":42,"@jscad/scad-api":129}],10:[function(require,module,exports){
 >>>>>>> master
+=======
+},{"./csgToGeometries":34,"@jscad/csg":43,"@jscad/scad-api":130}],10:[function(require,module,exports){
+>>>>>>> Wei-shiang
 "use strict;"
 
 const scadApi = require('@jscad/scad-api')
@@ -3216,8 +3243,12 @@ module.exports = CreateDoorBoard
 },{"./csgToGeometries":34,"@jscad/csg":43,"@jscad/scad-api":130}],12:[function(require,module,exports){
 =======
 module.exports = CreateDoor
+<<<<<<< HEAD
 },{"./csgToGeometries":33,"@jscad/csg":42,"@jscad/scad-api":129}],11:[function(require,module,exports){
 >>>>>>> master
+=======
+},{"./csgToGeometries":34,"@jscad/csg":43,"@jscad/scad-api":130}],11:[function(require,module,exports){
+>>>>>>> Wei-shiang
 "use strict;"
 
 const scadApi = require('@jscad/scad-api')
@@ -3258,10 +3289,14 @@ function CreateDrawer(width, length, height) {
 
 module.exports = CreateDrawer
 <<<<<<< HEAD
+<<<<<<< HEAD
 },{"./csgToGeometries":34,"@jscad/csg":43,"@jscad/scad-api":130}],13:[function(require,module,exports){
 =======
 },{"./csgToGeometries":33,"@jscad/csg":42,"@jscad/scad-api":129}],12:[function(require,module,exports){
 >>>>>>> master
+=======
+},{"./csgToGeometries":34,"@jscad/csg":43,"@jscad/scad-api":130}],12:[function(require,module,exports){
+>>>>>>> Wei-shiang
 "use strict;"
 
 const scadApi = require('@jscad/scad-api')
@@ -3281,10 +3316,14 @@ function CreateDresserLeg() {
 
 module.exports = CreateDresserLeg
 <<<<<<< HEAD
+<<<<<<< HEAD
 },{"./csgToGeometries":34,"@jscad/csg":43,"@jscad/scad-api":130}],14:[function(require,module,exports){
 =======
 },{"./csgToGeometries":33,"@jscad/csg":42,"@jscad/scad-api":129}],13:[function(require,module,exports){
 >>>>>>> master
+=======
+},{"./csgToGeometries":34,"@jscad/csg":43,"@jscad/scad-api":130}],13:[function(require,module,exports){
+>>>>>>> Wei-shiang
 "use strict;"
 
 const scadApi = require('@jscad/scad-api')
@@ -3338,10 +3377,14 @@ function CreateHinge(RAngle, mode) {
 
 module.exports = CreateHinge
 <<<<<<< HEAD
+<<<<<<< HEAD
 },{"./csgToGeometries":34,"@jscad/csg":43,"@jscad/scad-api":130}],15:[function(require,module,exports){
 =======
 },{"./csgToGeometries":33,"@jscad/csg":42,"@jscad/scad-api":129}],14:[function(require,module,exports){
 >>>>>>> master
+=======
+},{"./csgToGeometries":34,"@jscad/csg":43,"@jscad/scad-api":130}],14:[function(require,module,exports){
+>>>>>>> Wei-shiang
 "use strict;"
 
 const scadApi = require('@jscad/scad-api')
@@ -3376,10 +3419,14 @@ function CreateRod(length) {
 
 module.exports = CreateRod
 <<<<<<< HEAD
+<<<<<<< HEAD
 },{"./csgToGeometries":34,"@jscad/csg":43,"@jscad/scad-api":130}],16:[function(require,module,exports){
 =======
 },{"./csgToGeometries":33,"@jscad/csg":42,"@jscad/scad-api":129}],15:[function(require,module,exports){
 >>>>>>> master
+=======
+},{"./csgToGeometries":34,"@jscad/csg":43,"@jscad/scad-api":130}],15:[function(require,module,exports){
+>>>>>>> Wei-shiang
 "use strict;"
 
 const scadApi = require('@jscad/scad-api')
@@ -4021,11 +4068,16 @@ Desk.prototype = {
 
 }
 
+<<<<<<< HEAD
 module.exports = Desk
 },{"./CreateSupport":17,"./CreateWheel":19,"./chairCreateBoard":30}],21:[function(require,module,exports){
 =======
 },{"./csgToGeometries":33,"@jscad/csg":42,"@jscad/scad-api":129}],16:[function(require,module,exports){
 >>>>>>> master
+=======
+module.exports = CreateSpiceRack
+},{"./csgToGeometries":34,"@jscad/csg":43,"@jscad/scad-api":130}],16:[function(require,module,exports){
+>>>>>>> Wei-shiang
 "use strict;"
 
 const dresserCutSpace = require('./dresserCutSpace')
@@ -5096,10 +5148,14 @@ Dresser_Add.prototype = {
 
 module.exports = Dresser_Add
 <<<<<<< HEAD
+<<<<<<< HEAD
 },{"./CreateBlum":8,"./CreateChain":9,"./CreateDoor":10,"./CreateDrawer":12,"./CreateDresserLeg":13,"./CreateHinge":14,"./CreateRod":15,"./CreateSpiceRack":16,"./chairCreateBoard":30,"./dresserCutSpace":35}],22:[function(require,module,exports){
 =======
 },{"./CreateBlum":8,"./CreateChain":9,"./CreateDoor":10,"./CreateDrawer":11,"./CreateDresserLeg":12,"./CreateHinge":13,"./CreateRod":14,"./CreateSpiceRack":15,"./chairCreateBoard":29,"./dresserCutSpace":34}],17:[function(require,module,exports){
 >>>>>>> master
+=======
+},{"./CreateBlum":8,"./CreateChain":9,"./CreateDoor":10,"./CreateDrawer":11,"./CreateDresserLeg":12,"./CreateHinge":13,"./CreateRod":14,"./CreateSpiceRack":15,"./chairCreateBoard":30,"./dresserCutSpace":35}],17:[function(require,module,exports){
+>>>>>>> Wei-shiang
 "use strict;"
 
 function MarkBetweenSize( main , TargetObj1 , TargetObj2 ){
@@ -5853,64 +5909,72 @@ module.exports = MarkSize;
 
 },{}],19:[function(require,module,exports){
 "use strict;"
+const Procedure_button = require('./Procedure_button');
 
 function Model_Align(main){
 
 	this.main = main;
     this.furnitures = main.furnitures;
     this.Align_mode = false; 
+    var scope = this;
+    $( ".item.ui.image.label.align1" ).click(function() {
+		if(scope.main.onCtrl == true && scope.main.DistanceObj.length==2){
+			scope.AlignFurniture('x');
+		}
+		if(scope.main.onCtrlE == true){
+			scope.AlignComponent('x');
+		}
+    });
+    $( ".item.ui.image.label.align2" ).click(function() {
+    	if(scope.main.onCtrl == true && scope.main.DistanceObj.length==2){
+			scope.AlignFurniture('y');
+		}
+		if(scope.main.onCtrlE == true){
+			scope.AlignComponent('y');
+		}
+    });
+    $( ".item.ui.image.label.align3" ).click(function() {
+    	if(scope.main.onCtrl == true && scope.main.DistanceObj.length==2){
+			scope.AlignFurniture('z');
+		}
+		if(scope.main.onCtrlE == true){
+			scope.AlignComponent('z');
+		}
+    });
 
 }
 
 Model_Align.prototype = {
 
 	execute: function( name ){
-		var scope = this;
 
-		$( ".item.ui.image.label.align1" ).click(function() {
-			if(scope.main.onCtrl == true && scope.main.DistanceObj.length==2){
-				scope.AlignFurniture('x');
-			}
-			if(scope.main.onCtrlE == true){
-				scope.AlignComponent('x');
-			}
-			
-        });
-        $( ".item.ui.image.label.align2" ).click(function() {
-        	if(scope.main.onCtrl == true && scope.main.DistanceObj.length==2){
-				scope.AlignFurniture('y');
-			}
-			if(scope.main.onCtrlE == true){
-				scope.AlignComponent('y');
-			}
-			
-        });
-        $( ".item.ui.image.label.align3" ).click(function() {
-        	if(scope.main.onCtrl == true && scope.main.DistanceObj.length==2){
-				scope.AlignFurniture('z');
-			}
-			if(scope.main.onCtrlE == true){
-				scope.AlignComponent('z');
-			}
-			
-        });
-
-
-		if(this.Align_mode == false){
+		if(this.Align_mode == false && name=='align'){
         	$('#parameter_control_tool_align').show();
             this.Align_mode = true;
+            this.main.processor.executeDesign("MODEL_PAINTING", "align");
+        	this.main.processor.executeDesign("MODEL_WRAP", "align");
+        	this.main.processor.executeDesign("MODEL_ROTATION", "align");
+        	
+        	//creat procedure button
+        	if(this.main.stepOperationName != name){
+        		this.DeleteButton();
+	        	Procedure_button( this.main, this.main.stepOperationName );
+	        	//record the operation name
+	        	this.main.stepOperationName = name;
+        	}
+	        	
         }
-        else if(this.Align_mode == true){
+        else if(this.Align_mode == true || name!= 'align'){
         	$('#parameter_control_tool_align').hide();
             this.Align_mode = false;
         }
-        $('#parameter_control_tool_painting').hide();
-        $('#parameter_control_tool_wrap').hide();
-        $('#parameter_control_tool_rotation').hide();
+        
 	},
 
 	AlignFurniture: function( mode ){
-
+		
+		this.DeleteButton();
+		
 		var group = new THREE.Group();
 		var TotalSize = new THREE.Vector3();
 
@@ -5967,6 +6031,8 @@ Model_Align.prototype = {
 	},
 
 	AlignComponent: function( mode ){
+		
+		this.DeleteButton();
 
 		var group = new THREE.Group();
 		var TotalSize = new THREE.Vector3();
@@ -6057,104 +6123,128 @@ Model_Align.prototype = {
 		return center;
     },
 
+    DeleteButton: function(){
+    	//console.log(this.main.stepNumber);
+		//console.log(this.main.stepObject.length);
+		this.main.lastStep = true;
+		if (this.main.stepNumber < this.main.stepObject.length){
+			var stepLength = this.main.stepObject.length;
 
+			for(var i=parseInt(this.main.stepNumber); i<stepLength; i++){
+				var btn = document.getElementById(
+					"ui circular icon button procedure "+i.toString());
+				btn.parentNode.removeChild(btn);
+			}
+			this.main.stepObject.length = parseInt(this.main.stepNumber);
+		}
+
+    }
 
 
 }
 
 module.exports = Model_Align
-},{}],20:[function(require,module,exports){
+},{"./Procedure_button":23}],20:[function(require,module,exports){
 "use strict;"
+const Procedure_button = require('./Procedure_button');
 
 
 function Model_Painting( main ){
 
     this.main = main;
     this.furnitures = main.furnitures;
-
     this.paint_mode = false;
+    var scope = this;
+    var manager = new THREE.LoadingManager();
+    var textureLoader = new THREE.TextureLoader( manager );
+    $( ".item.ui.image.label.paint1" ).click(function() {
+        var texture = textureLoader.load( '../images/material/material1.jpg' );
+        texture.repeat.set(0.1, 0.1);
+        texture.wrapS = texture.wrapT = THREE.MirroredRepeatWrapping;
+        var newmaterial = new THREE.MeshBasicMaterial( {map: texture} );
+        scope.ChangeTexture( newmaterial );
+        
+    });
+    $( ".item.ui.image.label.paint2" ).click(function() {
+        var texture = textureLoader.load( '../images/material/material2.jpg' );
+        texture.repeat.set(0.1, 0.1);
+        texture.wrapS = texture.wrapT = THREE.MirroredRepeatWrapping;
+        var newmaterial = new THREE.MeshBasicMaterial( {map: texture} );
+        scope.ChangeTexture( newmaterial );
+        
+    });
+    $( ".item.ui.image.label.paint3" ).click(function() {
+        var texture = textureLoader.load( '../images/material/material3.jpg' );
+        texture.repeat.set(0.1, 0.1);
+        texture.wrapS = texture.wrapT = THREE.MirroredRepeatWrapping;
+        var newmaterial = new THREE.MeshBasicMaterial( {map: texture} );
+        scope.ChangeTexture( newmaterial );
+        
+    });
+    $( ".item.ui.image.label.paint4" ).click(function() {
+        var texture = textureLoader.load( '../images/material/material4.jpg' );
+        texture.repeat.set(0.1, 0.1);
+        texture.wrapS = texture.wrapT = THREE.MirroredRepeatWrapping;
+        var newmaterial = new THREE.MeshBasicMaterial( {map: texture} );
+        scope.ChangeTexture( newmaterial );
+        
+    });
+    $( ".item.ui.image.label.paint5" ).click(function() {
+        var texture = textureLoader.load( '../images/material/material5.jpg' );
+        texture.repeat.set(0.1, 0.1);
+        texture.wrapS = texture.wrapT = THREE.MirroredRepeatWrapping;
+        var newmaterial = new THREE.MeshBasicMaterial( {map: texture} );
+        scope.ChangeTexture( newmaterial );
+        
+    });
+    $( ".item.ui.image.label.paint7" ).click(function() {
+        var texture = textureLoader.load( '../images/material/material7.jpg' );
+        texture.repeat.set(0.1, 0.1);
+        texture.wrapS = texture.wrapT = THREE.MirroredRepeatWrapping;
+        var newmaterial = new THREE.MeshBasicMaterial( {map: texture} );
+        scope.ChangeTexture( newmaterial );
+        
+    });
+    $( ".item.ui.image.label.paint9" ).click(function() {
+        var texture = textureLoader.load( '../images/material/material9.jpg' );
+        texture.repeat.set(0.1, 0.1);
+        texture.wrapS = texture.wrapT = THREE.MirroredRepeatWrapping;
+        var newmaterial = new THREE.MeshBasicMaterial( {map: texture} );
+        scope.ChangeTexture( newmaterial );
+        
+    });
 }
 
 Model_Painting.prototype = {
 
     execute: function( name ){
-        
-        var main = this;
-        var manager = new THREE.LoadingManager();
-        var textureLoader = new THREE.TextureLoader( manager );
 
-        $( ".item.ui.image.label.paint1" ).click(function() {
-            var texture = textureLoader.load( '../images/material/material1.jpg' );
-            texture.repeat.set(0.1, 0.1);
-            texture.wrapS = texture.wrapT = THREE.MirroredRepeatWrapping;
-            var newmaterial = new THREE.MeshBasicMaterial( {map: texture} );
-            main.ChangeTexture( newmaterial );
-            
-        });
-        $( ".item.ui.image.label.paint2" ).click(function() {
-            var texture = textureLoader.load( '../images/material/material2.jpg' );
-            texture.repeat.set(0.1, 0.1);
-            texture.wrapS = texture.wrapT = THREE.MirroredRepeatWrapping;
-            var newmaterial = new THREE.MeshBasicMaterial( {map: texture} );
-            main.ChangeTexture( newmaterial );
-            
-        });
-        $( ".item.ui.image.label.paint3" ).click(function() {
-            var texture = textureLoader.load( '../images/material/material3.jpg' );
-            texture.repeat.set(0.1, 0.1);
-            texture.wrapS = texture.wrapT = THREE.MirroredRepeatWrapping;
-            var newmaterial = new THREE.MeshBasicMaterial( {map: texture} );
-            main.ChangeTexture( newmaterial );
-            
-        });
-        $( ".item.ui.image.label.paint4" ).click(function() {
-            var texture = textureLoader.load( '../images/material/material4.jpg' );
-            texture.repeat.set(0.1, 0.1);
-            texture.wrapS = texture.wrapT = THREE.MirroredRepeatWrapping;
-            var newmaterial = new THREE.MeshBasicMaterial( {map: texture} );
-            main.ChangeTexture( newmaterial );
-            
-        });
-        $( ".item.ui.image.label.paint5" ).click(function() {
-            var texture = textureLoader.load( '../images/material/material5.jpg' );
-            texture.repeat.set(0.1, 0.1);
-            texture.wrapS = texture.wrapT = THREE.MirroredRepeatWrapping;
-            var newmaterial = new THREE.MeshBasicMaterial( {map: texture} );
-            main.ChangeTexture( newmaterial );
-            
-        });
-        $( ".item.ui.image.label.paint7" ).click(function() {
-            var texture = textureLoader.load( '../images/material/material7.jpg' );
-            texture.repeat.set(0.1, 0.1);
-            texture.wrapS = texture.wrapT = THREE.MirroredRepeatWrapping;
-            var newmaterial = new THREE.MeshBasicMaterial( {map: texture} );
-            main.ChangeTexture( newmaterial );
-            
-        });
-        $( ".item.ui.image.label.paint9" ).click(function() {
-            var texture = textureLoader.load( '../images/material/material9.jpg' );
-            texture.repeat.set(0.1, 0.1);
-            texture.wrapS = texture.wrapT = THREE.MirroredRepeatWrapping;
-            var newmaterial = new THREE.MeshBasicMaterial( {map: texture} );
-            main.ChangeTexture( newmaterial );
-            
-        });
-
-        if(this.paint_mode == false){
+        if(this.paint_mode == false && name=='painting'){
             $('#parameter_control_tool_painting').show();
             this.paint_mode = true;
+            this.main.processor.executeDesign("MODEL_ALIGN", "painting");
+            this.main.processor.executeDesign("MODEL_WRAP", "painting");
+            this.main.processor.executeDesign("MODEL_ROTATION", "painting");
+            
+            //creat procedure button
+            if(this.main.stepOperationName != name){
+                this.DeleteButton();
+                Procedure_button( this.main, this.main.stepOperationName );
+                //record the operation name
+                this.main.stepOperationName = name;
+            }
         }
-        else if(this.paint_mode == true){
+        else if(this.paint_mode == true || name!= 'painting'){
             $('#parameter_control_tool_painting').hide();
             this.paint_mode = false;
         }
-        $('#parameter_control_tool_wrap').hide();
-        $('#parameter_control_tool_rotation').hide();
-        $('#parameter_control_tool_align').hide();
+        
 
     },
 
     ChangeTexture( newmaterial ){
+        
+        this.DeleteButton();
 
         for(var i=0 ; i<this.main.GetSizeObj.length ; i++ ){
             
@@ -6167,6 +6257,7 @@ Model_Painting.prototype = {
                 if( ChangeTextureObj[j].geometry.isBufferGeometry ){
                     ChangeTextureObj[j].geometry = new THREE.Geometry().fromBufferGeometry( ChangeTextureObj[j].geometry );
                     assignUVs( ChangeTextureObj[j].geometry );
+                    ChangeTextureObj[j].geometry= new THREE.BufferGeometry().fromGeometry( ChangeTextureObj[j].geometry );
                 }
                 
                 ChangeTextureObj[j].material = newmaterial;
@@ -6187,6 +6278,22 @@ Model_Painting.prototype = {
             array.push(obj);    
         }
 
+    },
+
+    DeleteButton: function(){
+        //console.log(this.main.stepNumber);
+        //console.log(this.main.stepObject.length);
+        this.main.lastStep = true;
+        if (this.main.stepNumber < this.main.stepObject.length){
+            var stepLength = this.main.stepObject.length;
+
+            for(var i=parseInt(this.main.stepNumber); i<stepLength; i++){
+                var btn = document.getElementById(
+                    "ui circular icon button procedure "+i.toString());
+                btn.parentNode.removeChild(btn);
+            }
+            this.main.stepObject.length = parseInt(this.main.stepNumber);
+        }
     }
 
 }
@@ -6218,15 +6325,53 @@ function assignUVs(geometry) {
 }
 
 module.exports = Model_Painting
-},{}],21:[function(require,module,exports){
+},{"./Procedure_button":23}],21:[function(require,module,exports){
 "use strict;"
+const Procedure_button = require('./Procedure_button');
 
 function Model_Rotation(main){
 
 	this.main = main;
     this.furnitures = main.furnitures;
     this.Rotation_mode = false; 
+	var scope = this;
 
+    $( ".item.ui.image.label.rota1" ).click(function() {	
+		for(var i=0 ; i<scope.main.GetSizeObj.length ; i++ ){
+            var model = scope.main.GetSizeObj[i];
+			scope.objectRotationByAxis( model, 'x' , 90 );
+        }
+    });
+    $( ".item.ui.image.label.rota2" ).click(function() {
+		for(var i=0 ; i<scope.main.GetSizeObj.length ; i++ ){
+            var model = scope.main.GetSizeObj[i];
+			scope.objectRotationByAxis( model, 'x' , -90 );
+        }
+    });
+    $( ".item.ui.image.label.rota3" ).click(function() {
+		for(var i=0 ; i<scope.main.GetSizeObj.length ; i++ ){
+            var model = scope.main.GetSizeObj[i];
+			scope.objectRotationByAxis( model, 'z' , 90 );
+        }
+    });
+    $( ".item.ui.image.label.rota4" ).click(function() {
+		for(var i=0 ; i<scope.main.GetSizeObj.length ; i++ ){
+            var model = scope.main.GetSizeObj[i];
+			scope.objectRotationByAxis( model, 'z' , -90 );
+        }
+    });
+    $( ".item.ui.image.label.rota5" ).click(function() {
+		for(var i=0 ; i<scope.main.GetSizeObj.length ; i++ ){
+            var model = scope.main.GetSizeObj[i];
+			scope.objectRotationByAxis( model, 'y' , 90 );
+        }
+    });
+    $( ".item.ui.image.label.rota6" ).click(function() {
+		for(var i=0 ; i<scope.main.GetSizeObj.length ; i++ ){
+            var model = scope.main.GetSizeObj[i];
+			scope.objectRotationByAxis( model, 'y' , -90 );
+        }
+    });
 }
 
 Model_Rotation.prototype = {
@@ -6234,64 +6379,35 @@ Model_Rotation.prototype = {
 	execute: function( name ){
 		var scope = this;
 
-		$( ".item.ui.image.label.rota1" ).click(function() {
-			
-			for(var i=0 ; i<scope.main.GetSizeObj.length ; i++ ){
-	            var model = scope.main.GetSizeObj[i];
-				scope.objectRotationByAxis( model, 'x' , 90 );
-	        }
-        });
-        $( ".item.ui.image.label.rota2" ).click(function() {
-
-			for(var i=0 ; i<scope.main.GetSizeObj.length ; i++ ){
-	            var model = scope.main.GetSizeObj[i];
-				scope.objectRotationByAxis( model, 'x' , -90 );
-	        }
-        });
-        $( ".item.ui.image.label.rota3" ).click(function() {
-
-			for(var i=0 ; i<scope.main.GetSizeObj.length ; i++ ){
-	            var model = scope.main.GetSizeObj[i];
-				scope.objectRotationByAxis( model, 'z' , 90 );
-	        }
-        });
-        $( ".item.ui.image.label.rota4" ).click(function() {
-
-			for(var i=0 ; i<scope.main.GetSizeObj.length ; i++ ){
-	            var model = scope.main.GetSizeObj[i];
-				scope.objectRotationByAxis( model, 'z' , -90 );
-	        }
-        });
-        $( ".item.ui.image.label.rota5" ).click(function() {
-
-			for(var i=0 ; i<scope.main.GetSizeObj.length ; i++ ){
-	            var model = scope.main.GetSizeObj[i];
-				scope.objectRotationByAxis( model, 'y' , 90 );
-	        }
-        });
-        $( ".item.ui.image.label.rota6" ).click(function() {
-
-			for(var i=0 ; i<scope.main.GetSizeObj.length ; i++ ){
-	            var model = scope.main.GetSizeObj[i];
-				scope.objectRotationByAxis( model, 'y' , -90 );
-	        }
-        });
-
-
-		if(this.Rotation_mode == false){
+        //show my button, hide others button
+		if(this.Rotation_mode == false && name=='rotation'){
         	$('#parameter_control_tool_rotation').show();
             this.Rotation_mode = true;
-        }
-        else if(this.Rotation_mode == true){
+            this.main.processor.executeDesign("MODEL_ALIGN", "rotation");
+        	this.main.processor.executeDesign("MODEL_PAINTING", "rotation");
+        	this.main.processor.executeDesign("MODEL_WRAP", "rotation");
+        	
+        	//creat procedure button
+        	if(this.main.stepOperationName != name){
+        		this.DeleteButton();
+	        	Procedure_button( this.main, this.main.stepOperationName );
+	        	//record the operation name
+	        	this.main.stepOperationName = name;
+        	}
+        }//hide my button
+        else if(this.Rotation_mode == true || name!='rotation'){
         	$('#parameter_control_tool_rotation').hide();
             this.Rotation_mode = false;
         }
-        $('#parameter_control_tool_painting').hide();
-        $('#parameter_control_tool_wrap').hide();
-        $('#parameter_control_tool_align').hide();
+        
+
+
 	},
 
 	objectRotationByAxis: function(obj, axis, degree){
+		
+		this.DeleteButton();
+
 		var center = this.getCenterPosition(obj);
 		var size = this.getSize(obj);
 		//rotation
@@ -6346,6 +6462,22 @@ Model_Rotation.prototype = {
 
         //this includes width, height, depth
         return box_size;
+    },
+
+    DeleteButton: function(){
+    	//console.log(this.main.stepNumber);
+		//console.log(this.main.stepObject.length);
+		this.main.lastStep = true;
+		if (this.main.stepNumber < this.main.stepObject.length){
+			var stepLength = this.main.stepObject.length;
+
+			for(var i=parseInt(this.main.stepNumber); i<stepLength; i++){
+				var btn = document.getElementById(
+					"ui circular icon button procedure "+i.toString());
+				btn.parentNode.removeChild(btn);
+			}
+			this.main.stepObject.length = parseInt(this.main.stepNumber);
+		}
     }
 
 
@@ -6353,120 +6485,124 @@ Model_Rotation.prototype = {
 }
 
 module.exports = Model_Rotation
-},{}],22:[function(require,module,exports){
+},{"./Procedure_button":23}],22:[function(require,module,exports){
 "use strict;"
 const computeConvexHull = require('./computeConvexHull');
 const cadExtrudeShapeIntersection = require('./cadExtrudeShapeIntersection');
 const chairCutBack = require('./chairCutBack');
+const Procedure_button = require('./Procedure_button');
 
 function Model_wrap(main){
 
 	this.main = main;
     this.furnitures = main.furnitures;
     this.wrap_mode	= false; 
-
+    var scope = this;
+    var manager = new THREE.LoadingManager();
+    var textureLoader = new THREE.TextureLoader( manager );
+    
+    $( ".item.ui.image.label.wrap1" ).click(function() {
+        var texture = textureLoader.load( '../images/material/wrap/wrap1.jpg' );
+        texture.repeat.set(0.1, 0.1);
+        texture.wrapS = texture.wrapT = THREE.MirroredRepeatWrapping;
+        var newmaterial = new THREE.MeshBasicMaterial( {map: texture} );
+        for(var i=0 ; i<scope.main.GetSizeObj.length ; i++ ){
+            var model = scope.main.GetSizeObj[i];
+            scope.Wrap( model , texture );
+        }
+    });
+    $( ".item.ui.image.label.wrap2" ).click(function() {
+        var texture = textureLoader.load( '../images/material/wrap/wrap2.jpg' );
+        texture.repeat.set(0.1, 0.1);
+        texture.wrapS = texture.wrapT = THREE.MirroredRepeatWrapping;
+        var newmaterial = new THREE.MeshBasicMaterial( {map: texture} );
+        for(var i=0 ; i<scope.main.GetSizeObj.length ; i++ ){
+            var model = scope.main.GetSizeObj[i];
+            scope.Wrap( model , texture );
+        }
+    });
+    $( ".item.ui.image.label.wrap3" ).click(function() {
+        var texture = textureLoader.load( '../images/material/wrap/wrap3.jpg' );
+        texture.repeat.set(0.1, 0.1);
+        texture.wrapS = texture.wrapT = THREE.MirroredRepeatWrapping;
+        var newmaterial = new THREE.MeshBasicMaterial( {map: texture} );
+        for(var i=0 ; i<scope.main.GetSizeObj.length ; i++ ){
+            var model = scope.main.GetSizeObj[i];
+            scope.Wrap( model , texture );
+        }
+    });
+    $( ".item.ui.image.label.wrap4" ).click(function() {
+        var texture = textureLoader.load( '../images/material/wrap/wrap4.jpg' );
+        texture.repeat.set(0.1, 0.1);
+        texture.wrapS = texture.wrapT = THREE.MirroredRepeatWrapping;
+        var newmaterial = new THREE.MeshBasicMaterial( {map: texture} );
+        for(var i=0 ; i<scope.main.GetSizeObj.length ; i++ ){
+            var model = scope.main.GetSizeObj[i];
+            scope.Wrap( model , texture );
+        }
+    });
+    $( ".item.ui.image.label.wrap5" ).click(function() {
+        var texture = textureLoader.load( '../images/material/wrap/wrap5.jpg' );
+        texture.repeat.set(0.1, 0.1);
+        texture.wrapS = texture.wrapT = THREE.MirroredRepeatWrapping;
+        var newmaterial = new THREE.MeshBasicMaterial( {map: texture} );
+        for(var i=0 ; i<scope.main.GetSizeObj.length ; i++ ){
+            var model = scope.main.GetSizeObj[i];
+            scope.Wrap( model , texture );
+        }
+    });
+    $( ".item.ui.image.label.wrap6" ).click(function() {
+        var texture = textureLoader.load( '../images/material/wrap/wrap6.jpg' );
+        texture.repeat.set(0.1, 0.1);
+        texture.wrapS = texture.wrapT = THREE.MirroredRepeatWrapping;
+        var newmaterial = new THREE.MeshBasicMaterial( {map: texture} );
+        for(var i=0 ; i<scope.main.GetSizeObj.length ; i++ ){
+            var model = scope.main.GetSizeObj[i];
+            scope.Wrap( model , texture );
+        }
+    });
+    $( ".item.ui.image.label.wrap7" ).click(function() {
+        var texture = textureLoader.load( '../images/material/wrap/wrap7.jpg' );
+        texture.repeat.set(0.1, 0.1);
+        texture.wrapS = texture.wrapT = THREE.MirroredRepeatWrapping;
+        var newmaterial = new THREE.MeshBasicMaterial( {map: texture} );
+        for(var i=0 ; i<scope.main.GetSizeObj.length ; i++ ){
+            var model = scope.main.GetSizeObj[i];
+            scope.Wrap( model , texture );
+        }
+    });
 }
 
 Model_wrap.prototype = {
 
 	execute: function( name ){
 
-        var main = this;
-        var manager = new THREE.LoadingManager();
-        var textureLoader = new THREE.TextureLoader( manager );
-
-        $( ".item.ui.image.label.wrap1" ).click(function() {
-            var texture = textureLoader.load( '../images/material/wrap/wrap1.jpg' );
-            texture.repeat.set(0.1, 0.1);
-            texture.wrapS = texture.wrapT = THREE.MirroredRepeatWrapping;
-            var newmaterial = new THREE.MeshBasicMaterial( {map: texture} );
-            for(var i=0 ; i<main.main.GetSizeObj.length ; i++ ){
-	            var model = main.main.GetSizeObj[i];
-	            main.Wrap( model , texture );
-	        }
-            
-        });
-        $( ".item.ui.image.label.wrap2" ).click(function() {
-            var texture = textureLoader.load( '../images/material/wrap/wrap2.jpg' );
-            texture.repeat.set(0.1, 0.1);
-            texture.wrapS = texture.wrapT = THREE.MirroredRepeatWrapping;
-            var newmaterial = new THREE.MeshBasicMaterial( {map: texture} );
-            for(var i=0 ; i<main.main.GetSizeObj.length ; i++ ){
-	            var model = main.main.GetSizeObj[i];
-	            main.Wrap( model , texture );
-	        }
-            
-        });
-        $( ".item.ui.image.label.wrap3" ).click(function() {
-            var texture = textureLoader.load( '../images/material/wrap/wrap3.jpg' );
-            texture.repeat.set(0.1, 0.1);
-            texture.wrapS = texture.wrapT = THREE.MirroredRepeatWrapping;
-            var newmaterial = new THREE.MeshBasicMaterial( {map: texture} );
-            for(var i=0 ; i<main.main.GetSizeObj.length ; i++ ){
-	            var model = main.main.GetSizeObj[i];
-	            main.Wrap( model , texture );
-	        }
-            
-        });
-        $( ".item.ui.image.label.wrap4" ).click(function() {
-            var texture = textureLoader.load( '../images/material/wrap/wrap4.jpg' );
-            texture.repeat.set(0.1, 0.1);
-            texture.wrapS = texture.wrapT = THREE.MirroredRepeatWrapping;
-            var newmaterial = new THREE.MeshBasicMaterial( {map: texture} );
-            for(var i=0 ; i<main.main.GetSizeObj.length ; i++ ){
-	            var model = main.main.GetSizeObj[i];
-	            main.Wrap( model , texture );
-	        }
-            
-        });
-        $( ".item.ui.image.label.wrap5" ).click(function() {
-            var texture = textureLoader.load( '../images/material/wrap/wrap5.jpg' );
-            texture.repeat.set(0.1, 0.1);
-            texture.wrapS = texture.wrapT = THREE.MirroredRepeatWrapping;
-            var newmaterial = new THREE.MeshBasicMaterial( {map: texture} );
-            for(var i=0 ; i<main.main.GetSizeObj.length ; i++ ){
-	            var model = main.main.GetSizeObj[i];
-	            main.Wrap( model , texture );
-	        }
-            
-        });
-        $( ".item.ui.image.label.wrap6" ).click(function() {
-            var texture = textureLoader.load( '../images/material/wrap/wrap6.jpg' );
-            texture.repeat.set(0.1, 0.1);
-            texture.wrapS = texture.wrapT = THREE.MirroredRepeatWrapping;
-            var newmaterial = new THREE.MeshBasicMaterial( {map: texture} );
-            for(var i=0 ; i<main.main.GetSizeObj.length ; i++ ){
-	            var model = main.main.GetSizeObj[i];
-	            main.Wrap( model , texture );
-	        }
-            
-        });
-        $( ".item.ui.image.label.wrap7" ).click(function() {
-            var texture = textureLoader.load( '../images/material/wrap/wrap7.jpg' );
-            texture.repeat.set(0.1, 0.1);
-            texture.wrapS = texture.wrapT = THREE.MirroredRepeatWrapping;
-            var newmaterial = new THREE.MeshBasicMaterial( {map: texture} );
-            for(var i=0 ; i<main.main.GetSizeObj.length ; i++ ){
-	            var model = main.main.GetSizeObj[i];
-	            main.Wrap( model , texture );
-	        }
-            
-        });
-
-        if(this.wrap_mode == false){
+        if(this.wrap_mode == false && name=='wrap'){
         	$('#parameter_control_tool_wrap').show();
             this.wrap_mode = true;
+            this.main.processor.executeDesign("MODEL_ALIGN", "wrap");
+        	this.main.processor.executeDesign("MODEL_PAINTING", "wrap");
+        	this.main.processor.executeDesign("MODEL_ROTATION", "wrap");
+        	
+        	//creat procedure button
+        	if(this.main.stepOperationName != name){
+        		this.DeleteButton();
+	        	Procedure_button( this.main, this.main.stepOperationName );
+	        	//record the operation name
+	        	this.main.stepOperationName = name;
+        	}
         }
-        else if(this.wrap_mode == true){
+        else if(this.wrap_mode == true || name!='wrap'){
         	$('#parameter_control_tool_wrap').hide();
             this.wrap_mode = false;
         }
-        $('#parameter_control_tool_painting').hide();
-        $('#parameter_control_tool_rotation').hide();
-        $('#parameter_control_tool_align').hide();
+        
 
 	},
 	Wrap: function( model , texture ){
+		//console.log(model.geometry);
+		
+		this.DeleteButton();
 
 		var left_to_right = this.MakeExtrudeArray1(model, "yz" , "xy" );
 		var back_to_front = this.MakeExtrudeArray2(model, "xy" , "yz" );
@@ -6480,8 +6616,8 @@ Model_wrap.prototype = {
         wireframe: false} );
 		
 		var backRest = new THREE.Mesh( geometry, material );
-		
 		this.main.WrapObject.push(backRest);
+		this.main.Sceneobjects.push(backRest);
 		this.main.scene.add( backRest );
 		
 	},
@@ -6733,6 +6869,22 @@ Model_wrap.prototype = {
 
 
 		return [back_3d , back_extrude_3d] ;
+    },
+
+    DeleteButton: function(){
+    	//console.log(this.main.stepNumber);
+		//console.log(this.main.stepObject.length);
+		this.main.lastStep = true;
+		if (this.main.stepNumber < this.main.stepObject.length){
+			var stepLength = this.main.stepObject.length;
+
+			for(var i=parseInt(this.main.stepNumber); i<stepLength; i++){
+				var btn = document.getElementById(
+					"ui circular icon button procedure "+i.toString());
+				btn.parentNode.removeChild(btn);
+			}
+			this.main.stepObject.length = parseInt(this.main.stepNumber);
+		}
     }
 
 
@@ -6761,8 +6913,202 @@ function loadLine( main , point1 , point2){
 },{}],24:[function(require,module,exports){
 =======
 module.exports = Model_wrap
+<<<<<<< HEAD
 },{"./cadExtrudeShapeIntersection":27,"./chairCutBack":30,"./computeConvexHull":31}],23:[function(require,module,exports){
 >>>>>>> master
+=======
+},{"./Procedure_button":23,"./cadExtrudeShapeIntersection":28,"./chairCutBack":31,"./computeConvexHull":32}],23:[function(require,module,exports){
+"use strict;"
+
+//this function for adding function 
+function Procedure_button(main, str){
+
+	//creat button, set class
+	var btn = document.createElement("button");
+	btn.classList.add("ui", "circular","icon","button","procedure",
+					  main.stepObject.length.toString());
+	btn.setAttribute ('id', "ui circular icon button procedure " + 
+					  main.stepObject.length.toString())
+	//set button string
+	var t = document.createTextNode(str);
+	btn.appendChild(t);
+	
+    //add button to Web
+    document.getElementById("Procedure_List").appendChild(btn);
+
+    //record scene object
+    RecordObjects(main);
+    main.stepNumber += 1;
+
+    //set the click action
+    btn.addEventListener("click", function(){
+
+    	//if is the last step, create the step button
+	    if(main.lastStep == true){
+	    	main.lastStep = false;
+	    	Procedure_button(main, main.stepOperationName);
+	    }
+
+	    //console.log(btn.classList[5]);
+	    buttonClicked(main, btn.classList[5]);
+	    main.stepNumber = btn.classList[5];
+	    main.stepOperationName = btn.firstChild.nodeValue;
+
+	    //Initialise the model button
+	    main.processor.executeDesign("MODEL_ALIGN", "initial");
+	    main.processor.executeDesign("MODEL_PAINTING", "initial");
+        main.processor.executeDesign("MODEL_WRAP", "initial");
+        main.processor.executeDesign("MODEL_ROTATION", "initial");
+	    //show the control buttons
+	    if(btn.firstChild.nodeValue != 'Initial')
+	    	$('#parameter_control_tool_' + btn.firstChild.nodeValue).show();	    
+
+	});
+	
+}
+
+function RecordObjects(main){
+	var RecordArr = [];
+
+	for(var i = main.scene.children.length - 1; i > -1; i -- ){ 
+		var object =  main.scene.children[i];	
+		if(object.isObject3D){
+			if ( object instanceof THREE.Camera ) {
+			} else if ( object instanceof THREE.PointLight ) {
+			} else if ( object instanceof THREE.DirectionalLight ) {
+			} else if ( object instanceof THREE.SpotLight ) {					
+			} else if ( object instanceof THREE.HemisphereLight ) {
+			} else if ( object instanceof THREE.AmbientLight ) {
+			} else if ( object instanceof THREE.GridHelper ) {
+			} else if ( object instanceof THREE.TransformControls ){
+			} else if ( object instanceof AddAxis){
+			} else if ( object instanceof THREE.BoxHelper){
+			} else if ( object == main.house) {
+			} else if ( object instanceof THREE.DirectionalLightHelper){
+			} else if ( object instanceof THREE.HemisphereLightHelper){
+			} else{
+				//RecordArr.push(object.clone());
+				var isFurniture = false;
+				for(var j = 0; j < main.furnitures.length; j++){
+					if(main.furnitures[j].getFurniture() == object){
+						isFurniture = true;
+						SaveFurniture(main.furnitures[j], RecordArr);
+						break;
+					}
+				}
+				if(isFurniture == false){
+					RecordArr.push(object.clone());
+				}
+
+			}
+		}
+	}
+	//record the object
+	main.stepObject.push( RecordArr );
+}
+
+function buttonClicked(main, btn_num){
+	clearScene(main);
+	var sceneObjs = main.stepObject[btn_num];
+	main.furnitures = [];
+	
+	//clear cards
+	$('#cards').empty();
+	
+	for(var i=0; i < sceneObjs.length; i++){
+		//try to add furniture to scene
+		try {
+		    var furniture = sceneObjs[i];
+			var new_furnitureObj = new THREE.Object3D();
+			new_furnitureObj.copy(furniture.getFurniture(), true);
+			var new_furniture = new Furniture(new_furnitureObj);
+
+			new_furniture.setCategory("straight_chair");
+			new_furniture.setIndex(furniture.index);
+			main.furnitures.push(new_furniture);
+
+			main.scene.add(new_furniture.getFurniture());
+			
+			//update the menu interface
+			new_furniture.addCard();
+			//copy the state
+			new_furniture.updatePosition(furniture.position);
+			new_furniture.updateDirection();
+			new_furniture.updateQuaternion(furniture.quaternion);
+			//copy the components and labeled state
+			new_furniture.updateListedComponents(furniture.listedComponents);
+			new_furniture.updateLabeledComponents(furniture.labeledComponents);
+			//copy the already labeled normal axis
+			//Object.assign(new_furniture.normalAxises, furniture.normalAxises);
+			for (let key in furniture.normalAxises) {
+				new_furniture.normalAxises[key] = new THREE.Vector3();
+				new_furniture.normalAxises[key].copy(furniture.normalAxises[key]);
+			}
+
+		}
+		catch(err) {//if it is not furniture, add to scene directly
+		    main.scene.add(sceneObjs[i]);
+		}
+		
+	}
+}
+
+function clearScene(main){
+	for(var i = main.scene.children.length - 1; i > -1; i -- ){ 
+		var object =  main.scene.children[i];	
+		if(object.isObject3D){
+			if ( object instanceof THREE.Camera ) {
+			} else if ( object instanceof THREE.PointLight ) {
+			} else if ( object instanceof THREE.DirectionalLight ) {
+			} else if ( object instanceof THREE.SpotLight ) {					
+			} else if ( object instanceof THREE.HemisphereLight ) {
+			} else if ( object instanceof THREE.AmbientLight ) {
+			} else if ( object instanceof THREE.GridHelper ) {
+			} else if ( object instanceof THREE.TransformControls ){
+			} else if ( object instanceof AddAxis){
+			} else if ( object instanceof THREE.BoxHelper){
+			} else if ( object == main.house) {
+			} else if ( object instanceof THREE.DirectionalLightHelper){
+			} else if ( object instanceof THREE.HemisphereLightHelper){
+			} else{
+				main.removeFromScene(object);
+			}
+		}
+	}
+}
+
+function SaveFurniture( furniture , furnituresDataSet) {
+
+	//var furniture = this.furnitures[i];
+	var new_furnitureObj = new THREE.Object3D();
+	new_furnitureObj.copy(furniture.getFurniture(), true);
+	var new_furniture = new Furniture(new_furnitureObj);
+
+	new_furniture.setCategory("straight_chair");
+	new_furniture.setIndex(furniture.index);
+	furnituresDataSet.push(new_furniture);
+
+	//copy the state
+	new_furniture.updatePosition(furniture.position);
+	new_furniture.updateDirection();
+	new_furniture.updateQuaternion(furniture.quaternion);
+
+	//copy the components and labeled state
+	new_furniture.updateListedComponents(furniture.listedComponents);
+	new_furniture.updateLabeledComponents(furniture.labeledComponents);
+
+	//copy the already labeled normal axis
+	//Object.assign(new_furniture.normalAxises, furniture.normalAxises);
+	for (let key in furniture.normalAxises) {
+		new_furniture.normalAxises[key] = new THREE.Vector3();
+		new_furniture.normalAxises[key].copy(furniture.normalAxises[key]);
+	}
+
+}
+
+module.exports = Procedure_button
+},{}],24:[function(require,module,exports){
+>>>>>>> Wei-shiang
 "use strict;"
 //this is to handle the new design approaches
 //that without the need of cad operations
@@ -7972,11 +8318,15 @@ Table.prototype = {
 }
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 module.exports = Table
 },{"./CabinetMakeSeat":3,"./CreateDoorBoard":11,"./CreateDrawer":12,"./CreateSupport":17,"./CreateTableRod":18,"./CreateWheel":19,"./chairCreateBoard":30}],26:[function(require,module,exports){
 =======
 },{"./Cabinet_kallax":4,"./Chair_Add":5,"./Chair_Align":6,"./Chair_Rebuild":7,"./Dresser_Add":16,"./Model_Align":19,"./Model_Painting":20,"./Model_Rotation":21,"./Model_wrap":22}],24:[function(require,module,exports){
 >>>>>>> master
+=======
+},{"./Cabinet_kallax":4,"./Chair_Add":5,"./Chair_Align":6,"./Chair_Rebuild":7,"./Dresser_Add":16,"./Model_Align":19,"./Model_Painting":20,"./Model_Rotation":21,"./Model_wrap":22}],25:[function(require,module,exports){
+>>>>>>> Wei-shiang
 "use strict;"
 
 
@@ -8009,10 +8359,14 @@ function assignUVs (geometry) {
 
 module.exports = assignUVs
 <<<<<<< HEAD
+<<<<<<< HEAD
 },{}],27:[function(require,module,exports){
 =======
 },{}],25:[function(require,module,exports){
 >>>>>>> master
+=======
+},{}],26:[function(require,module,exports){
+>>>>>>> Wei-shiang
 "use strict;"
 
 const scadApi = require('@jscad/scad-api')
@@ -8059,10 +8413,14 @@ module.exports = cadCutByPlane
 
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 },{"./csgToGeometries":34,"./geometryToCsgs":37,"@jscad/csg":43,"@jscad/scad-api":130}],28:[function(require,module,exports){
 =======
 },{"./csgToGeometries":33,"./geometryToCsgs":36,"@jscad/csg":42,"@jscad/scad-api":129}],26:[function(require,module,exports){
 >>>>>>> master
+=======
+},{"./csgToGeometries":34,"./geometryToCsgs":37,"@jscad/csg":43,"@jscad/scad-api":130}],27:[function(require,module,exports){
+>>>>>>> Wei-shiang
 "use strict;"
 
 const scadApi = require('@jscad/scad-api');
@@ -8113,9 +8471,13 @@ module.exports = cadExtrudeShape
 
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 },{"./assignUVs":26,"./csgToGeometries":34,"@jscad/csg":43,"@jscad/scad-api":130}],29:[function(require,module,exports){
 =======
 },{"./assignUVs":24,"./csgToGeometries":33,"@jscad/csg":42,"@jscad/scad-api":129}],27:[function(require,module,exports){
+=======
+},{"./assignUVs":25,"./csgToGeometries":34,"@jscad/csg":43,"@jscad/scad-api":130}],28:[function(require,module,exports){
+>>>>>>> Wei-shiang
 "use strict;"
 
 const scadApi = require('@jscad/scad-api');
@@ -8192,8 +8554,12 @@ function SimplifyGeo( geometry ){
 module.exports = cadExtrudeShapeIntersection
 
 
+<<<<<<< HEAD
 },{"./assignUVs":24,"./csgToGeometries":33,"./geometryToCsgs":36,"@jscad/csg":42,"@jscad/scad-api":129}],28:[function(require,module,exports){
 >>>>>>> master
+=======
+},{"./assignUVs":25,"./csgToGeometries":34,"./geometryToCsgs":37,"@jscad/csg":43,"@jscad/scad-api":130}],29:[function(require,module,exports){
+>>>>>>> Wei-shiang
 "use strict;"
 
 const scadApi = require('@jscad/scad-api');
@@ -8298,10 +8664,14 @@ function cadMakeSeat (innerRace, outerRace, offsetY, textures) {
 
 module.exports = cadMakeSeat
 <<<<<<< HEAD
+<<<<<<< HEAD
 },{"./assignUVs":26,"./csgToGeometries":34,"@jscad/csg":43,"@jscad/scad-api":130}],30:[function(require,module,exports){
 =======
 },{"./assignUVs":24,"./csgToGeometries":33,"@jscad/csg":42,"@jscad/scad-api":129}],29:[function(require,module,exports){
 >>>>>>> master
+=======
+},{"./assignUVs":25,"./csgToGeometries":34,"@jscad/csg":43,"@jscad/scad-api":130}],30:[function(require,module,exports){
+>>>>>>> Wei-shiang
 "use strict;"
 
 const scadApi = require('@jscad/scad-api')
@@ -8323,10 +8693,14 @@ function chairCreateBoard(width, height, depth) {
 
 module.exports = chairCreateBoard
 <<<<<<< HEAD
+<<<<<<< HEAD
 },{"./csgToGeometries":34,"@jscad/csg":43,"@jscad/scad-api":130}],31:[function(require,module,exports){
 =======
 },{"./csgToGeometries":33,"@jscad/csg":42,"@jscad/scad-api":129}],30:[function(require,module,exports){
 >>>>>>> master
+=======
+},{"./csgToGeometries":34,"@jscad/csg":43,"@jscad/scad-api":130}],31:[function(require,module,exports){
+>>>>>>> Wei-shiang
 "use strict;"
 
 const scadApi = require('@jscad/scad-api')
@@ -8361,10 +8735,14 @@ function chairCutBack(back, offest) {
 
 module.exports = chairCutBack
 <<<<<<< HEAD
+<<<<<<< HEAD
 },{"./csgToGeometries":34,"./geometryToCsgs":37,"@jscad/csg":43,"@jscad/scad-api":130}],32:[function(require,module,exports){
 =======
 },{"./csgToGeometries":33,"./geometryToCsgs":36,"@jscad/csg":42,"@jscad/scad-api":129}],31:[function(require,module,exports){
 >>>>>>> master
+=======
+},{"./csgToGeometries":34,"./geometryToCsgs":37,"@jscad/csg":43,"@jscad/scad-api":130}],32:[function(require,module,exports){
+>>>>>>> Wei-shiang
 "use strict;"
 
 const hull = require('./hull')
@@ -8466,10 +8844,14 @@ function collectPointOnFace(component, face) {
 
 module.exports = computeConvexHull
 <<<<<<< HEAD
+<<<<<<< HEAD
 },{"./hull":39}],33:[function(require,module,exports){
 =======
 },{"./hull":38}],32:[function(require,module,exports){
 >>>>>>> master
+=======
+},{"./hull":39}],33:[function(require,module,exports){
+>>>>>>> Wei-shiang
 function _cross(o, a, b) {
     return (a[0] - o[0]) * (b[1] - o[1]) - (a[1] - o[1]) * (b[0] - o[0]);
 }
@@ -8512,10 +8894,14 @@ function convex(pointset) {
 module.exports = convex;
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 },{}],34:[function(require,module,exports){
 =======
 },{}],33:[function(require,module,exports){
 >>>>>>> master
+=======
+},{}],34:[function(require,module,exports){
+>>>>>>> Wei-shiang
 "use strict;"
 
 const { CSG, CAG, isCSG, isCAG } = require('@jscad/csg')
@@ -8699,10 +9085,14 @@ function csgToGeometries(initial_csg) {
 
 module.exports = csgToGeometries
 <<<<<<< HEAD
+<<<<<<< HEAD
 },{"@jscad/csg":43}],35:[function(require,module,exports){
 =======
 },{"@jscad/csg":42}],34:[function(require,module,exports){
 >>>>>>> master
+=======
+},{"@jscad/csg":43}],35:[function(require,module,exports){
+>>>>>>> Wei-shiang
 "use strict;"
 
 const scadApi = require('@jscad/scad-api')
@@ -8729,10 +9119,14 @@ function dresserCutSpace(dresser, position, size, scale) {
 
 module.exports = dresserCutSpace
 <<<<<<< HEAD
+<<<<<<< HEAD
 },{"./csgToGeometries":34,"./geometryToCsgs":37,"@jscad/csg":43,"@jscad/scad-api":130}],36:[function(require,module,exports){
 =======
 },{"./csgToGeometries":33,"./geometryToCsgs":36,"@jscad/csg":42,"@jscad/scad-api":129}],35:[function(require,module,exports){
 >>>>>>> master
+=======
+},{"./csgToGeometries":34,"./geometryToCsgs":37,"@jscad/csg":43,"@jscad/scad-api":130}],36:[function(require,module,exports){
+>>>>>>> Wei-shiang
 module.exports = {
 
     toXy: function(pointset, format) {
@@ -8759,10 +9153,14 @@ module.exports = {
 
 }
 <<<<<<< HEAD
+<<<<<<< HEAD
 },{}],37:[function(require,module,exports){
 =======
 },{}],36:[function(require,module,exports){
 >>>>>>> master
+=======
+},{}],37:[function(require,module,exports){
+>>>>>>> Wei-shiang
 "use strict;"
 
 const {log, status} = require('./log')
@@ -8844,10 +9242,14 @@ function unionCsgs(csgs) {
 
 module.exports = {geometryToCsgs, unionCsgs};
 <<<<<<< HEAD
+<<<<<<< HEAD
 },{"./log":41,"@jscad/csg":43,"@jscad/scad-api":130}],38:[function(require,module,exports){
 =======
 },{"./log":40,"@jscad/csg":42,"@jscad/scad-api":129}],37:[function(require,module,exports){
 >>>>>>> master
+=======
+},{"./log":41,"@jscad/csg":43,"@jscad/scad-api":130}],38:[function(require,module,exports){
+>>>>>>> Wei-shiang
 function Grid(points, cellSize) {
     this._cells = [];
     this._cellSize = cellSize;
@@ -8924,10 +9326,14 @@ function grid(points, cellSize) {
 
 module.exports = grid;
 <<<<<<< HEAD
+<<<<<<< HEAD
 },{}],39:[function(require,module,exports){
 =======
 },{}],38:[function(require,module,exports){
 >>>>>>> master
+=======
+},{}],39:[function(require,module,exports){
+>>>>>>> Wei-shiang
 /*
  (c) 2014-2016, Andrii Heonia
  Hull.js, a JavaScript library for concave hull generation by set of points.
@@ -9132,10 +9538,14 @@ var MAX_SEARCH_BBOX_SIZE_PERCENT = 0.6;
 
 module.exports = hull;
 <<<<<<< HEAD
+<<<<<<< HEAD
 },{"./convex.js":33,"./format.js":36,"./grid.js":38,"./intersect.js":40}],40:[function(require,module,exports){
 =======
 },{"./convex.js":32,"./format.js":35,"./grid.js":37,"./intersect.js":39}],39:[function(require,module,exports){
 >>>>>>> master
+=======
+},{"./convex.js":33,"./format.js":36,"./grid.js":38,"./intersect.js":40}],40:[function(require,module,exports){
+>>>>>>> Wei-shiang
 function ccw(x1, y1, x2, y2, x3, y3) {           
     var cw = ((y3 - y1) * (x2 - x1)) - ((y2 - y1) * (x3 - x1));
     return cw > 0 ? true : cw < 0 ? false : true; // colinear
@@ -9152,10 +9562,14 @@ function intersect(seg1, seg2) {
 
 module.exports = intersect;
 <<<<<<< HEAD
+<<<<<<< HEAD
 },{}],41:[function(require,module,exports){
 =======
 },{}],40:[function(require,module,exports){
 >>>>>>> master
+=======
+},{}],41:[function(require,module,exports){
+>>>>>>> Wei-shiang
 function log (txt) {
   var timeInMs = Date.now()
   var prevtime = undefined//OpenJsCad.log.prevLogTime
@@ -9184,10 +9598,14 @@ module.exports = {
 }
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 },{}],42:[function(require,module,exports){
 =======
 },{}],41:[function(require,module,exports){
 >>>>>>> master
+=======
+},{}],42:[function(require,module,exports){
+>>>>>>> Wei-shiang
 "use strict;"
 
 //const {log, status} = require('./log')
@@ -9282,6 +9700,18 @@ function Main()
 
 	//object for wrap 
 	this.WrapObject = [];
+
+
+	//Procedure objects
+	//for record objects in every step
+	this.stepObject = [];
+	//for record operation name in every step
+	this.stepOperationName = 'Initial';
+	//for record step is the last or not
+	this.lastStep = true;
+	//for record operation step times
+	this.stepNumber = 0;
+
 
 	//this is to store the furnitures before any chance
 	//simply copy of the this.furnitures
@@ -10360,9 +10790,9 @@ Main.prototype = {
 						this.select(this.furniture.getFurniture());
 
 						objselect = false;
-						//if not select this furniture before
-						if (this.GetSizeObj.indexOf(this.furniture.getFurniture())<0)
-							this.GetSizeObj.push( this.furniture.getFurniture() );
+						//if haven't select this furniture before
+						this.GetSizeObj = [];
+						this.GetSizeObj.push( this.furniture.getFurniture() );
 						$('.ui.blue.submit.button.getsize').show();
 						
 
@@ -10389,6 +10819,7 @@ Main.prototype = {
 							
 							this.furniture = this.Sceneobjects[i];
 							this.select(this.Sceneobjects[i]);
+							this.GetSizeObj = [];
 							this.GetSizeObj.push( this.Sceneobjects[i] );
 							$('.ui.blue.submit.button.getsize').show();
 							SomethingSelected = true;
@@ -10606,6 +11037,32 @@ Main.prototype = {
 
 			this.onCtrl = true;
 			console.log('Ctrl down');
+		
+		}else if(keyCode == 46){
+			
+			//delete furniture
+			if(this.furniture != null ){
+				try{//delete furniture
+					this.removeFromScene(this.furniture.getFurniture());
+					this.furnitures.splice( this.furnitures.indexOf(this.furniture),1);
+					this.selectionBox.visible = false;
+					this.transformControls.detach();
+					
+				}
+				catch(err){//delete object
+				    this.removeFromScene(this.furniture);
+				    this.Sceneobjects.splice( this.Sceneobjects.indexOf(this.furniture),1);
+					this.selectionBox.visible = false;
+					this.transformControls.detach();
+				}
+			}
+			//clear cards
+			$('#cards').empty();
+			//add cards again
+			for(var i=0; i<this.furnitures.length; i++){
+				this.furnitures[i].addCard();
+			}
+
 		}
 
 
@@ -11093,6 +11550,23 @@ Main.prototype = {
 		var center = new THREE.Vector3();
 		box.getCenter(center);
 		return center;
+    },
+
+    DeleteObj: function(){
+    	this.collapse(this.furniture);
+    	var objects = this.furniture.getObjects();
+    	var furnitureObj = this.furniture.getFurniture();
+    	//this.objCenter = this.getCenterPoint(this.furniture.getFurniture());
+    	//delete object in furniture
+		for(var i=0 ; i < this.GetSizeObj.length; i++){
+			var model = this.GetSizeObj[i];
+			model.parent.remove(model);
+		}
+		
+		this.explode(this.furniture);
+		this.GetSizeObj = [];
+		$('.ui.blue.submit.button.getsize').hide();
+
     }
 
 };
@@ -11109,10 +11583,14 @@ document.addEventListener('DOMContentLoaded', function(event){
 
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 },{"./MarkBetweenSize":22,"./MarkSize":23,"./Processor":24,"./cadCutByPlane":27,"./computeConvexHull":32}],43:[function(require,module,exports){
 =======
 },{"./MarkBetweenSize":17,"./MarkSize":18,"./Processor":23,"./cadCutByPlane":25,"./computeConvexHull":31}],42:[function(require,module,exports){
 >>>>>>> master
+=======
+},{"./MarkBetweenSize":17,"./MarkSize":18,"./Processor":24,"./cadCutByPlane":26,"./computeConvexHull":32}],43:[function(require,module,exports){
+>>>>>>> Wei-shiang
 /*
 ## License
 
@@ -11324,10 +11802,14 @@ const globalApi = Object.assign({}, {CSG, CAG}, optionsParsers, {isCAG, isCSG})
 module.exports = globalApi
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 },{"./src/api/debugHelpers":46,"./src/api/optionParsers":53,"./src/api/primitives2d":54,"./src/api/primitives3d":55,"./src/core/CAG":57,"./src/core/CAGFactories":58,"./src/core/CSG":59,"./src/core/CSGFactories":60,"./src/core/Properties":64,"./src/core/connectors":65,"./src/core/constants":66,"./src/core/math/Line2":67,"./src/core/math/Line3":68,"./src/core/math/Matrix4":69,"./src/core/math/OrthoNormalBasis":70,"./src/core/math/Path2":71,"./src/core/math/Plane":72,"./src/core/math/Polygon2":73,"./src/core/math/Polygon3":74,"./src/core/math/Side":75,"./src/core/math/Vector2":76,"./src/core/math/Vector3":77,"./src/core/math/Vertex2":78,"./src/core/math/Vertex3":79,"./src/core/mutators":82,"./src/core/utils":84}],44:[function(require,module,exports){
 =======
 },{"./src/api/debugHelpers":45,"./src/api/optionParsers":52,"./src/api/primitives2d":53,"./src/api/primitives3d":54,"./src/core/CAG":56,"./src/core/CAGFactories":57,"./src/core/CSG":58,"./src/core/CSGFactories":59,"./src/core/Properties":63,"./src/core/connectors":64,"./src/core/constants":65,"./src/core/math/Line2":66,"./src/core/math/Line3":67,"./src/core/math/Matrix4":68,"./src/core/math/OrthoNormalBasis":69,"./src/core/math/Path2":70,"./src/core/math/Plane":71,"./src/core/math/Polygon2":72,"./src/core/math/Polygon3":73,"./src/core/math/Side":74,"./src/core/math/Vector2":75,"./src/core/math/Vector3":76,"./src/core/math/Vertex2":77,"./src/core/math/Vertex3":78,"./src/core/mutators":81,"./src/core/utils":83}],43:[function(require,module,exports){
 >>>>>>> master
+=======
+},{"./src/api/debugHelpers":46,"./src/api/optionParsers":53,"./src/api/primitives2d":54,"./src/api/primitives3d":55,"./src/core/CAG":57,"./src/core/CAGFactories":58,"./src/core/CSG":59,"./src/core/CSGFactories":60,"./src/core/Properties":64,"./src/core/connectors":65,"./src/core/constants":66,"./src/core/math/Line2":67,"./src/core/math/Line3":68,"./src/core/math/Matrix4":69,"./src/core/math/OrthoNormalBasis":70,"./src/core/math/Path2":71,"./src/core/math/Plane":72,"./src/core/math/Polygon2":73,"./src/core/math/Polygon3":74,"./src/core/math/Side":75,"./src/core/math/Vector2":76,"./src/core/math/Vector3":77,"./src/core/math/Vertex2":78,"./src/core/math/Vertex3":79,"./src/core/mutators":82,"./src/core/utils":84}],44:[function(require,module,exports){
+>>>>>>> Wei-shiang
 const Path2D = require('../core/math/Path2')
 
 const cagoutlinePaths = function (_cag) {
@@ -11410,10 +11892,14 @@ const cagoutlinePaths = function (_cag) {
 module.exports = cagoutlinePaths
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 },{"../core/math/Path2":71}],45:[function(require,module,exports){
 =======
 },{"../core/math/Path2":70}],44:[function(require,module,exports){
 >>>>>>> master
+=======
+},{"../core/math/Path2":71}],45:[function(require,module,exports){
+>>>>>>> Wei-shiang
 const toArray = require('../core/utils/toArray')
 
 /**
@@ -11452,10 +11938,14 @@ const center = function (options, objects) {
 module.exports = center
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 },{"../core/utils/toArray":92}],46:[function(require,module,exports){
 =======
 },{"../core/utils/toArray":91}],45:[function(require,module,exports){
 >>>>>>> master
+=======
+},{"../core/utils/toArray":92}],46:[function(require,module,exports){
+>>>>>>> Wei-shiang
 const CSG = require('../core/CSG')
 const {cube} = require('./primitives3d')
 
@@ -11491,10 +11981,14 @@ const toPointCloud = function (csg, cuberadius) {
 module.exports = {toPointCloud}
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 },{"../core/CSG":59,"./primitives3d":55}],47:[function(require,module,exports){
 =======
 },{"../core/CSG":58,"./primitives3d":54}],46:[function(require,module,exports){
 >>>>>>> master
+=======
+},{"../core/CSG":59,"./primitives3d":55}],47:[function(require,module,exports){
+>>>>>>> Wei-shiang
 const Vertex3 = require('../core/math/Vertex3')
 const Vector3 = require('../core/math/Vector3')
 const Polygon3 = require('../core/math/Polygon3')
@@ -11560,10 +12054,14 @@ const degToRad = deg => (Math.PI / 180) * deg
 module.exports = {cagToPointsArray, clamp, rightMultiply1x3VectorToArray, polygonFromPoints}
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 },{"../core/math/Polygon3":74,"../core/math/Vector3":77,"../core/math/Vertex3":79}],48:[function(require,module,exports){
 =======
 },{"../core/math/Polygon3":73,"../core/math/Vector3":76,"../core/math/Vertex3":78}],47:[function(require,module,exports){
 >>>>>>> master
+=======
+},{"../core/math/Polygon3":74,"../core/math/Vector3":77,"../core/math/Vertex3":79}],48:[function(require,module,exports){
+>>>>>>> Wei-shiang
 const {isCAG} = require('../core/utils')
 // boolean operations
 
@@ -11667,10 +12165,14 @@ module.exports = {
 }
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 },{"../core/utils":84}],49:[function(require,module,exports){
 =======
 },{"../core/utils":83}],48:[function(require,module,exports){
 >>>>>>> master
+=======
+},{"../core/utils":84}],49:[function(require,module,exports){
+>>>>>>> Wei-shiang
 const Matrix4x4 = require('../core/math/Matrix4.js')
 const Vector3D = require('../core/math/Vector3.js')
 const {Connector} = require('../core/connectors.js')
@@ -11840,10 +12342,14 @@ const overCutInsideCorners = function (_cag, cutterradius) {
 module.exports = {lieFlat, getTransformationToFlatLying, getTransformationAndInverseTransformationToFlatLying, overCutInsideCorners}
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 },{"../core/CAGFactories":58,"../core/connectors.js":65,"../core/math/Matrix4.js":69,"../core/math/Vector2":76,"../core/math/Vector3.js":77}],50:[function(require,module,exports){
 =======
 },{"../core/CAGFactories":57,"../core/connectors.js":64,"../core/math/Matrix4.js":68,"../core/math/Vector2":75,"../core/math/Vector3.js":76}],49:[function(require,module,exports){
 >>>>>>> master
+=======
+},{"../core/CAGFactories":58,"../core/connectors.js":65,"../core/math/Matrix4.js":69,"../core/math/Vector2":76,"../core/math/Vector3.js":77}],50:[function(require,module,exports){
+>>>>>>> Wei-shiang
 const {EPS} = require('../core/constants')
 const Plane = require('../core/math/Plane')
 const Vector2 = require('../core/math/Vector2')
@@ -11910,10 +12416,14 @@ const cutByPlane = function (csg, plane) {
 module.exports = {sectionCut, cutByPlane}
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 },{"../core/CSG":59,"../core/constants":66,"../core/math/OrthoNormalBasis":70,"../core/math/Plane":72,"../core/math/Polygon3":74,"../core/math/Vector2":76,"../core/math/Vertex3":79}],51:[function(require,module,exports){
 =======
 },{"../core/CSG":58,"../core/constants":65,"../core/math/OrthoNormalBasis":69,"../core/math/Plane":71,"../core/math/Polygon3":73,"../core/math/Vector2":75,"../core/math/Vertex3":78}],50:[function(require,module,exports){
 >>>>>>> master
+=======
+},{"../core/CSG":59,"../core/constants":66,"../core/math/OrthoNormalBasis":70,"../core/math/Plane":72,"../core/math/Polygon3":74,"../core/math/Vector2":76,"../core/math/Vertex3":79}],51:[function(require,module,exports){
+>>>>>>> Wei-shiang
 
 const {EPS, angleEPS} = require('../core/constants')
 const Vertex = require('../core/math/Vertex3')
@@ -12253,10 +12763,14 @@ module.exports = {
 }
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 },{"../core/CAG":57,"../core/CAGFactories":58,"../core/CSG":59,"../core/CSGFactories":60,"../core/constants":66,"../core/math/Polygon3":74,"../core/math/Vector2":76,"../core/math/Vertex3":79,"../core/utils":84}],52:[function(require,module,exports){
 =======
 },{"../core/CAG":56,"../core/CAGFactories":57,"../core/CSG":58,"../core/CSGFactories":59,"../core/constants":65,"../core/math/Polygon3":73,"../core/math/Vector2":75,"../core/math/Vertex3":78,"../core/utils":83}],51:[function(require,module,exports){
 >>>>>>> master
+=======
+},{"../core/CAG":57,"../core/CAGFactories":58,"../core/CSG":59,"../core/CSGFactories":60,"../core/constants":66,"../core/math/Polygon3":74,"../core/math/Vector2":76,"../core/math/Vertex3":79,"../core/utils":84}],52:[function(require,module,exports){
+>>>>>>> Wei-shiang
 const {EPS, defaultResolution3D} = require('../core/constants')
 const OrthoNormalBasis = require('../core/math/OrthoNormalBasis')
 const {parseOptionAs3DVector, parseOptionAsBool, parseOptionAsFloat, parseOptionAsInt} = require('./optionParsers')
@@ -12616,10 +13130,14 @@ module.exports = {
 }
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 },{"../core/CAGFactories":58,"../core/CSG":59,"../core/CSGFactories":60,"../core/connectors":65,"../core/constants":66,"../core/math/Matrix4":69,"../core/math/OrthoNormalBasis":70,"../core/math/Path2":71,"../core/math/Vector3":77,"./helpers":47,"./optionParsers":53}],53:[function(require,module,exports){
 =======
 },{"../core/CAGFactories":57,"../core/CSG":58,"../core/CSGFactories":59,"../core/connectors":64,"../core/constants":65,"../core/math/Matrix4":68,"../core/math/OrthoNormalBasis":69,"../core/math/Path2":70,"../core/math/Vector3":76,"./helpers":46,"./optionParsers":52}],52:[function(require,module,exports){
 >>>>>>> master
+=======
+},{"../core/CAGFactories":58,"../core/CSG":59,"../core/CSGFactories":60,"../core/connectors":65,"../core/constants":66,"../core/math/Matrix4":69,"../core/math/OrthoNormalBasis":70,"../core/math/Path2":71,"../core/math/Vector3":77,"./helpers":47,"./optionParsers":53}],53:[function(require,module,exports){
+>>>>>>> Wei-shiang
 const Vector3D = require('../core/math/Vector3')
 const Vector2D = require('../core/math/Vector2')
 
@@ -12698,10 +13216,14 @@ module.exports = {
 }
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 },{"../core/math/Vector2":76,"../core/math/Vector3":77}],54:[function(require,module,exports){
 =======
 },{"../core/math/Vector2":75,"../core/math/Vector3":76}],53:[function(require,module,exports){
 >>>>>>> master
+=======
+},{"../core/math/Vector2":76,"../core/math/Vector3":77}],54:[function(require,module,exports){
+>>>>>>> Wei-shiang
 const CAG = require('../core/CAG')
 const {parseOptionAs2DVector, parseOptionAsFloat, parseOptionAsInt} = require('./optionParsers')
 const {defaultResolution2D} = require('../core/constants')
@@ -12889,10 +13411,14 @@ module.exports = {
 }
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 },{"../core/CAG":57,"../core/CAGFactories":58,"../core/constants":66,"../core/math/Path2":71,"../core/math/Vector2":76,"../core/math/Vertex2":78,"./optionParsers":53}],55:[function(require,module,exports){
 =======
 },{"../core/CAG":56,"../core/CAGFactories":57,"../core/constants":65,"../core/math/Path2":70,"../core/math/Vector2":75,"../core/math/Vertex2":77,"./optionParsers":52}],54:[function(require,module,exports){
 >>>>>>> master
+=======
+},{"../core/CAG":57,"../core/CAGFactories":58,"../core/constants":66,"../core/math/Path2":71,"../core/math/Vector2":76,"../core/math/Vertex2":78,"./optionParsers":53}],55:[function(require,module,exports){
+>>>>>>> Wei-shiang
 const {parseOption, parseOptionAs3DVector, parseOptionAs2DVector, parseOptionAs3DVectorList, parseOptionAsFloat, parseOptionAsInt} = require('./optionParsers')
 const {defaultResolution3D, defaultResolution2D, EPS} = require('../core/constants')
 const Vector3 = require('../core/math/Vector3')
@@ -13443,10 +13969,14 @@ module.exports = {
 }
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 },{"../core/CSGFactories":60,"../core/Properties":64,"../core/connectors":65,"../core/constants":66,"../core/math/Polygon3":74,"../core/math/Vector3":77,"../core/math/Vertex3":79,"./optionParsers":53}],56:[function(require,module,exports){
 =======
 },{"../core/CSGFactories":59,"../core/Properties":63,"../core/connectors":64,"../core/constants":65,"../core/math/Polygon3":73,"../core/math/Vector3":76,"../core/math/Vertex3":78,"./optionParsers":52}],55:[function(require,module,exports){
 >>>>>>> master
+=======
+},{"../core/CSGFactories":60,"../core/Properties":64,"../core/connectors":65,"../core/constants":66,"../core/math/Polygon3":74,"../core/math/Vector3":77,"../core/math/Vertex3":79,"./optionParsers":53}],56:[function(require,module,exports){
+>>>>>>> Wei-shiang
 const Polygon = require('../core/math/Polygon3')
 const {fromPolygons} = require('../core/CSGFactories')
 const {fnSortByIndex} = require('../core/utils')
@@ -13662,10 +14192,14 @@ const _addWalls = function (walls, bottom, top, bFlipped) {
 module.exports = solidFromSlices
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 },{"../core/CSGFactories":60,"../core/math/Polygon3":74,"../core/utils":84}],57:[function(require,module,exports){
 =======
 },{"../core/CSGFactories":59,"../core/math/Polygon3":73,"../core/utils":83}],56:[function(require,module,exports){
 >>>>>>> master
+=======
+},{"../core/CSGFactories":60,"../core/math/Polygon3":74,"../core/utils":84}],57:[function(require,module,exports){
+>>>>>>> Wei-shiang
 const {Connector} = require('./connectors')
 const Vertex3D = require('./math/Vertex3')
 const Vector2D = require('./math/Vector2')
@@ -14045,10 +14579,14 @@ CAG.prototype = {
 module.exports = CAG
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 },{"../api/cagOutlinePaths":44,"../api/center":45,"../api/ops-cnc":49,"../api/ops-expandContract":51,"../api/ops-extrusions":52,"./CAGFactories":58,"./CSGFactories":60,"./connectors":65,"./math/Polygon3":74,"./math/Vector2":76,"./math/Vector3":77,"./math/Vertex3":79,"./utils/cagMeasurements":85,"./utils/cagValidation":86,"./utils/canonicalize":87,"./utils/retesellate":91}],58:[function(require,module,exports){
 =======
 },{"../api/cagOutlinePaths":43,"../api/center":44,"../api/ops-cnc":48,"../api/ops-expandContract":50,"../api/ops-extrusions":51,"./CAGFactories":57,"./CSGFactories":59,"./connectors":64,"./math/Polygon3":73,"./math/Vector2":75,"./math/Vector3":76,"./math/Vertex3":78,"./utils/cagMeasurements":84,"./utils/cagValidation":85,"./utils/canonicalize":86,"./utils/retesellate":90}],57:[function(require,module,exports){
 >>>>>>> master
+=======
+},{"../api/cagOutlinePaths":44,"../api/center":45,"../api/ops-cnc":49,"../api/ops-expandContract":51,"../api/ops-extrusions":52,"./CAGFactories":58,"./CSGFactories":60,"./connectors":65,"./math/Polygon3":74,"./math/Vector2":76,"./math/Vector3":77,"./math/Vertex3":79,"./utils/cagMeasurements":85,"./utils/cagValidation":86,"./utils/canonicalize":87,"./utils/retesellate":91}],58:[function(require,module,exports){
+>>>>>>> Wei-shiang
 const Side = require('./math/Side')
 const Vector2D = require('./math/Vector2')
 const Vertex2 = require('./math/Vertex2')
@@ -14265,10 +14803,14 @@ module.exports = {
 }
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 },{"../api/ops-booleans":48,"./CAG":57,"./constants":66,"./math/Side":75,"./math/Vector2":76,"./math/Vertex2":78,"./utils/cagValidation":86}],59:[function(require,module,exports){
 =======
 },{"../api/ops-booleans":47,"./CAG":56,"./constants":65,"./math/Side":74,"./math/Vector2":75,"./math/Vertex2":77,"./utils/cagValidation":85}],58:[function(require,module,exports){
 >>>>>>> master
+=======
+},{"../api/ops-booleans":48,"./CAG":57,"./constants":66,"./math/Side":75,"./math/Vector2":76,"./math/Vertex2":78,"./utils/cagValidation":86}],59:[function(require,module,exports){
+>>>>>>> Wei-shiang
 const Tree = require('./trees')
 const Polygon = require('./math/Polygon3')
 const Plane = require('./math/Plane')
@@ -14857,10 +15399,14 @@ CSG.prototype = {
 module.exports = CSG
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 },{"../api/center":45,"../api/ops-cnc":49,"../api/ops-cuts":50,"../api/ops-expandContract":51,"./CAG":57,"./CSGFactories":60,"./Properties":64,"./math/OrthoNormalBasis":70,"./math/Plane":72,"./math/Polygon3":74,"./trees":83,"./utils/canonicalize":87,"./utils/csgMeasurements":88,"./utils/csgProjections":89,"./utils/fixTJunctions":90,"./utils/retesellate":91}],60:[function(require,module,exports){
 =======
 },{"../api/center":44,"../api/ops-cnc":48,"../api/ops-cuts":49,"../api/ops-expandContract":50,"./CAG":56,"./CSGFactories":59,"./Properties":63,"./math/OrthoNormalBasis":69,"./math/Plane":71,"./math/Polygon3":73,"./trees":82,"./utils/canonicalize":86,"./utils/csgMeasurements":87,"./utils/csgProjections":88,"./utils/fixTJunctions":89,"./utils/retesellate":90}],59:[function(require,module,exports){
 >>>>>>> master
+=======
+},{"../api/center":45,"../api/ops-cnc":49,"../api/ops-cuts":50,"../api/ops-expandContract":51,"./CAG":57,"./CSGFactories":60,"./Properties":64,"./math/OrthoNormalBasis":70,"./math/Plane":72,"./math/Polygon3":74,"./trees":83,"./utils/canonicalize":87,"./utils/csgMeasurements":88,"./utils/csgProjections":89,"./utils/fixTJunctions":90,"./utils/retesellate":91}],60:[function(require,module,exports){
+>>>>>>> Wei-shiang
 const Vector3D = require('./math/Vector3')
 const Vertex = require('./math/Vertex3')
 const Plane = require('./math/Plane')
@@ -14984,10 +15530,14 @@ module.exports = {
 }
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 },{"./CSG":59,"./math/Plane":72,"./math/Polygon2":73,"./math/Polygon3":74,"./math/Vector3":77,"./math/Vertex3":79}],61:[function(require,module,exports){
 =======
 },{"./CSG":58,"./math/Plane":71,"./math/Polygon2":72,"./math/Polygon3":73,"./math/Vector3":76,"./math/Vertex3":78}],60:[function(require,module,exports){
 >>>>>>> master
+=======
+},{"./CSG":59,"./math/Plane":72,"./math/Polygon2":73,"./math/Polygon3":74,"./math/Vector3":77,"./math/Vertex3":79}],61:[function(require,module,exports){
+>>>>>>> Wei-shiang
 // //////////////////////////////
 // ## class fuzzyFactory
 // This class acts as a factory for objects. We can search for an object with approximately
@@ -15046,10 +15596,14 @@ FuzzyFactory.prototype = {
 module.exports = FuzzyFactory
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 },{}],62:[function(require,module,exports){
 =======
 },{}],61:[function(require,module,exports){
 >>>>>>> master
+=======
+},{}],62:[function(require,module,exports){
+>>>>>>> Wei-shiang
 const FuzzyFactory = require('./FuzzyFactory')
 const {EPS} = require('./constants')
 const Side = require('./math/Side')
@@ -15077,10 +15631,14 @@ FuzzyCAGFactory.prototype = {
 module.exports = FuzzyCAGFactory
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 },{"./FuzzyFactory":61,"./constants":66,"./math/Side":75}],63:[function(require,module,exports){
 =======
 },{"./FuzzyFactory":60,"./constants":65,"./math/Side":74}],62:[function(require,module,exports){
 >>>>>>> master
+=======
+},{"./FuzzyFactory":61,"./constants":66,"./math/Side":75}],63:[function(require,module,exports){
+>>>>>>> Wei-shiang
 const {EPS} = require('./constants')
 const Polygon = require('./math/Polygon3')
 const FuzzyFactory = require('./FuzzyFactory')
@@ -15151,10 +15709,14 @@ FuzzyCSGFactory.prototype = {
 module.exports = FuzzyCSGFactory
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 },{"./FuzzyFactory":61,"./constants":66,"./math/Polygon3":74}],64:[function(require,module,exports){
 =======
 },{"./FuzzyFactory":60,"./constants":65,"./math/Polygon3":73}],63:[function(require,module,exports){
 >>>>>>> master
+=======
+},{"./FuzzyFactory":61,"./constants":66,"./math/Polygon3":74}],64:[function(require,module,exports){
+>>>>>>> Wei-shiang
 // ////////////////////////////////////
 // # Class Properties
 // This class is used to store properties of a solid
@@ -15239,10 +15801,14 @@ Properties.addFrom = function (result, otherproperties) {
 module.exports = Properties
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 },{}],65:[function(require,module,exports){
 =======
 },{}],64:[function(require,module,exports){
 >>>>>>> master
+=======
+},{}],65:[function(require,module,exports){
+>>>>>>> Wei-shiang
 const Vector3D = require('./math/Vector3')
 const Line3D = require('./math/Line3')
 const Matrix4x4 = require('./math/Matrix4')
@@ -15465,10 +16031,14 @@ ConnectorList.prototype = {
 module.exports = {Connector, ConnectorList}
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 },{"./CSG":59,"./math/Line3":68,"./math/Matrix4":69,"./math/OrthoNormalBasis":70,"./math/Plane":72,"./math/Vector3":77}],66:[function(require,module,exports){
 =======
 },{"./CSG":58,"./math/Line3":67,"./math/Matrix4":68,"./math/OrthoNormalBasis":69,"./math/Plane":71,"./math/Vector3":76}],65:[function(require,module,exports){
 >>>>>>> master
+=======
+},{"./CSG":59,"./math/Line3":68,"./math/Matrix4":69,"./math/OrthoNormalBasis":70,"./math/Plane":72,"./math/Vector3":77}],66:[function(require,module,exports){
+>>>>>>> Wei-shiang
 const _CSGDEBUG = false
 
 /** Number of polygons per 360 degree revolution for 2D objects.
@@ -15526,10 +16096,14 @@ module.exports = {
 }
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 },{}],67:[function(require,module,exports){
 =======
 },{}],66:[function(require,module,exports){
 >>>>>>> master
+=======
+},{}],67:[function(require,module,exports){
+>>>>>>> Wei-shiang
 const Vector2D = require('./Vector2')
 const {solve2Linear} = require('../utils')
 
@@ -15622,10 +16196,14 @@ Line2D.prototype = {
 module.exports = Line2D
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 },{"../utils":84,"./Vector2":76}],68:[function(require,module,exports){
 =======
 },{"../utils":83,"./Vector2":75}],67:[function(require,module,exports){
 >>>>>>> master
+=======
+},{"../utils":84,"./Vector2":76}],68:[function(require,module,exports){
+>>>>>>> Wei-shiang
 const Vector3D = require('./Vector3')
 const {EPS} = require('../constants')
 const {solve2Linear} = require('../utils')
@@ -15728,10 +16306,14 @@ Line3D.prototype = {
 module.exports = Line3D
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 },{"../constants":66,"../utils":84,"./Vector3":77}],69:[function(require,module,exports){
 =======
 },{"../constants":65,"../utils":83,"./Vector3":76}],68:[function(require,module,exports){
 >>>>>>> master
+=======
+},{"../constants":66,"../utils":84,"./Vector3":77}],69:[function(require,module,exports){
+>>>>>>> Wei-shiang
 const Vector3D = require('./Vector3')
 const Vector2D = require('./Vector2')
 const OrthoNormalBasis = require('./OrthoNormalBasis')
@@ -16018,10 +16600,14 @@ Matrix4x4.scaling = function (v) {
 module.exports = Matrix4x4
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 },{"./OrthoNormalBasis":70,"./Plane":72,"./Vector2":76,"./Vector3":77}],70:[function(require,module,exports){
 =======
 },{"./OrthoNormalBasis":69,"./Plane":71,"./Vector2":75,"./Vector3":76}],69:[function(require,module,exports){
 >>>>>>> master
+=======
+},{"./OrthoNormalBasis":70,"./Plane":72,"./Vector2":76,"./Vector3":77}],70:[function(require,module,exports){
+>>>>>>> Wei-shiang
 const Vector2D = require('./Vector2')
 const Vector3D = require('./Vector3')
 const Line2D = require('./Line2')
@@ -16229,10 +16815,14 @@ OrthoNormalBasis.prototype = {
 module.exports = OrthoNormalBasis
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 },{"./Line2":67,"./Line3":68,"./Matrix4":69,"./Plane":72,"./Vector2":76,"./Vector3":77}],71:[function(require,module,exports){
 =======
 },{"./Line2":66,"./Line3":67,"./Matrix4":68,"./Plane":71,"./Vector2":75,"./Vector3":76}],70:[function(require,module,exports){
 >>>>>>> master
+=======
+},{"./Line2":67,"./Line3":68,"./Matrix4":69,"./Plane":72,"./Vector2":76,"./Vector3":77}],71:[function(require,module,exports){
+>>>>>>> Wei-shiang
 const Vector2D = require('./Vector2')
 const {EPS, angleEPS} = require('../constants')
 const {parseOptionAs2DVector, parseOptionAsFloat, parseOptionAsInt, parseOptionAsBool} = require('../../api/optionParsers')
@@ -16706,10 +17296,14 @@ Path2D.prototype = {
 module.exports = Path2D
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 },{"../../api/optionParsers":53,"../CAG":57,"../constants":66,"./Side":75,"./Vector2":76,"./Vertex2":78}],72:[function(require,module,exports){
 =======
 },{"../../api/optionParsers":52,"../CAG":56,"../constants":65,"./Side":74,"./Vector2":75,"./Vertex2":77}],71:[function(require,module,exports){
 >>>>>>> master
+=======
+},{"../../api/optionParsers":53,"../CAG":57,"../constants":66,"./Side":75,"./Vector2":76,"./Vertex2":78}],72:[function(require,module,exports){
+>>>>>>> Wei-shiang
 const Vector3D = require('./Vector3')
 const Line3D = require('./Line3')
 const {EPS, getTag} = require('../constants')
@@ -16852,10 +17446,14 @@ Plane.prototype = {
 module.exports = Plane
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 },{"../constants":66,"./Line3":68,"./Vector3":77}],73:[function(require,module,exports){
 =======
 },{"../constants":65,"./Line3":67,"./Vector3":76}],72:[function(require,module,exports){
 >>>>>>> master
+=======
+},{"../constants":66,"./Line3":68,"./Vector3":77}],73:[function(require,module,exports){
+>>>>>>> Wei-shiang
 const CAG = require('../CAG')
 const {fromPoints} = require('../CAGFactories')
 
@@ -16878,10 +17476,14 @@ Polygon2D.prototype = CAG.prototype
 module.exports = Polygon2D
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 },{"../CAG":57,"../CAGFactories":58}],74:[function(require,module,exports){
 =======
 },{"../CAG":56,"../CAGFactories":57}],73:[function(require,module,exports){
 >>>>>>> master
+=======
+},{"../CAG":57,"../CAGFactories":58}],74:[function(require,module,exports){
+>>>>>>> Wei-shiang
 const Vector3D = require('./Vector3')
 const Vertex = require('./Vertex3')
 const Matrix4x4 = require('./Matrix4')
@@ -17258,10 +17860,14 @@ Polygon.defaultShared = new Polygon.Shared(null)
 module.exports = Polygon
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 },{"../../api/solidFromSlices":56,"../CAG":57,"../CAGFactories":58,"../CSGFactories":60,"../constants":66,"./Matrix4":69,"./Plane":72,"./Vector3":77,"./Vertex3":79}],75:[function(require,module,exports){
 =======
 },{"../../api/solidFromSlices":55,"../CAG":56,"../CAGFactories":57,"../CSGFactories":59,"../constants":65,"./Matrix4":68,"./Plane":71,"./Vector3":76,"./Vertex3":78}],74:[function(require,module,exports){
 >>>>>>> master
+=======
+},{"../../api/solidFromSlices":56,"../CAG":57,"../CAGFactories":58,"../CSGFactories":60,"../constants":66,"./Matrix4":69,"./Plane":72,"./Vector3":77,"./Vertex3":79}],75:[function(require,module,exports){
+>>>>>>> Wei-shiang
 const Vector2D = require('./Vector2')
 const Vertex = require('./Vertex2')
 const Vertex3 = require('./Vertex3')
@@ -17366,10 +17972,14 @@ Side.prototype = {
 module.exports = Side
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 },{"../constants":66,"./Polygon3":74,"./Vector2":76,"./Vertex2":78,"./Vertex3":79}],76:[function(require,module,exports){
 =======
 },{"../constants":65,"./Polygon3":73,"./Vector2":75,"./Vertex2":77,"./Vertex3":78}],75:[function(require,module,exports){
 >>>>>>> master
+=======
+},{"../constants":66,"./Polygon3":74,"./Vector2":76,"./Vertex2":78,"./Vertex3":79}],76:[function(require,module,exports){
+>>>>>>> Wei-shiang
 const {IsFloat} = require('../utils')
 
 /** Class Vector2D
@@ -17568,10 +18178,14 @@ Vector2D.prototype = {
 module.exports = Vector2D
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 },{"../utils":84,"./Vector3":77}],77:[function(require,module,exports){
 =======
 },{"../utils":83,"./Vector3":76}],76:[function(require,module,exports){
 >>>>>>> master
+=======
+},{"../utils":84,"./Vector3":77}],77:[function(require,module,exports){
+>>>>>>> Wei-shiang
 const {IsFloat} = require('../utils')
 const Vector2D = require('./Vector2')
 
@@ -17787,10 +18401,14 @@ Vector3D.prototype = {
 module.exports = Vector3D
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 },{"../utils":84,"./Vector2":76}],78:[function(require,module,exports){
 =======
 },{"../utils":83,"./Vector2":75}],77:[function(require,module,exports){
 >>>>>>> master
+=======
+},{"../utils":84,"./Vector2":76}],78:[function(require,module,exports){
+>>>>>>> Wei-shiang
 const Vector2D = require('./Vector2')
 const {getTag} = require('../constants')
 
@@ -17819,10 +18437,14 @@ Vertex.prototype = {
 module.exports = Vertex
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 },{"../constants":66,"./Vector2":76}],79:[function(require,module,exports){
 =======
 },{"../constants":65,"./Vector2":75}],78:[function(require,module,exports){
 >>>>>>> master
+=======
+},{"../constants":66,"./Vector2":76}],79:[function(require,module,exports){
+>>>>>>> Wei-shiang
 const Vector3D = require('./Vector3')
 const {getTag} = require('../constants')
 
@@ -17881,10 +18503,14 @@ Vertex.prototype = {
 module.exports = Vertex
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 },{"../constants":66,"./Vector3":77}],80:[function(require,module,exports){
 =======
 },{"../constants":65,"./Vector3":76}],79:[function(require,module,exports){
 >>>>>>> master
+=======
+},{"../constants":66,"./Vector3":77}],80:[function(require,module,exports){
+>>>>>>> Wei-shiang
 const {EPS} = require('../constants')
 const {solve2Linear} = require('../utils')
 
@@ -17911,10 +18537,14 @@ const linesIntersect = function (p0start, p0end, p1start, p1end) {
 module.exports = {linesIntersect}
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 },{"../constants":66,"../utils":84}],81:[function(require,module,exports){
 =======
 },{"../constants":65,"../utils":83}],80:[function(require,module,exports){
 >>>>>>> master
+=======
+},{"../constants":66,"../utils":84}],81:[function(require,module,exports){
+>>>>>>> Wei-shiang
 const {EPS} = require('../constants')
 const OrthoNormalBasis = require('./OrthoNormalBasis')
 const {interpolateBetween2DPointsForY, insertSorted, fnNumberSort} = require('../utils')
@@ -18259,10 +18889,14 @@ const reTesselateCoplanarPolygons = function (sourcepolygons, destpolygons) {
 module.exports = reTesselateCoplanarPolygons
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 },{"../constants":66,"../utils":84,"./Line2":67,"./OrthoNormalBasis":70,"./Polygon3":74,"./Vector2":76,"./Vertex3":79}],82:[function(require,module,exports){
 =======
 },{"../constants":65,"../utils":83,"./Line2":66,"./OrthoNormalBasis":69,"./Polygon3":73,"./Vector2":75,"./Vertex3":78}],81:[function(require,module,exports){
 >>>>>>> master
+=======
+},{"../constants":66,"../utils":84,"./Line2":67,"./OrthoNormalBasis":70,"./Polygon3":74,"./Vector2":76,"./Vertex3":79}],82:[function(require,module,exports){
+>>>>>>> Wei-shiang
 const Matrix4x4 = require('./math/Matrix4')
 const Vector3D = require('./math/Vector3')
 const Plane = require('./math/Plane')
@@ -18346,10 +18980,14 @@ module.exports = {
 }
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 },{"./math/Matrix4":69,"./math/Plane":72,"./math/Vector3":77}],83:[function(require,module,exports){
 =======
 },{"./math/Matrix4":68,"./math/Plane":71,"./math/Vector3":76}],82:[function(require,module,exports){
 >>>>>>> master
+=======
+},{"./math/Matrix4":69,"./math/Plane":72,"./math/Vector3":77}],83:[function(require,module,exports){
+>>>>>>> Wei-shiang
 const {_CSGDEBUG, EPS} = require('./constants')
 const Vertex = require('./math/Vertex3')
 const Polygon = require('./math/Polygon3')
@@ -18861,10 +19499,14 @@ Node.prototype = {
 module.exports = Tree
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 },{"./constants":66,"./math/Polygon3":74,"./math/Vertex3":79}],84:[function(require,module,exports){
 =======
 },{"./constants":65,"./math/Polygon3":73,"./math/Vertex3":78}],83:[function(require,module,exports){
 >>>>>>> master
+=======
+},{"./constants":66,"./math/Polygon3":74,"./math/Vertex3":79}],84:[function(require,module,exports){
+>>>>>>> Wei-shiang
 function fnNumberSort (a, b) {
   return a - b
 }
@@ -18969,10 +19611,14 @@ module.exports = {
 }
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 },{}],85:[function(require,module,exports){
 =======
 },{}],84:[function(require,module,exports){
 >>>>>>> master
+=======
+},{}],85:[function(require,module,exports){
+>>>>>>> Wei-shiang
 const Vector2D = require('../math/Vector2')
 
 // see http://local.wasp.uwa.edu.au/~pbourke/geometry/polyarea/ :
@@ -19007,10 +19653,14 @@ const getBounds = function (cag) {
 module.exports = {area, getBounds}
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 },{"../math/Vector2":76}],86:[function(require,module,exports){
 =======
 },{"../math/Vector2":75}],85:[function(require,module,exports){
 >>>>>>> master
+=======
+},{"../math/Vector2":76}],86:[function(require,module,exports){
+>>>>>>> Wei-shiang
 const {areaEPS} = require('../constants')
 const {linesIntersect} = require('../math/lineUtils')
 
@@ -19113,10 +19763,14 @@ module.exports = {
 }
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 },{"../constants":66,"../math/lineUtils":80}],87:[function(require,module,exports){
 =======
 },{"../constants":65,"../math/lineUtils":79}],86:[function(require,module,exports){
 >>>>>>> master
+=======
+},{"../constants":66,"../math/lineUtils":80}],87:[function(require,module,exports){
+>>>>>>> Wei-shiang
 const {EPS} = require('../constants')
 const FuzzyCSGFactory = require('../FuzzyFactory3d')
 const FuzzyCAGFactory = require('../FuzzyFactory2d')
@@ -19203,10 +19857,14 @@ const CAGFromCAGFuzzyFactory = function (factory, sourcecag) {
 module.exports = canonicalize
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 },{"../CAGFactories":58,"../CSGFactories":60,"../FuzzyFactory2d":62,"../FuzzyFactory3d":63,"../constants":66}],88:[function(require,module,exports){
 =======
 },{"../CAGFactories":57,"../CSGFactories":59,"../FuzzyFactory2d":61,"../FuzzyFactory3d":62,"../constants":65}],87:[function(require,module,exports){
 >>>>>>> master
+=======
+},{"../CAGFactories":58,"../CSGFactories":60,"../FuzzyFactory2d":62,"../FuzzyFactory3d":63,"../constants":66}],88:[function(require,module,exports){
+>>>>>>> Wei-shiang
 const Vector3D = require('../math/Vector3')
 
 /**
@@ -19257,10 +19915,14 @@ const area = function (csg) {
 module.exports = {bounds, volume, area}
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 },{"../math/Vector3":77}],89:[function(require,module,exports){
 =======
 },{"../math/Vector3":76}],88:[function(require,module,exports){
 >>>>>>> master
+=======
+},{"../math/Vector3":77}],89:[function(require,module,exports){
+>>>>>>> Wei-shiang
 const CAG = require('../CAG') // FIXME: circular dependency !
 const {EPS} = require('../constants')
 
@@ -19286,10 +19948,14 @@ const projectToOrthoNormalBasis = function (csg, orthobasis) {
 module.exports = {projectToOrthoNormalBasis}
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 },{"../CAG":57,"../constants":66}],90:[function(require,module,exports){
 =======
 },{"../CAG":56,"../constants":65}],89:[function(require,module,exports){
 >>>>>>> master
+=======
+},{"../CAG":57,"../constants":66}],90:[function(require,module,exports){
+>>>>>>> Wei-shiang
 const {EPS} = require('../constants')
 const Polygon = require('../math/Polygon3')
 const Plane = require('../math/Plane')
@@ -19608,10 +20274,14 @@ const fixTJunctions = function (fromPolygons, csg) {
 module.exports = fixTJunctions
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 },{"../constants":66,"../math/Plane":72,"../math/Polygon3":74}],91:[function(require,module,exports){
 =======
 },{"../constants":65,"../math/Plane":71,"../math/Polygon3":73}],90:[function(require,module,exports){
 >>>>>>> master
+=======
+},{"../constants":66,"../math/Plane":72,"../math/Polygon3":74}],91:[function(require,module,exports){
+>>>>>>> Wei-shiang
 const FuzzyCSGFactory = require('../FuzzyFactory3d')
 const reTesselateCoplanarPolygons = require('../math/reTesselateCoplanarPolygons')
 const {fromPolygons} = require('../CSGFactories')
@@ -19661,10 +20331,14 @@ const reTesselate = function (csg) {
 module.exports = reTesselate
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 },{"../CSGFactories":60,"../FuzzyFactory3d":63,"../math/reTesselateCoplanarPolygons":81}],92:[function(require,module,exports){
 =======
 },{"../CSGFactories":59,"../FuzzyFactory3d":62,"../math/reTesselateCoplanarPolygons":80}],91:[function(require,module,exports){
 >>>>>>> master
+=======
+},{"../CSGFactories":60,"../FuzzyFactory3d":63,"../math/reTesselateCoplanarPolygons":81}],92:[function(require,module,exports){
+>>>>>>> Wei-shiang
 /* converts input data to array if it is not already an array */
 function toArray (data) {
   if (!data) return []
@@ -19675,10 +20349,14 @@ function toArray (data) {
 module.exports = toArray
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 },{}],93:[function(require,module,exports){
 =======
 },{}],92:[function(require,module,exports){
 >>>>>>> master
+=======
+},{}],93:[function(require,module,exports){
+>>>>>>> Wei-shiang
 /*
 ## License
 
@@ -19870,10 +20548,14 @@ addCenteringToPrototype(CAG.prototype, ['x', 'y'])
 module.exports = {CSG, CAG}
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 },{"./src/CAG":94,"./src/CAGFactories":95,"./src/CSG":96,"./src/CSGFactories":97,"./src/Properties":101,"./src/connectors":102,"./src/constants":103,"./src/debugHelpers":104,"./src/math/Line2":105,"./src/math/Line3":106,"./src/math/Matrix4":107,"./src/math/OrthoNormalBasis":108,"./src/math/Path2":109,"./src/math/Plane":110,"./src/math/Polygon2":111,"./src/math/Polygon3":112,"./src/math/Side":113,"./src/math/Vector2":114,"./src/math/Vector3":115,"./src/math/Vertex2":116,"./src/math/Vertex3":117,"./src/mutators":120,"./src/primitives2d":122,"./src/primitives3d":123}],94:[function(require,module,exports){
 =======
 },{"./src/CAG":93,"./src/CAGFactories":94,"./src/CSG":95,"./src/CSGFactories":96,"./src/Properties":100,"./src/connectors":101,"./src/constants":102,"./src/debugHelpers":103,"./src/math/Line2":104,"./src/math/Line3":105,"./src/math/Matrix4":106,"./src/math/OrthoNormalBasis":107,"./src/math/Path2":108,"./src/math/Plane":109,"./src/math/Polygon2":110,"./src/math/Polygon3":111,"./src/math/Side":112,"./src/math/Vector2":113,"./src/math/Vector3":114,"./src/math/Vertex2":115,"./src/math/Vertex3":116,"./src/mutators":119,"./src/primitives2d":121,"./src/primitives3d":122}],93:[function(require,module,exports){
 >>>>>>> master
+=======
+},{"./src/CAG":94,"./src/CAGFactories":95,"./src/CSG":96,"./src/CSGFactories":97,"./src/Properties":101,"./src/connectors":102,"./src/constants":103,"./src/debugHelpers":104,"./src/math/Line2":105,"./src/math/Line3":106,"./src/math/Matrix4":107,"./src/math/OrthoNormalBasis":108,"./src/math/Path2":109,"./src/math/Plane":110,"./src/math/Polygon2":111,"./src/math/Polygon3":112,"./src/math/Side":113,"./src/math/Vector2":114,"./src/math/Vector3":115,"./src/math/Vertex2":116,"./src/math/Vertex3":117,"./src/mutators":120,"./src/primitives2d":122,"./src/primitives3d":123}],94:[function(require,module,exports){
+>>>>>>> Wei-shiang
 const {EPS, angleEPS, areaEPS, defaultResolution3D} = require('./constants')
 const {Connector} = require('./connectors')
 const OrthoNormalBasis = require('./math/OrthoNormalBasis')
@@ -20692,10 +21374,14 @@ CAG.prototype = {
 module.exports = CAG
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 },{"./CSG":96,"./FuzzyFactory2d":99,"./connectors":102,"./constants":103,"./math/OrthoNormalBasis":108,"./math/Path2":109,"./math/Polygon3":112,"./math/Side":113,"./math/Vector2":114,"./math/Vector3":115,"./math/Vertex2":116,"./math/Vertex3":117,"./math/lineUtils":118,"./optionParsers":121}],95:[function(require,module,exports){
 =======
 },{"./CSG":95,"./FuzzyFactory2d":98,"./connectors":101,"./constants":102,"./math/OrthoNormalBasis":107,"./math/Path2":108,"./math/Polygon3":111,"./math/Side":112,"./math/Vector2":113,"./math/Vector3":114,"./math/Vertex2":115,"./math/Vertex3":116,"./math/lineUtils":117,"./optionParsers":120}],94:[function(require,module,exports){
 >>>>>>> master
+=======
+},{"./CSG":96,"./FuzzyFactory2d":99,"./connectors":102,"./constants":103,"./math/OrthoNormalBasis":108,"./math/Path2":109,"./math/Polygon3":112,"./math/Side":113,"./math/Vector2":114,"./math/Vector3":115,"./math/Vertex2":116,"./math/Vertex3":117,"./math/lineUtils":118,"./optionParsers":121}],95:[function(require,module,exports){
+>>>>>>> Wei-shiang
 const CAG = require('./CAG')
 const Side = require('./math/Side')
 const Vector2D = require('./math/Vector2')
@@ -20756,10 +21442,14 @@ module.exports = {
 }
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 },{"./CAG":94,"./math/Path2":109,"./math/Side":113,"./math/Vector2":114,"./math/Vertex2":116}],96:[function(require,module,exports){
 =======
 },{"./CAG":93,"./math/Path2":108,"./math/Side":112,"./math/Vector2":113,"./math/Vertex2":115}],95:[function(require,module,exports){
 >>>>>>> master
+=======
+},{"./CAG":94,"./math/Path2":109,"./math/Side":113,"./math/Vector2":114,"./math/Vertex2":116}],96:[function(require,module,exports){
+>>>>>>> Wei-shiang
 const {fnNumberSort} = require('./utils')
 const FuzzyCSGFactory = require('./FuzzyFactory3d')
 const Tree = require('./trees')
@@ -21731,10 +22421,14 @@ const CSGFromCSGFuzzyFactory = function (factory, sourcecsg) {
 module.exports = CSG
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 },{"./CAG":94,"./FuzzyFactory3d":100,"./Properties":101,"./connectors":102,"./constants":103,"./math/Matrix4":107,"./math/OrthoNormalBasis":108,"./math/Plane":110,"./math/Polygon3":112,"./math/Vector2":114,"./math/Vector3":115,"./math/Vertex3":117,"./math/polygonUtils":119,"./trees":124,"./utils":125,"./utils/fixTJunctions":126}],97:[function(require,module,exports){
 =======
 },{"./CAG":93,"./FuzzyFactory3d":99,"./Properties":100,"./connectors":101,"./constants":102,"./math/Matrix4":106,"./math/OrthoNormalBasis":107,"./math/Plane":109,"./math/Polygon3":111,"./math/Vector2":113,"./math/Vector3":114,"./math/Vertex3":116,"./math/polygonUtils":118,"./trees":123,"./utils":124,"./utils/fixTJunctions":125}],96:[function(require,module,exports){
 >>>>>>> master
+=======
+},{"./CAG":94,"./FuzzyFactory3d":100,"./Properties":101,"./connectors":102,"./constants":103,"./math/Matrix4":107,"./math/OrthoNormalBasis":108,"./math/Plane":110,"./math/Polygon3":112,"./math/Vector2":114,"./math/Vector3":115,"./math/Vertex3":117,"./math/polygonUtils":119,"./trees":124,"./utils":125,"./utils/fixTJunctions":126}],97:[function(require,module,exports){
+>>>>>>> Wei-shiang
 const Vector3D = require('./math/Vector3')
 const Vertex = require('./math/Vertex3')
 const Plane = require('./math/Plane')
@@ -21848,6 +22542,7 @@ module.exports = {
 }
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 },{"./CSG":96,"./math/Plane":110,"./math/Polygon2":111,"./math/Polygon3":112,"./math/Vector3":115,"./math/Vertex3":117}],98:[function(require,module,exports){
 arguments[4][61][0].apply(exports,arguments)
 },{"dup":61}],99:[function(require,module,exports){
@@ -21861,13 +22556,22 @@ arguments[4][64][0].apply(exports,arguments)
 },{"./CSG":95,"./math/Plane":109,"./math/Polygon2":110,"./math/Polygon3":111,"./math/Vector3":114,"./math/Vertex3":116}],97:[function(require,module,exports){
 arguments[4][60][0].apply(exports,arguments)
 },{"dup":60}],98:[function(require,module,exports){
+=======
+},{"./CSG":96,"./math/Plane":110,"./math/Polygon2":111,"./math/Polygon3":112,"./math/Vector3":115,"./math/Vertex3":117}],98:[function(require,module,exports){
+>>>>>>> Wei-shiang
 arguments[4][61][0].apply(exports,arguments)
-},{"./FuzzyFactory":97,"./constants":102,"./math/Side":112,"dup":61}],99:[function(require,module,exports){
+},{"dup":61}],99:[function(require,module,exports){
 arguments[4][62][0].apply(exports,arguments)
-},{"./FuzzyFactory":97,"./constants":102,"./math/Polygon3":111,"dup":62}],100:[function(require,module,exports){
+},{"./FuzzyFactory":98,"./constants":103,"./math/Side":113,"dup":62}],100:[function(require,module,exports){
 arguments[4][63][0].apply(exports,arguments)
+<<<<<<< HEAD
 },{"dup":63}],101:[function(require,module,exports){
 >>>>>>> master
+=======
+},{"./FuzzyFactory":98,"./constants":103,"./math/Polygon3":112,"dup":63}],101:[function(require,module,exports){
+arguments[4][64][0].apply(exports,arguments)
+},{"dup":64}],102:[function(require,module,exports){
+>>>>>>> Wei-shiang
 const Vector3D = require('./math/Vector3')
 const Line3D = require('./math/Line3')
 const Matrix4x4 = require('./math/Matrix4')
@@ -22090,6 +22794,7 @@ ConnectorList.prototype = {
 module.exports = {Connector, ConnectorList}
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 },{"./CSG":96,"./math/Line3":106,"./math/Matrix4":107,"./math/OrthoNormalBasis":108,"./math/Plane":110,"./math/Vector3":115}],103:[function(require,module,exports){
 arguments[4][66][0].apply(exports,arguments)
 },{"dup":66}],104:[function(require,module,exports){
@@ -22098,6 +22803,11 @@ arguments[4][66][0].apply(exports,arguments)
 arguments[4][65][0].apply(exports,arguments)
 },{"dup":65}],103:[function(require,module,exports){
 >>>>>>> master
+=======
+},{"./CSG":96,"./math/Line3":106,"./math/Matrix4":107,"./math/OrthoNormalBasis":108,"./math/Plane":110,"./math/Vector3":115}],103:[function(require,module,exports){
+arguments[4][66][0].apply(exports,arguments)
+},{"dup":66}],104:[function(require,module,exports){
+>>>>>>> Wei-shiang
 const CSG = require('./CSG')
 const {cube} = require('./primitives3d')
 
@@ -22133,6 +22843,7 @@ const toPointCloud = function (csg, cuberadius) {
 module.exports = {toPointCloud}
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 },{"./CSG":96,"./primitives3d":123}],105:[function(require,module,exports){
 arguments[4][67][0].apply(exports,arguments)
 },{"../utils":125,"./Vector2":114,"dup":67}],106:[function(require,module,exports){
@@ -22144,11 +22855,20 @@ arguments[4][69][0].apply(exports,arguments)
 },{"./CSG":95,"./primitives3d":122}],104:[function(require,module,exports){
 arguments[4][66][0].apply(exports,arguments)
 },{"../utils":124,"./Vector2":113,"dup":66}],105:[function(require,module,exports){
+=======
+},{"./CSG":96,"./primitives3d":123}],105:[function(require,module,exports){
+>>>>>>> Wei-shiang
 arguments[4][67][0].apply(exports,arguments)
-},{"../constants":102,"../utils":124,"./Vector3":114,"dup":67}],106:[function(require,module,exports){
+},{"../utils":125,"./Vector2":114,"dup":67}],106:[function(require,module,exports){
 arguments[4][68][0].apply(exports,arguments)
+<<<<<<< HEAD
 },{"./OrthoNormalBasis":107,"./Plane":109,"./Vector2":113,"./Vector3":114,"dup":68}],107:[function(require,module,exports){
 >>>>>>> master
+=======
+},{"../constants":103,"../utils":125,"./Vector3":115,"dup":68}],107:[function(require,module,exports){
+arguments[4][69][0].apply(exports,arguments)
+},{"./OrthoNormalBasis":108,"./Plane":110,"./Vector2":114,"./Vector3":115,"dup":69}],108:[function(require,module,exports){
+>>>>>>> Wei-shiang
 const Vector2D = require('./Vector2')
 const Vector3D = require('./Vector3')
 const Line2D = require('./Line2')
@@ -22353,10 +23073,14 @@ OrthoNormalBasis.prototype = {
 module.exports = OrthoNormalBasis
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 },{"./Line2":105,"./Line3":106,"./Matrix4":107,"./Plane":110,"./Vector2":114,"./Vector3":115}],109:[function(require,module,exports){
 =======
 },{"./Line2":104,"./Line3":105,"./Matrix4":106,"./Plane":109,"./Vector2":113,"./Vector3":114}],108:[function(require,module,exports){
 >>>>>>> master
+=======
+},{"./Line2":105,"./Line3":106,"./Matrix4":107,"./Plane":110,"./Vector2":114,"./Vector3":115}],109:[function(require,module,exports){
+>>>>>>> Wei-shiang
 const Vector2D = require('./Vector2')
 const {EPS, angleEPS} = require('../constants')
 const {parseOptionAs2DVector, parseOptionAsFloat, parseOptionAsInt, parseOptionAsBool} = require('../optionParsers')
@@ -22831,6 +23555,7 @@ Path2D.prototype = {
 module.exports = Path2D
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 },{"../CAG":94,"../constants":103,"../optionParsers":121,"./Side":113,"./Vector2":114,"./Vertex2":116}],110:[function(require,module,exports){
 arguments[4][72][0].apply(exports,arguments)
 },{"../constants":103,"./Line3":106,"./Vector3":115,"dup":72}],111:[function(require,module,exports){
@@ -22839,6 +23564,11 @@ arguments[4][72][0].apply(exports,arguments)
 arguments[4][71][0].apply(exports,arguments)
 },{"../constants":102,"./Line3":105,"./Vector3":114,"dup":71}],110:[function(require,module,exports){
 >>>>>>> master
+=======
+},{"../CAG":94,"../constants":103,"../optionParsers":121,"./Side":113,"./Vector2":114,"./Vertex2":116}],110:[function(require,module,exports){
+arguments[4][72][0].apply(exports,arguments)
+},{"../constants":103,"./Line3":106,"./Vector3":115,"dup":72}],111:[function(require,module,exports){
+>>>>>>> Wei-shiang
 const CAG = require('../CAG')
 
 /*
@@ -22860,10 +23590,14 @@ Polygon2D.prototype = CAG.prototype
 module.exports = Polygon2D
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 },{"../CAG":94}],112:[function(require,module,exports){
 =======
 },{"../CAG":93}],111:[function(require,module,exports){
 >>>>>>> master
+=======
+},{"../CAG":94}],112:[function(require,module,exports){
+>>>>>>> Wei-shiang
 const Vector3D = require('./Vector3')
 const Vertex = require('./Vertex3')
 const Matrix4x4 = require('./Matrix4')
@@ -23441,10 +24175,14 @@ Polygon.defaultShared = new Polygon.Shared(null)
 module.exports = Polygon
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 },{"../CAG":94,"../CAGFactories":95,"../CSG":96,"../constants":103,"../utils":125,"./Matrix4":107,"./Plane":110,"./Vector3":115,"./Vertex3":117}],113:[function(require,module,exports){
 =======
 },{"../CAG":93,"../CAGFactories":94,"../CSG":95,"../constants":102,"../utils":124,"./Matrix4":106,"./Plane":109,"./Vector3":114,"./Vertex3":116}],112:[function(require,module,exports){
 >>>>>>> master
+=======
+},{"../CAG":94,"../CAGFactories":95,"../CSG":96,"../constants":103,"../utils":125,"./Matrix4":107,"./Plane":110,"./Vector3":115,"./Vertex3":117}],113:[function(require,module,exports){
+>>>>>>> Wei-shiang
 const Vector2D = require('./Vector2')
 const Vertex = require('./Vertex2')
 const Vertex3 = require('./Vertex3')
@@ -23549,10 +24287,14 @@ Side.prototype = {
 module.exports = Side
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 },{"../constants":103,"./Polygon3":112,"./Vector2":114,"./Vertex2":116,"./Vertex3":117}],114:[function(require,module,exports){
 =======
 },{"../constants":102,"./Polygon3":111,"./Vector2":113,"./Vertex2":115,"./Vertex3":116}],113:[function(require,module,exports){
 >>>>>>> master
+=======
+},{"../constants":103,"./Polygon3":112,"./Vector2":114,"./Vertex2":116,"./Vertex3":117}],114:[function(require,module,exports){
+>>>>>>> Wei-shiang
 const {IsFloat} = require('../utils')
 
 /** Class Vector2D
@@ -23751,6 +24493,7 @@ Vector2D.prototype = {
 module.exports = Vector2D
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 },{"../utils":125,"./Vector3":115}],115:[function(require,module,exports){
 arguments[4][77][0].apply(exports,arguments)
 },{"../utils":125,"./Vector2":114,"dup":77}],116:[function(require,module,exports){
@@ -23762,11 +24505,20 @@ arguments[4][79][0].apply(exports,arguments)
 },{"../utils":124,"./Vector3":114}],114:[function(require,module,exports){
 arguments[4][76][0].apply(exports,arguments)
 },{"../utils":124,"./Vector2":113,"dup":76}],115:[function(require,module,exports){
+=======
+},{"../utils":125,"./Vector3":115}],115:[function(require,module,exports){
+>>>>>>> Wei-shiang
 arguments[4][77][0].apply(exports,arguments)
-},{"../constants":102,"./Vector2":113,"dup":77}],116:[function(require,module,exports){
+},{"../utils":125,"./Vector2":114,"dup":77}],116:[function(require,module,exports){
 arguments[4][78][0].apply(exports,arguments)
+<<<<<<< HEAD
 },{"../constants":102,"./Vector3":114,"dup":78}],117:[function(require,module,exports){
 >>>>>>> master
+=======
+},{"../constants":103,"./Vector2":114,"dup":78}],117:[function(require,module,exports){
+arguments[4][79][0].apply(exports,arguments)
+},{"../constants":103,"./Vector3":115,"dup":79}],118:[function(require,module,exports){
+>>>>>>> Wei-shiang
 const {EPS} = require('../constants')
 const {solve2Linear} = require('../utils')
 
@@ -23794,10 +24546,14 @@ const linesIntersect = function (p0start, p0end, p1start, p1end) {
 module.exports = {linesIntersect}
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 },{"../constants":103,"../utils":125}],119:[function(require,module,exports){
 =======
 },{"../constants":102,"../utils":124}],118:[function(require,module,exports){
 >>>>>>> master
+=======
+},{"../constants":103,"../utils":125}],119:[function(require,module,exports){
+>>>>>>> Wei-shiang
 const {EPS} = require('../constants')
 const OrthoNormalBasis = require('./OrthoNormalBasis')
 const {interpolateBetween2DPointsForY, insertSorted, fnNumberSort} = require('../utils')
@@ -24142,6 +24898,7 @@ const reTesselateCoplanarPolygons = function (sourcepolygons, destpolygons) {
 module.exports = {reTesselateCoplanarPolygons}
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 },{"../constants":103,"../utils":125,"./Line2":105,"./OrthoNormalBasis":108,"./Polygon3":112,"./Vector2":114,"./Vertex3":117}],120:[function(require,module,exports){
 arguments[4][82][0].apply(exports,arguments)
 },{"./math/Matrix4":107,"./math/Plane":110,"./math/Vector3":115,"dup":82}],121:[function(require,module,exports){
@@ -24150,6 +24907,11 @@ arguments[4][82][0].apply(exports,arguments)
 arguments[4][81][0].apply(exports,arguments)
 },{"./math/Matrix4":106,"./math/Plane":109,"./math/Vector3":114,"dup":81}],120:[function(require,module,exports){
 >>>>>>> master
+=======
+},{"../constants":103,"../utils":125,"./Line2":105,"./OrthoNormalBasis":108,"./Polygon3":112,"./Vector2":114,"./Vertex3":117}],120:[function(require,module,exports){
+arguments[4][82][0].apply(exports,arguments)
+},{"./math/Matrix4":107,"./math/Plane":110,"./math/Vector3":115,"dup":82}],121:[function(require,module,exports){
+>>>>>>> Wei-shiang
 const Vector3D = require('./math/Vector3')
 const Vector2D = require('./math/Vector2')
 
@@ -24228,10 +24990,14 @@ module.exports = {
 }
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 },{"./math/Vector2":114,"./math/Vector3":115}],122:[function(require,module,exports){
 =======
 },{"./math/Vector2":113,"./math/Vector3":114}],121:[function(require,module,exports){
 >>>>>>> master
+=======
+},{"./math/Vector2":114,"./math/Vector3":115}],122:[function(require,module,exports){
+>>>>>>> Wei-shiang
 const CAG = require('./CAG')
 const {parseOptionAs2DVector, parseOptionAsFloat, parseOptionAsInt} = require('./optionParsers')
 const {defaultResolution2D} = require('./constants')
@@ -24418,10 +25184,14 @@ module.exports = {
 }
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 },{"./CAG":94,"./CAGFactories":95,"./constants":103,"./math/Path2":109,"./math/Vector2":114,"./optionParsers":121}],123:[function(require,module,exports){
 =======
 },{"./CAG":93,"./CAGFactories":94,"./constants":102,"./math/Path2":108,"./math/Vector2":113,"./optionParsers":120}],122:[function(require,module,exports){
 >>>>>>> master
+=======
+},{"./CAG":94,"./CAGFactories":95,"./constants":103,"./math/Path2":109,"./math/Vector2":114,"./optionParsers":121}],123:[function(require,module,exports){
+>>>>>>> Wei-shiang
 const CSG = require('./CSG')
 const {parseOption, parseOptionAs3DVector, parseOptionAs2DVector, parseOptionAs3DVectorList, parseOptionAsFloat, parseOptionAsInt} = require('./optionParsers')
 const {defaultResolution3D, defaultResolution2D, EPS} = require('./constants')
@@ -24972,10 +25742,14 @@ module.exports = {
 }
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 },{"./CSG":96,"./Properties":101,"./connectors":102,"./constants":103,"./math/Polygon3":112,"./math/Vector3":115,"./math/Vertex3":117,"./optionParsers":121}],124:[function(require,module,exports){
 =======
 },{"./CSG":95,"./Properties":100,"./connectors":101,"./constants":102,"./math/Polygon3":111,"./math/Vector3":114,"./math/Vertex3":116,"./optionParsers":120}],123:[function(require,module,exports){
 >>>>>>> master
+=======
+},{"./CSG":96,"./Properties":101,"./connectors":102,"./constants":103,"./math/Polygon3":112,"./math/Vector3":115,"./math/Vertex3":117,"./optionParsers":121}],124:[function(require,module,exports){
+>>>>>>> Wei-shiang
 const {_CSGDEBUG, EPS} = require('./constants')
 const Vertex = require('./math/Vertex3')
 const Polygon = require('./math/Polygon3')
@@ -25488,10 +26262,14 @@ Node.prototype = {
 module.exports = Tree
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 },{"./constants":103,"./math/Polygon3":112,"./math/Vertex3":117}],125:[function(require,module,exports){
 =======
 },{"./constants":102,"./math/Polygon3":111,"./math/Vertex3":116}],124:[function(require,module,exports){
 >>>>>>> master
+=======
+},{"./constants":103,"./math/Polygon3":112,"./math/Vertex3":117}],125:[function(require,module,exports){
+>>>>>>> Wei-shiang
 function fnNumberSort (a, b) {
   return a - b
 }
@@ -25565,6 +26343,7 @@ module.exports = {
 }
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 },{}],126:[function(require,module,exports){
 arguments[4][90][0].apply(exports,arguments)
 },{"../constants":103,"../math/Plane":110,"../math/Polygon3":112,"dup":90}],127:[function(require,module,exports){
@@ -25573,6 +26352,11 @@ arguments[4][90][0].apply(exports,arguments)
 arguments[4][89][0].apply(exports,arguments)
 },{"../constants":102,"../math/Plane":109,"../math/Polygon3":111,"dup":89}],126:[function(require,module,exports){
 >>>>>>> master
+=======
+},{}],126:[function(require,module,exports){
+arguments[4][90][0].apply(exports,arguments)
+},{"../constants":103,"../math/Plane":110,"../math/Polygon3":112,"dup":90}],127:[function(require,module,exports){
+>>>>>>> Wei-shiang
 // color table from http://www.w3.org/TR/css3-color/
 const cssColors = {
 // basic color keywords
@@ -26020,10 +26804,14 @@ module.exports = {
 }
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 },{}],128:[function(require,module,exports){
 =======
 },{}],127:[function(require,module,exports){
 >>>>>>> master
+=======
+},{}],128:[function(require,module,exports){
+>>>>>>> Wei-shiang
 function echo () {
   console.warn('echo() will be deprecated in the near future: please use console.log/warn/error instead')
   var s = '', a = arguments
@@ -26041,10 +26829,14 @@ module.exports = {
 }
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 },{}],129:[function(require,module,exports){
 =======
 },{}],128:[function(require,module,exports){
 >>>>>>> master
+=======
+},{}],129:[function(require,module,exports){
+>>>>>>> Wei-shiang
 const { CSG } = require('@jscad/csg')
 
 // FIXME: this is to have more readable/less extremely verbose code below
@@ -26107,10 +26899,14 @@ const degToRad = deg => (Math.PI / 180) * deg
 
 module.exports = {cagToPointsArray, clamp, rightMultiply1x3VectorToArray, polygonFromPoints}
 <<<<<<< HEAD
+<<<<<<< HEAD
 },{"@jscad/csg":93}],130:[function(require,module,exports){
 =======
 },{"@jscad/csg":92}],129:[function(require,module,exports){
 >>>>>>> master
+=======
+},{"@jscad/csg":93}],130:[function(require,module,exports){
+>>>>>>> Wei-shiang
 
 const primitives3d = require('./primitives3d')
 const primitives2d = require('./primitives2d')
@@ -26147,10 +26943,14 @@ const exportedApi = {
 module.exports = exportedApi
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 },{"./color":127,"./debug":128,"./log":131,"./maths":132,"./ops-booleans":133,"./ops-extrusions":134,"./ops-transformations":135,"./primitives2d":136,"./primitives3d":137,"./text":138,"@jscad/csg":93}],131:[function(require,module,exports){
 =======
 },{"./color":126,"./debug":127,"./log":130,"./maths":131,"./ops-booleans":132,"./ops-extrusions":133,"./ops-transformations":134,"./primitives2d":135,"./primitives3d":136,"./text":137,"@jscad/csg":92}],130:[function(require,module,exports){
 >>>>>>> master
+=======
+},{"./color":127,"./debug":128,"./log":131,"./maths":132,"./ops-booleans":133,"./ops-extrusions":134,"./ops-transformations":135,"./primitives2d":136,"./primitives3d":137,"./text":138,"@jscad/csg":93}],131:[function(require,module,exports){
+>>>>>>> Wei-shiang
 function log (txt) {
   var timeInMs = Date.now()
   var prevtime// OpenJsCad.log.prevLogTime
@@ -26178,10 +26978,14 @@ module.exports = {
 }
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 },{}],132:[function(require,module,exports){
 =======
 },{}],131:[function(require,module,exports){
 >>>>>>> master
+=======
+},{}],132:[function(require,module,exports){
+>>>>>>> Wei-shiang
 // -- Math functions (360 deg based vs 2pi)
 function sin (a) {
   return Math.sin(a / 360 * Math.PI * 2)
@@ -26293,10 +27097,14 @@ module.exports = {
 }
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 },{}],133:[function(require,module,exports){
 =======
 },{}],132:[function(require,module,exports){
 >>>>>>> master
+=======
+},{}],133:[function(require,module,exports){
+>>>>>>> Wei-shiang
 const { CAG } = require('@jscad/csg')
 
 // -- 3D boolean operations
@@ -26401,10 +27209,14 @@ module.exports = {
 }
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 },{"@jscad/csg":93}],134:[function(require,module,exports){
 =======
 },{"@jscad/csg":92}],133:[function(require,module,exports){
 >>>>>>> master
+=======
+},{"@jscad/csg":93}],134:[function(require,module,exports){
+>>>>>>> Wei-shiang
 const { CSG, CAG } = require('@jscad/csg')
 const {cagToPointsArray, clamp, rightMultiply1x3VectorToArray, polygonFromPoints} = require('./helpers')
 // -- 2D to 3D primitives
@@ -26621,10 +27433,14 @@ module.exports = {
 }
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 },{"./helpers":129,"@jscad/csg":93}],135:[function(require,module,exports){
 =======
 },{"./helpers":128,"@jscad/csg":92}],134:[function(require,module,exports){
 >>>>>>> master
+=======
+},{"./helpers":129,"@jscad/csg":93}],135:[function(require,module,exports){
+>>>>>>> Wei-shiang
 const { CSG, CAG } = require('@jscad/csg')
 const { union } = require('./ops-booleans')
 // -- 3D transformations (OpenSCAD like notion)
@@ -27038,10 +27854,14 @@ module.exports = {
 }
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 },{"./ops-booleans":133,"@jscad/csg":93}],136:[function(require,module,exports){
 =======
 },{"./ops-booleans":132,"@jscad/csg":92}],135:[function(require,module,exports){
 >>>>>>> master
+=======
+},{"./ops-booleans":133,"@jscad/csg":93}],136:[function(require,module,exports){
+>>>>>>> Wei-shiang
 const { CAG } = require('@jscad/csg')
 
 // -- 2D primitives (OpenSCAD like notion)
@@ -27159,10 +27979,14 @@ module.exports = {
 }
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 },{"@jscad/csg":93}],137:[function(require,module,exports){
 =======
 },{"@jscad/csg":92}],136:[function(require,module,exports){
 >>>>>>> master
+=======
+},{"@jscad/csg":93}],137:[function(require,module,exports){
+>>>>>>> Wei-shiang
 // -- 3D primitives (OpenSCAD like notion)
 const { CSG } = require('@jscad/csg')
 const { circle } = require('./primitives2d')
@@ -27554,10 +28378,14 @@ module.exports = {
 }
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 },{"./ops-extrusions":134,"./ops-transformations":135,"./primitives2d":136,"@jscad/csg":93}],138:[function(require,module,exports){
 =======
 },{"./ops-extrusions":133,"./ops-transformations":134,"./primitives2d":135,"@jscad/csg":92}],137:[function(require,module,exports){
 >>>>>>> master
+=======
+},{"./ops-extrusions":134,"./ops-transformations":135,"./primitives2d":136,"@jscad/csg":93}],138:[function(require,module,exports){
+>>>>>>> Wei-shiang
 
 /** Construct a with, segments tupple from a character
  * @param {Float} x - x offset
@@ -28197,10 +29025,14 @@ module.exports = {
 }
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 },{}],139:[function(require,module,exports){
 =======
 },{}],138:[function(require,module,exports){
 >>>>>>> master
+=======
+},{}],139:[function(require,module,exports){
+>>>>>>> Wei-shiang
 "use strict;"
 
 const scadApi = require('@jscad/scad-api')
@@ -28224,10 +29056,14 @@ function rebuildMakeLeg ( Leg_r , Leg_h ){
 
 module.exports = rebuildMakeLeg
 <<<<<<< HEAD
+<<<<<<< HEAD
 },{"./csgToGeometries":34,"@jscad/csg":43,"@jscad/scad-api":130}],140:[function(require,module,exports){
 =======
 },{"./csgToGeometries":33,"@jscad/csg":42,"@jscad/scad-api":129}],139:[function(require,module,exports){
 >>>>>>> master
+=======
+},{"./csgToGeometries":34,"@jscad/csg":43,"@jscad/scad-api":130}],140:[function(require,module,exports){
+>>>>>>> Wei-shiang
 "use strict;"
 
 const scadApi = require('@jscad/scad-api')
@@ -28314,7 +29150,11 @@ function assignUVs(geometry) {
 
 module.exports = rebuildMakeSeat
 <<<<<<< HEAD
+<<<<<<< HEAD
 },{"./csgToGeometries":34,"@jscad/csg":43,"@jscad/scad-api":130}]},{},[42]);
 =======
 },{"./csgToGeometries":33,"@jscad/csg":42,"@jscad/scad-api":129}]},{},[41]);
 >>>>>>> master
+=======
+},{"./csgToGeometries":34,"@jscad/csg":43,"@jscad/scad-api":130}]},{},[42]);
+>>>>>>> Wei-shiang

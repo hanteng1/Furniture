@@ -112,6 +112,11 @@ Ui.prototype = {
 			scope.main.mergeObjs();
 		});
 
+		$( ".item.m_delete" ).click(function() {
+			//group function
+			scope.main.DeleteObj();
+		});
+
 
 		//enable house environment
 		$('.ui.toggle.checkbox.house').checkbox({
@@ -202,6 +207,7 @@ Ui.prototype = {
 			scope.main.GetDistance();
 			
 		});
+		
 
 		//chair_align controller function
 		this.designButtons();
