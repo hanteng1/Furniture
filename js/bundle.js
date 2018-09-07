@@ -5127,48 +5127,44 @@ module.exports = MarkSize;
 
 },{}],19:[function(require,module,exports){
 "use strict;"
+const Procedure_button = require('./Procedure_button');
 
 function Model_Align(main){
 
 	this.main = main;
     this.furnitures = main.furnitures;
     this.Align_mode = false; 
+    var scope = this;
+    $( ".item.ui.image.label.align1" ).click(function() {
+		if(scope.main.onCtrl == true && scope.main.DistanceObj.length==2){
+			scope.AlignFurniture('x');
+		}
+		if(scope.main.onCtrlE == true){
+			scope.AlignComponent('x');
+		}
+    });
+    $( ".item.ui.image.label.align2" ).click(function() {
+    	if(scope.main.onCtrl == true && scope.main.DistanceObj.length==2){
+			scope.AlignFurniture('y');
+		}
+		if(scope.main.onCtrlE == true){
+			scope.AlignComponent('y');
+		}
+    });
+    $( ".item.ui.image.label.align3" ).click(function() {
+    	if(scope.main.onCtrl == true && scope.main.DistanceObj.length==2){
+			scope.AlignFurniture('z');
+		}
+		if(scope.main.onCtrlE == true){
+			scope.AlignComponent('z');
+		}
+    });
 
 }
 
 Model_Align.prototype = {
 
 	execute: function( name ){
-		var scope = this;
-
-		$( ".item.ui.image.label.align1" ).click(function() {
-			if(scope.main.onCtrl == true && scope.main.DistanceObj.length==2){
-				scope.AlignFurniture('x');
-			}
-			if(scope.main.onCtrlE == true){
-				scope.AlignComponent('x');
-			}
-			
-        });
-        $( ".item.ui.image.label.align2" ).click(function() {
-        	if(scope.main.onCtrl == true && scope.main.DistanceObj.length==2){
-				scope.AlignFurniture('y');
-			}
-			if(scope.main.onCtrlE == true){
-				scope.AlignComponent('y');
-			}
-			
-        });
-        $( ".item.ui.image.label.align3" ).click(function() {
-        	if(scope.main.onCtrl == true && scope.main.DistanceObj.length==2){
-				scope.AlignFurniture('z');
-			}
-			if(scope.main.onCtrlE == true){
-				scope.AlignComponent('z');
-			}
-			
-        });
-
 
 		if(this.Align_mode == false && name=='align'){
         	$('#parameter_control_tool_align').show();
@@ -5176,6 +5172,15 @@ Model_Align.prototype = {
             this.main.processor.executeDesign("MODEL_PAINTING", "align");
         	this.main.processor.executeDesign("MODEL_WRAP", "align");
         	this.main.processor.executeDesign("MODEL_ROTATION", "align");
+        	
+        	//creat procedure button
+        	if(this.main.stepOperationName != name){
+        		this.DeleteButton();
+	        	Procedure_button( this.main, this.main.stepOperationName );
+	        	//record the operation name
+	        	this.main.stepOperationName = name;
+        	}
+	        	
         }
         else if(this.Align_mode == true || name!= 'align'){
         	$('#parameter_control_tool_align').hide();
@@ -5185,7 +5190,9 @@ Model_Align.prototype = {
 	},
 
 	AlignFurniture: function( mode ){
-
+		
+		this.DeleteButton();
+		
 		var group = new THREE.Group();
 		var TotalSize = new THREE.Vector3();
 
@@ -5242,6 +5249,8 @@ Model_Align.prototype = {
 	},
 
 	AlignComponent: function( mode ){
+		
+		this.DeleteButton();
 
 		var group = new THREE.Group();
 		var TotalSize = new THREE.Vector3();
@@ -5332,88 +5341,101 @@ Model_Align.prototype = {
 		return center;
     },
 
+    DeleteButton: function(){
+    	//console.log(this.main.stepNumber);
+		//console.log(this.main.stepObject.length);
+		this.main.lastStep = true;
+		if (this.main.stepNumber < this.main.stepObject.length){
+			var stepLength = this.main.stepObject.length;
 
+			for(var i=parseInt(this.main.stepNumber); i<stepLength; i++){
+				var btn = document.getElementById(
+					"ui circular icon button procedure "+i.toString());
+				btn.parentNode.removeChild(btn);
+			}
+			this.main.stepObject.length = parseInt(this.main.stepNumber);
+		}
+
+    }
 
 
 }
 
 module.exports = Model_Align
-},{}],20:[function(require,module,exports){
+},{"./Procedure_button":23}],20:[function(require,module,exports){
 "use strict;"
+const Procedure_button = require('./Procedure_button');
 
 
 function Model_Painting( main ){
 
     this.main = main;
     this.furnitures = main.furnitures;
-
     this.paint_mode = false;
+    var scope = this;
+    var manager = new THREE.LoadingManager();
+    var textureLoader = new THREE.TextureLoader( manager );
+    $( ".item.ui.image.label.paint1" ).click(function() {
+        var texture = textureLoader.load( '../images/material/material1.jpg' );
+        texture.repeat.set(0.1, 0.1);
+        texture.wrapS = texture.wrapT = THREE.MirroredRepeatWrapping;
+        var newmaterial = new THREE.MeshBasicMaterial( {map: texture} );
+        scope.ChangeTexture( newmaterial );
+        
+    });
+    $( ".item.ui.image.label.paint2" ).click(function() {
+        var texture = textureLoader.load( '../images/material/material2.jpg' );
+        texture.repeat.set(0.1, 0.1);
+        texture.wrapS = texture.wrapT = THREE.MirroredRepeatWrapping;
+        var newmaterial = new THREE.MeshBasicMaterial( {map: texture} );
+        scope.ChangeTexture( newmaterial );
+        
+    });
+    $( ".item.ui.image.label.paint3" ).click(function() {
+        var texture = textureLoader.load( '../images/material/material3.jpg' );
+        texture.repeat.set(0.1, 0.1);
+        texture.wrapS = texture.wrapT = THREE.MirroredRepeatWrapping;
+        var newmaterial = new THREE.MeshBasicMaterial( {map: texture} );
+        scope.ChangeTexture( newmaterial );
+        
+    });
+    $( ".item.ui.image.label.paint4" ).click(function() {
+        var texture = textureLoader.load( '../images/material/material4.jpg' );
+        texture.repeat.set(0.1, 0.1);
+        texture.wrapS = texture.wrapT = THREE.MirroredRepeatWrapping;
+        var newmaterial = new THREE.MeshBasicMaterial( {map: texture} );
+        scope.ChangeTexture( newmaterial );
+        
+    });
+    $( ".item.ui.image.label.paint5" ).click(function() {
+        var texture = textureLoader.load( '../images/material/material5.jpg' );
+        texture.repeat.set(0.1, 0.1);
+        texture.wrapS = texture.wrapT = THREE.MirroredRepeatWrapping;
+        var newmaterial = new THREE.MeshBasicMaterial( {map: texture} );
+        scope.ChangeTexture( newmaterial );
+        
+    });
+    $( ".item.ui.image.label.paint7" ).click(function() {
+        var texture = textureLoader.load( '../images/material/material7.jpg' );
+        texture.repeat.set(0.1, 0.1);
+        texture.wrapS = texture.wrapT = THREE.MirroredRepeatWrapping;
+        var newmaterial = new THREE.MeshBasicMaterial( {map: texture} );
+        scope.ChangeTexture( newmaterial );
+        
+    });
+    $( ".item.ui.image.label.paint9" ).click(function() {
+        var texture = textureLoader.load( '../images/material/material9.jpg' );
+        texture.repeat.set(0.1, 0.1);
+        texture.wrapS = texture.wrapT = THREE.MirroredRepeatWrapping;
+        var newmaterial = new THREE.MeshBasicMaterial( {map: texture} );
+        scope.ChangeTexture( newmaterial );
+        
+    });
 }
 
 Model_Painting.prototype = {
 
     execute: function( name ){
-        
-        var main = this;
-        var manager = new THREE.LoadingManager();
-        var textureLoader = new THREE.TextureLoader( manager );
-
-        $( ".item.ui.image.label.paint1" ).click(function() {
-            var texture = textureLoader.load( '../images/material/material1.jpg' );
-            texture.repeat.set(0.1, 0.1);
-            texture.wrapS = texture.wrapT = THREE.MirroredRepeatWrapping;
-            var newmaterial = new THREE.MeshBasicMaterial( {map: texture} );
-            main.ChangeTexture( newmaterial );
-            
-        });
-        $( ".item.ui.image.label.paint2" ).click(function() {
-            var texture = textureLoader.load( '../images/material/material2.jpg' );
-            texture.repeat.set(0.1, 0.1);
-            texture.wrapS = texture.wrapT = THREE.MirroredRepeatWrapping;
-            var newmaterial = new THREE.MeshBasicMaterial( {map: texture} );
-            main.ChangeTexture( newmaterial );
-            
-        });
-        $( ".item.ui.image.label.paint3" ).click(function() {
-            var texture = textureLoader.load( '../images/material/material3.jpg' );
-            texture.repeat.set(0.1, 0.1);
-            texture.wrapS = texture.wrapT = THREE.MirroredRepeatWrapping;
-            var newmaterial = new THREE.MeshBasicMaterial( {map: texture} );
-            main.ChangeTexture( newmaterial );
-            
-        });
-        $( ".item.ui.image.label.paint4" ).click(function() {
-            var texture = textureLoader.load( '../images/material/material4.jpg' );
-            texture.repeat.set(0.1, 0.1);
-            texture.wrapS = texture.wrapT = THREE.MirroredRepeatWrapping;
-            var newmaterial = new THREE.MeshBasicMaterial( {map: texture} );
-            main.ChangeTexture( newmaterial );
-            
-        });
-        $( ".item.ui.image.label.paint5" ).click(function() {
-            var texture = textureLoader.load( '../images/material/material5.jpg' );
-            texture.repeat.set(0.1, 0.1);
-            texture.wrapS = texture.wrapT = THREE.MirroredRepeatWrapping;
-            var newmaterial = new THREE.MeshBasicMaterial( {map: texture} );
-            main.ChangeTexture( newmaterial );
-            
-        });
-        $( ".item.ui.image.label.paint7" ).click(function() {
-            var texture = textureLoader.load( '../images/material/material7.jpg' );
-            texture.repeat.set(0.1, 0.1);
-            texture.wrapS = texture.wrapT = THREE.MirroredRepeatWrapping;
-            var newmaterial = new THREE.MeshBasicMaterial( {map: texture} );
-            main.ChangeTexture( newmaterial );
-            
-        });
-        $( ".item.ui.image.label.paint9" ).click(function() {
-            var texture = textureLoader.load( '../images/material/material9.jpg' );
-            texture.repeat.set(0.1, 0.1);
-            texture.wrapS = texture.wrapT = THREE.MirroredRepeatWrapping;
-            var newmaterial = new THREE.MeshBasicMaterial( {map: texture} );
-            main.ChangeTexture( newmaterial );
-            
-        });
 
         if(this.paint_mode == false && name=='painting'){
             $('#parameter_control_tool_painting').show();
@@ -5421,6 +5443,14 @@ Model_Painting.prototype = {
             this.main.processor.executeDesign("MODEL_ALIGN", "painting");
             this.main.processor.executeDesign("MODEL_WRAP", "painting");
             this.main.processor.executeDesign("MODEL_ROTATION", "painting");
+            
+            //creat procedure button
+            if(this.main.stepOperationName != name){
+                this.DeleteButton();
+                Procedure_button( this.main, this.main.stepOperationName );
+                //record the operation name
+                this.main.stepOperationName = name;
+            }
         }
         else if(this.paint_mode == true || name!= 'painting'){
             $('#parameter_control_tool_painting').hide();
@@ -5431,6 +5461,8 @@ Model_Painting.prototype = {
     },
 
     ChangeTexture( newmaterial ){
+        
+        this.DeleteButton();
 
         for(var i=0 ; i<this.main.GetSizeObj.length ; i++ ){
             
@@ -5443,6 +5475,7 @@ Model_Painting.prototype = {
                 if( ChangeTextureObj[j].geometry.isBufferGeometry ){
                     ChangeTextureObj[j].geometry = new THREE.Geometry().fromBufferGeometry( ChangeTextureObj[j].geometry );
                     assignUVs( ChangeTextureObj[j].geometry );
+                    ChangeTextureObj[j].geometry= new THREE.BufferGeometry().fromGeometry( ChangeTextureObj[j].geometry );
                 }
                 
                 ChangeTextureObj[j].material = newmaterial;
@@ -5463,6 +5496,22 @@ Model_Painting.prototype = {
             array.push(obj);    
         }
 
+    },
+
+    DeleteButton: function(){
+        //console.log(this.main.stepNumber);
+        //console.log(this.main.stepObject.length);
+        this.main.lastStep = true;
+        if (this.main.stepNumber < this.main.stepObject.length){
+            var stepLength = this.main.stepObject.length;
+
+            for(var i=parseInt(this.main.stepNumber); i<stepLength; i++){
+                var btn = document.getElementById(
+                    "ui circular icon button procedure "+i.toString());
+                btn.parentNode.removeChild(btn);
+            }
+            this.main.stepObject.length = parseInt(this.main.stepNumber);
+        }
     }
 
 }
@@ -5494,16 +5543,53 @@ function assignUVs(geometry) {
 }
 
 module.exports = Model_Painting
-},{}],21:[function(require,module,exports){
+},{"./Procedure_button":23}],21:[function(require,module,exports){
 "use strict;"
-const {Procedure_button , RecordPosition} = require('./Procedure_button');
+const Procedure_button = require('./Procedure_button');
 
 function Model_Rotation(main){
 
 	this.main = main;
     this.furnitures = main.furnitures;
     this.Rotation_mode = false; 
+	var scope = this;
 
+    $( ".item.ui.image.label.rota1" ).click(function() {	
+		for(var i=0 ; i<scope.main.GetSizeObj.length ; i++ ){
+            var model = scope.main.GetSizeObj[i];
+			scope.objectRotationByAxis( model, 'x' , 90 );
+        }
+    });
+    $( ".item.ui.image.label.rota2" ).click(function() {
+		for(var i=0 ; i<scope.main.GetSizeObj.length ; i++ ){
+            var model = scope.main.GetSizeObj[i];
+			scope.objectRotationByAxis( model, 'x' , -90 );
+        }
+    });
+    $( ".item.ui.image.label.rota3" ).click(function() {
+		for(var i=0 ; i<scope.main.GetSizeObj.length ; i++ ){
+            var model = scope.main.GetSizeObj[i];
+			scope.objectRotationByAxis( model, 'z' , 90 );
+        }
+    });
+    $( ".item.ui.image.label.rota4" ).click(function() {
+		for(var i=0 ; i<scope.main.GetSizeObj.length ; i++ ){
+            var model = scope.main.GetSizeObj[i];
+			scope.objectRotationByAxis( model, 'z' , -90 );
+        }
+    });
+    $( ".item.ui.image.label.rota5" ).click(function() {
+		for(var i=0 ; i<scope.main.GetSizeObj.length ; i++ ){
+            var model = scope.main.GetSizeObj[i];
+			scope.objectRotationByAxis( model, 'y' , 90 );
+        }
+    });
+    $( ".item.ui.image.label.rota6" ).click(function() {
+		for(var i=0 ; i<scope.main.GetSizeObj.length ; i++ ){
+            var model = scope.main.GetSizeObj[i];
+			scope.objectRotationByAxis( model, 'y' , -90 );
+        }
+    });
 }
 
 Model_Rotation.prototype = {
@@ -5511,62 +5597,22 @@ Model_Rotation.prototype = {
 	execute: function( name ){
 		var scope = this;
 
-		$( ".item.ui.image.label.rota1" ).click(function() {
-			
-			for(var i=0 ; i<scope.main.GetSizeObj.length ; i++ ){
-	            var model = scope.main.GetSizeObj[i];
-				scope.objectRotationByAxis( model, 'x' , 90 );
-	        }
-        });
-        $( ".item.ui.image.label.rota2" ).click(function() {
-
-			for(var i=0 ; i<scope.main.GetSizeObj.length ; i++ ){
-	            var model = scope.main.GetSizeObj[i];
-				scope.objectRotationByAxis( model, 'x' , -90 );
-	        }
-	        
-        });
-        $( ".item.ui.image.label.rota3" ).click(function() {
-
-			for(var i=0 ; i<scope.main.GetSizeObj.length ; i++ ){
-	            var model = scope.main.GetSizeObj[i];
-				scope.objectRotationByAxis( model, 'z' , 90 );
-	        }
-	        
-        });
-        $( ".item.ui.image.label.rota4" ).click(function() {
-
-			for(var i=0 ; i<scope.main.GetSizeObj.length ; i++ ){
-	            var model = scope.main.GetSizeObj[i];
-				scope.objectRotationByAxis( model, 'z' , -90 );
-	        }
-	        
-        });
-        $( ".item.ui.image.label.rota5" ).click(function() {
-
-			for(var i=0 ; i<scope.main.GetSizeObj.length ; i++ ){
-	            var model = scope.main.GetSizeObj[i];
-				scope.objectRotationByAxis( model, 'y' , 90 );
-	        }
-	        
-        });
-        $( ".item.ui.image.label.rota6" ).click(function() {
-
-			for(var i=0 ; i<scope.main.GetSizeObj.length ; i++ ){
-	            var model = scope.main.GetSizeObj[i];
-				scope.objectRotationByAxis( model, 'y' , -90 );
-	        }
-	        
-        });
-
-
+        //show my button, hide others button
 		if(this.Rotation_mode == false && name=='rotation'){
         	$('#parameter_control_tool_rotation').show();
             this.Rotation_mode = true;
             this.main.processor.executeDesign("MODEL_ALIGN", "rotation");
         	this.main.processor.executeDesign("MODEL_PAINTING", "rotation");
         	this.main.processor.executeDesign("MODEL_WRAP", "rotation");
-        }
+        	
+        	//creat procedure button
+        	if(this.main.stepOperationName != name){
+        		this.DeleteButton();
+	        	Procedure_button( this.main, this.main.stepOperationName );
+	        	//record the operation name
+	        	this.main.stepOperationName = name;
+        	}
+        }//hide my button
         else if(this.Rotation_mode == true || name!='rotation'){
         	$('#parameter_control_tool_rotation').hide();
             this.Rotation_mode = false;
@@ -5577,6 +5623,9 @@ Model_Rotation.prototype = {
 	},
 
 	objectRotationByAxis: function(obj, axis, degree){
+		
+		this.DeleteButton();
+
 		var center = this.getCenterPosition(obj);
 		var size = this.getSize(obj);
 		//rotation
@@ -5631,6 +5680,22 @@ Model_Rotation.prototype = {
 
         //this includes width, height, depth
         return box_size;
+    },
+
+    DeleteButton: function(){
+    	//console.log(this.main.stepNumber);
+		//console.log(this.main.stepObject.length);
+		this.main.lastStep = true;
+		if (this.main.stepNumber < this.main.stepObject.length){
+			var stepLength = this.main.stepObject.length;
+
+			for(var i=parseInt(this.main.stepNumber); i<stepLength; i++){
+				var btn = document.getElementById(
+					"ui circular icon button procedure "+i.toString());
+				btn.parentNode.removeChild(btn);
+			}
+			this.main.stepObject.length = parseInt(this.main.stepNumber);
+		}
     }
 
 
@@ -5643,100 +5708,92 @@ module.exports = Model_Rotation
 const computeConvexHull = require('./computeConvexHull');
 const cadExtrudeShapeIntersection = require('./cadExtrudeShapeIntersection');
 const chairCutBack = require('./chairCutBack');
+const Procedure_button = require('./Procedure_button');
 
 function Model_wrap(main){
 
 	this.main = main;
     this.furnitures = main.furnitures;
     this.wrap_mode	= false; 
-
+    var scope = this;
+    var manager = new THREE.LoadingManager();
+    var textureLoader = new THREE.TextureLoader( manager );
+    
+    $( ".item.ui.image.label.wrap1" ).click(function() {
+        var texture = textureLoader.load( '../images/material/wrap/wrap1.jpg' );
+        texture.repeat.set(0.1, 0.1);
+        texture.wrapS = texture.wrapT = THREE.MirroredRepeatWrapping;
+        var newmaterial = new THREE.MeshBasicMaterial( {map: texture} );
+        for(var i=0 ; i<scope.main.GetSizeObj.length ; i++ ){
+            var model = scope.main.GetSizeObj[i];
+            scope.Wrap( model , texture );
+        }
+    });
+    $( ".item.ui.image.label.wrap2" ).click(function() {
+        var texture = textureLoader.load( '../images/material/wrap/wrap2.jpg' );
+        texture.repeat.set(0.1, 0.1);
+        texture.wrapS = texture.wrapT = THREE.MirroredRepeatWrapping;
+        var newmaterial = new THREE.MeshBasicMaterial( {map: texture} );
+        for(var i=0 ; i<scope.main.GetSizeObj.length ; i++ ){
+            var model = scope.main.GetSizeObj[i];
+            scope.Wrap( model , texture );
+        }
+    });
+    $( ".item.ui.image.label.wrap3" ).click(function() {
+        var texture = textureLoader.load( '../images/material/wrap/wrap3.jpg' );
+        texture.repeat.set(0.1, 0.1);
+        texture.wrapS = texture.wrapT = THREE.MirroredRepeatWrapping;
+        var newmaterial = new THREE.MeshBasicMaterial( {map: texture} );
+        for(var i=0 ; i<scope.main.GetSizeObj.length ; i++ ){
+            var model = scope.main.GetSizeObj[i];
+            scope.Wrap( model , texture );
+        }
+    });
+    $( ".item.ui.image.label.wrap4" ).click(function() {
+        var texture = textureLoader.load( '../images/material/wrap/wrap4.jpg' );
+        texture.repeat.set(0.1, 0.1);
+        texture.wrapS = texture.wrapT = THREE.MirroredRepeatWrapping;
+        var newmaterial = new THREE.MeshBasicMaterial( {map: texture} );
+        for(var i=0 ; i<scope.main.GetSizeObj.length ; i++ ){
+            var model = scope.main.GetSizeObj[i];
+            scope.Wrap( model , texture );
+        }
+    });
+    $( ".item.ui.image.label.wrap5" ).click(function() {
+        var texture = textureLoader.load( '../images/material/wrap/wrap5.jpg' );
+        texture.repeat.set(0.1, 0.1);
+        texture.wrapS = texture.wrapT = THREE.MirroredRepeatWrapping;
+        var newmaterial = new THREE.MeshBasicMaterial( {map: texture} );
+        for(var i=0 ; i<scope.main.GetSizeObj.length ; i++ ){
+            var model = scope.main.GetSizeObj[i];
+            scope.Wrap( model , texture );
+        }
+    });
+    $( ".item.ui.image.label.wrap6" ).click(function() {
+        var texture = textureLoader.load( '../images/material/wrap/wrap6.jpg' );
+        texture.repeat.set(0.1, 0.1);
+        texture.wrapS = texture.wrapT = THREE.MirroredRepeatWrapping;
+        var newmaterial = new THREE.MeshBasicMaterial( {map: texture} );
+        for(var i=0 ; i<scope.main.GetSizeObj.length ; i++ ){
+            var model = scope.main.GetSizeObj[i];
+            scope.Wrap( model , texture );
+        }
+    });
+    $( ".item.ui.image.label.wrap7" ).click(function() {
+        var texture = textureLoader.load( '../images/material/wrap/wrap7.jpg' );
+        texture.repeat.set(0.1, 0.1);
+        texture.wrapS = texture.wrapT = THREE.MirroredRepeatWrapping;
+        var newmaterial = new THREE.MeshBasicMaterial( {map: texture} );
+        for(var i=0 ; i<scope.main.GetSizeObj.length ; i++ ){
+            var model = scope.main.GetSizeObj[i];
+            scope.Wrap( model , texture );
+        }
+    });
 }
 
 Model_wrap.prototype = {
 
 	execute: function( name ){
-
-        var main = this;
-        var manager = new THREE.LoadingManager();
-        var textureLoader = new THREE.TextureLoader( manager );
-
-        $( ".item.ui.image.label.wrap1" ).click(function() {
-            var texture = textureLoader.load( '../images/material/wrap/wrap1.jpg' );
-            texture.repeat.set(0.1, 0.1);
-            texture.wrapS = texture.wrapT = THREE.MirroredRepeatWrapping;
-            var newmaterial = new THREE.MeshBasicMaterial( {map: texture} );
-            for(var i=0 ; i<main.main.GetSizeObj.length ; i++ ){
-	            var model = main.main.GetSizeObj[i];
-	            main.Wrap( model , texture );
-	        }
-            
-        });
-        $( ".item.ui.image.label.wrap2" ).click(function() {
-            var texture = textureLoader.load( '../images/material/wrap/wrap2.jpg' );
-            texture.repeat.set(0.1, 0.1);
-            texture.wrapS = texture.wrapT = THREE.MirroredRepeatWrapping;
-            var newmaterial = new THREE.MeshBasicMaterial( {map: texture} );
-            for(var i=0 ; i<main.main.GetSizeObj.length ; i++ ){
-	            var model = main.main.GetSizeObj[i];
-	            main.Wrap( model , texture );
-	        }
-            
-        });
-        $( ".item.ui.image.label.wrap3" ).click(function() {
-            var texture = textureLoader.load( '../images/material/wrap/wrap3.jpg' );
-            texture.repeat.set(0.1, 0.1);
-            texture.wrapS = texture.wrapT = THREE.MirroredRepeatWrapping;
-            var newmaterial = new THREE.MeshBasicMaterial( {map: texture} );
-            for(var i=0 ; i<main.main.GetSizeObj.length ; i++ ){
-	            var model = main.main.GetSizeObj[i];
-	            main.Wrap( model , texture );
-	        }
-            
-        });
-        $( ".item.ui.image.label.wrap4" ).click(function() {
-            var texture = textureLoader.load( '../images/material/wrap/wrap4.jpg' );
-            texture.repeat.set(0.1, 0.1);
-            texture.wrapS = texture.wrapT = THREE.MirroredRepeatWrapping;
-            var newmaterial = new THREE.MeshBasicMaterial( {map: texture} );
-            for(var i=0 ; i<main.main.GetSizeObj.length ; i++ ){
-	            var model = main.main.GetSizeObj[i];
-	            main.Wrap( model , texture );
-	        }
-            
-        });
-        $( ".item.ui.image.label.wrap5" ).click(function() {
-            var texture = textureLoader.load( '../images/material/wrap/wrap5.jpg' );
-            texture.repeat.set(0.1, 0.1);
-            texture.wrapS = texture.wrapT = THREE.MirroredRepeatWrapping;
-            var newmaterial = new THREE.MeshBasicMaterial( {map: texture} );
-            for(var i=0 ; i<main.main.GetSizeObj.length ; i++ ){
-	            var model = main.main.GetSizeObj[i];
-	            main.Wrap( model , texture );
-	        }
-            
-        });
-        $( ".item.ui.image.label.wrap6" ).click(function() {
-            var texture = textureLoader.load( '../images/material/wrap/wrap6.jpg' );
-            texture.repeat.set(0.1, 0.1);
-            texture.wrapS = texture.wrapT = THREE.MirroredRepeatWrapping;
-            var newmaterial = new THREE.MeshBasicMaterial( {map: texture} );
-            for(var i=0 ; i<main.main.GetSizeObj.length ; i++ ){
-	            var model = main.main.GetSizeObj[i];
-	            main.Wrap( model , texture );
-	        }
-            
-        });
-        $( ".item.ui.image.label.wrap7" ).click(function() {
-            var texture = textureLoader.load( '../images/material/wrap/wrap7.jpg' );
-            texture.repeat.set(0.1, 0.1);
-            texture.wrapS = texture.wrapT = THREE.MirroredRepeatWrapping;
-            var newmaterial = new THREE.MeshBasicMaterial( {map: texture} );
-            for(var i=0 ; i<main.main.GetSizeObj.length ; i++ ){
-	            var model = main.main.GetSizeObj[i];
-	            main.Wrap( model , texture );
-	        }
-            
-        });
 
         if(this.wrap_mode == false && name=='wrap'){
         	$('#parameter_control_tool_wrap').show();
@@ -5744,6 +5801,14 @@ Model_wrap.prototype = {
             this.main.processor.executeDesign("MODEL_ALIGN", "wrap");
         	this.main.processor.executeDesign("MODEL_PAINTING", "wrap");
         	this.main.processor.executeDesign("MODEL_ROTATION", "wrap");
+        	
+        	//creat procedure button
+        	if(this.main.stepOperationName != name){
+        		this.DeleteButton();
+	        	Procedure_button( this.main, this.main.stepOperationName );
+	        	//record the operation name
+	        	this.main.stepOperationName = name;
+        	}
         }
         else if(this.wrap_mode == true || name!='wrap'){
         	$('#parameter_control_tool_wrap').hide();
@@ -5753,6 +5818,9 @@ Model_wrap.prototype = {
 
 	},
 	Wrap: function( model , texture ){
+		//console.log(model.geometry);
+		
+		this.DeleteButton();
 
 		var left_to_right = this.MakeExtrudeArray1(model, "yz" , "xy" );
 		var back_to_front = this.MakeExtrudeArray2(model, "xy" , "yz" );
@@ -5766,8 +5834,8 @@ Model_wrap.prototype = {
         wireframe: false} );
 		
 		var backRest = new THREE.Mesh( geometry, material );
-		
 		this.main.WrapObject.push(backRest);
+		this.main.Sceneobjects.push(backRest);
 		this.main.scene.add( backRest );
 		
 	},
@@ -6019,6 +6087,22 @@ Model_wrap.prototype = {
 
 
 		return [back_3d , back_extrude_3d] ;
+    },
+
+    DeleteButton: function(){
+    	//console.log(this.main.stepNumber);
+		//console.log(this.main.stepObject.length);
+		this.main.lastStep = true;
+		if (this.main.stepNumber < this.main.stepObject.length){
+			var stepLength = this.main.stepObject.length;
+
+			for(var i=parseInt(this.main.stepNumber); i<stepLength; i++){
+				var btn = document.getElementById(
+					"ui circular icon button procedure "+i.toString());
+				btn.parentNode.removeChild(btn);
+			}
+			this.main.stepObject.length = parseInt(this.main.stepNumber);
+		}
     }
 
 
@@ -6044,55 +6128,196 @@ function loadLine( main , point1 , point2){
 }
 
 module.exports = Model_wrap
-},{"./cadExtrudeShapeIntersection":28,"./chairCutBack":31,"./computeConvexHull":32}],23:[function(require,module,exports){
+},{"./Procedure_button":23,"./cadExtrudeShapeIntersection":28,"./chairCutBack":31,"./computeConvexHull":32}],23:[function(require,module,exports){
 "use strict;"
 
+//this function for adding function 
 function Procedure_button(main, str){
 
-	if(main.GetSizeObj.length == 0){
-		main.GetSizeObj.push(0);
-		return;
-	}
-
+	//creat button, set class
 	var btn = document.createElement("button");
-	btn.classList.add("ui","circular","icon","button","procedure",
-					  main.GetSizeObj.length.toString());
-	//console.log(btn.classList[4]);
-	var t = document.createTextNode(str);       
+	btn.classList.add("ui", "circular","icon","button","procedure",
+					  main.stepObject.length.toString());
+	btn.setAttribute ('id', "ui circular icon button procedure " + 
+					  main.stepObject.length.toString())
+	//set button string
+	var t = document.createTextNode(str);
 	btn.appendChild(t);
-	//var icon = document.createElement("i");
-	//icon.classList.add("facebook","icon");
-    //btn.appendChild(icon);
-    //document.body.appendChild(btn);
-    
+	
+    //add button to Web
     document.getElementById("Procedure_List").appendChild(btn);
 
+    //record scene object
+    RecordObjects(main);
+    main.stepNumber += 1;
 
-}
-function RecordPosition(main){
-	var recordPosi = [];
-	for(var i=0; i< main.furnitures.length ; i++){
-		var furniture = main.furnitures[i].getFurniture();
-		var position = new THREE.Vector3(furniture.x,
-										 furniture.y,
-										 furniture.z);
-		recordPosi.push(position);
+    //set the click action
+    btn.addEventListener("click", function(){
 
-	}
-	main.stepFurniturePosition.push(recordPosi);
+    	//if is the last step, create the step button
+	    if(main.lastStep == true){
+	    	main.lastStep = false;
+	    	Procedure_button(main, main.stepOperationName);
+	    }
+
+	    //console.log(btn.classList[5]);
+	    buttonClicked(main, btn.classList[5]);
+	    main.stepNumber = btn.classList[5];
+	    main.stepOperationName = btn.firstChild.nodeValue;
+
+	    //Initialise the model button
+	    main.processor.executeDesign("MODEL_ALIGN", "initial");
+	    main.processor.executeDesign("MODEL_PAINTING", "initial");
+        main.processor.executeDesign("MODEL_WRAP", "initial");
+        main.processor.executeDesign("MODEL_ROTATION", "initial");
+	    //show the control buttons
+	    if(btn.firstChild.nodeValue != 'Initial')
+	    	$('#parameter_control_tool_' + btn.firstChild.nodeValue).show();	    
+
+	});
 	
-	recordPosi = [];
-	for(var i=0; i< main.Objects.length ; i++){
-		var obj = main.Objects[i];
-		var position = new THREE.Vector3(obj.x, obj.y, obj.z);
-		recordPosi.push(position);
-
-	}
-	main.stepObjectPosition.push(recordPosi);
 }
 
+function RecordObjects(main){
+	var RecordArr = [];
 
-module.exports = {Procedure_button,RecordPosition}
+	for(var i = main.scene.children.length - 1; i > -1; i -- ){ 
+		var object =  main.scene.children[i];	
+		if(object.isObject3D){
+			if ( object instanceof THREE.Camera ) {
+			} else if ( object instanceof THREE.PointLight ) {
+			} else if ( object instanceof THREE.DirectionalLight ) {
+			} else if ( object instanceof THREE.SpotLight ) {					
+			} else if ( object instanceof THREE.HemisphereLight ) {
+			} else if ( object instanceof THREE.AmbientLight ) {
+			} else if ( object instanceof THREE.GridHelper ) {
+			} else if ( object instanceof THREE.TransformControls ){
+			} else if ( object instanceof AddAxis){
+			} else if ( object instanceof THREE.BoxHelper){
+			} else if ( object == main.house) {
+			} else if ( object instanceof THREE.DirectionalLightHelper){
+			} else if ( object instanceof THREE.HemisphereLightHelper){
+			} else{
+				//RecordArr.push(object.clone());
+				var isFurniture = false;
+				for(var j = 0; j < main.furnitures.length; j++){
+					if(main.furnitures[j].getFurniture() == object){
+						isFurniture = true;
+						SaveFurniture(main.furnitures[j], RecordArr);
+						break;
+					}
+				}
+				if(isFurniture == false){
+					RecordArr.push(object.clone());
+				}
+
+			}
+		}
+	}
+	//record the object
+	main.stepObject.push( RecordArr );
+}
+
+function buttonClicked(main, btn_num){
+	clearScene(main);
+	var sceneObjs = main.stepObject[btn_num];
+	main.furnitures = [];
+	
+	//clear cards
+	$('#cards').empty();
+	
+	for(var i=0; i < sceneObjs.length; i++){
+		//try to add furniture to scene
+		try {
+		    var furniture = sceneObjs[i];
+			var new_furnitureObj = new THREE.Object3D();
+			new_furnitureObj.copy(furniture.getFurniture(), true);
+			var new_furniture = new Furniture(new_furnitureObj);
+
+			new_furniture.setCategory("straight_chair");
+			new_furniture.setIndex(furniture.index);
+			main.furnitures.push(new_furniture);
+
+			main.scene.add(new_furniture.getFurniture());
+			
+			//update the menu interface
+			new_furniture.addCard();
+			//copy the state
+			new_furniture.updatePosition(furniture.position);
+			new_furniture.updateDirection();
+			new_furniture.updateQuaternion(furniture.quaternion);
+			//copy the components and labeled state
+			new_furniture.updateListedComponents(furniture.listedComponents);
+			new_furniture.updateLabeledComponents(furniture.labeledComponents);
+			//copy the already labeled normal axis
+			//Object.assign(new_furniture.normalAxises, furniture.normalAxises);
+			for (let key in furniture.normalAxises) {
+				new_furniture.normalAxises[key] = new THREE.Vector3();
+				new_furniture.normalAxises[key].copy(furniture.normalAxises[key]);
+			}
+
+		}
+		catch(err) {//if it is not furniture, add to scene directly
+		    main.scene.add(sceneObjs[i]);
+		}
+		
+	}
+}
+
+function clearScene(main){
+	for(var i = main.scene.children.length - 1; i > -1; i -- ){ 
+		var object =  main.scene.children[i];	
+		if(object.isObject3D){
+			if ( object instanceof THREE.Camera ) {
+			} else if ( object instanceof THREE.PointLight ) {
+			} else if ( object instanceof THREE.DirectionalLight ) {
+			} else if ( object instanceof THREE.SpotLight ) {					
+			} else if ( object instanceof THREE.HemisphereLight ) {
+			} else if ( object instanceof THREE.AmbientLight ) {
+			} else if ( object instanceof THREE.GridHelper ) {
+			} else if ( object instanceof THREE.TransformControls ){
+			} else if ( object instanceof AddAxis){
+			} else if ( object instanceof THREE.BoxHelper){
+			} else if ( object == main.house) {
+			} else if ( object instanceof THREE.DirectionalLightHelper){
+			} else if ( object instanceof THREE.HemisphereLightHelper){
+			} else{
+				main.removeFromScene(object);
+			}
+		}
+	}
+}
+
+function SaveFurniture( furniture , furnituresDataSet) {
+
+	//var furniture = this.furnitures[i];
+	var new_furnitureObj = new THREE.Object3D();
+	new_furnitureObj.copy(furniture.getFurniture(), true);
+	var new_furniture = new Furniture(new_furnitureObj);
+
+	new_furniture.setCategory("straight_chair");
+	new_furniture.setIndex(furniture.index);
+	furnituresDataSet.push(new_furniture);
+
+	//copy the state
+	new_furniture.updatePosition(furniture.position);
+	new_furniture.updateDirection();
+	new_furniture.updateQuaternion(furniture.quaternion);
+
+	//copy the components and labeled state
+	new_furniture.updateListedComponents(furniture.listedComponents);
+	new_furniture.updateLabeledComponents(furniture.labeledComponents);
+
+	//copy the already labeled normal axis
+	//Object.assign(new_furniture.normalAxises, furniture.normalAxises);
+	for (let key in furniture.normalAxises) {
+		new_furniture.normalAxises[key] = new THREE.Vector3();
+		new_furniture.normalAxises[key].copy(furniture.normalAxises[key]);
+	}
+
+}
+
+module.exports = Procedure_button
 },{}],24:[function(require,module,exports){
 "use strict;"
 //this is to handle the new design approaches
@@ -7565,8 +7790,14 @@ function Main()
 
 
 	//Procedure objects
-	//for record objects position in every step
+	//for record objects in every step
 	this.stepObject = [];
+	//for record operation name in every step
+	this.stepOperationName = 'Initial';
+	//for record step is the last or not
+	this.lastStep = true;
+	//for record operation step times
+	this.stepNumber = 0;
 
 
 	//this is to store the furnitures before any chance
@@ -8649,8 +8880,8 @@ Main.prototype = {
 
 						objselect = false;
 						//if haven't select this furniture before
-						if (this.GetSizeObj.indexOf(this.furniture.getFurniture())<0)
-							this.GetSizeObj.push( this.furniture.getFurniture() );
+						this.GetSizeObj = [];
+						this.GetSizeObj.push( this.furniture.getFurniture() );
 						$('.ui.blue.submit.button.getsize').show();
 						
 
@@ -8677,6 +8908,7 @@ Main.prototype = {
 							
 							this.furniture = this.Sceneobjects[i];
 							this.select(this.Sceneobjects[i]);
+							this.GetSizeObj = [];
 							this.GetSizeObj.push( this.Sceneobjects[i] );
 							$('.ui.blue.submit.button.getsize').show();
 							SomethingSelected = true;
@@ -8899,12 +9131,25 @@ Main.prototype = {
 			
 			//delete furniture
 			if(this.furniture != null ){
-				this.removeFromScene(this.furniture.getFurniture());
-				if ( this.furnitures.indexOf(this.furniture) > -1 ){
+				try{//delete furniture
+					this.removeFromScene(this.furniture.getFurniture());
 					this.furnitures.splice( this.furnitures.indexOf(this.furniture),1);
 					this.selectionBox.visible = false;
 					this.transformControls.detach();
+					
 				}
+				catch(err){//delete object
+				    this.removeFromScene(this.furniture);
+				    this.Sceneobjects.splice( this.Sceneobjects.indexOf(this.furniture),1);
+					this.selectionBox.visible = false;
+					this.transformControls.detach();
+				}
+			}
+			//clear cards
+			$('#cards').empty();
+			//add cards again
+			for(var i=0; i<this.furnitures.length; i++){
+				this.furnitures[i].addCard();
 			}
 
 		}

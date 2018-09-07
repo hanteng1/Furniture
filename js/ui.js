@@ -199,6 +199,7 @@ Ui.prototype = {
 			scope.main.GetDistance();
 			
 		});
+		
 
 		//chair_align controller function
 		this.designButtons();

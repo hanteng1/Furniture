@@ -88,8 +88,14 @@ function Main()
 
 
 	//Procedure objects
-	//for record objects position in every step
+	//for record objects in every step
 	this.stepObject = [];
+	//for record operation name in every step
+	this.stepOperationName = 'Initial';
+	//for record step is the last or not
+	this.lastStep = true;
+	//for record operation step times
+	this.stepNumber = 0;
 
 
 	//this is to store the furnitures before any chance
@@ -1172,8 +1178,8 @@ Main.prototype = {
 
 						objselect = false;
 						//if haven't select this furniture before
-						if (this.GetSizeObj.indexOf(this.furniture.getFurniture())<0)
-							this.GetSizeObj.push( this.furniture.getFurniture() );
+						this.GetSizeObj = [];
+						this.GetSizeObj.push( this.furniture.getFurniture() );
 						$('.ui.blue.submit.button.getsize').show();
 						
 
@@ -1200,6 +1206,7 @@ Main.prototype = {
 							
 							this.furniture = this.Sceneobjects[i];
 							this.select(this.Sceneobjects[i]);
+							this.GetSizeObj = [];
 							this.GetSizeObj.push( this.Sceneobjects[i] );
 							$('.ui.blue.submit.button.getsize').show();
 							SomethingSelected = true;
@@ -1422,12 +1429,25 @@ Main.prototype = {
 			
 			//delete furniture
 			if(this.furniture != null ){
-				this.removeFromScene(this.furniture.getFurniture());
-				if ( this.furnitures.indexOf(this.furniture) > -1 ){
+				try{//delete furniture
+					this.removeFromScene(this.furniture.getFurniture());
 					this.furnitures.splice( this.furnitures.indexOf(this.furniture),1);
 					this.selectionBox.visible = false;
 					this.transformControls.detach();
+					
 				}
+				catch(err){//delete object
+				    this.removeFromScene(this.furniture);
+				    this.Sceneobjects.splice( this.Sceneobjects.indexOf(this.furniture),1);
+					this.selectionBox.visible = false;
+					this.transformControls.detach();
+				}
+			}
+			//clear cards
+			$('#cards').empty();
+			//add cards again
+			for(var i=0; i<this.furnitures.length; i++){
+				this.furnitures[i].addCard();
 			}
 
 		}
