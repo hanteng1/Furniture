@@ -188,7 +188,6 @@
 						</button>
  					</div>
 
-
  					<div class="operations operation_table">
 						<h3 class="ui header">Table</h3>
 						<button class="ui inverted secondary button" id="operation_table_stack">
@@ -239,6 +238,7 @@
 					
 
  					<div class="operations operation_tool">
+
 	 					<h3 class="ui header">Tool</h3>
 
 						<button class="ui inverted secondary button" id="operation_Painting">
@@ -257,6 +257,7 @@
 								<i class="gamepad icon"></i>
 	    						Align
 						</button>
+
 						<button class="ui inverted secondary button" id="operation_Add">
 								<i class="gamepad icon"></i>
 	    						Add
@@ -280,9 +281,13 @@
 				<i class="object group icon"></i>
 				Group
 			</a>
-			<a class="item">
+			<a class="item m_group">
 				<i class="object ungroup icon"></i>
 				Ungroup
+			</a>
+			<a class="item m_delete">
+				<i class="object delete icon"></i>
+				Delete
 			</a>
 			<a class="item">
 				<i class="edit icon"></i>
@@ -625,6 +630,8 @@
 		<!-- End of Weihsiang's Block-->
 
 		<div id="container"></div>
+
+		<div id="Procedure_List"></div>
 
 		<!-- design viewer -->
     	<!-- <div oncontextmenu="return false;" id="viewerContext"></div> --> <!-- avoiding popup when right mouse is clicked -->
