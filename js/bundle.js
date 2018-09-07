@@ -3432,6 +3432,7 @@ function CreateWheel() {
     c2 = c1.translate([0,0,0.4]);
     var h = cylinder({r: 0.3, h: 0.3});
     h = h.translate([0,0,0.1]);
+    // touch array 0.28 * 0.28
     h2 = cylinder({r: 0.14, h: 0.5}).translate([0,0.25,0.125]);
     h2 = h2.rotateX(90);
     obj = union(c1, c2, h, h2);
@@ -5789,20 +5790,56 @@ module.exports = MarkSize;
 },{}],24:[function(require,module,exports){
 "use strict;"
 
-const computeConvexHull = require('./computeConvexHull')
+const CreateWheel = require('./CreateWheel')
+const CreateTableRod = require('./CreateTableRod')
+const CreateRod = require('./CreateRod')
+const CreateSpiceRack = require('./CreateSpiceRack')
+const CreateDoor = require('./CreateDoor')
+const CreateDresserLeg = require('./CreateDresserLeg')
+const CreateDrawer = require('./CreateDrawer')
+
+
+
 
 function Model_Add(main){
 	this.main = main;
     this.furnitures = main.furnitures;
-    this.Add_mode = false;
+    this.Add_mode = false;    
+
+    //select box
+    this.hasSelectBox = false;
+    this.plane = ""; // "front" "back" "left" "right" "up" "down" string
+
+    //furniture
+    this.selectFurnitureUUID = "";
+    this.selectFurniture = new THREE.Object3D();
+    
+    
+    //add object
+    this.selectObjectName = "";
+    this.selectObject = new THREE.Object3D();
+    this.objectVectorList = {wheel: new THREE.Vector3(0,1,0)};
+    this.objectAreaList = {wheel: [0.28, 0.28]};
+    this.isCreateObject = false;
 }
 
 Model_Add.prototype = {
+	init: function() {
+		
+    	$('#parameter_control_tool_add').show();
+        this.Add_mode = true;
+       
+        $('#parameter_control_tool_painting').hide();
+        $('#parameter_control_tool_wrap').hide();
+        $('#parameter_control_tool_align').hide();
+        this.isCreateObject = false;
+	},
 
-	test: function(pos1) {
+	test: function(pos) {
 		var geometry = new THREE.BoxGeometry( 0.1, 0.1, 0.1 );
-		var material = new THREE.MeshBasicMaterial( {color: 0x00ff00} );
+		var material = new THREE.MeshBasicMaterial( {color: Math.random() * 0xffffff} );
 		var cube = new THREE.Mesh( geometry, material );
+		cube.name = "cube";
 		cube.position.set(pos.x, pos.y, pos.z);
 		this.main.scene.add( cube );
 	},
@@ -5821,6 +5858,118 @@ Model_Add.prototype = {
 		var box_center = new THREE.Vector3();
 		box.getCenter (box_center);
 		return box_center;
+	},
+
+	getAllChildren: function(obj, array) {
+		if (obj.children.length > 0) {
+			for (var i = 0; i < obj.children.length; i++) {
+				if(obj.children[i].type == "Mesh" || obj.children[i].type == "Object3D"){
+					this.getAllChildren(obj.children[i], array);
+				}	
+			}
+		}
+		else
+			array.push(obj);			
+	},
+
+	getPointByRay: function(obj, origin, direction) {
+		var raycaster = new THREE.Raycaster();
+		raycaster.set(origin, direction);
+		if(obj.children.length > 0){
+			var array = new Array();
+			this.getAllChildren(obj, array);
+			var intersects = raycaster.intersectObjects(array);
+		}
+		else
+			var intersects = raycaster.intersectObject(obj);
+		return intersects;
+	},
+
+	objectAddToFurniture: function(furniture, object, position) {
+		var inverse = new THREE.Matrix4();
+		inverse.getInverse(furniture.matrixWorld);	
+		object.applyMatrix(inverse);		
+		furniture.worldToLocal(position);		
+		object.position.set(position.x, position.y, position.z);		
+		furniture.add(object);		
+	},
+
+	checkAxis: function(vector1, vector2) {
+		if(vector1.x != 0){
+			if(vector2.x != 0)
+				return "y";
+			if(vector2.y != 0)
+				return "z";
+			if(vector2.z != 0)
+				return "y";
+		}
+		else if(vector1.y != 0){
+			if(vector2.x != 0)
+				return "z";
+			if(vector2.y != 0)
+				return "x";
+			if(vector2.z != 0)
+				return "x";
+		}
+		else{
+			if(vector2.x != 0)
+				return "y";
+			if(vector2.y != 0)
+				return "x";
+			if(vector2.z != 0)
+				return "x";
+		}
+	},
+
+	checkDegree: function(vector1, vector2, axis) {
+		var deg0 = vector1.clone();
+		var deg90 = vector1.clone();
+		var degn90 = vector1.clone();
+		var deg180 = vector1.clone();
+
+		if(axis == "x")
+			var vector = new THREE.Vector3(1,0,0);
+		if(axis == "y")
+			var vector = new THREE.Vector3(0,1,0);
+		if(axis == "z")
+			var vector = new THREE.Vector3(0,0,1);
+
+		deg90.applyAxisAngle(vector, Math.PI/2);
+		degn90.applyAxisAngle(vector, -Math.PI/2);
+		deg180.applyAxisAngle(vector, Math.PI);
+
+		if(deg0.x.toFixed(4) == vector2.x && deg0.y.toFixed(4) == vector2.y && deg0.z.toFixed(4) == vector2.z)
+			return 0;
+		if(deg90.x.toFixed(4) == vector2.x && deg90.y.toFixed(4) == vector2.y && deg90.z.toFixed(4) == vector2.z)
+			return Math.PI/2;
+		if(degn90.x.toFixed(4) == vector2.x && degn90.y.toFixed(4) == vector2.y && degn90.z.toFixed(4) == vector2.z)
+			return -Math.PI/2;
+		if(deg180.x.toFixed(4) == vector2.x && deg180.y.toFixed(4) == vector2.y && deg180.z.toFixed(4) == vector2.z)
+			return Math.PI;
+	},
+
+	objectRotationByAxis: function(obj, axis, degree) {
+		var size = this.getPartSize(obj);
+		var center = this.getPartCenter(obj);
+		obj.position.set(0, 0, -30);
+		if(axis == 'x'){			
+			obj.rotateOnWorldAxis(new THREE.Vector3(1,0,0), degree);			
+		}
+		if(axis == 'y'){
+			obj.rotateOnWorldAxis(new THREE.Vector3(0,1,0), degree);
+		}
+		if(axis == 'z'){
+			obj.rotateOnWorldAxis(new THREE.Vector3(0,0,1), degree);
+		}
+		var newCenter = this.getPartCenter(obj);
+		var offset = new THREE.Vector3(center.x - newCenter.x, center.y - newCenter.y, center.z - newCenter.z);
+		obj.position.x += offset.x;
+		obj.position.y += offset.y;
+		obj.position.z += offset.z;		
+	},
+
+	setAddObjectName: function(objectName) {
+		this.selectObjectName = objectName;
 	},
 
 	getAllCorners: function(obj) {
@@ -5892,69 +6041,420 @@ Model_Add.prototype = {
 		return corners;
 	},
 
-	execute: function( name ){
+	strcmp: function(str1, str2) {
+		// http://kevin.vanzonneveld.net
+	    // +   original by: Waldo Malqui Silva
+	    // +      input by: Steve Hilder
+	    // +   improved by: Kevin van Zonneveld (http://kevin.vanzonneveld.net)
+	    // +    revised by: gorthaur
+	    // *     example 1: strcmp( 'waldo', 'owald' );
+	    // *     returns 1: 1
+	    // *     example 2: strcmp( 'owald', 'waldo' );
+	    // *     returns 2: -1
+    	return ( ( str1 == str2 ) ? 0 : ( ( str1 > str2 ) ? 1 : -1 ) );
+	},
 
-		var obj = this.furnitures[0].getFurniture();
-		var tabletop = obj.getObjectByName("tabletop");
-		console.log(tabletop);
+	select: function(obj) {
+		var furniture = new THREE.Object3D();
+
+		if(this.strcmp(obj.uuid, this.selectFurnitureUUID) != 0){
+
+			if(this.hasSelectBox){
+				furniture = this.selectFurniture;				
+				while(furniture.parent.uuid != this.main.scene.uuid)
+					furniture = furniture.parent;
+
+				this.deleteSelectBox(this.main.scene);
+			}
+			else
+				this.hasSelectBox = true;
+
+			this.selectFurnitureUUID = obj.uuid;
+			this.selectFurniture = obj;
+
+			this.createSelectBox(this.main.scene, obj);
+		}
+	},
+
+	createSelectBox: function(furniture, obj) {
 		// 0-----1   4-----5
 		// | up  |   | down|
 		// |     |   |     |
 		// 3-----2   7-----6
-		var obj = this.main.GetSizeObj[0];
-		var obj_points = this.getAllCorners(obj);
+		var corners = this.getAllCorners(obj);
 
-		var geometry = new THREE.Geometry();
+        var xy_positive_geometry = new THREE.Geometry();
+        var xy_negative_geometry = new THREE.Geometry();
+        var yz_positive_geometry = new THREE.Geometry();
+        var yz_negative_geometry = new THREE.Geometry();
+        var xz_positive_geometry = new THREE.Geometry();
+        var xz_negative_geometry = new THREE.Geometry();
+        // XY positive (3, 7, 6, 2, 3)
+        xy_positive_geometry.vertices.push(corners[3], corners[7], corners[6], corners[2]);
+        // XY negative (1, 5, 4, 0, 1)
+        xy_negative_geometry.vertices.push(corners[1], corners[5], corners[4], corners[0]);
+        // YZ positive (2, 6, 5, 1, 2)
+        yz_positive_geometry.vertices.push(corners[2], corners[6], corners[5], corners[1]);
+        // YZ negative (0, 4, 7, 3, 0)
+        yz_negative_geometry.vertices.push(corners[0], corners[4], corners[7], corners[3]);
+        // XZ positive (0, 3, 2, 1, 0)
+        xz_positive_geometry.vertices.push(corners[0], corners[3], corners[2], corners[1]);
+        // XZ negative (5, 6, 7, 4, 5)
+        xz_negative_geometry.vertices.push(corners[5], corners[6], corners[7], corners[4]);
+
+		var selectedMaterial = new THREE.MeshLambertMaterial( {
+			color: 0xffffff,
+			opacity: 0.3,
+			transparent: true
+		} );
+		var unselectedMaterial = new THREE.MeshLambertMaterial( {
+			color: 0xffffff,
+			opacity: 0.1,
+			transparent: true
+		} );
+
+		xy_positive_geometry.faces.push( new THREE.Face3( 0, 1, 2 ), new THREE.Face3( 2, 3, 0 ) );
+		xy_negative_geometry.faces.push( new THREE.Face3( 0, 1, 2 ), new THREE.Face3( 2, 3, 0 ) );
+		yz_positive_geometry.faces.push( new THREE.Face3( 0, 1, 2 ), new THREE.Face3( 2, 3, 0 ) );
+		yz_negative_geometry.faces.push( new THREE.Face3( 0, 1, 2 ), new THREE.Face3( 2, 3, 0 ) );
+		xz_positive_geometry.faces.push( new THREE.Face3( 0, 1, 2 ), new THREE.Face3( 2, 3, 0 ) );
+		xz_negative_geometry.faces.push( new THREE.Face3( 0, 1, 2 ), new THREE.Face3( 2, 3, 0 ) );
+
+		var xy_positive = new THREE.Mesh( xy_positive_geometry, unselectedMaterial );
+		var xy_negative = new THREE.Mesh( xy_negative_geometry, unselectedMaterial );
+		var yz_positive = new THREE.Mesh( yz_positive_geometry, unselectedMaterial );
+		var yz_negative = new THREE.Mesh( yz_negative_geometry, unselectedMaterial );
+		var xz_positive = new THREE.Mesh( xz_positive_geometry, unselectedMaterial );
+		var xz_negative = new THREE.Mesh( xz_negative_geometry, unselectedMaterial );
+
+		xy_positive.name = "front";
+		xy_negative.name = "back";
+		yz_positive.name = "right";
+		yz_negative.name = "left";
+		xz_positive.name = "up";
+		xz_negative.name = "down";
+
+		this.main.scene.add(xy_positive);
+		this.main.scene.add(xy_negative);
+		this.main.scene.add(yz_positive);
+		this.main.scene.add(yz_negative);
+		this.main.scene.add(xz_positive);
+		this.main.scene.add(xz_negative);
+	},
+
+	deleteSelectBox: function(furniture) {
+		console.log("deleteSelectBox");
+		var xy_positive = furniture.getObjectByName("front");
+		var xy_negative = furniture.getObjectByName("back");
+		var yz_positive = furniture.getObjectByName("right");
+		var yz_negative = furniture.getObjectByName("left");
+		var xz_positive = furniture.getObjectByName("up");
+		var xz_negative = furniture.getObjectByName("down");
+		furniture.remove(xy_positive, xy_negative, yz_positive, yz_negative, xz_positive, xz_negative);
+	},
+
+	changePlaneMaterial: function(plane, material) {
+		var obj = this.main.scene.getObjectByName(plane);
+		obj.material = material;
+	},
+
+	selectPlane: function(mouse, camera, point) {
+		var selectedMaterial = new THREE.MeshLambertMaterial( {
+			color: 0xffffff,
+			opacity: 0.3,
+			transparent: true
+		} );
+		var unselectedMaterial = new THREE.MeshLambertMaterial( {
+			color: 0xffffff,
+			opacity: 0.1,
+			transparent: true
+		} );
+		var raycaster = new THREE.Raycaster();
+		mouse.set( ( point.x * 2 ) - 1, - ( point.y * 2 ) + 1 );
+		raycaster.setFromCamera( mouse, camera );
+		var frontIntersects = raycaster.intersectObject( this.main.scene.getObjectByName("front"), true);
+		var backIntersects = raycaster.intersectObject( this.main.scene.getObjectByName("back"), true);
+		var rightIntersects = raycaster.intersectObject( this.main.scene.getObjectByName("right"), true);
+		var leftIntersects = raycaster.intersectObject( this.main.scene.getObjectByName("left"), true);
+		var upIntersects = raycaster.intersectObject( this.main.scene.getObjectByName("up"), true);
+		var downIntersects = raycaster.intersectObject( this.main.scene.getObjectByName("down"), true);
+
+		if(frontIntersects.length > 0){
+			this.plane = "fornt";
+			this.changePlaneMaterial("front", selectedMaterial);
+		}
+		else
+			this.changePlaneMaterial("front", unselectedMaterial);
 		
-		geometry.vertices.push(obj_points[0], obj_points[3], obj_points[7], obj_points[4], obj_points[0]);
+		if(backIntersects.length > 0){
+			this.plane = "back";
+			this.changePlaneMaterial("back", selectedMaterial);
+		}
+		else
+			this.changePlaneMaterial("back", unselectedMaterial);
 		
-		var material = new THREE.MeshBasicMaterial( {color: 0x00ff00} );
-		var tmp = new THREE.Line( geometry, material);
-		tmp.position.x -= 1;
-		this.main.scene.add( tmp );
+		if(rightIntersects.length > 0){
+			this.plane = "right";
+			this.changePlaneMaterial("right", selectedMaterial);
+		}
+		else
+			this.changePlaneMaterial("right", unselectedMaterial);
+		
+		if(leftIntersects.length > 0){
+			this.plane = "left";
+			this.changePlaneMaterial("left", selectedMaterial);
+		}
+		else
+			this.changePlaneMaterial("left", unselectedMaterial);
+		
+		if(upIntersects.length > 0){
+			this.plane = "up";
+			this.changePlaneMaterial("up", selectedMaterial);
+		}
+		else
+			this.changePlaneMaterial("up", unselectedMaterial);
+		
+		if(downIntersects.length > 0){
+			this.plane = "down";
+			this.changePlaneMaterial("down", selectedMaterial);
+		}
+		else
+			this.changePlaneMaterial("down", unselectedMaterial);
 
-		$( ".item.ui.image.label.add.board" ).click(function() {
-			console.log("add.board");
-        });
-        $( ".item.ui.image.label.add.rod" ).click(function() {
-        	console.log("add.rod");
-        });
-        $( ".item.ui.image.label.add.seat" ).click(function() {
-        	console.log("add.seat");
-        });
-        $( ".item.ui.image.label.add.leg" ).click(function() {
-        	console.log("add.leg");
-        });
-        $( ".item.ui.image.label.add.wheel" ).click(function() {
-        	console.log("add.wheel");
-        });
-        $( ".item.ui.image.label.add.hook" ).click(function() {
-        	console.log("add.hook");
-        });
-        $( ".item.ui.image.label.add.drawer" ).click(function() {
-        	console.log("add.drawer");
-        });
-        $( ".item.ui.image.label.add.door" ).click(function() {
-			console.log("add.door");
-        });
+		//remove object
+		var object = [];
+		for (var i = 0; i < this.main.scene.children.length; i++) {
+			if(this.main.scene.children[i].name == this.selectObjectName)
+				object.push(this.main.scene.children[i]);
+		}
+		for (var i = 0; i < object.length; i++) {
+			this.main.scene.remove(object[i]);				
+		}
+		
+		//create object
+		this.createObject();
+	},
 
+	createWheel: function(vector) {//rotation vector
+		var wheelSelectedMaterial = new THREE.MeshLambertMaterial( {
+			color: 0x000000,
+			opacity: 0.5,
+			transparent: true
+		} );
+		var wheelGeometry = CreateWheel();
+		var wheel = new THREE.Mesh(wheelGeometry, wheelSelectedMaterial);
+		wheel.name = "wheel";
+		var wheelSize = this.getPartSize(wheel);
+		var axis = this.checkAxis(this.objectVectorList.wheel, vector);
+		var degree = this.checkDegree(this.objectVectorList.wheel, vector, axis);
+		this.objectRotationByAxis(wheel, axis, degree);
+		this.main.scene.add(wheel);
+		this.selectObject = wheel;
+	},
 
-		if(this.Add_mode == false){
-        	$('#parameter_control_tool_add').show();
-            this.Add_mode = true;
-        }
-        else if(this.Add_mode == true){
-        	$('#parameter_control_tool_add').hide();
-            this.Add_mode = false;
-        }
-        $('#parameter_control_tool_painting').hide();
-        $('#parameter_control_tool_wrap').hide();
-        $('#parameter_control_tool_align').hide();
+	createObject: function() {
+		this.isCreateObject = true;
+
+		//which plan selected
+		if(this.plane == "fornt")
+			var vector = new THREE.Vector3(0,0,-1);
+		if (this.plane == "back")
+			var vector = new THREE.Vector3(0,0,1);
+		if(this.plane == "left")
+			var vector = new THREE.Vector3(1,0,0);
+		if(this.plane == "right")
+			var vector = new THREE.Vector3(-1,0,0);
+		if(this.plane == "up")
+			var vector = new THREE.Vector3(0,-1,0);
+		if(this.plane == "down")
+			var vector = new THREE.Vector3(0,1,0);
+		
+		//what object need create
+		console.log("createObject");
+		console.log(this.selectObjectName);
+		if(this.selectObjectName == "wheel")
+			this.createWheel(vector);
+	},
+
+	checkOnThePlane: function(pos) {
+		var furnitureCenter = this.getPartCenter(this.selectFurniture);
+		furnitureCenter.x = furnitureCenter.x.toFixed(4);
+		furnitureCenter.y = furnitureCenter.y.toFixed(4);
+		furnitureCenter.z = furnitureCenter.z.toFixed(4);
+		var furnitureSize = this.getPartSize(this.selectFurniture);
+		furnitureSize.x = furnitureSize.x.toFixed(4);
+		furnitureSize.y = furnitureSize.y.toFixed(4);
+		furnitureSize.z = furnitureSize.z.toFixed(4);
+		pos.x = pos.x.toFixed(4);
+		pos.y = pos.y.toFixed(4);
+		pos.z = pos.z.toFixed(4);
+		if(this.plane == "front"){ // z+
+			if(pos.z >= furnitureCenter.z + furnitureSize.z/2)
+				return true;
+			else
+				return false;
+		}
+		else if(this.plane == "back"){ //z-
+			if(pos.z <= furnitureCenter.z - furnitureSize.z/2)
+				return true;
+			else
+				return false;
+		}
+		else if(this.plane == "left"){ //x-
+			if(pos.x <= furnitureCenter.x - furnitureSize.x/2)
+				return true;
+			else
+				return false;
+		}
+		else if(this.plane == "right"){ //x+
+			if(pos.x >= furnitureCenter.x + furnitureSize.x/2)
+				return true;
+			else
+				return false;
+		}
+		else if(this.plane == "up"){ //y+
+			if(pos.y >= furnitureCenter.y + furnitureSize.y/2)
+				return true;
+			else
+				return false;
+		}
+		else if(this.plane == "down"){ //y-
+			if(pos.y <= furnitureCenter.y - furnitureSize.y/2)
+				return true;
+			else
+				return false;
+		}
+	},
+
+	checkWheelArea: function(pos) {
+		// getPointByRay: function(obj, origin, direction)
+		var furnitureSize = this.getPartSize(this.selectFurniture);
+		//   1
+		//2     3
+		//   4
+		if(this.plane == "front") {//z+, v.z-
+			var origin = new THREE.Vector3(pos.x, pos.y, pos.z + furnitureSize.z + 1);
+			var origin1 = new THREE.Vector3(origin.x, origin.y + this.objectAreaList.wheel[1]/2, origin.z);
+			var origin2 = new THREE.Vector3(origin.x - this.objectAreaList.wheel[0]/2, origin.y, origin.z);
+			var origin3 = new THREE.Vector3(origin.x + this.objectAreaList.wheel[0]/2, origin.y, origin.z);
+			var origin4 = new THREE.Vector3(origin.x, origin.y - this.objectAreaList.wheel[1]/2, origin.z);
+			var direction = new THREE.Vector3(0,0,-1);
+		}
+		if(this.plane == "back") {//z-, v.z+
+			var origin = new THREE.Vector3(pos.x, pos.y, pos.z - furnitureSize.z - 1);
+			var origin1 = new THREE.Vector3(origin.x, origin.y + this.objectAreaList.wheel[1]/2, origin.z);
+			var origin2 = new THREE.Vector3(origin.x - this.objectAreaList.wheel[0]/2, origin.y, origin.z);
+			var origin3 = new THREE.Vector3(origin.x + this.objectAreaList.wheel[0]/2, origin.y, origin.z);
+			var origin4 = new THREE.Vector3(origin.x, origin.y - this.objectAreaList.wheel[1]/2, origin.z);
+			var direction = new THREE.Vector3(0,0,1);
+		}
+		if(this.plane == "left") {//x-, v.x+
+			var origin = new THREE.Vector3(pos.x - furnitureSize.x - 1, pos.y, pos.z);
+			var origin1 = new THREE.Vector3(origin.x, origin.y + this.objectAreaList.wheel[1]/2, origin.z);
+			var origin2 = new THREE.Vector3(origin.x, origin.y, origin.z - this.objectAreaList.wheel[0]/2);
+			var origin3 = new THREE.Vector3(origin.x, origin.y, origin.z + this.objectAreaList.wheel[0]/2);
+			var origin4 = new THREE.Vector3(origin.x, origin.y - this.objectAreaList.wheel[1]/2, origin.z);
+			var direction = new THREE.Vector3(1,0,0);
+		}
+		if(this.plane == "right") {//x+, v.x-
+			var origin = new THREE.Vector3(pos.x + furnitureSize.x + 1, pos.y, pos.z);
+			var origin1 = new THREE.Vector3(origin.x, origin.y + this.objectAreaList.wheel[1]/2, origin.z);
+			var origin2 = new THREE.Vector3(origin.x, origin.y, origin.z - this.objectAreaList.wheel[0]/2);
+			var origin3 = new THREE.Vector3(origin.x, origin.y, origin.z + this.objectAreaList.wheel[0]/2);
+			var origin4 = new THREE.Vector3(origin.x, origin.y - this.objectAreaList.wheel[1]/2, origin.z);
+			var direction = new THREE.Vector3(-1,0,0);
+		}
+		if(this.plane == "up") {//y+, v.y-
+			var origin = new THREE.Vector3(pos.x, pos.y + furnitureSize.y + 1, pos.z);
+			var origin1 = new THREE.Vector3(origin.x, origin.y, origin.z - this.objectAreaList.wheel[1]/2);
+			var origin2 = new THREE.Vector3(origin.x - this.objectAreaList.wheel[0]/2, origin.y, origin.z);
+			var origin3 = new THREE.Vector3(origin.x + this.objectAreaList.wheel[0]/2, origin.y, origin.z);
+			var origin4 = new THREE.Vector3(origin.x, origin.y, origin.z + this.objectAreaList.wheel[1]/2);
+			var direction = new THREE.Vector3(0,-1,0);
+		}
+		if(this.plane == "down") {//y-, v.y+
+			var origin = new THREE.Vector3(pos.x, pos.y - furnitureSize.y - 1, pos.z);
+			var origin1 = new THREE.Vector3(origin.x, origin.y, origin.z - this.objectAreaList.wheel[1]/2);
+			var origin2 = new THREE.Vector3(origin.x - this.objectAreaList.wheel[0]/2, origin.y, origin.z);
+			var origin3 = new THREE.Vector3(origin.x + this.objectAreaList.wheel[0]/2, origin.y, origin.z);
+			var origin4 = new THREE.Vector3(origin.x, origin.y, origin.z + this.objectAreaList.wheel[1]/2);
+			var direction = new THREE.Vector3(0,1,0);
+		}
+		
+		var intersects1 = this.getPointByRay(this.selectFurniture, origin1, direction);
+		var intersects2 = this.getPointByRay(this.selectFurniture, origin2, direction);
+		var intersects3 = this.getPointByRay(this.selectFurniture, origin3, direction);
+		var intersects4 = this.getPointByRay(this.selectFurniture, origin4, direction);
+
+		if(intersects1.length == 0 || intersects2.length == 0 || intersects3.length == 0 || intersects4.length == 0)
+			return false;
+		else
+			return true;
+	},
+
+	updateWheelPosition: function(pos) {
+		var furnitureCenter = this.getPartCenter(this.selectFurniture);
+		var furnitureSize = this.getPartSize(this.selectFurniture);
+		var isOnTheplane = this.checkOnThePlane(pos);
+		if(isOnTheplane){
+			var isArea = this.checkWheelArea(pos);
+			if(isArea)
+				this.selectObject.position.set(pos.x, pos.y, pos.z);
+			else
+				console.log("Area isn't enough");
+		}
+		else
+			console.log("Ray position isn't on the plan.");
+	},
+
+	updateObjectPosition: function(pos) {
+		// if(position correct)
+		// 	this.selectObject..position.set(pos.x, pos.y, pos.z);
+		// else
+		// 	console.log("miss");
+
+		// control list
+		if(this.selectObjectName == "wheel"){
+			this.updateWheelPosition(pos);
+		}
+		// if(this.selectObjectName == "rod")
+		// ...
+
+		
+	},
+
+	execute: function( name ){
+		this.init();
+		var scope = this;
+		$( ".item.ui.image.label.add.board" ).click( function() {
+			scope.setAddObjectName("board");
+        });
+        $( ".item.ui.image.label.add.rod" ).click( function() {
+        	scope.setAddObjectName("rod");
+        });
+        $( ".item.ui.image.label.add.seat" ).click( function() {
+        	scope.setAddObjectName("seat");
+        });
+        $( ".item.ui.image.label.add.leg" ).click( function() {
+        	scope.setAddObjectName("leg");
+        });
+        $( ".item.ui.image.label.add.wheel" ).click( function() {
+        	scope.setAddObjectName("wheel");
+        });
+        $( ".item.ui.image.label.add.hook" ).click( function() {
+        	scope.setAddObjectName("hook");
+        });
+        $( ".item.ui.image.label.add.drawer" ).click( function() {
+        	scope.setAddObjectName("drawer");
+        });
+        $( ".item.ui.image.label.add.door" ).click( function() {		
+			scope.setAddObjectName("door");
+        }); 
 	}
 }
 
 module.exports = Model_Add
-},{"./computeConvexHull":38}],25:[function(require,module,exports){
+},{"./CreateDoor":10,"./CreateDrawer":12,"./CreateDresserLeg":13,"./CreateRod":15,"./CreateSpiceRack":16,"./CreateTableRod":18,"./CreateWheel":19}],25:[function(require,module,exports){
 "use strict;"
 
 function Model_Align(main){
@@ -8143,6 +8643,7 @@ function cadExtrudeShape (shape, path) {
 	}
 
 	//the order is reversed to the shape position
+	
 	var point_last = path[path.length - 1];
 	path = path.map(point => {point[0] -= point_last[0]; point[1] -= point_last[1]; point[2] -= point_last[2]; return point});
 
@@ -8435,13 +8936,13 @@ function computeConvexHull(component, face) {
 	}
 
 	var points = collectPointOnFace(component, face);
-	//console.log(points);
+	console.log(points);
 
 	var concaveHull = hull(points, 20);
 
 	console.log(concaveHull);
 
-	return concaveHull;
+	return points;
 
 
 }
@@ -8488,16 +8989,41 @@ function collectPointOnFace(component, face) {
 		//to the face
 		for(var i = 0; i < pointsArray.length; i++) {
 			var vertex = pointsArray[i];
-
+			var isExist = false;
 			if(face == "xy")
 			{
-				var fv = [vertex[0], vertex[1]];
-				points.push(fv);
+				var fv = [vertex[0].toFixed(4), vertex[1].toFixed(4)];
+				isExist = false;
+				for (var j = 0; j < points.length; j++) {
+					if(points[j][0] == fv[0] && points[j][1] == fv[1]){
+						isExist = true;
+						break;
+					}
+				}
+				if(!isExist)
+					points.push(fv);					
+				
 			}else if(face == "xz"){
-				var fv = [vertex[0], vertex[2]];
-				points.push(fv);
+				var fv = [vertex[0].toFixed(4), vertex[2].toFixed(4)];
+				isExist = false;
+				for (var j = 0; j < points.length; j++) {
+					if(points[j][0] == fv[0] && points[j][1] == fv[1]){
+						isExist = true;
+						break;
+					}
+				}
+				if(!isExist)
+					points.push(fv);
 			}else if(face == "yz"){
-				var fv = [vertex[1], vertex[2]];
+				var fv = [vertex[1].toFixed(4), vertex[2].toFixed(4)];
+				isExist = false;
+				for (var j = 0; j < points.length; j++) {
+					if(points[j][0] == fv[0] && points[j][1] == fv[1]){
+						isExist = true;
+						break;
+					}
+				}
+				if(!isExist)
 				points.push(fv);
 			}
 		}
@@ -9265,6 +9791,11 @@ function Main()
 	this.mouse = new THREE.Vector2();
 	this.onDownPosition = new THREE.Vector2();
 	this.onUpPosition = new THREE.Vector2();
+
+	//----------------------Add Model-------------------------------
+	this.onMovePosition = new THREE.Vector2();
+
+
 	this.onDoubleClickPosition = new THREE.Vector2();
 	this.onCtrlE = false;
 	this.onCtrl = false;
@@ -9328,6 +9859,7 @@ function Main()
 	this.purpleWall = new THREE.Object3D();
 	this.ceiling = new THREE.Object3D();
 
+	
 }
 
 Main.prototype = {
@@ -9389,6 +9921,9 @@ Main.prototype = {
 		//this.container.appendChild( this.stats.dom )
 		window.addEventListener( 'resize', this.onWindowResize.bind(this), false );
 
+		//--------------------Add Model------------------------------------------
+		window.addEventListener( 'mousemove', this.onMouseMove.bind(this), false );
+
 		//mouse events
 		this.container.addEventListener('mousedown', this.onMouseDown.bind(this), false);
 		this.container.addEventListener('touchstart', this.onTouchStart.bind(this), false);		
@@ -9406,15 +9941,15 @@ Main.prototype = {
 		//this.customControl.enablePan = true;
 		//this.customControl.target.set(0, 0.5, - 0.2);
 
-		this.customControl.lookSpeed = 0.05;
-        this.customControl.movementSpeed = 20;
-        this.customControl.noFly = true;
-        this.customControl.lookVertical = true;
-        this.customControl.constrainVertical = true;
-        this.customControl.verticalMin = 1.0;
-        this.customControl.verticalMax = 2.0;
-        this.customControl.lon = -110;
-        this.customControl.lat = -50;
+		//this.customControl.lookSpeed = 0.05;
+        //this.customControl.movementSpeed = 20;
+        //this.customControl.noFly = true;
+        //this.customControl.lookVertical = true;
+        //this.customControl.constrainVertical = true;
+        //this.customControl.verticalMin = 1.0;
+        //this.customControl.verticalMax = 2.0;
+        //this.customControl.lon = -110;
+        //this.customControl.lat = -50;
 
 
 		this.transformControls = new THREE.TransformControls(this.camera, this.renderer.domElement);
@@ -9730,7 +10265,6 @@ Main.prototype = {
 		});
 
 		//this.scene.add(this.house);
-
 	},
 
 
@@ -9782,6 +10316,41 @@ Main.prototype = {
 		this.camera.aspect = window.innerWidth / window.innerHeight;
 		this.camera.updateProjectionMatrix();
 		this.renderer.setSize( window.innerWidth, window.innerHeight );
+	},
+
+	//-----------------------------------Add Model--------------------------
+	onMouseMove: function ( event ) {
+		if( this.processor.model_add !== undefined){
+			if(this.processor.model_add.isCreateObject){
+				this.mouse.x = ( event.clientX / window.innerWidth ) * 2 - 1;
+				this.mouse.y = - ( event.clientY / window.innerHeight ) * 2 + 1;
+				var raycaster = new THREE.Raycaster();
+				raycaster.setFromCamera( this.mouse, this.camera );
+				var intersects = raycaster.intersectObject(this.processor.model_add.selectFurniture);
+				if(intersects.length > 0){
+					var pos = intersects[0].point;
+
+					var object = this.processor.model_add.selectObject;
+					console.log(object);
+					object.position.set(pos.x, pos.y, pos.z);
+				}
+				else
+					console.log("miss");
+			}
+		}
+		
+		
+		
+		// 
+
+		// 
+		// var line = new THREE.Line();
+		// if(intersects.length > 0){
+		// 	line.raycast(raycaster, intersects);
+		// 	this.scene.add(line);
+		// 	console.log(intersects[0].point);
+		// }
+		
 	},
 
 
@@ -10436,10 +11005,20 @@ Main.prototype = {
 						//push object to label size
 						this.GetSizeObj.push(object);
 						$('.ui.blue.submit.button.getsize').show();
+
+						//---------------Add Model------------------
+						if( this.processor.model_add !== undefined){
+							this.processor.model_add.select(object);
+						}
 					}
 				} else {
 					//it also calls select, to detach
 					this.select( null );
+				}
+
+				//---------------Add Model------------------
+				if( this.processor.model_add !== undefined){
+					this.processor.model_add.selectPlane(this.mouse, this.camera, this.onUpPosition);
 				}
 			}
 			//select two obj for getting distance
@@ -10647,9 +11226,40 @@ Main.prototype = {
 		{
 			this.onCtrlE = false;
 
+			//-------------Add Model----------------------
+			if( this.processor.model_add !== undefined){
+				var bef = this.processor.model_add.getPartCenter(this.processor.model_add.selectFurniture);
+			}
+
 			//disable explosion view 
 			if(this.furniture  != null )
 				this.collapse(this.furniture);
+
+			//-------------Add Model----------------------
+			if( this.processor.model_add !== undefined){
+				var aft = this.processor.model_add.getPartCenter(this.processor.model_add.selectFurniture);
+				
+				var offset = new THREE.Vector3( aft.x - bef.x, aft.y - bef.y, aft.z - bef.z);
+				var obj = [];
+				for (var i = 0; i < this.scene.children.length; i++) {
+					if(this.scene.children[i].name == this.processor.model_add.selectObjectName)
+						obj.push(this.scene.children[i]);
+				}
+				for (var i = 0; i < obj.length; i++) {
+					obj[i].position.x += offset.x;
+					obj[i].position.y += offset.y;
+					obj[i].position.z += offset.z;
+				}
+				
+				var furniture = this.processor.model_add.selectFurniture;
+				while(furniture.parent != this.scene)
+					furniture = furniture.parent;
+				for (var i = 0; i < obj.length; i++) {
+					var pos = new THREE.Vector3(obj[i].position.x, obj[i].position.y, obj[i].position.z);
+					this.processor.model_add.objectAddToFurniture(furniture, obj[i], pos);					
+				}
+				
+			}
 
 			if(this.selectionBoxes.length > 0)
 			{
@@ -10694,6 +11304,19 @@ Main.prototype = {
 			this.WrapObject = [];
 			
 			this.RemoveSizeLabel();
+
+			//----------------------Add Model---------------------------
+			//when "E" Up
+			if( this.processor.model_add !== undefined){
+				this.processor.model_add.deleteSelectBox(this.scene);
+				this.processor.model_add.selectObjectName = "";
+				this.processor.model_add.selectFurnitureUUID = "";
+	    		this.processor.model_add.hasSelectBox = false;
+	    		this.processor.model_add.isCreateObject = false;
+			}
+			
+
+
 		}else {
 
 			var keyCode = event.which;

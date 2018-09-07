@@ -16,6 +16,7 @@ function cadExtrudeShape (shape, path) {
 	}
 
 	//the order is reversed to the shape position
+	
 	var point_last = path[path.length - 1];
 	path = path.map(point => {point[0] -= point_last[0]; point[1] -= point_last[1]; point[2] -= point_last[2]; return point});
 
