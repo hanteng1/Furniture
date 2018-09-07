@@ -202,11 +202,7 @@ Ui.prototype = {
 			scope.main.GetDistance();
 			
 		});
-<<<<<<< HEAD
 
-		
-=======
->>>>>>> parent of 9ffda49... Merge branch 'Wei-shiang'
 
 		//chair_align controller function
 		this.designButtons();

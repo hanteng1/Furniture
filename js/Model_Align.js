@@ -4,7 +4,6 @@ function Model_Align(main){
 
 	this.main = main;
     this.furnitures = main.furnitures;
-<<<<<<< HEAD
     this.Align_mode = false;
     var scope = this;
     $( ".item.ui.image.label.align1" ).click(function() {
@@ -31,9 +30,7 @@ function Model_Align(main){
 			scope.AlignComponent('z');
 		}
     });
-=======
-    this.Align_mode = false; 
->>>>>>> parent of 9ffda49... Merge branch 'Wei-shiang'
+
 
 }
 
