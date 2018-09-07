@@ -5,7 +5,7 @@ function Model_Align(main){
 
 	this.main = main;
     this.furnitures = main.furnitures;
-    this.Align_mode = false; 
+    this.Align_mode = false;
     var scope = this;
     $( ".item.ui.image.label.align1" ).click(function() {
 		if(scope.main.onCtrl == true && scope.main.DistanceObj.length==2){

@@ -1801,6 +1801,9 @@ Main.prototype = {
 		$('#parameter_control_tool_wrap').hide();
 		$('#parameter_control_tool_rotation').hide();
 		$('#parameter_control_tool_align').hide();
+		$('#parameter_control_tool_add').hide();
+		$('#parameter_control_tool_addbetween').hide();
+
 
 		this.furnitures.length = 0;	
 
@@ -1906,6 +1909,9 @@ Main.prototype = {
 		$('#parameter_control_tool_wrap').hide();
 		$('#parameter_control_tool_rotation').hide();
 		$('#parameter_control_tool_align').hide();
+		$('#parameter_control_tool_add').hide();
+		$('#parameter_control_tool_addbetween').hide();
+
 
 		this.processor.init();
 		//this.processor.executeDesign();

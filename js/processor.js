@@ -17,13 +17,13 @@ const Model_wrap = require('./Model_wrap');
 const Model_Rotation = require('./Model_Rotation');
 const Model_Align = require('./Model_Align');
 const Model_Add = require('./Model_Add');
+const Model_AddBetween = require('./Model_AddBetween');
 
 
 function Processor(main) {
 	this.main = main;
 	this.category = main.category;  //chair, cabinet, table
 	this.furnitures = main.furnitures;
-
 
 	//variables of transformation functions
 	//chair
@@ -55,7 +55,7 @@ function Processor(main) {
 	this.model_wrap = undefined;
 	this.model_rotation = undefined;
 	this.model_align = undefined;
-
+	this.model_addbetween = undefined;
 
 	//end of weixiang's block
 
@@ -224,6 +224,10 @@ Processor.prototype = {
 				//add
 				scope.model_add = new Model_Add(scope.main);
 				scope.transformFunctions.MODEL_ADD = scope.model_add;
+
+				//addbetween
+				scope.model_addbetween = new Model_AddBetween(scope.main);
+				scope.transformFunctions.MODEL_ADDBETWEEN = scope.model_addbetween;
 
 				$('.operations.operation_tool').show();
 				

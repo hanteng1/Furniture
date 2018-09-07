@@ -207,6 +207,7 @@ Ui.prototype = {
 			scope.main.GetDistance();
 			
 		});
+
 		
 
 		//chair_align controller function
@@ -251,6 +252,7 @@ Ui.prototype = {
 		$('#parameter_control_tool_rotation').hide();
 		$('#parameter_control_tool_align').hide();
 		$('#parameter_control_tool_add').hide();
+		$('#parameter_control_tool_addbetween').hide();
 		
 
 	},
@@ -431,6 +433,11 @@ Ui.prototype = {
 		//add
 		$('#operation_Add').click(function() {
 			scope.processor.executeDesign("MODEL_ADD", "add");
+
+		});
+
+		$('#operation_AddBetween').click(function() {
+			scope.processor.executeDesign("MODEL_ADDBETWEEN", "addbetween");
 
 		});
 	},
