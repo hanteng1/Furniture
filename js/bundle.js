@@ -6028,6 +6028,7 @@ function Model_Align(main){
 
 	this.main = main;
     this.furnitures = main.furnitures;
+
     this.Align_mode = false;
     var scope = this;
     $( ".item.ui.image.label.align1" ).click(function() {
@@ -6056,45 +6057,22 @@ function Model_Align(main){
     });
 
 
+
 }
 
 Model_Align.prototype = {
 
 	execute: function( name ){
-		var scope = this;
-
-		$( ".item.ui.image.label.align1" ).click(function() {
-			if(scope.main.onCtrl == true && scope.main.DistanceObj.length==2){
-				scope.AlignFurniture('x');
-			}
-			if(scope.main.onCtrlE == true){
-				scope.AlignComponent('x');
-			}
-			
-        });
-        $( ".item.ui.image.label.align2" ).click(function() {
-        	if(scope.main.onCtrl == true && scope.main.DistanceObj.length==2){
-				scope.AlignFurniture('y');
-			}
-			if(scope.main.onCtrlE == true){
-				scope.AlignComponent('y');
-			}
-			
-        });
-        $( ".item.ui.image.label.align3" ).click(function() {
-        	if(scope.main.onCtrl == true && scope.main.DistanceObj.length==2){
-				scope.AlignFurniture('z');
-			}
-			if(scope.main.onCtrlE == true){
-				scope.AlignComponent('z');
-			}
-			
-        });
 
 
 		if(this.Align_mode == false){
         	$('#parameter_control_tool_align').show();
             this.Align_mode = true;
+
+            this.main.processor.executeDesign("MODEL_PAINTING", "align");
+        	this.main.processor.executeDesign("MODEL_WRAP", "align");
+        	this.main.processor.executeDesign("MODEL_ROTATION", "align");
+
         }
         else if(this.Align_mode == true){
         	$('#parameter_control_tool_align').hide();
@@ -6339,6 +6317,11 @@ Model_Painting.prototype = {
         if(this.paint_mode == false){
             $('#parameter_control_tool_painting').show();
             this.paint_mode = true;
+
+            this.main.processor.executeDesign("MODEL_ALIGN", "painting");
+            this.main.processor.executeDesign("MODEL_WRAP", "painting");
+            this.main.processor.executeDesign("MODEL_ROTATION", "painting");
+
         }
         else if(this.paint_mode == true){
             $('#parameter_control_tool_painting').hide();
@@ -6417,6 +6400,8 @@ module.exports = Model_Painting
 },{}],28:[function(require,module,exports){
 "use strict;"
 
+const {Procedure_button , RecordPosition} = require('./Procedure_button');
+
 function Model_Rotation(main){
 
 	this.main = main;
@@ -6443,6 +6428,7 @@ Model_Rotation.prototype = {
 	            var model = scope.main.GetSizeObj[i];
 				scope.objectRotationByAxis( model, 'x' , -90 );
 	        }
+
         });
         $( ".item.ui.image.label.rota3" ).click(function() {
 
@@ -6450,6 +6436,7 @@ Model_Rotation.prototype = {
 	            var model = scope.main.GetSizeObj[i];
 				scope.objectRotationByAxis( model, 'z' , 90 );
 	        }
+
         });
         $( ".item.ui.image.label.rota4" ).click(function() {
 
@@ -6457,6 +6444,7 @@ Model_Rotation.prototype = {
 	            var model = scope.main.GetSizeObj[i];
 				scope.objectRotationByAxis( model, 'z' , -90 );
 	        }
+
         });
         $( ".item.ui.image.label.rota5" ).click(function() {
 
@@ -6464,6 +6452,7 @@ Model_Rotation.prototype = {
 	            var model = scope.main.GetSizeObj[i];
 				scope.objectRotationByAxis( model, 'y' , 90 );
 	        }
+
         });
         $( ".item.ui.image.label.rota6" ).click(function() {
 
@@ -6471,6 +6460,7 @@ Model_Rotation.prototype = {
 	            var model = scope.main.GetSizeObj[i];
 				scope.objectRotationByAxis( model, 'y' , -90 );
 	        }
+
         });
 
 
@@ -6479,6 +6469,20 @@ Model_Rotation.prototype = {
             this.Rotation_mode = true;
         }
         else if(this.Rotation_mode == true){
+
+	        
+        };
+
+        //show my button, hide others button
+		if(this.Rotation_mode == false && name=='rotation'){
+        	$('#parameter_control_tool_rotation').show();
+            this.Rotation_mode = true;
+            this.main.processor.executeDesign("MODEL_ALIGN", "rotation");
+        	this.main.processor.executeDesign("MODEL_PAINTING", "rotation");
+        	this.main.processor.executeDesign("MODEL_WRAP", "rotation");
+        }//hide my button
+        else if(this.Rotation_mode == true || name!='rotation'){
+
         	$('#parameter_control_tool_rotation').hide();
             this.Rotation_mode = false;
         }
@@ -6549,7 +6553,7 @@ Model_Rotation.prototype = {
 }
 
 module.exports = Model_Rotation
-},{}],29:[function(require,module,exports){
+},{"./Procedure_button":30}],29:[function(require,module,exports){
 "use strict;"
 const computeConvexHull = require('./computeConvexHull');
 const cadExtrudeShapeIntersection = require('./cadExtrudeShapeIntersection');
@@ -6649,9 +6653,19 @@ Model_wrap.prototype = {
             
         });
 
+
         if(this.wrap_mode == false){
         	$('#parameter_control_tool_wrap').show();
             this.wrap_mode = true;
+        }
+        if(this.wrap_mode == false && name=='wrap'){
+        	$('#parameter_control_tool_wrap').show();
+            this.wrap_mode = true;
+            this.main.processor.executeDesign("MODEL_ALIGN", "wrap");
+        	this.main.processor.executeDesign("MODEL_PAINTING", "wrap");
+        	this.main.processor.executeDesign("MODEL_ROTATION", "wrap");
+        	
+
         }
         else if(this.wrap_mode == true){
         	$('#parameter_control_tool_wrap').hide();
@@ -6660,7 +6674,7 @@ Model_wrap.prototype = {
         $('#parameter_control_tool_painting').hide();
         $('#parameter_control_tool_rotation').hide();
         $('#parameter_control_tool_align').hide();
-
+	
 	},
 	Wrap: function( model , texture ){
 
@@ -6957,193 +6971,52 @@ module.exports = Model_wrap
 },{"./cadExtrudeShapeIntersection":36,"./chairCutBack":39,"./computeConvexHull":40}],30:[function(require,module,exports){
 "use strict;"
 
-//this function for adding function 
 function Procedure_button(main, str){
 
-	//creat button, set class
+	if(main.GetSizeObj.length == 0){
+		main.GetSizeObj.push(0);
+		return;
+	}
+
 	var btn = document.createElement("button");
-	btn.classList.add("ui", "circular","icon","button","procedure",
-					  main.stepObject.length.toString());
-	btn.setAttribute ('id', "ui circular icon button procedure " + 
-					  main.stepObject.length.toString())
-	//set button string
-	var t = document.createTextNode(str);
+	btn.classList.add("ui","circular","icon","button","procedure",
+					  main.GetSizeObj.length.toString());
+	//console.log(btn.classList[4]);
+	var t = document.createTextNode(str);       
 	btn.appendChild(t);
-	
-    //add button to Web
+	//var icon = document.createElement("i");
+	//icon.classList.add("facebook","icon");
+    //btn.appendChild(icon);
+    //document.body.appendChild(btn);
+    
     document.getElementById("Procedure_List").appendChild(btn);
 
-    //record scene object
-    RecordObjects(main);
-    main.stepNumber += 1;
 
-    //set the click action
-    btn.addEventListener("click", function(){
+}
+function RecordPosition(main){
+	var recordPosi = [];
+	for(var i=0; i< main.furnitures.length ; i++){
+		var furniture = main.furnitures[i].getFurniture();
+		var position = new THREE.Vector3(furniture.x,
+										 furniture.y,
+										 furniture.z);
+		recordPosi.push(position);
 
-    	//if is the last step, create the step button
-	    if(main.lastStep == true){
-	    	main.lastStep = false;
-	    	Procedure_button(main, main.stepOperationName);
-	    }
-
-	    //console.log(btn.classList[5]);
-	    buttonClicked(main, btn.classList[5]);
-	    main.stepNumber = btn.classList[5];
-	    main.stepOperationName = btn.firstChild.nodeValue;
-
-	    //Initialise the model button
-	    main.processor.executeDesign("MODEL_ALIGN", "initial");
-	    main.processor.executeDesign("MODEL_PAINTING", "initial");
-        main.processor.executeDesign("MODEL_WRAP", "initial");
-        main.processor.executeDesign("MODEL_ROTATION", "initial");
-	    //show the control buttons
-	    if(btn.firstChild.nodeValue != 'Initial')
-	    	$('#parameter_control_tool_' + btn.firstChild.nodeValue).show();	    
-
-	});
+	}
+	main.stepFurniturePosition.push(recordPosi);
 	
-}
+	recordPosi = [];
+	for(var i=0; i< main.Objects.length ; i++){
+		var obj = main.Objects[i];
+		var position = new THREE.Vector3(obj.x, obj.y, obj.z);
+		recordPosi.push(position);
 
-function RecordObjects(main){
-	var RecordArr = [];
-
-	for(var i = main.scene.children.length - 1; i > -1; i -- ){ 
-		var object =  main.scene.children[i];	
-		if(object.isObject3D){
-			if ( object instanceof THREE.Camera ) {
-			} else if ( object instanceof THREE.PointLight ) {
-			} else if ( object instanceof THREE.DirectionalLight ) {
-			} else if ( object instanceof THREE.SpotLight ) {					
-			} else if ( object instanceof THREE.HemisphereLight ) {
-			} else if ( object instanceof THREE.AmbientLight ) {
-			} else if ( object instanceof THREE.GridHelper ) {
-			} else if ( object instanceof THREE.TransformControls ){
-			} else if ( object instanceof AddAxis){
-			} else if ( object instanceof THREE.BoxHelper){
-			} else if ( object == main.house) {
-			} else if ( object instanceof THREE.DirectionalLightHelper){
-			} else if ( object instanceof THREE.HemisphereLightHelper){
-			} else{
-				//RecordArr.push(object.clone());
-				var isFurniture = false;
-				for(var j = 0; j < main.furnitures.length; j++){
-					if(main.furnitures[j].getFurniture() == object){
-						isFurniture = true;
-						SaveFurniture(main.furnitures[j], RecordArr);
-						break;
-					}
-				}
-				if(isFurniture == false){
-					RecordArr.push(object.clone());
-				}
-
-			}
-		}
 	}
-	//record the object
-	main.stepObject.push( RecordArr );
+	main.stepObjectPosition.push(recordPosi);
 }
 
-function buttonClicked(main, btn_num){
-	clearScene(main);
-	var sceneObjs = main.stepObject[btn_num];
-	main.furnitures = [];
-	
-	//clear cards
-	$('#cards').empty();
-	
-	for(var i=0; i < sceneObjs.length; i++){
-		//try to add furniture to scene
-		try {
-		    var furniture = sceneObjs[i];
-			var new_furnitureObj = new THREE.Object3D();
-			new_furnitureObj.copy(furniture.getFurniture(), true);
-			var new_furniture = new Furniture(new_furnitureObj);
 
-			new_furniture.setCategory("straight_chair");
-			new_furniture.setIndex(furniture.index);
-			main.furnitures.push(new_furniture);
-
-			main.scene.add(new_furniture.getFurniture());
-			
-			//update the menu interface
-			new_furniture.addCard();
-			//copy the state
-			new_furniture.updatePosition(furniture.position);
-			new_furniture.updateDirection();
-			new_furniture.updateQuaternion(furniture.quaternion);
-			//copy the components and labeled state
-			new_furniture.updateListedComponents(furniture.listedComponents);
-			new_furniture.updateLabeledComponents(furniture.labeledComponents);
-			//copy the already labeled normal axis
-			//Object.assign(new_furniture.normalAxises, furniture.normalAxises);
-			for (let key in furniture.normalAxises) {
-				new_furniture.normalAxises[key] = new THREE.Vector3();
-				new_furniture.normalAxises[key].copy(furniture.normalAxises[key]);
-			}
-
-		}
-		catch(err) {//if it is not furniture, add to scene directly
-		    main.scene.add(sceneObjs[i]);
-		}
-		
-	}
-}
-
-function clearScene(main){
-	for(var i = main.scene.children.length - 1; i > -1; i -- ){ 
-		var object =  main.scene.children[i];	
-		if(object.isObject3D){
-			if ( object instanceof THREE.Camera ) {
-			} else if ( object instanceof THREE.PointLight ) {
-			} else if ( object instanceof THREE.DirectionalLight ) {
-			} else if ( object instanceof THREE.SpotLight ) {					
-			} else if ( object instanceof THREE.HemisphereLight ) {
-			} else if ( object instanceof THREE.AmbientLight ) {
-			} else if ( object instanceof THREE.GridHelper ) {
-			} else if ( object instanceof THREE.TransformControls ){
-			} else if ( object instanceof AddAxis){
-			} else if ( object instanceof THREE.BoxHelper){
-			} else if ( object == main.house) {
-			} else if ( object instanceof THREE.DirectionalLightHelper){
-			} else if ( object instanceof THREE.HemisphereLightHelper){
-			} else{
-				main.removeFromScene(object);
-			}
-		}
-	}
-}
-
-function SaveFurniture( furniture , furnituresDataSet) {
-
-	//var furniture = this.furnitures[i];
-	var new_furnitureObj = new THREE.Object3D();
-	new_furnitureObj.copy(furniture.getFurniture(), true);
-	var new_furniture = new Furniture(new_furnitureObj);
-
-	new_furniture.setCategory("straight_chair");
-	new_furniture.setIndex(furniture.index);
-	furnituresDataSet.push(new_furniture);
-
-	//copy the state
-	new_furniture.updatePosition(furniture.position);
-	new_furniture.updateDirection();
-	new_furniture.updateQuaternion(furniture.quaternion);
-
-	//copy the components and labeled state
-	new_furniture.updateListedComponents(furniture.listedComponents);
-	new_furniture.updateLabeledComponents(furniture.labeledComponents);
-
-	//copy the already labeled normal axis
-	//Object.assign(new_furniture.normalAxises, furniture.normalAxises);
-	for (let key in furniture.normalAxises) {
-		new_furniture.normalAxises[key] = new THREE.Vector3();
-		new_furniture.normalAxises[key].copy(furniture.normalAxises[key]);
-	}
-
-}
-
-module.exports = Procedure_button
+module.exports = {Procedure_button,RecordPosition}
 },{}],31:[function(require,module,exports){
 "use strict;"
 //this is to handle the new design approaches
@@ -9574,6 +9447,12 @@ function Main()
 	//object for wrap 
 	this.WrapObject = [];
 
+
+	//Procedure objects
+	//for record objects position in every step
+	this.stepObject = [];
+
+
 	//this is to store the furnitures before any chance
 	//simply copy of the this.furnitures
 	this.furnituresDataSet = [];
@@ -10897,6 +10776,20 @@ Main.prototype = {
 
 			this.onCtrl = true;
 			console.log('Ctrl down');
+
+		
+		}else if(keyCode == 46){
+			
+			//delete furniture
+			if(this.furniture != null ){
+				this.removeFromScene(this.furniture.getFurniture());
+				if ( this.furnitures.indexOf(this.furniture) > -1 ){
+					this.furnitures.splice( this.furnitures.indexOf(this.furniture),1);
+					this.selectionBox.visible = false;
+					this.transformControls.detach();
+				}
+			}
+
 		}
 
 

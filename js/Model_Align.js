@@ -4,6 +4,7 @@ function Model_Align(main){
 
 	this.main = main;
     this.furnitures = main.furnitures;
+
     this.Align_mode = false;
     var scope = this;
     $( ".item.ui.image.label.align1" ).click(function() {
@@ -32,45 +33,22 @@ function Model_Align(main){
     });
 
 
+
 }
 
 Model_Align.prototype = {
 
 	execute: function( name ){
-		var scope = this;
-
-		$( ".item.ui.image.label.align1" ).click(function() {
-			if(scope.main.onCtrl == true && scope.main.DistanceObj.length==2){
-				scope.AlignFurniture('x');
-			}
-			if(scope.main.onCtrlE == true){
-				scope.AlignComponent('x');
-			}
-			
-        });
-        $( ".item.ui.image.label.align2" ).click(function() {
-        	if(scope.main.onCtrl == true && scope.main.DistanceObj.length==2){
-				scope.AlignFurniture('y');
-			}
-			if(scope.main.onCtrlE == true){
-				scope.AlignComponent('y');
-			}
-			
-        });
-        $( ".item.ui.image.label.align3" ).click(function() {
-        	if(scope.main.onCtrl == true && scope.main.DistanceObj.length==2){
-				scope.AlignFurniture('z');
-			}
-			if(scope.main.onCtrlE == true){
-				scope.AlignComponent('z');
-			}
-			
-        });
 
 
 		if(this.Align_mode == false){
         	$('#parameter_control_tool_align').show();
             this.Align_mode = true;
+
+            this.main.processor.executeDesign("MODEL_PAINTING", "align");
+        	this.main.processor.executeDesign("MODEL_WRAP", "align");
+        	this.main.processor.executeDesign("MODEL_ROTATION", "align");
+
         }
         else if(this.Align_mode == true){
         	$('#parameter_control_tool_align').hide();

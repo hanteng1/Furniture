@@ -77,6 +77,11 @@ Model_Painting.prototype = {
         if(this.paint_mode == false){
             $('#parameter_control_tool_painting').show();
             this.paint_mode = true;
+
+            this.main.processor.executeDesign("MODEL_ALIGN", "painting");
+            this.main.processor.executeDesign("MODEL_WRAP", "painting");
+            this.main.processor.executeDesign("MODEL_ROTATION", "painting");
+
         }
         else if(this.paint_mode == true){
             $('#parameter_control_tool_painting').hide();

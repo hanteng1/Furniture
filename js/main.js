@@ -91,6 +91,12 @@ function Main()
 	//object for wrap 
 	this.WrapObject = [];
 
+
+	//Procedure objects
+	//for record objects position in every step
+	this.stepObject = [];
+
+
 	//this is to store the furnitures before any chance
 	//simply copy of the this.furnitures
 	this.furnituresDataSet = [];
@@ -1414,6 +1420,20 @@ Main.prototype = {
 
 			this.onCtrl = true;
 			console.log('Ctrl down');
+
+		
+		}else if(keyCode == 46){
+			
+			//delete furniture
+			if(this.furniture != null ){
+				this.removeFromScene(this.furniture.getFurniture());
+				if ( this.furnitures.indexOf(this.furniture) > -1 ){
+					this.furnitures.splice( this.furnitures.indexOf(this.furniture),1);
+					this.selectionBox.visible = false;
+					this.transformControls.detach();
+				}
+			}
+
 		}
 
 
