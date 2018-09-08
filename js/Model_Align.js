@@ -1,70 +1,62 @@
 "use strict;"
-const Procedure_button = require('./Procedure_button');
 
 function Model_Align(main){
 
 	this.main = main;
     this.furnitures = main.furnitures;
     this.Align_mode = false; 
-    var scope = this;
-    $( ".item.ui.image.label.align1" ).click(function() {
-		if(scope.main.onCtrl == true && scope.main.DistanceObj.length==2){
-			scope.AlignFurniture('x');
-		}
-		if(scope.main.onCtrlE == true){
-			scope.AlignComponent('x');
-		}
-    });
-    $( ".item.ui.image.label.align2" ).click(function() {
-    	if(scope.main.onCtrl == true && scope.main.DistanceObj.length==2){
-			scope.AlignFurniture('y');
-		}
-		if(scope.main.onCtrlE == true){
-			scope.AlignComponent('y');
-		}
-    });
-    $( ".item.ui.image.label.align3" ).click(function() {
-    	if(scope.main.onCtrl == true && scope.main.DistanceObj.length==2){
-			scope.AlignFurniture('z');
-		}
-		if(scope.main.onCtrlE == true){
-			scope.AlignComponent('z');
-		}
-    });
 
 }
 
 Model_Align.prototype = {
 
 	execute: function( name ){
+		var scope = this;
 
-		if(this.Align_mode == false && name=='align'){
+		$( ".item.ui.image.label.align1" ).click(function() {
+			if(scope.main.onCtrl == true && scope.main.DistanceObj.length==2){
+				scope.AlignFurniture('x');
+			}
+			if(scope.main.onCtrlE == true){
+				scope.AlignComponent('x');
+			}
+			
+        });
+        $( ".item.ui.image.label.align2" ).click(function() {
+        	if(scope.main.onCtrl == true && scope.main.DistanceObj.length==2){
+				scope.AlignFurniture('y');
+			}
+			if(scope.main.onCtrlE == true){
+				scope.AlignComponent('y');
+			}
+			
+        });
+        $( ".item.ui.image.label.align3" ).click(function() {
+        	if(scope.main.onCtrl == true && scope.main.DistanceObj.length==2){
+				scope.AlignFurniture('z');
+			}
+			if(scope.main.onCtrlE == true){
+				scope.AlignComponent('z');
+			}
+			
+        });
+
+
+		if(this.Align_mode == false){
         	$('#parameter_control_tool_align').show();
             this.Align_mode = true;
-            this.main.processor.executeDesign("MODEL_PAINTING", "align");
-        	this.main.processor.executeDesign("MODEL_WRAP", "align");
-        	this.main.processor.executeDesign("MODEL_ROTATION", "align");
-        	
-        	//creat procedure button
-        	if(this.main.stepOperationName != name){
-        		this.DeleteButton();
-	        	Procedure_button( this.main, this.main.stepOperationName );
-	        	//record the operation name
-	        	this.main.stepOperationName = name;
-        	}
-	        	
         }
-        else if(this.Align_mode == true || name!= 'align'){
+        else if(this.Align_mode == true){
         	$('#parameter_control_tool_align').hide();
             this.Align_mode = false;
         }
-        
+        $('#parameter_control_tool_painting').hide();
+        $('#parameter_control_tool_wrap').hide();
+        $('#parameter_control_tool_rotation').hide();
 	},
 
 	AlignFurniture: function( mode ){
-		
-		this.DeleteButton();
-		
+
 		var group = new THREE.Group();
 		var TotalSize = new THREE.Vector3();
 
@@ -121,8 +113,6 @@ Model_Align.prototype = {
 	},
 
 	AlignComponent: function( mode ){
-		
-		this.DeleteButton();
 
 		var group = new THREE.Group();
 		var TotalSize = new THREE.Vector3();
@@ -213,22 +203,7 @@ Model_Align.prototype = {
 		return center;
     },
 
-    DeleteButton: function(){
-    	//console.log(this.main.stepNumber);
-		//console.log(this.main.stepObject.length);
-		this.main.lastStep = true;
-		if (this.main.stepNumber < this.main.stepObject.length){
-			var stepLength = this.main.stepObject.length;
 
-			for(var i=parseInt(this.main.stepNumber); i<stepLength; i++){
-				var btn = document.getElementById(
-					"ui circular icon button procedure "+i.toString());
-				btn.parentNode.removeChild(btn);
-			}
-			this.main.stepObject.length = parseInt(this.main.stepNumber);
-		}
-
-    }
 
 
 }
