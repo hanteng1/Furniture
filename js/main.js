@@ -595,6 +595,24 @@ Main.prototype = {
 		this.renderer.setSize( window.innerWidth, window.innerHeight );
 	},
 
+	//-----------------------------------Add Model--------------------------
+	onMouseMove: function ( event ) {
+		if( this.processor.model_add !== undefined){
+			if(this.processor.model_add.isCreateObject){
+				this.mouse.x = ( event.clientX / window.innerWidth ) * 2 - 1;
+				this.mouse.y = - ( event.clientY / window.innerHeight ) * 2 + 1;
+				var raycaster = new THREE.Raycaster();
+				raycaster.setFromCamera( this.mouse, this.camera );
+				var intersects = raycaster.intersectObject(this.processor.model_add.selectFurniture);
+				if(intersects.length > 0){
+					var pos = intersects[0].point;
+					this.processor.model_add.updateObjectPosition(pos);					
+				}
+				else
+					console.log("miss");
+			}
+		}
+	},
 
 	preAddObject: function(object) {
 		
@@ -795,14 +813,16 @@ Main.prototype = {
 
 	select: function(object){
 		//var scope = this;
-
+		console.log()
 		if(this.selected == object) return;
 		var uuid = null;
 
 		if(object !== null) {
 			uuid = object.uuid;
 		}
-
+		//-----test----
+		console.log("select function object");
+		console.log(object);
 		this.selected = object;
 
 		if(this.onCtrlE == false && this.onCtrl == false)
@@ -1174,6 +1194,8 @@ Main.prototype = {
 					if ( intersects.length > 0 ) {
 
 						this.furniture = this.furnitures[i];
+						console.log("this.onCtrlE == false && this.onCtrl == false");
+						console.log(this.furniture);
 						this.select(this.furniture.getFurniture());
 
 						objselect = false;
@@ -1217,7 +1239,7 @@ Main.prototype = {
 							this.select( null );
 							$('.ui.blue.submit.button.getsize').hide();
 							this.GetSizeObj = [];
-							//this.RemoveSizeLabel();
+							this.RemoveSizeLabel();
 
 						}
 
@@ -1250,6 +1272,12 @@ Main.prototype = {
 						//push object to label size
 						this.GetSizeObj.push(object);
 						$('.ui.blue.submit.button.getsize').show();
+
+						// //---------------Add Model------------------
+						if( this.processor.model_add !== undefined){
+							this.processor.model_add.select(object);
+						}
+
 					}
 				} else {
 					//it also calls select, to detach
@@ -1354,7 +1382,7 @@ Main.prototype = {
 		var array = this.getMousePosition( this.container, event.clientX, event.clientY );
 		this.onDoubleClickPosition.fromArray( array );
 
-		//console.log("double clicked");
+		// console.log("double clicked");
 
 		//this.customControl.switchView2TG();
 		//this.customControl.switchView2FP();
@@ -1373,9 +1401,10 @@ Main.prototype = {
 		// }
 
 		if(this.furniture !== null) {
-
+			// console.log("yes furniture");
 			this.customControl.switchView2TG();
 		}else {
+			// console.log("no furniture");
 			this.customControl.switchView2FP();
 		}
 
@@ -1491,6 +1520,36 @@ Main.prototype = {
 			if(this.furniture  != null )
 				this.collapse(this.furniture);
 
+
+			//-------------Add Model----------------------
+			if( this.processor.model_add !== undefined){
+				if(this.processor.model_add.isCreateObject){
+					var aft = this.processor.model_add.getPartCenter(this.processor.model_add.selectFurniture);				
+					var offset = new THREE.Vector3( aft.x - bef.x, aft.y - bef.y, aft.z - bef.z);
+					var obj = [];
+					for (var i = 0; i < this.scene.children.length; i++) {
+						if(this.scene.children[i].name == this.processor.model_add.selectObjectName)
+							obj.push(this.scene.children[i]);
+					}
+					for (var i = 0; i < obj.length; i++) {
+						obj[i].position.x += offset.x;
+						obj[i].position.y += offset.y;
+						obj[i].position.z += offset.z;
+					}
+					
+					var furniture = this.processor.model_add.selectFurniture;
+					console.log(furniture);
+					while(furniture.parent.uuid != this.scene.uuid)
+						furniture = furniture.parent;
+					console.log(furniture);
+					for (var i = 0; i < obj.length; i++) {
+						var pos = new THREE.Vector3(obj[i].position.x, obj[i].position.y, obj[i].position.z);
+						this.processor.model_add.objectAddToFurniture(furniture, obj[i], pos);					
+					}
+					console.log(furniture);
+				}
+			}
+
 			if(this.selectionBoxes.length > 0)
 			{
 				for(var i = 0; i < this.selectionBoxes.length; i++)
@@ -1498,7 +1557,7 @@ Main.prototype = {
 					this.removeFromScene(this.selectionBoxes[i]);
 				}
 			}
-
+			
 			this.selectionBoxes = [];
 			this.selectedIds = [];
 			this.furniture = null;
@@ -1534,6 +1593,19 @@ Main.prototype = {
 			this.WrapObject = [];
 			
 			this.RemoveSizeLabel();
+
+			//----------------------Add Model---------------------------
+			//when "E" Up
+			if( this.processor.model_add !== undefined){
+				if(this.processor.model_add.isCreateObject){
+					this.processor.model_add.deleteSelectBox(this.scene);
+					this.processor.model_add.selectObjectName = "";
+					this.processor.model_add.selectFurnitureUUID = "";
+		    		this.processor.model_add.hasSelectBox = false;
+		    		this.processor.model_add.isCreateObject = false;
+	    		}
+			}
+
 		}else {
 
 			var keyCode = event.which;
