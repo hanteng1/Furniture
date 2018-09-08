@@ -7,23 +7,16 @@ const Chair_Add = require('./Chair_Add');
 const Chair_Rebuild = require('./Chair_Rebuild');
 const Cabinet_kallax = require('./Cabinet_kallax');
 const Dresser_Add = require('./Dresser_Add');
-
-const Table = require('./Table');
-const Desk = require('./Desk');
-
-
 const Model_Painting = require('./Model_Painting');
 const Model_wrap = require('./Model_wrap');
 const Model_Rotation = require('./Model_Rotation');
 const Model_Align = require('./Model_Align');
-const Model_Add = require('./Model_Add');
-const Model_AddBetween = require('./Model_AddBetween');
-
 
 function Processor(main) {
 	this.main = main;
 	this.category = main.category;  //chair, cabinet, table
 	this.furnitures = main.furnitures;
+
 
 	//variables of transformation functions
 	//chair
@@ -40,10 +33,6 @@ function Processor(main) {
 	this.chair_add = undefined;
 	this.dresser_add = undefined;
 
-	this.table = undefined;
-	this.desk = undefined;
-
-	this.model_add = undefined;
 	//end of zhuen's block
 
 
@@ -55,7 +44,7 @@ function Processor(main) {
 	this.model_wrap = undefined;
 	this.model_rotation = undefined;
 	this.model_align = undefined;
-	this.model_addbetween = undefined;
+
 
 	//end of weixiang's block
 
@@ -163,48 +152,6 @@ Processor.prototype = {
 
 
 			case "table" :
-				if(scope.furnitures.length == 0) {
-			
-					return;
-
-				}
-				else if(scope.furnitures.length == 1){
-					//possible actions with one furniture					
-					
-					scope.table = new Table(scope.main);
-					scope.transformFunctions.TABLE = scope.table;						
-					$('.operations.operation_table').show();
-
-				}
-				else if( scope.furnitures.length > 1) {
-					//possible actions with many furnitures
-
-					
-					scope.table = new Table(scope.main);
-					scope.transformFunctions.TABLE = scope.table;						
-					$('.operations.operation_table').show();
-
-				}
-
-				break;
-
-			case "desk" :
-				if(scope.furnitures.length == 0) {
-					return;
-				}
-				else if(scope.furnitures.length == 1){
-					//possible actions with one furniture
-					scope.desk = new Desk(scope.main);
-					scope.transformFunctions.DESK = scope.desk;						
-					$('.operations.operation_desk').show();
-
-				}
-				else if( scope.furnitures.length > 1) {
-					//possible actions with many furnitures
-					scope.desk = new Desk(scope.main);
-					scope.transformFunctions.DESK = scope.desk;						
-					$('.operations.operation_desk').show();
-				}
 
 				break;
 
@@ -221,14 +168,6 @@ Processor.prototype = {
 				scope.model_align = new Model_Align(scope.main);
 				scope.transformFunctions.MODEL_ALIGN = scope.model_align;
 				
-				//add
-				scope.model_add = new Model_Add(scope.main);
-				scope.transformFunctions.MODEL_ADD = scope.model_add;
-
-				//addbetween
-				scope.model_addbetween = new Model_AddBetween(scope.main);
-				scope.transformFunctions.MODEL_ADDBETWEEN = scope.model_addbetween;
-
 				$('.operations.operation_tool').show();
 				
 				break;

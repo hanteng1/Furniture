@@ -8,7 +8,8 @@ const {translate, rotate} = scadApi.transformations
 const csgToGeometries = require('./csgToGeometries')
 
 function CreateDresserLeg() {
-    var leg = cylinder({start: [0,0,0], end: [0,0,1.5], r1: 0.5, r2: 0.8, fn: 50});
+    var leg = cylinder({start: [0,0,0], end: [0,0,5], r1: 1, r2: 2, fn: 50});
+
     leg = leg.center();
     leg = leg.rotateX(-90);
     var geometry = csgToGeometries(leg)[0];

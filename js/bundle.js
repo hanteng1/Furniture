@@ -81,7 +81,7 @@ function assignUVs(geometry) {
 
 module.exports = CabinetMakeBedBroad
 
-},{"./csgToGeometries":42,"@jscad/csg":51,"@jscad/scad-api":138}],2:[function(require,module,exports){
+},{"./csgToGeometries":34,"@jscad/csg":43,"@jscad/scad-api":130}],2:[function(require,module,exports){
 "use strict;"
 
 const scadApi = require('@jscad/scad-api')
@@ -130,7 +130,7 @@ function assignUVs(geometry) {
 }
 
 module.exports = CabinetMakeBroad
-},{"./csgToGeometries":42,"@jscad/csg":51,"@jscad/scad-api":138}],3:[function(require,module,exports){
+},{"./csgToGeometries":34,"@jscad/csg":43,"@jscad/scad-api":130}],3:[function(require,module,exports){
 "use strict;"
 
 const scadApi = require('@jscad/scad-api')
@@ -182,7 +182,7 @@ function assignUVs(geometry) {
 
 
 module.exports = CabinetMakeSeat
-},{"./csgToGeometries":42,"@jscad/csg":51,"@jscad/scad-api":138}],4:[function(require,module,exports){
+},{"./csgToGeometries":34,"@jscad/csg":43,"@jscad/scad-api":130}],4:[function(require,module,exports){
 "use strict;"
 
 const CabinetMakeSeat = require('./CabinetMakeSeat');
@@ -695,7 +695,7 @@ Cabinet_kallax.prototype = {
 }
 
 module.exports = Cabinet_kallax
-},{"./CabinetMakeBedBroad":1,"./CabinetMakeBroad":2,"./CabinetMakeSeat":3,"./MarkBetweenSize":22,"./MarkSize":23,"./rebuildMakeSeat":148}],5:[function(require,module,exports){
+},{"./CabinetMakeBedBroad":1,"./CabinetMakeBroad":2,"./CabinetMakeSeat":3,"./MarkBetweenSize":17,"./MarkSize":18,"./rebuildMakeSeat":140}],5:[function(require,module,exports){
 const chairCreateBoard = require('./chairCreateBoard')
 const chairCutBack = require('./chairCutBack')
 
@@ -1584,7 +1584,7 @@ Chair_Add.prototype = {
 }
 
 module.exports = Chair_Add
-},{"./cadCutByPlane":34,"./chairCreateBoard":38,"./chairCutBack":39}],6:[function(require,module,exports){
+},{"./cadCutByPlane":26,"./chairCreateBoard":30,"./chairCutBack":31}],6:[function(require,module,exports){
 "use strict;"
 //chair align related functions
 //align in one line
@@ -2201,7 +2201,7 @@ module.exports = Chair_Align
 
 
 
-},{"./cadMakeSeat":37,"./chairCutBack":39,"./computeConvexHull":40}],7:[function(require,module,exports){
+},{"./cadMakeSeat":29,"./chairCutBack":31,"./computeConvexHull":32}],7:[function(require,module,exports){
 "use strict;"
 
 const rebuildMakeSeat = require('./rebuildMakeSeat');
@@ -2620,15 +2620,6 @@ Chair_Rebuild.prototype = {
 		this.loadLegModel('../models/Legs/Leg1.dae', furniture, SeatPosi, SeatSize);
 		
 	},
-
-	// remove: function(group, name){
-	// 	for (var i = group.children.length - 1; i >= 0 ; i--) {				
-	// 		var str = group.children[i].name;
-	// 		if (str == name) {
-	// 			group.remove(group.children[i]);
-	// 		}	
-	// 	}
-	// },
 
 
 	remove: function(group){
@@ -3049,7 +3040,7 @@ Chair_Rebuild.prototype = {
 }
 module.exports = Chair_Rebuild
 
-},{"./Model_Painting":27,"./Model_wrap":29,"./cadExtrudeShape":35,"./chairCutBack":39,"./computeConvexHull":40,"./rebuildMakeLeg":147,"./rebuildMakeSeat":148}],8:[function(require,module,exports){
+},{"./Model_Painting":20,"./Model_wrap":22,"./cadExtrudeShape":27,"./chairCutBack":31,"./computeConvexHull":32,"./rebuildMakeLeg":139,"./rebuildMakeSeat":140}],8:[function(require,module,exports){
 "use strict;"
 
 const scadApi = require('@jscad/scad-api')
@@ -3060,10 +3051,10 @@ const {translate, rotate} = scadApi.transformations
 const csgToGeometries = require('./csgToGeometries')
 
 function CreateBlum(width, length, height) {
-	var blum1 = cube([length-0.1,0.05,0.05]).translate([0.1,-0.05,0]);
-    var blum2 = cube([length-0.1,0.05,0.05]).translate([0.1,-0.05,0.15]);
-    var blum3 = cube([length-0.1,0.05,0.05]).translate([0.1,width-0.1,0]);
-    var blum4 = cube([length-0.1,0.05,0.05]).translate([0.1,width-0.1,0.15]);
+	var blum1 = cube([length-0.8,0.2,0.2]).translate([0.2,-0.2,height/2-1]);
+    var blum2 = cube([length-0.8,0.2,0.2]).translate([0.2,-0.2,height/2-1.5]);
+    var blum3 = cube([length-0.8,0.2,0.2]).translate([0.2,width-0.5,height/2-1]);
+    var blum4 = cube([length-0.8,0.2,0.2]).translate([0.2,width-0.5,height/2-1.5]);
     obj = union(blum1, blum2, blum3, blum4);
     obj = obj.rotateX(-90);
     obj = obj.rotateY(-90);
@@ -3072,7 +3063,7 @@ function CreateBlum(width, length, height) {
 }
 
 module.exports = CreateBlum
-},{"./csgToGeometries":42,"@jscad/csg":51,"@jscad/scad-api":138}],9:[function(require,module,exports){
+},{"./csgToGeometries":34,"@jscad/csg":43,"@jscad/scad-api":130}],9:[function(require,module,exports){
 "use strict;"
 
 const scadApi = require('@jscad/scad-api')
@@ -3111,7 +3102,7 @@ function CreateChain(length) {
 }
 
 module.exports = CreateChain
-},{"./csgToGeometries":42,"@jscad/csg":51,"@jscad/scad-api":138}],10:[function(require,module,exports){
+},{"./csgToGeometries":34,"@jscad/csg":43,"@jscad/scad-api":130}],10:[function(require,module,exports){
 "use strict;"
 
 const scadApi = require('@jscad/scad-api')
@@ -3122,14 +3113,13 @@ const {translate, rotate} = scadApi.transformations
 const csgToGeometries = require('./csgToGeometries')
 
 function CreateDoor(h, w) {
-    var tmp = 0.05;
-   	var board = cube({size:[0.03, h, w], center:true});
-   	var obj = board.expand(0.04, 16);
-    var path = new CSG.Path2D([[tmp, w/8+w/10], [tmp, w/8], [tmp-w/20, w/8-w/15], 
-    	[tmp-w/20, -1*w/8+w/15], [tmp, -1*w/8], [tmp, -1*w/8-w/10]], /*closed=*/false);
-    var handle = path.rectangularExtrude(0.08, 0.2, 16, true);
-    //var handle = rectangular_extrude([ [-0.25,1], [-0.5,0.5], [-0.5,0], [-0.25,-0.5] ],  {w: 0.1, h: 0.2});
-    handle = handle.translate([-0.12,0, -1*w/2 + w/8]);
+    var board = cube({size:[0.8, h - 1, w - 1], center:true});
+	var obj = board.expand(0.1, 16);
+	var path = new CSG.Path2D([[-0.25, w/8+w/10], [-0.25, w/8], [-0.25-w/20, w/8-w/15], 
+		[-0.25-w/20, -1*w/8+w/15], [-0.25, -1*w/8], [-0.25, -1*w/8-w/10]], /*closed=*/false);
+	var handle = path.rectangularExtrude(0.2, 1, 16, true);
+	//var handle = rectangular_extrude([ [-0.25,1], [-0.5,0.5], [-0.5,0], [-0.25,-0.5] ],  {w: 0.1, h: 0.2});
+    handle = handle.translate([-0.3,0, -1*w/2 + w/8]);
     obj = union(obj, handle);
     obj = obj.rotateY(90);
 
@@ -3137,46 +3127,11 @@ function CreateDoor(h, w) {
 
 	return geometry;
 
-}
-
-module.exports = CreateDoor 
-},{"./csgToGeometries":42,"@jscad/csg":51,"@jscad/scad-api":138}],11:[function(require,module,exports){
-"use strict;"
-
-const scadApi = require('@jscad/scad-api')
-const { CSG, CAG, isCSG, isCAG } = require('@jscad/csg')
-const {cube, sphere, cylinder} = scadApi.primitives3d
-const {union, difference, intersection} = scadApi.booleanOps
-const {translate, rotate} = scadApi.transformations
-const csgToGeometries = require('./csgToGeometries')
-
-function CreateDoorBoard (length, height){
-
-	// var length = 2;
- 	// var height = 7;
-   
-    var obj = cube({size: [0.1,length,height]});
-
-	var obj1 = cube({size: [0.4,length/10,height]}).translate([-0.25,0,0]);
-	obj1 = obj1.translate([0.1,0,0]);
-	var obj2 = obj1.translate([0,length-length/10,0]);
-	
-	var obj3 = cube({size: [0.4,length,height/10]}).translate([-0.15,0,height - height/10]);
-	var obj4 = obj3.translate([0,0,-height/10-1]);
-	var obj5 = obj3.translate([0,0,-height+height/10+height/10+1]);
-	var obj6 = obj3.translate([0,0,-height+height/10]);
-	obj = union(obj, obj1, obj2, obj3, obj4, obj5, obj6);
-    obj = obj.center();
-    
-	obj = obj.rotateX(90);
-	var geometry = csgToGeometries(obj)[0];
-	return geometry;
 
 }
 
-
-module.exports = CreateDoorBoard
-},{"./csgToGeometries":42,"@jscad/csg":51,"@jscad/scad-api":138}],12:[function(require,module,exports){
+module.exports = CreateDoor
+},{"./csgToGeometries":34,"@jscad/csg":43,"@jscad/scad-api":130}],11:[function(require,module,exports){
 "use strict;"
 
 const scadApi = require('@jscad/scad-api')
@@ -3189,23 +3144,21 @@ const csgToGeometries = require('./csgToGeometries')
 function CreateDrawer(width, length, height) {
     
     // var width = 10, length = 15, height = 5;
-    // var width = 1, length = 1.5, height = 0.5;
-    var obj = cube([length, width-0.15, 0.05]);
-    var obj1 = cube([length, 0.05, height-0.1]);
-    var obj2 = cube([0.05, width-0.15, height-0.1]);
-    var obj3 = cube([length ,0.05, height-0.1]).translate([0 ,width-0.15, 0]);
-    var obj4 = cube([0.05, width, height]).translate([length-0.05, -0.05, 0]);
+    var obj = cube([length, width-1, 0.5]);
+    var obj1 = cube([length, 0.5, height-1]);
+    var obj2 = cube([0.5, width-1, height-1]);
+    var obj3 = cube([length ,0.5, height-1]).translate([0 ,width-1, 0]);
+    var obj4 = cube([0.5, width, height]).translate([length-0.5, -0.25, 0]);
     
-    var w = width;
-    var tmp = 0.05;
-    var path = new CSG.Path2D([[tmp, w/8+w/10], [tmp, w/8], [tmp-w/20, w/8-w/15], 
-        [tmp-w/20, -1*w/8+w/15], [tmp, -1*w/8], [tmp, -1*w/8-w/10]], /*closed=*/false);
-    var handle = path.rectangularExtrude(0.02, 0.2, 16, true);
-    //handle = handle.center();
-    handle = handle.rotateY(180);
-    
-    
-    handle = handle.translate([length+0.05,(width-0.1)/2,(height+0.2)/2]);
+    var path = new CSG.Path2D([[-0.25, width/8+width/10], [-0.25, width/8], 
+    [-0.25-width/20, width/8-width/15], [-0.25-width/20, -1*width/8+width/15], 
+    [-0.25, -1*width/8], [-0.25, -1*width/8-width/10]],false);
+	var handle = path.rectangularExtrude(0.2, 1, 10, true);
+	//handle = handle.center();
+	handle = handle.rotateY(180);
+	
+	
+	handle = handle.translate([length-0.2,width/2,(height+1)/2]);
     obj = union(obj, obj1, obj2, obj3, obj4, handle);
     // obj = obj.center();
     obj = obj.rotateX(-90);
@@ -3216,7 +3169,7 @@ function CreateDrawer(width, length, height) {
 }
 
 module.exports = CreateDrawer
-},{"./csgToGeometries":42,"@jscad/csg":51,"@jscad/scad-api":138}],13:[function(require,module,exports){
+},{"./csgToGeometries":34,"@jscad/csg":43,"@jscad/scad-api":130}],12:[function(require,module,exports){
 "use strict;"
 
 const scadApi = require('@jscad/scad-api')
@@ -3227,7 +3180,8 @@ const {translate, rotate} = scadApi.transformations
 const csgToGeometries = require('./csgToGeometries')
 
 function CreateDresserLeg() {
-    var leg = cylinder({start: [0,0,0], end: [0,0,1.5], r1: 0.5, r2: 0.8, fn: 50});
+    var leg = cylinder({start: [0,0,0], end: [0,0,5], r1: 1, r2: 2, fn: 50});
+
     leg = leg.center();
     leg = leg.rotateX(-90);
     var geometry = csgToGeometries(leg)[0];
@@ -3235,7 +3189,7 @@ function CreateDresserLeg() {
 }
 
 module.exports = CreateDresserLeg
-},{"./csgToGeometries":42,"@jscad/csg":51,"@jscad/scad-api":138}],14:[function(require,module,exports){
+},{"./csgToGeometries":34,"@jscad/csg":43,"@jscad/scad-api":130}],13:[function(require,module,exports){
 "use strict;"
 
 const scadApi = require('@jscad/scad-api')
@@ -3273,10 +3227,8 @@ function CreateHinge(RAngle, mode) {
     c4 = c4.scale([0.5,0.5,0.5]);
     var c = cylinder({start: [0,-2.1,0], end: [0,2.4,0], r1: 0.3, r2: 0.3, fn: 50});
    	c = c.scale([0.5,0.5,0.5]);
-
     var hinge = union(left, c, c1, c3, c2, c4, right);
-    hinge = hinge.scale([0.3,0.3,0.3]);
-
+    
     // left to right (1) // up to down (2) + (1)
     if(mode == "upToDown") 
     	hinge = hinge.rotateX(-90); // (2)
@@ -3288,7 +3240,7 @@ function CreateHinge(RAngle, mode) {
 }
 
 module.exports = CreateHinge
-},{"./csgToGeometries":42,"@jscad/csg":51,"@jscad/scad-api":138}],15:[function(require,module,exports){
+},{"./csgToGeometries":34,"@jscad/csg":43,"@jscad/scad-api":130}],14:[function(require,module,exports){
 "use strict;"
 
 const scadApi = require('@jscad/scad-api')
@@ -3299,14 +3251,14 @@ const {translate, rotate} = scadApi.transformations
 const csgToGeometries = require('./csgToGeometries')
 
 function CreateRod(length) {
-    var mid = cylinder({r: 0.2, h: length});
-    
-    var left = cylinder({start: [0,0,0.2], 
-	    end: [0,0,0], r1: 0.5, r2: 0.5, fn: 50});
-	var s1 = difference(sphere({r: 0.11, center:true}),
-	    cube({size: 0.55, center:true}).translate([0,0,-0.22])).translate([0.35,0,0.15]);
-	var s2 = s1.translate([-0.5,-0.3,0]);
-    var s3 = s1.translate([-0.5,0.3,0]);
+    var mid = cylinder({r: 0.5, h: length});
+
+	var left = cylinder({start: [0,0,0.2], 
+	    end: [0,0,0], r1: 1, r2: 1, fn: 50});
+	var s1 = difference(sphere({r: 0.2, center:true}),
+	    cube({size: 1, center:true}).translate([0,0,-0.4])).translate([0.7,0,0.1]);
+	var s2 = s1.translate([-1.1,-0.65,0]);
+    var s3 = s1.translate([-1.1,0.65,0]);
     left = union(left, s1, s2, s3);
     
     var right = left.center();
@@ -3316,13 +3268,14 @@ function CreateRod(length) {
 	var rod = union(left, mid, right);
 	rod = rod.rotateY(90);
 	rod = rod.center();
+
 	var geometry = csgToGeometries(rod)[0];
 
 	return geometry;
 }
 
 module.exports = CreateRod
-},{"./csgToGeometries":42,"@jscad/csg":51,"@jscad/scad-api":138}],16:[function(require,module,exports){
+},{"./csgToGeometries":34,"@jscad/csg":43,"@jscad/scad-api":130}],15:[function(require,module,exports){
 "use strict;"
 
 const scadApi = require('@jscad/scad-api')
@@ -3334,10 +3287,10 @@ const csgToGeometries = require('./csgToGeometries')
 
 function CreateSpiceRack(length) {
 
-    var mid = cylinder({r: 0.05, h: length});
-	var right = cube({size: [0.4, 0.5, 0.1], center: true}).translate([-0.03, 0.09, length]);
-	var left = cube({size: [0.4, 0.5, 0.1], center: true}).translate([-0.03, 0.09, 0]);
-	var bottom = cube({size: [0.1, 0.5, length + 0.1], center: true}).translate([-0.18, 0.09, length/2]);
+    var mid = cylinder({r: 0.4, h: length});
+	var right = cube({size: [3, 3.5, 1], center: true}).translate([-0.3, 0.5, length]);
+	var left = cube({size: [3, 3.5, 1], center: true}).translate([-0.3, 0.5, 0]);
+	var bottom = cube({size: [1, 3.5, length + 1], center: true}).translate([-1.8, 0.5, length/2]);	
 	
 	var spiceRack = union(mid, right, left, bottom);	
 	spiceRack = spiceRack.center();	
@@ -3348,623 +3301,7 @@ function CreateSpiceRack(length) {
 }
 
 module.exports = CreateSpiceRack
-},{"./csgToGeometries":42,"@jscad/csg":51,"@jscad/scad-api":138}],17:[function(require,module,exports){
-"use strict;"
-
-const scadApi = require('@jscad/scad-api')
-const { CSG, CAG, isCSG, isCAG } = require('@jscad/csg')
-const {cube, sphere, cylinder} = scadApi.primitives3d
-const {union, difference, intersection} = scadApi.booleanOps
-const {translate, rotate} = scadApi.transformations
-const csgToGeometries = require('./csgToGeometries')
-
-function CreateSupport(length) {
-    var mid = cylinder({r: 0.4, h: length});
-    
-    var left = cylinder({start: [0,0,0.1], 
-	    end: [0,0,0], r1: 0.7, r2: 0.7, fn: 50});
-	var s1 = difference(sphere({r: 0.15, center:true}),
-	    cube({size: 0.75, center:true}).translate([0,0,-0.3])).translate([0.55,0,0.03]);
-	var s2 = s1.translate([-0.9,-0.4,0]);
-    var s3 = s1.translate([-0.9,0.4,0]);
-    left = union(left, s1, s2, s3);
-    
-    var right = left.center();
-    right = left.rotateX(180);
-    right = right.translate([0,0,length]);
-    
-	var rod = union(left, mid, right);
-	rod = rod.rotateX(90);
-	rod = rod.center();
-	var geometry = csgToGeometries(rod)[0];
-
-	return geometry;
-}
-
-module.exports = CreateSupport
-},{"./csgToGeometries":42,"@jscad/csg":51,"@jscad/scad-api":138}],18:[function(require,module,exports){
-"use strict;"
-
-const scadApi = require('@jscad/scad-api')
-const { CSG, CAG, isCSG, isCAG } = require('@jscad/csg')
-const {cube, sphere, cylinder} = scadApi.primitives3d
-const {union, difference, intersection} = scadApi.booleanOps
-const {translate, rotate} = scadApi.transformations
-const csgToGeometries = require('./csgToGeometries')
-
-function CreateTableRod(length) {
-
-	// var length = 5;
-    var obj = cylinder({r: 0.3, h: length});
-    var obj1 = cube({size: [1,0.6,0.05]}).translate([0,-0.3,0]);
-	var obj2 = obj1.translate([0,0,length-0.05]);
-	var obj3 = cube({size: [0.05,2,0.5]}).translate([1,-1,0]);
-	var obj4 = obj3.translate([0,0,length-0.5]);
-	
-	var s1 = difference(sphere({r: 0.1, center:true}),
-	    cube({size: 0.75, center:true}).translate([0.35,0,0])).translate([1.05,-0.5,0.25]);
-	var s2 = s1.translate([0,1,0]);
-	var s3 = s1.translate([0,0,length-0.5]);
-	var s4 = s2.translate([0,0,length-0.5]);
-	obj = union(obj, obj1, obj2, obj3, obj4, s1, s2, s3, s4);
-	obj = obj.center();
-
-	var geometry = csgToGeometries(obj)[0];
-
-	return geometry;
-}
-
-
-module.exports = CreateTableRod
-},{"./csgToGeometries":42,"@jscad/csg":51,"@jscad/scad-api":138}],19:[function(require,module,exports){
-"use strict;"
-
-const scadApi = require('@jscad/scad-api')
-const { CSG, CAG, isCSG, isCAG } = require('@jscad/csg')
-const {cube, sphere, cylinder} = scadApi.primitives3d
-const {union, difference, intersection} = scadApi.booleanOps
-const {translate, rotate} = scadApi.transformations
-const csgToGeometries = require('./csgToGeometries')
-
-function CreateWheel() {
-
-	var c1 = cylinder({r: 0.4, h: 0.1});
-    c2 = c1.translate([0,0,0.4]);
-    var h = cylinder({r: 0.3, h: 0.3});
-    h = h.translate([0,0,0.1]);
-    h2 = cylinder({r: 0.14, h: 0.5}).translate([0,0.25,0.125]);
-    h2 = h2.rotateX(90);
-    obj = union(c1, c2, h, h2);
-    obj = obj.rotateZ(180);
-    obj = obj.center();
-
-	var geometry = csgToGeometries(obj)[0];
-
-	return geometry;
-}
-
-
-module.exports = CreateWheel
-},{"./csgToGeometries":42,"@jscad/csg":51,"@jscad/scad-api":138}],20:[function(require,module,exports){
-"use strict;"
-
-const CreateSupport = require('./CreateSupport')
-const chairCreateBoard = require('./chairCreateBoard')
-const CreateWheel = require('./CreateWheel')
-
-
-function Desk (main){
-	this.main = main;
-	this.furnitures = main.furnitures;
-}
-
-Desk.prototype = {
-	getPartSize: function(obj){
-		var box = new THREE.Box3();
-		box.setFromObject(obj);
-		var box_size = new THREE.Vector3();
-		box.getSize(box_size);
-		return box_size;
-	},
-
-	getPartCenter: function(obj){
-		var box = new THREE.Box3();
-		box.setFromObject(obj);
-		var box_center = new THREE.Vector3();
-		box.getCenter (box_center);
-		return box_center;
-	},
-
-	getPartMaterial: function(obj) {
-		var material = new THREE.Material();
-		if(obj.children.length > 0){
-			var child = obj.children[0];
-			while(child.children.length)
-				child = child.children[0];
-			if (Array.isArray(child.material))
-				material = child.material[0];			
-			else
-				material = child.material;
-		}
-		else{
-			if (Array.isArray(obj.material))
-				material = obj.material[0];			
-			else
-				material = obj.material;			
-		}
-
-		return material;
-	},
-
-	objectAddToFurniture: function(furniture, object, position) {
-		var inverse = new THREE.Matrix4();
-		inverse.getInverse(furniture.matrixWorld);	
-		object.applyMatrix(inverse);		
-		furniture.worldToLocal(position);		
-		object.position.set(position.x, position.y, position.z);		
-		furniture.add(object);		
-	},
-
-	getAllChildren: function(obj, array) {
-		if (obj.children.length > 0) {
-			for (var i = 0; i < obj.children.length; i++) {
-				if(obj.children[i].type == "Mesh" || obj.children[i].type == "Object3D"){
-					this.getAllChildren(obj.children[i], array);
-				}	
-			}
-		}
-		else
-			array.push(obj);			
-	},
-
-	getPointByRay: function(obj, origin, direction) {
-		var raycaster = new THREE.Raycaster();
-		raycaster.set(origin, direction);
-		if(obj.children.length > 0){
-			var array = new Array();
-			this.getAllChildren(obj, array);
-			var intersects = raycaster.intersectObjects(array);
-		}
-		else
-			var intersects = raycaster.intersectObject(obj);
-		return intersects;
-	},
-
-	test: function(pos) {
-		var geometry = new THREE.BoxGeometry( 0.1, 0.1, 0.1 );
-		var material = new THREE.MeshBasicMaterial( {color: 0x00ff00} );
-		var cube = new THREE.Mesh( geometry, material );
-		cube.position.set(pos.x, pos.y, pos.z);
-		this.main.scene.add( cube );
-	},
-
-	getDesktopSurfaceCenterPoint: function(Desk) {
-		var desktop = Desk.getObjectByName("desktop");
-		var desktopSize = this.getPartSize(desktop);
-		var desktopCenter = this.getPartCenter(desktop);
-		var origin = new THREE.Vector3(desktopCenter.x, desktopCenter.y + desktopSize.y, desktopCenter.z);
-		var direction = new THREE.Vector3(0,-1,0);
-
-		var intersects = this.getPointByRay(desktop, origin, direction);
-		if(intersects.length > 0){
-			return intersects[0].point;
-		}
-		else
-			console.log("Desktop Surface Center Point miss");
-	},
-
-	addTopBoardEvent: function() {
-		var desk = this.furnitures[0].getFurniture();
-		var surfaceCenterPoint = this.getDesktopSurfaceCenterPoint(desk);
-		var desktop = desk.getObjectByName("desktop");
-		var desktopSize = this.getPartSize(desktop);
-		// 0 ---- 1
-		// |      |
-		// |      |
-		// 3 ---- 2
-		var pos = [];
-
-		pos.push(new THREE.Vector3(surfaceCenterPoint.x - desktopSize.x/4, surfaceCenterPoint.y, surfaceCenterPoint.z - desktopSize.z/4));
-		pos.push(new THREE.Vector3(surfaceCenterPoint.x + desktopSize.x/4, surfaceCenterPoint.y, surfaceCenterPoint.z - desktopSize.z/4));
-		pos.push(new THREE.Vector3(surfaceCenterPoint.x + desktopSize.x/4, surfaceCenterPoint.y, surfaceCenterPoint.z + desktopSize.z/4));
-		pos.push(new THREE.Vector3(surfaceCenterPoint.x - desktopSize.x/4, surfaceCenterPoint.y, surfaceCenterPoint.z + desktopSize.z/4));
-
-		var material = this.getPartMaterial(desktop);
-		var geometry = CreateSupport(1);
-		var support = new THREE.Mesh(geometry, material);
-		support.name = "support";
-
-		var supportSize = this.getPartSize(support);
-		
-		var supportArray = [];
-		for (var i = 0; i < 4; i++) {
-			supportArray[i] = new THREE.Object3D();
-			supportArray[i] = support.clone();
-			var tmp = new THREE.Vector3(pos[i].x, pos[i].y + supportSize.y/2, pos[i].z);
-			this.objectAddToFurniture(desk, supportArray[i], tmp);
-		}
-		
-		var offset = 2;
-		geometry = chairCreateBoard(desktopSize.x + offset, 0.5, desktopSize.z + offset);
-		var board = new THREE.Mesh(geometry, material);
-		board.name = "board";
-		var boardSize = this.getPartSize(board);
-		var boardpos = new THREE.Vector3(surfaceCenterPoint.x - boardSize.x/2, 
-			surfaceCenterPoint.y + supportSize.y + 0.12, surfaceCenterPoint.z - boardSize.z/2);
-		// this.test(new THREE.Vector3(surfaceCenterPoint.x, surfaceCenterPoint.y + supportSize.y, surfaceCenterPoint.z));
-		this.objectAddToFurniture(desk, board, boardpos);
-	},
-
-	addBottomBoardEvent: function() {
-		var desk = this.furnitures[0].getFurniture();
-		var desktop = desk.getObjectByName("desktop");
-		var desktopSize = this.getPartSize(desktop);
-		var deskSize = this.getPartSize(desk);
-		var deskCenter = this.getPartCenter(desk);
-		var material = this.getPartMaterial(desktop);
-		var geometry = chairCreateBoard(desktopSize.x, 0.5, desktopSize.z);
-		var board = new THREE.Mesh(geometry, material);
-		board.name = "bottomBoard";
-		var boardSize = this.getPartSize(board);
-		var boardpos = new THREE.Vector3(deskCenter.x - boardSize.x/2 + 0.12, 
-			deskCenter.y - deskSize.y/2 - boardSize.y/2 - 0.12, deskCenter.z - boardSize.z/2 + 0.12);
-		this.objectAddToFurniture(desk, board, boardpos);
-		desk.position.y += boardSize.y;
-	},
-
-	getInsideSpaceByBox: function(obj) {
-		var objSize = this.getPartSize(obj);
-		var objCenter = this.getPartCenter(obj);
-		var allChildren = [];
-		this.getAllChildren(obj, allChildren);
-		var allChildrenBoxs = [];
-		for (var i = 0; i < allChildren.length; i++) {
-			var box = new THREE.Box3();
-			box.setFromObject(allChildren[i]);
-			allChildrenBoxs.push(box);
-		}
-		
-		var checkbox = new THREE.Box3();
-		var initSize = new THREE.Vector3(0.1, 0.1, 0.1);
-		checkbox.setFromCenterAndSize(objCenter, initSize);
-
-		var touch = false;
-		while(checkbox.max.x < (objCenter.x + objSize.x/2) && !touch){
-			for (var j = 0; j < allChildrenBoxs.length; j++) {
-				if(!touch){
-					if(checkbox.intersectsBox (allChildrenBoxs[j])){
-						console.log("checkbox tuoch child (max.x)");
-						console.log(allChildrenBoxs[j]);
-						touch = true;
-					}
-				}
-				else
-					break;
-			}
-			checkbox.max.x += 0.1;
-		}
-		checkbox.max.x -= 0.2;
-
-		touch = false;
-		while(checkbox.min.x > (objCenter.x - objSize.x/2) && !touch){
-			for (var j = 0; j < allChildrenBoxs.length; j++) {
-				if(!touch){
-					if(checkbox.intersectsBox (allChildrenBoxs[j])){
-						console.log("checkbox tuoch child (min.x)");
-						console.log(allChildrenBoxs[j]);
-						touch = true;
-					}
-				}
-				else
-					break;
-			}
-			checkbox.min.x -= 0.1;
-		}
-		checkbox.min.x += 0.2;
-
-		touch = false;
-		while(checkbox.max.y < (objCenter.y + objSize.y/2) && !touch){
-			for (var j = 0; j < allChildrenBoxs.length; j++) {
-				if(!touch){
-					if(checkbox.intersectsBox (allChildrenBoxs[j])){
-						console.log("checkbox tuoch child (max.y)");
-						console.log(allChildrenBoxs[j]);
-						touch = true;
-					}
-				}
-				else
-					break;
-			}
-			checkbox.max.y += 0.1;
-		}
-		checkbox.max.y -= 0.2;
-
-		touch = false;
-		while(checkbox.min.y > (objCenter.y - objSize.y/2) && !touch){
-			for (var j = 0; j < allChildrenBoxs.length; j++) {
-				if(!touch){
-					if(checkbox.intersectsBox (allChildrenBoxs[j])){
-						console.log("checkbox tuoch child (min.y)");
-						console.log(allChildrenBoxs[j]);
-						touch = true;
-					}
-				}
-				else
-					break;
-			}
-			checkbox.min.y -= 0.1;
-		}
-		checkbox.min.y += 0.2;
-
-		touch = false;
-		while(checkbox.max.z < (objCenter.z + objSize.z/2) && !touch){
-			for (var j = 0; j < allChildrenBoxs.length; j++) {
-				if(!touch){
-					if(checkbox.intersectsBox (allChildrenBoxs[j])){
-						console.log("checkbox tuoch child (max.z)");
-						console.log(allChildrenBoxs[j]);
-						touch = true;
-					}
-				}
-				else
-					break;
-			}
-			checkbox.max.z += 0.1;
-		}
-		checkbox.max.z -= 0.2;
-
-		touch = false;
-		while(checkbox.min.z > (objCenter.z - objSize.z/2) && !touch){
-			for (var j = 0; j < allChildrenBoxs.length; j++) {
-				if(!touch){
-					if(checkbox.intersectsBox (allChildrenBoxs[j])){
-						console.log("checkbox tuoch child (min.z)");
-						console.log(allChildrenBoxs[j]);
-						touch = true;
-					}
-				}
-				else
-					break;
-			}
-			checkbox.min.z -= 0.1;
-		}
-		checkbox.min.z += 0.2;
-
-		console.log("end check");
-		console.log(checkbox);
-		return checkbox;
-	},
-
-	getInsideSpaceByRay: function(obj) {
-		var objCenter = this.getPartCenter(obj);
-
-		var checkbox = new THREE.Box3();
-		var initSize = new THREE.Vector3(0.1, 0.1, 0.1);
-		checkbox.setFromCenterAndSize(objCenter, initSize);
-
-		var origin = new THREE.Vector3(objCenter.x, objCenter.y, objCenter.z);
-		var directionR = new THREE.Vector3(1,0,0);
-		var directionL = new THREE.Vector3(-1,0,0);		
-		var directionU = new THREE.Vector3(0,1,0);
-		var directionD = new THREE.Vector3(0,-1,0);
-		var directionF = new THREE.Vector3(0,0,1);
-		var directionB = new THREE.Vector3(0,0,-1);
-
-		var intersectsR = this.getPointByRay(obj, origin, directionR);
-		var intersectsL = this.getPointByRay(obj, origin, directionL);
-		var intersectsU = this.getPointByRay(obj, origin, directionU);
-		var intersectsD = this.getPointByRay(obj, origin, directionD);
-		var intersectsF = this.getPointByRay(obj, origin, directionF);
-		var intersectsB = this.getPointByRay(obj, origin, directionD);
-
-		if(intersectsR.length > 0)
-			checkbox.max.x = intersectsR[0].point.x;
-		else
-			console.log("intersectsR miss");
-		if(intersectsL.length > 0)
-			checkbox.min.x = intersectsL[0].point.x;
-		else
-			console.log("intersectsL miss");
-		if(intersectsU.length > 0)
-			checkbox.max.y = intersectsU[0].point.x;
-		else
-			console.log("intersectsU miss");
-		if(intersectsD.length > 0)
-			checkbox.min.y = intersectsD[0].point.y;
-		else
-			console.log("intersectsD miss");
-		if(intersectsF.length > 0)
-			checkbox.max.z = intersectsF[0].point.y;
-		else
-			console.log("intersectsF miss");
-		if(intersectsB.length > 0)
-			checkbox.min.z = intersectsB[0].point.y;
-		else
-			console.log("intersectsB miss");
-
-		return checkbox;
-	},
-
-	checkMaxValue: function(center, a, b, origin) {
-		center = center.toFixed(4);
-		a = a.toFixed(4);
-		b = b.toFixed(4);
-		origin = origin.toFixed(4);
-		if(center == a && center == b)
-			return origin;
-		else if(center != a && center == b)
-			return a;
-		else if(center == a && center != b)
-			return b;
-		else{
-			if(a < b)
-				return b;
-			else
-				return a;
-		}
-	},
-
-	checkMinValue: function(center, a, b, origin) {
-		center = center.toFixed(4);
-		a = a.toFixed(4);
-		b = b.toFixed(4);
-		origin = origin.toFixed(4);
-		if(center == a && center == b)
-			return origin;
-		else if(center != a && center == b)
-			return a;
-		else if(center == a && center != b)
-			return b;
-		else{
-			if(a < b)
-				return a;
-			else
-				return b;
-		}
-	},
-
-	addInsideBoardEvent: function() {
-		var desk = this.furnitures[0].getFurniture();
-		var deskCenter = this.getPartCenter(desk);
-		var deskSize = this.getPartSize(desk);
-		var box1 = this.getInsideSpaceByBox(desk);
-		var box2 = this.getInsideSpaceByRay(desk);
-		var box = new THREE.Box3();
-		box.setFromObject(desk);
-		
-		var mergeBox = new THREE.Box3();
-		mergeBox.max.x =  this.checkMaxValue(deskCenter.x, box1.max.x + 0.05, box2.max.x - 0.05, deskCenter.x + deskSize.x/2);
-		mergeBox.max.y =  this.checkMaxValue(deskCenter.y, box1.max.y + 0.05, box2.max.y - 0.05, deskCenter.y + deskSize.y/2);
-		mergeBox.max.z =  this.checkMaxValue(deskCenter.z, box1.max.z + 0.05, box2.max.z - 0.05, deskCenter.z + deskSize.z/2);
-
-		mergeBox.min.x =  this.checkMinValue(deskCenter.x, box1.min.x - 0.05, box2.min.x + 0.05, deskCenter.x - deskSize.x/2);
-		mergeBox.min.y =  this.checkMinValue(deskCenter.y, box1.min.y - 0.05, box2.min.y + 0.05, deskCenter.y - deskSize.y/2);
-		mergeBox.min.z =  this.checkMinValue(deskCenter.z, box1.min.z - 0.05, box2.min.z + 0.05, deskCenter.z - deskSize.z/2);
-		
-		var mergeBoxCenter = new THREE.Vector3((parseFloat(mergeBox.max.x) + parseFloat(mergeBox.min.x)) / 2, 
-											   (parseFloat(mergeBox.max.y) + parseFloat(mergeBox.min.y)) / 2, 
-											   (parseFloat(mergeBox.max.z) + parseFloat(mergeBox.min.z)) / 2);
-		var mergeBoxSize = new THREE.Vector3(parseFloat(mergeBox.max.x) - parseFloat(mergeBox.min.x), 
-											 parseFloat(mergeBox.max.y) - parseFloat(mergeBox.min.y), 
-											 parseFloat(mergeBox.max.z) - parseFloat(mergeBox.min.z));
-
-		var material = this.getPartMaterial(desk);
-		var geometry = chairCreateBoard(mergeBoxSize.x, 0.2, mergeBoxSize.z);
-		var board = new THREE.Mesh(geometry, material);
-		board.name = "insideBoard";
-		var boardSize = this.getPartSize(board);
-		var boardpos = new THREE.Vector3(mergeBoxCenter.x - boardSize.x/2 + 0.12, 
-			mergeBoxCenter.y - boardSize.y/2 - 0.12, mergeBoxCenter.z - boardSize.z/2 + 0.12);
-		this.objectAddToFurniture(desk, board, boardpos);
-		
-	},
-
-	objectRotationByAxis: function(obj, axis, degree){
-		var size = this.getPartSize(obj);
-		var center = this.getPartCenter(obj);
-		obj.position.set(0, 0, -30);
-		if(axis == 'x'){			
-			obj.rotateOnWorldAxis(new THREE.Vector3(1,0,0), degree);			
-		}
-		if(axis == 'y'){
-			obj.rotateOnWorldAxis(new THREE.Vector3(0,1,0), degree);
-		}
-		if(axis == 'z'){
-			obj.rotateOnWorldAxis(new THREE.Vector3(0,0,1), degree);
-		}
-		var newCenter = this.getPartCenter(obj);
-		var offset = new THREE.Vector3(center.x - newCenter.x, center.y - newCenter.y, center.z - newCenter.z);
-		obj.position.x += offset.x;
-		obj.position.y += offset.y;
-		obj.position.z += offset.z;		
-	},
-
-	loadModel: function( ModelPath , obj) {
-		var scope = this;
-		var model;
-		// loading manager
-		var loadingManager = new THREE.LoadingManager( function() {
-			var board = obj.getObjectByName("insideBoard");
-			var boardCenter = scope.getPartCenter(board);
-			var boardSize = scope.getPartSize(board);
-			var modelSize = scope.getPartSize(model);
-			var pos = new THREE.Vector3(boardCenter.x + boardSize.x/2, boardCenter.y - boardSize.y/2, boardCenter.z + modelSize.z/2);
-			scope.objectRotationByAxis(model, "z", Math.PI);			
-			scope.objectAddToFurniture(obj, model, pos);
-		} );
-		
-		// collada
-		var loader = new THREE.ColladaLoader( loadingManager );
-		loader.load( ModelPath , function ( collada ) {
-			model = collada.scene;
-			model.scale.set(1,1,1);			
-			model.name = 'angle';
-		} );
-	},
-
-	addBesideBoardEvent: function() {
-		var desk = this.furnitures[0].getFurniture();
-		var deskSize = this.getPartSize(desk);
-		var deskCenter = this.getPartCenter(desk);
-		var material = this.getPartMaterial(desk);
-		var geometry = chairCreateBoard(deskSize.y, 0.2, deskSize.z);
-		var board = new THREE.Mesh(geometry, material);
-		board.name = "insideBoard";
-		var boardSize = this.getPartSize(board);
-		var boardpos = new THREE.Vector3(deskCenter.x - deskSize.x/2 - boardSize.x + 0.12, 
-			deskCenter.y + deskSize.y/2 - boardSize.y/2 - 0.12, deskCenter.z - boardSize.z/2 + 0.12);
-		this.objectAddToFurniture(desk, board, boardpos);
-
-		this.loadModel('../models/angle.dae', desk);
-	},
-
-	addWheelEvent: function() {
-		this.addBottomBoardEvent();
-		var desk = this.furnitures[0].getFurniture();
-		var bottomBoard = desk.getObjectByName("bottomBoard");
-		var bottomBoardSize = this.getPartSize(bottomBoard);
-		var bottomBoardCenter = this.getPartCenter(bottomBoard);
-		var desktop = desk.getObjectByName("desktop");
-		var material = this.getPartMaterial(desktop);
-		var geometry = CreateWheel();
-		var wheel = new THREE.Mesh(geometry, material);
-		wheel.name = "wheel";
-		var wheelSize = this.getPartSize(wheel);
-
-		var wheelArray =[6];
-		for (var i = 0, offset = 0; i < 3; i++, offset += bottomBoardSize.x/3) {
-			wheelArray[i] = new THREE.Object3D();
-			wheelArray[i] = wheel.clone();
-			var pos = new THREE.Vector3(bottomBoardCenter.x - bottomBoardSize.x/3 + offset, 
-				bottomBoardCenter.y - bottomBoardSize.y/2 - wheelSize.y/2, bottomBoardCenter.z - bottomBoardSize.z/4);
-			this.objectAddToFurniture(desk, wheelArray[i], pos);
-		}
-		for (var i = 3, offset = 0; i < 6; i++, offset += bottomBoardSize.x/3) {
-			wheelArray[i] = new THREE.Object3D();
-			wheelArray[i] = wheel.clone();
-			var pos = new THREE.Vector3(bottomBoardCenter.x - bottomBoardSize.x/3 + offset, 
-				bottomBoardCenter.y - bottomBoardSize.y/2 - wheelSize.y/2, bottomBoardCenter.z + bottomBoardSize.z/4);
-			this.objectAddToFurniture(desk, wheelArray[i], pos);
-		}
-		desk.position.y = desk.position.y + wheelSize.y;
-	},
-
-
-
-	execute: function(tfname) {
-		if(tfname == "addBoard"){
-			// this.addTopBoardEvent();
-			// this.addBottomBoardEvent();
-			// this.addWheelEvent();
-			// this.addInsideBoardEvent();
-			this.addBesideBoardEvent();
-		}
-	}
-
-}
-
-module.exports = Desk
-},{"./CreateSupport":17,"./CreateWheel":19,"./chairCreateBoard":38}],21:[function(require,module,exports){
+},{"./csgToGeometries":34,"@jscad/csg":43,"@jscad/scad-api":130}],16:[function(require,module,exports){
 "use strict;"
 
 const dresserCutSpace = require('./dresserCutSpace')
@@ -3986,16 +3323,15 @@ function Dresser_Add (main){
 	this.hasRemovedDrawers = false;
 	// remove drawers number 
 	this.parameter = 3;
-	this.countDrawer = 0;
 
 	// door event
-	this.mode = "upToDown";
-	// this.mode = "leftToRight";
+	// this.mode = "upToDown";
+	this.mode = "leftToRight";
 	this.RAngle = 70;
 
 	// add drawer
-	this.drawerMode = "vertical";
-	// this.drawerMode = "horizontal";
+	// this.drawerMode = "vertical";
+	this.drawerMode = "horizontal";
 	this.drawerParameter = 3;
 }
 
@@ -4017,7 +3353,7 @@ Dresser_Add.prototype = {
 			var rodCenter = Dresser_Add.getPartCenter(rod);
 			var rodSize = Dresser_Add.getPartSize(rod);
 
-			clothesHanger.position.set(rodCenter.x, rodCenter.y - clothesHangerSize.y + 0.3, rodCenter.z);
+			clothesHanger.position.set(rodCenter.x, rodCenter.y - clothesHangerSize.y + rodSize.y/2, rodCenter.z);
 			rod.worldToLocal(clothesHanger.position);
 
 			rod.add(clothesHanger);
@@ -4026,7 +3362,7 @@ Dresser_Add.prototype = {
 			loader.load( "./models/chothesHanger/model.dae", function ( collada ) {
 			clothesHanger = collada.scene;
 			clothesHanger.name = "clothesHanger";
-			clothesHanger.scale.x = 0.24; clothesHanger.scale.y = 0.24; clothesHanger.scale.z = 0.24;
+			clothesHanger.scale.x = 0.75; clothesHanger.scale.y = 0.75; clothesHanger.scale.z = 0.75;
 			
 		} );
 	},
@@ -4036,11 +3372,8 @@ Dresser_Add.prototype = {
 		// console.log(obj);
 		var str1 = "cabinetTop-cabinetFront";
 		var str2 = "cabinetFront-cabinetTop";
-		var str3 = "Dresser";
-		console.log("checkHasTopFront");
-		for (var i = 0; i < obj.children.length; i++) {			
-			console.log(obj.children[i].name);
-			if(obj.children[i].name == str1 || obj.children[i].name == str2 || obj.children[i].name == str3)
+		for (var i = 0; i < obj.children.length; i++) {
+			if(obj.children[i].name == str1 || obj.children[i].name == str2)
 				return true;			
 		}
 		return false;
@@ -4054,7 +3387,7 @@ Dresser_Add.prototype = {
 
 	addBottom: function(dresser, size, center) {
 		var material = this.getPartMaterial(dresser);
-		var geometry = chairCreateBoard(size.x, 0.1, size.z);
+		var geometry = chairCreateBoard(size.x - 0.6, 0.1, size.z - 0.6);
 		var bottom = new THREE.Mesh(geometry, material);
 		bottom.name = "Dresser_part_bottom";
 		var tmp = new THREE.Vector3(center.x - size.x/2, center.y - size.y/2, center.z - size.z/2);
@@ -4088,10 +3421,10 @@ Dresser_Add.prototype = {
 
 	addBack: function(dresser, size, center) {
 		var material = this.getPartMaterial(dresser);
-		var geometry = chairCreateBoard(size.x - 0.2, size.y - 0.2, 0.1);
+		var geometry = chairCreateBoard(size.x - 0.6, size.y - 0.6, 0.1);
 		var back = new THREE.Mesh(geometry, material);
 		back.name = "Dresser_part_back";
-		var tmp = new THREE.Vector3(center.x - size.x/2 + 0.12, center.y - size.y/2 + 0.12, center.z - size.z/2);
+		var tmp = new THREE.Vector3(center.x - size.x/2 + 0.3, center.y - size.y/2 + 0.3, center.z - size.z/2);
 		var inverse = new THREE.Matrix4();
 		inverse.getInverse(dresser.matrixWorld);
 		dresser.worldToLocal(tmp);
@@ -4122,17 +3455,33 @@ Dresser_Add.prototype = {
 
 	addShelf: function(furniture, spaceCenter, spaceSize) {
 		var dresser = furniture.getObjectByName("Dresser");
+		// console.log("dresser");
+		// console.log(dresser);
+		// var raycaster = new THREE.Raycaster();
+		// var pos = spaceCenter.clone();
+		// pos.y = pos.y + spaceSize.y;
+		// raycaster.set(pos, new THREE.Vector3(0,-1,0));
+
+		// var intersects = raycaster.intersectObjects(dresser.children);
+		// if(intersects.length > 2){
+		// 	console.log("Dresser shelf exit.");
+		// 	return;
+		// }
+		// console.log("Dresser no shelf.");
+
+		//get dresser material case1: no children case2: has children
+
 		var material = this.getPartMaterial(dresser);
 
-		var geometry = chairCreateBoard(spaceSize.x - 0.2, 0.1, spaceSize.z - 0.2);
+		var geometry = chairCreateBoard(spaceSize.x - 0.6, 0.1, spaceSize.z - 0.6);
 		var shelf = new THREE.Mesh(geometry, material);
 		var shelfSize = this.getPartSize(shelf);
 		var shelf_inverse = new THREE.Matrix4();
 		shelf_inverse.getInverse(dresser.matrixWorld);
 		shelf.applyMatrix(shelf_inverse);
 
-		shelf.position.set(spaceCenter.x - spaceSize.x/2 + 0.12, spaceCenter.y - spaceSize.y/2, 
-			spaceCenter.z - spaceSize.z/2 + 0.12);
+		shelf.position.set(spaceCenter.x - spaceSize.x/2, spaceCenter.y - spaceSize.y/2, 
+			spaceCenter.z - spaceSize.z/2);
 		dresser.worldToLocal(shelf.position);
 
 		dresser.add(shelf);
@@ -4149,11 +3498,11 @@ Dresser_Add.prototype = {
 			blums.name = "blums";
 		}
 		else if(this.drawerMode == "horizontal"){
-			var geometry = CreateDrawer(size.x/2 - 0.05, size.z, size.y);
+			var geometry = CreateDrawer(size.x/2 - 0.5, size.z, size.y);
 			var drawer = new THREE.Mesh(geometry, drawerMaterial);
 			drawer.name = "drawer";
 
-			var blumsGeometry = CreateBlum(size.x/2 - 0.05, size.z, size.y);
+			var blumsGeometry = CreateBlum(size.x/2 - 0.5, size.z, size.y);
 			var blums = new THREE.Mesh(blumsGeometry, blumsMaterial);
 			blums.name = "blums";
 		}
@@ -4228,7 +3577,7 @@ Dresser_Add.prototype = {
 		else
 			console.log("rayFB miss");
 
-		originFB = new THREE.Vector3(space.max.x + 0.01, center.y, center.z + size.z);
+		originFB = new THREE.Vector3(space.max.x + 0.1, center.y, center.z + size.z);
 		var rayFB = this.getPointByRay(dresser, originFB, directionFB);
 		if(rayFB.length > 0){
 			maxZ = rayFB[0].point;
@@ -4237,7 +3586,7 @@ Dresser_Add.prototype = {
 		else
 			console.log("rayFB(2) miss");
 
-		var originUD = new THREE.Vector3(center.x, center.y, space.max.z + 0.01);
+		var originUD = new THREE.Vector3(center.x, center.y, space.max.z + 0.1);
 		var directionUD = new THREE.Vector3(0,-1,0);
 		var rayUD = this.getPointByRay(dresser, originUD, directionUD);
 		if(rayUD.length > 0){
@@ -4247,7 +3596,7 @@ Dresser_Add.prototype = {
 		else{
 			console.log("rayUD1 miss");
 			rayUD = [];
-			originUD = new THREE.Vector3(center.x, center.y, space.max.z - 0.01);
+			originUD = new THREE.Vector3(center.x, center.y, space.max.z - 0.1);
 			rayUD = this.getPointByRay(dresser, originUD, directionUD);
 			if(rayUD.length > 0){
 				maxY = rayUD[0].point;
@@ -4257,7 +3606,7 @@ Dresser_Add.prototype = {
 				console.log("rayUD2 miss");
 		}
 
-		var originDU = new THREE.Vector3(center.x, center.y, space.max.z + 0.01);
+		var originDU = new THREE.Vector3(center.x, center.y, space.max.z + 0.1);
 		var directionDU = new THREE.Vector3(0,1,0);
 		var rayDU = this.getPointByRay(dresser, originDU, directionDU);
 		if(rayDU.length > 0){
@@ -4460,7 +3809,7 @@ Dresser_Add.prototype = {
 
 		count.push(centers_clone[0]);
 		for (var i = 1; i < centers_clone.length; i++) {
-			if(centers_clone[i] <= centers_clone[i-1] - 0.3)
+			if(centers_clone[i] <= centers_clone[i-1] - 2)
 				count.push(centers_clone[i]);
 		}
 	},
@@ -4500,8 +3849,6 @@ Dresser_Add.prototype = {
 		var dresser = furniture_cutToChair.getObjectByName("Dresser");
 		this.hasBottom(dresser);
 		this.hasBack(dresser);
-
-		this.getInsideSpace(furniture_cutToChair);
 		
 	},
 
@@ -4556,12 +3903,11 @@ Dresser_Add.prototype = {
 				furniture_addLeg.worldToLocal(pos);
 				legsArray[i-4].position.set(pos.x, pos.y, pos.z);
 				furniture_addLeg.add(legsArray[i-4]);
-			}			
+			}
 			else{
 				console.log("Ray miss");
-			}			
+			}
 		}		
-		furniture_addLeg.position.y += legSize.y;		
 	},
 
 	addDoorEvent: function() {
@@ -4589,18 +3935,13 @@ Dresser_Add.prototype = {
 				this.removeDrawersByColumn(furniture_addDoor, this.parameter, tmp);				
 			}
 			this.hasRemovedDrawers = true;
-			this.countDrawer = count.length;
 		}
 
 		var spaceBox = new THREE.Box3();
 		spaceBox = this.getInsideSpace(furniture_addDoor);
-
-		// var box = new THREE.Box3Helper(spaceBox, 0x000000);
-		// this.main.scene.add(box);
-
-		if(this.parameter < this.countDrawer){
-			var offest = (spaceBox.max.y - spaceBox.min.y) / this.countDrawer;
-			spaceBox.min.y += offest * (this.countDrawer - this.parameter);
+		if(this.parameter < count.length){
+			var offest = (spaceBox.max.y - spaceBox.min.y) / count.length;
+			spaceBox.min.y += offest * (count.length - this.parameter);
 		}
 
 		var spaceSize = new THREE.Vector3();
@@ -4610,7 +3951,7 @@ Dresser_Add.prototype = {
 
 		spaceCenter.y = spaceCenter.y + spaceSize.y/4;
 		spaceSize.y = spaceSize.y/2;
-		// this.addShelf(furniture_addDoor, spaceCenter, spaceSize);
+		this.addShelf(furniture_addDoor, spaceCenter, spaceSize);
 
 		
 		spaceBox.getSize(spaceSize);
@@ -4618,18 +3959,17 @@ Dresser_Add.prototype = {
 
 		//left to right
 		if(this.mode == "leftToRight"){
-			
-			var doorGeometry = CreateDoor(spaceSize.y, spaceSize.x);
+			var doorGeometry = CreateDoor(spaceSize.y, spaceSize.x + 1);
 			var door = new THREE.Mesh(doorGeometry, doorMaterial);
 			door.name = "door";
 			var doorSize = this.getPartSize(door);
 
 			var angle = this.RAngle/180*Math.PI;
 
-			var offsetZ = spaceSize.x/2 * Math.sin(angle) + 0.128 * Math.cos(angle);
+			var offsetZ = spaceSize.x/2 * Math.sin(angle) + 0.8 * Math.cos(angle);
 
 			
-			var offsetX = -1 * spaceSize.x/2 * Math.cos(angle) + 0.02 * Math.sin(angle);
+			var offsetX = -1 * spaceSize.x/2 * Math.cos(angle) + 0.5 * Math.sin(angle);
 			
 
 			var doorpos = new THREE.Vector3(spaceCenter.x + spaceSize.x/2 + offsetX, spaceCenter.y, 
@@ -4647,10 +3987,10 @@ Dresser_Add.prototype = {
 			var hinge1 = new THREE.Mesh(hingeGeometry, doorMaterial);
 			hinge1.name = "hinge";
 			var hinge2 = hinge1.clone();
-			var hinge1pos = new THREE.Vector3(spaceCenter.x + spaceSize.x/2 - 0.12, 
-				spaceCenter.y + spaceSize.y/4, spaceCenter.z + spaceSize.z/2 );
-			var hinge2pos = new THREE.Vector3(spaceCenter.x + spaceSize.x/2 - 0.12, 
-				spaceCenter.y - spaceSize.y/4, spaceCenter.z + spaceSize.z/2 );
+			var hinge1pos = new THREE.Vector3(spaceCenter.x + spaceSize.x/2 - 0.3, 
+				spaceCenter.y + spaceSize.y/4, spaceCenter.z + spaceSize.z/2);
+			var hinge2pos = new THREE.Vector3(spaceCenter.x + spaceSize.x/2 - 0.3, 
+				spaceCenter.y - spaceSize.y/4, spaceCenter.z + spaceSize.z/2);
 
 			hinge1.applyMatrix(inverse);
 			hinge2.applyMatrix(inverse);
@@ -4664,7 +4004,6 @@ Dresser_Add.prototype = {
 
 		//up to down
 		if(this.mode == "upToDown"){
-			this.addBottom(dresser, spaceSize, spaceCenter);
 			var doorGeometry = CreateDoor(spaceSize.x, spaceSize.y);
 			var door = new THREE.Mesh(doorGeometry, doorMaterial);	
 			door.name = "door";		
@@ -4672,9 +4011,9 @@ Dresser_Add.prototype = {
 			var doorSize = this.getPartSize(door);
 			
 			var angle = this.RAngle/180*Math.PI ;
-			var offsetY = doorSize.y/2 * Math.cos(angle) + 0.2 * Math.sin(angle);
+			var offsetY = doorSize.y/2 * Math.cos(angle) - 0.8 * Math.sin(angle);
 			
-			var offsetZ = doorSize.y/2 * Math.sin(angle) + 0.1 * Math.cos(angle);
+			var offsetZ = doorSize.y/2 * Math.sin(angle) + 0.8 * Math.cos(angle);
 
 			var doorpos = new THREE.Vector3(spaceCenter.x, 
 				spaceCenter.y - doorSize.y/2 + offsetY , spaceCenter.z + spaceSize.z/2 + offsetZ);
@@ -4694,11 +4033,11 @@ Dresser_Add.prototype = {
 			hinge1.name = "hinge";
 			// var offest = ((dresserSize.y - 1)/2) * (-1) *Math.cos(angle) + 0.8;
 			var hinge1pos = new THREE.Vector3(spaceCenter.x + spaceSize.x/4, 
-				spaceCenter.y - spaceSize.y/2 + 0.3, spaceCenter.z + spaceSize.z/2 - 0.05);
+				spaceCenter.y - spaceSize.y/2 + 0.7, spaceCenter.z + spaceSize.z/2 );
 
 			var hinge2 = hinge1.clone();
 			var hinge2pos = new THREE.Vector3(spaceCenter.x - spaceSize.x/4, 
-				spaceCenter.y - spaceSize.y/2 + 0.3, spaceCenter.z + spaceSize.z/2 - 0.05);
+				spaceCenter.y - spaceSize.y/2 + 0.7, spaceCenter.z + spaceSize.z/2 );
 
 			hinge1.applyMatrix(inverse);
 			furniture_addDoor.worldToLocal(hinge1pos);
@@ -4730,16 +4069,35 @@ Dresser_Add.prototype = {
 					this.removeDrawersByColumn(furniture_addRod, this.parameter, tmp);
 				}
 				this.hasRemovedDrawers = true;
-				this.countDrawer = count.length;
 			}
-
 
 			var spaceBox = this.getInsideSpace(furniture_addRod);
 
-			if(this.parameter < this.countDrawer){
-				var offest = (spaceBox.max.y - spaceBox.min.y) / this.countDrawer;
-				spaceBox.min.y += offest * (this.countDrawer - this.parameter);
+			if(this.parameter < count.length){
+				var offest = (spaceBox.max.y - spaceBox.min.y) / count.length;
+				spaceBox.min.y += offest * (count.length - this.parameter);
 			}
+
+			var dresserSize = this.getPartSize(dresser);
+			var dresserCenter = this.getPartCenter(dresser);
+			var originRight = new THREE.Vector3(dresserCenter.x + dresserSize.x, 
+				dresserCenter.y, dresserCenter.z);
+			var rayRiToLe = this.getPointByRay(dresser, originRight, new THREE.Vector3(-1,0,0));
+			if(rayRiToLe.length > 0)
+				var insideLeft = rayRiToLe[rayRiToLe.length - 1].point;
+			else
+				console.log("insideLeft miss.");
+
+			var originLeft = new THREE.Vector3(dresserCenter.x - dresserSize.x, 
+				dresserCenter.y, dresserCenter.z);
+			var rayLeToRi = this.getPointByRay(dresser, originLeft, new THREE.Vector3(1,0,0));
+			if(rayLeToRi.length > 0)
+				var insideRight = rayLeToRi[rayLeToRi.length - 1].point;
+			else
+				console.log("insideRight miss.");
+
+			spaceBox.max.x = insideRight.x;
+			spaceBox.min.x = insideLeft.x;
 
 			var spaceSize = new THREE.Vector3();
 			var spaceCenter = new THREE.Vector3();
@@ -4772,7 +4130,7 @@ Dresser_Add.prototype = {
 				var furniture_addRod = this.furnitures[i].getFurniture();
 				this.markCabinet(furniture_addRod);		
 				this.markDrawer(furniture_addRod);
-				furniture_addRod.position.set(offest, 0, -30);
+				furniture_addRod.position.set(offest, 0, 0);
 			}
 
 			//add rod
@@ -4785,7 +4143,7 @@ Dresser_Add.prototype = {
 				var rodGeometry = CreateRod(furnitureSize.x);
 				var rod = new THREE.Mesh(rodGeometry, rodMaterial);
 				rod.name = "rod";
-				rod.position.set(offest, furnitureCenter.y + furnitureSize.y/4, -30);
+				rod.position.set(offest, furnitureCenter.y + furnitureSize.y/4, 0);
 				this.main.scene.add(rod);
 				this.loadClothesHanger(rod);
 				
@@ -4796,12 +4154,7 @@ Dresser_Add.prototype = {
 	addSpiceRackEvent: function() {
 		var furniture_addSpiceRack = new THREE.Object3D();
 		furniture_addSpiceRack = this.furnitures[0].getFurniture();
-		this.markCabinet(furniture_addSpiceRack);		
-		this.markDrawer(furniture_addSpiceRack);
 		var dresser = furniture_addSpiceRack.getObjectByName("Dresser");
-		this.hasBottom(furniture_addSpiceRack);
-		this.hasBack(furniture_addSpiceRack);
-		
 		var furnitureSize = this.getPartSize(dresser);
 		var furnitureCenter = this.getPartCenter(dresser);
 
@@ -4891,7 +4244,7 @@ Dresser_Add.prototype = {
 		if(this.drawerMode == "vertical"){
 			var drawerSize = this.getPartSize(theDrawer);
 			var tmp = new THREE.Box3();
-			for (var i = 0, move = 0.3; i < this.drawerParameter; i++) {
+			for (var i = 0, move = 3; i < this.drawerParameter; i++) {
 				tmp.copy(space);				
 				tmp.max.y -= offest * i; 
 				tmp.min.y += offest * (this.drawerParameter - i - 1);
@@ -4903,14 +4256,14 @@ Dresser_Add.prototype = {
 				var spaceSize = new THREE.Vector3();
 				tmp.getCenter(spaceCenter);
 				tmp.getSize(spaceSize);
-				var drawerpos = new THREE.Vector3(spaceCenter.x - drawerSize.x/2 + 0.05, spaceCenter.y,
+				var drawerpos = new THREE.Vector3(spaceCenter.x - drawerSize.x/2 + 0.25, spaceCenter.y,
 				 spaceCenter.z - spaceSize.z/2 + move);
 				drawer1.applyMatrix(inverse);
 				drawer1.position.set(drawerpos.x, drawerpos.y, drawerpos.z);
 				furniture_addDrawer.worldToLocal(drawer1.position);
 				
-				var drawer2pos = new THREE.Vector3(spaceCenter.x - drawerSize.x/2 + 0.05, 
-					spaceCenter.y - spaceSize.y/2, spaceCenter.z - spaceSize.z/2 + move + 0.2);
+				var drawer2pos = new THREE.Vector3(spaceCenter.x - drawerSize.x/2 + 0.25, 
+					spaceCenter.y - spaceSize.y/2, spaceCenter.z - spaceSize.z/2 + move + 2);
 				drawer2.applyMatrix(inverse);
 				drawer2.position.set(drawer2pos.x, drawer2pos.y, drawer2pos.z);
 				furniture_addDrawer.worldToLocal(drawer2.position);
@@ -4921,7 +4274,7 @@ Dresser_Add.prototype = {
 		else if(this.drawerMode == "horizontal"){
 			var drawerSize = this.getPartSize(theDrawer);
 			var tmp = new THREE.Box3();
-			for (var i = 0, move = 0.3; i < this.drawerParameter; i++) {
+			for (var i = 0, move = 3; i < this.drawerParameter; i++) {
 				tmp.copy(space);				
 				tmp.max.y -= offest * i; 
 				tmp.min.y += offest * (this.drawerParameter - i - 1);
@@ -4951,7 +4304,7 @@ Dresser_Add.prototype = {
 
 				drawer2.applyMatrix(inverse);
 				drawer2.position.set(spaceCenter.x - spaceSize.x/2 + 0.25, spaceCenter.y - spaceSize.y/2,
-				 spaceCenter.z - spaceSize.z/2 + move + 0.2);
+				 spaceCenter.z - spaceSize.z/2 + move +2);
 				furniture_addDrawer.worldToLocal(drawer2.position);
 				furniture_addDrawer.add(drawer2);
 			}
@@ -5002,29 +4355,15 @@ Dresser_Add.prototype = {
 		}
 	},
 
-	execute: function(tfname) {
+	execute: function() {
 		if(this.checkHasTopFront(this.furnitures[0])){
-			if(tfname == "cut_chair") {
-				this.cutToChairEvent();
-			}
-			else if(tfname == "add_door") {
-				this.addDoorEvent();
-			}
-			else if(tfname == "add_leg") {
-				this.addLegEvent();
-			}
-			else if(tfname == "add_rod") {
-				this.addRodEvent();
-			}
-			else if(tfname == "add_spice_rack") {
-				this.addSpiceRackEvent();
-			}
-			else if(tfname == "add_drawer") {
-				this.addDrawerEvent();
-			}
-			else if(tfname == "remove_drawers") {
-				this.removeDrawersEvent();
-			}
+			// this.cutToChairEvent();
+			this.addDoorEvent();
+			this.addLegEvent();	
+			this.addRodEvent();
+			this.addSpiceRackEvent();
+			// this.addDrawerEvent();
+			// this.removeDrawersEvent();
 		}
 		else{
 			alert("Please mark cabinetTop and cabinetFront");
@@ -5034,7 +4373,7 @@ Dresser_Add.prototype = {
 }
 
 module.exports = Dresser_Add
-},{"./CreateBlum":8,"./CreateChain":9,"./CreateDoor":10,"./CreateDrawer":12,"./CreateDresserLeg":13,"./CreateHinge":14,"./CreateRod":15,"./CreateSpiceRack":16,"./chairCreateBoard":38,"./dresserCutSpace":43}],22:[function(require,module,exports){
+},{"./CreateBlum":8,"./CreateChain":9,"./CreateDoor":10,"./CreateDrawer":11,"./CreateDresserLeg":12,"./CreateHinge":13,"./CreateRod":14,"./CreateSpiceRack":15,"./chairCreateBoard":30,"./dresserCutSpace":35}],17:[function(require,module,exports){
 "use strict;"
 
 function MarkBetweenSize( main , TargetObj1 , TargetObj2 ){
@@ -5426,7 +4765,7 @@ function loadLine( main , point1 , point2){
 module.exports = MarkBetweenSize;
 
 
-},{}],23:[function(require,module,exports){
+},{}],18:[function(require,module,exports){
 "use strict;"
 
 function MarkSize( main , TargetObj ){
@@ -5786,250 +5125,15 @@ function loadLine( main , point1 , point2){
 
 module.exports = MarkSize;
 
-},{}],24:[function(require,module,exports){
-"use strict;"
-
-const computeConvexHull = require('./computeConvexHull')
-
-function Model_Add(main){
-	this.main = main;
-    this.furnitures = main.furnitures;
-    this.Add_mode = false;
-}
-
-Model_Add.prototype = {
-
-	test: function(pos1) {
-		var geometry = new THREE.BoxGeometry( 0.1, 0.1, 0.1 );
-		var material = new THREE.MeshBasicMaterial( {color: 0x00ff00} );
-		var cube = new THREE.Mesh( geometry, material );
-		cube.position.set(pos.x, pos.y, pos.z);
-		this.main.scene.add( cube );
-	},
-
-	getPartSize: function(obj){
-		var box = new THREE.Box3();
-		box.setFromObject(obj);
-		var box_size = new THREE.Vector3();
-		box.getSize(box_size);
-		return box_size;
-	},
-
-	getPartCenter: function(obj){
-		var box = new THREE.Box3();
-		box.setFromObject(obj);
-		var box_center = new THREE.Vector3();
-		box.getCenter (box_center);
-		return box_center;
-	},
-
-	getAllCorners: function(obj) {
-		// 0-----1   4-----5
-		// | up  |   | down|
-		// |     |   |     |
-		// 3-----2   7-----6
-
-		var corners = new Array();
-		var center = this.getPartCenter(obj);
-		var size = this.getPartSize(obj);
-
-		//0
-		var point0 = new THREE.Vector3();
-		point0.x = center.x - size.x/2;
-		point0.y = center.y + size.y/2;
-		point0.z = center.z - size.z/2;
-		corners.push(point0);
-
-		//1
-		var point1 = new THREE.Vector3();
-		point1.x = center.x + size.x/2;
-		point1.y = center.y + size.y/2;
-		point1.z = center.z - size.z/2;
-		corners.push(point1);
-
-		//2
-		var point2 = new THREE.Vector3();
-		point2.x = center.x + size.x/2;
-		point2.y = center.y + size.y/2;
-		point2.z = center.z + size.z/2;
-		corners.push(point2);
-
-		//3
-		var point3 = new THREE.Vector3();
-		point3.x = center.x - size.x/2;
-		point3.y = center.y + size.y/2;
-		point3.z = center.z + size.z/2;
-		corners.push(point3);
-
-		//4
-		var point4 = new THREE.Vector3();
-		point4.x = center.x - size.x/2;
-		point4.y = center.y - size.y/2;
-		point4.z = center.z - size.z/2;
-		corners.push(point4);
-
-		//5
-		var point5 = new THREE.Vector3();
-		point5.x = center.x + size.x/2;
-		point5.y = center.y - size.y/2;
-		point5.z = center.z - size.z/2;
-		corners.push(point5);
-
-		//6
-		var point6 = new THREE.Vector3();
-		point6.x = center.x + size.x/2;
-		point6.y = center.y - size.y/2;
-		point6.z = center.z + size.z/2;
-		corners.push(point6);
-
-		//7
-		var point7 = new THREE.Vector3();
-		point7.x = center.x - size.x/2;
-		point7.y = center.y - size.y/2;
-		point7.z = center.z + size.z/2;
-		corners.push(point7);
-
-		return corners;
-	},
-
-	execute: function( name ){
-
-		var obj = this.furnitures[0].getFurniture();
-		var tabletop = obj.getObjectByName("tabletop");
-		console.log(tabletop);
-		// 0-----1   4-----5
-		// | up  |   | down|
-		// |     |   |     |
-		// 3-----2   7-----6
-		var obj = this.main.GetSizeObj[0];
-		var obj_points = this.getAllCorners(obj);
-
-		var geometry = new THREE.Geometry();
-		
-		geometry.vertices.push(obj_points[0], obj_points[3], obj_points[7], obj_points[4], obj_points[0]);
-		
-		var material = new THREE.MeshBasicMaterial( {color: 0x00ff00} );
-		var tmp = new THREE.Line( geometry, material);
-		tmp.position.x -= 1;
-		this.main.scene.add( tmp );
-
-		$( ".item.ui.image.label.add.board" ).click(function() {
-			console.log("add.board");
-        });
-        $( ".item.ui.image.label.add.rod" ).click(function() {
-        	console.log("add.rod");
-        });
-        $( ".item.ui.image.label.add.seat" ).click(function() {
-        	console.log("add.seat");
-        });
-        $( ".item.ui.image.label.add.leg" ).click(function() {
-        	console.log("add.leg");
-        });
-        $( ".item.ui.image.label.add.wheel" ).click(function() {
-        	console.log("add.wheel");
-        });
-        $( ".item.ui.image.label.add.hook" ).click(function() {
-        	console.log("add.hook");
-        });
-        $( ".item.ui.image.label.add.drawer" ).click(function() {
-        	console.log("add.drawer");
-        });
-        $( ".item.ui.image.label.add.door" ).click(function() {
-			console.log("add.door");
-        });
-
-
-		if(this.Add_mode == false){
-        	$('#parameter_control_tool_add').show();
-            this.Add_mode = true;
-        }
-        else if(this.Add_mode == true){
-        	$('#parameter_control_tool_add').hide();
-            this.Add_mode = false;
-        }
-        $('#parameter_control_tool_painting').hide();
-        $('#parameter_control_tool_wrap').hide();
-        $('#parameter_control_tool_align').hide();
-	}
-}
-
-module.exports = Model_Add
-},{"./computeConvexHull":40}],25:[function(require,module,exports){
+},{}],19:[function(require,module,exports){
 "use strict;"
 const Procedure_button = require('./Procedure_button');
-
-function Model_AddBetween( main ){
-
-    this.main = main;
-    this.furnitures = main.furnitures;
-    this.addbetween_mode = false;
-    var scope = this;
-    
-    $( ".item.ui.image.label.addbetween.rod" ).click(function() {
-        console.log('AddRod');
-        
-    });
-    
-}
-Model_AddBetween.prototype = {
-
-	execute: function( name ){
-
-        if(this.addbetween_mode == false && name=='addbetween'){
-            $('#parameter_control_tool_addbetween').show();
-            this.addbetween_mode = true;
-            this.main.processor.executeDesign("MODEL_ALIGN", "addbetween");
-            this.main.processor.executeDesign("MODEL_WRAP", "addbetween");
-            this.main.processor.executeDesign("MODEL_ROTATION", "addbetween");
-            this.main.processor.executeDesign("MODEL_PAINTING", "addbetween");
-            //creat procedure button
-            if(this.main.stepOperationName != name){
-                this.DeleteButton();
-                Procedure_button( this.main, this.main.stepOperationName );
-                //record the operation name
-                this.main.stepOperationName = name;
-            }
-        }
-        else if(this.addbetween_mode == true || name!= 'addbetween'){
-            $('#parameter_control_tool_addbetween').hide();
-            this.addbetween_mode = false;
-        }
-        
-
-    },
-
-    DeleteButton: function(){
-        //console.log(this.main.stepNumber);
-        //console.log(this.main.stepObject.length);
-        this.main.lastStep = true;
-        if (this.main.stepNumber < this.main.stepObject.length){
-            var stepLength = this.main.stepObject.length;
-
-            for(var i=parseInt(this.main.stepNumber); i<stepLength; i++){
-                var btn = document.getElementById(
-                    "ui circular icon button procedure "+i.toString());
-                btn.parentNode.removeChild(btn);
-            }
-            this.main.stepObject.length = parseInt(this.main.stepNumber);
-        }
-    }
-
-
-
-
-}
-module.exports = Model_AddBetween
-
-
-},{"./Procedure_button":30}],26:[function(require,module,exports){
-"use strict;"
 
 function Model_Align(main){
 
 	this.main = main;
     this.furnitures = main.furnitures;
-
-    this.Align_mode = false;
+    this.Align_mode = false; 
     var scope = this;
     $( ".item.ui.image.label.align1" ).click(function() {
 		if(scope.main.onCtrl == true && scope.main.DistanceObj.length==2){
@@ -6056,35 +5160,39 @@ function Model_Align(main){
 		}
     });
 
-
-
 }
 
 Model_Align.prototype = {
 
 	execute: function( name ){
 
-
-		if(this.Align_mode == false){
+		if(this.Align_mode == false && name=='align'){
         	$('#parameter_control_tool_align').show();
             this.Align_mode = true;
-
             this.main.processor.executeDesign("MODEL_PAINTING", "align");
         	this.main.processor.executeDesign("MODEL_WRAP", "align");
         	this.main.processor.executeDesign("MODEL_ROTATION", "align");
-
+        	
+        	//creat procedure button
+        	if(this.main.stepOperationName != name){
+        		this.DeleteButton();
+	        	Procedure_button( this.main, this.main.stepOperationName );
+	        	//record the operation name
+	        	this.main.stepOperationName = name;
+        	}
+	        	
         }
-        else if(this.Align_mode == true){
+        else if(this.Align_mode == true || name!= 'align'){
         	$('#parameter_control_tool_align').hide();
             this.Align_mode = false;
         }
-        $('#parameter_control_tool_painting').hide();
-        $('#parameter_control_tool_wrap').hide();
-        $('#parameter_control_tool_rotation').hide();
+        
 	},
 
 	AlignFurniture: function( mode ){
-
+		
+		this.DeleteButton();
+		
 		var group = new THREE.Group();
 		var TotalSize = new THREE.Vector3();
 
@@ -6141,6 +5249,8 @@ Model_Align.prototype = {
 	},
 
 	AlignComponent: function( mode ){
+		
+		this.DeleteButton();
 
 		var group = new THREE.Group();
 		var TotalSize = new THREE.Vector3();
@@ -6231,109 +5341,128 @@ Model_Align.prototype = {
 		return center;
     },
 
+    DeleteButton: function(){
+    	//console.log(this.main.stepNumber);
+		//console.log(this.main.stepObject.length);
+		this.main.lastStep = true;
+		if (this.main.stepNumber < this.main.stepObject.length){
+			var stepLength = this.main.stepObject.length;
 
+			for(var i=parseInt(this.main.stepNumber); i<stepLength; i++){
+				var btn = document.getElementById(
+					"ui circular icon button procedure "+i.toString());
+				btn.parentNode.removeChild(btn);
+			}
+			this.main.stepObject.length = parseInt(this.main.stepNumber);
+		}
+
+    }
 
 
 }
 
 module.exports = Model_Align
-},{}],27:[function(require,module,exports){
+},{"./Procedure_button":23}],20:[function(require,module,exports){
 "use strict;"
+const Procedure_button = require('./Procedure_button');
 
 
 function Model_Painting( main ){
 
     this.main = main;
     this.furnitures = main.furnitures;
-
     this.paint_mode = false;
+    var scope = this;
+    var manager = new THREE.LoadingManager();
+    var textureLoader = new THREE.TextureLoader( manager );
+    $( ".item.ui.image.label.paint1" ).click(function() {
+        var texture = textureLoader.load( '../images/material/material1.jpg' );
+        texture.repeat.set(0.1, 0.1);
+        texture.wrapS = texture.wrapT = THREE.MirroredRepeatWrapping;
+        var newmaterial = new THREE.MeshBasicMaterial( {map: texture} );
+        scope.ChangeTexture( newmaterial );
+        
+    });
+    $( ".item.ui.image.label.paint2" ).click(function() {
+        var texture = textureLoader.load( '../images/material/material2.jpg' );
+        texture.repeat.set(0.1, 0.1);
+        texture.wrapS = texture.wrapT = THREE.MirroredRepeatWrapping;
+        var newmaterial = new THREE.MeshBasicMaterial( {map: texture} );
+        scope.ChangeTexture( newmaterial );
+        
+    });
+    $( ".item.ui.image.label.paint3" ).click(function() {
+        var texture = textureLoader.load( '../images/material/material3.jpg' );
+        texture.repeat.set(0.1, 0.1);
+        texture.wrapS = texture.wrapT = THREE.MirroredRepeatWrapping;
+        var newmaterial = new THREE.MeshBasicMaterial( {map: texture} );
+        scope.ChangeTexture( newmaterial );
+        
+    });
+    $( ".item.ui.image.label.paint4" ).click(function() {
+        var texture = textureLoader.load( '../images/material/material4.jpg' );
+        texture.repeat.set(0.1, 0.1);
+        texture.wrapS = texture.wrapT = THREE.MirroredRepeatWrapping;
+        var newmaterial = new THREE.MeshBasicMaterial( {map: texture} );
+        scope.ChangeTexture( newmaterial );
+        
+    });
+    $( ".item.ui.image.label.paint5" ).click(function() {
+        var texture = textureLoader.load( '../images/material/material5.jpg' );
+        texture.repeat.set(0.1, 0.1);
+        texture.wrapS = texture.wrapT = THREE.MirroredRepeatWrapping;
+        var newmaterial = new THREE.MeshBasicMaterial( {map: texture} );
+        scope.ChangeTexture( newmaterial );
+        
+    });
+    $( ".item.ui.image.label.paint7" ).click(function() {
+        var texture = textureLoader.load( '../images/material/material7.jpg' );
+        texture.repeat.set(0.1, 0.1);
+        texture.wrapS = texture.wrapT = THREE.MirroredRepeatWrapping;
+        var newmaterial = new THREE.MeshBasicMaterial( {map: texture} );
+        scope.ChangeTexture( newmaterial );
+        
+    });
+    $( ".item.ui.image.label.paint9" ).click(function() {
+        var texture = textureLoader.load( '../images/material/material9.jpg' );
+        texture.repeat.set(0.1, 0.1);
+        texture.wrapS = texture.wrapT = THREE.MirroredRepeatWrapping;
+        var newmaterial = new THREE.MeshBasicMaterial( {map: texture} );
+        scope.ChangeTexture( newmaterial );
+        
+    });
 }
 
 Model_Painting.prototype = {
 
     execute: function( name ){
-        
-        var main = this;
-        var manager = new THREE.LoadingManager();
-        var textureLoader = new THREE.TextureLoader( manager );
 
-        $( ".item.ui.image.label.paint1" ).click(function() {
-            var texture = textureLoader.load( '../images/material/material1.jpg' );
-            texture.repeat.set(0.1, 0.1);
-            texture.wrapS = texture.wrapT = THREE.MirroredRepeatWrapping;
-            var newmaterial = new THREE.MeshBasicMaterial( {map: texture} );
-            main.ChangeTexture( newmaterial );
-            
-        });
-        $( ".item.ui.image.label.paint2" ).click(function() {
-            var texture = textureLoader.load( '../images/material/material2.jpg' );
-            texture.repeat.set(0.1, 0.1);
-            texture.wrapS = texture.wrapT = THREE.MirroredRepeatWrapping;
-            var newmaterial = new THREE.MeshBasicMaterial( {map: texture} );
-            main.ChangeTexture( newmaterial );
-            
-        });
-        $( ".item.ui.image.label.paint3" ).click(function() {
-            var texture = textureLoader.load( '../images/material/material3.jpg' );
-            texture.repeat.set(0.1, 0.1);
-            texture.wrapS = texture.wrapT = THREE.MirroredRepeatWrapping;
-            var newmaterial = new THREE.MeshBasicMaterial( {map: texture} );
-            main.ChangeTexture( newmaterial );
-            
-        });
-        $( ".item.ui.image.label.paint4" ).click(function() {
-            var texture = textureLoader.load( '../images/material/material4.jpg' );
-            texture.repeat.set(0.1, 0.1);
-            texture.wrapS = texture.wrapT = THREE.MirroredRepeatWrapping;
-            var newmaterial = new THREE.MeshBasicMaterial( {map: texture} );
-            main.ChangeTexture( newmaterial );
-            
-        });
-        $( ".item.ui.image.label.paint5" ).click(function() {
-            var texture = textureLoader.load( '../images/material/material5.jpg' );
-            texture.repeat.set(0.1, 0.1);
-            texture.wrapS = texture.wrapT = THREE.MirroredRepeatWrapping;
-            var newmaterial = new THREE.MeshBasicMaterial( {map: texture} );
-            main.ChangeTexture( newmaterial );
-            
-        });
-        $( ".item.ui.image.label.paint7" ).click(function() {
-            var texture = textureLoader.load( '../images/material/material7.jpg' );
-            texture.repeat.set(0.1, 0.1);
-            texture.wrapS = texture.wrapT = THREE.MirroredRepeatWrapping;
-            var newmaterial = new THREE.MeshBasicMaterial( {map: texture} );
-            main.ChangeTexture( newmaterial );
-            
-        });
-        $( ".item.ui.image.label.paint9" ).click(function() {
-            var texture = textureLoader.load( '../images/material/material9.jpg' );
-            texture.repeat.set(0.1, 0.1);
-            texture.wrapS = texture.wrapT = THREE.MirroredRepeatWrapping;
-            var newmaterial = new THREE.MeshBasicMaterial( {map: texture} );
-            main.ChangeTexture( newmaterial );
-            
-        });
-
-        if(this.paint_mode == false){
+        if(this.paint_mode == false && name=='painting'){
             $('#parameter_control_tool_painting').show();
             this.paint_mode = true;
-
             this.main.processor.executeDesign("MODEL_ALIGN", "painting");
             this.main.processor.executeDesign("MODEL_WRAP", "painting");
             this.main.processor.executeDesign("MODEL_ROTATION", "painting");
-
+            
+            //creat procedure button
+            if(this.main.stepOperationName != name){
+                this.DeleteButton();
+                Procedure_button( this.main, this.main.stepOperationName );
+                //record the operation name
+                this.main.stepOperationName = name;
+            }
         }
-        else if(this.paint_mode == true){
+        else if(this.paint_mode == true || name!= 'painting'){
             $('#parameter_control_tool_painting').hide();
             this.paint_mode = false;
         }
-        $('#parameter_control_tool_wrap').hide();
-        $('#parameter_control_tool_rotation').hide();
-        $('#parameter_control_tool_align').hide();
+        
 
     },
 
     ChangeTexture( newmaterial ){
+        
+        this.DeleteButton();
 
         for(var i=0 ; i<this.main.GetSizeObj.length ; i++ ){
             
@@ -6346,6 +5475,7 @@ Model_Painting.prototype = {
                 if( ChangeTextureObj[j].geometry.isBufferGeometry ){
                     ChangeTextureObj[j].geometry = new THREE.Geometry().fromBufferGeometry( ChangeTextureObj[j].geometry );
                     assignUVs( ChangeTextureObj[j].geometry );
+                    ChangeTextureObj[j].geometry= new THREE.BufferGeometry().fromGeometry( ChangeTextureObj[j].geometry );
                 }
                 
                 ChangeTextureObj[j].material = newmaterial;
@@ -6366,6 +5496,22 @@ Model_Painting.prototype = {
             array.push(obj);    
         }
 
+    },
+
+    DeleteButton: function(){
+        //console.log(this.main.stepNumber);
+        //console.log(this.main.stepObject.length);
+        this.main.lastStep = true;
+        if (this.main.stepNumber < this.main.stepObject.length){
+            var stepLength = this.main.stepObject.length;
+
+            for(var i=parseInt(this.main.stepNumber); i<stepLength; i++){
+                var btn = document.getElementById(
+                    "ui circular icon button procedure "+i.toString());
+                btn.parentNode.removeChild(btn);
+            }
+            this.main.stepObject.length = parseInt(this.main.stepNumber);
+        }
     }
 
 }
@@ -6397,81 +5543,59 @@ function assignUVs(geometry) {
 }
 
 module.exports = Model_Painting
-},{}],28:[function(require,module,exports){
+},{"./Procedure_button":23}],21:[function(require,module,exports){
 "use strict;"
-
-const {Procedure_button , RecordPosition} = require('./Procedure_button');
+const Procedure_button = require('./Procedure_button');
 
 function Model_Rotation(main){
 
 	this.main = main;
     this.furnitures = main.furnitures;
     this.Rotation_mode = false; 
+	var scope = this;
 
+    $( ".item.ui.image.label.rota1" ).click(function() {	
+		for(var i=0 ; i<scope.main.GetSizeObj.length ; i++ ){
+            var model = scope.main.GetSizeObj[i];
+			scope.objectRotationByAxis( model, 'x' , 90 );
+        }
+    });
+    $( ".item.ui.image.label.rota2" ).click(function() {
+		for(var i=0 ; i<scope.main.GetSizeObj.length ; i++ ){
+            var model = scope.main.GetSizeObj[i];
+			scope.objectRotationByAxis( model, 'x' , -90 );
+        }
+    });
+    $( ".item.ui.image.label.rota3" ).click(function() {
+		for(var i=0 ; i<scope.main.GetSizeObj.length ; i++ ){
+            var model = scope.main.GetSizeObj[i];
+			scope.objectRotationByAxis( model, 'z' , 90 );
+        }
+    });
+    $( ".item.ui.image.label.rota4" ).click(function() {
+		for(var i=0 ; i<scope.main.GetSizeObj.length ; i++ ){
+            var model = scope.main.GetSizeObj[i];
+			scope.objectRotationByAxis( model, 'z' , -90 );
+        }
+    });
+    $( ".item.ui.image.label.rota5" ).click(function() {
+		for(var i=0 ; i<scope.main.GetSizeObj.length ; i++ ){
+            var model = scope.main.GetSizeObj[i];
+			scope.objectRotationByAxis( model, 'y' , 90 );
+        }
+    });
+    $( ".item.ui.image.label.rota6" ).click(function() {
+		for(var i=0 ; i<scope.main.GetSizeObj.length ; i++ ){
+            var model = scope.main.GetSizeObj[i];
+			scope.objectRotationByAxis( model, 'y' , -90 );
+        }
+    });
 }
 
 Model_Rotation.prototype = {
 
 	execute: function( name ){
 		var scope = this;
-
-		$( ".item.ui.image.label.rota1" ).click(function() {
-			
-			for(var i=0 ; i<scope.main.GetSizeObj.length ; i++ ){
-	            var model = scope.main.GetSizeObj[i];
-				scope.objectRotationByAxis( model, 'x' , 90 );
-	        }
-        });
-        $( ".item.ui.image.label.rota2" ).click(function() {
-
-			for(var i=0 ; i<scope.main.GetSizeObj.length ; i++ ){
-	            var model = scope.main.GetSizeObj[i];
-				scope.objectRotationByAxis( model, 'x' , -90 );
-	        }
-
-        });
-        $( ".item.ui.image.label.rota3" ).click(function() {
-
-			for(var i=0 ; i<scope.main.GetSizeObj.length ; i++ ){
-	            var model = scope.main.GetSizeObj[i];
-				scope.objectRotationByAxis( model, 'z' , 90 );
-	        }
-
-        });
-        $( ".item.ui.image.label.rota4" ).click(function() {
-
-			for(var i=0 ; i<scope.main.GetSizeObj.length ; i++ ){
-	            var model = scope.main.GetSizeObj[i];
-				scope.objectRotationByAxis( model, 'z' , -90 );
-	        }
-
-        });
-        $( ".item.ui.image.label.rota5" ).click(function() {
-
-			for(var i=0 ; i<scope.main.GetSizeObj.length ; i++ ){
-	            var model = scope.main.GetSizeObj[i];
-				scope.objectRotationByAxis( model, 'y' , 90 );
-	        }
-
-        });
-        $( ".item.ui.image.label.rota6" ).click(function() {
-
-			for(var i=0 ; i<scope.main.GetSizeObj.length ; i++ ){
-	            var model = scope.main.GetSizeObj[i];
-				scope.objectRotationByAxis( model, 'y' , -90 );
-	        }
-
-        });
-
-
-		if(this.Rotation_mode == false){
-        	$('#parameter_control_tool_rotation').show();
-            this.Rotation_mode = true;
-        }
-        else if(this.Rotation_mode == true){
-
-	        
-        };
 
         //show my button, hide others button
 		if(this.Rotation_mode == false && name=='rotation'){
@@ -6480,18 +5604,28 @@ Model_Rotation.prototype = {
             this.main.processor.executeDesign("MODEL_ALIGN", "rotation");
         	this.main.processor.executeDesign("MODEL_PAINTING", "rotation");
         	this.main.processor.executeDesign("MODEL_WRAP", "rotation");
+        	
+        	//creat procedure button
+        	if(this.main.stepOperationName != name){
+        		this.DeleteButton();
+	        	Procedure_button( this.main, this.main.stepOperationName );
+	        	//record the operation name
+	        	this.main.stepOperationName = name;
+        	}
         }//hide my button
         else if(this.Rotation_mode == true || name!='rotation'){
-
         	$('#parameter_control_tool_rotation').hide();
             this.Rotation_mode = false;
         }
-        $('#parameter_control_tool_painting').hide();
-        $('#parameter_control_tool_wrap').hide();
-        $('#parameter_control_tool_align').hide();
+        
+
+
 	},
 
 	objectRotationByAxis: function(obj, axis, degree){
+		
+		this.DeleteButton();
+
 		var center = this.getCenterPosition(obj);
 		var size = this.getSize(obj);
 		//rotation
@@ -6546,6 +5680,22 @@ Model_Rotation.prototype = {
 
         //this includes width, height, depth
         return box_size;
+    },
+
+    DeleteButton: function(){
+    	//console.log(this.main.stepNumber);
+		//console.log(this.main.stepObject.length);
+		this.main.lastStep = true;
+		if (this.main.stepNumber < this.main.stepObject.length){
+			var stepLength = this.main.stepObject.length;
+
+			for(var i=parseInt(this.main.stepNumber); i<stepLength; i++){
+				var btn = document.getElementById(
+					"ui circular icon button procedure "+i.toString());
+				btn.parentNode.removeChild(btn);
+			}
+			this.main.stepObject.length = parseInt(this.main.stepNumber);
+		}
     }
 
 
@@ -6553,111 +5703,98 @@ Model_Rotation.prototype = {
 }
 
 module.exports = Model_Rotation
-},{"./Procedure_button":30}],29:[function(require,module,exports){
+},{"./Procedure_button":23}],22:[function(require,module,exports){
 "use strict;"
 const computeConvexHull = require('./computeConvexHull');
 const cadExtrudeShapeIntersection = require('./cadExtrudeShapeIntersection');
 const chairCutBack = require('./chairCutBack');
+const Procedure_button = require('./Procedure_button');
 
 function Model_wrap(main){
 
 	this.main = main;
     this.furnitures = main.furnitures;
     this.wrap_mode	= false; 
-
+    var scope = this;
+    var manager = new THREE.LoadingManager();
+    var textureLoader = new THREE.TextureLoader( manager );
+    
+    $( ".item.ui.image.label.wrap1" ).click(function() {
+        var texture = textureLoader.load( '../images/material/wrap/wrap1.jpg' );
+        texture.repeat.set(0.1, 0.1);
+        texture.wrapS = texture.wrapT = THREE.MirroredRepeatWrapping;
+        var newmaterial = new THREE.MeshBasicMaterial( {map: texture} );
+        for(var i=0 ; i<scope.main.GetSizeObj.length ; i++ ){
+            var model = scope.main.GetSizeObj[i];
+            scope.Wrap( model , texture );
+        }
+    });
+    $( ".item.ui.image.label.wrap2" ).click(function() {
+        var texture = textureLoader.load( '../images/material/wrap/wrap2.jpg' );
+        texture.repeat.set(0.1, 0.1);
+        texture.wrapS = texture.wrapT = THREE.MirroredRepeatWrapping;
+        var newmaterial = new THREE.MeshBasicMaterial( {map: texture} );
+        for(var i=0 ; i<scope.main.GetSizeObj.length ; i++ ){
+            var model = scope.main.GetSizeObj[i];
+            scope.Wrap( model , texture );
+        }
+    });
+    $( ".item.ui.image.label.wrap3" ).click(function() {
+        var texture = textureLoader.load( '../images/material/wrap/wrap3.jpg' );
+        texture.repeat.set(0.1, 0.1);
+        texture.wrapS = texture.wrapT = THREE.MirroredRepeatWrapping;
+        var newmaterial = new THREE.MeshBasicMaterial( {map: texture} );
+        for(var i=0 ; i<scope.main.GetSizeObj.length ; i++ ){
+            var model = scope.main.GetSizeObj[i];
+            scope.Wrap( model , texture );
+        }
+    });
+    $( ".item.ui.image.label.wrap4" ).click(function() {
+        var texture = textureLoader.load( '../images/material/wrap/wrap4.jpg' );
+        texture.repeat.set(0.1, 0.1);
+        texture.wrapS = texture.wrapT = THREE.MirroredRepeatWrapping;
+        var newmaterial = new THREE.MeshBasicMaterial( {map: texture} );
+        for(var i=0 ; i<scope.main.GetSizeObj.length ; i++ ){
+            var model = scope.main.GetSizeObj[i];
+            scope.Wrap( model , texture );
+        }
+    });
+    $( ".item.ui.image.label.wrap5" ).click(function() {
+        var texture = textureLoader.load( '../images/material/wrap/wrap5.jpg' );
+        texture.repeat.set(0.1, 0.1);
+        texture.wrapS = texture.wrapT = THREE.MirroredRepeatWrapping;
+        var newmaterial = new THREE.MeshBasicMaterial( {map: texture} );
+        for(var i=0 ; i<scope.main.GetSizeObj.length ; i++ ){
+            var model = scope.main.GetSizeObj[i];
+            scope.Wrap( model , texture );
+        }
+    });
+    $( ".item.ui.image.label.wrap6" ).click(function() {
+        var texture = textureLoader.load( '../images/material/wrap/wrap6.jpg' );
+        texture.repeat.set(0.1, 0.1);
+        texture.wrapS = texture.wrapT = THREE.MirroredRepeatWrapping;
+        var newmaterial = new THREE.MeshBasicMaterial( {map: texture} );
+        for(var i=0 ; i<scope.main.GetSizeObj.length ; i++ ){
+            var model = scope.main.GetSizeObj[i];
+            scope.Wrap( model , texture );
+        }
+    });
+    $( ".item.ui.image.label.wrap7" ).click(function() {
+        var texture = textureLoader.load( '../images/material/wrap/wrap7.jpg' );
+        texture.repeat.set(0.1, 0.1);
+        texture.wrapS = texture.wrapT = THREE.MirroredRepeatWrapping;
+        var newmaterial = new THREE.MeshBasicMaterial( {map: texture} );
+        for(var i=0 ; i<scope.main.GetSizeObj.length ; i++ ){
+            var model = scope.main.GetSizeObj[i];
+            scope.Wrap( model , texture );
+        }
+    });
 }
 
 Model_wrap.prototype = {
 
 	execute: function( name ){
 
-        var main = this;
-        var manager = new THREE.LoadingManager();
-        var textureLoader = new THREE.TextureLoader( manager );
-
-        $( ".item.ui.image.label.wrap1" ).click(function() {
-            var texture = textureLoader.load( '../images/material/wrap/wrap1.jpg' );
-            texture.repeat.set(0.1, 0.1);
-            texture.wrapS = texture.wrapT = THREE.MirroredRepeatWrapping;
-            var newmaterial = new THREE.MeshBasicMaterial( {map: texture} );
-            for(var i=0 ; i<main.main.GetSizeObj.length ; i++ ){
-	            var model = main.main.GetSizeObj[i];
-	            main.Wrap( model , texture );
-	        }
-            
-        });
-        $( ".item.ui.image.label.wrap2" ).click(function() {
-            var texture = textureLoader.load( '../images/material/wrap/wrap2.jpg' );
-            texture.repeat.set(0.1, 0.1);
-            texture.wrapS = texture.wrapT = THREE.MirroredRepeatWrapping;
-            var newmaterial = new THREE.MeshBasicMaterial( {map: texture} );
-            for(var i=0 ; i<main.main.GetSizeObj.length ; i++ ){
-	            var model = main.main.GetSizeObj[i];
-	            main.Wrap( model , texture );
-	        }
-            
-        });
-        $( ".item.ui.image.label.wrap3" ).click(function() {
-            var texture = textureLoader.load( '../images/material/wrap/wrap3.jpg' );
-            texture.repeat.set(0.1, 0.1);
-            texture.wrapS = texture.wrapT = THREE.MirroredRepeatWrapping;
-            var newmaterial = new THREE.MeshBasicMaterial( {map: texture} );
-            for(var i=0 ; i<main.main.GetSizeObj.length ; i++ ){
-	            var model = main.main.GetSizeObj[i];
-	            main.Wrap( model , texture );
-	        }
-            
-        });
-        $( ".item.ui.image.label.wrap4" ).click(function() {
-            var texture = textureLoader.load( '../images/material/wrap/wrap4.jpg' );
-            texture.repeat.set(0.1, 0.1);
-            texture.wrapS = texture.wrapT = THREE.MirroredRepeatWrapping;
-            var newmaterial = new THREE.MeshBasicMaterial( {map: texture} );
-            for(var i=0 ; i<main.main.GetSizeObj.length ; i++ ){
-	            var model = main.main.GetSizeObj[i];
-	            main.Wrap( model , texture );
-	        }
-            
-        });
-        $( ".item.ui.image.label.wrap5" ).click(function() {
-            var texture = textureLoader.load( '../images/material/wrap/wrap5.jpg' );
-            texture.repeat.set(0.1, 0.1);
-            texture.wrapS = texture.wrapT = THREE.MirroredRepeatWrapping;
-            var newmaterial = new THREE.MeshBasicMaterial( {map: texture} );
-            for(var i=0 ; i<main.main.GetSizeObj.length ; i++ ){
-	            var model = main.main.GetSizeObj[i];
-	            main.Wrap( model , texture );
-	        }
-            
-        });
-        $( ".item.ui.image.label.wrap6" ).click(function() {
-            var texture = textureLoader.load( '../images/material/wrap/wrap6.jpg' );
-            texture.repeat.set(0.1, 0.1);
-            texture.wrapS = texture.wrapT = THREE.MirroredRepeatWrapping;
-            var newmaterial = new THREE.MeshBasicMaterial( {map: texture} );
-            for(var i=0 ; i<main.main.GetSizeObj.length ; i++ ){
-	            var model = main.main.GetSizeObj[i];
-	            main.Wrap( model , texture );
-	        }
-            
-        });
-        $( ".item.ui.image.label.wrap7" ).click(function() {
-            var texture = textureLoader.load( '../images/material/wrap/wrap7.jpg' );
-            texture.repeat.set(0.1, 0.1);
-            texture.wrapS = texture.wrapT = THREE.MirroredRepeatWrapping;
-            var newmaterial = new THREE.MeshBasicMaterial( {map: texture} );
-            for(var i=0 ; i<main.main.GetSizeObj.length ; i++ ){
-	            var model = main.main.GetSizeObj[i];
-	            main.Wrap( model , texture );
-	        }
-            
-        });
-
-
-        if(this.wrap_mode == false){
-        	$('#parameter_control_tool_wrap').show();
-            this.wrap_mode = true;
-        }
         if(this.wrap_mode == false && name=='wrap'){
         	$('#parameter_control_tool_wrap').show();
             this.wrap_mode = true;
@@ -6665,18 +5802,25 @@ Model_wrap.prototype = {
         	this.main.processor.executeDesign("MODEL_PAINTING", "wrap");
         	this.main.processor.executeDesign("MODEL_ROTATION", "wrap");
         	
-
+        	//creat procedure button
+        	if(this.main.stepOperationName != name){
+        		this.DeleteButton();
+	        	Procedure_button( this.main, this.main.stepOperationName );
+	        	//record the operation name
+	        	this.main.stepOperationName = name;
+        	}
         }
-        else if(this.wrap_mode == true){
+        else if(this.wrap_mode == true || name!='wrap'){
         	$('#parameter_control_tool_wrap').hide();
             this.wrap_mode = false;
         }
-        $('#parameter_control_tool_painting').hide();
-        $('#parameter_control_tool_rotation').hide();
-        $('#parameter_control_tool_align').hide();
-	
+        
+
 	},
 	Wrap: function( model , texture ){
+		//console.log(model.geometry);
+		
+		this.DeleteButton();
 
 		var left_to_right = this.MakeExtrudeArray1(model, "yz" , "xy" );
 		var back_to_front = this.MakeExtrudeArray2(model, "xy" , "yz" );
@@ -6690,8 +5834,8 @@ Model_wrap.prototype = {
         wireframe: false} );
 		
 		var backRest = new THREE.Mesh( geometry, material );
-		
 		this.main.WrapObject.push(backRest);
+		this.main.Sceneobjects.push(backRest);
 		this.main.scene.add( backRest );
 		
 	},
@@ -6943,6 +6087,22 @@ Model_wrap.prototype = {
 
 
 		return [back_3d , back_extrude_3d] ;
+    },
+
+    DeleteButton: function(){
+    	//console.log(this.main.stepNumber);
+		//console.log(this.main.stepObject.length);
+		this.main.lastStep = true;
+		if (this.main.stepNumber < this.main.stepObject.length){
+			var stepLength = this.main.stepObject.length;
+
+			for(var i=parseInt(this.main.stepNumber); i<stepLength; i++){
+				var btn = document.getElementById(
+					"ui circular icon button procedure "+i.toString());
+				btn.parentNode.removeChild(btn);
+			}
+			this.main.stepObject.length = parseInt(this.main.stepNumber);
+		}
     }
 
 
@@ -6968,56 +6128,197 @@ function loadLine( main , point1 , point2){
 }
 
 module.exports = Model_wrap
-},{"./cadExtrudeShapeIntersection":36,"./chairCutBack":39,"./computeConvexHull":40}],30:[function(require,module,exports){
+},{"./Procedure_button":23,"./cadExtrudeShapeIntersection":28,"./chairCutBack":31,"./computeConvexHull":32}],23:[function(require,module,exports){
 "use strict;"
 
+//this function for adding function 
 function Procedure_button(main, str){
 
-	if(main.GetSizeObj.length == 0){
-		main.GetSizeObj.push(0);
-		return;
-	}
-
+	//creat button, set class
 	var btn = document.createElement("button");
-	btn.classList.add("ui","circular","icon","button","procedure",
-					  main.GetSizeObj.length.toString());
-	//console.log(btn.classList[4]);
-	var t = document.createTextNode(str);       
+	btn.classList.add("ui", "circular","icon","button","procedure",
+					  main.stepObject.length.toString());
+	btn.setAttribute ('id', "ui circular icon button procedure " + 
+					  main.stepObject.length.toString())
+	//set button string
+	var t = document.createTextNode(str);
 	btn.appendChild(t);
-	//var icon = document.createElement("i");
-	//icon.classList.add("facebook","icon");
-    //btn.appendChild(icon);
-    //document.body.appendChild(btn);
-    
+	
+    //add button to Web
     document.getElementById("Procedure_List").appendChild(btn);
 
+    //record scene object
+    RecordObjects(main);
+    main.stepNumber += 1;
 
-}
-function RecordPosition(main){
-	var recordPosi = [];
-	for(var i=0; i< main.furnitures.length ; i++){
-		var furniture = main.furnitures[i].getFurniture();
-		var position = new THREE.Vector3(furniture.x,
-										 furniture.y,
-										 furniture.z);
-		recordPosi.push(position);
+    //set the click action
+    btn.addEventListener("click", function(){
 
-	}
-	main.stepFurniturePosition.push(recordPosi);
+    	//if is the last step, create the step button
+	    if(main.lastStep == true){
+	    	main.lastStep = false;
+	    	Procedure_button(main, main.stepOperationName);
+	    }
+
+	    //console.log(btn.classList[5]);
+	    buttonClicked(main, btn.classList[5]);
+	    main.stepNumber = btn.classList[5];
+	    main.stepOperationName = btn.firstChild.nodeValue;
+
+	    //Initialise the model button
+	    main.processor.executeDesign("MODEL_ALIGN", "initial");
+	    main.processor.executeDesign("MODEL_PAINTING", "initial");
+        main.processor.executeDesign("MODEL_WRAP", "initial");
+        main.processor.executeDesign("MODEL_ROTATION", "initial");
+	    //show the control buttons
+	    if(btn.firstChild.nodeValue != 'Initial')
+	    	$('#parameter_control_tool_' + btn.firstChild.nodeValue).show();	    
+
+	});
 	
-	recordPosi = [];
-	for(var i=0; i< main.Objects.length ; i++){
-		var obj = main.Objects[i];
-		var position = new THREE.Vector3(obj.x, obj.y, obj.z);
-		recordPosi.push(position);
-
-	}
-	main.stepObjectPosition.push(recordPosi);
 }
 
+function RecordObjects(main){
+	var RecordArr = [];
 
-module.exports = {Procedure_button,RecordPosition}
-},{}],31:[function(require,module,exports){
+	for(var i = main.scene.children.length - 1; i > -1; i -- ){ 
+		var object =  main.scene.children[i];	
+		if(object.isObject3D){
+			if ( object instanceof THREE.Camera ) {
+			} else if ( object instanceof THREE.PointLight ) {
+			} else if ( object instanceof THREE.DirectionalLight ) {
+			} else if ( object instanceof THREE.SpotLight ) {					
+			} else if ( object instanceof THREE.HemisphereLight ) {
+			} else if ( object instanceof THREE.AmbientLight ) {
+			} else if ( object instanceof THREE.GridHelper ) {
+			} else if ( object instanceof THREE.TransformControls ){
+			} else if ( object instanceof AddAxis){
+			} else if ( object instanceof THREE.BoxHelper){
+			} else if ( object == main.house) {
+			} else if ( object instanceof THREE.DirectionalLightHelper){
+			} else if ( object instanceof THREE.HemisphereLightHelper){
+			} else{
+				//RecordArr.push(object.clone());
+				var isFurniture = false;
+				for(var j = 0; j < main.furnitures.length; j++){
+					if(main.furnitures[j].getFurniture() == object){
+						isFurniture = true;
+						SaveFurniture(main.furnitures[j], RecordArr);
+						break;
+					}
+				}
+				if(isFurniture == false){
+					RecordArr.push(object.clone());
+				}
+
+			}
+		}
+	}
+	//record the object
+	main.stepObject.push( RecordArr );
+}
+
+function buttonClicked(main, btn_num){
+	clearScene(main);
+	var sceneObjs = main.stepObject[btn_num];
+	main.furnitures = [];
+	
+	//clear cards
+	$('#cards').empty();
+	
+	for(var i=0; i < sceneObjs.length; i++){
+		//try to add furniture to scene
+		try {
+		    var furniture = sceneObjs[i];
+			var new_furnitureObj = new THREE.Object3D();
+			new_furnitureObj.copy(furniture.getFurniture(), true);
+			var new_furniture = new Furniture(new_furnitureObj);
+
+			new_furniture.setCategory("straight_chair");
+			new_furniture.setIndex(furniture.index);
+			main.furnitures.push(new_furniture);
+
+			main.scene.add(new_furniture.getFurniture());
+			
+			//update the menu interface
+			new_furniture.addCard();
+			//copy the state
+			new_furniture.updatePosition(furniture.position);
+			new_furniture.updateDirection();
+			new_furniture.updateQuaternion(furniture.quaternion);
+			//copy the components and labeled state
+			new_furniture.updateListedComponents(furniture.listedComponents);
+			new_furniture.updateLabeledComponents(furniture.labeledComponents);
+			//copy the already labeled normal axis
+			//Object.assign(new_furniture.normalAxises, furniture.normalAxises);
+			for (let key in furniture.normalAxises) {
+				new_furniture.normalAxises[key] = new THREE.Vector3();
+				new_furniture.normalAxises[key].copy(furniture.normalAxises[key]);
+			}
+
+		}
+		catch(err) {//if it is not furniture, add to scene directly
+		    main.scene.add(sceneObjs[i]);
+		}
+		
+	}
+}
+
+function clearScene(main){
+	for(var i = main.scene.children.length - 1; i > -1; i -- ){ 
+		var object =  main.scene.children[i];	
+		if(object.isObject3D){
+			if ( object instanceof THREE.Camera ) {
+			} else if ( object instanceof THREE.PointLight ) {
+			} else if ( object instanceof THREE.DirectionalLight ) {
+			} else if ( object instanceof THREE.SpotLight ) {					
+			} else if ( object instanceof THREE.HemisphereLight ) {
+			} else if ( object instanceof THREE.AmbientLight ) {
+			} else if ( object instanceof THREE.GridHelper ) {
+			} else if ( object instanceof THREE.TransformControls ){
+			} else if ( object instanceof AddAxis){
+			} else if ( object instanceof THREE.BoxHelper){
+			} else if ( object == main.house) {
+			} else if ( object instanceof THREE.DirectionalLightHelper){
+			} else if ( object instanceof THREE.HemisphereLightHelper){
+			} else{
+				main.removeFromScene(object);
+			}
+		}
+	}
+}
+
+function SaveFurniture( furniture , furnituresDataSet) {
+
+	//var furniture = this.furnitures[i];
+	var new_furnitureObj = new THREE.Object3D();
+	new_furnitureObj.copy(furniture.getFurniture(), true);
+	var new_furniture = new Furniture(new_furnitureObj);
+
+	new_furniture.setCategory("straight_chair");
+	new_furniture.setIndex(furniture.index);
+	furnituresDataSet.push(new_furniture);
+
+	//copy the state
+	new_furniture.updatePosition(furniture.position);
+	new_furniture.updateDirection();
+	new_furniture.updateQuaternion(furniture.quaternion);
+
+	//copy the components and labeled state
+	new_furniture.updateListedComponents(furniture.listedComponents);
+	new_furniture.updateLabeledComponents(furniture.labeledComponents);
+
+	//copy the already labeled normal axis
+	//Object.assign(new_furniture.normalAxises, furniture.normalAxises);
+	for (let key in furniture.normalAxises) {
+		new_furniture.normalAxises[key] = new THREE.Vector3();
+		new_furniture.normalAxises[key].copy(furniture.normalAxises[key]);
+	}
+
+}
+
+module.exports = Procedure_button
+},{}],24:[function(require,module,exports){
 "use strict;"
 //this is to handle the new design approaches
 //that without the need of cad operations
@@ -7027,23 +6328,16 @@ const Chair_Add = require('./Chair_Add');
 const Chair_Rebuild = require('./Chair_Rebuild');
 const Cabinet_kallax = require('./Cabinet_kallax');
 const Dresser_Add = require('./Dresser_Add');
-
-const Table = require('./Table');
-const Desk = require('./Desk');
-
-
 const Model_Painting = require('./Model_Painting');
 const Model_wrap = require('./Model_wrap');
 const Model_Rotation = require('./Model_Rotation');
 const Model_Align = require('./Model_Align');
-const Model_Add = require('./Model_Add');
-const Model_AddBetween = require('./Model_AddBetween');
-
 
 function Processor(main) {
 	this.main = main;
 	this.category = main.category;  //chair, cabinet, table
 	this.furnitures = main.furnitures;
+
 
 	//variables of transformation functions
 	//chair
@@ -7060,10 +6354,6 @@ function Processor(main) {
 	this.chair_add = undefined;
 	this.dresser_add = undefined;
 
-	this.table = undefined;
-	this.desk = undefined;
-
-	this.model_add = undefined;
 	//end of zhuen's block
 
 
@@ -7075,7 +6365,7 @@ function Processor(main) {
 	this.model_wrap = undefined;
 	this.model_rotation = undefined;
 	this.model_align = undefined;
-	this.model_addbetween = undefined;
+
 
 	//end of weixiang's block
 
@@ -7183,48 +6473,6 @@ Processor.prototype = {
 
 
 			case "table" :
-				if(scope.furnitures.length == 0) {
-			
-					return;
-
-				}
-				else if(scope.furnitures.length == 1){
-					//possible actions with one furniture					
-					
-					scope.table = new Table(scope.main);
-					scope.transformFunctions.TABLE = scope.table;						
-					$('.operations.operation_table').show();
-
-				}
-				else if( scope.furnitures.length > 1) {
-					//possible actions with many furnitures
-
-					
-					scope.table = new Table(scope.main);
-					scope.transformFunctions.TABLE = scope.table;						
-					$('.operations.operation_table').show();
-
-				}
-
-				break;
-
-			case "desk" :
-				if(scope.furnitures.length == 0) {
-					return;
-				}
-				else if(scope.furnitures.length == 1){
-					//possible actions with one furniture
-					scope.desk = new Desk(scope.main);
-					scope.transformFunctions.DESK = scope.desk;						
-					$('.operations.operation_desk').show();
-
-				}
-				else if( scope.furnitures.length > 1) {
-					//possible actions with many furnitures
-					scope.desk = new Desk(scope.main);
-					scope.transformFunctions.DESK = scope.desk;						
-					$('.operations.operation_desk').show();
-				}
 
 				break;
 
@@ -7241,14 +6489,6 @@ Processor.prototype = {
 				scope.model_align = new Model_Align(scope.main);
 				scope.transformFunctions.MODEL_ALIGN = scope.model_align;
 				
-				//add
-				scope.model_add = new Model_Add(scope.main);
-				scope.transformFunctions.MODEL_ADD = scope.model_add;
-
-				//addbetween
-				scope.model_addbetween = new Model_AddBetween(scope.main);
-				scope.transformFunctions.MODEL_ADDBETWEEN = scope.model_addbetween;
-
 				$('.operations.operation_tool').show();
 				
 				break;
@@ -7312,901 +6552,7 @@ Processor.prototype = {
 
 module.exports = Processor
 
-},{"./Cabinet_kallax":4,"./Chair_Add":5,"./Chair_Align":6,"./Chair_Rebuild":7,"./Desk":20,"./Dresser_Add":21,"./Model_Add":24,"./Model_AddBetween":25,"./Model_Align":26,"./Model_Painting":27,"./Model_Rotation":28,"./Model_wrap":29,"./Table":32}],32:[function(require,module,exports){
-"use strict;"
-
-const chairCreateBoard = require('./chairCreateBoard')
-const CreateWheel = require('./CreateWheel')
-const CreateSupport = require('./CreateSupport')
-const CreateDrawer = require('./CreateDrawer')
-const CreateTableRod = require('./CreateTableRod')
-const CabinetMakeSeat = require('./CabinetMakeSeat')
-const CreateDoorBoard = require('./CreateDoorBoard')
-
-
-function Table (main){
-	this.main = main;
-	this.furnitures = main.furnitures;
-
-}
-
-Table.prototype = {
-	checkTableInfo: function(Table) {
-		// body...
-		var tabletop = Table.getComponentByName("tabletop");
-		var tableLeg = Table.getComponentByName("tableLeg");
-		if(typeof tabletop == 'undefined' || typeof tableLeg == 'undefined')
-			return false;
-		return true;
-	},
-
-	getPartSize: function(obj){
-		var box = new THREE.Box3();
-		box.setFromObject(obj);
-		var box_size = new THREE.Vector3();
-		box.getSize(box_size);
-		return box_size;
-	},
-
-	getPartCenter: function(obj){
-		var box = new THREE.Box3();
-		box.setFromObject(obj);
-		var box_center = new THREE.Vector3();
-		box.getCenter (box_center);
-		return box_center;
-	},
-
-	getPartMaterial: function(obj) {
-		var material = new THREE.Material();
-		if(obj.children.length > 0){
-			var child = obj.children[0];
-			while(child.children.length)
-				child = child.children[0];
-			if (Array.isArray(child.material))
-				material = child.material[0];			
-			else
-				material = child.material;
-		}
-		else{
-			if (Array.isArray(obj.material))
-				material = obj.material[0];			
-			else
-				material = obj.material;			
-		}
-
-		return material;
-	},
-
-	rotationByAxis: function(furniture, axis, degree){
-		var obj = furniture.getFurniture();
-		var size = this.getPartSize(obj);
-		var center = this.getPartCenter(obj);
-		obj.position.set(0, 0, -30);
-		if(axis == 'x'){			
-			obj.rotateOnWorldAxis(new THREE.Vector3(1,0,0), degree);			
-		}
-		if(axis == 'y'){
-			obj.rotateOnWorldAxis(new THREE.Vector3(0,1,0), degree);
-		}
-		if(axis == 'z'){
-			obj.rotateOnWorldAxis(new THREE.Vector3(0,0,1), degree);
-		}
-		var newCenter = this.getPartCenter(obj);
-		var offset = new THREE.Vector3(center.x - newCenter.x, center.y - newCenter.y, center.z - newCenter.z);
-		obj.position.x += offset.x;
-		obj.position.y += offset.y;
-		obj.position.z += offset.z;		
-	},
-
-	objectRotationByAxis: function(obj, axis, degree){
-		var size = this.getPartSize(obj);
-		var center = this.getPartCenter(obj);
-		obj.position.set(0, 0, -30);
-		if(axis == 'x'){			
-			obj.rotateOnWorldAxis(new THREE.Vector3(1,0,0), degree);			
-		}
-		if(axis == 'y'){
-			obj.rotateOnWorldAxis(new THREE.Vector3(0,1,0), degree);
-		}
-		if(axis == 'z'){
-			obj.rotateOnWorldAxis(new THREE.Vector3(0,0,1), degree);
-		}
-		var newCenter = this.getPartCenter(obj);
-		var offset = new THREE.Vector3(center.x - newCenter.x, center.y - newCenter.y, center.z - newCenter.z);
-		obj.position.x += offset.x;
-		obj.position.y += offset.y;
-		obj.position.z += offset.z;		
-	},
-
-	objectAddToFurniture: function(furniture, object, position) {
-		var inverse = new THREE.Matrix4();
-		inverse.getInverse(furniture.matrixWorld);	
-		object.applyMatrix(inverse);		
-		furniture.worldToLocal(position);		
-		object.position.set(position.x, position.y, position.z);		
-		furniture.add(object);		
-	},
-
-	getLongestContinueNumber: function(array1, array2){
-		var result = new Array();
-		for(var i=0; i < array1.length; i++){
-			var tmp = new Array();
-			for(var j=0, offset = 0; j < array2.length && offset < array1.length - i; j++){
-				if(array1[i + offset].index == array2[j].index){
-					tmp.push(array1[i + offset]);
-					offset++;
-				}
-			}
-			if(tmp.length > result.length)
-				result = tmp;
-		}
-		return result;
-	},
-
-	getCanStackTables: function(Tables, result){
-		var TablesBigEdge = new Array();
-		var TablesSmallEdge = new Array();
-		for (var i = 0; i < Tables.length; i++) {
-			TablesBigEdge.push(Tables[i]);
-		}
-		TablesBigEdge.sort(function(a, b){
-			var aSize = a.getSize();
-			var bSize = b.getSize();
-			if(aSize.x > aSize.z)
-				var aBigEdge =  aSize.x;
-			else
-				var aBigEdge =  aSize.z;
-			if(bSize.x > bSize.z)
-				var bBigEdge =  bSize.x;
-			else
-				var bBigEdge =  bSize.z;
-			return bBigEdge - aBigEdge; // sort: big to small
-		}); 
-
-		TablesSmallEdge = TablesBigEdge.slice(0)
-		TablesSmallEdge.sort(function(a, b){
-			var aSize = a.getSize();
-			var bSize = b.getSize();
-			if(aSize.x > aSize.z)
-				var aSmallEdge =  aSize.z;
-			else
-				var aSmallEdge =  aSize.x;
-			if(bSize.x > bSize.z)
-				var bSmallEdge =  bSize.z;
-			else
-				var bSmallEdge =  bSize.x;
-			return bSmallEdge - aSmallEdge; // sort: big to small
-		}); 
-
-		var tmp1 = new Array();
-		var tmp2 = new Array();
-		var ids = new Array();
-		for (var i = 0, flag = true; i < Tables.length; i++) {
-			if(TablesBigEdge[i].index == TablesSmallEdge[i].index){
-				if (tmp1.length > 0) {					
-					ids = this.getLongestContinueNumber(tmp1, tmp2);
-					for (var i = 0; i < ids.length; i++) {
-						result.push(ids[i]);
-					}
-					tmp1 = [];
-					tmp2 = [];
-					ids = [];
-				}
-				result.push(TablesBigEdge[i]);
-			}
-			else{				
-				tmp1.push(TablesBigEdge[i]);
-				tmp2.push(TablesSmallEdge[i]);				
-			}			
-		}
-		if(tmp1.length > 0){
-			ids = this.getLongestContinueNumber(tmp1, tmp2);
-			for (var i = 0; i < ids.length; i++) {
-				result.push(ids[i]);
-			}
-		}
-	},
-
-	stackEvent: function() {
-		var stackTables = new Array();
-		this.getCanStackTables(this.furnitures, stackTables);
-		console.log(stackTables);
-
-		for (var i = 0, offset = 0; i < stackTables.length; i++) {
-			stackTables[i].moveToPosition(new THREE.Vector3(0, offset, -30));
-			var size = stackTables[i].getSize();
-			offset += size.y;
-		}
-	},
-
-	getCanFlipStackTables: function(Tables, result){
-		var marked = new Array();
-		for (var i = 0; i < Tables.length; i++) {
-			marked[i] = false;
-		}
-
-		for (var i = 0, count = 0; i < Tables.length; i++) {
-			var aSize = Tables[i].getSize();
-			if(aSize.x > aSize.z)
-				var aBigEdge =  aSize.x;
-			else
-				var aBigEdge =  aSize.z;
-			var aXaddZ = aSize.x + aSize.z;
-			if(!marked[i]){
-				result[count].push(Tables[i]);
-				for (var j = 0; j < Tables.length; j++) {
-					if(i==j || marked[j]);
-					else{
-
-						var bSize = Tables[j].getSize();
-						if(bSize.x > bSize.z)
-							var bBigEdge =  bSize.x;
-						else
-							var bBigEdge =  bSize.z;
-						var bXaddZ = bSize.x + bSize.z;
-						console.log(Tables[i]);
-						console.log(aBigEdge + " , " + aXaddZ);
-						console.log(Tables[j]);
-						console.log(bBigEdge + " , " + bXaddZ);
-						if(aBigEdge.toFixed(6) == bBigEdge.toFixed(6) && aXaddZ.toFixed(6) == bXaddZ.toFixed(6)){
-							result[count].push(Tables[j]);
-							marked[j] = true;
-						}
-					}
-				}
-				count++;
-			}
-			
-		}
-		var i = 0;
-		while(result[i].length > 1){
-			i++;
-		}
-		result.splice(i, result.length - i);
-	},
-
-	flipStackEvent: function() {
-		var flipStackTables = [];
-		for (var i = 0; i < this.furnitures.length; i++) {
-			flipStackTables[i] = [];
-		}
-		this.getCanFlipStackTables(this.furnitures, flipStackTables);
-		console.log("flipStackEvent");
-		console.log(flipStackTables);		
-
-		for (var i = 0; i < flipStackTables.length; i++) {
-			if(flipStackTables[i].length % 2 == 0){
-				for (var j = 0; j < flipStackTables[i].length; j += 2) {					
-					this.rotationByAxis(flipStackTables[i][j], 'x', Math.PI);
-					var obj1 = flipStackTables[i][j].getFurniture();
-					var obj2 = flipStackTables[i][j+1].getFurniture();
-					var obj1Center = this.getPartCenter(obj1);
-					var obj1Size = this.getPartSize(obj1);
-					var obj2Center = this.getPartCenter(obj2);
-					var obj2Size = this.getPartSize(obj2);
-					var obj2NewCenter = new THREE.Vector3(obj1Center.x, 
-						obj1Center.y + obj1Size.y/2 + obj2Size.y/2, obj1Center.z);
-					var offset = new THREE.Vector3(obj2NewCenter.x - obj2Center.x, 
-						obj2NewCenter.y - obj2Center.y, obj2NewCenter.z - obj2Center.z);
-					obj2.position.x += offset.x;
-					obj2.position.y += offset.y;
-					obj2.position.z += offset.z;
-
-					var tabletop = obj1.getObjectByName("tabletop");
-					var tabletopMaterial = this.getPartMaterial(tabletop);
-					var boardGeometry = chairCreateBoard(obj1Size.x, 0.05, obj1Size.z);
-					var board = new THREE.Mesh(boardGeometry, tabletopMaterial);
-
-					board.position.set(obj1Center.x - obj1Size.x/2, obj1Center.y + obj1Size.y/2, 
-						obj1Center.z - obj1Size.z/2);
-					this.main.scene.add(board);
-				}
-			}
-		}		
-	},
-
-	getAllChildren: function(obj, array) {
-		if (obj.children.length > 0) {
-			for (var i = 0; i < obj.children.length; i++) {
-				if(obj.children[i].type == "Mesh" || obj.children[i].type == "Object3D"){
-					this.getAllChildren(obj.children[i], array);
-				}	
-			}
-		}
-		else
-			array.push(obj);			
-	},
-
-	getPointByRay: function(obj, origin, direction) {
-		var raycaster = new THREE.Raycaster();
-		raycaster.set(origin, direction);
-		if(obj.children.length > 0){
-			var array = new Array();
-			this.getAllChildren(obj, array);
-			var intersects = raycaster.intersectObjects(array);
-		}
-		else
-			var intersects = raycaster.intersectObject(obj);
-		return intersects;
-	},
-
-	test: function(pos) {
-		var geometry = new THREE.BoxGeometry( 0.1, 0.1, 0.1 );
-		var material = new THREE.MeshBasicMaterial( {color: 0x00ff00} );
-		var cube = new THREE.Mesh( geometry, material );
-		cube.position.set(pos.x, pos.y, pos.z);
-		this.main.scene.add( cube );
-	},
-
-	getNumber1LegBottom: function(Table) {
-		var tableCenter = this.getPartCenter(Table);
-		var tableSize = this.getPartSize(Table);
-		var tableLeg = Table.getObjectByName("tableLeg");
-		//get middle x position (pos1+pos2)/2
-		var origin1 = new THREE.Vector3(tableCenter.x, tableCenter.y, tableCenter.z - tableSize.z/2 + 0.01);
-		var direction1 = new THREE.Vector3(-1, 0, 0);
-		var intersects1 = this.getPointByRay(tableLeg, origin1, direction1);
-		if(intersects1.length > 0)
-			var pos1 = intersects1[0].point;
-		else
-			console.log("number1 raycaster1 miss");
-
-		var origin2 = new THREE.Vector3(tableCenter.x - tableSize.x, tableCenter.y, tableCenter.z - tableSize.z/2 + 0.01);
-		var direction2 = new THREE.Vector3(1, 0, 0);
-		var intersects2 = this.getPointByRay(tableLeg, origin2, direction2);
-		if(intersects2.length > 0)
-			var pos2 = intersects2[0].point;
-		else
-			console.log("number1 raycaster2 miss");
-
-		//get middle z position (pos3+pos4)/2
-		var origin3 = new THREE.Vector3(tableCenter.x - tableSize.x/2 + 0.01, tableCenter.y, tableCenter.z);
-		var direction3 = new THREE.Vector3(0, 0, -1);
-		var intersects3 = this.getPointByRay(tableLeg, origin3, direction3);
-		if(intersects3.length > 0)
-			var pos3 = intersects3[0].point;
-		else
-			console.log("number1 raycaster3 miss");			
-
-		var origin4 = new THREE.Vector3(tableCenter.x - tableSize.x/2 + 0.01, tableCenter.y, tableCenter.z - tableSize.z);
-		var direction4 = new THREE.Vector3(0, 0, 1);
-		var intersects4 = this.getPointByRay(tableLeg, origin4, direction4);
-		if(intersects4.length > 0)
-			var pos4 = intersects4[0].point;
-		else
-			console.log("number1 raycaster4 miss");			
-
-		//get y
-		var origin5 = new THREE.Vector3((pos1.x+pos2.x)/2, tableCenter.y - tableSize.y, (pos3.z+pos4.z)/2);
-		var direction5 = new THREE.Vector3(0, 1, 0);
-		var intersects5 = this.getPointByRay(tableLeg, origin5, direction5);
-		if(intersects5.length > 0)
-			var pos5 = intersects5[0].point;
-		else
-			console.log("number1 raycaster5 miss");
-		return new THREE.Vector3((pos1.x+pos2.x)/2, pos5.y, (pos3.z+pos4.z)/2);
-	},
-
-	getNumber2LegBottom: function(Table) {
-		var tableCenter = this.getPartCenter(Table);
-		var tableSize = this.getPartSize(Table);
-		var tableLeg = Table.getObjectByName("tableLeg");
-		//get middle x position (pos1+pos2)/2
-		var origin1 = new THREE.Vector3(tableCenter.x, tableCenter.y, tableCenter.z - tableSize.z/2 + 0.01);
-		var direction1 = new THREE.Vector3(1, 0, 0);
-		var intersects1 = this.getPointByRay(tableLeg, origin1, direction1);
-		if(intersects1.length > 0)
-			var pos1 = intersects1[0].point;
-		else
-			console.log("number2 raycaster1 miss");
-
-		var origin2 = new THREE.Vector3(tableCenter.x + tableSize.x, tableCenter.y, tableCenter.z + tableSize.z/2 - 0.01);
-		var direction2 = new THREE.Vector3(-1, 0, 0);
-		var intersects2 = this.getPointByRay(tableLeg, origin2, direction2);
-		if(intersects2.length > 0)
-			var pos2 = intersects2[0].point;
-		else
-			console.log("number2 raycaster2 miss");
-
-		//get middle z position (pos3+pos4)/2
-		var origin3 = new THREE.Vector3(tableCenter.x - tableSize.x/2 + 0.01, tableCenter.y, tableCenter.z);
-		var direction3 = new THREE.Vector3(0, 0, -1);
-		var intersects3 = this.getPointByRay(tableLeg, origin3, direction3);
-		if(intersects3.length > 0)
-			var pos3 = intersects3[0].point;
-		else
-			console.log("number2 raycaster3 miss");			
-
-		var origin4 = new THREE.Vector3(tableCenter.x - tableSize.x/2 + 0.01, tableCenter.y, tableCenter.z - tableSize.z);
-		var direction4 = new THREE.Vector3(0, 0, 1);
-		var intersects4 = this.getPointByRay(tableLeg, origin4, direction4);
-		if(intersects4.length > 0)
-			var pos4 = intersects4[0].point;
-		else
-			console.log("number2 raycaster4 miss");			
-
-		//get y
-		var origin5 = new THREE.Vector3((pos1.x+pos2.x)/2, tableCenter.y - tableSize.y, (pos3.z+pos4.z)/2);
-		var direction5 = new THREE.Vector3(0, 1, 0);
-		var intersects5 = this.getPointByRay(tableLeg, origin5, direction5);
-		if(intersects5.length > 0)
-			var pos5 = intersects5[0].point;
-		else
-			console.log("number2 raycaster5 miss");
-		return new THREE.Vector3((pos1.x+pos2.x)/2, pos5.y, (pos3.z+pos4.z)/2);
-	},
-
-	getNumber3LegBottom: function(Table) {
-		var tableCenter = this.getPartCenter(Table);
-		var tableSize = this.getPartSize(Table);
-		var tableLeg = Table.getObjectByName("tableLeg");
-		//get middle x position (pos1+pos2)/2
-		var origin1 = new THREE.Vector3(tableCenter.x, tableCenter.y, tableCenter.z + tableSize.z/2 - 0.01);
-		var direction1 = new THREE.Vector3(1, 0, 0);
-		var intersects1 = this.getPointByRay(tableLeg, origin1, direction1);
-		if(intersects1.length > 0)
-			var pos1 = intersects1[0].point;
-		else
-			console.log("number3 raycaster1 miss");
-
-		var origin2 = new THREE.Vector3(tableCenter.x + tableSize.x, tableCenter.y, tableCenter.z + tableSize.z/2 - 0.01);
-		var direction2 = new THREE.Vector3(-1, 0, 0);
-		var intersects2 = this.getPointByRay(tableLeg, origin2, direction2);
-		if(intersects2.length > 0)
-			var pos2 = intersects2[0].point;
-		else
-			console.log("number3 raycaster2 miss");
-
-		//get middle z position (pos3+pos4)/2
-		var origin3 = new THREE.Vector3(tableCenter.x + tableSize.x/2 - 0.01, tableCenter.y, tableCenter.z);
-		var direction3 = new THREE.Vector3(0, 0, 1);
-		var intersects3 = this.getPointByRay(tableLeg, origin3, direction3);
-		if(intersects3.length > 0)
-			var pos3 = intersects3[0].point;
-		else
-			console.log("number3 raycaster3 miss");			
-
-		var origin4 = new THREE.Vector3(tableCenter.x + tableSize.x/2 - 0.01, tableCenter.y, tableCenter.z + tableSize.z);
-		var direction4 = new THREE.Vector3(0, 0, -1);
-		var intersects4 = this.getPointByRay(tableLeg, origin4, direction4);
-		if(intersects4.length > 0)
-			var pos4 = intersects4[0].point;
-		else
-			console.log("number3 raycaster4 miss");			
-
-		//get y
-		var origin5 = new THREE.Vector3((pos1.x+pos2.x)/2, tableCenter.y - tableSize.y, (pos3.z+pos4.z)/2);
-		var direction5 = new THREE.Vector3(0, 1, 0);
-		var intersects5 = this.getPointByRay(tableLeg, origin5, direction5);
-		if(intersects5.length > 0)
-			var pos5 = intersects5[0].point;
-		else
-			console.log("number3 raycaster5 miss");
-		return new THREE.Vector3((pos1.x+pos2.x)/2, pos5.y, (pos3.z+pos4.z)/2);
-	},
-
-	getNumber4LegBottom: function(Table) {
-		var tableCenter = this.getPartCenter(Table);
-		var tableSize = this.getPartSize(Table);
-		var tableLeg = Table.getObjectByName("tableLeg");
-		//get middle x position (pos1+pos2)/2
-		var origin1 = new THREE.Vector3(tableCenter.x, tableCenter.y, tableCenter.z + tableSize.z/2 - 0.01);
-		var direction1 = new THREE.Vector3(-1, 0, 0);
-		var intersects1 = this.getPointByRay(tableLeg, origin1, direction1);
-		if(intersects1.length > 0)
-			var pos1 = intersects1[0].point;
-		else
-			console.log("number4 raycaster1 miss");
-
-		var origin2 = new THREE.Vector3(tableCenter.x - tableSize.x, tableCenter.y, tableCenter.z + tableSize.z/2 - 0.01);
-		var direction2 = new THREE.Vector3(1, 0, 0);
-		var intersects2 = this.getPointByRay(tableLeg, origin2, direction2);
-		if(intersects2.length > 0)
-			var pos2 = intersects2[0].point;
-		else
-			console.log("number4 raycaster2 miss");
-
-		//get middle z position (pos3+pos4)/2
-		var origin3 = new THREE.Vector3(tableCenter.x + tableSize.x/2 - 0.01, tableCenter.y, tableCenter.z);
-		var direction3 = new THREE.Vector3(0, 0, 1);
-		var intersects3 = this.getPointByRay(tableLeg, origin3, direction3);
-		if(intersects3.length > 0)
-			var pos3 = intersects3[0].point;
-		else
-			console.log("number4 raycaster3 miss");			
-
-		var origin4 = new THREE.Vector3(tableCenter.x + tableSize.x/2 - 0.01, tableCenter.y, tableCenter.z + tableSize.z);
-		var direction4 = new THREE.Vector3(0, 0, -1);
-		var intersects4 = this.getPointByRay(tableLeg, origin4, direction4);
-		if(intersects4.length > 0)
-			var pos4 = intersects4[0].point;
-		else
-			console.log("number4 raycaster4 miss");			
-
-		//get y
-		var origin5 = new THREE.Vector3((pos1.x+pos2.x)/2, tableCenter.y - tableSize.y, (pos3.z+pos4.z)/2);
-		var direction5 = new THREE.Vector3(0, 1, 0);
-		var intersects5 = this.getPointByRay(tableLeg, origin5, direction5);
-		if(intersects5.length > 0)
-			var pos5 = intersects5[0].point;
-		else
-			console.log("number4 raycaster5 miss");
-		return new THREE.Vector3((pos1.x+pos2.x)/2, pos5.y, (pos3.z+pos4.z)/2);
-	},
-
-	getLegBottomCenterPosition: function(Table, number) {
-		var tableCenter = this.getPartCenter(Table);
-		var tableSize = this.getPartSize(Table);
-		var tableLeg = Table.getObjectByName("tableLeg");
-
-		if(number == 1){
-			return this.getNumber1LegBottom(Table);
-		}
-		else if(number == 2){
-			return this.getNumber2LegBottom(Table);
-		}
-		else if(number == 3){
-			return this.getNumber3LegBottom(Table);
-		}
-		else if(number == 4){
-			return this.getNumber4LegBottom(Table);
-		}
-	},
-
-	getLegsPosition: function(Table, positions) {
-		positions.push(this.getLegBottomCenterPosition(Table, 1));
-		positions.push(this.getLegBottomCenterPosition(Table, 2));
-		positions.push(this.getLegBottomCenterPosition(Table, 3));
-		positions.push(this.getLegBottomCenterPosition(Table, 4));		
-	},
-
-	addWheelEvent: function() {
-		var table = this.furnitures[0].getFurniture();
-
-		var legsPosition = [];
-		this.getLegsPosition(table, legsPosition);
-
-		var tabletop = table.getObjectByName("tabletop");
-		var material = this.getPartMaterial(tabletop);
-		var geometry = CreateWheel();
-		var wheel = new THREE.Mesh(geometry, material);
-		wheel.name = "wheel";
-		var wheelSize = this.getPartSize(wheel);
-
-		// 0 ---- 1
-		// |      |
-		// |      |
-		// 3 ---- 2
-		var wheelArray =[4];
-		for (var i = 0; i < 4; i++) {
-			wheelArray[i] = new THREE.Object3D();
-		}
-		for (var i = 0; i < 4; i++) {
-			wheelArray[i] = wheel.clone();
-		}
-		
-		for (var i = 0; i < 4; i++) {
-			legsPosition[i].y = legsPosition[i].y - wheelSize.y/2;
-			this.objectAddToFurniture(table, wheelArray[i], legsPosition[i]);
-		}		
-
-		table.position.y = table.position.y + wheelSize.y;
-	},
-
-	getTabletopSurfaceCenterPoint: function(Table) {
-		var tabletop = Table.getObjectByName("tabletop");
-		var tabletopSize = this.getPartSize(tabletop);
-		var tabletopCenter = this.getPartCenter(tabletop);
-		var origin = new THREE.Vector3(tabletopCenter.x, tabletopCenter.y + tabletopSize.y, tabletopCenter.z);
-		var direction = new THREE.Vector3(0,-1,0);
-
-		var intersects = this.getPointByRay(tabletop, origin, direction);
-		if(intersects.length > 0){
-			return intersects[0].point;
-		}
-		else
-			console.log("Tabletop Surface Center Point miss");
-	},
-
-	addBoardOnTabletop: function() {
-		var table = this.furnitures[0].getFurniture();
-		var surfaceCenterPoint = this.getTabletopSurfaceCenterPoint(table);
-		var tabletop = table.getObjectByName("tabletop");
-		var tabletopSize = this.getPartSize(tabletop);
-		// 0 ---- 1
-		// |      |
-		// |      |
-		// 3 ---- 2
-		var pos = [];
-
-		pos.push(new THREE.Vector3(surfaceCenterPoint.x - tabletopSize.x/4, surfaceCenterPoint.y, surfaceCenterPoint.z - tabletopSize.z/4));
-		pos.push(new THREE.Vector3(surfaceCenterPoint.x + tabletopSize.x/4, surfaceCenterPoint.y, surfaceCenterPoint.z - tabletopSize.z/4));
-		pos.push(new THREE.Vector3(surfaceCenterPoint.x + tabletopSize.x/4, surfaceCenterPoint.y, surfaceCenterPoint.z + tabletopSize.z/4));
-		pos.push(new THREE.Vector3(surfaceCenterPoint.x - tabletopSize.x/4, surfaceCenterPoint.y, surfaceCenterPoint.z + tabletopSize.z/4));
-
-		var material = this.getPartMaterial(tabletop);
-		var geometry = CreateSupport(1);
-		var support = new THREE.Mesh(geometry, material);
-		support.name = "support";
-
-		var supportSize = this.getPartSize(support);
-		
-		var supportArray = [];
-		for (var i = 0; i < 4; i++) {
-			supportArray[i] = new THREE.Object3D();
-			supportArray[i] = support.clone();
-			var tmp = new THREE.Vector3(pos[i].x, pos[i].y + supportSize.y/2, pos[i].z);
-			this.objectAddToFurniture(table, supportArray[i], tmp);
-		}
-		
-		var offset = 2;
-		geometry = chairCreateBoard(tabletopSize.x + offset, tabletopSize.y, tabletopSize.z + offset);
-		var board = new THREE.Mesh(geometry, material);
-		board.name = "board";
-		var boardSize = this.getPartSize(board);
-		var boardpos = new THREE.Vector3(surfaceCenterPoint.x - boardSize.x/2, 
-			surfaceCenterPoint.y + supportSize.y + 0.12, surfaceCenterPoint.z - boardSize.z/2);
-		// this.test(new THREE.Vector3(surfaceCenterPoint.x, surfaceCenterPoint.y + supportSize.y, surfaceCenterPoint.z));
-		this.objectAddToFurniture(table, board, boardpos);
-	},
-
-	addBoard: function() {
-		var table = this.furnitures[0].getFurniture();
-		var tabletop = table.getObjectByName("tabletop");
-		var tableCenter = this.getPartCenter(table);
-		var tabletopCenter =  this.getPartCenter(tabletop);
-		var tabletopSize = this.getPartSize(tabletop);
-		var material = this.getPartMaterial(tabletop);
-		var geometry = chairCreateBoard(tabletopSize.x, 0.03, tabletopSize.z);
-		var board = new THREE.Mesh(geometry, material);
-		board.name = "board";
-		var boardSize = this.getPartSize(board);
-		var pos = new THREE.Vector3((tableCenter.x + tabletopCenter.x)/2 - boardSize.x/2 + 0.12, 
-			tabletopCenter.y - 2 - boardSize.y/2, 
-			(tableCenter.z + tabletopCenter.z)/2 - boardSize.z/2 + 0.12);
-		this.objectAddToFurniture(table, board, pos);
-	},
-
-	addDrawer: function(){
-		var table = this.furnitures[0].getFurniture();
-		var tableSize = this.getPartSize(table);
-		var tableCenter = this.getPartCenter(table);
-		var tabletop = table.getObjectByName("tabletop");
-		this.addBoard();		
-		var board = table.getObjectByName("board");
-		var boardCenter = this.getPartCenter(board);
-		var boardSize = this.getPartSize(board);
-		var tmp = new THREE.Vector3(tableCenter.x, boardCenter.y + boardSize.y/2 + 0.01, tableCenter.z);
-
-		if(tableSize.x > tableSize.z){
-			var origin = new THREE.Vector3(tmp.x, tmp.y, tmp.z + tableSize.z/2 - 0.01);
-			var direction1 = new THREE.Vector3(1,0,0);
-			var direction2 = new THREE.Vector3(-1,0,0);
-			var direction3 = new THREE.Vector3(0,1,0);
-			var direction4 = new THREE.Vector3(0,-1,0);
-			var intersects1 = this.getPointByRay(table, origin, direction1);
-			var intersects2 = this.getPointByRay(table, origin, direction2);
-			var intersects3 = this.getPointByRay(table, origin, direction3);
-			var intersects4 = this.getPointByRay(board, origin, direction4);
-			if(intersects1.length > 0)
-				var right = intersects1[0].point;
-			else
-				console.log("x > z intersects1 miss");
-			if(intersects2.length > 0)
-				var left = intersects2[0].point;
-			else
-				console.log("x > z intersects2 miss");
-			if(intersects3.length > 0)
-				var up = intersects3[0].point;
-			else
-				console.log("x > z intersects3 miss");
-			if(intersects4.length > 0)
-				var down = intersects4[0].point;
-			else
-				console.log("x > z intersects4 miss");
-
-			var lengthX = right.x - left.x;
-			var lengthY = up.y - down.y;
-
-			var width = lengthX / 3;
-			var length = boardSize.z / 3;
-			var height = lengthY;
-			
-			var material = this.getPartMaterial(tabletop);
-			var geometry = CreateDrawer(width, length, height);
-			var drawer = new THREE.Mesh(geometry, material);
-			drawer.name = "drawer";
-			var drawerSize = this.getPartSize(drawer);
-			var drawerArray = [];
-			for (var i = 0, offset = 0; i < 3; i++, offset += drawerSize.z/3) {
-				drawerArray[i] = new THREE.Object3D();
-				drawerArray[i] = drawer.clone();
-				var tmp = new THREE.Vector3(boardCenter.x - drawerSize.x/2 - width + width*i, 
-					boardCenter.y + 0.12, boardCenter.z + drawerSize.z/2 + offset);
-				this.objectAddToFurniture(table, drawerArray[i], tmp);
-			}
-		}
-		else{
-			var origin = new THREE.Vector3(tmp.x - tableSize.x/2 + 0.01, tmp.y, tmp.z);
-			var direction1 = new THREE.Vector3(0,0,1);
-			var direction2 = new THREE.Vector3(0,0,-1);
-			var direction3 = new THREE.Vector3(0,1,0);
-			var direction4 = new THREE.Vector3(0,-1,0);
-			var intersects1 = this.getPointByRay(table, origin, direction1);
-			var intersects2 = this.getPointByRay(table, origin, direction2);
-			var intersects3 = this.getPointByRay(table, origin, direction3);
-			var intersects4 = this.getPointByRay(board, origin, direction4);
-			if(intersects1.length > 0)
-				var right = intersects1[0].point;
-			else
-				console.log("x <= z intersects1 miss");
-
-			if(intersects2.length > 0)
-				var left = intersects2[0].point;
-			else
-				console.log("x <= z intersects2 miss");
-
-			if(intersects3.length > 0)
-				var up = intersects3[0].point;
-			else
-				console.log("x <= z intersects3 miss");
-
-			if(intersects4.length > 0)
-				var down = intersects4[0].point;
-			else
-				console.log("x <= z intersects4 miss");
-
-			var lengthZ = right.z - left.z;
-			var lengthY = up.y - down.y;
-
-			var width = lengthZ / 3;
-			var length = boardSize.x / 3;
-			var height = lengthY;
-
-			var material = this.getPartMaterial(tabletop);
-			var geometry = CreateDrawer(width, length, height);
-			var drawer = new THREE.Mesh(geometry, material);
-			drawer.name = "drawer";	
-			this.objectRotationByAxis(drawer, "y", - Math.PI / 2);
-			var drawerSize = this.getPartSize(drawer);
-			
-
-			var drawerArray = [];
-			for (var i = 0, offset = 0; i < 3; i++, offset += drawerSize.x/3) {
-				drawerArray[i] = new THREE.Object3D();
-				drawerArray[i] = drawer.clone();
-				var tmp = new THREE.Vector3(boardCenter.x - drawerSize.x/2 - offset, 
-					boardCenter.y + 0.12, boardCenter.z - drawerSize.z/2 - width + width*i);
-				this.objectAddToFurniture(table, drawerArray[i], tmp);
-			}
-		}
-		
-	},
-
-	addRod: function() {
-		var table = this.furnitures[0].getFurniture();
-		var tabletop = table.getObjectByName("tabletop");
-		var tabletopCenter = this.getPartCenter(tabletop);
-		var tabletopSize = this.getPartSize(tabletop);
-		var material = this.getPartMaterial(tabletop);
-
-		if(tabletopSize.x > tabletopSize.z){
-			var geometry = CreateTableRod(tabletopSize.z);
-			var tableRod = new THREE.Mesh(geometry, material);
-			tableRod.name = "tableRod";
-			var tableRodSize = this.getPartSize(tableRod);
-			var pos = new THREE.Vector3(tabletopCenter.x - tabletopSize.x/2 - tableRodSize.x/2, 
-				tabletopCenter.y - tableRodSize.y/2, tabletopCenter.z);
-			this.objectAddToFurniture(table, tableRod, pos);
-		}
-		else{
-			var geometry = CreateTableRod(tabletopSize.x);
-			var tableRod = new THREE.Mesh(geometry, material);
-			tableRod.name = "tableRod";
-			this.objectRotationByAxis(tableRod, "y", Math.PI/2);
-			var tableRodSize = this.getPartSize(tableRod);
-			var pos = new THREE.Vector3(tabletopCenter.x, tabletopCenter.y - tableRodSize.y/2, 
-				tabletopCenter.z  + tabletopSize.z/2 + tableRodSize.z/2);
-			this.objectAddToFurniture(table, tableRod, pos);
-		}
-	},
-
-	addSeat: function() {
-		var table = this.furnitures[0].getFurniture();
-		var tabletop = table.getObjectByName("tabletop");
-		var tabletopSize = this.getPartSize(tabletop);
-		var tabletopCenter = this.getPartCenter(tabletop);
-
-		var geometry = CabinetMakeSeat( tabletopSize.x , tabletopSize.z );
-		var texture = new THREE.TextureLoader().load( 'images/material/material2.jpg' );
-		var material = new THREE.MeshBasicMaterial( {map: texture} );
-		var seat = new THREE.Mesh( geometry, material );
-		seat.name = 'seat';
-		var seatSize = this.getPartSize(seat);
-		var pos = new THREE.Vector3(tabletopCenter.x - seatSize.x/2 + 0.3, tabletopCenter.y, 
-			tabletopCenter.z - seatSize.z/2 + 0.3);
-		this.objectAddToFurniture(table, seat, pos);
-	},
-
-	addDoorBoard: function() {
-		var table = this.furnitures[0].getFurniture();	
-		var tableSize = this.getPartSize(table);	
-		var tabletop = table.getObjectByName("tabletop");
-		var tabletopSize = this.getPartSize(tabletop);
-		var tabletopCenter = this.getPartCenter(tabletop);		
-		var material = this.getPartMaterial(tabletop);
-
-		if(tabletopSize.x < tabletopSize.z){
-			var geometry = CreateDoorBoard(tabletopSize.x, tableSize.y * 2.5);
-			var doorBoard = new THREE.Mesh(geometry, material);
-			doorBoard.name = "doorBoard";
-
-			var doorBoardSize = this.getPartSize(doorBoard);
-			this.objectRotationByAxis(doorBoard, "y", Math.PI / 2);
-			var pos = new THREE.Vector3(tabletopCenter.x, doorBoardSize.y/2, tabletopCenter.z);
-			this.objectAddToFurniture(table, doorBoard, pos);
-
-		}
-		else{
-			var geometry = CreateDoorBoard(tabletopSize.z, tableSize.y * 2.5);
-			var doorBoard = new THREE.Mesh(geometry, material);
-			doorBoard.name = "doorBoard";
-			var doorBoardSize = this.getPartSize(doorBoard);
-			var pos = new THREE.Vector3(tabletopCenter.x, doorBoardSize.y/2, tabletopCenter.z);
-			this.objectAddToFurniture(table, doorBoard, pos);
-		}
-		
-		
-	},
-
-	execute: function(tfname) {
-		if(this.furnitures.length > 0){
-			console.log("this.furnitures.length > 0");
-			var flag = true;
-			for (var i = 0; i < this.furnitures.length; i++) {
-				flag = flag && this.checkTableInfo(this.furnitures[i]);
-			}
-			if(flag){
-				if(tfname == "stack"){
-					this.stackEvent();
-				}
-				if(tfname == "flipStack"){					
-					this.flipStackEvent();					
-				}
-				if(tfname == "addWheel"){
-					this.addWheelEvent();
-				}
-				if(tfname == "addBoardOnTabletop"){
-					this.addBoardOnTabletop();
-				}
-				if(tfname == "addBoard"){
-					this.addBoard();
-				}
-				if(tfname == "addDrawer"){
-					this.addDrawer();
-				}
-				if(tfname == "addRod"){
-					this.addRod();
-				}
-				if(tfname == "addSeat"){
-					this.addSeat();
-				}
-				if(tfname == "addDoorBoard"){
-					this.addDoorBoard();
-				}
-			}
-			else{
-				console.log("Exist one table isn't marked tabletop or tableLeg.");
-			}			
-		}
-		else
-			console.log("No Table in the scene.");
-	}
-
-}
-
-module.exports = Table
-},{"./CabinetMakeSeat":3,"./CreateDoorBoard":11,"./CreateDrawer":12,"./CreateSupport":17,"./CreateTableRod":18,"./CreateWheel":19,"./chairCreateBoard":38}],33:[function(require,module,exports){
+},{"./Cabinet_kallax":4,"./Chair_Add":5,"./Chair_Align":6,"./Chair_Rebuild":7,"./Dresser_Add":16,"./Model_Align":19,"./Model_Painting":20,"./Model_Rotation":21,"./Model_wrap":22}],25:[function(require,module,exports){
 "use strict;"
 
 
@@ -8238,7 +6584,7 @@ function assignUVs (geometry) {
 
 
 module.exports = assignUVs
-},{}],34:[function(require,module,exports){
+},{}],26:[function(require,module,exports){
 "use strict;"
 
 const scadApi = require('@jscad/scad-api')
@@ -8284,7 +6630,7 @@ function cadCutByPlane (geometry) {
 module.exports = cadCutByPlane
 
 
-},{"./csgToGeometries":42,"./geometryToCsgs":45,"@jscad/csg":51,"@jscad/scad-api":138}],35:[function(require,module,exports){
+},{"./csgToGeometries":34,"./geometryToCsgs":37,"@jscad/csg":43,"@jscad/scad-api":130}],27:[function(require,module,exports){
 "use strict;"
 
 const scadApi = require('@jscad/scad-api');
@@ -8334,7 +6680,7 @@ function cadExtrudeShape (shape, path) {
 module.exports = cadExtrudeShape
 
 
-},{"./assignUVs":33,"./csgToGeometries":42,"@jscad/csg":51,"@jscad/scad-api":138}],36:[function(require,module,exports){
+},{"./assignUVs":25,"./csgToGeometries":34,"@jscad/csg":43,"@jscad/scad-api":130}],28:[function(require,module,exports){
 "use strict;"
 
 const scadApi = require('@jscad/scad-api');
@@ -8411,7 +6757,7 @@ function SimplifyGeo( geometry ){
 module.exports = cadExtrudeShapeIntersection
 
 
-},{"./assignUVs":33,"./csgToGeometries":42,"./geometryToCsgs":45,"@jscad/csg":51,"@jscad/scad-api":138}],37:[function(require,module,exports){
+},{"./assignUVs":25,"./csgToGeometries":34,"./geometryToCsgs":37,"@jscad/csg":43,"@jscad/scad-api":130}],29:[function(require,module,exports){
 "use strict;"
 
 const scadApi = require('@jscad/scad-api');
@@ -8515,7 +6861,7 @@ function cadMakeSeat (innerRace, outerRace, offsetY, textures) {
 
 
 module.exports = cadMakeSeat
-},{"./assignUVs":33,"./csgToGeometries":42,"@jscad/csg":51,"@jscad/scad-api":138}],38:[function(require,module,exports){
+},{"./assignUVs":25,"./csgToGeometries":34,"@jscad/csg":43,"@jscad/scad-api":130}],30:[function(require,module,exports){
 "use strict;"
 
 const scadApi = require('@jscad/scad-api')
@@ -8536,7 +6882,7 @@ function chairCreateBoard(width, height, depth) {
 
 
 module.exports = chairCreateBoard
-},{"./csgToGeometries":42,"@jscad/csg":51,"@jscad/scad-api":138}],39:[function(require,module,exports){
+},{"./csgToGeometries":34,"@jscad/csg":43,"@jscad/scad-api":130}],31:[function(require,module,exports){
 "use strict;"
 
 const scadApi = require('@jscad/scad-api')
@@ -8570,7 +6916,7 @@ function chairCutBack(back, offest) {
 
 
 module.exports = chairCutBack
-},{"./csgToGeometries":42,"./geometryToCsgs":45,"@jscad/csg":51,"@jscad/scad-api":138}],40:[function(require,module,exports){
+},{"./csgToGeometries":34,"./geometryToCsgs":37,"@jscad/csg":43,"@jscad/scad-api":130}],32:[function(require,module,exports){
 "use strict;"
 
 const hull = require('./hull')
@@ -8671,7 +7017,7 @@ function collectPointOnFace(component, face) {
 
 
 module.exports = computeConvexHull
-},{"./hull":47}],41:[function(require,module,exports){
+},{"./hull":39}],33:[function(require,module,exports){
 function _cross(o, a, b) {
     return (a[0] - o[0]) * (b[1] - o[1]) - (a[1] - o[1]) * (b[0] - o[0]);
 }
@@ -8713,7 +7059,7 @@ function convex(pointset) {
 
 module.exports = convex;
 
-},{}],42:[function(require,module,exports){
+},{}],34:[function(require,module,exports){
 "use strict;"
 
 const { CSG, CAG, isCSG, isCAG } = require('@jscad/csg')
@@ -8896,7 +7242,7 @@ function csgToGeometries(initial_csg) {
 
 
 module.exports = csgToGeometries
-},{"@jscad/csg":51}],43:[function(require,module,exports){
+},{"@jscad/csg":43}],35:[function(require,module,exports){
 "use strict;"
 
 const scadApi = require('@jscad/scad-api')
@@ -8922,7 +7268,7 @@ function dresserCutSpace(dresser, position, size, scale) {
 
 
 module.exports = dresserCutSpace
-},{"./csgToGeometries":42,"./geometryToCsgs":45,"@jscad/csg":51,"@jscad/scad-api":138}],44:[function(require,module,exports){
+},{"./csgToGeometries":34,"./geometryToCsgs":37,"@jscad/csg":43,"@jscad/scad-api":130}],36:[function(require,module,exports){
 module.exports = {
 
     toXy: function(pointset, format) {
@@ -8948,7 +7294,7 @@ module.exports = {
     }
 
 }
-},{}],45:[function(require,module,exports){
+},{}],37:[function(require,module,exports){
 "use strict;"
 
 const {log, status} = require('./log')
@@ -9029,7 +7375,7 @@ function unionCsgs(csgs) {
 
 
 module.exports = {geometryToCsgs, unionCsgs};
-},{"./log":49,"@jscad/csg":51,"@jscad/scad-api":138}],46:[function(require,module,exports){
+},{"./log":41,"@jscad/csg":43,"@jscad/scad-api":130}],38:[function(require,module,exports){
 function Grid(points, cellSize) {
     this._cells = [];
     this._cellSize = cellSize;
@@ -9105,7 +7451,7 @@ function grid(points, cellSize) {
 }
 
 module.exports = grid;
-},{}],47:[function(require,module,exports){
+},{}],39:[function(require,module,exports){
 /*
  (c) 2014-2016, Andrii Heonia
  Hull.js, a JavaScript library for concave hull generation by set of points.
@@ -9309,7 +7655,7 @@ var MAX_CONCAVE_ANGLE_COS = Math.cos(90 / (180 / Math.PI)); // angle = 90 deg
 var MAX_SEARCH_BBOX_SIZE_PERCENT = 0.6;
 
 module.exports = hull;
-},{"./convex.js":41,"./format.js":44,"./grid.js":46,"./intersect.js":48}],48:[function(require,module,exports){
+},{"./convex.js":33,"./format.js":36,"./grid.js":38,"./intersect.js":40}],40:[function(require,module,exports){
 function ccw(x1, y1, x2, y2, x3, y3) {           
     var cw = ((y3 - y1) * (x2 - x1)) - ((y2 - y1) * (x3 - x1));
     return cw > 0 ? true : cw < 0 ? false : true; // colinear
@@ -9325,7 +7671,7 @@ function intersect(seg1, seg2) {
 }
 
 module.exports = intersect;
-},{}],49:[function(require,module,exports){
+},{}],41:[function(require,module,exports){
 function log (txt) {
   var timeInMs = Date.now()
   var prevtime = undefined//OpenJsCad.log.prevLogTime
@@ -9353,7 +7699,7 @@ module.exports = {
   status
 }
 
-},{}],50:[function(require,module,exports){
+},{}],42:[function(require,module,exports){
 "use strict;"
 
 //const {log, status} = require('./log')
@@ -9386,14 +7732,9 @@ function Main()
 
 	//category
 	//todo: an floating window to select category
-
-	// this.category = "chair";
-	// this.category = "cabinet";
-	// this.category = "table";
-	// this.category = "desk";
-
+	//this.category = "chair";
+	//this.category = "cabinet";
 	this.category = "tool";
-
 
 	//only stores data
 	this.container = document.getElementById('container');
@@ -9449,8 +7790,14 @@ function Main()
 
 
 	//Procedure objects
-	//for record objects position in every step
+	//for record objects in every step
 	this.stepObject = [];
+	//for record operation name in every step
+	this.stepOperationName = 'Initial';
+	//for record step is the last or not
+	this.lastStep = true;
+	//for record operation step times
+	this.stepNumber = 0;
 
 
 	//this is to store the furnitures before any chance
@@ -9572,15 +7919,15 @@ Main.prototype = {
 		//this.customControl.enablePan = true;
 		//this.customControl.target.set(0, 0.5, - 0.2);
 
-		//this.customControl.lookSpeed = 0.05;
-        //this.customControl.movementSpeed = 20;
-        //this.customControl.noFly = true;
-        //this.customControl.lookVertical = true;
-        //this.customControl.constrainVertical = true;
-        //this.customControl.verticalMin = 1.0;
-        //this.customControl.verticalMax = 2.0;
-        //this.customControl.lon = -110;
-        //this.customControl.lat = -50;
+		this.customControl.lookSpeed = 0.05;
+        this.customControl.movementSpeed = 20;
+        this.customControl.noFly = true;
+        this.customControl.lookVertical = true;
+        this.customControl.constrainVertical = true;
+        this.customControl.verticalMin = 1.0;
+        this.customControl.verticalMax = 2.0;
+        this.customControl.lon = -110;
+        this.customControl.lat = -50;
 
 
 		this.transformControls = new THREE.TransformControls(this.camera, this.renderer.domElement);
@@ -9992,8 +8339,10 @@ Main.prototype = {
 
 				var scale = new THREE.Vector3(loadedScale.x * 10, loadedScale.y * 10, loadedScale.z * 10)
 
-				loadMatrix.compose(location, quaternion, scale);		
+				loadMatrix.compose(location, quaternion, scale);
+		
 			}
+
 		}
 
 		//visualize
@@ -10531,8 +8880,8 @@ Main.prototype = {
 
 						objselect = false;
 						//if haven't select this furniture before
-						if (this.GetSizeObj.indexOf(this.furniture.getFurniture())<0)
-							this.GetSizeObj.push( this.furniture.getFurniture() );
+						this.GetSizeObj = [];
+						this.GetSizeObj.push( this.furniture.getFurniture() );
 						$('.ui.blue.submit.button.getsize').show();
 						
 
@@ -10559,6 +8908,7 @@ Main.prototype = {
 							
 							this.furniture = this.Sceneobjects[i];
 							this.select(this.Sceneobjects[i]);
+							this.GetSizeObj = [];
 							this.GetSizeObj.push( this.Sceneobjects[i] );
 							$('.ui.blue.submit.button.getsize').show();
 							SomethingSelected = true;
@@ -10776,18 +9126,30 @@ Main.prototype = {
 
 			this.onCtrl = true;
 			console.log('Ctrl down');
-
 		
 		}else if(keyCode == 46){
 			
 			//delete furniture
 			if(this.furniture != null ){
-				this.removeFromScene(this.furniture.getFurniture());
-				if ( this.furnitures.indexOf(this.furniture) > -1 ){
+				try{//delete furniture
+					this.removeFromScene(this.furniture.getFurniture());
 					this.furnitures.splice( this.furnitures.indexOf(this.furniture),1);
 					this.selectionBox.visible = false;
 					this.transformControls.detach();
+					
 				}
+				catch(err){//delete object
+				    this.removeFromScene(this.furniture);
+				    this.Sceneobjects.splice( this.Sceneobjects.indexOf(this.furniture),1);
+					this.selectionBox.visible = false;
+					this.transformControls.detach();
+				}
+			}
+			//clear cards
+			$('#cards').empty();
+			//add cards again
+			for(var i=0; i<this.furnitures.length; i++){
+				this.furnitures[i].addCard();
 			}
 
 		}
@@ -11041,9 +9403,6 @@ Main.prototype = {
 		$('#parameter_control_tool_wrap').hide();
 		$('#parameter_control_tool_rotation').hide();
 		$('#parameter_control_tool_align').hide();
-		$('#parameter_control_tool_add').hide();
-		$('#parameter_control_tool_addbetween').hide();
-
 
 		this.furnitures.length = 0;	
 
@@ -11100,10 +9459,10 @@ Main.prototype = {
 		//assume the furnitures are annoted well and get ready
 		//add the corners to the labeled and axised components
 		
-		// for(var i = 0; i < this.furnitures.length; i++) {
-		// 	this.furnitures[i].addCorners();
-		// 	this.furnitures[i].addtoPoint();
-		// }
+		for(var i = 0; i < this.furnitures.length; i++) {
+			this.furnitures[i].addCorners();
+			this.furnitures[i].addtoPoint();
+		}
 		
 
 		//testing
@@ -11149,9 +9508,6 @@ Main.prototype = {
 		$('#parameter_control_tool_wrap').hide();
 		$('#parameter_control_tool_rotation').hide();
 		$('#parameter_control_tool_align').hide();
-		$('#parameter_control_tool_add').hide();
-		$('#parameter_control_tool_addbetween').hide();
-
 
 		this.processor.init();
 		//this.processor.executeDesign();
@@ -11283,6 +9639,23 @@ Main.prototype = {
 		var center = new THREE.Vector3();
 		box.getCenter(center);
 		return center;
+    },
+
+    DeleteObj: function(){
+    	this.collapse(this.furniture);
+    	var objects = this.furniture.getObjects();
+    	var furnitureObj = this.furniture.getFurniture();
+    	//this.objCenter = this.getCenterPoint(this.furniture.getFurniture());
+    	//delete object in furniture
+		for(var i=0 ; i < this.GetSizeObj.length; i++){
+			var model = this.GetSizeObj[i];
+			model.parent.remove(model);
+		}
+		
+		this.explode(this.furniture);
+		this.GetSizeObj = [];
+		$('.ui.blue.submit.button.getsize').hide();
+
     }
 
 };
@@ -11298,7 +9671,7 @@ document.addEventListener('DOMContentLoaded', function(event){
 
 
 
-},{"./MarkBetweenSize":22,"./MarkSize":23,"./Processor":31,"./cadCutByPlane":34,"./computeConvexHull":40}],51:[function(require,module,exports){
+},{"./MarkBetweenSize":17,"./MarkSize":18,"./Processor":24,"./cadCutByPlane":26,"./computeConvexHull":32}],43:[function(require,module,exports){
 /*
 ## License
 
@@ -11509,7 +9882,7 @@ const globalApi = Object.assign({}, {CSG, CAG}, optionsParsers, {isCAG, isCSG})
 
 module.exports = globalApi
 
-},{"./src/api/debugHelpers":54,"./src/api/optionParsers":61,"./src/api/primitives2d":62,"./src/api/primitives3d":63,"./src/core/CAG":65,"./src/core/CAGFactories":66,"./src/core/CSG":67,"./src/core/CSGFactories":68,"./src/core/Properties":72,"./src/core/connectors":73,"./src/core/constants":74,"./src/core/math/Line2":75,"./src/core/math/Line3":76,"./src/core/math/Matrix4":77,"./src/core/math/OrthoNormalBasis":78,"./src/core/math/Path2":79,"./src/core/math/Plane":80,"./src/core/math/Polygon2":81,"./src/core/math/Polygon3":82,"./src/core/math/Side":83,"./src/core/math/Vector2":84,"./src/core/math/Vector3":85,"./src/core/math/Vertex2":86,"./src/core/math/Vertex3":87,"./src/core/mutators":90,"./src/core/utils":92}],52:[function(require,module,exports){
+},{"./src/api/debugHelpers":46,"./src/api/optionParsers":53,"./src/api/primitives2d":54,"./src/api/primitives3d":55,"./src/core/CAG":57,"./src/core/CAGFactories":58,"./src/core/CSG":59,"./src/core/CSGFactories":60,"./src/core/Properties":64,"./src/core/connectors":65,"./src/core/constants":66,"./src/core/math/Line2":67,"./src/core/math/Line3":68,"./src/core/math/Matrix4":69,"./src/core/math/OrthoNormalBasis":70,"./src/core/math/Path2":71,"./src/core/math/Plane":72,"./src/core/math/Polygon2":73,"./src/core/math/Polygon3":74,"./src/core/math/Side":75,"./src/core/math/Vector2":76,"./src/core/math/Vector3":77,"./src/core/math/Vertex2":78,"./src/core/math/Vertex3":79,"./src/core/mutators":82,"./src/core/utils":84}],44:[function(require,module,exports){
 const Path2D = require('../core/math/Path2')
 
 const cagoutlinePaths = function (_cag) {
@@ -11591,7 +9964,7 @@ const cagoutlinePaths = function (_cag) {
 
 module.exports = cagoutlinePaths
 
-},{"../core/math/Path2":79}],53:[function(require,module,exports){
+},{"../core/math/Path2":71}],45:[function(require,module,exports){
 const toArray = require('../core/utils/toArray')
 
 /**
@@ -11629,7 +10002,7 @@ const center = function (options, objects) {
 
 module.exports = center
 
-},{"../core/utils/toArray":100}],54:[function(require,module,exports){
+},{"../core/utils/toArray":92}],46:[function(require,module,exports){
 const CSG = require('../core/CSG')
 const {cube} = require('./primitives3d')
 
@@ -11664,7 +10037,7 @@ const toPointCloud = function (csg, cuberadius) {
 
 module.exports = {toPointCloud}
 
-},{"../core/CSG":67,"./primitives3d":63}],55:[function(require,module,exports){
+},{"../core/CSG":59,"./primitives3d":55}],47:[function(require,module,exports){
 const Vertex3 = require('../core/math/Vertex3')
 const Vector3 = require('../core/math/Vector3')
 const Polygon3 = require('../core/math/Polygon3')
@@ -11729,7 +10102,7 @@ const degToRad = deg => (Math.PI / 180) * deg
 
 module.exports = {cagToPointsArray, clamp, rightMultiply1x3VectorToArray, polygonFromPoints}
 
-},{"../core/math/Polygon3":82,"../core/math/Vector3":85,"../core/math/Vertex3":87}],56:[function(require,module,exports){
+},{"../core/math/Polygon3":74,"../core/math/Vector3":77,"../core/math/Vertex3":79}],48:[function(require,module,exports){
 const {isCAG} = require('../core/utils')
 // boolean operations
 
@@ -11832,7 +10205,7 @@ module.exports = {
   intersection
 }
 
-},{"../core/utils":92}],57:[function(require,module,exports){
+},{"../core/utils":84}],49:[function(require,module,exports){
 const Matrix4x4 = require('../core/math/Matrix4.js')
 const Vector3D = require('../core/math/Vector3.js')
 const {Connector} = require('../core/connectors.js')
@@ -12001,7 +10374,7 @@ const overCutInsideCorners = function (_cag, cutterradius) {
 
 module.exports = {lieFlat, getTransformationToFlatLying, getTransformationAndInverseTransformationToFlatLying, overCutInsideCorners}
 
-},{"../core/CAGFactories":66,"../core/connectors.js":73,"../core/math/Matrix4.js":77,"../core/math/Vector2":84,"../core/math/Vector3.js":85}],58:[function(require,module,exports){
+},{"../core/CAGFactories":58,"../core/connectors.js":65,"../core/math/Matrix4.js":69,"../core/math/Vector2":76,"../core/math/Vector3.js":77}],50:[function(require,module,exports){
 const {EPS} = require('../core/constants')
 const Plane = require('../core/math/Plane')
 const Vector2 = require('../core/math/Vector2')
@@ -12067,7 +10440,7 @@ const cutByPlane = function (csg, plane) {
 
 module.exports = {sectionCut, cutByPlane}
 
-},{"../core/CSG":67,"../core/constants":74,"../core/math/OrthoNormalBasis":78,"../core/math/Plane":80,"../core/math/Polygon3":82,"../core/math/Vector2":84,"../core/math/Vertex3":87}],59:[function(require,module,exports){
+},{"../core/CSG":59,"../core/constants":66,"../core/math/OrthoNormalBasis":70,"../core/math/Plane":72,"../core/math/Polygon3":74,"../core/math/Vector2":76,"../core/math/Vertex3":79}],51:[function(require,module,exports){
 
 const {EPS, angleEPS} = require('../core/constants')
 const Vertex = require('../core/math/Vertex3')
@@ -12406,7 +10779,7 @@ module.exports = {
   expandedShellOfCCSG
 }
 
-},{"../core/CAG":65,"../core/CAGFactories":66,"../core/CSG":67,"../core/CSGFactories":68,"../core/constants":74,"../core/math/Polygon3":82,"../core/math/Vector2":84,"../core/math/Vertex3":87,"../core/utils":92}],60:[function(require,module,exports){
+},{"../core/CAG":57,"../core/CAGFactories":58,"../core/CSG":59,"../core/CSGFactories":60,"../core/constants":66,"../core/math/Polygon3":74,"../core/math/Vector2":76,"../core/math/Vertex3":79,"../core/utils":84}],52:[function(require,module,exports){
 const {EPS, defaultResolution3D} = require('../core/constants')
 const OrthoNormalBasis = require('../core/math/OrthoNormalBasis')
 const {parseOptionAs3DVector, parseOptionAsBool, parseOptionAsFloat, parseOptionAsInt} = require('./optionParsers')
@@ -12765,7 +11138,7 @@ module.exports = {
   rectangular_extrude
 }
 
-},{"../core/CAGFactories":66,"../core/CSG":67,"../core/CSGFactories":68,"../core/connectors":73,"../core/constants":74,"../core/math/Matrix4":77,"../core/math/OrthoNormalBasis":78,"../core/math/Path2":79,"../core/math/Vector3":85,"./helpers":55,"./optionParsers":61}],61:[function(require,module,exports){
+},{"../core/CAGFactories":58,"../core/CSG":59,"../core/CSGFactories":60,"../core/connectors":65,"../core/constants":66,"../core/math/Matrix4":69,"../core/math/OrthoNormalBasis":70,"../core/math/Path2":71,"../core/math/Vector3":77,"./helpers":47,"./optionParsers":53}],53:[function(require,module,exports){
 const Vector3D = require('../core/math/Vector3')
 const Vector2D = require('../core/math/Vector2')
 
@@ -12843,7 +11216,7 @@ module.exports = {
   parseOptionAs3DVectorList
 }
 
-},{"../core/math/Vector2":84,"../core/math/Vector3":85}],62:[function(require,module,exports){
+},{"../core/math/Vector2":76,"../core/math/Vector3":77}],54:[function(require,module,exports){
 const CAG = require('../core/CAG')
 const {parseOptionAs2DVector, parseOptionAsFloat, parseOptionAsInt} = require('./optionParsers')
 const {defaultResolution2D} = require('../core/constants')
@@ -13030,7 +11403,7 @@ module.exports = {
   fromCompactBinary
 }
 
-},{"../core/CAG":65,"../core/CAGFactories":66,"../core/constants":74,"../core/math/Path2":79,"../core/math/Vector2":84,"../core/math/Vertex2":86,"./optionParsers":61}],63:[function(require,module,exports){
+},{"../core/CAG":57,"../core/CAGFactories":58,"../core/constants":66,"../core/math/Path2":71,"../core/math/Vector2":76,"../core/math/Vertex2":78,"./optionParsers":53}],55:[function(require,module,exports){
 const {parseOption, parseOptionAs3DVector, parseOptionAs2DVector, parseOptionAs3DVectorList, parseOptionAsFloat, parseOptionAsInt} = require('./optionParsers')
 const {defaultResolution3D, defaultResolution2D, EPS} = require('../core/constants')
 const Vector3 = require('../core/math/Vector3')
@@ -13580,7 +11953,7 @@ module.exports = {
   polyhedron
 }
 
-},{"../core/CSGFactories":68,"../core/Properties":72,"../core/connectors":73,"../core/constants":74,"../core/math/Polygon3":82,"../core/math/Vector3":85,"../core/math/Vertex3":87,"./optionParsers":61}],64:[function(require,module,exports){
+},{"../core/CSGFactories":60,"../core/Properties":64,"../core/connectors":65,"../core/constants":66,"../core/math/Polygon3":74,"../core/math/Vector3":77,"../core/math/Vertex3":79,"./optionParsers":53}],56:[function(require,module,exports){
 const Polygon = require('../core/math/Polygon3')
 const {fromPolygons} = require('../core/CSGFactories')
 const {fnSortByIndex} = require('../core/utils')
@@ -13795,7 +12168,7 @@ const _addWalls = function (walls, bottom, top, bFlipped) {
 
 module.exports = solidFromSlices
 
-},{"../core/CSGFactories":68,"../core/math/Polygon3":82,"../core/utils":92}],65:[function(require,module,exports){
+},{"../core/CSGFactories":60,"../core/math/Polygon3":74,"../core/utils":84}],57:[function(require,module,exports){
 const {Connector} = require('./connectors')
 const Vertex3D = require('./math/Vertex3')
 const Vector2D = require('./math/Vector2')
@@ -14174,7 +12547,7 @@ CAG.prototype = {
 
 module.exports = CAG
 
-},{"../api/cagOutlinePaths":52,"../api/center":53,"../api/ops-cnc":57,"../api/ops-expandContract":59,"../api/ops-extrusions":60,"./CAGFactories":66,"./CSGFactories":68,"./connectors":73,"./math/Polygon3":82,"./math/Vector2":84,"./math/Vector3":85,"./math/Vertex3":87,"./utils/cagMeasurements":93,"./utils/cagValidation":94,"./utils/canonicalize":95,"./utils/retesellate":99}],66:[function(require,module,exports){
+},{"../api/cagOutlinePaths":44,"../api/center":45,"../api/ops-cnc":49,"../api/ops-expandContract":51,"../api/ops-extrusions":52,"./CAGFactories":58,"./CSGFactories":60,"./connectors":65,"./math/Polygon3":74,"./math/Vector2":76,"./math/Vector3":77,"./math/Vertex3":79,"./utils/cagMeasurements":85,"./utils/cagValidation":86,"./utils/canonicalize":87,"./utils/retesellate":91}],58:[function(require,module,exports){
 const Side = require('./math/Side')
 const Vector2D = require('./math/Vector2')
 const Vertex2 = require('./math/Vertex2')
@@ -14390,7 +12763,7 @@ module.exports = {
   fromCompactBinary
 }
 
-},{"../api/ops-booleans":56,"./CAG":65,"./constants":74,"./math/Side":83,"./math/Vector2":84,"./math/Vertex2":86,"./utils/cagValidation":94}],67:[function(require,module,exports){
+},{"../api/ops-booleans":48,"./CAG":57,"./constants":66,"./math/Side":75,"./math/Vector2":76,"./math/Vertex2":78,"./utils/cagValidation":86}],59:[function(require,module,exports){
 const Tree = require('./trees')
 const Polygon = require('./math/Polygon3')
 const Plane = require('./math/Plane')
@@ -14978,7 +13351,7 @@ CSG.prototype = {
 
 module.exports = CSG
 
-},{"../api/center":53,"../api/ops-cnc":57,"../api/ops-cuts":58,"../api/ops-expandContract":59,"./CAG":65,"./CSGFactories":68,"./Properties":72,"./math/OrthoNormalBasis":78,"./math/Plane":80,"./math/Polygon3":82,"./trees":91,"./utils/canonicalize":95,"./utils/csgMeasurements":96,"./utils/csgProjections":97,"./utils/fixTJunctions":98,"./utils/retesellate":99}],68:[function(require,module,exports){
+},{"../api/center":45,"../api/ops-cnc":49,"../api/ops-cuts":50,"../api/ops-expandContract":51,"./CAG":57,"./CSGFactories":60,"./Properties":64,"./math/OrthoNormalBasis":70,"./math/Plane":72,"./math/Polygon3":74,"./trees":83,"./utils/canonicalize":87,"./utils/csgMeasurements":88,"./utils/csgProjections":89,"./utils/fixTJunctions":90,"./utils/retesellate":91}],60:[function(require,module,exports){
 const Vector3D = require('./math/Vector3')
 const Vertex = require('./math/Vertex3')
 const Plane = require('./math/Plane')
@@ -15101,7 +13474,7 @@ module.exports = {
   fromCompactBinary
 }
 
-},{"./CSG":67,"./math/Plane":80,"./math/Polygon2":81,"./math/Polygon3":82,"./math/Vector3":85,"./math/Vertex3":87}],69:[function(require,module,exports){
+},{"./CSG":59,"./math/Plane":72,"./math/Polygon2":73,"./math/Polygon3":74,"./math/Vector3":77,"./math/Vertex3":79}],61:[function(require,module,exports){
 // //////////////////////////////
 // ## class fuzzyFactory
 // This class acts as a factory for objects. We can search for an object with approximately
@@ -15159,7 +13532,7 @@ FuzzyFactory.prototype = {
 
 module.exports = FuzzyFactory
 
-},{}],70:[function(require,module,exports){
+},{}],62:[function(require,module,exports){
 const FuzzyFactory = require('./FuzzyFactory')
 const {EPS} = require('./constants')
 const Side = require('./math/Side')
@@ -15186,7 +13559,7 @@ FuzzyCAGFactory.prototype = {
 
 module.exports = FuzzyCAGFactory
 
-},{"./FuzzyFactory":69,"./constants":74,"./math/Side":83}],71:[function(require,module,exports){
+},{"./FuzzyFactory":61,"./constants":66,"./math/Side":75}],63:[function(require,module,exports){
 const {EPS} = require('./constants')
 const Polygon = require('./math/Polygon3')
 const FuzzyFactory = require('./FuzzyFactory')
@@ -15256,7 +13629,7 @@ FuzzyCSGFactory.prototype = {
 
 module.exports = FuzzyCSGFactory
 
-},{"./FuzzyFactory":69,"./constants":74,"./math/Polygon3":82}],72:[function(require,module,exports){
+},{"./FuzzyFactory":61,"./constants":66,"./math/Polygon3":74}],64:[function(require,module,exports){
 // ////////////////////////////////////
 // # Class Properties
 // This class is used to store properties of a solid
@@ -15340,7 +13713,7 @@ Properties.addFrom = function (result, otherproperties) {
 
 module.exports = Properties
 
-},{}],73:[function(require,module,exports){
+},{}],65:[function(require,module,exports){
 const Vector3D = require('./math/Vector3')
 const Line3D = require('./math/Line3')
 const Matrix4x4 = require('./math/Matrix4')
@@ -15562,7 +13935,7 @@ ConnectorList.prototype = {
 
 module.exports = {Connector, ConnectorList}
 
-},{"./CSG":67,"./math/Line3":76,"./math/Matrix4":77,"./math/OrthoNormalBasis":78,"./math/Plane":80,"./math/Vector3":85}],74:[function(require,module,exports){
+},{"./CSG":59,"./math/Line3":68,"./math/Matrix4":69,"./math/OrthoNormalBasis":70,"./math/Plane":72,"./math/Vector3":77}],66:[function(require,module,exports){
 const _CSGDEBUG = false
 
 /** Number of polygons per 360 degree revolution for 2D objects.
@@ -15619,7 +13992,7 @@ module.exports = {
   getTag
 }
 
-},{}],75:[function(require,module,exports){
+},{}],67:[function(require,module,exports){
 const Vector2D = require('./Vector2')
 const {solve2Linear} = require('../utils')
 
@@ -15711,7 +14084,7 @@ Line2D.prototype = {
 
 module.exports = Line2D
 
-},{"../utils":92,"./Vector2":84}],76:[function(require,module,exports){
+},{"../utils":84,"./Vector2":76}],68:[function(require,module,exports){
 const Vector3D = require('./Vector3')
 const {EPS} = require('../constants')
 const {solve2Linear} = require('../utils')
@@ -15813,7 +14186,7 @@ Line3D.prototype = {
 
 module.exports = Line3D
 
-},{"../constants":74,"../utils":92,"./Vector3":85}],77:[function(require,module,exports){
+},{"../constants":66,"../utils":84,"./Vector3":77}],69:[function(require,module,exports){
 const Vector3D = require('./Vector3')
 const Vector2D = require('./Vector2')
 const OrthoNormalBasis = require('./OrthoNormalBasis')
@@ -16099,7 +14472,7 @@ Matrix4x4.scaling = function (v) {
 
 module.exports = Matrix4x4
 
-},{"./OrthoNormalBasis":78,"./Plane":80,"./Vector2":84,"./Vector3":85}],78:[function(require,module,exports){
+},{"./OrthoNormalBasis":70,"./Plane":72,"./Vector2":76,"./Vector3":77}],70:[function(require,module,exports){
 const Vector2D = require('./Vector2')
 const Vector3D = require('./Vector3')
 const Line2D = require('./Line2')
@@ -16306,7 +14679,7 @@ OrthoNormalBasis.prototype = {
 
 module.exports = OrthoNormalBasis
 
-},{"./Line2":75,"./Line3":76,"./Matrix4":77,"./Plane":80,"./Vector2":84,"./Vector3":85}],79:[function(require,module,exports){
+},{"./Line2":67,"./Line3":68,"./Matrix4":69,"./Plane":72,"./Vector2":76,"./Vector3":77}],71:[function(require,module,exports){
 const Vector2D = require('./Vector2')
 const {EPS, angleEPS} = require('../constants')
 const {parseOptionAs2DVector, parseOptionAsFloat, parseOptionAsInt, parseOptionAsBool} = require('../../api/optionParsers')
@@ -16779,7 +15152,7 @@ Path2D.prototype = {
 
 module.exports = Path2D
 
-},{"../../api/optionParsers":61,"../CAG":65,"../constants":74,"./Side":83,"./Vector2":84,"./Vertex2":86}],80:[function(require,module,exports){
+},{"../../api/optionParsers":53,"../CAG":57,"../constants":66,"./Side":75,"./Vector2":76,"./Vertex2":78}],72:[function(require,module,exports){
 const Vector3D = require('./Vector3')
 const Line3D = require('./Line3')
 const {EPS, getTag} = require('../constants')
@@ -16921,7 +15294,7 @@ Plane.prototype = {
 
 module.exports = Plane
 
-},{"../constants":74,"./Line3":76,"./Vector3":85}],81:[function(require,module,exports){
+},{"../constants":66,"./Line3":68,"./Vector3":77}],73:[function(require,module,exports){
 const CAG = require('../CAG')
 const {fromPoints} = require('../CAGFactories')
 
@@ -16943,7 +15316,7 @@ Polygon2D.prototype = CAG.prototype
 
 module.exports = Polygon2D
 
-},{"../CAG":65,"../CAGFactories":66}],82:[function(require,module,exports){
+},{"../CAG":57,"../CAGFactories":58}],74:[function(require,module,exports){
 const Vector3D = require('./Vector3')
 const Vertex = require('./Vertex3')
 const Matrix4x4 = require('./Matrix4')
@@ -17319,7 +15692,7 @@ Polygon.defaultShared = new Polygon.Shared(null)
 
 module.exports = Polygon
 
-},{"../../api/solidFromSlices":64,"../CAG":65,"../CAGFactories":66,"../CSGFactories":68,"../constants":74,"./Matrix4":77,"./Plane":80,"./Vector3":85,"./Vertex3":87}],83:[function(require,module,exports){
+},{"../../api/solidFromSlices":56,"../CAG":57,"../CAGFactories":58,"../CSGFactories":60,"../constants":66,"./Matrix4":69,"./Plane":72,"./Vector3":77,"./Vertex3":79}],75:[function(require,module,exports){
 const Vector2D = require('./Vector2')
 const Vertex = require('./Vertex2')
 const Vertex3 = require('./Vertex3')
@@ -17423,7 +15796,7 @@ Side.prototype = {
 
 module.exports = Side
 
-},{"../constants":74,"./Polygon3":82,"./Vector2":84,"./Vertex2":86,"./Vertex3":87}],84:[function(require,module,exports){
+},{"../constants":66,"./Polygon3":74,"./Vector2":76,"./Vertex2":78,"./Vertex3":79}],76:[function(require,module,exports){
 const {IsFloat} = require('../utils')
 
 /** Class Vector2D
@@ -17621,7 +15994,7 @@ Vector2D.prototype = {
 
 module.exports = Vector2D
 
-},{"../utils":92,"./Vector3":85}],85:[function(require,module,exports){
+},{"../utils":84,"./Vector3":77}],77:[function(require,module,exports){
 const {IsFloat} = require('../utils')
 const Vector2D = require('./Vector2')
 
@@ -17836,7 +16209,7 @@ Vector3D.prototype = {
 
 module.exports = Vector3D
 
-},{"../utils":92,"./Vector2":84}],86:[function(require,module,exports){
+},{"../utils":84,"./Vector2":76}],78:[function(require,module,exports){
 const Vector2D = require('./Vector2')
 const {getTag} = require('../constants')
 
@@ -17864,7 +16237,7 @@ Vertex.prototype = {
 
 module.exports = Vertex
 
-},{"../constants":74,"./Vector2":84}],87:[function(require,module,exports){
+},{"../constants":66,"./Vector2":76}],79:[function(require,module,exports){
 const Vector3D = require('./Vector3')
 const {getTag} = require('../constants')
 
@@ -17922,7 +16295,7 @@ Vertex.prototype = {
 
 module.exports = Vertex
 
-},{"../constants":74,"./Vector3":85}],88:[function(require,module,exports){
+},{"../constants":66,"./Vector3":77}],80:[function(require,module,exports){
 const {EPS} = require('../constants')
 const {solve2Linear} = require('../utils')
 
@@ -17948,7 +16321,7 @@ const linesIntersect = function (p0start, p0end, p1start, p1end) {
 
 module.exports = {linesIntersect}
 
-},{"../constants":74,"../utils":92}],89:[function(require,module,exports){
+},{"../constants":66,"../utils":84}],81:[function(require,module,exports){
 const {EPS} = require('../constants')
 const OrthoNormalBasis = require('./OrthoNormalBasis')
 const {interpolateBetween2DPointsForY, insertSorted, fnNumberSort} = require('../utils')
@@ -18292,7 +16665,7 @@ const reTesselateCoplanarPolygons = function (sourcepolygons, destpolygons) {
 
 module.exports = reTesselateCoplanarPolygons
 
-},{"../constants":74,"../utils":92,"./Line2":75,"./OrthoNormalBasis":78,"./Polygon3":82,"./Vector2":84,"./Vertex3":87}],90:[function(require,module,exports){
+},{"../constants":66,"../utils":84,"./Line2":67,"./OrthoNormalBasis":70,"./Polygon3":74,"./Vector2":76,"./Vertex3":79}],82:[function(require,module,exports){
 const Matrix4x4 = require('./math/Matrix4')
 const Vector3D = require('./math/Vector3')
 const Plane = require('./math/Plane')
@@ -18375,7 +16748,7 @@ module.exports = {
   addCenteringToPrototype
 }
 
-},{"./math/Matrix4":77,"./math/Plane":80,"./math/Vector3":85}],91:[function(require,module,exports){
+},{"./math/Matrix4":69,"./math/Plane":72,"./math/Vector3":77}],83:[function(require,module,exports){
 const {_CSGDEBUG, EPS} = require('./constants')
 const Vertex = require('./math/Vertex3')
 const Polygon = require('./math/Polygon3')
@@ -18886,7 +17259,7 @@ Node.prototype = {
 
 module.exports = Tree
 
-},{"./constants":74,"./math/Polygon3":82,"./math/Vertex3":87}],92:[function(require,module,exports){
+},{"./constants":66,"./math/Polygon3":74,"./math/Vertex3":79}],84:[function(require,module,exports){
 function fnNumberSort (a, b) {
   return a - b
 }
@@ -18990,7 +17363,7 @@ module.exports = {
   isCSG
 }
 
-},{}],93:[function(require,module,exports){
+},{}],85:[function(require,module,exports){
 const Vector2D = require('../math/Vector2')
 
 // see http://local.wasp.uwa.edu.au/~pbourke/geometry/polyarea/ :
@@ -19024,7 +17397,7 @@ const getBounds = function (cag) {
 
 module.exports = {area, getBounds}
 
-},{"../math/Vector2":84}],94:[function(require,module,exports){
+},{"../math/Vector2":76}],86:[function(require,module,exports){
 const {areaEPS} = require('../constants')
 const {linesIntersect} = require('../math/lineUtils')
 
@@ -19126,7 +17499,7 @@ module.exports = {
   contains
 }
 
-},{"../constants":74,"../math/lineUtils":88}],95:[function(require,module,exports){
+},{"../constants":66,"../math/lineUtils":80}],87:[function(require,module,exports){
 const {EPS} = require('../constants')
 const FuzzyCSGFactory = require('../FuzzyFactory3d')
 const FuzzyCAGFactory = require('../FuzzyFactory2d')
@@ -19212,7 +17585,7 @@ const CAGFromCAGFuzzyFactory = function (factory, sourcecag) {
 
 module.exports = canonicalize
 
-},{"../CAGFactories":66,"../CSGFactories":68,"../FuzzyFactory2d":70,"../FuzzyFactory3d":71,"../constants":74}],96:[function(require,module,exports){
+},{"../CAGFactories":58,"../CSGFactories":60,"../FuzzyFactory2d":62,"../FuzzyFactory3d":63,"../constants":66}],88:[function(require,module,exports){
 const Vector3D = require('../math/Vector3')
 
 /**
@@ -19262,7 +17635,7 @@ const area = function (csg) {
 
 module.exports = {bounds, volume, area}
 
-},{"../math/Vector3":85}],97:[function(require,module,exports){
+},{"../math/Vector3":77}],89:[function(require,module,exports){
 const CAG = require('../CAG') // FIXME: circular dependency !
 const {EPS} = require('../constants')
 
@@ -19287,7 +17660,7 @@ const projectToOrthoNormalBasis = function (csg, orthobasis) {
 
 module.exports = {projectToOrthoNormalBasis}
 
-},{"../CAG":65,"../constants":74}],98:[function(require,module,exports){
+},{"../CAG":57,"../constants":66}],90:[function(require,module,exports){
 const {EPS} = require('../constants')
 const Polygon = require('../math/Polygon3')
 const Plane = require('../math/Plane')
@@ -19605,7 +17978,7 @@ const fixTJunctions = function (fromPolygons, csg) {
 
 module.exports = fixTJunctions
 
-},{"../constants":74,"../math/Plane":80,"../math/Polygon3":82}],99:[function(require,module,exports){
+},{"../constants":66,"../math/Plane":72,"../math/Polygon3":74}],91:[function(require,module,exports){
 const FuzzyCSGFactory = require('../FuzzyFactory3d')
 const reTesselateCoplanarPolygons = require('../math/reTesselateCoplanarPolygons')
 const {fromPolygons} = require('../CSGFactories')
@@ -19654,7 +18027,7 @@ const reTesselate = function (csg) {
 
 module.exports = reTesselate
 
-},{"../CSGFactories":68,"../FuzzyFactory3d":71,"../math/reTesselateCoplanarPolygons":89}],100:[function(require,module,exports){
+},{"../CSGFactories":60,"../FuzzyFactory3d":63,"../math/reTesselateCoplanarPolygons":81}],92:[function(require,module,exports){
 /* converts input data to array if it is not already an array */
 function toArray (data) {
   if (!data) return []
@@ -19664,7 +18037,7 @@ function toArray (data) {
 
 module.exports = toArray
 
-},{}],101:[function(require,module,exports){
+},{}],93:[function(require,module,exports){
 /*
 ## License
 
@@ -19855,7 +18228,7 @@ addCenteringToPrototype(CAG.prototype, ['x', 'y'])
 
 module.exports = {CSG, CAG}
 
-},{"./src/CAG":102,"./src/CAGFactories":103,"./src/CSG":104,"./src/CSGFactories":105,"./src/Properties":109,"./src/connectors":110,"./src/constants":111,"./src/debugHelpers":112,"./src/math/Line2":113,"./src/math/Line3":114,"./src/math/Matrix4":115,"./src/math/OrthoNormalBasis":116,"./src/math/Path2":117,"./src/math/Plane":118,"./src/math/Polygon2":119,"./src/math/Polygon3":120,"./src/math/Side":121,"./src/math/Vector2":122,"./src/math/Vector3":123,"./src/math/Vertex2":124,"./src/math/Vertex3":125,"./src/mutators":128,"./src/primitives2d":130,"./src/primitives3d":131}],102:[function(require,module,exports){
+},{"./src/CAG":94,"./src/CAGFactories":95,"./src/CSG":96,"./src/CSGFactories":97,"./src/Properties":101,"./src/connectors":102,"./src/constants":103,"./src/debugHelpers":104,"./src/math/Line2":105,"./src/math/Line3":106,"./src/math/Matrix4":107,"./src/math/OrthoNormalBasis":108,"./src/math/Path2":109,"./src/math/Plane":110,"./src/math/Polygon2":111,"./src/math/Polygon3":112,"./src/math/Side":113,"./src/math/Vector2":114,"./src/math/Vector3":115,"./src/math/Vertex2":116,"./src/math/Vertex3":117,"./src/mutators":120,"./src/primitives2d":122,"./src/primitives3d":123}],94:[function(require,module,exports){
 const {EPS, angleEPS, areaEPS, defaultResolution3D} = require('./constants')
 const {Connector} = require('./connectors')
 const OrthoNormalBasis = require('./math/OrthoNormalBasis')
@@ -20673,7 +19046,7 @@ CAG.prototype = {
 
 module.exports = CAG
 
-},{"./CSG":104,"./FuzzyFactory2d":107,"./connectors":110,"./constants":111,"./math/OrthoNormalBasis":116,"./math/Path2":117,"./math/Polygon3":120,"./math/Side":121,"./math/Vector2":122,"./math/Vector3":123,"./math/Vertex2":124,"./math/Vertex3":125,"./math/lineUtils":126,"./optionParsers":129}],103:[function(require,module,exports){
+},{"./CSG":96,"./FuzzyFactory2d":99,"./connectors":102,"./constants":103,"./math/OrthoNormalBasis":108,"./math/Path2":109,"./math/Polygon3":112,"./math/Side":113,"./math/Vector2":114,"./math/Vector3":115,"./math/Vertex2":116,"./math/Vertex3":117,"./math/lineUtils":118,"./optionParsers":121}],95:[function(require,module,exports){
 const CAG = require('./CAG')
 const Side = require('./math/Side')
 const Vector2D = require('./math/Vector2')
@@ -20733,7 +19106,7 @@ module.exports = {
   //fromFakeCSG
 }
 
-},{"./CAG":102,"./math/Path2":117,"./math/Side":121,"./math/Vector2":122,"./math/Vertex2":124}],104:[function(require,module,exports){
+},{"./CAG":94,"./math/Path2":109,"./math/Side":113,"./math/Vector2":114,"./math/Vertex2":116}],96:[function(require,module,exports){
 const {fnNumberSort} = require('./utils')
 const FuzzyCSGFactory = require('./FuzzyFactory3d')
 const Tree = require('./trees')
@@ -21704,7 +20077,7 @@ const CSGFromCSGFuzzyFactory = function (factory, sourcecsg) {
 
 module.exports = CSG
 
-},{"./CAG":102,"./FuzzyFactory3d":108,"./Properties":109,"./connectors":110,"./constants":111,"./math/Matrix4":115,"./math/OrthoNormalBasis":116,"./math/Plane":118,"./math/Polygon3":120,"./math/Vector2":122,"./math/Vector3":123,"./math/Vertex3":125,"./math/polygonUtils":127,"./trees":132,"./utils":133,"./utils/fixTJunctions":134}],105:[function(require,module,exports){
+},{"./CAG":94,"./FuzzyFactory3d":100,"./Properties":101,"./connectors":102,"./constants":103,"./math/Matrix4":107,"./math/OrthoNormalBasis":108,"./math/Plane":110,"./math/Polygon3":112,"./math/Vector2":114,"./math/Vector3":115,"./math/Vertex3":117,"./math/polygonUtils":119,"./trees":124,"./utils":125,"./utils/fixTJunctions":126}],97:[function(require,module,exports){
 const Vector3D = require('./math/Vector3')
 const Vertex = require('./math/Vertex3')
 const Plane = require('./math/Plane')
@@ -21817,15 +20190,15 @@ module.exports = {
   fromCompactBinary
 }
 
-},{"./CSG":104,"./math/Plane":118,"./math/Polygon2":119,"./math/Polygon3":120,"./math/Vector3":123,"./math/Vertex3":125}],106:[function(require,module,exports){
-arguments[4][69][0].apply(exports,arguments)
-},{"dup":69}],107:[function(require,module,exports){
-arguments[4][70][0].apply(exports,arguments)
-},{"./FuzzyFactory":106,"./constants":111,"./math/Side":121,"dup":70}],108:[function(require,module,exports){
-arguments[4][71][0].apply(exports,arguments)
-},{"./FuzzyFactory":106,"./constants":111,"./math/Polygon3":120,"dup":71}],109:[function(require,module,exports){
-arguments[4][72][0].apply(exports,arguments)
-},{"dup":72}],110:[function(require,module,exports){
+},{"./CSG":96,"./math/Plane":110,"./math/Polygon2":111,"./math/Polygon3":112,"./math/Vector3":115,"./math/Vertex3":117}],98:[function(require,module,exports){
+arguments[4][61][0].apply(exports,arguments)
+},{"dup":61}],99:[function(require,module,exports){
+arguments[4][62][0].apply(exports,arguments)
+},{"./FuzzyFactory":98,"./constants":103,"./math/Side":113,"dup":62}],100:[function(require,module,exports){
+arguments[4][63][0].apply(exports,arguments)
+},{"./FuzzyFactory":98,"./constants":103,"./math/Polygon3":112,"dup":63}],101:[function(require,module,exports){
+arguments[4][64][0].apply(exports,arguments)
+},{"dup":64}],102:[function(require,module,exports){
 const Vector3D = require('./math/Vector3')
 const Line3D = require('./math/Line3')
 const Matrix4x4 = require('./math/Matrix4')
@@ -22047,9 +20420,9 @@ ConnectorList.prototype = {
 
 module.exports = {Connector, ConnectorList}
 
-},{"./CSG":104,"./math/Line3":114,"./math/Matrix4":115,"./math/OrthoNormalBasis":116,"./math/Plane":118,"./math/Vector3":123}],111:[function(require,module,exports){
-arguments[4][74][0].apply(exports,arguments)
-},{"dup":74}],112:[function(require,module,exports){
+},{"./CSG":96,"./math/Line3":106,"./math/Matrix4":107,"./math/OrthoNormalBasis":108,"./math/Plane":110,"./math/Vector3":115}],103:[function(require,module,exports){
+arguments[4][66][0].apply(exports,arguments)
+},{"dup":66}],104:[function(require,module,exports){
 const CSG = require('./CSG')
 const {cube} = require('./primitives3d')
 
@@ -22084,13 +20457,13 @@ const toPointCloud = function (csg, cuberadius) {
 
 module.exports = {toPointCloud}
 
-},{"./CSG":104,"./primitives3d":131}],113:[function(require,module,exports){
-arguments[4][75][0].apply(exports,arguments)
-},{"../utils":133,"./Vector2":122,"dup":75}],114:[function(require,module,exports){
-arguments[4][76][0].apply(exports,arguments)
-},{"../constants":111,"../utils":133,"./Vector3":123,"dup":76}],115:[function(require,module,exports){
-arguments[4][77][0].apply(exports,arguments)
-},{"./OrthoNormalBasis":116,"./Plane":118,"./Vector2":122,"./Vector3":123,"dup":77}],116:[function(require,module,exports){
+},{"./CSG":96,"./primitives3d":123}],105:[function(require,module,exports){
+arguments[4][67][0].apply(exports,arguments)
+},{"../utils":125,"./Vector2":114,"dup":67}],106:[function(require,module,exports){
+arguments[4][68][0].apply(exports,arguments)
+},{"../constants":103,"../utils":125,"./Vector3":115,"dup":68}],107:[function(require,module,exports){
+arguments[4][69][0].apply(exports,arguments)
+},{"./OrthoNormalBasis":108,"./Plane":110,"./Vector2":114,"./Vector3":115,"dup":69}],108:[function(require,module,exports){
 const Vector2D = require('./Vector2')
 const Vector3D = require('./Vector3')
 const Line2D = require('./Line2')
@@ -22294,7 +20667,7 @@ OrthoNormalBasis.prototype = {
 
 module.exports = OrthoNormalBasis
 
-},{"./Line2":113,"./Line3":114,"./Matrix4":115,"./Plane":118,"./Vector2":122,"./Vector3":123}],117:[function(require,module,exports){
+},{"./Line2":105,"./Line3":106,"./Matrix4":107,"./Plane":110,"./Vector2":114,"./Vector3":115}],109:[function(require,module,exports){
 const Vector2D = require('./Vector2')
 const {EPS, angleEPS} = require('../constants')
 const {parseOptionAs2DVector, parseOptionAsFloat, parseOptionAsInt, parseOptionAsBool} = require('../optionParsers')
@@ -22768,9 +21141,9 @@ Path2D.prototype = {
 
 module.exports = Path2D
 
-},{"../CAG":102,"../constants":111,"../optionParsers":129,"./Side":121,"./Vector2":122,"./Vertex2":124}],118:[function(require,module,exports){
-arguments[4][80][0].apply(exports,arguments)
-},{"../constants":111,"./Line3":114,"./Vector3":123,"dup":80}],119:[function(require,module,exports){
+},{"../CAG":94,"../constants":103,"../optionParsers":121,"./Side":113,"./Vector2":114,"./Vertex2":116}],110:[function(require,module,exports){
+arguments[4][72][0].apply(exports,arguments)
+},{"../constants":103,"./Line3":106,"./Vector3":115,"dup":72}],111:[function(require,module,exports){
 const CAG = require('../CAG')
 
 /*
@@ -22791,7 +21164,7 @@ Polygon2D.prototype = CAG.prototype
 
 module.exports = Polygon2D
 
-},{"../CAG":102}],120:[function(require,module,exports){
+},{"../CAG":94}],112:[function(require,module,exports){
 const Vector3D = require('./Vector3')
 const Vertex = require('./Vertex3')
 const Matrix4x4 = require('./Matrix4')
@@ -23368,7 +21741,7 @@ Polygon.defaultShared = new Polygon.Shared(null)
 
 module.exports = Polygon
 
-},{"../CAG":102,"../CAGFactories":103,"../CSG":104,"../constants":111,"../utils":133,"./Matrix4":115,"./Plane":118,"./Vector3":123,"./Vertex3":125}],121:[function(require,module,exports){
+},{"../CAG":94,"../CAGFactories":95,"../CSG":96,"../constants":103,"../utils":125,"./Matrix4":107,"./Plane":110,"./Vector3":115,"./Vertex3":117}],113:[function(require,module,exports){
 const Vector2D = require('./Vector2')
 const Vertex = require('./Vertex2')
 const Vertex3 = require('./Vertex3')
@@ -23472,7 +21845,7 @@ Side.prototype = {
 
 module.exports = Side
 
-},{"../constants":111,"./Polygon3":120,"./Vector2":122,"./Vertex2":124,"./Vertex3":125}],122:[function(require,module,exports){
+},{"../constants":103,"./Polygon3":112,"./Vector2":114,"./Vertex2":116,"./Vertex3":117}],114:[function(require,module,exports){
 const {IsFloat} = require('../utils')
 
 /** Class Vector2D
@@ -23670,13 +22043,13 @@ Vector2D.prototype = {
 
 module.exports = Vector2D
 
-},{"../utils":133,"./Vector3":123}],123:[function(require,module,exports){
-arguments[4][85][0].apply(exports,arguments)
-},{"../utils":133,"./Vector2":122,"dup":85}],124:[function(require,module,exports){
-arguments[4][86][0].apply(exports,arguments)
-},{"../constants":111,"./Vector2":122,"dup":86}],125:[function(require,module,exports){
-arguments[4][87][0].apply(exports,arguments)
-},{"../constants":111,"./Vector3":123,"dup":87}],126:[function(require,module,exports){
+},{"../utils":125,"./Vector3":115}],115:[function(require,module,exports){
+arguments[4][77][0].apply(exports,arguments)
+},{"../utils":125,"./Vector2":114,"dup":77}],116:[function(require,module,exports){
+arguments[4][78][0].apply(exports,arguments)
+},{"../constants":103,"./Vector2":114,"dup":78}],117:[function(require,module,exports){
+arguments[4][79][0].apply(exports,arguments)
+},{"../constants":103,"./Vector3":115,"dup":79}],118:[function(require,module,exports){
 const {EPS} = require('../constants')
 const {solve2Linear} = require('../utils')
 
@@ -23703,7 +22076,7 @@ const linesIntersect = function (p0start, p0end, p1start, p1end) {
 
 module.exports = {linesIntersect}
 
-},{"../constants":111,"../utils":133}],127:[function(require,module,exports){
+},{"../constants":103,"../utils":125}],119:[function(require,module,exports){
 const {EPS} = require('../constants')
 const OrthoNormalBasis = require('./OrthoNormalBasis')
 const {interpolateBetween2DPointsForY, insertSorted, fnNumberSort} = require('../utils')
@@ -24047,9 +22420,9 @@ const reTesselateCoplanarPolygons = function (sourcepolygons, destpolygons) {
 
 module.exports = {reTesselateCoplanarPolygons}
 
-},{"../constants":111,"../utils":133,"./Line2":113,"./OrthoNormalBasis":116,"./Polygon3":120,"./Vector2":122,"./Vertex3":125}],128:[function(require,module,exports){
-arguments[4][90][0].apply(exports,arguments)
-},{"./math/Matrix4":115,"./math/Plane":118,"./math/Vector3":123,"dup":90}],129:[function(require,module,exports){
+},{"../constants":103,"../utils":125,"./Line2":105,"./OrthoNormalBasis":108,"./Polygon3":112,"./Vector2":114,"./Vertex3":117}],120:[function(require,module,exports){
+arguments[4][82][0].apply(exports,arguments)
+},{"./math/Matrix4":107,"./math/Plane":110,"./math/Vector3":115,"dup":82}],121:[function(require,module,exports){
 const Vector3D = require('./math/Vector3')
 const Vector2D = require('./math/Vector2')
 
@@ -24127,7 +22500,7 @@ module.exports = {
   parseOptionAs3DVectorList
 }
 
-},{"./math/Vector2":122,"./math/Vector3":123}],130:[function(require,module,exports){
+},{"./math/Vector2":114,"./math/Vector3":115}],122:[function(require,module,exports){
 const CAG = require('./CAG')
 const {parseOptionAs2DVector, parseOptionAsFloat, parseOptionAsInt} = require('./optionParsers')
 const {defaultResolution2D} = require('./constants')
@@ -24313,7 +22686,7 @@ module.exports = {
   fromCompactBinary
 }
 
-},{"./CAG":102,"./CAGFactories":103,"./constants":111,"./math/Path2":117,"./math/Vector2":122,"./optionParsers":129}],131:[function(require,module,exports){
+},{"./CAG":94,"./CAGFactories":95,"./constants":103,"./math/Path2":109,"./math/Vector2":114,"./optionParsers":121}],123:[function(require,module,exports){
 const CSG = require('./CSG')
 const {parseOption, parseOptionAs3DVector, parseOptionAs2DVector, parseOptionAs3DVectorList, parseOptionAsFloat, parseOptionAsInt} = require('./optionParsers')
 const {defaultResolution3D, defaultResolution2D, EPS} = require('./constants')
@@ -24863,7 +23236,7 @@ module.exports = {
   polyhedron
 }
 
-},{"./CSG":104,"./Properties":109,"./connectors":110,"./constants":111,"./math/Polygon3":120,"./math/Vector3":123,"./math/Vertex3":125,"./optionParsers":129}],132:[function(require,module,exports){
+},{"./CSG":96,"./Properties":101,"./connectors":102,"./constants":103,"./math/Polygon3":112,"./math/Vector3":115,"./math/Vertex3":117,"./optionParsers":121}],124:[function(require,module,exports){
 const {_CSGDEBUG, EPS} = require('./constants')
 const Vertex = require('./math/Vertex3')
 const Polygon = require('./math/Polygon3')
@@ -25375,7 +23748,7 @@ Node.prototype = {
 
 module.exports = Tree
 
-},{"./constants":111,"./math/Polygon3":120,"./math/Vertex3":125}],133:[function(require,module,exports){
+},{"./constants":103,"./math/Polygon3":112,"./math/Vertex3":117}],125:[function(require,module,exports){
 function fnNumberSort (a, b) {
   return a - b
 }
@@ -25448,9 +23821,9 @@ module.exports = {
   interpolateBetween2DPointsForY
 }
 
-},{}],134:[function(require,module,exports){
-arguments[4][98][0].apply(exports,arguments)
-},{"../constants":111,"../math/Plane":118,"../math/Polygon3":120,"dup":98}],135:[function(require,module,exports){
+},{}],126:[function(require,module,exports){
+arguments[4][90][0].apply(exports,arguments)
+},{"../constants":103,"../math/Plane":110,"../math/Polygon3":112,"dup":90}],127:[function(require,module,exports){
 // color table from http://www.w3.org/TR/css3-color/
 const cssColors = {
 // basic color keywords
@@ -25897,7 +24270,7 @@ module.exports = {
   rgb2html
 }
 
-},{}],136:[function(require,module,exports){
+},{}],128:[function(require,module,exports){
 function echo () {
   console.warn('echo() will be deprecated in the near future: please use console.log/warn/error instead')
   var s = '', a = arguments
@@ -25914,7 +24287,7 @@ module.exports = {
   echo
 }
 
-},{}],137:[function(require,module,exports){
+},{}],129:[function(require,module,exports){
 const { CSG } = require('@jscad/csg')
 
 // FIXME: this is to have more readable/less extremely verbose code below
@@ -25976,7 +24349,7 @@ const cagToPointsArray = input => {
 const degToRad = deg => (Math.PI / 180) * deg
 
 module.exports = {cagToPointsArray, clamp, rightMultiply1x3VectorToArray, polygonFromPoints}
-},{"@jscad/csg":101}],138:[function(require,module,exports){
+},{"@jscad/csg":93}],130:[function(require,module,exports){
 
 const primitives3d = require('./primitives3d')
 const primitives2d = require('./primitives2d')
@@ -26012,7 +24385,7 @@ const exportedApi = {
 
 module.exports = exportedApi
 
-},{"./color":135,"./debug":136,"./log":139,"./maths":140,"./ops-booleans":141,"./ops-extrusions":142,"./ops-transformations":143,"./primitives2d":144,"./primitives3d":145,"./text":146,"@jscad/csg":101}],139:[function(require,module,exports){
+},{"./color":127,"./debug":128,"./log":131,"./maths":132,"./ops-booleans":133,"./ops-extrusions":134,"./ops-transformations":135,"./primitives2d":136,"./primitives3d":137,"./text":138,"@jscad/csg":93}],131:[function(require,module,exports){
 function log (txt) {
   var timeInMs = Date.now()
   var prevtime// OpenJsCad.log.prevLogTime
@@ -26039,7 +24412,7 @@ module.exports = {
   status
 }
 
-},{}],140:[function(require,module,exports){
+},{}],132:[function(require,module,exports){
 // -- Math functions (360 deg based vs 2pi)
 function sin (a) {
   return Math.sin(a / 360 * Math.PI * 2)
@@ -26150,7 +24523,7 @@ module.exports = {
   round
 }
 
-},{}],141:[function(require,module,exports){
+},{}],133:[function(require,module,exports){
 const { CAG } = require('@jscad/csg')
 
 // -- 3D boolean operations
@@ -26254,7 +24627,7 @@ module.exports = {
   intersection
 }
 
-},{"@jscad/csg":101}],142:[function(require,module,exports){
+},{"@jscad/csg":93}],134:[function(require,module,exports){
 const { CSG, CAG } = require('@jscad/csg')
 const {cagToPointsArray, clamp, rightMultiply1x3VectorToArray, polygonFromPoints} = require('./helpers')
 // -- 2D to 3D primitives
@@ -26470,7 +24843,7 @@ module.exports = {
   rectangular_extrude
 }
 
-},{"./helpers":137,"@jscad/csg":101}],143:[function(require,module,exports){
+},{"./helpers":129,"@jscad/csg":93}],135:[function(require,module,exports){
 const { CSG, CAG } = require('@jscad/csg')
 const { union } = require('./ops-booleans')
 // -- 3D transformations (OpenSCAD like notion)
@@ -26883,7 +25256,7 @@ module.exports = {
   chain_hull
 }
 
-},{"./ops-booleans":141,"@jscad/csg":101}],144:[function(require,module,exports){
+},{"./ops-booleans":133,"@jscad/csg":93}],136:[function(require,module,exports){
 const { CAG } = require('@jscad/csg')
 
 // -- 2D primitives (OpenSCAD like notion)
@@ -27000,7 +25373,7 @@ module.exports = {
   triangle
 }
 
-},{"@jscad/csg":101}],145:[function(require,module,exports){
+},{"@jscad/csg":93}],137:[function(require,module,exports){
 // -- 3D primitives (OpenSCAD like notion)
 const { CSG } = require('@jscad/csg')
 const { circle } = require('./primitives2d')
@@ -27391,7 +25764,7 @@ module.exports = {
   polyhedron
 }
 
-},{"./ops-extrusions":142,"./ops-transformations":143,"./primitives2d":144,"@jscad/csg":101}],146:[function(require,module,exports){
+},{"./ops-extrusions":134,"./ops-transformations":135,"./primitives2d":136,"@jscad/csg":93}],138:[function(require,module,exports){
 
 /** Construct a with, segments tupple from a character
  * @param {Float} x - x offset
@@ -28030,7 +26403,7 @@ module.exports = {
   vector_text
 }
 
-},{}],147:[function(require,module,exports){
+},{}],139:[function(require,module,exports){
 "use strict;"
 
 const scadApi = require('@jscad/scad-api')
@@ -28053,7 +26426,7 @@ function rebuildMakeLeg ( Leg_r , Leg_h ){
 
 
 module.exports = rebuildMakeLeg
-},{"./csgToGeometries":42,"@jscad/csg":51,"@jscad/scad-api":138}],148:[function(require,module,exports){
+},{"./csgToGeometries":34,"@jscad/csg":43,"@jscad/scad-api":130}],140:[function(require,module,exports){
 "use strict;"
 
 const scadApi = require('@jscad/scad-api')
@@ -28139,4 +26512,4 @@ function assignUVs(geometry) {
 }
 
 module.exports = rebuildMakeSeat
-},{"./csgToGeometries":42,"@jscad/csg":51,"@jscad/scad-api":138}]},{},[50]);
+},{"./csgToGeometries":34,"@jscad/csg":43,"@jscad/scad-api":130}]},{},[42]);

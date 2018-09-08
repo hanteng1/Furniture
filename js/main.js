@@ -30,14 +30,9 @@ function Main()
 
 	//category
 	//todo: an floating window to select category
-
-	// this.category = "chair";
-	// this.category = "cabinet";
-	// this.category = "table";
-	// this.category = "desk";
-
+	//this.category = "chair";
+	//this.category = "cabinet";
 	this.category = "tool";
-
 
 	//only stores data
 	this.container = document.getElementById('container');
@@ -93,8 +88,14 @@ function Main()
 
 
 	//Procedure objects
-	//for record objects position in every step
+	//for record objects in every step
 	this.stepObject = [];
+	//for record operation name in every step
+	this.stepOperationName = 'Initial';
+	//for record step is the last or not
+	this.lastStep = true;
+	//for record operation step times
+	this.stepNumber = 0;
 
 
 	//this is to store the furnitures before any chance
@@ -216,15 +217,15 @@ Main.prototype = {
 		//this.customControl.enablePan = true;
 		//this.customControl.target.set(0, 0.5, - 0.2);
 
-		//this.customControl.lookSpeed = 0.05;
-        //this.customControl.movementSpeed = 20;
-        //this.customControl.noFly = true;
-        //this.customControl.lookVertical = true;
-        //this.customControl.constrainVertical = true;
-        //this.customControl.verticalMin = 1.0;
-        //this.customControl.verticalMax = 2.0;
-        //this.customControl.lon = -110;
-        //this.customControl.lat = -50;
+		this.customControl.lookSpeed = 0.05;
+        this.customControl.movementSpeed = 20;
+        this.customControl.noFly = true;
+        this.customControl.lookVertical = true;
+        this.customControl.constrainVertical = true;
+        this.customControl.verticalMin = 1.0;
+        this.customControl.verticalMax = 2.0;
+        this.customControl.lon = -110;
+        this.customControl.lat = -50;
 
 
 		this.transformControls = new THREE.TransformControls(this.camera, this.renderer.domElement);
@@ -636,8 +637,10 @@ Main.prototype = {
 
 				var scale = new THREE.Vector3(loadedScale.x * 10, loadedScale.y * 10, loadedScale.z * 10)
 
-				loadMatrix.compose(location, quaternion, scale);		
+				loadMatrix.compose(location, quaternion, scale);
+		
 			}
+
 		}
 
 		//visualize
@@ -1175,8 +1178,8 @@ Main.prototype = {
 
 						objselect = false;
 						//if haven't select this furniture before
-						if (this.GetSizeObj.indexOf(this.furniture.getFurniture())<0)
-							this.GetSizeObj.push( this.furniture.getFurniture() );
+						this.GetSizeObj = [];
+						this.GetSizeObj.push( this.furniture.getFurniture() );
 						$('.ui.blue.submit.button.getsize').show();
 						
 
@@ -1203,6 +1206,7 @@ Main.prototype = {
 							
 							this.furniture = this.Sceneobjects[i];
 							this.select(this.Sceneobjects[i]);
+							this.GetSizeObj = [];
 							this.GetSizeObj.push( this.Sceneobjects[i] );
 							$('.ui.blue.submit.button.getsize').show();
 							SomethingSelected = true;
@@ -1420,18 +1424,30 @@ Main.prototype = {
 
 			this.onCtrl = true;
 			console.log('Ctrl down');
-
 		
 		}else if(keyCode == 46){
 			
 			//delete furniture
 			if(this.furniture != null ){
-				this.removeFromScene(this.furniture.getFurniture());
-				if ( this.furnitures.indexOf(this.furniture) > -1 ){
+				try{//delete furniture
+					this.removeFromScene(this.furniture.getFurniture());
 					this.furnitures.splice( this.furnitures.indexOf(this.furniture),1);
 					this.selectionBox.visible = false;
 					this.transformControls.detach();
+					
 				}
+				catch(err){//delete object
+				    this.removeFromScene(this.furniture);
+				    this.Sceneobjects.splice( this.Sceneobjects.indexOf(this.furniture),1);
+					this.selectionBox.visible = false;
+					this.transformControls.detach();
+				}
+			}
+			//clear cards
+			$('#cards').empty();
+			//add cards again
+			for(var i=0; i<this.furnitures.length; i++){
+				this.furnitures[i].addCard();
 			}
 
 		}
@@ -1685,9 +1701,6 @@ Main.prototype = {
 		$('#parameter_control_tool_wrap').hide();
 		$('#parameter_control_tool_rotation').hide();
 		$('#parameter_control_tool_align').hide();
-		$('#parameter_control_tool_add').hide();
-		$('#parameter_control_tool_addbetween').hide();
-
 
 		this.furnitures.length = 0;	
 
@@ -1744,10 +1757,10 @@ Main.prototype = {
 		//assume the furnitures are annoted well and get ready
 		//add the corners to the labeled and axised components
 		
-		// for(var i = 0; i < this.furnitures.length; i++) {
-		// 	this.furnitures[i].addCorners();
-		// 	this.furnitures[i].addtoPoint();
-		// }
+		for(var i = 0; i < this.furnitures.length; i++) {
+			this.furnitures[i].addCorners();
+			this.furnitures[i].addtoPoint();
+		}
 		
 
 		//testing
@@ -1793,9 +1806,6 @@ Main.prototype = {
 		$('#parameter_control_tool_wrap').hide();
 		$('#parameter_control_tool_rotation').hide();
 		$('#parameter_control_tool_align').hide();
-		$('#parameter_control_tool_add').hide();
-		$('#parameter_control_tool_addbetween').hide();
-
 
 		this.processor.init();
 		//this.processor.executeDesign();
@@ -1927,6 +1937,23 @@ Main.prototype = {
 		var center = new THREE.Vector3();
 		box.getCenter(center);
 		return center;
+    },
+
+    DeleteObj: function(){
+    	this.collapse(this.furniture);
+    	var objects = this.furniture.getObjects();
+    	var furnitureObj = this.furniture.getFurniture();
+    	//this.objCenter = this.getCenterPoint(this.furniture.getFurniture());
+    	//delete object in furniture
+		for(var i=0 ; i < this.GetSizeObj.length; i++){
+			var model = this.GetSizeObj[i];
+			model.parent.remove(model);
+		}
+		
+		this.explode(this.furniture);
+		this.GetSizeObj = [];
+		$('.ui.blue.submit.button.getsize').hide();
+
     }
 
 };
