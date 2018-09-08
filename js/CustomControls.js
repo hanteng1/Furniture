@@ -175,10 +175,10 @@ THREE.CustomControls = function ( object, domElement ) {
 	//problem...if called without moving in the fp mode... it will initalize with the last lon and lat
 
 	this.switchView2TG = function() {
-
+		// console.log("switchView2TG");
 		if(scope.targetFocused == false) {
 			scope.targetFocused = true;
-
+			// console.log("targetFocused = true");
 			//copy target position
 			//scope.target
 
@@ -935,7 +935,7 @@ THREE.CustomControls = function ( object, domElement ) {
 
 
 	function onMouseWheel( event ) {
-
+		// console.log("onMouseWheel");
 		if ( scope.enabled === false || scope.enableZoom === false || ( state !== STATE.NONE && state !== STATE.ROTATE ) ) return;
 
 		event.preventDefault();
@@ -943,11 +943,13 @@ THREE.CustomControls = function ( object, domElement ) {
 
 		scope.dispatchEvent( startEvent );
 
-		if(this.targetFocused) {
+		if(scope.targetFocused) {
+			// console.log("targetFocused");
 			handleMouseTGWheel( event );
 		}else{
 			//make a first person view move forward or backward
-
+			// console.log("scope.targetFocused");
+			// console.log(scope.targetFocused);
 		}
 
 		scope.dispatchEvent( endEvent );

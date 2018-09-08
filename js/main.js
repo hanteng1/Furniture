@@ -625,19 +625,6 @@ Main.prototype = {
 					console.log("miss");
 			}
 		}
-		
-		
-		
-		// 
-
-		// 
-		// var line = new THREE.Line();
-		// if(intersects.length > 0){
-		// 	line.raycast(raycaster, intersects);
-		// 	this.scene.add(line);
-		// 	console.log(intersects[0].point);
-		// }
-		
 	},
 
 
@@ -838,14 +825,16 @@ Main.prototype = {
 
 	select: function(object){
 		//var scope = this;
-
+		console.log()
 		if(this.selected == object) return;
 		var uuid = null;
 
 		if(object !== null) {
 			uuid = object.uuid;
 		}
-
+		//-----test----
+		console.log("select function object");
+		console.log(object);
 		this.selected = object;
 
 		if(this.onCtrlE == false && this.onCtrl == false)
@@ -1218,7 +1207,7 @@ Main.prototype = {
 
 						this.furniture = this.furnitures[i];
 						console.log("this.onCtrlE == false && this.onCtrl == false");
-						console.log(this.furniture.getFurniture());
+						console.log(this.furniture);
 						this.select(this.furniture.getFurniture());
 
 						objselect = false;
@@ -1262,7 +1251,7 @@ Main.prototype = {
 							this.select( null );
 							$('.ui.blue.submit.button.getsize').hide();
 							this.GetSizeObj = [];
-							//this.RemoveSizeLabel();
+							this.RemoveSizeLabel();
 
 						}
 
@@ -1296,7 +1285,7 @@ Main.prototype = {
 						this.GetSizeObj.push(object);
 						$('.ui.blue.submit.button.getsize').show();
 
-						//---------------Add Model------------------
+						// //---------------Add Model------------------
 						if( this.processor.model_add !== undefined){
 							this.processor.model_add.select(object);
 						}
@@ -1409,7 +1398,7 @@ Main.prototype = {
 		var array = this.getMousePosition( this.container, event.clientX, event.clientY );
 		this.onDoubleClickPosition.fromArray( array );
 
-		//console.log("double clicked");
+		// console.log("double clicked");
 
 		//this.customControl.switchView2TG();
 		//this.customControl.switchView2FP();
@@ -1428,9 +1417,10 @@ Main.prototype = {
 		// }
 
 		if(this.furniture !== null) {
-
+			// console.log("yes furniture");
 			this.customControl.switchView2TG();
 		}else {
+			// console.log("no furniture");
 			this.customControl.switchView2FP();
 		}
 
@@ -1578,7 +1568,6 @@ Main.prototype = {
 					}
 					console.log(furniture);
 				}
-				
 			}
 
 			if(this.selectionBoxes.length > 0)
