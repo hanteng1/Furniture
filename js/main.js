@@ -1773,6 +1773,8 @@ Main.prototype = {
 		$('#parameter_control_tool_wrap').hide();
 		$('#parameter_control_tool_rotation').hide();
 		$('#parameter_control_tool_align').hide();
+		$('.operations.operation_desk').hide();
+		$('.operations.operation_table').hide();
 
 		this.furnitures.length = 0;	
 
@@ -1878,6 +1880,8 @@ Main.prototype = {
 		$('#parameter_control_tool_wrap').hide();
 		$('#parameter_control_tool_rotation').hide();
 		$('#parameter_control_tool_align').hide();
+		$('.operations.operation_desk').hide();
+		$('.operations.operation_table').hide();
 
 		this.processor.init();
 		//this.processor.executeDesign();
