@@ -200,6 +200,9 @@ Main.prototype = {
 		//this.container.appendChild( this.stats.dom )
 		window.addEventListener( 'resize', this.onWindowResize.bind(this), false );
 
+		//--------------------Add Model------------------------------------------
+		window.addEventListener( 'mousemove', this.onMouseMove.bind(this), false );
+
 		//mouse events
 		this.container.addEventListener('mousedown', this.onMouseDown.bind(this), false);
 		this.container.addEventListener('touchstart', this.onTouchStart.bind(this), false);		
@@ -1283,6 +1286,12 @@ Main.prototype = {
 					//it also calls select, to detach
 					this.select( null );
 				}
+
+				//---------------Add Model------------------
+				if( this.processor.model_add !== undefined){
+					this.processor.model_add.selectPlane(this.mouse, this.camera, this.onUpPosition);
+				}
+
 			}
 			//select two obj for getting distance
 			else if(this.onCtrl == true){
@@ -1515,6 +1524,11 @@ Main.prototype = {
 		if(this.onCtrlE == true)
 		{
 			this.onCtrlE = false;
+
+			//-------------Add Model----------------------
+			if( this.processor.model_add !== undefined){
+				var bef = this.processor.model_add.getPartCenter(this.processor.model_add.selectFurniture);
+			}
 
 			//disable explosion view 
 			if(this.furniture  != null )
