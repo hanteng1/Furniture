@@ -390,7 +390,7 @@ Model_Add.prototype = {
 		var downIntersects = raycaster.intersectObject( this.main.scene.getObjectByName("down"), true);
 
 		if(frontIntersects.length > 0){
-			this.plane = "fornt";
+			this.plane = "front";
 			this.changePlaneMaterial("front", selectedMaterial);
 		}
 		else
@@ -466,7 +466,7 @@ Model_Add.prototype = {
 		this.isCreateObject = true;
 
 		//which plan selected
-		if(this.plane == "fornt")
+		if(this.plane == "front")
 			var vector = new THREE.Vector3(0,0,-1);
 		if (this.plane == "back")
 			var vector = new THREE.Vector3(0,0,1);
@@ -487,6 +487,9 @@ Model_Add.prototype = {
 	},
 
 	checkOnThePlane: function(pos) {
+		// var furniture = this.selectFurniture;
+		// while(furniture.parent.uuid != this.main.scene.uuid)
+		// 	furniture = furniture.parent;
 		var furnitureCenter = this.getPartCenter(this.selectFurniture);
 		furnitureCenter.x = furnitureCenter.x.toFixed(4);
 		furnitureCenter.y = furnitureCenter.y.toFixed(4);
@@ -498,120 +501,68 @@ Model_Add.prototype = {
 		pos.x = pos.x.toFixed(4);
 		pos.y = pos.y.toFixed(4);
 		pos.z = pos.z.toFixed(4);
+
 		if(this.plane == "front"){ // z+
-			if(pos.z >= furnitureCenter.z + furnitureSize.z/2)
+			var tmp = parseFloat(furnitureCenter.z) + parseFloat(furnitureSize.z)/2;
+			tmp = tmp.toFixed(4);
+			if(pos.z >= tmp)
 				return true;
 			else
 				return false;
 		}
 		else if(this.plane == "back"){ //z-
-			if(pos.z <= furnitureCenter.z - furnitureSize.z/2)
+			var tmp = parseFloat(furnitureCenter.z) - parseFloat(furnitureSize.z)/2;
+			tmp = tmp.toFixed(4);
+			if(pos.z <= tmp)
 				return true;
 			else
 				return false;
 		}
 		else if(this.plane == "left"){ //x-
-			if(pos.x <= furnitureCenter.x - furnitureSize.x/2)
+			var tmp = parseFloat(furnitureCenter.x) - parseFloat(furnitureSize.x)/2;
+			tmp = tmp.toFixed(4);
+			if(pos.x <= tmp)
 				return true;
 			else
 				return false;
 		}
 		else if(this.plane == "right"){ //x+
-			if(pos.x >= furnitureCenter.x + furnitureSize.x/2)
+			var tmp = parseFloat(furnitureCenter.x) + parseFloat(furnitureSize.x)/2;
+			tmp = tmp.toFixed(4);
+			if(pos.x >= tmp)
 				return true;
 			else
 				return false;
 		}
 		else if(this.plane == "up"){ //y+
-			if(pos.y >= furnitureCenter.y + furnitureSize.y/2)
+			var tmp = parseFloat(furnitureCenter.y) + parseFloat(furnitureSize.y)/2;
+			tmp = tmp.toFixed(4);
+			if(pos.y >= tmp)
 				return true;
 			else
 				return false;
 		}
 		else if(this.plane == "down"){ //y-
-			if(pos.y <= furnitureCenter.y - furnitureSize.y/2)
+			var tmp = parseFloat(furnitureCenter.y) - parseFloat(furnitureSize.y)/2;
+			tmp = tmp.toFixed(4);
+			if(pos.y <= tmp)
 				return true;
 			else
 				return false;
 		}
 	},
 
-	checkWheelArea: function(pos) {
-		// getPointByRay: function(obj, origin, direction)
-		var furnitureSize = this.getPartSize(this.selectFurniture);
-		//   1
-		//2     3
-		//   4
-		if(this.plane == "front") {//z+, v.z-
-			var origin = new THREE.Vector3(pos.x, pos.y, pos.z + furnitureSize.z + 1);
-			var origin1 = new THREE.Vector3(origin.x, origin.y + this.objectAreaList.wheel[1]/2, origin.z);
-			var origin2 = new THREE.Vector3(origin.x - this.objectAreaList.wheel[0]/2, origin.y, origin.z);
-			var origin3 = new THREE.Vector3(origin.x + this.objectAreaList.wheel[0]/2, origin.y, origin.z);
-			var origin4 = new THREE.Vector3(origin.x, origin.y - this.objectAreaList.wheel[1]/2, origin.z);
-			var direction = new THREE.Vector3(0,0,-1);
-		}
-		if(this.plane == "back") {//z-, v.z+
-			var origin = new THREE.Vector3(pos.x, pos.y, pos.z - furnitureSize.z - 1);
-			var origin1 = new THREE.Vector3(origin.x, origin.y + this.objectAreaList.wheel[1]/2, origin.z);
-			var origin2 = new THREE.Vector3(origin.x - this.objectAreaList.wheel[0]/2, origin.y, origin.z);
-			var origin3 = new THREE.Vector3(origin.x + this.objectAreaList.wheel[0]/2, origin.y, origin.z);
-			var origin4 = new THREE.Vector3(origin.x, origin.y - this.objectAreaList.wheel[1]/2, origin.z);
-			var direction = new THREE.Vector3(0,0,1);
-		}
-		if(this.plane == "left") {//x-, v.x+
-			var origin = new THREE.Vector3(pos.x - furnitureSize.x - 1, pos.y, pos.z);
-			var origin1 = new THREE.Vector3(origin.x, origin.y + this.objectAreaList.wheel[1]/2, origin.z);
-			var origin2 = new THREE.Vector3(origin.x, origin.y, origin.z - this.objectAreaList.wheel[0]/2);
-			var origin3 = new THREE.Vector3(origin.x, origin.y, origin.z + this.objectAreaList.wheel[0]/2);
-			var origin4 = new THREE.Vector3(origin.x, origin.y - this.objectAreaList.wheel[1]/2, origin.z);
-			var direction = new THREE.Vector3(1,0,0);
-		}
-		if(this.plane == "right") {//x+, v.x-
-			var origin = new THREE.Vector3(pos.x + furnitureSize.x + 1, pos.y, pos.z);
-			var origin1 = new THREE.Vector3(origin.x, origin.y + this.objectAreaList.wheel[1]/2, origin.z);
-			var origin2 = new THREE.Vector3(origin.x, origin.y, origin.z - this.objectAreaList.wheel[0]/2);
-			var origin3 = new THREE.Vector3(origin.x, origin.y, origin.z + this.objectAreaList.wheel[0]/2);
-			var origin4 = new THREE.Vector3(origin.x, origin.y - this.objectAreaList.wheel[1]/2, origin.z);
-			var direction = new THREE.Vector3(-1,0,0);
-		}
-		if(this.plane == "up") {//y+, v.y-
-			var origin = new THREE.Vector3(pos.x, pos.y + furnitureSize.y + 1, pos.z);
-			var origin1 = new THREE.Vector3(origin.x, origin.y, origin.z - this.objectAreaList.wheel[1]/2);
-			var origin2 = new THREE.Vector3(origin.x - this.objectAreaList.wheel[0]/2, origin.y, origin.z);
-			var origin3 = new THREE.Vector3(origin.x + this.objectAreaList.wheel[0]/2, origin.y, origin.z);
-			var origin4 = new THREE.Vector3(origin.x, origin.y, origin.z + this.objectAreaList.wheel[1]/2);
-			var direction = new THREE.Vector3(0,-1,0);
-		}
-		if(this.plane == "down") {//y-, v.y+
-			var origin = new THREE.Vector3(pos.x, pos.y - furnitureSize.y - 1, pos.z);
-			var origin1 = new THREE.Vector3(origin.x, origin.y, origin.z - this.objectAreaList.wheel[1]/2);
-			var origin2 = new THREE.Vector3(origin.x - this.objectAreaList.wheel[0]/2, origin.y, origin.z);
-			var origin3 = new THREE.Vector3(origin.x + this.objectAreaList.wheel[0]/2, origin.y, origin.z);
-			var origin4 = new THREE.Vector3(origin.x, origin.y, origin.z + this.objectAreaList.wheel[1]/2);
-			var direction = new THREE.Vector3(0,1,0);
-		}
-		
-		var intersects1 = this.getPointByRay(this.selectFurniture, origin1, direction);
-		var intersects2 = this.getPointByRay(this.selectFurniture, origin2, direction);
-		var intersects3 = this.getPointByRay(this.selectFurniture, origin3, direction);
-		var intersects4 = this.getPointByRay(this.selectFurniture, origin4, direction);
-
-		if(intersects1.length == 0 || intersects2.length == 0 || intersects3.length == 0 || intersects4.length == 0)
-			return false;
-		else
-			return true;
-	},
-
 	updateWheelPosition: function(pos) {
 		var furnitureCenter = this.getPartCenter(this.selectFurniture);
 		var furnitureSize = this.getPartSize(this.selectFurniture);
-		var isOnTheplane = this.checkOnThePlane(pos);
-		if(isOnTheplane){
-			var isArea = this.checkWheelArea(pos);
-			if(isArea)
+		var isOnThePlane = this.checkOnThePlane(pos);
+		if(isOnThePlane){
+			// var isArea = this.checkWheelArea(pos);
+			// console.log(isArea);
+			// if(isArea)
 				this.selectObject.position.set(pos.x, pos.y, pos.z);
-			else
-				console.log("Area isn't enough");
+			// else
+				// console.log("Area isn't enough");
 		}
 		else
 			console.log("Ray position isn't on the plan.");

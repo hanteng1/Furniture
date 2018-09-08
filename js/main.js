@@ -619,10 +619,7 @@ Main.prototype = {
 				var intersects = raycaster.intersectObject(this.processor.model_add.selectFurniture);
 				if(intersects.length > 0){
 					var pos = intersects[0].point;
-
-					var object = this.processor.model_add.selectObject;
-					console.log(object);
-					object.position.set(pos.x, pos.y, pos.z);
+					this.processor.model_add.updateObjectPosition(pos);					
 				}
 				else
 					console.log("miss");
@@ -1220,6 +1217,8 @@ Main.prototype = {
 					if ( intersects.length > 0 ) {
 
 						this.furniture = this.furnitures[i];
+						console.log("this.onCtrlE == false && this.onCtrl == false");
+						console.log(this.furniture.getFurniture());
 						this.select(this.furniture.getFurniture());
 
 						objselect = false;
@@ -1554,26 +1553,30 @@ Main.prototype = {
 
 			//-------------Add Model----------------------
 			if( this.processor.model_add !== undefined){
-				var aft = this.processor.model_add.getPartCenter(this.processor.model_add.selectFurniture);
-				
-				var offset = new THREE.Vector3( aft.x - bef.x, aft.y - bef.y, aft.z - bef.z);
-				var obj = [];
-				for (var i = 0; i < this.scene.children.length; i++) {
-					if(this.scene.children[i].name == this.processor.model_add.selectObjectName)
-						obj.push(this.scene.children[i]);
-				}
-				for (var i = 0; i < obj.length; i++) {
-					obj[i].position.x += offset.x;
-					obj[i].position.y += offset.y;
-					obj[i].position.z += offset.z;
-				}
-				
-				var furniture = this.processor.model_add.selectFurniture;
-				while(furniture.parent != this.scene)
-					furniture = furniture.parent;
-				for (var i = 0; i < obj.length; i++) {
-					var pos = new THREE.Vector3(obj[i].position.x, obj[i].position.y, obj[i].position.z);
-					this.processor.model_add.objectAddToFurniture(furniture, obj[i], pos);					
+				if(this.processor.model_add.isCreateObject){
+					var aft = this.processor.model_add.getPartCenter(this.processor.model_add.selectFurniture);				
+					var offset = new THREE.Vector3( aft.x - bef.x, aft.y - bef.y, aft.z - bef.z);
+					var obj = [];
+					for (var i = 0; i < this.scene.children.length; i++) {
+						if(this.scene.children[i].name == this.processor.model_add.selectObjectName)
+							obj.push(this.scene.children[i]);
+					}
+					for (var i = 0; i < obj.length; i++) {
+						obj[i].position.x += offset.x;
+						obj[i].position.y += offset.y;
+						obj[i].position.z += offset.z;
+					}
+					
+					var furniture = this.processor.model_add.selectFurniture;
+					console.log(furniture);
+					while(furniture.parent.uuid != this.scene.uuid)
+						furniture = furniture.parent;
+					console.log(furniture);
+					for (var i = 0; i < obj.length; i++) {
+						var pos = new THREE.Vector3(obj[i].position.x, obj[i].position.y, obj[i].position.z);
+						this.processor.model_add.objectAddToFurniture(furniture, obj[i], pos);					
+					}
+					console.log(furniture);
 				}
 				
 			}
@@ -1585,7 +1588,7 @@ Main.prototype = {
 					this.removeFromScene(this.selectionBoxes[i]);
 				}
 			}
-
+			
 			this.selectionBoxes = [];
 			this.selectedIds = [];
 			this.furniture = null;
@@ -1625,11 +1628,13 @@ Main.prototype = {
 			//----------------------Add Model---------------------------
 			//when "E" Up
 			if( this.processor.model_add !== undefined){
-				this.processor.model_add.deleteSelectBox(this.scene);
-				this.processor.model_add.selectObjectName = "";
-				this.processor.model_add.selectFurnitureUUID = "";
-	    		this.processor.model_add.hasSelectBox = false;
-	    		this.processor.model_add.isCreateObject = false;
+				if(this.processor.model_add.isCreateObject){
+					this.processor.model_add.deleteSelectBox(this.scene);
+					this.processor.model_add.selectObjectName = "";
+					this.processor.model_add.selectFurnitureUUID = "";
+		    		this.processor.model_add.hasSelectBox = false;
+		    		this.processor.model_add.isCreateObject = false;
+	    		}
 			}
 			
 
