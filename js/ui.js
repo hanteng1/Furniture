@@ -232,11 +232,16 @@ Ui.prototype = {
 		$('.ui.blue.submit.button.getsize').hide();
 		$('.ui.red.submit.button.removesize').hide();
 		$('.ui.blue.submit.button.getdis').hide();
+
+		$('.operations.operation_table').hide();
+		$('.operations.operation_desk').hide();
+
 		$('.operations.operation_tool').hide();
 		$('#parameter_control_tool_painting').hide();
 		$('#parameter_control_tool_wrap').hide();
 		$('#parameter_control_tool_rotation').hide();
 		$('#parameter_control_tool_align').hide();
+		$('#parameter_control_tool_add').hide();
 		
 
 	},
@@ -309,9 +314,6 @@ Ui.prototype = {
 			scope.processor.executeDesign("CHAIR_REBUILD", "leg");
 		});
 
-
-
-
 		//dresser
 		$('#operation_dresser_add_cut_chair').click(function() {
 			scope.processor.executeDesign("DRESSER_ADD", "cut_chair");
@@ -328,26 +330,90 @@ Ui.prototype = {
 			$('#parameter_control_cabinet_bed').show();
 		});
 
+		
+
 		//cabinet_kallax_table
 		$('#operation_cabinet_kallax_table').click(function() {
 			scope.processor.executeDesign("CABINET_LALLAX", "table");
 
 		});
 
+
+		//table
+		$('#operation_table_stack').click(function() {
+			scope.processor.executeDesign("TABLE", "stack");
+		});
+
+		$('#operation_table_flipStack').click(function() {
+			scope.processor.executeDesign("TABLE", "flipStack");
+		});
+
+		$('#operation_table_addWheel').click(function() {
+			scope.processor.executeDesign("TABLE", "addWheel");
+		});
+
+		$('#operation_table_addBoardOnTabletop').click(function() {
+			scope.processor.executeDesign("TABLE", "addBoardOnTabletop");
+		});
+
+		$('#operation_table_addBoard').click(function() {
+			scope.processor.executeDesign("TABLE", "addBoard");
+		});
+
+		$('#operation_table_addDrawer').click(function() {
+			scope.processor.executeDesign("TABLE", "addDrawer");
+		});
+
+		$('#operation_table_addRod').click(function() {
+			scope.processor.executeDesign("TABLE", "addRod");
+		});
+
+		$('#operation_table_addSeat').click(function() {
+			scope.processor.executeDesign("TABLE", "addSeat");
+		});
+
+		$('#operation_table_addDoorBoard').click(function() {
+			scope.processor.executeDesign("TABLE", "addDoorBoard");
+		});
+
+		//desk
+		$('#operation_desk_add_board').click(function() {
+			scope.processor.executeDesign("DESK", "addBoard");
+		});
+
+		//model painting
 		$('#operation_Painting').click(function() {
 			scope.processor.executeDesign("MODEL_PAINTING", "painting");
 
 		});
+
+		//model wrap
 		$('#operation_Wrap').click(function() {
 			scope.processor.executeDesign("MODEL_WRAP", "wrap");
 
 		});
+
+		//model rotation
 		$('#operation_Rotation').click(function() {
 			scope.processor.executeDesign("MODEL_ROTATION", "rotation");
 
 		});
+
+		//model align
 		$('#operation_Align').click(function() {
 			scope.processor.executeDesign("MODEL_ALIGN", "align");
+
+		});
+
+		//model painting
+		$('#operation_Painting').click(function() {
+			scope.processor.executeDesign("MODEL_PAINTING", "painting");
+
+		});
+
+		//add
+		$('#operation_Add').click(function() {
+			scope.processor.executeDesign("MODEL_ADD", "add");
 
 		});
 
