@@ -81,15 +81,7 @@ function assignUVs(geometry) {
 
 module.exports = CabinetMakeBedBroad
 
-<<<<<<< HEAD
-<<<<<<< HEAD
 },{"./csgToGeometries":41,"@jscad/csg":50,"@jscad/scad-api":137}],2:[function(require,module,exports){
-=======
-},{"./csgToGeometries":40,"@jscad/csg":49,"@jscad/scad-api":136}],2:[function(require,module,exports){
->>>>>>> parent of d095edd... Merge branch 'master' into Hou-branch
-=======
-},{"./csgToGeometries":40,"@jscad/csg":49,"@jscad/scad-api":136}],2:[function(require,module,exports){
->>>>>>> parent of d095edd... Merge branch 'master' into Hou-branch
 "use strict;"
 
 const scadApi = require('@jscad/scad-api')
@@ -138,15 +130,7 @@ function assignUVs(geometry) {
 }
 
 module.exports = CabinetMakeBroad
-<<<<<<< HEAD
-<<<<<<< HEAD
 },{"./csgToGeometries":41,"@jscad/csg":50,"@jscad/scad-api":137}],3:[function(require,module,exports){
-=======
-},{"./csgToGeometries":40,"@jscad/csg":49,"@jscad/scad-api":136}],3:[function(require,module,exports){
->>>>>>> parent of d095edd... Merge branch 'master' into Hou-branch
-=======
-},{"./csgToGeometries":40,"@jscad/csg":49,"@jscad/scad-api":136}],3:[function(require,module,exports){
->>>>>>> parent of d095edd... Merge branch 'master' into Hou-branch
 "use strict;"
 
 const scadApi = require('@jscad/scad-api')
@@ -198,15 +182,7 @@ function assignUVs(geometry) {
 
 
 module.exports = CabinetMakeSeat
-<<<<<<< HEAD
-<<<<<<< HEAD
 },{"./csgToGeometries":41,"@jscad/csg":50,"@jscad/scad-api":137}],4:[function(require,module,exports){
-=======
-},{"./csgToGeometries":40,"@jscad/csg":49,"@jscad/scad-api":136}],4:[function(require,module,exports){
->>>>>>> parent of d095edd... Merge branch 'master' into Hou-branch
-=======
-},{"./csgToGeometries":40,"@jscad/csg":49,"@jscad/scad-api":136}],4:[function(require,module,exports){
->>>>>>> parent of d095edd... Merge branch 'master' into Hou-branch
 "use strict;"
 
 const CabinetMakeSeat = require('./CabinetMakeSeat');
@@ -719,15 +695,7 @@ Cabinet_kallax.prototype = {
 }
 
 module.exports = Cabinet_kallax
-<<<<<<< HEAD
-<<<<<<< HEAD
 },{"./CabinetMakeBedBroad":1,"./CabinetMakeBroad":2,"./CabinetMakeSeat":3,"./MarkBetweenSize":22,"./MarkSize":23,"./rebuildMakeSeat":147}],5:[function(require,module,exports){
-=======
-},{"./CabinetMakeBedBroad":1,"./CabinetMakeBroad":2,"./CabinetMakeSeat":3,"./MarkBetweenSize":22,"./MarkSize":23,"./rebuildMakeSeat":146}],5:[function(require,module,exports){
->>>>>>> parent of d095edd... Merge branch 'master' into Hou-branch
-=======
-},{"./CabinetMakeBedBroad":1,"./CabinetMakeBroad":2,"./CabinetMakeSeat":3,"./MarkBetweenSize":22,"./MarkSize":23,"./rebuildMakeSeat":146}],5:[function(require,module,exports){
->>>>>>> parent of d095edd... Merge branch 'master' into Hou-branch
 const chairCreateBoard = require('./chairCreateBoard')
 const chairCutBack = require('./chairCutBack')
 
@@ -1616,15 +1584,7 @@ Chair_Add.prototype = {
 }
 
 module.exports = Chair_Add
-<<<<<<< HEAD
-<<<<<<< HEAD
 },{"./cadCutByPlane":33,"./chairCreateBoard":37,"./chairCutBack":38}],6:[function(require,module,exports){
-=======
-},{"./cadCutByPlane":32,"./chairCreateBoard":36,"./chairCutBack":37}],6:[function(require,module,exports){
->>>>>>> parent of d095edd... Merge branch 'master' into Hou-branch
-=======
-},{"./cadCutByPlane":32,"./chairCreateBoard":36,"./chairCutBack":37}],6:[function(require,module,exports){
->>>>>>> parent of d095edd... Merge branch 'master' into Hou-branch
 "use strict;"
 //chair align related functions
 //align in one line
@@ -2241,15 +2201,7 @@ module.exports = Chair_Align
 
 
 
-<<<<<<< HEAD
-<<<<<<< HEAD
 },{"./cadMakeSeat":36,"./chairCutBack":38,"./computeConvexHull":39}],7:[function(require,module,exports){
-=======
-},{"./cadMakeSeat":35,"./chairCutBack":37,"./computeConvexHull":38}],7:[function(require,module,exports){
->>>>>>> parent of d095edd... Merge branch 'master' into Hou-branch
-=======
-},{"./cadMakeSeat":35,"./chairCutBack":37,"./computeConvexHull":38}],7:[function(require,module,exports){
->>>>>>> parent of d095edd... Merge branch 'master' into Hou-branch
 "use strict;"
 
 const rebuildMakeSeat = require('./rebuildMakeSeat');
@@ -2668,15 +2620,6 @@ Chair_Rebuild.prototype = {
 		this.loadLegModel('../models/Legs/Leg1.dae', furniture, SeatPosi, SeatSize);
 		
 	},
-
-	// remove: function(group, name){
-	// 	for (var i = group.children.length - 1; i >= 0 ; i--) {				
-	// 		var str = group.children[i].name;
-	// 		if (str == name) {
-	// 			group.remove(group.children[i]);
-	// 		}	
-	// 	}
-	// },
 
 
 	remove: function(group){
@@ -3097,15 +3040,7 @@ Chair_Rebuild.prototype = {
 }
 module.exports = Chair_Rebuild
 
-<<<<<<< HEAD
-<<<<<<< HEAD
 },{"./Model_Painting":26,"./Model_wrap":28,"./cadExtrudeShape":34,"./chairCutBack":38,"./computeConvexHull":39,"./rebuildMakeLeg":146,"./rebuildMakeSeat":147}],8:[function(require,module,exports){
-=======
-},{"./Model_Painting":26,"./Model_wrap":28,"./cadExtrudeShape":33,"./chairCutBack":37,"./computeConvexHull":38,"./rebuildMakeLeg":145,"./rebuildMakeSeat":146}],8:[function(require,module,exports){
->>>>>>> parent of d095edd... Merge branch 'master' into Hou-branch
-=======
-},{"./Model_Painting":26,"./Model_wrap":28,"./cadExtrudeShape":33,"./chairCutBack":37,"./computeConvexHull":38,"./rebuildMakeLeg":145,"./rebuildMakeSeat":146}],8:[function(require,module,exports){
->>>>>>> parent of d095edd... Merge branch 'master' into Hou-branch
 "use strict;"
 
 const scadApi = require('@jscad/scad-api')
@@ -3128,15 +3063,7 @@ function CreateBlum(width, length, height) {
 }
 
 module.exports = CreateBlum
-<<<<<<< HEAD
-<<<<<<< HEAD
 },{"./csgToGeometries":41,"@jscad/csg":50,"@jscad/scad-api":137}],9:[function(require,module,exports){
-=======
-},{"./csgToGeometries":40,"@jscad/csg":49,"@jscad/scad-api":136}],9:[function(require,module,exports){
->>>>>>> parent of d095edd... Merge branch 'master' into Hou-branch
-=======
-},{"./csgToGeometries":40,"@jscad/csg":49,"@jscad/scad-api":136}],9:[function(require,module,exports){
->>>>>>> parent of d095edd... Merge branch 'master' into Hou-branch
 "use strict;"
 
 const scadApi = require('@jscad/scad-api')
@@ -3175,15 +3102,7 @@ function CreateChain(length) {
 }
 
 module.exports = CreateChain
-<<<<<<< HEAD
-<<<<<<< HEAD
 },{"./csgToGeometries":41,"@jscad/csg":50,"@jscad/scad-api":137}],10:[function(require,module,exports){
-=======
-},{"./csgToGeometries":40,"@jscad/csg":49,"@jscad/scad-api":136}],10:[function(require,module,exports){
->>>>>>> parent of d095edd... Merge branch 'master' into Hou-branch
-=======
-},{"./csgToGeometries":40,"@jscad/csg":49,"@jscad/scad-api":136}],10:[function(require,module,exports){
->>>>>>> parent of d095edd... Merge branch 'master' into Hou-branch
 "use strict;"
 
 const scadApi = require('@jscad/scad-api')
@@ -3248,15 +3167,7 @@ function CreateDoorBoard (length, height){
 
 
 module.exports = CreateDoorBoard
-<<<<<<< HEAD
-<<<<<<< HEAD
 },{"./csgToGeometries":41,"@jscad/csg":50,"@jscad/scad-api":137}],12:[function(require,module,exports){
-=======
-},{"./csgToGeometries":40,"@jscad/csg":49,"@jscad/scad-api":136}],12:[function(require,module,exports){
->>>>>>> parent of d095edd... Merge branch 'master' into Hou-branch
-=======
-},{"./csgToGeometries":40,"@jscad/csg":49,"@jscad/scad-api":136}],12:[function(require,module,exports){
->>>>>>> parent of d095edd... Merge branch 'master' into Hou-branch
 "use strict;"
 
 const scadApi = require('@jscad/scad-api')
@@ -3296,15 +3207,7 @@ function CreateDrawer(width, length, height) {
 }
 
 module.exports = CreateDrawer
-<<<<<<< HEAD
-<<<<<<< HEAD
 },{"./csgToGeometries":41,"@jscad/csg":50,"@jscad/scad-api":137}],13:[function(require,module,exports){
-=======
-},{"./csgToGeometries":40,"@jscad/csg":49,"@jscad/scad-api":136}],13:[function(require,module,exports){
->>>>>>> parent of d095edd... Merge branch 'master' into Hou-branch
-=======
-},{"./csgToGeometries":40,"@jscad/csg":49,"@jscad/scad-api":136}],13:[function(require,module,exports){
->>>>>>> parent of d095edd... Merge branch 'master' into Hou-branch
 "use strict;"
 
 const scadApi = require('@jscad/scad-api')
@@ -3323,15 +3226,7 @@ function CreateDresserLeg() {
 }
 
 module.exports = CreateDresserLeg
-<<<<<<< HEAD
-<<<<<<< HEAD
 },{"./csgToGeometries":41,"@jscad/csg":50,"@jscad/scad-api":137}],14:[function(require,module,exports){
-=======
-},{"./csgToGeometries":40,"@jscad/csg":49,"@jscad/scad-api":136}],14:[function(require,module,exports){
->>>>>>> parent of d095edd... Merge branch 'master' into Hou-branch
-=======
-},{"./csgToGeometries":40,"@jscad/csg":49,"@jscad/scad-api":136}],14:[function(require,module,exports){
->>>>>>> parent of d095edd... Merge branch 'master' into Hou-branch
 "use strict;"
 
 const scadApi = require('@jscad/scad-api')
@@ -3384,15 +3279,7 @@ function CreateHinge(RAngle, mode) {
 }
 
 module.exports = CreateHinge
-<<<<<<< HEAD
-<<<<<<< HEAD
 },{"./csgToGeometries":41,"@jscad/csg":50,"@jscad/scad-api":137}],15:[function(require,module,exports){
-=======
-},{"./csgToGeometries":40,"@jscad/csg":49,"@jscad/scad-api":136}],15:[function(require,module,exports){
->>>>>>> parent of d095edd... Merge branch 'master' into Hou-branch
-=======
-},{"./csgToGeometries":40,"@jscad/csg":49,"@jscad/scad-api":136}],15:[function(require,module,exports){
->>>>>>> parent of d095edd... Merge branch 'master' into Hou-branch
 "use strict;"
 
 const scadApi = require('@jscad/scad-api')
@@ -3426,15 +3313,7 @@ function CreateRod(length) {
 }
 
 module.exports = CreateRod
-<<<<<<< HEAD
-<<<<<<< HEAD
 },{"./csgToGeometries":41,"@jscad/csg":50,"@jscad/scad-api":137}],16:[function(require,module,exports){
-=======
-},{"./csgToGeometries":40,"@jscad/csg":49,"@jscad/scad-api":136}],16:[function(require,module,exports){
->>>>>>> parent of d095edd... Merge branch 'master' into Hou-branch
-=======
-},{"./csgToGeometries":40,"@jscad/csg":49,"@jscad/scad-api":136}],16:[function(require,module,exports){
->>>>>>> parent of d095edd... Merge branch 'master' into Hou-branch
 "use strict;"
 
 const scadApi = require('@jscad/scad-api')
@@ -4077,15 +3956,7 @@ Desk.prototype = {
 }
 
 module.exports = Desk
-<<<<<<< HEAD
-<<<<<<< HEAD
 },{"./CreateSupport":17,"./CreateWheel":19,"./chairCreateBoard":37}],21:[function(require,module,exports){
-=======
-},{"./CreateSupport":17,"./CreateWheel":19,"./chairCreateBoard":36}],21:[function(require,module,exports){
->>>>>>> parent of d095edd... Merge branch 'master' into Hou-branch
-=======
-},{"./CreateSupport":17,"./CreateWheel":19,"./chairCreateBoard":36}],21:[function(require,module,exports){
->>>>>>> parent of d095edd... Merge branch 'master' into Hou-branch
 "use strict;"
 
 const dresserCutSpace = require('./dresserCutSpace')
@@ -5155,15 +5026,7 @@ Dresser_Add.prototype = {
 }
 
 module.exports = Dresser_Add
-<<<<<<< HEAD
-<<<<<<< HEAD
 },{"./CreateBlum":8,"./CreateChain":9,"./CreateDoor":10,"./CreateDrawer":12,"./CreateDresserLeg":13,"./CreateHinge":14,"./CreateRod":15,"./CreateSpiceRack":16,"./chairCreateBoard":37,"./dresserCutSpace":42}],22:[function(require,module,exports){
-=======
-},{"./CreateBlum":8,"./CreateChain":9,"./CreateDoor":10,"./CreateDrawer":12,"./CreateDresserLeg":13,"./CreateHinge":14,"./CreateRod":15,"./CreateSpiceRack":16,"./chairCreateBoard":36,"./dresserCutSpace":41}],22:[function(require,module,exports){
->>>>>>> parent of d095edd... Merge branch 'master' into Hou-branch
-=======
-},{"./CreateBlum":8,"./CreateChain":9,"./CreateDoor":10,"./CreateDrawer":12,"./CreateDresserLeg":13,"./CreateHinge":14,"./CreateRod":15,"./CreateSpiceRack":16,"./chairCreateBoard":36,"./dresserCutSpace":41}],22:[function(require,module,exports){
->>>>>>> parent of d095edd... Merge branch 'master' into Hou-branch
 "use strict;"
 
 function MarkBetweenSize( main , TargetObj1 , TargetObj2 ){
@@ -6535,64 +6398,72 @@ Model_Add.prototype = {
 module.exports = Model_Add
 },{"./CreateDoor":10,"./CreateDrawer":12,"./CreateDresserLeg":13,"./CreateRod":15,"./CreateSpiceRack":16,"./CreateTableRod":18,"./CreateWheel":19}],25:[function(require,module,exports){
 "use strict;"
+const Procedure_button = require('./Procedure_button');
 
 function Model_Align(main){
 
 	this.main = main;
     this.furnitures = main.furnitures;
     this.Align_mode = false; 
+    var scope = this;
+    $( ".item.ui.image.label.align1" ).click(function() {
+		if(scope.main.onCtrl == true && scope.main.DistanceObj.length==2){
+			scope.AlignFurniture('x');
+		}
+		if(scope.main.onCtrlE == true){
+			scope.AlignComponent('x');
+		}
+    });
+    $( ".item.ui.image.label.align2" ).click(function() {
+    	if(scope.main.onCtrl == true && scope.main.DistanceObj.length==2){
+			scope.AlignFurniture('y');
+		}
+		if(scope.main.onCtrlE == true){
+			scope.AlignComponent('y');
+		}
+    });
+    $( ".item.ui.image.label.align3" ).click(function() {
+    	if(scope.main.onCtrl == true && scope.main.DistanceObj.length==2){
+			scope.AlignFurniture('z');
+		}
+		if(scope.main.onCtrlE == true){
+			scope.AlignComponent('z');
+		}
+    });
 
 }
 
 Model_Align.prototype = {
 
 	execute: function( name ){
-		var scope = this;
 
-		$( ".item.ui.image.label.align1" ).click(function() {
-			if(scope.main.onCtrl == true && scope.main.DistanceObj.length==2){
-				scope.AlignFurniture('x');
-			}
-			if(scope.main.onCtrlE == true){
-				scope.AlignComponent('x');
-			}
-			
-        });
-        $( ".item.ui.image.label.align2" ).click(function() {
-        	if(scope.main.onCtrl == true && scope.main.DistanceObj.length==2){
-				scope.AlignFurniture('y');
-			}
-			if(scope.main.onCtrlE == true){
-				scope.AlignComponent('y');
-			}
-			
-        });
-        $( ".item.ui.image.label.align3" ).click(function() {
-        	if(scope.main.onCtrl == true && scope.main.DistanceObj.length==2){
-				scope.AlignFurniture('z');
-			}
-			if(scope.main.onCtrlE == true){
-				scope.AlignComponent('z');
-			}
-			
-        });
-
-
-		if(this.Align_mode == false){
+		if(this.Align_mode == false && name=='align'){
         	$('#parameter_control_tool_align').show();
             this.Align_mode = true;
+            this.main.processor.executeDesign("MODEL_PAINTING", "align");
+        	this.main.processor.executeDesign("MODEL_WRAP", "align");
+        	this.main.processor.executeDesign("MODEL_ROTATION", "align");
+        	
+        	//creat procedure button
+        	if(this.main.stepOperationName != name){
+        		this.DeleteButton();
+	        	Procedure_button( this.main, this.main.stepOperationName );
+	        	//record the operation name
+	        	this.main.stepOperationName = name;
+        	}
+	        	
         }
-        else if(this.Align_mode == true){
+        else if(this.Align_mode == true || name!= 'align'){
         	$('#parameter_control_tool_align').hide();
             this.Align_mode = false;
         }
-        $('#parameter_control_tool_painting').hide();
-        $('#parameter_control_tool_wrap').hide();
-        $('#parameter_control_tool_rotation').hide();
+        
 	},
 
 	AlignFurniture: function( mode ){
-
+		
+		this.DeleteButton();
+		
 		var group = new THREE.Group();
 		var TotalSize = new THREE.Vector3();
 
@@ -6649,6 +6520,8 @@ Model_Align.prototype = {
 	},
 
 	AlignComponent: function( mode ){
+		
+		this.DeleteButton();
 
 		var group = new THREE.Group();
 		var TotalSize = new THREE.Vector3();
@@ -6739,112 +6612,128 @@ Model_Align.prototype = {
 		return center;
     },
 
+    DeleteButton: function(){
+    	//console.log(this.main.stepNumber);
+		//console.log(this.main.stepObject.length);
+		this.main.lastStep = true;
+		if (this.main.stepNumber < this.main.stepObject.length){
+			var stepLength = this.main.stepObject.length;
 
+			for(var i=parseInt(this.main.stepNumber); i<stepLength; i++){
+				var btn = document.getElementById(
+					"ui circular icon button procedure "+i.toString());
+				btn.parentNode.removeChild(btn);
+			}
+			this.main.stepObject.length = parseInt(this.main.stepNumber);
+		}
+
+    }
 
 
 }
 
 module.exports = Model_Align
-<<<<<<< HEAD
-<<<<<<< HEAD
 },{"./Procedure_button":29}],26:[function(require,module,exports){
-=======
-},{}],26:[function(require,module,exports){
->>>>>>> parent of d095edd... Merge branch 'master' into Hou-branch
-=======
-},{}],26:[function(require,module,exports){
->>>>>>> parent of d095edd... Merge branch 'master' into Hou-branch
 "use strict;"
+const Procedure_button = require('./Procedure_button');
 
 
 function Model_Painting( main ){
 
     this.main = main;
     this.furnitures = main.furnitures;
-
     this.paint_mode = false;
+    var scope = this;
+    var manager = new THREE.LoadingManager();
+    var textureLoader = new THREE.TextureLoader( manager );
+    $( ".item.ui.image.label.paint1" ).click(function() {
+        var texture = textureLoader.load( '../images/material/material1.jpg' );
+        texture.repeat.set(0.1, 0.1);
+        texture.wrapS = texture.wrapT = THREE.MirroredRepeatWrapping;
+        var newmaterial = new THREE.MeshBasicMaterial( {map: texture} );
+        scope.ChangeTexture( newmaterial );
+        
+    });
+    $( ".item.ui.image.label.paint2" ).click(function() {
+        var texture = textureLoader.load( '../images/material/material2.jpg' );
+        texture.repeat.set(0.1, 0.1);
+        texture.wrapS = texture.wrapT = THREE.MirroredRepeatWrapping;
+        var newmaterial = new THREE.MeshBasicMaterial( {map: texture} );
+        scope.ChangeTexture( newmaterial );
+        
+    });
+    $( ".item.ui.image.label.paint3" ).click(function() {
+        var texture = textureLoader.load( '../images/material/material3.jpg' );
+        texture.repeat.set(0.1, 0.1);
+        texture.wrapS = texture.wrapT = THREE.MirroredRepeatWrapping;
+        var newmaterial = new THREE.MeshBasicMaterial( {map: texture} );
+        scope.ChangeTexture( newmaterial );
+        
+    });
+    $( ".item.ui.image.label.paint4" ).click(function() {
+        var texture = textureLoader.load( '../images/material/material4.jpg' );
+        texture.repeat.set(0.1, 0.1);
+        texture.wrapS = texture.wrapT = THREE.MirroredRepeatWrapping;
+        var newmaterial = new THREE.MeshBasicMaterial( {map: texture} );
+        scope.ChangeTexture( newmaterial );
+        
+    });
+    $( ".item.ui.image.label.paint5" ).click(function() {
+        var texture = textureLoader.load( '../images/material/material5.jpg' );
+        texture.repeat.set(0.1, 0.1);
+        texture.wrapS = texture.wrapT = THREE.MirroredRepeatWrapping;
+        var newmaterial = new THREE.MeshBasicMaterial( {map: texture} );
+        scope.ChangeTexture( newmaterial );
+        
+    });
+    $( ".item.ui.image.label.paint7" ).click(function() {
+        var texture = textureLoader.load( '../images/material/material7.jpg' );
+        texture.repeat.set(0.1, 0.1);
+        texture.wrapS = texture.wrapT = THREE.MirroredRepeatWrapping;
+        var newmaterial = new THREE.MeshBasicMaterial( {map: texture} );
+        scope.ChangeTexture( newmaterial );
+        
+    });
+    $( ".item.ui.image.label.paint9" ).click(function() {
+        var texture = textureLoader.load( '../images/material/material9.jpg' );
+        texture.repeat.set(0.1, 0.1);
+        texture.wrapS = texture.wrapT = THREE.MirroredRepeatWrapping;
+        var newmaterial = new THREE.MeshBasicMaterial( {map: texture} );
+        scope.ChangeTexture( newmaterial );
+        
+    });
 }
 
 Model_Painting.prototype = {
 
     execute: function( name ){
-        
-        var main = this;
-        var manager = new THREE.LoadingManager();
-        var textureLoader = new THREE.TextureLoader( manager );
 
-        $( ".item.ui.image.label.paint1" ).click(function() {
-            var texture = textureLoader.load( '../images/material/material1.jpg' );
-            texture.repeat.set(0.1, 0.1);
-            texture.wrapS = texture.wrapT = THREE.MirroredRepeatWrapping;
-            var newmaterial = new THREE.MeshBasicMaterial( {map: texture} );
-            main.ChangeTexture( newmaterial );
-            
-        });
-        $( ".item.ui.image.label.paint2" ).click(function() {
-            var texture = textureLoader.load( '../images/material/material2.jpg' );
-            texture.repeat.set(0.1, 0.1);
-            texture.wrapS = texture.wrapT = THREE.MirroredRepeatWrapping;
-            var newmaterial = new THREE.MeshBasicMaterial( {map: texture} );
-            main.ChangeTexture( newmaterial );
-            
-        });
-        $( ".item.ui.image.label.paint3" ).click(function() {
-            var texture = textureLoader.load( '../images/material/material3.jpg' );
-            texture.repeat.set(0.1, 0.1);
-            texture.wrapS = texture.wrapT = THREE.MirroredRepeatWrapping;
-            var newmaterial = new THREE.MeshBasicMaterial( {map: texture} );
-            main.ChangeTexture( newmaterial );
-            
-        });
-        $( ".item.ui.image.label.paint4" ).click(function() {
-            var texture = textureLoader.load( '../images/material/material4.jpg' );
-            texture.repeat.set(0.1, 0.1);
-            texture.wrapS = texture.wrapT = THREE.MirroredRepeatWrapping;
-            var newmaterial = new THREE.MeshBasicMaterial( {map: texture} );
-            main.ChangeTexture( newmaterial );
-            
-        });
-        $( ".item.ui.image.label.paint5" ).click(function() {
-            var texture = textureLoader.load( '../images/material/material5.jpg' );
-            texture.repeat.set(0.1, 0.1);
-            texture.wrapS = texture.wrapT = THREE.MirroredRepeatWrapping;
-            var newmaterial = new THREE.MeshBasicMaterial( {map: texture} );
-            main.ChangeTexture( newmaterial );
-            
-        });
-        $( ".item.ui.image.label.paint7" ).click(function() {
-            var texture = textureLoader.load( '../images/material/material7.jpg' );
-            texture.repeat.set(0.1, 0.1);
-            texture.wrapS = texture.wrapT = THREE.MirroredRepeatWrapping;
-            var newmaterial = new THREE.MeshBasicMaterial( {map: texture} );
-            main.ChangeTexture( newmaterial );
-            
-        });
-        $( ".item.ui.image.label.paint9" ).click(function() {
-            var texture = textureLoader.load( '../images/material/material9.jpg' );
-            texture.repeat.set(0.1, 0.1);
-            texture.wrapS = texture.wrapT = THREE.MirroredRepeatWrapping;
-            var newmaterial = new THREE.MeshBasicMaterial( {map: texture} );
-            main.ChangeTexture( newmaterial );
-            
-        });
-
-        if(this.paint_mode == false){
+        if(this.paint_mode == false && name=='painting'){
             $('#parameter_control_tool_painting').show();
             this.paint_mode = true;
+            this.main.processor.executeDesign("MODEL_ALIGN", "painting");
+            this.main.processor.executeDesign("MODEL_WRAP", "painting");
+            this.main.processor.executeDesign("MODEL_ROTATION", "painting");
+            
+            //creat procedure button
+            if(this.main.stepOperationName != name){
+                this.DeleteButton();
+                Procedure_button( this.main, this.main.stepOperationName );
+                //record the operation name
+                this.main.stepOperationName = name;
+            }
         }
-        else if(this.paint_mode == true){
+        else if(this.paint_mode == true || name!= 'painting'){
             $('#parameter_control_tool_painting').hide();
             this.paint_mode = false;
         }
-        $('#parameter_control_tool_wrap').hide();
-        $('#parameter_control_tool_rotation').hide();
-        $('#parameter_control_tool_align').hide();
+        
 
     },
 
     ChangeTexture( newmaterial ){
+        
+        this.DeleteButton();
 
         for(var i=0 ; i<this.main.GetSizeObj.length ; i++ ){
             
@@ -6857,6 +6746,7 @@ Model_Painting.prototype = {
                 if( ChangeTextureObj[j].geometry.isBufferGeometry ){
                     ChangeTextureObj[j].geometry = new THREE.Geometry().fromBufferGeometry( ChangeTextureObj[j].geometry );
                     assignUVs( ChangeTextureObj[j].geometry );
+                    ChangeTextureObj[j].geometry= new THREE.BufferGeometry().fromGeometry( ChangeTextureObj[j].geometry );
                 }
                 
                 ChangeTextureObj[j].material = newmaterial;
@@ -6877,6 +6767,22 @@ Model_Painting.prototype = {
             array.push(obj);    
         }
 
+    },
+
+    DeleteButton: function(){
+        //console.log(this.main.stepNumber);
+        //console.log(this.main.stepObject.length);
+        this.main.lastStep = true;
+        if (this.main.stepNumber < this.main.stepObject.length){
+            var stepLength = this.main.stepObject.length;
+
+            for(var i=parseInt(this.main.stepNumber); i<stepLength; i++){
+                var btn = document.getElementById(
+                    "ui circular icon button procedure "+i.toString());
+                btn.parentNode.removeChild(btn);
+            }
+            this.main.stepObject.length = parseInt(this.main.stepNumber);
+        }
     }
 
 }
@@ -6908,23 +6814,53 @@ function assignUVs(geometry) {
 }
 
 module.exports = Model_Painting
-<<<<<<< HEAD
-<<<<<<< HEAD
 },{"./Procedure_button":29}],27:[function(require,module,exports){
-=======
-},{}],27:[function(require,module,exports){
->>>>>>> parent of d095edd... Merge branch 'master' into Hou-branch
-=======
-},{}],27:[function(require,module,exports){
->>>>>>> parent of d095edd... Merge branch 'master' into Hou-branch
 "use strict;"
+const Procedure_button = require('./Procedure_button');
 
 function Model_Rotation(main){
 
 	this.main = main;
     this.furnitures = main.furnitures;
     this.Rotation_mode = false; 
+	var scope = this;
 
+    $( ".item.ui.image.label.rota1" ).click(function() {	
+		for(var i=0 ; i<scope.main.GetSizeObj.length ; i++ ){
+            var model = scope.main.GetSizeObj[i];
+			scope.objectRotationByAxis( model, 'x' , 90 );
+        }
+    });
+    $( ".item.ui.image.label.rota2" ).click(function() {
+		for(var i=0 ; i<scope.main.GetSizeObj.length ; i++ ){
+            var model = scope.main.GetSizeObj[i];
+			scope.objectRotationByAxis( model, 'x' , -90 );
+        }
+    });
+    $( ".item.ui.image.label.rota3" ).click(function() {
+		for(var i=0 ; i<scope.main.GetSizeObj.length ; i++ ){
+            var model = scope.main.GetSizeObj[i];
+			scope.objectRotationByAxis( model, 'z' , 90 );
+        }
+    });
+    $( ".item.ui.image.label.rota4" ).click(function() {
+		for(var i=0 ; i<scope.main.GetSizeObj.length ; i++ ){
+            var model = scope.main.GetSizeObj[i];
+			scope.objectRotationByAxis( model, 'z' , -90 );
+        }
+    });
+    $( ".item.ui.image.label.rota5" ).click(function() {
+		for(var i=0 ; i<scope.main.GetSizeObj.length ; i++ ){
+            var model = scope.main.GetSizeObj[i];
+			scope.objectRotationByAxis( model, 'y' , 90 );
+        }
+    });
+    $( ".item.ui.image.label.rota6" ).click(function() {
+		for(var i=0 ; i<scope.main.GetSizeObj.length ; i++ ){
+            var model = scope.main.GetSizeObj[i];
+			scope.objectRotationByAxis( model, 'y' , -90 );
+        }
+    });
 }
 
 Model_Rotation.prototype = {
@@ -6932,64 +6868,35 @@ Model_Rotation.prototype = {
 	execute: function( name ){
 		var scope = this;
 
-		$( ".item.ui.image.label.rota1" ).click(function() {
-			
-			for(var i=0 ; i<scope.main.GetSizeObj.length ; i++ ){
-	            var model = scope.main.GetSizeObj[i];
-				scope.objectRotationByAxis( model, 'x' , 90 );
-	        }
-        });
-        $( ".item.ui.image.label.rota2" ).click(function() {
-
-			for(var i=0 ; i<scope.main.GetSizeObj.length ; i++ ){
-	            var model = scope.main.GetSizeObj[i];
-				scope.objectRotationByAxis( model, 'x' , -90 );
-	        }
-        });
-        $( ".item.ui.image.label.rota3" ).click(function() {
-
-			for(var i=0 ; i<scope.main.GetSizeObj.length ; i++ ){
-	            var model = scope.main.GetSizeObj[i];
-				scope.objectRotationByAxis( model, 'z' , 90 );
-	        }
-        });
-        $( ".item.ui.image.label.rota4" ).click(function() {
-
-			for(var i=0 ; i<scope.main.GetSizeObj.length ; i++ ){
-	            var model = scope.main.GetSizeObj[i];
-				scope.objectRotationByAxis( model, 'z' , -90 );
-	        }
-        });
-        $( ".item.ui.image.label.rota5" ).click(function() {
-
-			for(var i=0 ; i<scope.main.GetSizeObj.length ; i++ ){
-	            var model = scope.main.GetSizeObj[i];
-				scope.objectRotationByAxis( model, 'y' , 90 );
-	        }
-        });
-        $( ".item.ui.image.label.rota6" ).click(function() {
-
-			for(var i=0 ; i<scope.main.GetSizeObj.length ; i++ ){
-	            var model = scope.main.GetSizeObj[i];
-				scope.objectRotationByAxis( model, 'y' , -90 );
-	        }
-        });
-
-
-		if(this.Rotation_mode == false){
+        //show my button, hide others button
+		if(this.Rotation_mode == false && name=='rotation'){
         	$('#parameter_control_tool_rotation').show();
             this.Rotation_mode = true;
-        }
-        else if(this.Rotation_mode == true){
+            this.main.processor.executeDesign("MODEL_ALIGN", "rotation");
+        	this.main.processor.executeDesign("MODEL_PAINTING", "rotation");
+        	this.main.processor.executeDesign("MODEL_WRAP", "rotation");
+        	
+        	//creat procedure button
+        	if(this.main.stepOperationName != name){
+        		this.DeleteButton();
+	        	Procedure_button( this.main, this.main.stepOperationName );
+	        	//record the operation name
+	        	this.main.stepOperationName = name;
+        	}
+        }//hide my button
+        else if(this.Rotation_mode == true || name!='rotation'){
         	$('#parameter_control_tool_rotation').hide();
             this.Rotation_mode = false;
         }
-        $('#parameter_control_tool_painting').hide();
-        $('#parameter_control_tool_wrap').hide();
-        $('#parameter_control_tool_align').hide();
+        
+
+
 	},
 
 	objectRotationByAxis: function(obj, axis, degree){
+		
+		this.DeleteButton();
+
 		var center = this.getCenterPosition(obj);
 		var size = this.getSize(obj);
 		//rotation
@@ -7044,6 +6951,22 @@ Model_Rotation.prototype = {
 
         //this includes width, height, depth
         return box_size;
+    },
+
+    DeleteButton: function(){
+    	//console.log(this.main.stepNumber);
+		//console.log(this.main.stepObject.length);
+		this.main.lastStep = true;
+		if (this.main.stepNumber < this.main.stepObject.length){
+			var stepLength = this.main.stepObject.length;
+
+			for(var i=parseInt(this.main.stepNumber); i<stepLength; i++){
+				var btn = document.getElementById(
+					"ui circular icon button procedure "+i.toString());
+				btn.parentNode.removeChild(btn);
+			}
+			this.main.stepObject.length = parseInt(this.main.stepNumber);
+		}
     }
 
 
@@ -7051,128 +6974,124 @@ Model_Rotation.prototype = {
 }
 
 module.exports = Model_Rotation
-<<<<<<< HEAD
-<<<<<<< HEAD
 },{"./Procedure_button":29}],28:[function(require,module,exports){
-=======
-},{}],28:[function(require,module,exports){
->>>>>>> parent of d095edd... Merge branch 'master' into Hou-branch
-=======
-},{}],28:[function(require,module,exports){
->>>>>>> parent of d095edd... Merge branch 'master' into Hou-branch
 "use strict;"
 const computeConvexHull = require('./computeConvexHull');
 const cadExtrudeShapeIntersection = require('./cadExtrudeShapeIntersection');
 const chairCutBack = require('./chairCutBack');
+const Procedure_button = require('./Procedure_button');
 
 function Model_wrap(main){
 
 	this.main = main;
     this.furnitures = main.furnitures;
     this.wrap_mode	= false; 
-
+    var scope = this;
+    var manager = new THREE.LoadingManager();
+    var textureLoader = new THREE.TextureLoader( manager );
+    
+    $( ".item.ui.image.label.wrap1" ).click(function() {
+        var texture = textureLoader.load( '../images/material/wrap/wrap1.jpg' );
+        texture.repeat.set(0.1, 0.1);
+        texture.wrapS = texture.wrapT = THREE.MirroredRepeatWrapping;
+        var newmaterial = new THREE.MeshBasicMaterial( {map: texture} );
+        for(var i=0 ; i<scope.main.GetSizeObj.length ; i++ ){
+            var model = scope.main.GetSizeObj[i];
+            scope.Wrap( model , texture );
+        }
+    });
+    $( ".item.ui.image.label.wrap2" ).click(function() {
+        var texture = textureLoader.load( '../images/material/wrap/wrap2.jpg' );
+        texture.repeat.set(0.1, 0.1);
+        texture.wrapS = texture.wrapT = THREE.MirroredRepeatWrapping;
+        var newmaterial = new THREE.MeshBasicMaterial( {map: texture} );
+        for(var i=0 ; i<scope.main.GetSizeObj.length ; i++ ){
+            var model = scope.main.GetSizeObj[i];
+            scope.Wrap( model , texture );
+        }
+    });
+    $( ".item.ui.image.label.wrap3" ).click(function() {
+        var texture = textureLoader.load( '../images/material/wrap/wrap3.jpg' );
+        texture.repeat.set(0.1, 0.1);
+        texture.wrapS = texture.wrapT = THREE.MirroredRepeatWrapping;
+        var newmaterial = new THREE.MeshBasicMaterial( {map: texture} );
+        for(var i=0 ; i<scope.main.GetSizeObj.length ; i++ ){
+            var model = scope.main.GetSizeObj[i];
+            scope.Wrap( model , texture );
+        }
+    });
+    $( ".item.ui.image.label.wrap4" ).click(function() {
+        var texture = textureLoader.load( '../images/material/wrap/wrap4.jpg' );
+        texture.repeat.set(0.1, 0.1);
+        texture.wrapS = texture.wrapT = THREE.MirroredRepeatWrapping;
+        var newmaterial = new THREE.MeshBasicMaterial( {map: texture} );
+        for(var i=0 ; i<scope.main.GetSizeObj.length ; i++ ){
+            var model = scope.main.GetSizeObj[i];
+            scope.Wrap( model , texture );
+        }
+    });
+    $( ".item.ui.image.label.wrap5" ).click(function() {
+        var texture = textureLoader.load( '../images/material/wrap/wrap5.jpg' );
+        texture.repeat.set(0.1, 0.1);
+        texture.wrapS = texture.wrapT = THREE.MirroredRepeatWrapping;
+        var newmaterial = new THREE.MeshBasicMaterial( {map: texture} );
+        for(var i=0 ; i<scope.main.GetSizeObj.length ; i++ ){
+            var model = scope.main.GetSizeObj[i];
+            scope.Wrap( model , texture );
+        }
+    });
+    $( ".item.ui.image.label.wrap6" ).click(function() {
+        var texture = textureLoader.load( '../images/material/wrap/wrap6.jpg' );
+        texture.repeat.set(0.1, 0.1);
+        texture.wrapS = texture.wrapT = THREE.MirroredRepeatWrapping;
+        var newmaterial = new THREE.MeshBasicMaterial( {map: texture} );
+        for(var i=0 ; i<scope.main.GetSizeObj.length ; i++ ){
+            var model = scope.main.GetSizeObj[i];
+            scope.Wrap( model , texture );
+        }
+    });
+    $( ".item.ui.image.label.wrap7" ).click(function() {
+        var texture = textureLoader.load( '../images/material/wrap/wrap7.jpg' );
+        texture.repeat.set(0.1, 0.1);
+        texture.wrapS = texture.wrapT = THREE.MirroredRepeatWrapping;
+        var newmaterial = new THREE.MeshBasicMaterial( {map: texture} );
+        for(var i=0 ; i<scope.main.GetSizeObj.length ; i++ ){
+            var model = scope.main.GetSizeObj[i];
+            scope.Wrap( model , texture );
+        }
+    });
 }
 
 Model_wrap.prototype = {
 
 	execute: function( name ){
 
-        var main = this;
-        var manager = new THREE.LoadingManager();
-        var textureLoader = new THREE.TextureLoader( manager );
-
-        $( ".item.ui.image.label.wrap1" ).click(function() {
-            var texture = textureLoader.load( '../images/material/wrap/wrap1.jpg' );
-            texture.repeat.set(0.1, 0.1);
-            texture.wrapS = texture.wrapT = THREE.MirroredRepeatWrapping;
-            var newmaterial = new THREE.MeshBasicMaterial( {map: texture} );
-            for(var i=0 ; i<main.main.GetSizeObj.length ; i++ ){
-	            var model = main.main.GetSizeObj[i];
-	            main.Wrap( model , texture );
-	        }
-            
-        });
-        $( ".item.ui.image.label.wrap2" ).click(function() {
-            var texture = textureLoader.load( '../images/material/wrap/wrap2.jpg' );
-            texture.repeat.set(0.1, 0.1);
-            texture.wrapS = texture.wrapT = THREE.MirroredRepeatWrapping;
-            var newmaterial = new THREE.MeshBasicMaterial( {map: texture} );
-            for(var i=0 ; i<main.main.GetSizeObj.length ; i++ ){
-	            var model = main.main.GetSizeObj[i];
-	            main.Wrap( model , texture );
-	        }
-            
-        });
-        $( ".item.ui.image.label.wrap3" ).click(function() {
-            var texture = textureLoader.load( '../images/material/wrap/wrap3.jpg' );
-            texture.repeat.set(0.1, 0.1);
-            texture.wrapS = texture.wrapT = THREE.MirroredRepeatWrapping;
-            var newmaterial = new THREE.MeshBasicMaterial( {map: texture} );
-            for(var i=0 ; i<main.main.GetSizeObj.length ; i++ ){
-	            var model = main.main.GetSizeObj[i];
-	            main.Wrap( model , texture );
-	        }
-            
-        });
-        $( ".item.ui.image.label.wrap4" ).click(function() {
-            var texture = textureLoader.load( '../images/material/wrap/wrap4.jpg' );
-            texture.repeat.set(0.1, 0.1);
-            texture.wrapS = texture.wrapT = THREE.MirroredRepeatWrapping;
-            var newmaterial = new THREE.MeshBasicMaterial( {map: texture} );
-            for(var i=0 ; i<main.main.GetSizeObj.length ; i++ ){
-	            var model = main.main.GetSizeObj[i];
-	            main.Wrap( model , texture );
-	        }
-            
-        });
-        $( ".item.ui.image.label.wrap5" ).click(function() {
-            var texture = textureLoader.load( '../images/material/wrap/wrap5.jpg' );
-            texture.repeat.set(0.1, 0.1);
-            texture.wrapS = texture.wrapT = THREE.MirroredRepeatWrapping;
-            var newmaterial = new THREE.MeshBasicMaterial( {map: texture} );
-            for(var i=0 ; i<main.main.GetSizeObj.length ; i++ ){
-	            var model = main.main.GetSizeObj[i];
-	            main.Wrap( model , texture );
-	        }
-            
-        });
-        $( ".item.ui.image.label.wrap6" ).click(function() {
-            var texture = textureLoader.load( '../images/material/wrap/wrap6.jpg' );
-            texture.repeat.set(0.1, 0.1);
-            texture.wrapS = texture.wrapT = THREE.MirroredRepeatWrapping;
-            var newmaterial = new THREE.MeshBasicMaterial( {map: texture} );
-            for(var i=0 ; i<main.main.GetSizeObj.length ; i++ ){
-	            var model = main.main.GetSizeObj[i];
-	            main.Wrap( model , texture );
-	        }
-            
-        });
-        $( ".item.ui.image.label.wrap7" ).click(function() {
-            var texture = textureLoader.load( '../images/material/wrap/wrap7.jpg' );
-            texture.repeat.set(0.1, 0.1);
-            texture.wrapS = texture.wrapT = THREE.MirroredRepeatWrapping;
-            var newmaterial = new THREE.MeshBasicMaterial( {map: texture} );
-            for(var i=0 ; i<main.main.GetSizeObj.length ; i++ ){
-	            var model = main.main.GetSizeObj[i];
-	            main.Wrap( model , texture );
-	        }
-            
-        });
-
-        if(this.wrap_mode == false){
+        if(this.wrap_mode == false && name=='wrap'){
         	$('#parameter_control_tool_wrap').show();
             this.wrap_mode = true;
+            this.main.processor.executeDesign("MODEL_ALIGN", "wrap");
+        	this.main.processor.executeDesign("MODEL_PAINTING", "wrap");
+        	this.main.processor.executeDesign("MODEL_ROTATION", "wrap");
+        	
+        	//creat procedure button
+        	if(this.main.stepOperationName != name){
+        		this.DeleteButton();
+	        	Procedure_button( this.main, this.main.stepOperationName );
+	        	//record the operation name
+	        	this.main.stepOperationName = name;
+        	}
         }
-        else if(this.wrap_mode == true){
+        else if(this.wrap_mode == true || name!='wrap'){
         	$('#parameter_control_tool_wrap').hide();
             this.wrap_mode = false;
         }
-        $('#parameter_control_tool_painting').hide();
-        $('#parameter_control_tool_rotation').hide();
-        $('#parameter_control_tool_align').hide();
+        
 
 	},
 	Wrap: function( model , texture ){
+		//console.log(model.geometry);
+		
+		this.DeleteButton();
 
 		var left_to_right = this.MakeExtrudeArray1(model, "yz" , "xy" );
 		var back_to_front = this.MakeExtrudeArray2(model, "xy" , "yz" );
@@ -7186,8 +7105,8 @@ Model_wrap.prototype = {
         wireframe: false} );
 		
 		var backRest = new THREE.Mesh( geometry, material );
-		
 		this.main.WrapObject.push(backRest);
+		this.main.Sceneobjects.push(backRest);
 		this.main.scene.add( backRest );
 		
 	},
@@ -7439,6 +7358,22 @@ Model_wrap.prototype = {
 
 
 		return [back_3d , back_extrude_3d] ;
+    },
+
+    DeleteButton: function(){
+    	//console.log(this.main.stepNumber);
+		//console.log(this.main.stepObject.length);
+		this.main.lastStep = true;
+		if (this.main.stepNumber < this.main.stepObject.length){
+			var stepLength = this.main.stepObject.length;
+
+			for(var i=parseInt(this.main.stepNumber); i<stepLength; i++){
+				var btn = document.getElementById(
+					"ui circular icon button procedure "+i.toString());
+				btn.parentNode.removeChild(btn);
+			}
+			this.main.stepObject.length = parseInt(this.main.stepNumber);
+		}
     }
 
 
@@ -7464,8 +7399,6 @@ function loadLine( main , point1 , point2){
 }
 
 module.exports = Model_wrap
-<<<<<<< HEAD
-<<<<<<< HEAD
 },{"./Procedure_button":29,"./cadExtrudeShapeIntersection":35,"./chairCutBack":38,"./computeConvexHull":39}],29:[function(require,module,exports){
 "use strict;"
 
@@ -7657,12 +7590,6 @@ function SaveFurniture( furniture , furnituresDataSet) {
 
 module.exports = Procedure_button
 },{}],30:[function(require,module,exports){
-=======
-},{"./cadExtrudeShapeIntersection":34,"./chairCutBack":37,"./computeConvexHull":38}],29:[function(require,module,exports){
->>>>>>> parent of d095edd... Merge branch 'master' into Hou-branch
-=======
-},{"./cadExtrudeShapeIntersection":34,"./chairCutBack":37,"./computeConvexHull":38}],29:[function(require,module,exports){
->>>>>>> parent of d095edd... Merge branch 'master' into Hou-branch
 "use strict;"
 //this is to handle the new design approaches
 //that without the need of cad operations
@@ -8847,15 +8774,7 @@ Table.prototype = {
 }
 
 module.exports = Table
-<<<<<<< HEAD
-<<<<<<< HEAD
 },{"./CabinetMakeSeat":3,"./CreateDoorBoard":11,"./CreateDrawer":12,"./CreateSupport":17,"./CreateTableRod":18,"./CreateWheel":19,"./chairCreateBoard":37}],32:[function(require,module,exports){
-=======
-},{"./CabinetMakeSeat":3,"./CreateDoorBoard":11,"./CreateDrawer":12,"./CreateSupport":17,"./CreateTableRod":18,"./CreateWheel":19,"./chairCreateBoard":36}],31:[function(require,module,exports){
->>>>>>> parent of d095edd... Merge branch 'master' into Hou-branch
-=======
-},{"./CabinetMakeSeat":3,"./CreateDoorBoard":11,"./CreateDrawer":12,"./CreateSupport":17,"./CreateTableRod":18,"./CreateWheel":19,"./chairCreateBoard":36}],31:[function(require,module,exports){
->>>>>>> parent of d095edd... Merge branch 'master' into Hou-branch
 "use strict;"
 
 
@@ -8887,15 +8806,7 @@ function assignUVs (geometry) {
 
 
 module.exports = assignUVs
-<<<<<<< HEAD
-<<<<<<< HEAD
 },{}],33:[function(require,module,exports){
-=======
-},{}],32:[function(require,module,exports){
->>>>>>> parent of d095edd... Merge branch 'master' into Hou-branch
-=======
-},{}],32:[function(require,module,exports){
->>>>>>> parent of d095edd... Merge branch 'master' into Hou-branch
 "use strict;"
 
 const scadApi = require('@jscad/scad-api')
@@ -8941,15 +8852,7 @@ function cadCutByPlane (geometry) {
 module.exports = cadCutByPlane
 
 
-<<<<<<< HEAD
-<<<<<<< HEAD
 },{"./csgToGeometries":41,"./geometryToCsgs":44,"@jscad/csg":50,"@jscad/scad-api":137}],34:[function(require,module,exports){
-=======
-},{"./csgToGeometries":40,"./geometryToCsgs":43,"@jscad/csg":49,"@jscad/scad-api":136}],33:[function(require,module,exports){
->>>>>>> parent of d095edd... Merge branch 'master' into Hou-branch
-=======
-},{"./csgToGeometries":40,"./geometryToCsgs":43,"@jscad/csg":49,"@jscad/scad-api":136}],33:[function(require,module,exports){
->>>>>>> parent of d095edd... Merge branch 'master' into Hou-branch
 "use strict;"
 
 const scadApi = require('@jscad/scad-api');
@@ -9000,15 +8903,7 @@ function cadExtrudeShape (shape, path) {
 module.exports = cadExtrudeShape
 
 
-<<<<<<< HEAD
-<<<<<<< HEAD
 },{"./assignUVs":32,"./csgToGeometries":41,"@jscad/csg":50,"@jscad/scad-api":137}],35:[function(require,module,exports){
-=======
-},{"./assignUVs":31,"./csgToGeometries":40,"@jscad/csg":49,"@jscad/scad-api":136}],34:[function(require,module,exports){
->>>>>>> parent of d095edd... Merge branch 'master' into Hou-branch
-=======
-},{"./assignUVs":31,"./csgToGeometries":40,"@jscad/csg":49,"@jscad/scad-api":136}],34:[function(require,module,exports){
->>>>>>> parent of d095edd... Merge branch 'master' into Hou-branch
 "use strict;"
 
 const scadApi = require('@jscad/scad-api');
@@ -9085,15 +8980,7 @@ function SimplifyGeo( geometry ){
 module.exports = cadExtrudeShapeIntersection
 
 
-<<<<<<< HEAD
-<<<<<<< HEAD
 },{"./assignUVs":32,"./csgToGeometries":41,"./geometryToCsgs":44,"@jscad/csg":50,"@jscad/scad-api":137}],36:[function(require,module,exports){
-=======
-},{"./assignUVs":31,"./csgToGeometries":40,"./geometryToCsgs":43,"@jscad/csg":49,"@jscad/scad-api":136}],35:[function(require,module,exports){
->>>>>>> parent of d095edd... Merge branch 'master' into Hou-branch
-=======
-},{"./assignUVs":31,"./csgToGeometries":40,"./geometryToCsgs":43,"@jscad/csg":49,"@jscad/scad-api":136}],35:[function(require,module,exports){
->>>>>>> parent of d095edd... Merge branch 'master' into Hou-branch
 "use strict;"
 
 const scadApi = require('@jscad/scad-api');
@@ -9197,15 +9084,7 @@ function cadMakeSeat (innerRace, outerRace, offsetY, textures) {
 
 
 module.exports = cadMakeSeat
-<<<<<<< HEAD
-<<<<<<< HEAD
 },{"./assignUVs":32,"./csgToGeometries":41,"@jscad/csg":50,"@jscad/scad-api":137}],37:[function(require,module,exports){
-=======
-},{"./assignUVs":31,"./csgToGeometries":40,"@jscad/csg":49,"@jscad/scad-api":136}],36:[function(require,module,exports){
->>>>>>> parent of d095edd... Merge branch 'master' into Hou-branch
-=======
-},{"./assignUVs":31,"./csgToGeometries":40,"@jscad/csg":49,"@jscad/scad-api":136}],36:[function(require,module,exports){
->>>>>>> parent of d095edd... Merge branch 'master' into Hou-branch
 "use strict;"
 
 const scadApi = require('@jscad/scad-api')
@@ -9226,15 +9105,7 @@ function chairCreateBoard(width, height, depth) {
 
 
 module.exports = chairCreateBoard
-<<<<<<< HEAD
-<<<<<<< HEAD
 },{"./csgToGeometries":41,"@jscad/csg":50,"@jscad/scad-api":137}],38:[function(require,module,exports){
-=======
-},{"./csgToGeometries":40,"@jscad/csg":49,"@jscad/scad-api":136}],37:[function(require,module,exports){
->>>>>>> parent of d095edd... Merge branch 'master' into Hou-branch
-=======
-},{"./csgToGeometries":40,"@jscad/csg":49,"@jscad/scad-api":136}],37:[function(require,module,exports){
->>>>>>> parent of d095edd... Merge branch 'master' into Hou-branch
 "use strict;"
 
 const scadApi = require('@jscad/scad-api')
@@ -9268,15 +9139,7 @@ function chairCutBack(back, offest) {
 
 
 module.exports = chairCutBack
-<<<<<<< HEAD
-<<<<<<< HEAD
 },{"./csgToGeometries":41,"./geometryToCsgs":44,"@jscad/csg":50,"@jscad/scad-api":137}],39:[function(require,module,exports){
-=======
-},{"./csgToGeometries":40,"./geometryToCsgs":43,"@jscad/csg":49,"@jscad/scad-api":136}],38:[function(require,module,exports){
->>>>>>> parent of d095edd... Merge branch 'master' into Hou-branch
-=======
-},{"./csgToGeometries":40,"./geometryToCsgs":43,"@jscad/csg":49,"@jscad/scad-api":136}],38:[function(require,module,exports){
->>>>>>> parent of d095edd... Merge branch 'master' into Hou-branch
 "use strict;"
 
 const hull = require('./hull')
@@ -9402,15 +9265,7 @@ function collectPointOnFace(component, face) {
 
 
 module.exports = computeConvexHull
-<<<<<<< HEAD
-<<<<<<< HEAD
 },{"./hull":46}],40:[function(require,module,exports){
-=======
-},{"./hull":45}],39:[function(require,module,exports){
->>>>>>> parent of d095edd... Merge branch 'master' into Hou-branch
-=======
-},{"./hull":45}],39:[function(require,module,exports){
->>>>>>> parent of d095edd... Merge branch 'master' into Hou-branch
 function _cross(o, a, b) {
     return (a[0] - o[0]) * (b[1] - o[1]) - (a[1] - o[1]) * (b[0] - o[0]);
 }
@@ -9452,15 +9307,7 @@ function convex(pointset) {
 
 module.exports = convex;
 
-<<<<<<< HEAD
-<<<<<<< HEAD
 },{}],41:[function(require,module,exports){
-=======
-},{}],40:[function(require,module,exports){
->>>>>>> parent of d095edd... Merge branch 'master' into Hou-branch
-=======
-},{}],40:[function(require,module,exports){
->>>>>>> parent of d095edd... Merge branch 'master' into Hou-branch
 "use strict;"
 
 const { CSG, CAG, isCSG, isCAG } = require('@jscad/csg')
@@ -9643,15 +9490,7 @@ function csgToGeometries(initial_csg) {
 
 
 module.exports = csgToGeometries
-<<<<<<< HEAD
-<<<<<<< HEAD
 },{"@jscad/csg":50}],42:[function(require,module,exports){
-=======
-},{"@jscad/csg":49}],41:[function(require,module,exports){
->>>>>>> parent of d095edd... Merge branch 'master' into Hou-branch
-=======
-},{"@jscad/csg":49}],41:[function(require,module,exports){
->>>>>>> parent of d095edd... Merge branch 'master' into Hou-branch
 "use strict;"
 
 const scadApi = require('@jscad/scad-api')
@@ -9677,15 +9516,7 @@ function dresserCutSpace(dresser, position, size, scale) {
 
 
 module.exports = dresserCutSpace
-<<<<<<< HEAD
-<<<<<<< HEAD
 },{"./csgToGeometries":41,"./geometryToCsgs":44,"@jscad/csg":50,"@jscad/scad-api":137}],43:[function(require,module,exports){
-=======
-},{"./csgToGeometries":40,"./geometryToCsgs":43,"@jscad/csg":49,"@jscad/scad-api":136}],42:[function(require,module,exports){
->>>>>>> parent of d095edd... Merge branch 'master' into Hou-branch
-=======
-},{"./csgToGeometries":40,"./geometryToCsgs":43,"@jscad/csg":49,"@jscad/scad-api":136}],42:[function(require,module,exports){
->>>>>>> parent of d095edd... Merge branch 'master' into Hou-branch
 module.exports = {
 
     toXy: function(pointset, format) {
@@ -9711,15 +9542,7 @@ module.exports = {
     }
 
 }
-<<<<<<< HEAD
-<<<<<<< HEAD
 },{}],44:[function(require,module,exports){
-=======
-},{}],43:[function(require,module,exports){
->>>>>>> parent of d095edd... Merge branch 'master' into Hou-branch
-=======
-},{}],43:[function(require,module,exports){
->>>>>>> parent of d095edd... Merge branch 'master' into Hou-branch
 "use strict;"
 
 const {log, status} = require('./log')
@@ -9800,15 +9623,7 @@ function unionCsgs(csgs) {
 
 
 module.exports = {geometryToCsgs, unionCsgs};
-<<<<<<< HEAD
-<<<<<<< HEAD
 },{"./log":48,"@jscad/csg":50,"@jscad/scad-api":137}],45:[function(require,module,exports){
-=======
-},{"./log":47,"@jscad/csg":49,"@jscad/scad-api":136}],44:[function(require,module,exports){
->>>>>>> parent of d095edd... Merge branch 'master' into Hou-branch
-=======
-},{"./log":47,"@jscad/csg":49,"@jscad/scad-api":136}],44:[function(require,module,exports){
->>>>>>> parent of d095edd... Merge branch 'master' into Hou-branch
 function Grid(points, cellSize) {
     this._cells = [];
     this._cellSize = cellSize;
@@ -9884,15 +9699,7 @@ function grid(points, cellSize) {
 }
 
 module.exports = grid;
-<<<<<<< HEAD
-<<<<<<< HEAD
 },{}],46:[function(require,module,exports){
-=======
-},{}],45:[function(require,module,exports){
->>>>>>> parent of d095edd... Merge branch 'master' into Hou-branch
-=======
-},{}],45:[function(require,module,exports){
->>>>>>> parent of d095edd... Merge branch 'master' into Hou-branch
 /*
  (c) 2014-2016, Andrii Heonia
  Hull.js, a JavaScript library for concave hull generation by set of points.
@@ -10096,15 +9903,7 @@ var MAX_CONCAVE_ANGLE_COS = Math.cos(90 / (180 / Math.PI)); // angle = 90 deg
 var MAX_SEARCH_BBOX_SIZE_PERCENT = 0.6;
 
 module.exports = hull;
-<<<<<<< HEAD
-<<<<<<< HEAD
 },{"./convex.js":40,"./format.js":43,"./grid.js":45,"./intersect.js":47}],47:[function(require,module,exports){
-=======
-},{"./convex.js":39,"./format.js":42,"./grid.js":44,"./intersect.js":46}],46:[function(require,module,exports){
->>>>>>> parent of d095edd... Merge branch 'master' into Hou-branch
-=======
-},{"./convex.js":39,"./format.js":42,"./grid.js":44,"./intersect.js":46}],46:[function(require,module,exports){
->>>>>>> parent of d095edd... Merge branch 'master' into Hou-branch
 function ccw(x1, y1, x2, y2, x3, y3) {           
     var cw = ((y3 - y1) * (x2 - x1)) - ((y2 - y1) * (x3 - x1));
     return cw > 0 ? true : cw < 0 ? false : true; // colinear
@@ -10120,15 +9919,7 @@ function intersect(seg1, seg2) {
 }
 
 module.exports = intersect;
-<<<<<<< HEAD
-<<<<<<< HEAD
 },{}],48:[function(require,module,exports){
-=======
-},{}],47:[function(require,module,exports){
->>>>>>> parent of d095edd... Merge branch 'master' into Hou-branch
-=======
-},{}],47:[function(require,module,exports){
->>>>>>> parent of d095edd... Merge branch 'master' into Hou-branch
 function log (txt) {
   var timeInMs = Date.now()
   var prevtime = undefined//OpenJsCad.log.prevLogTime
@@ -10156,15 +9947,7 @@ module.exports = {
   status
 }
 
-<<<<<<< HEAD
-<<<<<<< HEAD
 },{}],49:[function(require,module,exports){
-=======
-},{}],48:[function(require,module,exports){
->>>>>>> parent of d095edd... Merge branch 'master' into Hou-branch
-=======
-},{}],48:[function(require,module,exports){
->>>>>>> parent of d095edd... Merge branch 'master' into Hou-branch
 "use strict;"
 
 //const {log, status} = require('./log')
@@ -10262,6 +10045,18 @@ function Main()
 
 	//object for wrap 
 	this.WrapObject = [];
+
+
+	//Procedure objects
+	//for record objects in every step
+	this.stepObject = [];
+	//for record operation name in every step
+	this.stepOperationName = 'Initial';
+	//for record step is the last or not
+	this.lastStep = true;
+	//for record operation step times
+	this.stepNumber = 0;
+
 
 	//this is to store the furnitures before any chance
 	//simply copy of the this.furnitures
@@ -11378,18 +11173,8 @@ Main.prototype = {
 
 						objselect = false;
 						//if haven't select this furniture before
-<<<<<<< HEAD
-<<<<<<< HEAD
 						this.GetSizeObj = [];
 						this.GetSizeObj.push( this.furniture.getFurniture() );
-=======
-						if (this.GetSizeObj.indexOf(this.furniture.getFurniture())<0)
-							this.GetSizeObj.push( this.furniture.getFurniture() );
->>>>>>> parent of d095edd... Merge branch 'master' into Hou-branch
-=======
-						if (this.GetSizeObj.indexOf(this.furniture.getFurniture())<0)
-							this.GetSizeObj.push( this.furniture.getFurniture() );
->>>>>>> parent of d095edd... Merge branch 'master' into Hou-branch
 						$('.ui.blue.submit.button.getsize').show();
 						
 
@@ -11416,6 +11201,7 @@ Main.prototype = {
 							
 							this.furniture = this.Sceneobjects[i];
 							this.select(this.Sceneobjects[i]);
+							this.GetSizeObj = [];
 							this.GetSizeObj.push( this.Sceneobjects[i] );
 							$('.ui.blue.submit.button.getsize').show();
 							SomethingSelected = true;
@@ -11643,6 +11429,32 @@ Main.prototype = {
 
 			this.onCtrl = true;
 			console.log('Ctrl down');
+		
+		}else if(keyCode == 46){
+			
+			//delete furniture
+			if(this.furniture != null ){
+				try{//delete furniture
+					this.removeFromScene(this.furniture.getFurniture());
+					this.furnitures.splice( this.furnitures.indexOf(this.furniture),1);
+					this.selectionBox.visible = false;
+					this.transformControls.detach();
+					
+				}
+				catch(err){//delete object
+				    this.removeFromScene(this.furniture);
+				    this.Sceneobjects.splice( this.Sceneobjects.indexOf(this.furniture),1);
+					this.selectionBox.visible = false;
+					this.transformControls.detach();
+				}
+			}
+			//clear cards
+			$('#cards').empty();
+			//add cards again
+			for(var i=0; i<this.furnitures.length; i++){
+				this.furnitures[i].addCard();
+			}
+
 		}
 
 
@@ -12180,6 +11992,23 @@ Main.prototype = {
 		var center = new THREE.Vector3();
 		box.getCenter(center);
 		return center;
+    },
+
+    DeleteObj: function(){
+    	this.collapse(this.furniture);
+    	var objects = this.furniture.getObjects();
+    	var furnitureObj = this.furniture.getFurniture();
+    	//this.objCenter = this.getCenterPoint(this.furniture.getFurniture());
+    	//delete object in furniture
+		for(var i=0 ; i < this.GetSizeObj.length; i++){
+			var model = this.GetSizeObj[i];
+			model.parent.remove(model);
+		}
+		
+		this.explode(this.furniture);
+		this.GetSizeObj = [];
+		$('.ui.blue.submit.button.getsize').hide();
+
     }
 
 };
@@ -12195,15 +12024,7 @@ document.addEventListener('DOMContentLoaded', function(event){
 
 
 
-<<<<<<< HEAD
-<<<<<<< HEAD
 },{"./MarkBetweenSize":22,"./MarkSize":23,"./Processor":30,"./cadCutByPlane":33,"./computeConvexHull":39}],50:[function(require,module,exports){
-=======
-},{"./MarkBetweenSize":22,"./MarkSize":23,"./Processor":29,"./cadCutByPlane":32,"./computeConvexHull":38}],49:[function(require,module,exports){
->>>>>>> parent of d095edd... Merge branch 'master' into Hou-branch
-=======
-},{"./MarkBetweenSize":22,"./MarkSize":23,"./Processor":29,"./cadCutByPlane":32,"./computeConvexHull":38}],49:[function(require,module,exports){
->>>>>>> parent of d095edd... Merge branch 'master' into Hou-branch
 /*
 ## License
 
@@ -12414,15 +12235,7 @@ const globalApi = Object.assign({}, {CSG, CAG}, optionsParsers, {isCAG, isCSG})
 
 module.exports = globalApi
 
-<<<<<<< HEAD
-<<<<<<< HEAD
 },{"./src/api/debugHelpers":53,"./src/api/optionParsers":60,"./src/api/primitives2d":61,"./src/api/primitives3d":62,"./src/core/CAG":64,"./src/core/CAGFactories":65,"./src/core/CSG":66,"./src/core/CSGFactories":67,"./src/core/Properties":71,"./src/core/connectors":72,"./src/core/constants":73,"./src/core/math/Line2":74,"./src/core/math/Line3":75,"./src/core/math/Matrix4":76,"./src/core/math/OrthoNormalBasis":77,"./src/core/math/Path2":78,"./src/core/math/Plane":79,"./src/core/math/Polygon2":80,"./src/core/math/Polygon3":81,"./src/core/math/Side":82,"./src/core/math/Vector2":83,"./src/core/math/Vector3":84,"./src/core/math/Vertex2":85,"./src/core/math/Vertex3":86,"./src/core/mutators":89,"./src/core/utils":91}],51:[function(require,module,exports){
-=======
-},{"./src/api/debugHelpers":52,"./src/api/optionParsers":59,"./src/api/primitives2d":60,"./src/api/primitives3d":61,"./src/core/CAG":63,"./src/core/CAGFactories":64,"./src/core/CSG":65,"./src/core/CSGFactories":66,"./src/core/Properties":70,"./src/core/connectors":71,"./src/core/constants":72,"./src/core/math/Line2":73,"./src/core/math/Line3":74,"./src/core/math/Matrix4":75,"./src/core/math/OrthoNormalBasis":76,"./src/core/math/Path2":77,"./src/core/math/Plane":78,"./src/core/math/Polygon2":79,"./src/core/math/Polygon3":80,"./src/core/math/Side":81,"./src/core/math/Vector2":82,"./src/core/math/Vector3":83,"./src/core/math/Vertex2":84,"./src/core/math/Vertex3":85,"./src/core/mutators":88,"./src/core/utils":90}],50:[function(require,module,exports){
->>>>>>> parent of d095edd... Merge branch 'master' into Hou-branch
-=======
-},{"./src/api/debugHelpers":52,"./src/api/optionParsers":59,"./src/api/primitives2d":60,"./src/api/primitives3d":61,"./src/core/CAG":63,"./src/core/CAGFactories":64,"./src/core/CSG":65,"./src/core/CSGFactories":66,"./src/core/Properties":70,"./src/core/connectors":71,"./src/core/constants":72,"./src/core/math/Line2":73,"./src/core/math/Line3":74,"./src/core/math/Matrix4":75,"./src/core/math/OrthoNormalBasis":76,"./src/core/math/Path2":77,"./src/core/math/Plane":78,"./src/core/math/Polygon2":79,"./src/core/math/Polygon3":80,"./src/core/math/Side":81,"./src/core/math/Vector2":82,"./src/core/math/Vector3":83,"./src/core/math/Vertex2":84,"./src/core/math/Vertex3":85,"./src/core/mutators":88,"./src/core/utils":90}],50:[function(require,module,exports){
->>>>>>> parent of d095edd... Merge branch 'master' into Hou-branch
 const Path2D = require('../core/math/Path2')
 
 const cagoutlinePaths = function (_cag) {
@@ -12504,15 +12317,7 @@ const cagoutlinePaths = function (_cag) {
 
 module.exports = cagoutlinePaths
 
-<<<<<<< HEAD
-<<<<<<< HEAD
 },{"../core/math/Path2":78}],52:[function(require,module,exports){
-=======
-},{"../core/math/Path2":77}],51:[function(require,module,exports){
->>>>>>> parent of d095edd... Merge branch 'master' into Hou-branch
-=======
-},{"../core/math/Path2":77}],51:[function(require,module,exports){
->>>>>>> parent of d095edd... Merge branch 'master' into Hou-branch
 const toArray = require('../core/utils/toArray')
 
 /**
@@ -12550,15 +12355,7 @@ const center = function (options, objects) {
 
 module.exports = center
 
-<<<<<<< HEAD
-<<<<<<< HEAD
 },{"../core/utils/toArray":99}],53:[function(require,module,exports){
-=======
-},{"../core/utils/toArray":98}],52:[function(require,module,exports){
->>>>>>> parent of d095edd... Merge branch 'master' into Hou-branch
-=======
-},{"../core/utils/toArray":98}],52:[function(require,module,exports){
->>>>>>> parent of d095edd... Merge branch 'master' into Hou-branch
 const CSG = require('../core/CSG')
 const {cube} = require('./primitives3d')
 
@@ -12593,15 +12390,7 @@ const toPointCloud = function (csg, cuberadius) {
 
 module.exports = {toPointCloud}
 
-<<<<<<< HEAD
-<<<<<<< HEAD
 },{"../core/CSG":66,"./primitives3d":62}],54:[function(require,module,exports){
-=======
-},{"../core/CSG":65,"./primitives3d":61}],53:[function(require,module,exports){
->>>>>>> parent of d095edd... Merge branch 'master' into Hou-branch
-=======
-},{"../core/CSG":65,"./primitives3d":61}],53:[function(require,module,exports){
->>>>>>> parent of d095edd... Merge branch 'master' into Hou-branch
 const Vertex3 = require('../core/math/Vertex3')
 const Vector3 = require('../core/math/Vector3')
 const Polygon3 = require('../core/math/Polygon3')
@@ -12666,15 +12455,7 @@ const degToRad = deg => (Math.PI / 180) * deg
 
 module.exports = {cagToPointsArray, clamp, rightMultiply1x3VectorToArray, polygonFromPoints}
 
-<<<<<<< HEAD
-<<<<<<< HEAD
 },{"../core/math/Polygon3":81,"../core/math/Vector3":84,"../core/math/Vertex3":86}],55:[function(require,module,exports){
-=======
-},{"../core/math/Polygon3":80,"../core/math/Vector3":83,"../core/math/Vertex3":85}],54:[function(require,module,exports){
->>>>>>> parent of d095edd... Merge branch 'master' into Hou-branch
-=======
-},{"../core/math/Polygon3":80,"../core/math/Vector3":83,"../core/math/Vertex3":85}],54:[function(require,module,exports){
->>>>>>> parent of d095edd... Merge branch 'master' into Hou-branch
 const {isCAG} = require('../core/utils')
 // boolean operations
 
@@ -12777,15 +12558,7 @@ module.exports = {
   intersection
 }
 
-<<<<<<< HEAD
-<<<<<<< HEAD
 },{"../core/utils":91}],56:[function(require,module,exports){
-=======
-},{"../core/utils":90}],55:[function(require,module,exports){
->>>>>>> parent of d095edd... Merge branch 'master' into Hou-branch
-=======
-},{"../core/utils":90}],55:[function(require,module,exports){
->>>>>>> parent of d095edd... Merge branch 'master' into Hou-branch
 const Matrix4x4 = require('../core/math/Matrix4.js')
 const Vector3D = require('../core/math/Vector3.js')
 const {Connector} = require('../core/connectors.js')
@@ -12954,15 +12727,7 @@ const overCutInsideCorners = function (_cag, cutterradius) {
 
 module.exports = {lieFlat, getTransformationToFlatLying, getTransformationAndInverseTransformationToFlatLying, overCutInsideCorners}
 
-<<<<<<< HEAD
-<<<<<<< HEAD
 },{"../core/CAGFactories":65,"../core/connectors.js":72,"../core/math/Matrix4.js":76,"../core/math/Vector2":83,"../core/math/Vector3.js":84}],57:[function(require,module,exports){
-=======
-},{"../core/CAGFactories":64,"../core/connectors.js":71,"../core/math/Matrix4.js":75,"../core/math/Vector2":82,"../core/math/Vector3.js":83}],56:[function(require,module,exports){
->>>>>>> parent of d095edd... Merge branch 'master' into Hou-branch
-=======
-},{"../core/CAGFactories":64,"../core/connectors.js":71,"../core/math/Matrix4.js":75,"../core/math/Vector2":82,"../core/math/Vector3.js":83}],56:[function(require,module,exports){
->>>>>>> parent of d095edd... Merge branch 'master' into Hou-branch
 const {EPS} = require('../core/constants')
 const Plane = require('../core/math/Plane')
 const Vector2 = require('../core/math/Vector2')
@@ -13028,15 +12793,7 @@ const cutByPlane = function (csg, plane) {
 
 module.exports = {sectionCut, cutByPlane}
 
-<<<<<<< HEAD
-<<<<<<< HEAD
 },{"../core/CSG":66,"../core/constants":73,"../core/math/OrthoNormalBasis":77,"../core/math/Plane":79,"../core/math/Polygon3":81,"../core/math/Vector2":83,"../core/math/Vertex3":86}],58:[function(require,module,exports){
-=======
-},{"../core/CSG":65,"../core/constants":72,"../core/math/OrthoNormalBasis":76,"../core/math/Plane":78,"../core/math/Polygon3":80,"../core/math/Vector2":82,"../core/math/Vertex3":85}],57:[function(require,module,exports){
->>>>>>> parent of d095edd... Merge branch 'master' into Hou-branch
-=======
-},{"../core/CSG":65,"../core/constants":72,"../core/math/OrthoNormalBasis":76,"../core/math/Plane":78,"../core/math/Polygon3":80,"../core/math/Vector2":82,"../core/math/Vertex3":85}],57:[function(require,module,exports){
->>>>>>> parent of d095edd... Merge branch 'master' into Hou-branch
 
 const {EPS, angleEPS} = require('../core/constants')
 const Vertex = require('../core/math/Vertex3')
@@ -13375,15 +13132,7 @@ module.exports = {
   expandedShellOfCCSG
 }
 
-<<<<<<< HEAD
-<<<<<<< HEAD
 },{"../core/CAG":64,"../core/CAGFactories":65,"../core/CSG":66,"../core/CSGFactories":67,"../core/constants":73,"../core/math/Polygon3":81,"../core/math/Vector2":83,"../core/math/Vertex3":86,"../core/utils":91}],59:[function(require,module,exports){
-=======
-},{"../core/CAG":63,"../core/CAGFactories":64,"../core/CSG":65,"../core/CSGFactories":66,"../core/constants":72,"../core/math/Polygon3":80,"../core/math/Vector2":82,"../core/math/Vertex3":85,"../core/utils":90}],58:[function(require,module,exports){
->>>>>>> parent of d095edd... Merge branch 'master' into Hou-branch
-=======
-},{"../core/CAG":63,"../core/CAGFactories":64,"../core/CSG":65,"../core/CSGFactories":66,"../core/constants":72,"../core/math/Polygon3":80,"../core/math/Vector2":82,"../core/math/Vertex3":85,"../core/utils":90}],58:[function(require,module,exports){
->>>>>>> parent of d095edd... Merge branch 'master' into Hou-branch
 const {EPS, defaultResolution3D} = require('../core/constants')
 const OrthoNormalBasis = require('../core/math/OrthoNormalBasis')
 const {parseOptionAs3DVector, parseOptionAsBool, parseOptionAsFloat, parseOptionAsInt} = require('./optionParsers')
@@ -13742,15 +13491,7 @@ module.exports = {
   rectangular_extrude
 }
 
-<<<<<<< HEAD
-<<<<<<< HEAD
 },{"../core/CAGFactories":65,"../core/CSG":66,"../core/CSGFactories":67,"../core/connectors":72,"../core/constants":73,"../core/math/Matrix4":76,"../core/math/OrthoNormalBasis":77,"../core/math/Path2":78,"../core/math/Vector3":84,"./helpers":54,"./optionParsers":60}],60:[function(require,module,exports){
-=======
-},{"../core/CAGFactories":64,"../core/CSG":65,"../core/CSGFactories":66,"../core/connectors":71,"../core/constants":72,"../core/math/Matrix4":75,"../core/math/OrthoNormalBasis":76,"../core/math/Path2":77,"../core/math/Vector3":83,"./helpers":53,"./optionParsers":59}],59:[function(require,module,exports){
->>>>>>> parent of d095edd... Merge branch 'master' into Hou-branch
-=======
-},{"../core/CAGFactories":64,"../core/CSG":65,"../core/CSGFactories":66,"../core/connectors":71,"../core/constants":72,"../core/math/Matrix4":75,"../core/math/OrthoNormalBasis":76,"../core/math/Path2":77,"../core/math/Vector3":83,"./helpers":53,"./optionParsers":59}],59:[function(require,module,exports){
->>>>>>> parent of d095edd... Merge branch 'master' into Hou-branch
 const Vector3D = require('../core/math/Vector3')
 const Vector2D = require('../core/math/Vector2')
 
@@ -13828,15 +13569,7 @@ module.exports = {
   parseOptionAs3DVectorList
 }
 
-<<<<<<< HEAD
-<<<<<<< HEAD
 },{"../core/math/Vector2":83,"../core/math/Vector3":84}],61:[function(require,module,exports){
-=======
-},{"../core/math/Vector2":82,"../core/math/Vector3":83}],60:[function(require,module,exports){
->>>>>>> parent of d095edd... Merge branch 'master' into Hou-branch
-=======
-},{"../core/math/Vector2":82,"../core/math/Vector3":83}],60:[function(require,module,exports){
->>>>>>> parent of d095edd... Merge branch 'master' into Hou-branch
 const CAG = require('../core/CAG')
 const {parseOptionAs2DVector, parseOptionAsFloat, parseOptionAsInt} = require('./optionParsers')
 const {defaultResolution2D} = require('../core/constants')
@@ -14023,15 +13756,7 @@ module.exports = {
   fromCompactBinary
 }
 
-<<<<<<< HEAD
-<<<<<<< HEAD
 },{"../core/CAG":64,"../core/CAGFactories":65,"../core/constants":73,"../core/math/Path2":78,"../core/math/Vector2":83,"../core/math/Vertex2":85,"./optionParsers":60}],62:[function(require,module,exports){
-=======
-},{"../core/CAG":63,"../core/CAGFactories":64,"../core/constants":72,"../core/math/Path2":77,"../core/math/Vector2":82,"../core/math/Vertex2":84,"./optionParsers":59}],61:[function(require,module,exports){
->>>>>>> parent of d095edd... Merge branch 'master' into Hou-branch
-=======
-},{"../core/CAG":63,"../core/CAGFactories":64,"../core/constants":72,"../core/math/Path2":77,"../core/math/Vector2":82,"../core/math/Vertex2":84,"./optionParsers":59}],61:[function(require,module,exports){
->>>>>>> parent of d095edd... Merge branch 'master' into Hou-branch
 const {parseOption, parseOptionAs3DVector, parseOptionAs2DVector, parseOptionAs3DVectorList, parseOptionAsFloat, parseOptionAsInt} = require('./optionParsers')
 const {defaultResolution3D, defaultResolution2D, EPS} = require('../core/constants')
 const Vector3 = require('../core/math/Vector3')
@@ -14581,15 +14306,7 @@ module.exports = {
   polyhedron
 }
 
-<<<<<<< HEAD
-<<<<<<< HEAD
 },{"../core/CSGFactories":67,"../core/Properties":71,"../core/connectors":72,"../core/constants":73,"../core/math/Polygon3":81,"../core/math/Vector3":84,"../core/math/Vertex3":86,"./optionParsers":60}],63:[function(require,module,exports){
-=======
-},{"../core/CSGFactories":66,"../core/Properties":70,"../core/connectors":71,"../core/constants":72,"../core/math/Polygon3":80,"../core/math/Vector3":83,"../core/math/Vertex3":85,"./optionParsers":59}],62:[function(require,module,exports){
->>>>>>> parent of d095edd... Merge branch 'master' into Hou-branch
-=======
-},{"../core/CSGFactories":66,"../core/Properties":70,"../core/connectors":71,"../core/constants":72,"../core/math/Polygon3":80,"../core/math/Vector3":83,"../core/math/Vertex3":85,"./optionParsers":59}],62:[function(require,module,exports){
->>>>>>> parent of d095edd... Merge branch 'master' into Hou-branch
 const Polygon = require('../core/math/Polygon3')
 const {fromPolygons} = require('../core/CSGFactories')
 const {fnSortByIndex} = require('../core/utils')
@@ -14804,15 +14521,7 @@ const _addWalls = function (walls, bottom, top, bFlipped) {
 
 module.exports = solidFromSlices
 
-<<<<<<< HEAD
-<<<<<<< HEAD
 },{"../core/CSGFactories":67,"../core/math/Polygon3":81,"../core/utils":91}],64:[function(require,module,exports){
-=======
-},{"../core/CSGFactories":66,"../core/math/Polygon3":80,"../core/utils":90}],63:[function(require,module,exports){
->>>>>>> parent of d095edd... Merge branch 'master' into Hou-branch
-=======
-},{"../core/CSGFactories":66,"../core/math/Polygon3":80,"../core/utils":90}],63:[function(require,module,exports){
->>>>>>> parent of d095edd... Merge branch 'master' into Hou-branch
 const {Connector} = require('./connectors')
 const Vertex3D = require('./math/Vertex3')
 const Vector2D = require('./math/Vector2')
@@ -15191,15 +14900,7 @@ CAG.prototype = {
 
 module.exports = CAG
 
-<<<<<<< HEAD
-<<<<<<< HEAD
 },{"../api/cagOutlinePaths":51,"../api/center":52,"../api/ops-cnc":56,"../api/ops-expandContract":58,"../api/ops-extrusions":59,"./CAGFactories":65,"./CSGFactories":67,"./connectors":72,"./math/Polygon3":81,"./math/Vector2":83,"./math/Vector3":84,"./math/Vertex3":86,"./utils/cagMeasurements":92,"./utils/cagValidation":93,"./utils/canonicalize":94,"./utils/retesellate":98}],65:[function(require,module,exports){
-=======
-},{"../api/cagOutlinePaths":50,"../api/center":51,"../api/ops-cnc":55,"../api/ops-expandContract":57,"../api/ops-extrusions":58,"./CAGFactories":64,"./CSGFactories":66,"./connectors":71,"./math/Polygon3":80,"./math/Vector2":82,"./math/Vector3":83,"./math/Vertex3":85,"./utils/cagMeasurements":91,"./utils/cagValidation":92,"./utils/canonicalize":93,"./utils/retesellate":97}],64:[function(require,module,exports){
->>>>>>> parent of d095edd... Merge branch 'master' into Hou-branch
-=======
-},{"../api/cagOutlinePaths":50,"../api/center":51,"../api/ops-cnc":55,"../api/ops-expandContract":57,"../api/ops-extrusions":58,"./CAGFactories":64,"./CSGFactories":66,"./connectors":71,"./math/Polygon3":80,"./math/Vector2":82,"./math/Vector3":83,"./math/Vertex3":85,"./utils/cagMeasurements":91,"./utils/cagValidation":92,"./utils/canonicalize":93,"./utils/retesellate":97}],64:[function(require,module,exports){
->>>>>>> parent of d095edd... Merge branch 'master' into Hou-branch
 const Side = require('./math/Side')
 const Vector2D = require('./math/Vector2')
 const Vertex2 = require('./math/Vertex2')
@@ -15415,15 +15116,7 @@ module.exports = {
   fromCompactBinary
 }
 
-<<<<<<< HEAD
-<<<<<<< HEAD
 },{"../api/ops-booleans":55,"./CAG":64,"./constants":73,"./math/Side":82,"./math/Vector2":83,"./math/Vertex2":85,"./utils/cagValidation":93}],66:[function(require,module,exports){
-=======
-},{"../api/ops-booleans":54,"./CAG":63,"./constants":72,"./math/Side":81,"./math/Vector2":82,"./math/Vertex2":84,"./utils/cagValidation":92}],65:[function(require,module,exports){
->>>>>>> parent of d095edd... Merge branch 'master' into Hou-branch
-=======
-},{"../api/ops-booleans":54,"./CAG":63,"./constants":72,"./math/Side":81,"./math/Vector2":82,"./math/Vertex2":84,"./utils/cagValidation":92}],65:[function(require,module,exports){
->>>>>>> parent of d095edd... Merge branch 'master' into Hou-branch
 const Tree = require('./trees')
 const Polygon = require('./math/Polygon3')
 const Plane = require('./math/Plane')
@@ -16011,15 +15704,7 @@ CSG.prototype = {
 
 module.exports = CSG
 
-<<<<<<< HEAD
-<<<<<<< HEAD
 },{"../api/center":52,"../api/ops-cnc":56,"../api/ops-cuts":57,"../api/ops-expandContract":58,"./CAG":64,"./CSGFactories":67,"./Properties":71,"./math/OrthoNormalBasis":77,"./math/Plane":79,"./math/Polygon3":81,"./trees":90,"./utils/canonicalize":94,"./utils/csgMeasurements":95,"./utils/csgProjections":96,"./utils/fixTJunctions":97,"./utils/retesellate":98}],67:[function(require,module,exports){
-=======
-},{"../api/center":51,"../api/ops-cnc":55,"../api/ops-cuts":56,"../api/ops-expandContract":57,"./CAG":63,"./CSGFactories":66,"./Properties":70,"./math/OrthoNormalBasis":76,"./math/Plane":78,"./math/Polygon3":80,"./trees":89,"./utils/canonicalize":93,"./utils/csgMeasurements":94,"./utils/csgProjections":95,"./utils/fixTJunctions":96,"./utils/retesellate":97}],66:[function(require,module,exports){
->>>>>>> parent of d095edd... Merge branch 'master' into Hou-branch
-=======
-},{"../api/center":51,"../api/ops-cnc":55,"../api/ops-cuts":56,"../api/ops-expandContract":57,"./CAG":63,"./CSGFactories":66,"./Properties":70,"./math/OrthoNormalBasis":76,"./math/Plane":78,"./math/Polygon3":80,"./trees":89,"./utils/canonicalize":93,"./utils/csgMeasurements":94,"./utils/csgProjections":95,"./utils/fixTJunctions":96,"./utils/retesellate":97}],66:[function(require,module,exports){
->>>>>>> parent of d095edd... Merge branch 'master' into Hou-branch
 const Vector3D = require('./math/Vector3')
 const Vertex = require('./math/Vertex3')
 const Plane = require('./math/Plane')
@@ -16142,15 +15827,7 @@ module.exports = {
   fromCompactBinary
 }
 
-<<<<<<< HEAD
-<<<<<<< HEAD
 },{"./CSG":66,"./math/Plane":79,"./math/Polygon2":80,"./math/Polygon3":81,"./math/Vector3":84,"./math/Vertex3":86}],68:[function(require,module,exports){
-=======
-},{"./CSG":65,"./math/Plane":78,"./math/Polygon2":79,"./math/Polygon3":80,"./math/Vector3":83,"./math/Vertex3":85}],67:[function(require,module,exports){
->>>>>>> parent of d095edd... Merge branch 'master' into Hou-branch
-=======
-},{"./CSG":65,"./math/Plane":78,"./math/Polygon2":79,"./math/Polygon3":80,"./math/Vector3":83,"./math/Vertex3":85}],67:[function(require,module,exports){
->>>>>>> parent of d095edd... Merge branch 'master' into Hou-branch
 // //////////////////////////////
 // ## class fuzzyFactory
 // This class acts as a factory for objects. We can search for an object with approximately
@@ -16208,15 +15885,7 @@ FuzzyFactory.prototype = {
 
 module.exports = FuzzyFactory
 
-<<<<<<< HEAD
-<<<<<<< HEAD
 },{}],69:[function(require,module,exports){
-=======
-},{}],68:[function(require,module,exports){
->>>>>>> parent of d095edd... Merge branch 'master' into Hou-branch
-=======
-},{}],68:[function(require,module,exports){
->>>>>>> parent of d095edd... Merge branch 'master' into Hou-branch
 const FuzzyFactory = require('./FuzzyFactory')
 const {EPS} = require('./constants')
 const Side = require('./math/Side')
@@ -16243,15 +15912,7 @@ FuzzyCAGFactory.prototype = {
 
 module.exports = FuzzyCAGFactory
 
-<<<<<<< HEAD
-<<<<<<< HEAD
 },{"./FuzzyFactory":68,"./constants":73,"./math/Side":82}],70:[function(require,module,exports){
-=======
-},{"./FuzzyFactory":67,"./constants":72,"./math/Side":81}],69:[function(require,module,exports){
->>>>>>> parent of d095edd... Merge branch 'master' into Hou-branch
-=======
-},{"./FuzzyFactory":67,"./constants":72,"./math/Side":81}],69:[function(require,module,exports){
->>>>>>> parent of d095edd... Merge branch 'master' into Hou-branch
 const {EPS} = require('./constants')
 const Polygon = require('./math/Polygon3')
 const FuzzyFactory = require('./FuzzyFactory')
@@ -16321,15 +15982,7 @@ FuzzyCSGFactory.prototype = {
 
 module.exports = FuzzyCSGFactory
 
-<<<<<<< HEAD
-<<<<<<< HEAD
 },{"./FuzzyFactory":68,"./constants":73,"./math/Polygon3":81}],71:[function(require,module,exports){
-=======
-},{"./FuzzyFactory":67,"./constants":72,"./math/Polygon3":80}],70:[function(require,module,exports){
->>>>>>> parent of d095edd... Merge branch 'master' into Hou-branch
-=======
-},{"./FuzzyFactory":67,"./constants":72,"./math/Polygon3":80}],70:[function(require,module,exports){
->>>>>>> parent of d095edd... Merge branch 'master' into Hou-branch
 // ////////////////////////////////////
 // # Class Properties
 // This class is used to store properties of a solid
@@ -16413,15 +16066,7 @@ Properties.addFrom = function (result, otherproperties) {
 
 module.exports = Properties
 
-<<<<<<< HEAD
-<<<<<<< HEAD
 },{}],72:[function(require,module,exports){
-=======
-},{}],71:[function(require,module,exports){
->>>>>>> parent of d095edd... Merge branch 'master' into Hou-branch
-=======
-},{}],71:[function(require,module,exports){
->>>>>>> parent of d095edd... Merge branch 'master' into Hou-branch
 const Vector3D = require('./math/Vector3')
 const Line3D = require('./math/Line3')
 const Matrix4x4 = require('./math/Matrix4')
@@ -16643,15 +16288,7 @@ ConnectorList.prototype = {
 
 module.exports = {Connector, ConnectorList}
 
-<<<<<<< HEAD
-<<<<<<< HEAD
 },{"./CSG":66,"./math/Line3":75,"./math/Matrix4":76,"./math/OrthoNormalBasis":77,"./math/Plane":79,"./math/Vector3":84}],73:[function(require,module,exports){
-=======
-},{"./CSG":65,"./math/Line3":74,"./math/Matrix4":75,"./math/OrthoNormalBasis":76,"./math/Plane":78,"./math/Vector3":83}],72:[function(require,module,exports){
->>>>>>> parent of d095edd... Merge branch 'master' into Hou-branch
-=======
-},{"./CSG":65,"./math/Line3":74,"./math/Matrix4":75,"./math/OrthoNormalBasis":76,"./math/Plane":78,"./math/Vector3":83}],72:[function(require,module,exports){
->>>>>>> parent of d095edd... Merge branch 'master' into Hou-branch
 const _CSGDEBUG = false
 
 /** Number of polygons per 360 degree revolution for 2D objects.
@@ -16708,15 +16345,7 @@ module.exports = {
   getTag
 }
 
-<<<<<<< HEAD
-<<<<<<< HEAD
 },{}],74:[function(require,module,exports){
-=======
-},{}],73:[function(require,module,exports){
->>>>>>> parent of d095edd... Merge branch 'master' into Hou-branch
-=======
-},{}],73:[function(require,module,exports){
->>>>>>> parent of d095edd... Merge branch 'master' into Hou-branch
 const Vector2D = require('./Vector2')
 const {solve2Linear} = require('../utils')
 
@@ -16808,15 +16437,7 @@ Line2D.prototype = {
 
 module.exports = Line2D
 
-<<<<<<< HEAD
-<<<<<<< HEAD
 },{"../utils":91,"./Vector2":83}],75:[function(require,module,exports){
-=======
-},{"../utils":90,"./Vector2":82}],74:[function(require,module,exports){
->>>>>>> parent of d095edd... Merge branch 'master' into Hou-branch
-=======
-},{"../utils":90,"./Vector2":82}],74:[function(require,module,exports){
->>>>>>> parent of d095edd... Merge branch 'master' into Hou-branch
 const Vector3D = require('./Vector3')
 const {EPS} = require('../constants')
 const {solve2Linear} = require('../utils')
@@ -16918,15 +16539,7 @@ Line3D.prototype = {
 
 module.exports = Line3D
 
-<<<<<<< HEAD
-<<<<<<< HEAD
 },{"../constants":73,"../utils":91,"./Vector3":84}],76:[function(require,module,exports){
-=======
-},{"../constants":72,"../utils":90,"./Vector3":83}],75:[function(require,module,exports){
->>>>>>> parent of d095edd... Merge branch 'master' into Hou-branch
-=======
-},{"../constants":72,"../utils":90,"./Vector3":83}],75:[function(require,module,exports){
->>>>>>> parent of d095edd... Merge branch 'master' into Hou-branch
 const Vector3D = require('./Vector3')
 const Vector2D = require('./Vector2')
 const OrthoNormalBasis = require('./OrthoNormalBasis')
@@ -17212,15 +16825,7 @@ Matrix4x4.scaling = function (v) {
 
 module.exports = Matrix4x4
 
-<<<<<<< HEAD
-<<<<<<< HEAD
 },{"./OrthoNormalBasis":77,"./Plane":79,"./Vector2":83,"./Vector3":84}],77:[function(require,module,exports){
-=======
-},{"./OrthoNormalBasis":76,"./Plane":78,"./Vector2":82,"./Vector3":83}],76:[function(require,module,exports){
->>>>>>> parent of d095edd... Merge branch 'master' into Hou-branch
-=======
-},{"./OrthoNormalBasis":76,"./Plane":78,"./Vector2":82,"./Vector3":83}],76:[function(require,module,exports){
->>>>>>> parent of d095edd... Merge branch 'master' into Hou-branch
 const Vector2D = require('./Vector2')
 const Vector3D = require('./Vector3')
 const Line2D = require('./Line2')
@@ -17427,15 +17032,7 @@ OrthoNormalBasis.prototype = {
 
 module.exports = OrthoNormalBasis
 
-<<<<<<< HEAD
-<<<<<<< HEAD
 },{"./Line2":74,"./Line3":75,"./Matrix4":76,"./Plane":79,"./Vector2":83,"./Vector3":84}],78:[function(require,module,exports){
-=======
-},{"./Line2":73,"./Line3":74,"./Matrix4":75,"./Plane":78,"./Vector2":82,"./Vector3":83}],77:[function(require,module,exports){
->>>>>>> parent of d095edd... Merge branch 'master' into Hou-branch
-=======
-},{"./Line2":73,"./Line3":74,"./Matrix4":75,"./Plane":78,"./Vector2":82,"./Vector3":83}],77:[function(require,module,exports){
->>>>>>> parent of d095edd... Merge branch 'master' into Hou-branch
 const Vector2D = require('./Vector2')
 const {EPS, angleEPS} = require('../constants')
 const {parseOptionAs2DVector, parseOptionAsFloat, parseOptionAsInt, parseOptionAsBool} = require('../../api/optionParsers')
@@ -17908,15 +17505,7 @@ Path2D.prototype = {
 
 module.exports = Path2D
 
-<<<<<<< HEAD
-<<<<<<< HEAD
 },{"../../api/optionParsers":60,"../CAG":64,"../constants":73,"./Side":82,"./Vector2":83,"./Vertex2":85}],79:[function(require,module,exports){
-=======
-},{"../../api/optionParsers":59,"../CAG":63,"../constants":72,"./Side":81,"./Vector2":82,"./Vertex2":84}],78:[function(require,module,exports){
->>>>>>> parent of d095edd... Merge branch 'master' into Hou-branch
-=======
-},{"../../api/optionParsers":59,"../CAG":63,"../constants":72,"./Side":81,"./Vector2":82,"./Vertex2":84}],78:[function(require,module,exports){
->>>>>>> parent of d095edd... Merge branch 'master' into Hou-branch
 const Vector3D = require('./Vector3')
 const Line3D = require('./Line3')
 const {EPS, getTag} = require('../constants')
@@ -18058,15 +17647,7 @@ Plane.prototype = {
 
 module.exports = Plane
 
-<<<<<<< HEAD
-<<<<<<< HEAD
 },{"../constants":73,"./Line3":75,"./Vector3":84}],80:[function(require,module,exports){
-=======
-},{"../constants":72,"./Line3":74,"./Vector3":83}],79:[function(require,module,exports){
->>>>>>> parent of d095edd... Merge branch 'master' into Hou-branch
-=======
-},{"../constants":72,"./Line3":74,"./Vector3":83}],79:[function(require,module,exports){
->>>>>>> parent of d095edd... Merge branch 'master' into Hou-branch
 const CAG = require('../CAG')
 const {fromPoints} = require('../CAGFactories')
 
@@ -18088,15 +17669,7 @@ Polygon2D.prototype = CAG.prototype
 
 module.exports = Polygon2D
 
-<<<<<<< HEAD
-<<<<<<< HEAD
 },{"../CAG":64,"../CAGFactories":65}],81:[function(require,module,exports){
-=======
-},{"../CAG":63,"../CAGFactories":64}],80:[function(require,module,exports){
->>>>>>> parent of d095edd... Merge branch 'master' into Hou-branch
-=======
-},{"../CAG":63,"../CAGFactories":64}],80:[function(require,module,exports){
->>>>>>> parent of d095edd... Merge branch 'master' into Hou-branch
 const Vector3D = require('./Vector3')
 const Vertex = require('./Vertex3')
 const Matrix4x4 = require('./Matrix4')
@@ -18472,15 +18045,7 @@ Polygon.defaultShared = new Polygon.Shared(null)
 
 module.exports = Polygon
 
-<<<<<<< HEAD
-<<<<<<< HEAD
 },{"../../api/solidFromSlices":63,"../CAG":64,"../CAGFactories":65,"../CSGFactories":67,"../constants":73,"./Matrix4":76,"./Plane":79,"./Vector3":84,"./Vertex3":86}],82:[function(require,module,exports){
-=======
-},{"../../api/solidFromSlices":62,"../CAG":63,"../CAGFactories":64,"../CSGFactories":66,"../constants":72,"./Matrix4":75,"./Plane":78,"./Vector3":83,"./Vertex3":85}],81:[function(require,module,exports){
->>>>>>> parent of d095edd... Merge branch 'master' into Hou-branch
-=======
-},{"../../api/solidFromSlices":62,"../CAG":63,"../CAGFactories":64,"../CSGFactories":66,"../constants":72,"./Matrix4":75,"./Plane":78,"./Vector3":83,"./Vertex3":85}],81:[function(require,module,exports){
->>>>>>> parent of d095edd... Merge branch 'master' into Hou-branch
 const Vector2D = require('./Vector2')
 const Vertex = require('./Vertex2')
 const Vertex3 = require('./Vertex3')
@@ -18584,15 +18149,7 @@ Side.prototype = {
 
 module.exports = Side
 
-<<<<<<< HEAD
-<<<<<<< HEAD
 },{"../constants":73,"./Polygon3":81,"./Vector2":83,"./Vertex2":85,"./Vertex3":86}],83:[function(require,module,exports){
-=======
-},{"../constants":72,"./Polygon3":80,"./Vector2":82,"./Vertex2":84,"./Vertex3":85}],82:[function(require,module,exports){
->>>>>>> parent of d095edd... Merge branch 'master' into Hou-branch
-=======
-},{"../constants":72,"./Polygon3":80,"./Vector2":82,"./Vertex2":84,"./Vertex3":85}],82:[function(require,module,exports){
->>>>>>> parent of d095edd... Merge branch 'master' into Hou-branch
 const {IsFloat} = require('../utils')
 
 /** Class Vector2D
@@ -18790,15 +18347,7 @@ Vector2D.prototype = {
 
 module.exports = Vector2D
 
-<<<<<<< HEAD
-<<<<<<< HEAD
 },{"../utils":91,"./Vector3":84}],84:[function(require,module,exports){
-=======
-},{"../utils":90,"./Vector3":83}],83:[function(require,module,exports){
->>>>>>> parent of d095edd... Merge branch 'master' into Hou-branch
-=======
-},{"../utils":90,"./Vector3":83}],83:[function(require,module,exports){
->>>>>>> parent of d095edd... Merge branch 'master' into Hou-branch
 const {IsFloat} = require('../utils')
 const Vector2D = require('./Vector2')
 
@@ -19013,15 +18562,7 @@ Vector3D.prototype = {
 
 module.exports = Vector3D
 
-<<<<<<< HEAD
-<<<<<<< HEAD
 },{"../utils":91,"./Vector2":83}],85:[function(require,module,exports){
-=======
-},{"../utils":90,"./Vector2":82}],84:[function(require,module,exports){
->>>>>>> parent of d095edd... Merge branch 'master' into Hou-branch
-=======
-},{"../utils":90,"./Vector2":82}],84:[function(require,module,exports){
->>>>>>> parent of d095edd... Merge branch 'master' into Hou-branch
 const Vector2D = require('./Vector2')
 const {getTag} = require('../constants')
 
@@ -19049,15 +18590,7 @@ Vertex.prototype = {
 
 module.exports = Vertex
 
-<<<<<<< HEAD
-<<<<<<< HEAD
 },{"../constants":73,"./Vector2":83}],86:[function(require,module,exports){
-=======
-},{"../constants":72,"./Vector2":82}],85:[function(require,module,exports){
->>>>>>> parent of d095edd... Merge branch 'master' into Hou-branch
-=======
-},{"../constants":72,"./Vector2":82}],85:[function(require,module,exports){
->>>>>>> parent of d095edd... Merge branch 'master' into Hou-branch
 const Vector3D = require('./Vector3')
 const {getTag} = require('../constants')
 
@@ -19115,15 +18648,7 @@ Vertex.prototype = {
 
 module.exports = Vertex
 
-<<<<<<< HEAD
-<<<<<<< HEAD
 },{"../constants":73,"./Vector3":84}],87:[function(require,module,exports){
-=======
-},{"../constants":72,"./Vector3":83}],86:[function(require,module,exports){
->>>>>>> parent of d095edd... Merge branch 'master' into Hou-branch
-=======
-},{"../constants":72,"./Vector3":83}],86:[function(require,module,exports){
->>>>>>> parent of d095edd... Merge branch 'master' into Hou-branch
 const {EPS} = require('../constants')
 const {solve2Linear} = require('../utils')
 
@@ -19149,15 +18674,7 @@ const linesIntersect = function (p0start, p0end, p1start, p1end) {
 
 module.exports = {linesIntersect}
 
-<<<<<<< HEAD
-<<<<<<< HEAD
 },{"../constants":73,"../utils":91}],88:[function(require,module,exports){
-=======
-},{"../constants":72,"../utils":90}],87:[function(require,module,exports){
->>>>>>> parent of d095edd... Merge branch 'master' into Hou-branch
-=======
-},{"../constants":72,"../utils":90}],87:[function(require,module,exports){
->>>>>>> parent of d095edd... Merge branch 'master' into Hou-branch
 const {EPS} = require('../constants')
 const OrthoNormalBasis = require('./OrthoNormalBasis')
 const {interpolateBetween2DPointsForY, insertSorted, fnNumberSort} = require('../utils')
@@ -19501,15 +19018,7 @@ const reTesselateCoplanarPolygons = function (sourcepolygons, destpolygons) {
 
 module.exports = reTesselateCoplanarPolygons
 
-<<<<<<< HEAD
-<<<<<<< HEAD
 },{"../constants":73,"../utils":91,"./Line2":74,"./OrthoNormalBasis":77,"./Polygon3":81,"./Vector2":83,"./Vertex3":86}],89:[function(require,module,exports){
-=======
-},{"../constants":72,"../utils":90,"./Line2":73,"./OrthoNormalBasis":76,"./Polygon3":80,"./Vector2":82,"./Vertex3":85}],88:[function(require,module,exports){
->>>>>>> parent of d095edd... Merge branch 'master' into Hou-branch
-=======
-},{"../constants":72,"../utils":90,"./Line2":73,"./OrthoNormalBasis":76,"./Polygon3":80,"./Vector2":82,"./Vertex3":85}],88:[function(require,module,exports){
->>>>>>> parent of d095edd... Merge branch 'master' into Hou-branch
 const Matrix4x4 = require('./math/Matrix4')
 const Vector3D = require('./math/Vector3')
 const Plane = require('./math/Plane')
@@ -19592,15 +19101,7 @@ module.exports = {
   addCenteringToPrototype
 }
 
-<<<<<<< HEAD
-<<<<<<< HEAD
 },{"./math/Matrix4":76,"./math/Plane":79,"./math/Vector3":84}],90:[function(require,module,exports){
-=======
-},{"./math/Matrix4":75,"./math/Plane":78,"./math/Vector3":83}],89:[function(require,module,exports){
->>>>>>> parent of d095edd... Merge branch 'master' into Hou-branch
-=======
-},{"./math/Matrix4":75,"./math/Plane":78,"./math/Vector3":83}],89:[function(require,module,exports){
->>>>>>> parent of d095edd... Merge branch 'master' into Hou-branch
 const {_CSGDEBUG, EPS} = require('./constants')
 const Vertex = require('./math/Vertex3')
 const Polygon = require('./math/Polygon3')
@@ -20111,15 +19612,7 @@ Node.prototype = {
 
 module.exports = Tree
 
-<<<<<<< HEAD
-<<<<<<< HEAD
 },{"./constants":73,"./math/Polygon3":81,"./math/Vertex3":86}],91:[function(require,module,exports){
-=======
-},{"./constants":72,"./math/Polygon3":80,"./math/Vertex3":85}],90:[function(require,module,exports){
->>>>>>> parent of d095edd... Merge branch 'master' into Hou-branch
-=======
-},{"./constants":72,"./math/Polygon3":80,"./math/Vertex3":85}],90:[function(require,module,exports){
->>>>>>> parent of d095edd... Merge branch 'master' into Hou-branch
 function fnNumberSort (a, b) {
   return a - b
 }
@@ -20223,15 +19716,7 @@ module.exports = {
   isCSG
 }
 
-<<<<<<< HEAD
-<<<<<<< HEAD
 },{}],92:[function(require,module,exports){
-=======
-},{}],91:[function(require,module,exports){
->>>>>>> parent of d095edd... Merge branch 'master' into Hou-branch
-=======
-},{}],91:[function(require,module,exports){
->>>>>>> parent of d095edd... Merge branch 'master' into Hou-branch
 const Vector2D = require('../math/Vector2')
 
 // see http://local.wasp.uwa.edu.au/~pbourke/geometry/polyarea/ :
@@ -20265,15 +19750,7 @@ const getBounds = function (cag) {
 
 module.exports = {area, getBounds}
 
-<<<<<<< HEAD
-<<<<<<< HEAD
 },{"../math/Vector2":83}],93:[function(require,module,exports){
-=======
-},{"../math/Vector2":82}],92:[function(require,module,exports){
->>>>>>> parent of d095edd... Merge branch 'master' into Hou-branch
-=======
-},{"../math/Vector2":82}],92:[function(require,module,exports){
->>>>>>> parent of d095edd... Merge branch 'master' into Hou-branch
 const {areaEPS} = require('../constants')
 const {linesIntersect} = require('../math/lineUtils')
 
@@ -20375,15 +19852,7 @@ module.exports = {
   contains
 }
 
-<<<<<<< HEAD
-<<<<<<< HEAD
 },{"../constants":73,"../math/lineUtils":87}],94:[function(require,module,exports){
-=======
-},{"../constants":72,"../math/lineUtils":86}],93:[function(require,module,exports){
->>>>>>> parent of d095edd... Merge branch 'master' into Hou-branch
-=======
-},{"../constants":72,"../math/lineUtils":86}],93:[function(require,module,exports){
->>>>>>> parent of d095edd... Merge branch 'master' into Hou-branch
 const {EPS} = require('../constants')
 const FuzzyCSGFactory = require('../FuzzyFactory3d')
 const FuzzyCAGFactory = require('../FuzzyFactory2d')
@@ -20469,15 +19938,7 @@ const CAGFromCAGFuzzyFactory = function (factory, sourcecag) {
 
 module.exports = canonicalize
 
-<<<<<<< HEAD
-<<<<<<< HEAD
 },{"../CAGFactories":65,"../CSGFactories":67,"../FuzzyFactory2d":69,"../FuzzyFactory3d":70,"../constants":73}],95:[function(require,module,exports){
-=======
-},{"../CAGFactories":64,"../CSGFactories":66,"../FuzzyFactory2d":68,"../FuzzyFactory3d":69,"../constants":72}],94:[function(require,module,exports){
->>>>>>> parent of d095edd... Merge branch 'master' into Hou-branch
-=======
-},{"../CAGFactories":64,"../CSGFactories":66,"../FuzzyFactory2d":68,"../FuzzyFactory3d":69,"../constants":72}],94:[function(require,module,exports){
->>>>>>> parent of d095edd... Merge branch 'master' into Hou-branch
 const Vector3D = require('../math/Vector3')
 
 /**
@@ -20527,15 +19988,7 @@ const area = function (csg) {
 
 module.exports = {bounds, volume, area}
 
-<<<<<<< HEAD
-<<<<<<< HEAD
 },{"../math/Vector3":84}],96:[function(require,module,exports){
-=======
-},{"../math/Vector3":83}],95:[function(require,module,exports){
->>>>>>> parent of d095edd... Merge branch 'master' into Hou-branch
-=======
-},{"../math/Vector3":83}],95:[function(require,module,exports){
->>>>>>> parent of d095edd... Merge branch 'master' into Hou-branch
 const CAG = require('../CAG') // FIXME: circular dependency !
 const {EPS} = require('../constants')
 
@@ -20560,15 +20013,7 @@ const projectToOrthoNormalBasis = function (csg, orthobasis) {
 
 module.exports = {projectToOrthoNormalBasis}
 
-<<<<<<< HEAD
-<<<<<<< HEAD
 },{"../CAG":64,"../constants":73}],97:[function(require,module,exports){
-=======
-},{"../CAG":63,"../constants":72}],96:[function(require,module,exports){
->>>>>>> parent of d095edd... Merge branch 'master' into Hou-branch
-=======
-},{"../CAG":63,"../constants":72}],96:[function(require,module,exports){
->>>>>>> parent of d095edd... Merge branch 'master' into Hou-branch
 const {EPS} = require('../constants')
 const Polygon = require('../math/Polygon3')
 const Plane = require('../math/Plane')
@@ -20886,15 +20331,7 @@ const fixTJunctions = function (fromPolygons, csg) {
 
 module.exports = fixTJunctions
 
-<<<<<<< HEAD
-<<<<<<< HEAD
 },{"../constants":73,"../math/Plane":79,"../math/Polygon3":81}],98:[function(require,module,exports){
-=======
-},{"../constants":72,"../math/Plane":78,"../math/Polygon3":80}],97:[function(require,module,exports){
->>>>>>> parent of d095edd... Merge branch 'master' into Hou-branch
-=======
-},{"../constants":72,"../math/Plane":78,"../math/Polygon3":80}],97:[function(require,module,exports){
->>>>>>> parent of d095edd... Merge branch 'master' into Hou-branch
 const FuzzyCSGFactory = require('../FuzzyFactory3d')
 const reTesselateCoplanarPolygons = require('../math/reTesselateCoplanarPolygons')
 const {fromPolygons} = require('../CSGFactories')
@@ -20943,15 +20380,7 @@ const reTesselate = function (csg) {
 
 module.exports = reTesselate
 
-<<<<<<< HEAD
-<<<<<<< HEAD
 },{"../CSGFactories":67,"../FuzzyFactory3d":70,"../math/reTesselateCoplanarPolygons":88}],99:[function(require,module,exports){
-=======
-},{"../CSGFactories":66,"../FuzzyFactory3d":69,"../math/reTesselateCoplanarPolygons":87}],98:[function(require,module,exports){
->>>>>>> parent of d095edd... Merge branch 'master' into Hou-branch
-=======
-},{"../CSGFactories":66,"../FuzzyFactory3d":69,"../math/reTesselateCoplanarPolygons":87}],98:[function(require,module,exports){
->>>>>>> parent of d095edd... Merge branch 'master' into Hou-branch
 /* converts input data to array if it is not already an array */
 function toArray (data) {
   if (!data) return []
@@ -20961,15 +20390,7 @@ function toArray (data) {
 
 module.exports = toArray
 
-<<<<<<< HEAD
-<<<<<<< HEAD
 },{}],100:[function(require,module,exports){
-=======
-},{}],99:[function(require,module,exports){
->>>>>>> parent of d095edd... Merge branch 'master' into Hou-branch
-=======
-},{}],99:[function(require,module,exports){
->>>>>>> parent of d095edd... Merge branch 'master' into Hou-branch
 /*
 ## License
 
@@ -21160,15 +20581,7 @@ addCenteringToPrototype(CAG.prototype, ['x', 'y'])
 
 module.exports = {CSG, CAG}
 
-<<<<<<< HEAD
-<<<<<<< HEAD
 },{"./src/CAG":101,"./src/CAGFactories":102,"./src/CSG":103,"./src/CSGFactories":104,"./src/Properties":108,"./src/connectors":109,"./src/constants":110,"./src/debugHelpers":111,"./src/math/Line2":112,"./src/math/Line3":113,"./src/math/Matrix4":114,"./src/math/OrthoNormalBasis":115,"./src/math/Path2":116,"./src/math/Plane":117,"./src/math/Polygon2":118,"./src/math/Polygon3":119,"./src/math/Side":120,"./src/math/Vector2":121,"./src/math/Vector3":122,"./src/math/Vertex2":123,"./src/math/Vertex3":124,"./src/mutators":127,"./src/primitives2d":129,"./src/primitives3d":130}],101:[function(require,module,exports){
-=======
-},{"./src/CAG":100,"./src/CAGFactories":101,"./src/CSG":102,"./src/CSGFactories":103,"./src/Properties":107,"./src/connectors":108,"./src/constants":109,"./src/debugHelpers":110,"./src/math/Line2":111,"./src/math/Line3":112,"./src/math/Matrix4":113,"./src/math/OrthoNormalBasis":114,"./src/math/Path2":115,"./src/math/Plane":116,"./src/math/Polygon2":117,"./src/math/Polygon3":118,"./src/math/Side":119,"./src/math/Vector2":120,"./src/math/Vector3":121,"./src/math/Vertex2":122,"./src/math/Vertex3":123,"./src/mutators":126,"./src/primitives2d":128,"./src/primitives3d":129}],100:[function(require,module,exports){
->>>>>>> parent of d095edd... Merge branch 'master' into Hou-branch
-=======
-},{"./src/CAG":100,"./src/CAGFactories":101,"./src/CSG":102,"./src/CSGFactories":103,"./src/Properties":107,"./src/connectors":108,"./src/constants":109,"./src/debugHelpers":110,"./src/math/Line2":111,"./src/math/Line3":112,"./src/math/Matrix4":113,"./src/math/OrthoNormalBasis":114,"./src/math/Path2":115,"./src/math/Plane":116,"./src/math/Polygon2":117,"./src/math/Polygon3":118,"./src/math/Side":119,"./src/math/Vector2":120,"./src/math/Vector3":121,"./src/math/Vertex2":122,"./src/math/Vertex3":123,"./src/mutators":126,"./src/primitives2d":128,"./src/primitives3d":129}],100:[function(require,module,exports){
->>>>>>> parent of d095edd... Merge branch 'master' into Hou-branch
 const {EPS, angleEPS, areaEPS, defaultResolution3D} = require('./constants')
 const {Connector} = require('./connectors')
 const OrthoNormalBasis = require('./math/OrthoNormalBasis')
@@ -21986,15 +21399,7 @@ CAG.prototype = {
 
 module.exports = CAG
 
-<<<<<<< HEAD
-<<<<<<< HEAD
 },{"./CSG":103,"./FuzzyFactory2d":106,"./connectors":109,"./constants":110,"./math/OrthoNormalBasis":115,"./math/Path2":116,"./math/Polygon3":119,"./math/Side":120,"./math/Vector2":121,"./math/Vector3":122,"./math/Vertex2":123,"./math/Vertex3":124,"./math/lineUtils":125,"./optionParsers":128}],102:[function(require,module,exports){
-=======
-},{"./CSG":102,"./FuzzyFactory2d":105,"./connectors":108,"./constants":109,"./math/OrthoNormalBasis":114,"./math/Path2":115,"./math/Polygon3":118,"./math/Side":119,"./math/Vector2":120,"./math/Vector3":121,"./math/Vertex2":122,"./math/Vertex3":123,"./math/lineUtils":124,"./optionParsers":127}],101:[function(require,module,exports){
->>>>>>> parent of d095edd... Merge branch 'master' into Hou-branch
-=======
-},{"./CSG":102,"./FuzzyFactory2d":105,"./connectors":108,"./constants":109,"./math/OrthoNormalBasis":114,"./math/Path2":115,"./math/Polygon3":118,"./math/Side":119,"./math/Vector2":120,"./math/Vector3":121,"./math/Vertex2":122,"./math/Vertex3":123,"./math/lineUtils":124,"./optionParsers":127}],101:[function(require,module,exports){
->>>>>>> parent of d095edd... Merge branch 'master' into Hou-branch
 const CAG = require('./CAG')
 const Side = require('./math/Side')
 const Vector2D = require('./math/Vector2')
@@ -22054,15 +21459,7 @@ module.exports = {
   //fromFakeCSG
 }
 
-<<<<<<< HEAD
-<<<<<<< HEAD
 },{"./CAG":101,"./math/Path2":116,"./math/Side":120,"./math/Vector2":121,"./math/Vertex2":123}],103:[function(require,module,exports){
-=======
-},{"./CAG":100,"./math/Path2":115,"./math/Side":119,"./math/Vector2":120,"./math/Vertex2":122}],102:[function(require,module,exports){
->>>>>>> parent of d095edd... Merge branch 'master' into Hou-branch
-=======
-},{"./CAG":100,"./math/Path2":115,"./math/Side":119,"./math/Vector2":120,"./math/Vertex2":122}],102:[function(require,module,exports){
->>>>>>> parent of d095edd... Merge branch 'master' into Hou-branch
 const {fnNumberSort} = require('./utils')
 const FuzzyCSGFactory = require('./FuzzyFactory3d')
 const Tree = require('./trees')
@@ -23033,15 +22430,7 @@ const CSGFromCSGFuzzyFactory = function (factory, sourcecsg) {
 
 module.exports = CSG
 
-<<<<<<< HEAD
-<<<<<<< HEAD
 },{"./CAG":101,"./FuzzyFactory3d":107,"./Properties":108,"./connectors":109,"./constants":110,"./math/Matrix4":114,"./math/OrthoNormalBasis":115,"./math/Plane":117,"./math/Polygon3":119,"./math/Vector2":121,"./math/Vector3":122,"./math/Vertex3":124,"./math/polygonUtils":126,"./trees":131,"./utils":132,"./utils/fixTJunctions":133}],104:[function(require,module,exports){
-=======
-},{"./CAG":100,"./FuzzyFactory3d":106,"./Properties":107,"./connectors":108,"./constants":109,"./math/Matrix4":113,"./math/OrthoNormalBasis":114,"./math/Plane":116,"./math/Polygon3":118,"./math/Vector2":120,"./math/Vector3":121,"./math/Vertex3":123,"./math/polygonUtils":125,"./trees":130,"./utils":131,"./utils/fixTJunctions":132}],103:[function(require,module,exports){
->>>>>>> parent of d095edd... Merge branch 'master' into Hou-branch
-=======
-},{"./CAG":100,"./FuzzyFactory3d":106,"./Properties":107,"./connectors":108,"./constants":109,"./math/Matrix4":113,"./math/OrthoNormalBasis":114,"./math/Plane":116,"./math/Polygon3":118,"./math/Vector2":120,"./math/Vector3":121,"./math/Vertex3":123,"./math/polygonUtils":125,"./trees":130,"./utils":131,"./utils/fixTJunctions":132}],103:[function(require,module,exports){
->>>>>>> parent of d095edd... Merge branch 'master' into Hou-branch
 const Vector3D = require('./math/Vector3')
 const Vertex = require('./math/Vertex3')
 const Plane = require('./math/Plane')
@@ -23154,32 +22543,15 @@ module.exports = {
   fromCompactBinary
 }
 
-<<<<<<< HEAD
-<<<<<<< HEAD
 },{"./CSG":103,"./math/Plane":117,"./math/Polygon2":118,"./math/Polygon3":119,"./math/Vector3":122,"./math/Vertex3":124}],105:[function(require,module,exports){
-=======
-=======
->>>>>>> parent of d095edd... Merge branch 'master' into Hou-branch
-},{"./CSG":102,"./math/Plane":116,"./math/Polygon2":117,"./math/Polygon3":118,"./math/Vector3":121,"./math/Vertex3":123}],104:[function(require,module,exports){
-arguments[4][67][0].apply(exports,arguments)
-},{"dup":67}],105:[function(require,module,exports){
->>>>>>> parent of d095edd... Merge branch 'master' into Hou-branch
 arguments[4][68][0].apply(exports,arguments)
 },{"dup":68}],106:[function(require,module,exports){
 arguments[4][69][0].apply(exports,arguments)
 },{"./FuzzyFactory":105,"./constants":110,"./math/Side":120,"dup":69}],107:[function(require,module,exports){
 arguments[4][70][0].apply(exports,arguments)
-<<<<<<< HEAD
-<<<<<<< HEAD
 },{"./FuzzyFactory":105,"./constants":110,"./math/Polygon3":119,"dup":70}],108:[function(require,module,exports){
 arguments[4][71][0].apply(exports,arguments)
 },{"dup":71}],109:[function(require,module,exports){
-=======
-},{"dup":70}],108:[function(require,module,exports){
->>>>>>> parent of d095edd... Merge branch 'master' into Hou-branch
-=======
-},{"dup":70}],108:[function(require,module,exports){
->>>>>>> parent of d095edd... Merge branch 'master' into Hou-branch
 const Vector3D = require('./math/Vector3')
 const Line3D = require('./math/Line3')
 const Matrix4x4 = require('./math/Matrix4')
@@ -23401,21 +22773,9 @@ ConnectorList.prototype = {
 
 module.exports = {Connector, ConnectorList}
 
-<<<<<<< HEAD
-<<<<<<< HEAD
 },{"./CSG":103,"./math/Line3":113,"./math/Matrix4":114,"./math/OrthoNormalBasis":115,"./math/Plane":117,"./math/Vector3":122}],110:[function(require,module,exports){
 arguments[4][73][0].apply(exports,arguments)
 },{"dup":73}],111:[function(require,module,exports){
-=======
-},{"./CSG":102,"./math/Line3":112,"./math/Matrix4":113,"./math/OrthoNormalBasis":114,"./math/Plane":116,"./math/Vector3":121}],109:[function(require,module,exports){
-arguments[4][72][0].apply(exports,arguments)
-},{"dup":72}],110:[function(require,module,exports){
->>>>>>> parent of d095edd... Merge branch 'master' into Hou-branch
-=======
-},{"./CSG":102,"./math/Line3":112,"./math/Matrix4":113,"./math/OrthoNormalBasis":114,"./math/Plane":116,"./math/Vector3":121}],109:[function(require,module,exports){
-arguments[4][72][0].apply(exports,arguments)
-},{"dup":72}],110:[function(require,module,exports){
->>>>>>> parent of d095edd... Merge branch 'master' into Hou-branch
 const CSG = require('./CSG')
 const {cube} = require('./primitives3d')
 
@@ -23450,30 +22810,13 @@ const toPointCloud = function (csg, cuberadius) {
 
 module.exports = {toPointCloud}
 
-<<<<<<< HEAD
-<<<<<<< HEAD
 },{"./CSG":103,"./primitives3d":130}],112:[function(require,module,exports){
-=======
-=======
->>>>>>> parent of d095edd... Merge branch 'master' into Hou-branch
-},{"./CSG":102,"./primitives3d":129}],111:[function(require,module,exports){
-arguments[4][73][0].apply(exports,arguments)
-},{"../utils":131,"./Vector2":120,"dup":73}],112:[function(require,module,exports){
->>>>>>> parent of d095edd... Merge branch 'master' into Hou-branch
 arguments[4][74][0].apply(exports,arguments)
 },{"../utils":132,"./Vector2":121,"dup":74}],113:[function(require,module,exports){
 arguments[4][75][0].apply(exports,arguments)
-<<<<<<< HEAD
-<<<<<<< HEAD
 },{"../constants":110,"../utils":132,"./Vector3":122,"dup":75}],114:[function(require,module,exports){
 arguments[4][76][0].apply(exports,arguments)
 },{"./OrthoNormalBasis":115,"./Plane":117,"./Vector2":121,"./Vector3":122,"dup":76}],115:[function(require,module,exports){
-=======
-},{"./OrthoNormalBasis":114,"./Plane":116,"./Vector2":120,"./Vector3":121,"dup":75}],114:[function(require,module,exports){
->>>>>>> parent of d095edd... Merge branch 'master' into Hou-branch
-=======
-},{"./OrthoNormalBasis":114,"./Plane":116,"./Vector2":120,"./Vector3":121,"dup":75}],114:[function(require,module,exports){
->>>>>>> parent of d095edd... Merge branch 'master' into Hou-branch
 const Vector2D = require('./Vector2')
 const Vector3D = require('./Vector3')
 const Line2D = require('./Line2')
@@ -23677,15 +23020,7 @@ OrthoNormalBasis.prototype = {
 
 module.exports = OrthoNormalBasis
 
-<<<<<<< HEAD
-<<<<<<< HEAD
 },{"./Line2":112,"./Line3":113,"./Matrix4":114,"./Plane":117,"./Vector2":121,"./Vector3":122}],116:[function(require,module,exports){
-=======
-},{"./Line2":111,"./Line3":112,"./Matrix4":113,"./Plane":116,"./Vector2":120,"./Vector3":121}],115:[function(require,module,exports){
->>>>>>> parent of d095edd... Merge branch 'master' into Hou-branch
-=======
-},{"./Line2":111,"./Line3":112,"./Matrix4":113,"./Plane":116,"./Vector2":120,"./Vector3":121}],115:[function(require,module,exports){
->>>>>>> parent of d095edd... Merge branch 'master' into Hou-branch
 const Vector2D = require('./Vector2')
 const {EPS, angleEPS} = require('../constants')
 const {parseOptionAs2DVector, parseOptionAsFloat, parseOptionAsInt, parseOptionAsBool} = require('../optionParsers')
@@ -24159,21 +23494,9 @@ Path2D.prototype = {
 
 module.exports = Path2D
 
-<<<<<<< HEAD
-<<<<<<< HEAD
 },{"../CAG":101,"../constants":110,"../optionParsers":128,"./Side":120,"./Vector2":121,"./Vertex2":123}],117:[function(require,module,exports){
 arguments[4][79][0].apply(exports,arguments)
 },{"../constants":110,"./Line3":113,"./Vector3":122,"dup":79}],118:[function(require,module,exports){
-=======
-},{"../CAG":100,"../constants":109,"../optionParsers":127,"./Side":119,"./Vector2":120,"./Vertex2":122}],116:[function(require,module,exports){
-arguments[4][78][0].apply(exports,arguments)
-},{"../constants":109,"./Line3":112,"./Vector3":121,"dup":78}],117:[function(require,module,exports){
->>>>>>> parent of d095edd... Merge branch 'master' into Hou-branch
-=======
-},{"../CAG":100,"../constants":109,"../optionParsers":127,"./Side":119,"./Vector2":120,"./Vertex2":122}],116:[function(require,module,exports){
-arguments[4][78][0].apply(exports,arguments)
-},{"../constants":109,"./Line3":112,"./Vector3":121,"dup":78}],117:[function(require,module,exports){
->>>>>>> parent of d095edd... Merge branch 'master' into Hou-branch
 const CAG = require('../CAG')
 
 /*
@@ -24194,15 +23517,7 @@ Polygon2D.prototype = CAG.prototype
 
 module.exports = Polygon2D
 
-<<<<<<< HEAD
-<<<<<<< HEAD
 },{"../CAG":101}],119:[function(require,module,exports){
-=======
-},{"../CAG":100}],118:[function(require,module,exports){
->>>>>>> parent of d095edd... Merge branch 'master' into Hou-branch
-=======
-},{"../CAG":100}],118:[function(require,module,exports){
->>>>>>> parent of d095edd... Merge branch 'master' into Hou-branch
 const Vector3D = require('./Vector3')
 const Vertex = require('./Vertex3')
 const Matrix4x4 = require('./Matrix4')
@@ -24779,15 +24094,7 @@ Polygon.defaultShared = new Polygon.Shared(null)
 
 module.exports = Polygon
 
-<<<<<<< HEAD
-<<<<<<< HEAD
 },{"../CAG":101,"../CAGFactories":102,"../CSG":103,"../constants":110,"../utils":132,"./Matrix4":114,"./Plane":117,"./Vector3":122,"./Vertex3":124}],120:[function(require,module,exports){
-=======
-},{"../CAG":100,"../CAGFactories":101,"../CSG":102,"../constants":109,"../utils":131,"./Matrix4":113,"./Plane":116,"./Vector3":121,"./Vertex3":123}],119:[function(require,module,exports){
->>>>>>> parent of d095edd... Merge branch 'master' into Hou-branch
-=======
-},{"../CAG":100,"../CAGFactories":101,"../CSG":102,"../constants":109,"../utils":131,"./Matrix4":113,"./Plane":116,"./Vector3":121,"./Vertex3":123}],119:[function(require,module,exports){
->>>>>>> parent of d095edd... Merge branch 'master' into Hou-branch
 const Vector2D = require('./Vector2')
 const Vertex = require('./Vertex2')
 const Vertex3 = require('./Vertex3')
@@ -24891,15 +24198,7 @@ Side.prototype = {
 
 module.exports = Side
 
-<<<<<<< HEAD
-<<<<<<< HEAD
 },{"../constants":110,"./Polygon3":119,"./Vector2":121,"./Vertex2":123,"./Vertex3":124}],121:[function(require,module,exports){
-=======
-},{"../constants":109,"./Polygon3":118,"./Vector2":120,"./Vertex2":122,"./Vertex3":123}],120:[function(require,module,exports){
->>>>>>> parent of d095edd... Merge branch 'master' into Hou-branch
-=======
-},{"../constants":109,"./Polygon3":118,"./Vector2":120,"./Vertex2":122,"./Vertex3":123}],120:[function(require,module,exports){
->>>>>>> parent of d095edd... Merge branch 'master' into Hou-branch
 const {IsFloat} = require('../utils')
 
 /** Class Vector2D
@@ -25097,30 +24396,13 @@ Vector2D.prototype = {
 
 module.exports = Vector2D
 
-<<<<<<< HEAD
-<<<<<<< HEAD
 },{"../utils":132,"./Vector3":122}],122:[function(require,module,exports){
-=======
-=======
->>>>>>> parent of d095edd... Merge branch 'master' into Hou-branch
-},{"../utils":131,"./Vector3":121}],121:[function(require,module,exports){
-arguments[4][83][0].apply(exports,arguments)
-},{"../utils":131,"./Vector2":120,"dup":83}],122:[function(require,module,exports){
->>>>>>> parent of d095edd... Merge branch 'master' into Hou-branch
 arguments[4][84][0].apply(exports,arguments)
 },{"../utils":132,"./Vector2":121,"dup":84}],123:[function(require,module,exports){
 arguments[4][85][0].apply(exports,arguments)
-<<<<<<< HEAD
-<<<<<<< HEAD
 },{"../constants":110,"./Vector2":121,"dup":85}],124:[function(require,module,exports){
 arguments[4][86][0].apply(exports,arguments)
 },{"../constants":110,"./Vector3":122,"dup":86}],125:[function(require,module,exports){
-=======
-},{"../constants":109,"./Vector3":121,"dup":85}],124:[function(require,module,exports){
->>>>>>> parent of d095edd... Merge branch 'master' into Hou-branch
-=======
-},{"../constants":109,"./Vector3":121,"dup":85}],124:[function(require,module,exports){
->>>>>>> parent of d095edd... Merge branch 'master' into Hou-branch
 const {EPS} = require('../constants')
 const {solve2Linear} = require('../utils')
 
@@ -25147,15 +24429,7 @@ const linesIntersect = function (p0start, p0end, p1start, p1end) {
 
 module.exports = {linesIntersect}
 
-<<<<<<< HEAD
-<<<<<<< HEAD
 },{"../constants":110,"../utils":132}],126:[function(require,module,exports){
-=======
-},{"../constants":109,"../utils":131}],125:[function(require,module,exports){
->>>>>>> parent of d095edd... Merge branch 'master' into Hou-branch
-=======
-},{"../constants":109,"../utils":131}],125:[function(require,module,exports){
->>>>>>> parent of d095edd... Merge branch 'master' into Hou-branch
 const {EPS} = require('../constants')
 const OrthoNormalBasis = require('./OrthoNormalBasis')
 const {interpolateBetween2DPointsForY, insertSorted, fnNumberSort} = require('../utils')
@@ -25499,21 +24773,9 @@ const reTesselateCoplanarPolygons = function (sourcepolygons, destpolygons) {
 
 module.exports = {reTesselateCoplanarPolygons}
 
-<<<<<<< HEAD
-<<<<<<< HEAD
 },{"../constants":110,"../utils":132,"./Line2":112,"./OrthoNormalBasis":115,"./Polygon3":119,"./Vector2":121,"./Vertex3":124}],127:[function(require,module,exports){
 arguments[4][89][0].apply(exports,arguments)
 },{"./math/Matrix4":114,"./math/Plane":117,"./math/Vector3":122,"dup":89}],128:[function(require,module,exports){
-=======
-},{"../constants":109,"../utils":131,"./Line2":111,"./OrthoNormalBasis":114,"./Polygon3":118,"./Vector2":120,"./Vertex3":123}],126:[function(require,module,exports){
-arguments[4][88][0].apply(exports,arguments)
-},{"./math/Matrix4":113,"./math/Plane":116,"./math/Vector3":121,"dup":88}],127:[function(require,module,exports){
->>>>>>> parent of d095edd... Merge branch 'master' into Hou-branch
-=======
-},{"../constants":109,"../utils":131,"./Line2":111,"./OrthoNormalBasis":114,"./Polygon3":118,"./Vector2":120,"./Vertex3":123}],126:[function(require,module,exports){
-arguments[4][88][0].apply(exports,arguments)
-},{"./math/Matrix4":113,"./math/Plane":116,"./math/Vector3":121,"dup":88}],127:[function(require,module,exports){
->>>>>>> parent of d095edd... Merge branch 'master' into Hou-branch
 const Vector3D = require('./math/Vector3')
 const Vector2D = require('./math/Vector2')
 
@@ -25591,15 +24853,7 @@ module.exports = {
   parseOptionAs3DVectorList
 }
 
-<<<<<<< HEAD
-<<<<<<< HEAD
 },{"./math/Vector2":121,"./math/Vector3":122}],129:[function(require,module,exports){
-=======
-},{"./math/Vector2":120,"./math/Vector3":121}],128:[function(require,module,exports){
->>>>>>> parent of d095edd... Merge branch 'master' into Hou-branch
-=======
-},{"./math/Vector2":120,"./math/Vector3":121}],128:[function(require,module,exports){
->>>>>>> parent of d095edd... Merge branch 'master' into Hou-branch
 const CAG = require('./CAG')
 const {parseOptionAs2DVector, parseOptionAsFloat, parseOptionAsInt} = require('./optionParsers')
 const {defaultResolution2D} = require('./constants')
@@ -25785,15 +25039,7 @@ module.exports = {
   fromCompactBinary
 }
 
-<<<<<<< HEAD
-<<<<<<< HEAD
 },{"./CAG":101,"./CAGFactories":102,"./constants":110,"./math/Path2":116,"./math/Vector2":121,"./optionParsers":128}],130:[function(require,module,exports){
-=======
-},{"./CAG":100,"./CAGFactories":101,"./constants":109,"./math/Path2":115,"./math/Vector2":120,"./optionParsers":127}],129:[function(require,module,exports){
->>>>>>> parent of d095edd... Merge branch 'master' into Hou-branch
-=======
-},{"./CAG":100,"./CAGFactories":101,"./constants":109,"./math/Path2":115,"./math/Vector2":120,"./optionParsers":127}],129:[function(require,module,exports){
->>>>>>> parent of d095edd... Merge branch 'master' into Hou-branch
 const CSG = require('./CSG')
 const {parseOption, parseOptionAs3DVector, parseOptionAs2DVector, parseOptionAs3DVectorList, parseOptionAsFloat, parseOptionAsInt} = require('./optionParsers')
 const {defaultResolution3D, defaultResolution2D, EPS} = require('./constants')
@@ -26343,15 +25589,7 @@ module.exports = {
   polyhedron
 }
 
-<<<<<<< HEAD
-<<<<<<< HEAD
 },{"./CSG":103,"./Properties":108,"./connectors":109,"./constants":110,"./math/Polygon3":119,"./math/Vector3":122,"./math/Vertex3":124,"./optionParsers":128}],131:[function(require,module,exports){
-=======
-},{"./CSG":102,"./Properties":107,"./connectors":108,"./constants":109,"./math/Polygon3":118,"./math/Vector3":121,"./math/Vertex3":123,"./optionParsers":127}],130:[function(require,module,exports){
->>>>>>> parent of d095edd... Merge branch 'master' into Hou-branch
-=======
-},{"./CSG":102,"./Properties":107,"./connectors":108,"./constants":109,"./math/Polygon3":118,"./math/Vector3":121,"./math/Vertex3":123,"./optionParsers":127}],130:[function(require,module,exports){
->>>>>>> parent of d095edd... Merge branch 'master' into Hou-branch
 const {_CSGDEBUG, EPS} = require('./constants')
 const Vertex = require('./math/Vertex3')
 const Polygon = require('./math/Polygon3')
@@ -26863,15 +26101,7 @@ Node.prototype = {
 
 module.exports = Tree
 
-<<<<<<< HEAD
-<<<<<<< HEAD
 },{"./constants":110,"./math/Polygon3":119,"./math/Vertex3":124}],132:[function(require,module,exports){
-=======
-},{"./constants":109,"./math/Polygon3":118,"./math/Vertex3":123}],131:[function(require,module,exports){
->>>>>>> parent of d095edd... Merge branch 'master' into Hou-branch
-=======
-},{"./constants":109,"./math/Polygon3":118,"./math/Vertex3":123}],131:[function(require,module,exports){
->>>>>>> parent of d095edd... Merge branch 'master' into Hou-branch
 function fnNumberSort (a, b) {
   return a - b
 }
@@ -26944,21 +26174,9 @@ module.exports = {
   interpolateBetween2DPointsForY
 }
 
-<<<<<<< HEAD
-<<<<<<< HEAD
 },{}],133:[function(require,module,exports){
 arguments[4][97][0].apply(exports,arguments)
 },{"../constants":110,"../math/Plane":117,"../math/Polygon3":119,"dup":97}],134:[function(require,module,exports){
-=======
-},{}],132:[function(require,module,exports){
-arguments[4][96][0].apply(exports,arguments)
-},{"../constants":109,"../math/Plane":116,"../math/Polygon3":118,"dup":96}],133:[function(require,module,exports){
->>>>>>> parent of d095edd... Merge branch 'master' into Hou-branch
-=======
-},{}],132:[function(require,module,exports){
-arguments[4][96][0].apply(exports,arguments)
-},{"../constants":109,"../math/Plane":116,"../math/Polygon3":118,"dup":96}],133:[function(require,module,exports){
->>>>>>> parent of d095edd... Merge branch 'master' into Hou-branch
 // color table from http://www.w3.org/TR/css3-color/
 const cssColors = {
 // basic color keywords
@@ -27405,15 +26623,7 @@ module.exports = {
   rgb2html
 }
 
-<<<<<<< HEAD
-<<<<<<< HEAD
 },{}],135:[function(require,module,exports){
-=======
-},{}],134:[function(require,module,exports){
->>>>>>> parent of d095edd... Merge branch 'master' into Hou-branch
-=======
-},{}],134:[function(require,module,exports){
->>>>>>> parent of d095edd... Merge branch 'master' into Hou-branch
 function echo () {
   console.warn('echo() will be deprecated in the near future: please use console.log/warn/error instead')
   var s = '', a = arguments
@@ -27430,15 +26640,7 @@ module.exports = {
   echo
 }
 
-<<<<<<< HEAD
-<<<<<<< HEAD
 },{}],136:[function(require,module,exports){
-=======
-},{}],135:[function(require,module,exports){
->>>>>>> parent of d095edd... Merge branch 'master' into Hou-branch
-=======
-},{}],135:[function(require,module,exports){
->>>>>>> parent of d095edd... Merge branch 'master' into Hou-branch
 const { CSG } = require('@jscad/csg')
 
 // FIXME: this is to have more readable/less extremely verbose code below
@@ -27500,15 +26702,7 @@ const cagToPointsArray = input => {
 const degToRad = deg => (Math.PI / 180) * deg
 
 module.exports = {cagToPointsArray, clamp, rightMultiply1x3VectorToArray, polygonFromPoints}
-<<<<<<< HEAD
-<<<<<<< HEAD
 },{"@jscad/csg":100}],137:[function(require,module,exports){
-=======
-},{"@jscad/csg":99}],136:[function(require,module,exports){
->>>>>>> parent of d095edd... Merge branch 'master' into Hou-branch
-=======
-},{"@jscad/csg":99}],136:[function(require,module,exports){
->>>>>>> parent of d095edd... Merge branch 'master' into Hou-branch
 
 const primitives3d = require('./primitives3d')
 const primitives2d = require('./primitives2d')
@@ -27544,15 +26738,7 @@ const exportedApi = {
 
 module.exports = exportedApi
 
-<<<<<<< HEAD
-<<<<<<< HEAD
 },{"./color":134,"./debug":135,"./log":138,"./maths":139,"./ops-booleans":140,"./ops-extrusions":141,"./ops-transformations":142,"./primitives2d":143,"./primitives3d":144,"./text":145,"@jscad/csg":100}],138:[function(require,module,exports){
-=======
-},{"./color":133,"./debug":134,"./log":137,"./maths":138,"./ops-booleans":139,"./ops-extrusions":140,"./ops-transformations":141,"./primitives2d":142,"./primitives3d":143,"./text":144,"@jscad/csg":99}],137:[function(require,module,exports){
->>>>>>> parent of d095edd... Merge branch 'master' into Hou-branch
-=======
-},{"./color":133,"./debug":134,"./log":137,"./maths":138,"./ops-booleans":139,"./ops-extrusions":140,"./ops-transformations":141,"./primitives2d":142,"./primitives3d":143,"./text":144,"@jscad/csg":99}],137:[function(require,module,exports){
->>>>>>> parent of d095edd... Merge branch 'master' into Hou-branch
 function log (txt) {
   var timeInMs = Date.now()
   var prevtime// OpenJsCad.log.prevLogTime
@@ -27579,15 +26765,7 @@ module.exports = {
   status
 }
 
-<<<<<<< HEAD
-<<<<<<< HEAD
 },{}],139:[function(require,module,exports){
-=======
-},{}],138:[function(require,module,exports){
->>>>>>> parent of d095edd... Merge branch 'master' into Hou-branch
-=======
-},{}],138:[function(require,module,exports){
->>>>>>> parent of d095edd... Merge branch 'master' into Hou-branch
 // -- Math functions (360 deg based vs 2pi)
 function sin (a) {
   return Math.sin(a / 360 * Math.PI * 2)
@@ -27698,15 +26876,7 @@ module.exports = {
   round
 }
 
-<<<<<<< HEAD
-<<<<<<< HEAD
 },{}],140:[function(require,module,exports){
-=======
-},{}],139:[function(require,module,exports){
->>>>>>> parent of d095edd... Merge branch 'master' into Hou-branch
-=======
-},{}],139:[function(require,module,exports){
->>>>>>> parent of d095edd... Merge branch 'master' into Hou-branch
 const { CAG } = require('@jscad/csg')
 
 // -- 3D boolean operations
@@ -27810,15 +26980,7 @@ module.exports = {
   intersection
 }
 
-<<<<<<< HEAD
-<<<<<<< HEAD
 },{"@jscad/csg":100}],141:[function(require,module,exports){
-=======
-},{"@jscad/csg":99}],140:[function(require,module,exports){
->>>>>>> parent of d095edd... Merge branch 'master' into Hou-branch
-=======
-},{"@jscad/csg":99}],140:[function(require,module,exports){
->>>>>>> parent of d095edd... Merge branch 'master' into Hou-branch
 const { CSG, CAG } = require('@jscad/csg')
 const {cagToPointsArray, clamp, rightMultiply1x3VectorToArray, polygonFromPoints} = require('./helpers')
 // -- 2D to 3D primitives
@@ -28034,15 +27196,7 @@ module.exports = {
   rectangular_extrude
 }
 
-<<<<<<< HEAD
-<<<<<<< HEAD
 },{"./helpers":136,"@jscad/csg":100}],142:[function(require,module,exports){
-=======
-},{"./helpers":135,"@jscad/csg":99}],141:[function(require,module,exports){
->>>>>>> parent of d095edd... Merge branch 'master' into Hou-branch
-=======
-},{"./helpers":135,"@jscad/csg":99}],141:[function(require,module,exports){
->>>>>>> parent of d095edd... Merge branch 'master' into Hou-branch
 const { CSG, CAG } = require('@jscad/csg')
 const { union } = require('./ops-booleans')
 // -- 3D transformations (OpenSCAD like notion)
@@ -28455,15 +27609,7 @@ module.exports = {
   chain_hull
 }
 
-<<<<<<< HEAD
-<<<<<<< HEAD
 },{"./ops-booleans":140,"@jscad/csg":100}],143:[function(require,module,exports){
-=======
-},{"./ops-booleans":139,"@jscad/csg":99}],142:[function(require,module,exports){
->>>>>>> parent of d095edd... Merge branch 'master' into Hou-branch
-=======
-},{"./ops-booleans":139,"@jscad/csg":99}],142:[function(require,module,exports){
->>>>>>> parent of d095edd... Merge branch 'master' into Hou-branch
 const { CAG } = require('@jscad/csg')
 
 // -- 2D primitives (OpenSCAD like notion)
@@ -28580,15 +27726,7 @@ module.exports = {
   triangle
 }
 
-<<<<<<< HEAD
-<<<<<<< HEAD
 },{"@jscad/csg":100}],144:[function(require,module,exports){
-=======
-},{"@jscad/csg":99}],143:[function(require,module,exports){
->>>>>>> parent of d095edd... Merge branch 'master' into Hou-branch
-=======
-},{"@jscad/csg":99}],143:[function(require,module,exports){
->>>>>>> parent of d095edd... Merge branch 'master' into Hou-branch
 // -- 3D primitives (OpenSCAD like notion)
 const { CSG } = require('@jscad/csg')
 const { circle } = require('./primitives2d')
@@ -28979,15 +28117,7 @@ module.exports = {
   polyhedron
 }
 
-<<<<<<< HEAD
-<<<<<<< HEAD
 },{"./ops-extrusions":141,"./ops-transformations":142,"./primitives2d":143,"@jscad/csg":100}],145:[function(require,module,exports){
-=======
-},{"./ops-extrusions":140,"./ops-transformations":141,"./primitives2d":142,"@jscad/csg":99}],144:[function(require,module,exports){
->>>>>>> parent of d095edd... Merge branch 'master' into Hou-branch
-=======
-},{"./ops-extrusions":140,"./ops-transformations":141,"./primitives2d":142,"@jscad/csg":99}],144:[function(require,module,exports){
->>>>>>> parent of d095edd... Merge branch 'master' into Hou-branch
 
 /** Construct a with, segments tupple from a character
  * @param {Float} x - x offset
@@ -29626,15 +28756,7 @@ module.exports = {
   vector_text
 }
 
-<<<<<<< HEAD
-<<<<<<< HEAD
 },{}],146:[function(require,module,exports){
-=======
-},{}],145:[function(require,module,exports){
->>>>>>> parent of d095edd... Merge branch 'master' into Hou-branch
-=======
-},{}],145:[function(require,module,exports){
->>>>>>> parent of d095edd... Merge branch 'master' into Hou-branch
 "use strict;"
 
 const scadApi = require('@jscad/scad-api')
@@ -29657,15 +28779,7 @@ function rebuildMakeLeg ( Leg_r , Leg_h ){
 
 
 module.exports = rebuildMakeLeg
-<<<<<<< HEAD
-<<<<<<< HEAD
 },{"./csgToGeometries":41,"@jscad/csg":50,"@jscad/scad-api":137}],147:[function(require,module,exports){
-=======
-},{"./csgToGeometries":40,"@jscad/csg":49,"@jscad/scad-api":136}],146:[function(require,module,exports){
->>>>>>> parent of d095edd... Merge branch 'master' into Hou-branch
-=======
-},{"./csgToGeometries":40,"@jscad/csg":49,"@jscad/scad-api":136}],146:[function(require,module,exports){
->>>>>>> parent of d095edd... Merge branch 'master' into Hou-branch
 "use strict;"
 
 const scadApi = require('@jscad/scad-api')
@@ -29751,12 +28865,4 @@ function assignUVs(geometry) {
 }
 
 module.exports = rebuildMakeSeat
-<<<<<<< HEAD
-<<<<<<< HEAD
 },{"./csgToGeometries":41,"@jscad/csg":50,"@jscad/scad-api":137}]},{},[49]);
-=======
-},{"./csgToGeometries":40,"@jscad/csg":49,"@jscad/scad-api":136}]},{},[48]);
->>>>>>> parent of d095edd... Merge branch 'master' into Hou-branch
-=======
-},{"./csgToGeometries":40,"@jscad/csg":49,"@jscad/scad-api":136}]},{},[48]);
->>>>>>> parent of d095edd... Merge branch 'master' into Hou-branch
