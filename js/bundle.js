@@ -695,7 +695,11 @@ Cabinet_kallax.prototype = {
 }
 
 module.exports = Cabinet_kallax
+<<<<<<< HEAD
 },{"./CabinetMakeBedBroad":1,"./CabinetMakeBroad":2,"./CabinetMakeSeat":3,"./MarkBetweenSize":22,"./MarkSize":23,"./rebuildMakeSeat":149}],5:[function(require,module,exports){
+=======
+},{"./CabinetMakeBedBroad":1,"./CabinetMakeBroad":2,"./CabinetMakeSeat":3,"./MarkBetweenSize":24,"./MarkSize":25,"./rebuildMakeSeat":149}],5:[function(require,module,exports){
+>>>>>>> Hou-branch
 const chairCreateBoard = require('./chairCreateBoard')
 const chairCutBack = require('./chairCutBack')
 
@@ -1584,7 +1588,11 @@ Chair_Add.prototype = {
 }
 
 module.exports = Chair_Add
+<<<<<<< HEAD
 },{"./cadCutByPlane":34,"./chairCreateBoard":39,"./chairCutBack":40}],6:[function(require,module,exports){
+=======
+},{"./cadCutByPlane":35,"./chairCreateBoard":39,"./chairCutBack":40}],6:[function(require,module,exports){
+>>>>>>> Hou-branch
 "use strict;"
 //chair align related functions
 //align in one line
@@ -3040,7 +3048,11 @@ Chair_Rebuild.prototype = {
 }
 module.exports = Chair_Rebuild
 
+<<<<<<< HEAD
 },{"./Model_Painting":27,"./Model_wrap":29,"./cadExtrudeShape":35,"./chairCutBack":40,"./computeConvexHull":41,"./rebuildMakeLeg":148,"./rebuildMakeSeat":149}],8:[function(require,module,exports){
+=======
+},{"./Model_Painting":28,"./Model_wrap":30,"./cadExtrudeShape":36,"./chairCutBack":40,"./computeConvexHull":41,"./rebuildMakeLeg":148,"./rebuildMakeSeat":149}],8:[function(require,module,exports){
+>>>>>>> Hou-branch
 "use strict;"
 
 const scadApi = require('@jscad/scad-api')
@@ -3113,13 +3125,15 @@ const {translate, rotate} = scadApi.transformations
 const csgToGeometries = require('./csgToGeometries')
 
 function CreateDoor(h, w) {
-    var board = cube({size:[0.8, h - 1, w - 1], center:true});
+   	var board = cube({size:[0.2, h - 1, w - 1], center:true});
 	var obj = board.expand(0.1, 16);
-	var path = new CSG.Path2D([[-0.25, w/8+w/10], [-0.25, w/8], [-0.25-w/20, w/8-w/15], 
-		[-0.25-w/20, -1*w/8+w/15], [-0.25, -1*w/8], [-0.25, -1*w/8-w/10]], /*closed=*/false);
+	var path = new CSG.Path2D([[-0.25, w/8+w/10], 
+	[-0.25, w/8], [-0.25-w/20, w/8-w/15], 
+	[-0.25-w/20, -1*w/8+w/15], [-0.25, -1*w/8], 
+	[-0.25, -1*w/8-w/10]], /*closed=*/false);
 	var handle = path.rectangularExtrude(0.2, 1, 16, true);
-	//var handle = rectangular_extrude([ [-0.25,1], [-0.5,0.5], [-0.5,0], [-0.25,-0.5] ],  {w: 0.1, h: 0.2});
-    handle = handle.translate([-0.3,0, -1*w/2 + w/8]);
+
+    handle = handle.translate([0,0, -1*w/2 + w/8]);
     obj = union(obj, handle);
     obj = obj.rotateY(90);
 
@@ -3277,6 +3291,52 @@ function CreateHinge(RAngle, mode) {
 
 module.exports = CreateHinge
 },{"./csgToGeometries":43,"@jscad/csg":52,"@jscad/scad-api":139}],15:[function(require,module,exports){
+<<<<<<< HEAD
+=======
+"use strict;"
+
+const scadApi = require('@jscad/scad-api')
+const { CSG, CAG, isCSG, isCAG } = require('@jscad/csg')
+const {cube, sphere, cylinder} = scadApi.primitives3d
+const {union, difference, intersection} = scadApi.booleanOps
+const {translate, rotate} = scadApi.transformations
+const csgToGeometries = require('./csgToGeometries')
+
+function CreateHook() {
+
+	var c = cube({size: [0.35,0.05,0.35]});
+    var c1 = cube({size: [0.1,0.3,0.1]}).translate([0.1,-0.3,0.06]);
+    var c2 = cube({size: [0.1,0.1,0.28]}).translate([0.1,-0.3,0.06]);
+    var obj = union(c, c1, c2);
+    obj = obj.rotateX(-90);
+    obj = obj.center();
+
+    var geometry = csgToGeometries(obj)[0];
+	return geometry;
+}
+
+module.exports = CreateHook
+},{"./csgToGeometries":43,"@jscad/csg":52,"@jscad/scad-api":139}],16:[function(require,module,exports){
+"use strict;"
+
+const scadApi = require('@jscad/scad-api')
+const { CSG, CAG, isCSG, isCAG } = require('@jscad/csg')
+const {cube, sphere, cylinder} = scadApi.primitives3d
+const {union, difference, intersection} = scadApi.booleanOps
+const {translate, rotate} = scadApi.transformations
+const csgToGeometries = require('./csgToGeometries')
+
+function CreateLeg(length) {
+
+    var leg = cylinder({start: [0,0,0], end: [0,0,length], r1: 0.3, r2: 0.2, fn: 50});
+    leg = leg.rotateX(-90);
+    var geometry = csgToGeometries(leg)[0];
+	return geometry;
+}
+
+module.exports = CreateLeg
+},{"./csgToGeometries":43,"@jscad/csg":52,"@jscad/scad-api":139}],17:[function(require,module,exports){
+>>>>>>> Hou-branch
 "use strict;"
 
 const scadApi = require('@jscad/scad-api')
@@ -3311,7 +3371,11 @@ function CreateRod(length) {
 }
 
 module.exports = CreateRod
+<<<<<<< HEAD
 },{"./csgToGeometries":43,"@jscad/csg":52,"@jscad/scad-api":139}],16:[function(require,module,exports){
+=======
+},{"./csgToGeometries":43,"@jscad/csg":52,"@jscad/scad-api":139}],18:[function(require,module,exports){
+>>>>>>> Hou-branch
 "use strict;"
 
 const scadApi = require('@jscad/scad-api')
@@ -3337,7 +3401,11 @@ function CreateSpiceRack(length) {
 }
 
 module.exports = CreateSpiceRack
+<<<<<<< HEAD
 },{"./csgToGeometries":43,"@jscad/csg":52,"@jscad/scad-api":139}],17:[function(require,module,exports){
+=======
+},{"./csgToGeometries":43,"@jscad/csg":52,"@jscad/scad-api":139}],19:[function(require,module,exports){
+>>>>>>> Hou-branch
 "use strict;"
 
 const scadApi = require('@jscad/scad-api')
@@ -3371,7 +3439,11 @@ function CreateSupport(length) {
 }
 
 module.exports = CreateSupport
+<<<<<<< HEAD
 },{"./csgToGeometries":43,"@jscad/csg":52,"@jscad/scad-api":139}],18:[function(require,module,exports){
+=======
+},{"./csgToGeometries":43,"@jscad/csg":52,"@jscad/scad-api":139}],20:[function(require,module,exports){
+>>>>>>> Hou-branch
 "use strict;"
 
 const scadApi = require('@jscad/scad-api')
@@ -3405,7 +3477,11 @@ function CreateTableRod(length) {
 
 
 module.exports = CreateTableRod
+<<<<<<< HEAD
 },{"./csgToGeometries":43,"@jscad/csg":52,"@jscad/scad-api":139}],19:[function(require,module,exports){
+=======
+},{"./csgToGeometries":43,"@jscad/csg":52,"@jscad/scad-api":139}],21:[function(require,module,exports){
+>>>>>>> Hou-branch
 "use strict;"
 
 const scadApi = require('@jscad/scad-api')
@@ -3435,7 +3511,11 @@ function CreateWheel() {
 
 
 module.exports = CreateWheel
+<<<<<<< HEAD
 },{"./csgToGeometries":43,"@jscad/csg":52,"@jscad/scad-api":139}],20:[function(require,module,exports){
+=======
+},{"./csgToGeometries":43,"@jscad/csg":52,"@jscad/scad-api":139}],22:[function(require,module,exports){
+>>>>>>> Hou-branch
 "use strict;"
 
 const CreateSupport = require('./CreateSupport')
@@ -3954,7 +4034,11 @@ Desk.prototype = {
 }
 
 module.exports = Desk
+<<<<<<< HEAD
 },{"./CreateSupport":17,"./CreateWheel":19,"./chairCreateBoard":39}],21:[function(require,module,exports){
+=======
+},{"./CreateSupport":19,"./CreateWheel":21,"./chairCreateBoard":39}],23:[function(require,module,exports){
+>>>>>>> Hou-branch
 "use strict;"
 
 const dresserCutSpace = require('./dresserCutSpace')
@@ -5026,7 +5110,11 @@ Dresser_Add.prototype = {
 }
 
 module.exports = Dresser_Add
+<<<<<<< HEAD
 },{"./CreateBlum":8,"./CreateChain":9,"./CreateDoor":10,"./CreateDrawer":12,"./CreateDresserLeg":13,"./CreateHinge":14,"./CreateRod":15,"./CreateSpiceRack":16,"./chairCreateBoard":39,"./dresserCutSpace":44}],22:[function(require,module,exports){
+=======
+},{"./CreateBlum":8,"./CreateChain":9,"./CreateDoor":10,"./CreateDrawer":12,"./CreateDresserLeg":13,"./CreateHinge":14,"./CreateRod":17,"./CreateSpiceRack":18,"./chairCreateBoard":39,"./dresserCutSpace":44}],24:[function(require,module,exports){
+>>>>>>> Hou-branch
 "use strict;"
 
 function MarkBetweenSize( main , TargetObj1 , TargetObj2 ){
@@ -5418,7 +5506,7 @@ function loadLine( main , point1 , point2){
 module.exports = MarkBetweenSize;
 
 
-},{}],23:[function(require,module,exports){
+},{}],25:[function(require,module,exports){
 "use strict;"
 
 function MarkSize( main , TargetObj ){
@@ -5778,7 +5866,7 @@ function loadLine( main , point1 , point2){
 
 module.exports = MarkSize;
 
-},{}],24:[function(require,module,exports){
+},{}],26:[function(require,module,exports){
 "use strict;"
 
 const CreateWheel = require('./CreateWheel')
@@ -5786,10 +5874,9 @@ const CreateTableRod = require('./CreateTableRod')
 const CreateRod = require('./CreateRod')
 const CreateSpiceRack = require('./CreateSpiceRack')
 const CreateDoor = require('./CreateDoor')
-const CreateDresserLeg = require('./CreateDresserLeg')
-const CreateDrawer = require('./CreateDrawer')
-
-
+const CreateLeg = require('./CreateLeg')
+const CreateHook = require('./CreateHook')
+const chairCreateBoard = require('./chairCreateBoard')
 
 
 function Model_Add(main){
@@ -5799,7 +5886,7 @@ function Model_Add(main){
 
     //select box
     this.hasSelectBox = false;
-    this.plane = ""; // "front" "back" "left" "right" "up" "down" string
+    this.plane = ""; // "selectBoxFront" "selectBoxBack" "selectBoxLeft" "selectBoxRight" "selectBoxUp" "selectBoxDown" string
 
     //furniture
     this.selectFurnitureUUID = "";
@@ -5809,21 +5896,60 @@ function Model_Add(main){
     //add object
     this.selectObjectName = "";
     this.selectObject = new THREE.Object3D();
-    this.objectVectorList = {wheel: new THREE.Vector3(0,1,0)};
+    this.objectVectorList = {wheel: new THREE.Vector3(0,1,0), 
+    						 rod: new THREE.Vector3(1,0,0), 
+    						 verBoard: new THREE.Vector3(0,0,-1),
+    						 horBoard: new THREE.Vector3(0,1,0),
+    						 leg: new THREE.Vector3(0,-1,0),
+    						 hook: new THREE.Vector3(0,0,-1),
+    						 door: new THREE.Vector3(0,0,-1)
+    						};
     this.objectAreaList = {wheel: [0.28, 0.28]};
     this.isCreateObject = false;
+
+    this.textures = {};
+
+    this.mousePoint = new THREE.Mesh();
 }
 
 Model_Add.prototype = {
 	init: function() {
-		
     	$('#parameter_control_tool_add').show();
         this.Add_mode = true;
-       
         $('#parameter_control_tool_painting').hide();
         $('#parameter_control_tool_wrap').hide();
         $('#parameter_control_tool_align').hide();
         this.isCreateObject = false;
+
+        var manager = new THREE.LoadingManager();
+	    manager.onProgress = function ( item, loaded, total ) {
+	        console.log( item, loaded, total );
+	    };
+
+	    var textureLoader = new THREE.TextureLoader( manager );
+	    
+	    this.textures["board"] = textureLoader.load( '../model/__Wood-cherry_.jpg' );
+	    this.textures["board"].repeat.set(0.1, 0.1);
+		this.textures["board"].wrapS = this.textures["board"].wrapT = THREE.MirroredRepeatWrapping;
+
+		this.textures["board2"] = textureLoader.load( '../model/Cherry_Kaffe_Vert.jpg' );
+	    this.textures["board2"].repeat.set(0.1, 0.1);
+		this.textures["board2"].wrapS = this.textures["board"].wrapT = THREE.MirroredRepeatWrapping;
+
+		this.textures["shiny"] = textureLoader.load( '../model/papel.jpg' );
+	    this.textures["shiny"].repeat.set(0.1, 0.1);
+		this.textures["shiny"].wrapS = this.textures["shiny"].wrapT = THREE.MirroredRepeatWrapping;
+
+		this.textures["leg"] = textureLoader.load( '../model/Wood_Bamboo_Medium.jpg' );
+	    this.textures["leg"].repeat.set(0.1, 0.1);
+		this.textures["leg"].wrapS = this.textures["leg"].wrapT = THREE.MirroredRepeatWrapping;
+
+		// var geometry = new THREE.BoxGeometry( 0.1, 0.1, 0.1 );
+		// var material = new THREE.MeshBasicMaterial( {color: 0xff0000} );
+		// this.mousePoint = new THREE.Mesh( geometry, material );
+		// this.mousePoint.name = "mousePoint";
+		// this.mousePoint.position.set(1000, 0, 0);
+		// this.main.scene.add(this.mousePoint);
 	},
 
 	test: function(pos) {
@@ -5908,7 +6034,7 @@ Model_Add.prototype = {
 			if(vector2.y != 0)
 				return "x";
 			if(vector2.z != 0)
-				return "x";
+				return "y";
 		}
 	},
 
@@ -5954,9 +6080,9 @@ Model_Add.prototype = {
 		}
 		var newCenter = this.getPartCenter(obj);
 		var offset = new THREE.Vector3(center.x - newCenter.x, center.y - newCenter.y, center.z - newCenter.z);
-		obj.position.x += offset.x;
-		obj.position.y += offset.y;
-		obj.position.z += offset.z;		
+		obj.position.x = parseFloat(obj.position.x) + parseFloat(offset.x);
+		obj.position.y = parseFloat(obj.position.y) + parseFloat(offset.y);
+		obj.position.z = parseFloat(obj.position.z) + parseFloat(offset.z);
 	},
 
 	setAddObjectName: function(objectName) {
@@ -6047,9 +6173,7 @@ Model_Add.prototype = {
 
 	select: function(obj) {
 		var furniture = new THREE.Object3D();
-
 		if(this.strcmp(obj.uuid, this.selectFurnitureUUID) != 0){
-
 			if(this.hasSelectBox){
 				furniture = this.selectFurniture;				
 				while(furniture.parent.uuid != this.main.scene.uuid)
@@ -6118,12 +6242,12 @@ Model_Add.prototype = {
 		var xz_positive = new THREE.Mesh( xz_positive_geometry, unselectedMaterial );
 		var xz_negative = new THREE.Mesh( xz_negative_geometry, unselectedMaterial );
 
-		xy_positive.name = "front";
-		xy_negative.name = "back";
-		yz_positive.name = "right";
-		yz_negative.name = "left";
-		xz_positive.name = "up";
-		xz_negative.name = "down";
+		xy_positive.name = "selectBoxFront";
+		xy_negative.name = "selectBoxBack";
+		yz_positive.name = "selectBoxRight";
+		yz_negative.name = "selectBoxLeft";
+		xz_positive.name = "selectBoxUp";
+		xz_negative.name = "selectBoxDown";
 
 		this.main.scene.add(xy_positive);
 		this.main.scene.add(xy_negative);
@@ -6135,12 +6259,12 @@ Model_Add.prototype = {
 
 	deleteSelectBox: function(furniture) {
 		console.log("deleteSelectBox");
-		var xy_positive = furniture.getObjectByName("front");
-		var xy_negative = furniture.getObjectByName("back");
-		var yz_positive = furniture.getObjectByName("right");
-		var yz_negative = furniture.getObjectByName("left");
-		var xz_positive = furniture.getObjectByName("up");
-		var xz_negative = furniture.getObjectByName("down");
+		var xy_positive = furniture.getObjectByName("selectBoxFront");
+		var xy_negative = furniture.getObjectByName("selectBoxBack");
+		var yz_positive = furniture.getObjectByName("selectBoxRight");
+		var yz_negative = furniture.getObjectByName("selectBoxLeft");
+		var xz_positive = furniture.getObjectByName("selectBoxUp");
+		var xz_negative = furniture.getObjectByName("selectBoxDown");
 		furniture.remove(xy_positive, xy_negative, yz_positive, yz_negative, xz_positive, xz_negative);
 	},
 
@@ -6163,114 +6287,311 @@ Model_Add.prototype = {
 		var raycaster = new THREE.Raycaster();
 		mouse.set( ( point.x * 2 ) - 1, - ( point.y * 2 ) + 1 );
 		raycaster.setFromCamera( mouse, camera );
-		var frontIntersects = raycaster.intersectObject( this.main.scene.getObjectByName("front"), true);
-		var backIntersects = raycaster.intersectObject( this.main.scene.getObjectByName("back"), true);
-		var rightIntersects = raycaster.intersectObject( this.main.scene.getObjectByName("right"), true);
-		var leftIntersects = raycaster.intersectObject( this.main.scene.getObjectByName("left"), true);
-		var upIntersects = raycaster.intersectObject( this.main.scene.getObjectByName("up"), true);
-		var downIntersects = raycaster.intersectObject( this.main.scene.getObjectByName("down"), true);
+		var frontIntersects = raycaster.intersectObject( this.main.scene.getObjectByName("selectBoxFront"), true);
+		var backIntersects = raycaster.intersectObject( this.main.scene.getObjectByName("selectBoxBack"), true);
+		var rightIntersects = raycaster.intersectObject( this.main.scene.getObjectByName("selectBoxRight"), true);
+		var leftIntersects = raycaster.intersectObject( this.main.scene.getObjectByName("selectBoxLeft"), true);
+		var upIntersects = raycaster.intersectObject( this.main.scene.getObjectByName("selectBoxUp"), true);
+		var downIntersects = raycaster.intersectObject( this.main.scene.getObjectByName("selectBoxDown"), true);
 
 		if(frontIntersects.length > 0){
-			this.plane = "front";
-			this.changePlaneMaterial("front", selectedMaterial);
+			this.plane = "selectBoxFront";
+			this.changePlaneMaterial("selectBoxFront", selectedMaterial);
 		}
 		else
-			this.changePlaneMaterial("front", unselectedMaterial);
+			this.changePlaneMaterial("selectBoxFront", unselectedMaterial);
 		
 		if(backIntersects.length > 0){
-			this.plane = "back";
-			this.changePlaneMaterial("back", selectedMaterial);
+			this.plane = "selectBoxBack";
+			this.changePlaneMaterial("selectBoxBack", selectedMaterial);
 		}
 		else
-			this.changePlaneMaterial("back", unselectedMaterial);
+			this.changePlaneMaterial("selectBoxBack", unselectedMaterial);
 		
 		if(rightIntersects.length > 0){
-			this.plane = "right";
-			this.changePlaneMaterial("right", selectedMaterial);
+			this.plane = "selectBoxRight";
+			this.changePlaneMaterial("selectBoxRight", selectedMaterial);
 		}
 		else
-			this.changePlaneMaterial("right", unselectedMaterial);
+			this.changePlaneMaterial("selectBoxRight", unselectedMaterial);
 		
 		if(leftIntersects.length > 0){
-			this.plane = "left";
-			this.changePlaneMaterial("left", selectedMaterial);
+			this.plane = "selectBoxLeft";
+			this.changePlaneMaterial("selectBoxLeft", selectedMaterial);
 		}
 		else
-			this.changePlaneMaterial("left", unselectedMaterial);
+			this.changePlaneMaterial("selectBoxLeft", unselectedMaterial);
 		
 		if(upIntersects.length > 0){
-			this.plane = "up";
-			this.changePlaneMaterial("up", selectedMaterial);
+			this.plane = "selectBoxUp";
+			this.changePlaneMaterial("selectBoxUp", selectedMaterial);
 		}
 		else
-			this.changePlaneMaterial("up", unselectedMaterial);
+			this.changePlaneMaterial("selectBoxUp", unselectedMaterial);
 		
 		if(downIntersects.length > 0){
-			this.plane = "down";
-			this.changePlaneMaterial("down", selectedMaterial);
+			this.plane = "selectBoxDown";
+			this.changePlaneMaterial("selectBoxDown", selectedMaterial);
 		}
 		else
-			this.changePlaneMaterial("down", unselectedMaterial);
+			this.changePlaneMaterial("selectBoxDown", unselectedMaterial);
 
 		//remove object
-		var object = [];
-		for (var i = 0; i < this.main.scene.children.length; i++) {
-			if(this.main.scene.children[i].name == this.selectObjectName)
-				object.push(this.main.scene.children[i]);
-		}
-		for (var i = 0; i < object.length; i++) {
-			this.main.scene.remove(object[i]);				
-		}
+		this.removeSelectObjectInScene();
 		
 		//create object
 		this.createObject();
 	},
 
+	removeSelectObjectInScene: function() {
+		if(this.selectObjectName != ""){
+			var object = [];
+			for (var i = 0; i < this.main.scene.children.length; i++) {
+				if(this.main.scene.children[i].name == this.selectObjectName)
+					object.push(this.main.scene.children[i]);
+			}
+			for (var i = 0; i < object.length; i++) {
+				this.main.scene.remove(object[i]);				
+			}
+		}
+		else
+			console.log("No object is created");
+	},
+
+	createVerBoard: function(vector) {
+		var furniture = this.selectFurniture;
+		var texture = this.textures["board"];
+		var boardSelectedMaterial = new THREE.MeshBasicMaterial( {map: texture} );
+		var furnitureSize = this.getPartSize(furniture);
+		// (width, height, depth)
+		var array = [];
+		array.push(furnitureSize.x);
+		array.push(furnitureSize.y);
+		array.push(furnitureSize.z);
+		array.sort(function(a, b){return a-b});
+		
+		// if(this.plane == "selectBoxFront" || this.plane == "selectBoxBack"){
+			var width = array[1];
+			var height = 0.3;
+			var depth = array[2];
+		// }
+		// if(this.plane == "selectBoxLeft" || this.plane == "selectBoxRight"){
+		// 	var width = furnitureSize.z;
+		// 	var height = 0.3;
+		// 	var depth = furnitureSize.y;
+		// }
+		// if(this.plane == "selectBoxUp" || this.plane == "selectBoxDown"){
+		// 	var width = furnitureSize.x;
+		// 	var height = 0.3;
+		// 	var depth = furnitureSize.z;
+		// }
+		
+		var boardGeometry = chairCreateBoard(width, height, depth);
+
+		var board = new THREE.Mesh(boardGeometry, boardSelectedMaterial);
+		board.name = "vertical board";
+		this.main.scene.add(board);
+		board.position.set(0,0,0);
+
+		var boardSize = this.getPartSize(board);
+		var axis = this.checkAxis(this.objectVectorList.verBoard, vector);
+		var degree = this.checkDegree(this.objectVectorList.verBoard, vector, axis);
+		this.objectRotationByAxis(board, axis, degree);
+		
+		this.selectObject = board;
+	},
+
+	createHorBoard: function(vector) {//not yet
+		var texture = this.textures["board2"];
+		var boardSelectedMaterial = new THREE.MeshBasicMaterial( {map: texture} );
+		var furnitureSize = this.getPartSize(this.selectFurniture);
+		var array = [];
+		array.push(furnitureSize.x);
+		array.push(furnitureSize.y);
+		array.push(furnitureSize.z);
+		array.sort(function(a, b){return a-b});
+		var width = array[1];
+		var height = 0.3;
+		var depth = array[2];
+		// (width, height, depth)
+		// if(this.plane == "selectBoxFront" || this.plane == "selectBoxBack"){
+		// 	var width = furnitureSize.x;
+		// 	var height = 0.3;
+		// 	var depth = furnitureSize.x;
+		// }
+		// if(this.plane == "selectBoxLeft" || this.plane == "selectBoxRight"){
+		// 	var width = furnitureSize.z;
+		// 	var height = 0.3;
+		// 	var depth = furnitureSize.z;
+		// }
+		// if(this.plane == "selectBoxUp" || this.plane == "selectBoxDown"){
+		// 	var width = furnitureSize.x;
+		// 	var height = 0.3;
+		// 	var depth = furnitureSize.z;
+		// }
+
+		var boardGeometry = chairCreateBoard(width, height, depth);
+
+		var board = new THREE.Mesh(boardGeometry, boardSelectedMaterial);
+		board.name = "horizontal board";
+		this.main.scene.add(board);
+		board.position.set(0,0,0);
+
+		var boardSize = this.getPartSize(board);
+		var axis = this.checkAxis(this.objectVectorList.horBoard, vector);
+		var degree = this.checkDegree(this.objectVectorList.horBoard, vector, axis);
+		this.objectRotationByAxis(board, axis, degree);
+		
+		this.selectObject = board;
+	},
+
+	createRod: function(vector) {//rotation vector
+		var texture = this.textures["shiny"];
+		var rodSelectedMaterial = new THREE.MeshBasicMaterial( {map: texture} );
+		var furnitureSize = this.getPartSize(this.selectFurniture);
+		if(this.plane == "selectBoxFront" || this.plane == "selectBoxBack")
+			var length = furnitureSize.x;
+		if(this.plane == "selectBoxLeft" || this.plane == "selectBoxRight")
+			var length = furnitureSize.z;
+		if(this.plane == "selectBoxUp" || this.plane == "selectBoxDown")
+			var length = furnitureSize.z;
+
+		var rodGeometry = CreateTableRod(length);
+
+		var rod = new THREE.Mesh(rodGeometry, rodSelectedMaterial);
+		rod.name = "rod";
+		this.main.scene.add(rod);
+		rod.position.set(0,0,0);
+
+		var rodSize = this.getPartSize(rod);
+		var axis = this.checkAxis(this.objectVectorList.rod, vector);
+		var degree = this.checkDegree(this.objectVectorList.rod, vector, axis);
+		this.objectRotationByAxis(rod, axis, degree);
+		
+		this.selectObject = rod;
+		
+	},
+
+	createLeg: function(vector){
+		var texture = this.textures["leg"];
+		var legSelectedMaterial = new THREE.MeshBasicMaterial( {map: texture} );
+		var legGeometry = CreateLeg(3);
+
+		var leg = new THREE.Mesh(legGeometry, legSelectedMaterial);
+		leg.name = "leg";
+		this.main.scene.add(leg);
+		leg.position.set(0,0,0);
+
+		var legSize = this.getPartSize(leg);
+		var axis = this.checkAxis(this.objectVectorList.leg, vector);
+		var degree = this.checkDegree(this.objectVectorList.leg, vector, axis);
+		this.objectRotationByAxis(leg, axis, degree);
+		
+		this.selectObject = leg;
+	},
+
 	createWheel: function(vector) {//rotation vector
-		var wheelSelectedMaterial = new THREE.MeshLambertMaterial( {
-			color: 0x000000,
-			opacity: 0.5,
-			transparent: true
-		} );
+		var wheelSelectedMaterial = new THREE.MeshBasicMaterial( {color: 0x000000} );
 		var wheelGeometry = CreateWheel();
+
 		var wheel = new THREE.Mesh(wheelGeometry, wheelSelectedMaterial);
 		wheel.name = "wheel";
+		this.main.scene.add(wheel);
+		wheel.position.set(0,0,0);
+
 		var wheelSize = this.getPartSize(wheel);
 		var axis = this.checkAxis(this.objectVectorList.wheel, vector);
 		var degree = this.checkDegree(this.objectVectorList.wheel, vector, axis);
 		this.objectRotationByAxis(wheel, axis, degree);
-		this.main.scene.add(wheel);
+		
 		this.selectObject = wheel;
+	},
+
+	createHook: function(vector) {//rotation vector
+		var texture = this.textures["shiny"];
+		var hookSelectedMaterial = new THREE.MeshBasicMaterial( {map: texture} );
+		var hookGeometry = CreateHook();
+
+		var hook = new THREE.Mesh(hookGeometry, hookSelectedMaterial);
+		hook.name = "hook";
+		this.main.scene.add(hook);
+		hook.position.set(0,0,0);
+
+		var hookSize = this.getPartSize(hook);
+		var axis = this.checkAxis(this.objectVectorList.hook, vector);
+		var degree = this.checkDegree(this.objectVectorList.hook, vector, axis);
+		this.objectRotationByAxis(hook, axis, degree);
+		
+		this.selectObject = hook;
+	},
+
+	createDoor: function(vector) {
+		var texture = this.textures["shiny"];
+		var doorSelectedMaterial = new THREE.MeshBasicMaterial( {map: texture} );
+
+		var furnitureSize = this.getPartSize(this.selectFurniture);
+		if(this.plane == "selectBoxFront" || this.plane == "selectBoxBack") {
+			var h = furnitureSize.y;
+			var w = furnitureSize.z;
+		}
+		if(this.plane == "selectBoxLeft" || this.plane == "selectBoxRight") {
+			var h = furnitureSize.y;
+			var w = furnitureSize.z;
+		}
+		if(this.plane == "selectBoxUp" || this.plane == "selectBoxDown") {
+			var h = furnitureSize.x;
+			var w = furnitureSize.z;
+		}
+
+		var doorGeometry = CreateDoor(h+1, w+1);
+		var door = new THREE.Mesh(doorGeometry, doorSelectedMaterial);
+		door.name = "door";
+		this.main.scene.add(door);
+		door.position.set(0,0,0);
+
+		var doorSize = this.getPartSize(door);
+		var axis = this.checkAxis(this.objectVectorList.door, vector);
+		var degree = this.checkDegree(this.objectVectorList.door, vector, axis);
+		this.objectRotationByAxis(door, axis, degree);
+
+		this.selectObject = door;
 	},
 
 	createObject: function() {
 		this.isCreateObject = true;
-
+		console.log("create a new " + this.selectObjectName);
 		//which plan selected
-		if(this.plane == "front")
+		if(this.plane == "selectBoxFront")
 			var vector = new THREE.Vector3(0,0,-1);
-		if (this.plane == "back")
+		if (this.plane == "selectBoxBack")
 			var vector = new THREE.Vector3(0,0,1);
-		if(this.plane == "left")
+		if(this.plane == "selectBoxLeft")
 			var vector = new THREE.Vector3(1,0,0);
-		if(this.plane == "right")
+		if(this.plane == "selectBoxRight")
 			var vector = new THREE.Vector3(-1,0,0);
-		if(this.plane == "up")
+		if(this.plane == "selectBoxUp")
 			var vector = new THREE.Vector3(0,-1,0);
-		if(this.plane == "down")
+		if(this.plane == "selectBoxDown")
 			var vector = new THREE.Vector3(0,1,0);
 		
 		//what object need create
-		console.log("createObject");
-		console.log(this.selectObjectName);
+		if(this.selectObjectName == "vertical board")
+			this.createVerBoard(vector);
+		if(this.selectObjectName == "horizontal board")
+			this.createHorBoard(vector);
+		if(this.selectObjectName == "rod")
+			this.createRod(vector);
+		if(this.selectObjectName == "leg")
+			this.createLeg(vector);
 		if(this.selectObjectName == "wheel")
 			this.createWheel(vector);
+		if(this.selectObjectName == "hook")
+			this.createHook(vector);
+		if(this.selectObjectName == "door")
+			this.createDoor(vector);
 	},
 
 	checkOnThePlane: function(pos) {
-		// var furniture = this.selectFurniture;
-		// while(furniture.parent.uuid != this.main.scene.uuid)
-		// 	furniture = furniture.parent;
 		var furnitureCenter = this.getPartCenter(this.selectFurniture);
 		furnitureCenter.x = furnitureCenter.x.toFixed(4);
 		furnitureCenter.y = furnitureCenter.y.toFixed(4);
@@ -6283,7 +6604,7 @@ Model_Add.prototype = {
 		pos.y = pos.y.toFixed(4);
 		pos.z = pos.z.toFixed(4);
 
-		if(this.plane == "front"){ // z+
+		if(this.plane == "selectBoxFront"){ // z+
 			var tmp = parseFloat(furnitureCenter.z) + parseFloat(furnitureSize.z)/2;
 			tmp = tmp.toFixed(4);
 			if(pos.z >= tmp)
@@ -6291,7 +6612,7 @@ Model_Add.prototype = {
 			else
 				return false;
 		}
-		else if(this.plane == "back"){ //z-
+		else if(this.plane == "selectBoxBack"){ //z-
 			var tmp = parseFloat(furnitureCenter.z) - parseFloat(furnitureSize.z)/2;
 			tmp = tmp.toFixed(4);
 			if(pos.z <= tmp)
@@ -6299,7 +6620,7 @@ Model_Add.prototype = {
 			else
 				return false;
 		}
-		else if(this.plane == "left"){ //x-
+		else if(this.plane == "selectBoxLeft"){ //x-
 			var tmp = parseFloat(furnitureCenter.x) - parseFloat(furnitureSize.x)/2;
 			tmp = tmp.toFixed(4);
 			if(pos.x <= tmp)
@@ -6307,7 +6628,7 @@ Model_Add.prototype = {
 			else
 				return false;
 		}
-		else if(this.plane == "right"){ //x+
+		else if(this.plane == "selectBoxRight"){ //x+
 			var tmp = parseFloat(furnitureCenter.x) + parseFloat(furnitureSize.x)/2;
 			tmp = tmp.toFixed(4);
 			if(pos.x >= tmp)
@@ -6315,7 +6636,7 @@ Model_Add.prototype = {
 			else
 				return false;
 		}
-		else if(this.plane == "up"){ //y+
+		else if(this.plane == "selectBoxUp"){ //y+
 			var tmp = parseFloat(furnitureCenter.y) + parseFloat(furnitureSize.y)/2;
 			tmp = tmp.toFixed(4);
 			if(pos.y >= tmp)
@@ -6323,7 +6644,7 @@ Model_Add.prototype = {
 			else
 				return false;
 		}
-		else if(this.plane == "down"){ //y-
+		else if(this.plane == "selectBoxDown"){ //y-
 			var tmp = parseFloat(furnitureCenter.y) - parseFloat(furnitureSize.y)/2;
 			tmp = tmp.toFixed(4);
 			if(pos.y <= tmp)
@@ -6333,33 +6654,155 @@ Model_Add.prototype = {
 		}
 	},
 
+	updateVerBoardPosition: function(pos) {
+		var isOnThePlane = this.checkOnThePlane(pos);
+		if(isOnThePlane){
+			this.selectObject.position.set(pos.x, pos.y, pos.z);
+		}
+		else
+			console.log("Ray position isn't on the plan.");
+	},
+
+	updateHorBoardPosition: function(pos) {
+		var isOnThePlane = this.checkOnThePlane(pos);
+		if(isOnThePlane){
+			this.selectObject.position.set(pos.x, pos.y, pos.z);
+		}
+		else
+			console.log("Ray position isn't on the plan.");
+	},
+
+	getRodOffset: function() {
+		var rodSize = this.getPartSize(this.selectObject);
+		if(this.plane == "selectBoxFront")
+			return new THREE.Vector3(rodSize.x/2, 0, rodSize.z/2);
+		if(this.plane == "selectBoxBack")
+			return new THREE.Vector3(-rodSize.x/2, 0, -rodSize.z/2);
+		if(this.plane == "selectBoxLeft")
+			return new THREE.Vector3(-rodSize.x/2, 0, rodSize.z/2);
+		if(this.plane == "selectBoxRight")
+			return new THREE.Vector3(rodSize.x/2, 0, -rodSize.z/2);
+		if(this.plane == "selectBoxUp")
+			return new THREE.Vector3(0, rodSize.y/2, -rodSize.z/2);
+		if(this.plane == "selectBoxDown")
+			return new THREE.Vector3(0, -rodSize.y/2, -rodSize.z/2);
+	},
+
+	updateRodPosition: function(pos) {
+		var isOnThePlane = this.checkOnThePlane(pos);
+		if(isOnThePlane){
+			var offset = this.getRodOffset();
+			pos.x = parseFloat(pos.x) + parseFloat(offset.x);
+			pos.y = parseFloat(pos.y) + parseFloat(offset.y);
+			pos.z = parseFloat(pos.z) + parseFloat(offset.z);
+			this.selectObject.position.set(pos.x, pos.y, pos.z);
+		}
+		else
+			console.log("Ray position isn't on the plan.");
+	},
+
+	updateLegPosition: function(pos) {
+		var isOnThePlane = this.checkOnThePlane(pos);
+		if(isOnThePlane){
+			this.selectObject.position.set(pos.x, pos.y, pos.z);
+		}
+		else
+			console.log("Ray position isn't on the plan.");
+	},
+
 	updateWheelPosition: function(pos) {
 		var furnitureCenter = this.getPartCenter(this.selectFurniture);
 		var furnitureSize = this.getPartSize(this.selectFurniture);
 		var isOnThePlane = this.checkOnThePlane(pos);
 		if(isOnThePlane){
-			// var isArea = this.checkWheelArea(pos);
-			// console.log(isArea);
-			// if(isArea)
-				this.selectObject.position.set(pos.x, pos.y, pos.z);
-			// else
-				// console.log("Area isn't enough");
+			this.selectObject.position.set(pos.x, pos.y, pos.z);
+		}
+		else
+			console.log("Ray position isn't on the plan.");
+	},
+
+	getHookOffset: function() {
+		var hookSize = this.getPartSize(this.selectObject);
+		if(this.plane == "selectBoxFront")
+			return new THREE.Vector3(hookSize.x/2, 0, hookSize.z/2);
+		if(this.plane == "selectBoxBack")
+			return new THREE.Vector3(-hookSize.x/2, 0, -hookSize.z/2);
+		if(this.plane == "selectBoxLeft")
+			return new THREE.Vector3(-hookSize.x/2, 0, hookSize.z/2);
+		if(this.plane == "selectBoxRight")
+			return new THREE.Vector3(hookSize.x/2, 0, -hookSize.z/2);
+		if(this.plane == "selectBoxUp")
+			return new THREE.Vector3(0, hookSize.y/2, -hookSize.z/2);
+		if(this.plane == "selectBoxDown")
+			return new THREE.Vector3(0, -hookSize.y/2, -hookSize.z/2);
+	},
+
+	updateHookPosition: function(pos) {
+		var isOnThePlane = this.checkOnThePlane(pos);
+		if(isOnThePlane){
+			var offset = this.getRodOffset();
+			pos.x = parseFloat(pos.x) + parseFloat(offset.x);
+			pos.y = parseFloat(pos.y) + parseFloat(offset.y);
+			pos.z = parseFloat(pos.z) + parseFloat(offset.z);
+			this.selectObject.position.set(pos.x, pos.y, pos.z);
+		}
+		else
+			console.log("Ray position isn't on the plan.");
+	},
+
+	getDoorOffset: function() {
+		var dookSize = this.getPartSize(this.selectObject);
+		if(this.plane == "selectBoxFront")
+			return new THREE.Vector3(dookSize.x/2, 0, dookSize.z/2 - 0.2);
+		if(this.plane == "selectBoxBack")
+			return new THREE.Vector3(-dookSize.x/2, 0, -dookSize.z/2 + 0.2);
+		if(this.plane == "selectBoxLeft")
+			return new THREE.Vector3(-dookSize.x/2 + 0.2, 0, dookSize.z/2);
+		if(this.plane == "selectBoxRight")
+			return new THREE.Vector3(dookSize.x/2 -0.2, 0, -dookSize.z/2);
+		if(this.plane == "selectBoxUp")
+			return new THREE.Vector3(0, dookSize.y/2 - 0.2, -dookSize.z/2);
+		if(this.plane == "selectBoxDown")
+			return new THREE.Vector3(0, -dookSize.y/2 + 0.2, -dookSize.z/2);
+	},
+
+	updateDoorPosition: function(pos) {
+		var isOnThePlane = this.checkOnThePlane(pos);
+		if(isOnThePlane){
+			var offset = this.getDoorOffset();
+			pos.x = parseFloat(pos.x) + parseFloat(offset.x);
+			pos.y = parseFloat(pos.y) + parseFloat(offset.y);
+			pos.z = parseFloat(pos.z) + parseFloat(offset.z);
+			this.selectObject.position.set(pos.x, pos.y, pos.z);
 		}
 		else
 			console.log("Ray position isn't on the plan.");
 	},
 
 	updateObjectPosition: function(pos) {
-		// if(position correct)
-		// 	this.selectObject..position.set(pos.x, pos.y, pos.z);
-		// else
-		// 	console.log("miss");
-
 		// control list
+		console.log("update " + this.selectObjectName + " position");
+		if(this.selectObjectName == "vertical board"){
+			this.updateVerBoardPosition(pos);
+		}
+		if(this.selectObjectName == "horizontal board"){
+			this.updateHorBoardPosition(pos);
+		}
+		if(this.selectObjectName == "rod"){
+			this.updateRodPosition(pos);
+		}
+		if(this.selectObjectName == "leg"){
+			this.updateLegPosition(pos);
+		}
 		if(this.selectObjectName == "wheel"){
 			this.updateWheelPosition(pos);
 		}
-		// if(this.selectObjectName == "rod")
+		if(this.selectObjectName == "hook"){
+			this.updateHookPosition(pos);
+		}
+		if(this.selectObjectName == "door"){
+			this.updateDoorPosition(pos);
+		}
 		// ...
 
 		
@@ -6368,35 +6811,46 @@ Model_Add.prototype = {
 	execute: function( name ){
 		this.init();
 		var scope = this;
-		$( ".item.ui.image.label.add.board" ).click( function() {
-			scope.setAddObjectName("board");
+		$( ".item.ui.image.label.add.vertical.board" ).click( function() {
+			scope.removeSelectObjectInScene();
+			scope.setAddObjectName("vertical board");
+			console.log("click vertical board");
+        });
+        $( ".item.ui.image.label.add.horizontal.board" ).click( function() {
+        	scope.removeSelectObjectInScene();
+			scope.setAddObjectName("horizontal board");
+			console.log("click horizontal board");
         });
         $( ".item.ui.image.label.add.rod" ).click( function() {
+        	scope.removeSelectObjectInScene();
         	scope.setAddObjectName("rod");
-        });
-        $( ".item.ui.image.label.add.seat" ).click( function() {
-        	scope.setAddObjectName("seat");
+        	console.log("click rod");
         });
         $( ".item.ui.image.label.add.leg" ).click( function() {
+        	scope.removeSelectObjectInScene();
         	scope.setAddObjectName("leg");
+        	console.log("click leg");
         });
         $( ".item.ui.image.label.add.wheel" ).click( function() {
+        	scope.removeSelectObjectInScene();
         	scope.setAddObjectName("wheel");
+        	console.log("click wheel");
         });
         $( ".item.ui.image.label.add.hook" ).click( function() {
+        	scope.removeSelectObjectInScene();
         	scope.setAddObjectName("hook");
+        	console.log("click hook");
         });
-        $( ".item.ui.image.label.add.drawer" ).click( function() {
-        	scope.setAddObjectName("drawer");
-        });
-        $( ".item.ui.image.label.add.door" ).click( function() {		
+        $( ".item.ui.image.label.add.door" ).click( function() {
+        	scope.removeSelectObjectInScene();		
 			scope.setAddObjectName("door");
+			console.log("click door");
         }); 
 	}
 }
 
 module.exports = Model_Add
-},{"./CreateDoor":10,"./CreateDrawer":12,"./CreateDresserLeg":13,"./CreateRod":15,"./CreateSpiceRack":16,"./CreateTableRod":18,"./CreateWheel":19}],25:[function(require,module,exports){
+},{"./CreateDoor":10,"./CreateHook":15,"./CreateLeg":16,"./CreateRod":17,"./CreateSpiceRack":18,"./CreateTableRod":20,"./CreateWheel":21,"./chairCreateBoard":39}],27:[function(require,module,exports){
 "use strict;"
 const Procedure_button = require('./Procedure_button');
 
@@ -6715,7 +7169,11 @@ Model_Align.prototype = {
 }
 
 module.exports = Model_Align
+<<<<<<< HEAD
 },{"./Procedure_button":30}],27:[function(require,module,exports){
+=======
+},{"./Procedure_button":31}],28:[function(require,module,exports){
+>>>>>>> Hou-branch
 "use strict;"
 const Procedure_button = require('./Procedure_button');
 
@@ -6896,7 +7354,11 @@ function assignUVs(geometry) {
 }
 
 module.exports = Model_Painting
+<<<<<<< HEAD
 },{"./Procedure_button":30}],28:[function(require,module,exports){
+=======
+},{"./Procedure_button":31}],29:[function(require,module,exports){
+>>>>>>> Hou-branch
 "use strict;"
 const Procedure_button = require('./Procedure_button');
 
@@ -7056,7 +7518,11 @@ Model_Rotation.prototype = {
 }
 
 module.exports = Model_Rotation
+<<<<<<< HEAD
 },{"./Procedure_button":30}],29:[function(require,module,exports){
+=======
+},{"./Procedure_button":31}],30:[function(require,module,exports){
+>>>>>>> Hou-branch
 "use strict;"
 const computeConvexHull = require('./computeConvexHull');
 const cadExtrudeShapeIntersection = require('./cadExtrudeShapeIntersection');
@@ -7474,7 +7940,11 @@ function loadLine( main , point1 , point2){
 }
 
 module.exports = Model_wrap
+<<<<<<< HEAD
 },{"./Procedure_button":30,"./cadExtrudeShapeIntersection":36,"./chairCutBack":40,"./computeConvexHull":41}],30:[function(require,module,exports){
+=======
+},{"./Procedure_button":31,"./cadExtrudeShapeIntersection":37,"./chairCutBack":40,"./computeConvexHull":41}],31:[function(require,module,exports){
+>>>>>>> Hou-branch
 "use strict;"
 
 //this function for adding function 
@@ -7665,7 +8135,11 @@ function SaveFurniture( furniture , furnituresDataSet) {
 }
 
 module.exports = Procedure_button
+<<<<<<< HEAD
 },{}],31:[function(require,module,exports){
+=======
+},{}],32:[function(require,module,exports){
+>>>>>>> Hou-branch
 "use strict;"
 //this is to handle the new design approaches
 //that without the need of cad operations
@@ -7955,7 +8429,11 @@ Processor.prototype = {
 
 module.exports = Processor
 
+<<<<<<< HEAD
 },{"./Cabinet_kallax":4,"./Chair_Add":5,"./Chair_Align":6,"./Chair_Rebuild":7,"./Desk":20,"./Dresser_Add":21,"./Model_Add":24,"./Model_AddBetween":25,"./Model_Align":26,"./Model_Painting":27,"./Model_Rotation":28,"./Model_wrap":29,"./Table":32}],32:[function(require,module,exports){
+=======
+},{"./Cabinet_kallax":4,"./Chair_Add":5,"./Chair_Align":6,"./Chair_Rebuild":7,"./Desk":22,"./Dresser_Add":23,"./Model_Add":26,"./Model_Align":27,"./Model_Painting":28,"./Model_Rotation":29,"./Model_wrap":30,"./Table":33}],33:[function(require,module,exports){
+>>>>>>> Hou-branch
 "use strict;"
 
 const chairCreateBoard = require('./chairCreateBoard')
@@ -8849,7 +9327,11 @@ Table.prototype = {
 }
 
 module.exports = Table
+<<<<<<< HEAD
 },{"./CabinetMakeSeat":3,"./CreateDoorBoard":11,"./CreateDrawer":12,"./CreateSupport":17,"./CreateTableRod":18,"./CreateWheel":19,"./chairCreateBoard":39}],33:[function(require,module,exports){
+=======
+},{"./CabinetMakeSeat":3,"./CreateDoorBoard":11,"./CreateDrawer":12,"./CreateSupport":19,"./CreateTableRod":20,"./CreateWheel":21,"./chairCreateBoard":39}],34:[function(require,module,exports){
+>>>>>>> Hou-branch
 "use strict;"
 
 
@@ -8881,7 +9363,11 @@ function assignUVs (geometry) {
 
 
 module.exports = assignUVs
+<<<<<<< HEAD
 },{}],34:[function(require,module,exports){
+=======
+},{}],35:[function(require,module,exports){
+>>>>>>> Hou-branch
 "use strict;"
 
 const scadApi = require('@jscad/scad-api')
@@ -8927,7 +9413,11 @@ function cadCutByPlane (geometry) {
 module.exports = cadCutByPlane
 
 
+<<<<<<< HEAD
 },{"./csgToGeometries":43,"./geometryToCsgs":46,"@jscad/csg":52,"@jscad/scad-api":139}],35:[function(require,module,exports){
+=======
+},{"./csgToGeometries":43,"./geometryToCsgs":46,"@jscad/csg":52,"@jscad/scad-api":139}],36:[function(require,module,exports){
+>>>>>>> Hou-branch
 "use strict;"
 
 const scadApi = require('@jscad/scad-api');
@@ -8977,7 +9467,11 @@ function cadExtrudeShape (shape, path) {
 module.exports = cadExtrudeShape
 
 
+<<<<<<< HEAD
 },{"./assignUVs":33,"./csgToGeometries":43,"@jscad/csg":52,"@jscad/scad-api":139}],36:[function(require,module,exports){
+=======
+},{"./assignUVs":34,"./csgToGeometries":43,"@jscad/csg":52,"@jscad/scad-api":139}],37:[function(require,module,exports){
+>>>>>>> Hou-branch
 "use strict;"
 
 const scadApi = require('@jscad/scad-api');
@@ -9054,6 +9548,7 @@ function SimplifyGeo( geometry ){
 module.exports = cadExtrudeShapeIntersection
 
 
+<<<<<<< HEAD
 },{"./assignUVs":33,"./csgToGeometries":43,"./geometryToCsgs":46,"@jscad/csg":52,"@jscad/scad-api":139}],37:[function(require,module,exports){
 "use strict;"
 
@@ -9103,6 +9598,9 @@ function assignUVs(geometry) {
 
 module.exports = cadMakeRod
 },{"./csgToGeometries":43,"@jscad/csg":52,"@jscad/scad-api":139}],38:[function(require,module,exports){
+=======
+},{"./assignUVs":34,"./csgToGeometries":43,"./geometryToCsgs":46,"@jscad/csg":52,"@jscad/scad-api":139}],38:[function(require,module,exports){
+>>>>>>> Hou-branch
 "use strict;"
 
 const scadApi = require('@jscad/scad-api');
@@ -9206,7 +9704,11 @@ function cadMakeSeat (innerRace, outerRace, offsetY, textures) {
 
 
 module.exports = cadMakeSeat
+<<<<<<< HEAD
 },{"./assignUVs":33,"./csgToGeometries":43,"@jscad/csg":52,"@jscad/scad-api":139}],39:[function(require,module,exports){
+=======
+},{"./assignUVs":34,"./csgToGeometries":43,"@jscad/csg":52,"@jscad/scad-api":139}],39:[function(require,module,exports){
+>>>>>>> Hou-branch
 "use strict;"
 
 const scadApi = require('@jscad/scad-api')
@@ -10382,8 +10884,6 @@ Main.prototype = {
 
 
 		this.purpleWall = purple_wall;
-		console.log("main purple_wall");
-		console.log(purple_wall);
 
 		//----------------------------------------------------------------------------------
 
@@ -10667,6 +11167,7 @@ Main.prototype = {
 				var intersects = raycaster.intersectObject(this.processor.model_add.selectFurniture);
 				if(intersects.length > 0){
 					var pos = intersects[0].point;
+					// this.processor.model_add.mousePoint.position.set(pos.x, pos.y, pos.z);
 					this.processor.model_add.updateObjectPosition(pos);					
 				}
 				else
@@ -10902,9 +11403,13 @@ Main.prototype = {
 		if(object !== null) {
 			uuid = object.uuid;
 		}
+<<<<<<< HEAD
 		//-----test----
 		//console.log("select function object");
 		//console.log(object);
+=======
+
+>>>>>>> Hou-branch
 		this.selected = object;
 
 		if(this.onCtrlE == false && this.onCtrl == false)
@@ -11021,7 +11526,6 @@ Main.prototype = {
 		}
 		if(object.material !== undefined) {
 
-			//console.log(object.material);
 			object.material.dispose();
 		}
 		object = undefined;
@@ -11276,8 +11780,12 @@ Main.prototype = {
 					if ( intersects.length > 0 ) {
 
 						this.furniture = this.furnitures[i];
+<<<<<<< HEAD
 						//console.log("this.onCtrlE == false && this.onCtrl == false");
 						//console.log(this.furniture);
+=======
+						
+>>>>>>> Hou-branch
 						this.select(this.furniture.getFurniture());
 
 						objselect = false;
@@ -11356,7 +11864,7 @@ Main.prototype = {
 						this.GetSizeObj.push(object);
 						$('.ui.blue.submit.button.getsize').show();
 
-						// //---------------Add Model------------------
+						//---------------Add Model------------------
 						if( this.processor.model_add !== undefined){
 							if(this.processor.model_add.selectObjectName != "")
 								this.processor.model_add.select(object);
@@ -11654,22 +12162,21 @@ Main.prototype = {
 						if(this.scene.children[i].name == this.processor.model_add.selectObjectName)
 							obj.push(this.scene.children[i]);
 					}
+
 					for (var i = 0; i < obj.length; i++) {
-						obj[i].position.x += offset.x;
-						obj[i].position.y += offset.y;
-						obj[i].position.z += offset.z;
+						obj[i].position.x = parseFloat(obj[i].position.x) + parseFloat(offset.x);
+						obj[i].position.y = parseFloat(obj[i].position.y) + parseFloat(offset.y);
+						obj[i].position.z = parseFloat(obj[i].position.z) + parseFloat(offset.z);
 					}
-					
+
 					var furniture = this.processor.model_add.selectFurniture;
-					console.log(furniture);
 					while(furniture.parent.uuid != this.scene.uuid)
 						furniture = furniture.parent;
-					console.log(furniture);
+
 					for (var i = 0; i < obj.length; i++) {
 						var pos = new THREE.Vector3(obj[i].position.x, obj[i].position.y, obj[i].position.z);
 						this.processor.model_add.objectAddToFurniture(furniture, obj[i], pos);					
 					}
-					console.log(furniture);
 				}
 			}
 
@@ -11723,6 +12230,7 @@ Main.prototype = {
 				if(this.processor.model_add.isCreateObject){
 					this.processor.model_add.deleteSelectBox(this.scene);
 					this.processor.model_add.selectObjectName = "";
+					// this.processor.model_add.mousePoint.position.set(1000, 0, 0);
 					this.processor.model_add.selectFurnitureUUID = "";
 		    		this.processor.model_add.hasSelectBox = false;
 		    		this.processor.model_add.isCreateObject = false;
@@ -12232,7 +12740,11 @@ document.addEventListener('DOMContentLoaded', function(event){
 
 
 
+<<<<<<< HEAD
 },{"./MarkBetweenSize":22,"./MarkSize":23,"./Processor":31,"./cadCutByPlane":34,"./cadMakeRod":37,"./computeConvexHull":41}],52:[function(require,module,exports){
+=======
+},{"./MarkBetweenSize":24,"./MarkSize":25,"./Processor":32,"./cadCutByPlane":35,"./computeConvexHull":41}],52:[function(require,module,exports){
+>>>>>>> Hou-branch
 /*
 ## License
 
