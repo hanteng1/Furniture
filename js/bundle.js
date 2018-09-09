@@ -6326,7 +6326,7 @@ Model_Add.prototype = {
 		array.push(furnitureSize.y);
 		array.push(furnitureSize.z);
 		array.sort(function(a, b){return a-b});
-		console.log(array);
+		
 		// if(this.plane == "selectBoxFront" || this.plane == "selectBoxBack"){
 			var width = array[1];
 			var height = 0.3;
@@ -6362,22 +6362,30 @@ Model_Add.prototype = {
 		var texture = this.textures["board2"];
 		var boardSelectedMaterial = new THREE.MeshBasicMaterial( {map: texture} );
 		var furnitureSize = this.getPartSize(this.selectFurniture);
+		var array = [];
+		array.push(furnitureSize.x);
+		array.push(furnitureSize.y);
+		array.push(furnitureSize.z);
+		array.sort(function(a, b){return a-b});
+		var width = array[1];
+		var height = 0.3;
+		var depth = array[2];
 		// (width, height, depth)
-		if(this.plane == "selectBoxFront" || this.plane == "selectBoxBack"){
-			var width = furnitureSize.x;
-			var height = 0.3;
-			var depth = furnitureSize.x;
-		}
-		if(this.plane == "selectBoxLeft" || this.plane == "selectBoxRight"){
-			var width = furnitureSize.z;
-			var height = 0.3;
-			var depth = furnitureSize.z;
-		}
-		if(this.plane == "selectBoxUp" || this.plane == "selectBoxDown"){
-			var width = furnitureSize.x;
-			var height = 0.3;
-			var depth = furnitureSize.z;
-		}
+		// if(this.plane == "selectBoxFront" || this.plane == "selectBoxBack"){
+		// 	var width = furnitureSize.x;
+		// 	var height = 0.3;
+		// 	var depth = furnitureSize.x;
+		// }
+		// if(this.plane == "selectBoxLeft" || this.plane == "selectBoxRight"){
+		// 	var width = furnitureSize.z;
+		// 	var height = 0.3;
+		// 	var depth = furnitureSize.z;
+		// }
+		// if(this.plane == "selectBoxUp" || this.plane == "selectBoxDown"){
+		// 	var width = furnitureSize.x;
+		// 	var height = 0.3;
+		// 	var depth = furnitureSize.z;
+		// }
 
 		var boardGeometry = chairCreateBoard(width, height, depth);
 
