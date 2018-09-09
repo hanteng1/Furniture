@@ -10,6 +10,21 @@ function Model_AddBetween( main ){
     
     $( ".item.ui.image.label.addbetween.rod" ).click(function() {
         console.log('AddRod');
+        //check select furniture or not
+        if(scope.main.furniture == null){
+        	alert('Please select the furniture first');
+        	return;
+        }
+        scope.main.SelectComponent = true;
+        //add the point ball to scene
+        var geometry = new THREE.SphereGeometry( 0.1 );
+		var material = new THREE.MeshBasicMaterial( {color: 0xff0000} );
+		var sphere = new THREE.Mesh( geometry, material );
+		scope.main.pointball = sphere;
+		scope.main.scene.add( sphere );
+    	scope.main.component = null;
+    	scope.main.intersectpoint = null;
+    	scope.main.fixpointball = false;
         
     });
     

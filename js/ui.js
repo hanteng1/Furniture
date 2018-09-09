@@ -243,7 +243,7 @@ Ui.prototype = {
 		$('#parameter_control_tool_align').hide();
 
 		$('#parameter_control_tool_add').hide();
-		
+		$('#parameter_control_tool_addbetween').hide();
 
 
 	},
@@ -407,15 +407,15 @@ Ui.prototype = {
 
 		});
 
-		//model painting
-		$('#operation_Painting').click(function() {
-			scope.processor.executeDesign("MODEL_PAINTING", "painting");
-
-		});
-
 		//add
 		$('#operation_Add').click(function() {
 			scope.processor.executeDesign("MODEL_ADD", "add");
+
+		});
+
+		//addbetween
+		$('#operation_AddBetween').click(function() {
+			scope.processor.executeDesign("MODEL_ADDBETWEEN", "addbetween");
 
 		});
 

@@ -44,7 +44,7 @@ Model_Align.prototype = {
             this.main.processor.executeDesign("MODEL_PAINTING", "align");
         	this.main.processor.executeDesign("MODEL_WRAP", "align");
         	this.main.processor.executeDesign("MODEL_ROTATION", "align");
-        	
+        	this.main.processor.executeDesign("MODEL_ADDBETWEEN", "align");
         	//creat procedure button
         	if(this.main.stepOperationName != name){
         		this.DeleteButton();

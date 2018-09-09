@@ -17,7 +17,6 @@ function Model_wrap(main){
         var texture = textureLoader.load( '../images/material/wrap/wrap1.jpg' );
         texture.repeat.set(0.1, 0.1);
         texture.wrapS = texture.wrapT = THREE.MirroredRepeatWrapping;
-        var newmaterial = new THREE.MeshBasicMaterial( {map: texture} );
         for(var i=0 ; i<scope.main.GetSizeObj.length ; i++ ){
             var model = scope.main.GetSizeObj[i];
             scope.Wrap( model , texture );
@@ -27,7 +26,6 @@ function Model_wrap(main){
         var texture = textureLoader.load( '../images/material/wrap/wrap2.jpg' );
         texture.repeat.set(0.1, 0.1);
         texture.wrapS = texture.wrapT = THREE.MirroredRepeatWrapping;
-        var newmaterial = new THREE.MeshBasicMaterial( {map: texture} );
         for(var i=0 ; i<scope.main.GetSizeObj.length ; i++ ){
             var model = scope.main.GetSizeObj[i];
             scope.Wrap( model , texture );
@@ -37,7 +35,6 @@ function Model_wrap(main){
         var texture = textureLoader.load( '../images/material/wrap/wrap3.jpg' );
         texture.repeat.set(0.1, 0.1);
         texture.wrapS = texture.wrapT = THREE.MirroredRepeatWrapping;
-        var newmaterial = new THREE.MeshBasicMaterial( {map: texture} );
         for(var i=0 ; i<scope.main.GetSizeObj.length ; i++ ){
             var model = scope.main.GetSizeObj[i];
             scope.Wrap( model , texture );
@@ -47,7 +44,6 @@ function Model_wrap(main){
         var texture = textureLoader.load( '../images/material/wrap/wrap4.jpg' );
         texture.repeat.set(0.1, 0.1);
         texture.wrapS = texture.wrapT = THREE.MirroredRepeatWrapping;
-        var newmaterial = new THREE.MeshBasicMaterial( {map: texture} );
         for(var i=0 ; i<scope.main.GetSizeObj.length ; i++ ){
             var model = scope.main.GetSizeObj[i];
             scope.Wrap( model , texture );
@@ -57,7 +53,6 @@ function Model_wrap(main){
         var texture = textureLoader.load( '../images/material/wrap/wrap5.jpg' );
         texture.repeat.set(0.1, 0.1);
         texture.wrapS = texture.wrapT = THREE.MirroredRepeatWrapping;
-        var newmaterial = new THREE.MeshBasicMaterial( {map: texture} );
         for(var i=0 ; i<scope.main.GetSizeObj.length ; i++ ){
             var model = scope.main.GetSizeObj[i];
             scope.Wrap( model , texture );
@@ -67,7 +62,6 @@ function Model_wrap(main){
         var texture = textureLoader.load( '../images/material/wrap/wrap6.jpg' );
         texture.repeat.set(0.1, 0.1);
         texture.wrapS = texture.wrapT = THREE.MirroredRepeatWrapping;
-        var newmaterial = new THREE.MeshBasicMaterial( {map: texture} );
         for(var i=0 ; i<scope.main.GetSizeObj.length ; i++ ){
             var model = scope.main.GetSizeObj[i];
             scope.Wrap( model , texture );
@@ -77,7 +71,6 @@ function Model_wrap(main){
         var texture = textureLoader.load( '../images/material/wrap/wrap7.jpg' );
         texture.repeat.set(0.1, 0.1);
         texture.wrapS = texture.wrapT = THREE.MirroredRepeatWrapping;
-        var newmaterial = new THREE.MeshBasicMaterial( {map: texture} );
         for(var i=0 ; i<scope.main.GetSizeObj.length ; i++ ){
             var model = scope.main.GetSizeObj[i];
             scope.Wrap( model , texture );
@@ -95,7 +88,7 @@ Model_wrap.prototype = {
             this.main.processor.executeDesign("MODEL_ALIGN", "wrap");
         	this.main.processor.executeDesign("MODEL_PAINTING", "wrap");
         	this.main.processor.executeDesign("MODEL_ROTATION", "wrap");
-        	
+        	this.main.processor.executeDesign("MODEL_ADDBETWEEN", "wrap");
         	//creat procedure button
         	if(this.main.stepOperationName != name){
         		this.DeleteButton();

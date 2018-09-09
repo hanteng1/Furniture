@@ -78,7 +78,7 @@ Model_Painting.prototype = {
             this.main.processor.executeDesign("MODEL_ALIGN", "painting");
             this.main.processor.executeDesign("MODEL_WRAP", "painting");
             this.main.processor.executeDesign("MODEL_ROTATION", "painting");
-            
+            this.main.processor.executeDesign("MODEL_ADDBETWEEN", "painting");
             //creat procedure button
             if(this.main.stepOperationName != name){
                 this.DeleteButton();
