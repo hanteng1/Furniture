@@ -325,8 +325,6 @@ Main.prototype = {
 
 
 		this.purpleWall = purple_wall;
-		console.log("main purple_wall");
-		console.log(purple_wall);
 
 		//----------------------------------------------------------------------------------
 
@@ -609,6 +607,7 @@ Main.prototype = {
 				var intersects = raycaster.intersectObject(this.processor.model_add.selectFurniture);
 				if(intersects.length > 0){
 					var pos = intersects[0].point;
+					// this.processor.model_add.mousePoint.position.set(pos.x, pos.y, pos.z);
 					this.processor.model_add.updateObjectPosition(pos);					
 				}
 				else
@@ -823,9 +822,7 @@ Main.prototype = {
 		if(object !== null) {
 			uuid = object.uuid;
 		}
-		//-----test----
-		console.log("select function object");
-		console.log(object);
+
 		this.selected = object;
 
 		if(this.onCtrlE == false && this.onCtrl == false)
@@ -942,7 +939,6 @@ Main.prototype = {
 		}
 		if(object.material !== undefined) {
 
-			//console.log(object.material);
 			object.material.dispose();
 		}
 		object = undefined;
@@ -1197,8 +1193,7 @@ Main.prototype = {
 					if ( intersects.length > 0 ) {
 
 						this.furniture = this.furnitures[i];
-						console.log("this.onCtrlE == false && this.onCtrl == false");
-						console.log(this.furniture);
+						
 						this.select(this.furniture.getFurniture());
 
 						objselect = false;
@@ -1276,9 +1271,10 @@ Main.prototype = {
 						this.GetSizeObj.push(object);
 						$('.ui.blue.submit.button.getsize').show();
 
-						// //---------------Add Model------------------
+						//---------------Add Model------------------
 						if( this.processor.model_add !== undefined){
-							this.processor.model_add.select(object);
+							if(this.processor.model_add.selectObjectName != "")
+								this.processor.model_add.select(object);
 						}
 
 					}
@@ -1289,7 +1285,8 @@ Main.prototype = {
 
 				//---------------Add Model------------------
 				if( this.processor.model_add !== undefined){
-					this.processor.model_add.selectPlane(this.mouse, this.camera, this.onUpPosition);
+					if(this.processor.model_add.selectObjectName != "")
+						this.processor.model_add.selectPlane(this.mouse, this.camera, this.onUpPosition);
 				}
 
 			}
@@ -1527,7 +1524,8 @@ Main.prototype = {
 
 			//-------------Add Model----------------------
 			if( this.processor.model_add !== undefined){
-				var bef = this.processor.model_add.getPartCenter(this.processor.model_add.selectFurniture);
+				if(this.processor.model_add.selectObjectName != "")
+					var bef = this.processor.model_add.getPartCenter(this.processor.model_add.selectFurniture);
 			}
 
 			//disable explosion view 
@@ -1545,22 +1543,21 @@ Main.prototype = {
 						if(this.scene.children[i].name == this.processor.model_add.selectObjectName)
 							obj.push(this.scene.children[i]);
 					}
+
 					for (var i = 0; i < obj.length; i++) {
-						obj[i].position.x += offset.x;
-						obj[i].position.y += offset.y;
-						obj[i].position.z += offset.z;
+						obj[i].position.x = parseFloat(obj[i].position.x) + parseFloat(offset.x);
+						obj[i].position.y = parseFloat(obj[i].position.y) + parseFloat(offset.y);
+						obj[i].position.z = parseFloat(obj[i].position.z) + parseFloat(offset.z);
 					}
-					
+
 					var furniture = this.processor.model_add.selectFurniture;
-					console.log(furniture);
 					while(furniture.parent.uuid != this.scene.uuid)
 						furniture = furniture.parent;
-					console.log(furniture);
+
 					for (var i = 0; i < obj.length; i++) {
 						var pos = new THREE.Vector3(obj[i].position.x, obj[i].position.y, obj[i].position.z);
 						this.processor.model_add.objectAddToFurniture(furniture, obj[i], pos);					
 					}
-					console.log(furniture);
 				}
 			}
 
@@ -1614,6 +1611,7 @@ Main.prototype = {
 				if(this.processor.model_add.isCreateObject){
 					this.processor.model_add.deleteSelectBox(this.scene);
 					this.processor.model_add.selectObjectName = "";
+					// this.processor.model_add.mousePoint.position.set(1000, 0, 0);
 					this.processor.model_add.selectFurnitureUUID = "";
 		    		this.processor.model_add.hasSelectBox = false;
 		    		this.processor.model_add.isCreateObject = false;
