@@ -635,9 +635,23 @@ Main.prototype = {
 				if(intersects.length > 0){
 					this.intersectpoint = intersects[0];
 					var pos = intersects[0].point;
-					//console.log(this.intersectpoint.face.normal);
-					if(this.fixpointball==false)
-						this.pointball.position.set( pos.x, pos.y, pos.z );					
+					//let the red point move to mouse position
+					if(this.fixpointball==false){
+						this.pointball.position.set( pos.x, pos.y, pos.z );
+						//set normal vector from local to world
+						var normalMatrix = new THREE.Matrix3().getNormalMatrix( this.intersectpoint.object.matrixWorld );
+    					var normal = intersects[0].face.normal
+    					normal = normal.clone().applyMatrix3( normalMatrix ).normalize();
+						//rotate the point
+						var newDir = new THREE.Vector3().addVectors(pos, normal);
+						this.pointball.lookAt( newDir );
+						this.pointball.rotateX(90* Math.PI/180);
+						var radius = document.getElementById('InputRodRadius').value;
+						if(radius == "")
+							this.pointball.scale.set(2.0, 1, 2.0);
+						else
+							this.pointball.scale.set(parseFloat(radius), 1, parseFloat(radius));
+					}
 					//console.log(pos);
 				}
 				else{
@@ -1848,6 +1862,7 @@ Main.prototype = {
 		$('.operations.operation_desk').hide();
 		$('.operations.operation_table').hide();
 		$('#parameter_control_tool_addbetween').hide();
+		$('.ui.right.labeled.input.rod').hide();
 
 		this.furnitures.length = 0;	
 
@@ -1956,6 +1971,7 @@ Main.prototype = {
 		$('.operations.operation_desk').hide();
 		$('.operations.operation_table').hide();
 		$('#parameter_control_tool_addbetween').hide();
+		$('.ui.right.labeled.input.rod').hide();
 
 		this.processor.init();
 		//this.processor.executeDesign();
@@ -2110,6 +2126,7 @@ Main.prototype = {
     AddRod: function(){
     	//get the point's normal vector
     	var addvector = this.intersectpoint.face.normal;
+    	//set normal vector from local to world
     	var normalMatrix = new THREE.Matrix3().getNormalMatrix( this.intersectpoint.object.matrixWorld );
     	addvector = addvector.clone().applyMatrix3( normalMatrix ).normalize();
     	//set the point position
@@ -2140,17 +2157,8 @@ Main.prototype = {
     			this.furniture.getFurniture(), rod, newPosi);
     		this.furniture.getFurniture().worldToLocal(pos);
     		rod.lookAt(pos);
-    		/*
-    		var newPosi = rod.position.clone();
-    		var group = this.furniture.getFurniture();
-    		var inverseMatrix = new THREE.Matrix4();
-			inverseMatrix.getInverse(group.matrixWorld, true);
-			rod.applyMatrix(inverseMatrix);
+    		
 
-			group.worldToLocal(newPosi);
-			group.add(rod);
-			rod.position.set( newPosi.x, newPosi.y, newPosi.z );
-			*/
     		this.selectionBox.visible = false;
 			this.transformControls.detach();
 			this.furniture = null;
@@ -2160,7 +2168,8 @@ Main.prototype = {
     		this.fixpointball = false;
     		this.scene.remove(this.pointball);
     		this.pointball = null;
-
+    		$('.ui.right.labeled.input.rod').hide();
+    		document.getElementById('InputRodRadius').value = "";
     	}
     	else{//if don't get
     		alert('position err');

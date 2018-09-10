@@ -9,24 +9,29 @@ function Model_AddBetween( main ){
     var scope = this;
     
     $( ".item.ui.image.label.addbetween.rod" ).click(function() {
-        console.log('AddRod');
+        //console.log(document.getElementById('InputRodRadius').value);
         //check select furniture or not
         if(scope.main.furniture == null){
         	alert('Please select the furniture first');
         	return;
         }
+        $('.ui.right.labeled.input.rod').show();
         scope.main.SelectComponent = true;
         //add the point ball to scene
-        var geometry = new THREE.SphereGeometry( 0.1 );
-		var material = new THREE.MeshBasicMaterial( {color: 0xff0000} );
-		var sphere = new THREE.Mesh( geometry, material );
-		scope.main.pointball = sphere;
-		scope.main.scene.add( sphere );
+        
+        if(scope.main.pointball == null){
+        	var geometry = new THREE.CylinderGeometry( 0.1, 0.1, 0.01, 32 );;
+			var material = new THREE.MeshBasicMaterial( {color: 0xff0000} );
+			scope.main.pointball = new THREE.Mesh( geometry, material );
+			scope.main.scene.add( scope.main.pointball );
+        }
+        
     	scope.main.component = null;
     	scope.main.intersectpoint = null;
     	scope.main.fixpointball = false;
         
     });
+    	
     
 }
 Model_AddBetween.prototype = {
@@ -50,7 +55,18 @@ Model_AddBetween.prototype = {
         }
         else if(this.addbetween_mode == true || name!= 'addbetween'){
             $('#parameter_control_tool_addbetween').hide();
+            $('.ui.right.labeled.input.rod').hide();
+            document.getElementById('InputRodRadius').value = "";
+            this.main.component = null;
+    		this.main.intersectpoint = null;
+    		this.main.fixpointball = false;
+            this.main.SelectComponent = false;
             this.addbetween_mode = false;
+            if(this.main.pointball != null)
+            	this.main.scene.remove(this.main.pointball);
+            this.main.pointball = null;
+            this.main.selectionBox.visible = false;
+			this.main.transformControls.detach();
         }
         
 

@@ -184,7 +184,12 @@ a {
 .ui.circular.icon.button.procedure{
   font-size: 20px;
 }
-
+.ui.right.labeled.input.rod{
+  position: relative;
+  top: 10px;
+  left:-20px;
+  width: 50px;
+}
 
 
 

@@ -8,8 +8,16 @@ const {translate, rotate} = scadApi.transformations
 const csgToGeometries = require('./csgToGeometries')
 
 function cadMakeRod( length ){
+    var radius;
+    if (document.getElementById('InputRodRadius').value == ""){
+        radius = 0.2;
+    }
+    else{
+        radius = parseFloat(document.getElementById('InputRodRadius').value);
+        radius = radius/10;
+    }
 
-	var rod = cylinder({r: 0.25, h: length}); 
+	var rod = cylinder({r: radius, h: length}); 
 
 	var geometry = csgToGeometries(rod)[0];
 
