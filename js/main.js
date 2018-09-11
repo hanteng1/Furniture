@@ -23,6 +23,7 @@ const cadCutByPlane = require('./cadCutByPlane')
 //Wei Hsiang start
 const MarkSize = require('./MarkSize')
 const MarkBetweenSize = require('./MarkBetweenSize')
+const cadMakeRod = require('./cadMakeRod')
 //Wei Hsiang end
 
 function Main()
@@ -30,14 +31,9 @@ function Main()
 
 	//category
 	//todo: an floating window to select category
-
-	// this.category = "chair";
-	// this.category = "cabinet";
-	// this.category = "table";
-	// this.category = "desk";
-
+	//this.category = "chair";
+	//this.category = "cabinet";
 	this.category = "tool";
-
 
 	//only stores data
 	this.container = document.getElementById('container');
@@ -90,6 +86,27 @@ function Main()
 
 	//object for wrap 
 	this.WrapObject = [];
+
+
+	//Procedure objects
+	//for record objects in every step
+	this.stepObject = [];
+	//for record operation name in every step
+	this.stepOperationName = 'Initial';
+	//for record step is the last or not
+	this.lastStep = true;
+	//for record operation step times
+	this.stepNumber = 0;
+
+	//select the single component
+	this.SelectComponent = false;
+	//the selected single component 
+	this.component = null;
+	//the select point
+	this.pointball = null;
+	this.fixpointball = false;
+	this.intersectpoint = null;
+
 
 	//this is to store the furnitures before any chance
 	//simply copy of the this.furnitures
@@ -193,6 +210,9 @@ Main.prototype = {
 		//this.container.appendChild( this.stats.dom )
 		window.addEventListener( 'resize', this.onWindowResize.bind(this), false );
 
+		//--------------------Add Model------------------------------------------
+		window.addEventListener( 'mousemove', this.onMouseMove.bind(this), false );
+
 		//mouse events
 		this.container.addEventListener('mousedown', this.onMouseDown.bind(this), false);
 		this.container.addEventListener('touchstart', this.onTouchStart.bind(this), false);		
@@ -210,15 +230,15 @@ Main.prototype = {
 		//this.customControl.enablePan = true;
 		//this.customControl.target.set(0, 0.5, - 0.2);
 
-		//this.customControl.lookSpeed = 0.05;
-        //this.customControl.movementSpeed = 20;
-        //this.customControl.noFly = true;
-        //this.customControl.lookVertical = true;
-        //this.customControl.constrainVertical = true;
-        //this.customControl.verticalMin = 1.0;
-        //this.customControl.verticalMax = 2.0;
-        //this.customControl.lon = -110;
-        //this.customControl.lat = -50;
+		this.customControl.lookSpeed = 0.05;
+        this.customControl.movementSpeed = 20;
+        this.customControl.noFly = true;
+        this.customControl.lookVertical = true;
+        this.customControl.constrainVertical = true;
+        this.customControl.verticalMin = 1.0;
+        this.customControl.verticalMax = 2.0;
+        this.customControl.lon = -110;
+        this.customControl.lat = -50;
 
 
 		this.transformControls = new THREE.TransformControls(this.camera, this.renderer.domElement);
@@ -315,8 +335,6 @@ Main.prototype = {
 
 
 		this.purpleWall = purple_wall;
-		console.log("main purple_wall");
-		console.log(purple_wall);
 
 		//----------------------------------------------------------------------------------
 
@@ -588,6 +606,61 @@ Main.prototype = {
 		this.renderer.setSize( window.innerWidth, window.innerHeight );
 	},
 
+	//-----------------------------------Add Model--------------------------
+	onMouseMove: function ( event ) {
+
+		if( this.processor.model_add !== undefined && this.SelectComponent == false){
+			if(this.processor.model_add.isCreateObject){
+				this.mouse.x = ( event.clientX / window.innerWidth ) * 2 - 1;
+				this.mouse.y = - ( event.clientY / window.innerHeight ) * 2 + 1;
+				var raycaster = new THREE.Raycaster();
+				raycaster.setFromCamera( this.mouse, this.camera );
+				var intersects = raycaster.intersectObject(this.processor.model_add.selectFurniture);
+				if(intersects.length > 0){
+					var pos = intersects[0].point;
+					// this.processor.model_add.mousePoint.position.set(pos.x, pos.y, pos.z);
+					this.processor.model_add.updateObjectPosition(pos);					
+				}
+				else
+					console.log("miss");
+			}
+		}
+		else if(this.SelectComponent == true){
+			if (this.component != null){
+				this.mouse.x = ( event.clientX / window.innerWidth ) * 2 - 1;
+				this.mouse.y = - ( event.clientY / window.innerHeight ) * 2 + 1;
+				var raycaster = new THREE.Raycaster();
+				raycaster.setFromCamera( this.mouse, this.camera );
+				var intersects = raycaster.intersectObject(this.component);
+				if(intersects.length > 0){
+					this.intersectpoint = intersects[0];
+					var pos = intersects[0].point;
+					//let the red point move to mouse position
+					if(this.fixpointball==false){
+						this.pointball.position.set( pos.x, pos.y, pos.z );
+						//set normal vector from local to world
+						var normalMatrix = new THREE.Matrix3().getNormalMatrix( this.intersectpoint.object.matrixWorld );
+    					var normal = intersects[0].face.normal
+    					normal = normal.clone().applyMatrix3( normalMatrix ).normalize();
+						//rotate the point
+						var newDir = new THREE.Vector3().addVectors(pos, normal);
+						this.pointball.lookAt( newDir );
+						this.pointball.rotateX(90* Math.PI/180);
+						var radius = document.getElementById('InputRodRadius').value;
+						if(radius == "")
+							this.pointball.scale.set(2.0, 1, 2.0);
+						else
+							this.pointball.scale.set(parseFloat(radius), 1, parseFloat(radius));
+					}
+					//console.log(pos);
+				}
+				else{
+					//console.log("miss");
+				}
+			}
+			
+		}
+	},
 
 	preAddObject: function(object) {
 		
@@ -630,8 +703,10 @@ Main.prototype = {
 
 				var scale = new THREE.Vector3(loadedScale.x * 10, loadedScale.y * 10, loadedScale.z * 10)
 
-				loadMatrix.compose(location, quaternion, scale);		
+				loadMatrix.compose(location, quaternion, scale);
+		
 			}
+
 		}
 
 		//visualize
@@ -786,13 +861,14 @@ Main.prototype = {
 
 	select: function(object){
 		//var scope = this;
-
+		console.log()
 		if(this.selected == object) return;
 		var uuid = null;
 
 		if(object !== null) {
 			uuid = object.uuid;
 		}
+
 
 		this.selected = object;
 
@@ -910,7 +986,6 @@ Main.prototype = {
 		}
 		if(object.material !== undefined) {
 
-			//console.log(object.material);
 			object.material.dispose();
 		}
 		object = undefined;
@@ -1152,10 +1227,10 @@ Main.prototype = {
 	{
 
 		//console.log("handleclick called");
-
 		if ( this.onDownPosition.distanceTo( this.onUpPosition ) === 0 ) {
 
-			if(this.onCtrlE == false && this.onCtrl == false) {
+			if(this.onCtrlE == false && this.onCtrl == false 
+				&& this.SelectComponent == false) {
 
 				var objselect = true;
 				//only select the furniture
@@ -1165,12 +1240,13 @@ Main.prototype = {
 					if ( intersects.length > 0 ) {
 
 						this.furniture = this.furnitures[i];
+
 						this.select(this.furniture.getFurniture());
 
 						objselect = false;
 						//if haven't select this furniture before
-						if (this.GetSizeObj.indexOf(this.furniture.getFurniture())<0)
-							this.GetSizeObj.push( this.furniture.getFurniture() );
+						this.GetSizeObj = [];
+						this.GetSizeObj.push( this.furniture.getFurniture() );
 						$('.ui.blue.submit.button.getsize').show();
 						
 
@@ -1197,6 +1273,7 @@ Main.prototype = {
 							
 							this.furniture = this.Sceneobjects[i];
 							this.select(this.Sceneobjects[i]);
+							this.GetSizeObj = [];
 							this.GetSizeObj.push( this.Sceneobjects[i] );
 							$('.ui.blue.submit.button.getsize').show();
 							SomethingSelected = true;
@@ -1207,7 +1284,7 @@ Main.prototype = {
 							this.select( null );
 							$('.ui.blue.submit.button.getsize').hide();
 							this.GetSizeObj = [];
-							//this.RemoveSizeLabel();
+							this.RemoveSizeLabel();
 
 						}
 
@@ -1221,7 +1298,8 @@ Main.prototype = {
 				}
 
 
-			}else if (this.onCtrlE == true && this.onCtrl == false){
+			}else if (this.onCtrlE == true && this.onCtrl == false
+				&& this.SelectComponent == false){
 				//select from explode objects, this.furniture should not be null
 				var intersects = this.getIntersects( this.onUpPosition, this.furniture.getObjects());
 
@@ -1240,14 +1318,28 @@ Main.prototype = {
 						//push object to label size
 						this.GetSizeObj.push(object);
 						$('.ui.blue.submit.button.getsize').show();
+
+						//---------------Add Model------------------
+						if( this.processor.model_add !== undefined){
+							if(this.processor.model_add.selectObjectName != "")
+								this.processor.model_add.select(object);
+						}
+
 					}
 				} else {
 					//it also calls select, to detach
 					this.select( null );
 				}
+
+				//---------------Add Model------------------
+				if( this.processor.model_add !== undefined){
+					if(this.processor.model_add.selectObjectName != "")
+						this.processor.model_add.selectPlane(this.mouse, this.camera, this.onUpPosition);
+				}
+
 			}
 			//select two obj for getting distance
-			else if(this.onCtrl == true){
+			else if(this.onCtrl == true && this.SelectComponent == false){
 				//console.log('select two');
 				var objselect = true;
 				//only select the furniture
@@ -1286,6 +1378,32 @@ Main.prototype = {
 					}
 				}
 
+			}
+			//select the furniture component for select the adding position
+			else if( this.SelectComponent == true){
+				
+				var intersects = this.getIntersects( this.onUpPosition, this.furniture.getObjects());
+
+				if ( intersects.length > 0 ) {
+
+					var object = intersects[ 0 ].object;
+					//if select the same component, record the click position
+					if(this.component == object){
+						this.fixpointball = true;
+						this.AddRod();
+					}
+
+					if ( object.userData.object !== undefined ) {
+						this.select( object.userData.object );
+						this.component = object.userData.object;
+					} else {
+						this.select( object );
+						this.component = object;
+					}
+				} else {
+					//it also calls select, to detach
+					this.select( null );
+				}
 			}
 		}
 	},
@@ -1344,7 +1462,7 @@ Main.prototype = {
 		var array = this.getMousePosition( this.container, event.clientX, event.clientY );
 		this.onDoubleClickPosition.fromArray( array );
 
-		//console.log("double clicked");
+		// console.log("double clicked");
 
 		//this.customControl.switchView2TG();
 		//this.customControl.switchView2FP();
@@ -1363,9 +1481,10 @@ Main.prototype = {
 		// }
 
 		if(this.furniture !== null) {
-
+			// console.log("yes furniture");
 			this.customControl.switchView2TG();
 		}else {
+			// console.log("no furniture");
 			this.customControl.switchView2FP();
 		}
 
@@ -1414,6 +1533,32 @@ Main.prototype = {
 
 			this.onCtrl = true;
 			console.log('Ctrl down');
+		
+		}else if(keyCode == 46){
+			
+			//delete furniture
+			if(this.furniture != null ){
+				try{//delete furniture
+					this.removeFromScene(this.furniture.getFurniture());
+					this.furnitures.splice( this.furnitures.indexOf(this.furniture),1);
+					this.selectionBox.visible = false;
+					this.transformControls.detach();
+					
+				}
+				catch(err){//delete object
+				    this.removeFromScene(this.furniture);
+				    this.Sceneobjects.splice( this.Sceneobjects.indexOf(this.furniture),1);
+					this.selectionBox.visible = false;
+					this.transformControls.detach();
+				}
+			}
+			//clear cards
+			$('#cards').empty();
+			//add cards again
+			for(var i=0; i<this.furnitures.length; i++){
+				this.furnitures[i].addCard();
+			}
+
 		}
 
 
@@ -1451,9 +1596,44 @@ Main.prototype = {
 		{
 			this.onCtrlE = false;
 
+			//-------------Add Model----------------------
+			if( this.processor.model_add !== undefined){
+				if(this.processor.model_add.selectObjectName != "")
+					var bef = this.processor.model_add.getPartCenter(this.processor.model_add.selectFurniture);
+			}
+
 			//disable explosion view 
 			if(this.furniture  != null )
 				this.collapse(this.furniture);
+
+
+			//-------------Add Model----------------------
+			if( this.processor.model_add !== undefined){
+				if(this.processor.model_add.isCreateObject){
+					var aft = this.processor.model_add.getPartCenter(this.processor.model_add.selectFurniture);				
+					var offset = new THREE.Vector3( aft.x - bef.x, aft.y - bef.y, aft.z - bef.z);
+					var obj = [];
+					for (var i = 0; i < this.scene.children.length; i++) {
+						if(this.scene.children[i].name == this.processor.model_add.selectObjectName)
+							obj.push(this.scene.children[i]);
+					}
+
+					for (var i = 0; i < obj.length; i++) {
+						obj[i].position.x = parseFloat(obj[i].position.x) + parseFloat(offset.x);
+						obj[i].position.y = parseFloat(obj[i].position.y) + parseFloat(offset.y);
+						obj[i].position.z = parseFloat(obj[i].position.z) + parseFloat(offset.z);
+					}
+
+					var furniture = this.processor.model_add.selectFurniture;
+					while(furniture.parent.uuid != this.scene.uuid)
+						furniture = furniture.parent;
+
+					for (var i = 0; i < obj.length; i++) {
+						var pos = new THREE.Vector3(obj[i].position.x, obj[i].position.y, obj[i].position.z);
+						this.processor.model_add.objectAddToFurniture(furniture, obj[i], pos);					
+					}
+				}
+			}
 
 			if(this.selectionBoxes.length > 0)
 			{
@@ -1462,7 +1642,7 @@ Main.prototype = {
 					this.removeFromScene(this.selectionBoxes[i]);
 				}
 			}
-
+			
 			this.selectionBoxes = [];
 			this.selectedIds = [];
 			this.furniture = null;
@@ -1498,6 +1678,20 @@ Main.prototype = {
 			this.WrapObject = [];
 			
 			this.RemoveSizeLabel();
+
+			//----------------------Add Model---------------------------
+			//when "E" Up
+			if( this.processor.model_add !== undefined){
+				if(this.processor.model_add.isCreateObject){
+					this.processor.model_add.deleteSelectBox(this.scene);
+					this.processor.model_add.selectObjectName = "";
+					// this.processor.model_add.mousePoint.position.set(1000, 0, 0);
+					this.processor.model_add.selectFurnitureUUID = "";
+		    		this.processor.model_add.hasSelectBox = false;
+		    		this.processor.model_add.isCreateObject = false;
+	    		}
+			}
+
 		}else {
 
 			var keyCode = event.which;
@@ -1665,6 +1859,10 @@ Main.prototype = {
 		$('#parameter_control_tool_wrap').hide();
 		$('#parameter_control_tool_rotation').hide();
 		$('#parameter_control_tool_align').hide();
+		$('.operations.operation_desk').hide();
+		$('.operations.operation_table').hide();
+		$('#parameter_control_tool_addbetween').hide();
+		$('.ui.right.labeled.input.rod').hide();
 
 		this.furnitures.length = 0;	
 
@@ -1721,10 +1919,10 @@ Main.prototype = {
 		//assume the furnitures are annoted well and get ready
 		//add the corners to the labeled and axised components
 		
-		// for(var i = 0; i < this.furnitures.length; i++) {
-		// 	this.furnitures[i].addCorners();
-		// 	this.furnitures[i].addtoPoint();
-		// }
+		for(var i = 0; i < this.furnitures.length; i++) {
+			this.furnitures[i].addCorners();
+			this.furnitures[i].addtoPoint();
+		}
 		
 
 		//testing
@@ -1770,6 +1968,10 @@ Main.prototype = {
 		$('#parameter_control_tool_wrap').hide();
 		$('#parameter_control_tool_rotation').hide();
 		$('#parameter_control_tool_align').hide();
+		$('.operations.operation_desk').hide();
+		$('.operations.operation_table').hide();
+		$('#parameter_control_tool_addbetween').hide();
+		$('.ui.right.labeled.input.rod').hide();
 
 		this.processor.init();
 		//this.processor.executeDesign();
@@ -1901,7 +2103,79 @@ Main.prototype = {
 		var center = new THREE.Vector3();
 		box.getCenter(center);
 		return center;
-    }
+    },
+
+    DeleteObj: function(){
+    	this.collapse(this.furniture);
+    	var objects = this.furniture.getObjects();
+    	var furnitureObj = this.furniture.getFurniture();
+    	//this.objCenter = this.getCenterPoint(this.furniture.getFurniture());
+    	//delete object in furniture
+		for(var i=0 ; i < this.GetSizeObj.length; i++){
+			var model = this.GetSizeObj[i];
+			model.parent.remove(model);
+		}
+		
+		this.explode(this.furniture);
+		this.GetSizeObj = [];
+		$('.ui.blue.submit.button.getsize').hide();
+
+    },
+
+    //creat the rod in intersection point
+    AddRod: function(){
+    	//get the point's normal vector
+    	var addvector = this.intersectpoint.face.normal;
+    	//set normal vector from local to world
+    	var normalMatrix = new THREE.Matrix3().getNormalMatrix( this.intersectpoint.object.matrixWorld );
+    	addvector = addvector.clone().applyMatrix3( normalMatrix ).normalize();
+    	//set the point position
+    	var original  = new THREE.Vector3().addVectors(this.pointball.position,addvector);
+    	//set the raycaster from point and normal vector
+    	var Raycaster = new THREE.Raycaster( original, addvector );
+    	//get the intersects from raycaster
+    	var intersects = Raycaster.intersectObjects ( this.furniture.getObjects(), true);
+    	//if get intersections
+    	if (intersects.length>0){
+    		var pos =  intersects[0].point;
+    		//using distance to make rod
+    		var geo = cadMakeRod(this.pointball.position.distanceTo(pos));
+    		var manager = new THREE.LoadingManager();
+    		var textureLoader = new THREE.TextureLoader( manager );
+    		var texture = textureLoader.load( '../images/material/material5.jpg' );
+        	texture.repeat.set(0.1, 0.1);
+        	texture.wrapS = texture.wrapT = THREE.MirroredRepeatWrapping;
+        	var material = new THREE.MeshBasicMaterial( {map: texture} );
+    		var rod = new THREE.Mesh( geo, material );
+    		rod.position.set(this.pointball.position.x ,
+    						 this.pointball.position.y ,
+    						 this.pointball.position.z );
+    		//this.scene.add(rod);
+    		
+    		var newPosi = rod.position.clone();
+    		this.processor.model_add.objectAddToFurniture(
+    			this.furniture.getFurniture(), rod, newPosi);
+    		this.furniture.getFurniture().worldToLocal(pos);
+    		rod.lookAt(pos);
+    		
+
+    		this.selectionBox.visible = false;
+			this.transformControls.detach();
+			this.furniture = null;
+    		this.SelectComponent = false;
+    		this.component = null;
+    		this.intersectpoint = null;
+    		this.fixpointball = false;
+    		this.scene.remove(this.pointball);
+    		this.pointball = null;
+    		$('.ui.right.labeled.input.rod').hide();
+    		document.getElementById('InputRodRadius').value = "";
+    	}
+    	else{//if don't get
+    		alert('position err');
+    		this.fixpointball = false;
+    	}
+    }	
 
 };
 

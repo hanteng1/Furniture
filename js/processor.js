@@ -16,6 +16,8 @@ const Model_Painting = require('./Model_Painting');
 const Model_wrap = require('./Model_wrap');
 const Model_Rotation = require('./Model_Rotation');
 const Model_Align = require('./Model_Align');
+const Model_Add = require('./Model_Add');
+const Model_AddBetween = require('./Model_AddBetween');
 
 
 function Processor(main) {
@@ -38,9 +40,7 @@ function Processor(main) {
 	//zhuen's block
 	this.chair_add = undefined;
 	this.dresser_add = undefined;
-
-	this.table = undefined;
-	this.desk = undefined;
+	this.model_add = undefined;
 	//end of zhuen's block
 
 
@@ -52,7 +52,7 @@ function Processor(main) {
 	this.model_wrap = undefined;
 	this.model_rotation = undefined;
 	this.model_align = undefined;
-
+	this.model_addbetween = undefined;
 
 	//end of weixiang's block
 
@@ -182,7 +182,6 @@ Processor.prototype = {
 					$('.operations.operation_table').show();
 
 				}
-
 				break;
 
 			case "desk" :
@@ -217,9 +216,16 @@ Processor.prototype = {
 				
 				scope.model_align = new Model_Align(scope.main);
 				scope.transformFunctions.MODEL_ALIGN = scope.model_align;
+
+				//add
+				scope.model_add = new Model_Add(scope.main);
+				scope.transformFunctions.MODEL_ADD = scope.model_add;
+
+				//addbetween
+				scope.model_addbetween = new Model_AddBetween(scope.main);
+				scope.transformFunctions.MODEL_ADDBETWEEN = scope.model_addbetween;
 				
-				$('.operations.operation_tool').show();
-				
+				$('.operations.operation_tool').show();		
 				break;
 
 		};

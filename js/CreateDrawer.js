@@ -10,23 +10,21 @@ const csgToGeometries = require('./csgToGeometries')
 function CreateDrawer(width, length, height) {
     
     // var width = 10, length = 15, height = 5;
-    // var width = 1, length = 1.5, height = 0.5;
-    var obj = cube([length, width-0.15, 0.05]);
-    var obj1 = cube([length, 0.05, height-0.1]);
-    var obj2 = cube([0.05, width-0.15, height-0.1]);
-    var obj3 = cube([length ,0.05, height-0.1]).translate([0 ,width-0.15, 0]);
-    var obj4 = cube([0.05, width, height]).translate([length-0.05, -0.05, 0]);
+    var obj = cube([length, width-1, 0.5]);
+    var obj1 = cube([length, 0.5, height-1]);
+    var obj2 = cube([0.5, width-1, height-1]);
+    var obj3 = cube([length ,0.5, height-1]).translate([0 ,width-1, 0]);
+    var obj4 = cube([0.5, width, height]).translate([length-0.5, -0.25, 0]);
     
-    var w = width;
-    var tmp = 0.05;
-    var path = new CSG.Path2D([[tmp, w/8+w/10], [tmp, w/8], [tmp-w/20, w/8-w/15], 
-        [tmp-w/20, -1*w/8+w/15], [tmp, -1*w/8], [tmp, -1*w/8-w/10]], /*closed=*/false);
-    var handle = path.rectangularExtrude(0.02, 0.2, 16, true);
-    //handle = handle.center();
-    handle = handle.rotateY(180);
-    
-    
-    handle = handle.translate([length+0.05,(width-0.1)/2,(height+0.2)/2]);
+    var path = new CSG.Path2D([[-0.25, width/8+width/10], [-0.25, width/8], 
+    [-0.25-width/20, width/8-width/15], [-0.25-width/20, -1*width/8+width/15], 
+    [-0.25, -1*width/8], [-0.25, -1*width/8-width/10]],false);
+	var handle = path.rectangularExtrude(0.2, 1, 10, true);
+	//handle = handle.center();
+	handle = handle.rotateY(180);
+	
+	
+	handle = handle.translate([length-0.2,width/2,(height+1)/2]);
     obj = union(obj, obj1, obj2, obj3, obj4, handle);
     // obj = obj.center();
     obj = obj.rotateX(-90);

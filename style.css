@@ -173,9 +173,23 @@ a {
   cursor: pointer;
 }
 
-
-
-
+#Procedure_List{
+  position: absolute;
+  opacity: 0.8;
+  -moz-opacity: 0.8;
+  left:350px;
+  top: 70px;
+  
+}
+.ui.circular.icon.button.procedure{
+  font-size: 20px;
+}
+.ui.right.labeled.input.rod{
+  position: relative;
+  top: 10px;
+  left:-20px;
+  width: 50px;
+}
 
 
 

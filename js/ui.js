@@ -77,26 +77,18 @@ Ui.prototype = {
 						scope.assignLabel("stand");
 						break;
 					case "l_6":
+						//stand
 						scope.assignLabel("cabinetTop");
 						break;
 					case "l_7":
+						//stand
 						scope.assignLabel("cabinetFront");
 						break;
 					case "l_8":
+						//stand
 						scope.assignLabel("cabinetBroad");
 						break;
-					case "l_9":
-						scope.assignLabel("tabletop");
-						break;
-					case "l_10":
-						scope.assignLabel("tableLeg");
-						break;
-					case "l_11":
-						scope.assignLabel("desktop");
-						break;
-					case "l_12":
-						scope.assignLabel("deskDrawer");
-						break;
+
 					
 				}
 			}
@@ -110,6 +102,11 @@ Ui.prototype = {
 		$( ".item.m_group" ).click(function() {
 			//group function
 			scope.main.mergeObjs();
+		});
+
+		$( ".item.m_delete" ).click(function() {
+			//group function
+			scope.main.DeleteObj();
 		});
 
 
@@ -202,6 +199,7 @@ Ui.prototype = {
 			scope.main.GetDistance();
 			
 		});
+		
 
 		//chair_align controller function
 		this.designButtons();
@@ -231,20 +229,23 @@ Ui.prototype = {
 
 		$('.operations.operation_cabinet_kallax_one').hide();
 		$('.operations.operation_cabinet_kallax_two').hide();
+		$('.ui.blue.submit.button.getsize').hide();
+		$('.ui.red.submit.button.removesize').hide();
+		$('.ui.blue.submit.button.getdis').hide();
 
 		$('.operations.operation_table').hide();
 		$('.operations.operation_desk').hide();
 
-		
-		$('.ui.blue.submit.button.getsize').hide();
-		$('.ui.red.submit.button.removesize').hide();
-		$('.ui.blue.submit.button.getdis').hide();
 		$('.operations.operation_tool').hide();
 		$('#parameter_control_tool_painting').hide();
 		$('#parameter_control_tool_wrap').hide();
 		$('#parameter_control_tool_rotation').hide();
 		$('#parameter_control_tool_align').hide();
-		
+
+		$('#parameter_control_tool_add').hide();
+		$('#parameter_control_tool_addbetween').hide();
+		$('.ui.right.labeled.input.rod').hide();
+
 
 	},
 
@@ -316,32 +317,10 @@ Ui.prototype = {
 			scope.processor.executeDesign("CHAIR_REBUILD", "leg");
 		});
 
-
-
-
 		//dresser
 		$('#operation_dresser_add_cut_chair').click(function() {
 			scope.processor.executeDesign("DRESSER_ADD", "cut_chair");
 		});
-		$('#operation_dresser_add_door').click(function() {
-			scope.processor.executeDesign("DRESSER_ADD", "add_door");
-		});
-		$('#operation_dresser_add_leg').click(function() {
-			scope.processor.executeDesign("DRESSER_ADD", "add_leg");
-		});
-		$('#operation_dresser_add_rod').click(function() {
-			scope.processor.executeDesign("DRESSER_ADD", "add_rod");
-		});
-		$('#operation_dresser_add_spice_rack').click(function() {
-			scope.processor.executeDesign("DRESSER_ADD", "add_spice_rack");
-		});
-		$('#operation_dresser_add_drawer').click(function() {
-			scope.processor.executeDesign("DRESSER_ADD", "add_drawer");
-		});
-		$('#operation_dresser_remove_drawers').click(function() {
-			scope.processor.executeDesign("DRESSER_ADD", "remove_drawers");
-		});
-
 
 		//cabinet_kallax_chair
 		$('#operation_cabinet_kallax_chair').click(function() {
@@ -354,12 +333,13 @@ Ui.prototype = {
 			$('#parameter_control_cabinet_bed').show();
 		});
 
+		
+
 		//cabinet_kallax_table
 		$('#operation_cabinet_kallax_table').click(function() {
 			scope.processor.executeDesign("CABINET_LALLAX", "table");
 
 		});
-
 
 
 		//table
@@ -404,23 +384,41 @@ Ui.prototype = {
 			scope.processor.executeDesign("DESK", "addBoard");
 		});
 
+		//model painting
 		$('#operation_Painting').click(function() {
 			scope.processor.executeDesign("MODEL_PAINTING", "painting");
 
 		});
+
+		//model wrap
 		$('#operation_Wrap').click(function() {
 			scope.processor.executeDesign("MODEL_WRAP", "wrap");
 
 		});
+
+		//model rotation
 		$('#operation_Rotation').click(function() {
 			scope.processor.executeDesign("MODEL_ROTATION", "rotation");
 
 		});
+
+		//model align
 		$('#operation_Align').click(function() {
 			scope.processor.executeDesign("MODEL_ALIGN", "align");
 
 		});
 
+		//add
+		$('#operation_Add').click(function() {
+			scope.processor.executeDesign("MODEL_ADD", "add");
+
+		});
+
+		//addbetween
+		$('#operation_AddBetween').click(function() {
+			scope.processor.executeDesign("MODEL_ADDBETWEEN", "addbetween");
+
+		});
 
 
 	},

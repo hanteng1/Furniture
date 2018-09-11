@@ -137,31 +137,7 @@
 	 					<h3 class="ui header">Dresser</h3>
 	 					<button class="ui inverted secondary button" id="operation_dresser_add_cut_chair">
 								<i class="gamepad icon"></i>
-	    						Cut To Chair
-	    				</button>
-	    				<button class="ui inverted secondary button" id="operation_dresser_add_door">
-								<i class="gamepad icon"></i>
-	    						Add Door
-	    				</button>
-	    				<button class="ui inverted secondary button" id="operation_dresser_add_leg">
-								<i class="gamepad icon"></i>
-	    						Add Leg
-	    				</button>
-	    				<button class="ui inverted secondary button" id="operation_dresser_add_rod">
-								<i class="gamepad icon"></i>
-	    						Add Rod
-	    				</button>
-	    				<button class="ui inverted secondary button" id="operation_dresser_add_spice_rack">
-								<i class="gamepad icon"></i>
-	    						Add Spice Rack
-	    				</button>
-	    				<button class="ui inverted secondary button" id="operation_dresser_add_drawer">
-								<i class="gamepad icon"></i>
-	    						Add Drawer
-	    				</button>
-	    				<button class="ui inverted secondary button" id="operation_dresser_remove_drawers">
-								<i class="gamepad icon"></i>
-	    						Remove Drawers
+	    						CutChair
 	    				</button>
 	    			</div>
 
@@ -190,6 +166,7 @@
 
 
  					<div class="operations operation_table">
+
 						<h3 class="ui header">Table</h3>
 						<button class="ui inverted secondary button" id="operation_table_stack">
 								<i class="gamepad icon"></i>
@@ -239,6 +216,7 @@
 					
 
  					<div class="operations operation_tool">
+
 	 					<h3 class="ui header">Tool</h3>
 
 						<button class="ui inverted secondary button" id="operation_Painting">
@@ -257,6 +235,17 @@
 								<i class="gamepad icon"></i>
 	    						Align
 						</button>
+
+						<button class="ui inverted secondary button" id="operation_Add">
+								<i class="gamepad icon"></i>
+	    						Add
+						</button>
+
+						<button class="ui inverted secondary button" id="operation_AddBetween">
+								<i class="gamepad icon"></i>
+	    						AddBetween
+						</button>
+
 
  					</div>
 
@@ -279,6 +268,10 @@
 			<a class="item">
 				<i class="object ungroup icon"></i>
 				Ungroup
+			</a>
+			<a class="item m_delete">
+				<i class="object delete icon"></i>
+				Delete
 			</a>
 			<a class="item">
 				<i class="edit icon"></i>
@@ -318,22 +311,6 @@
 							<div class="item" data-value="l_8">
 								<div class="ui orange empty circular label"></div>
 								cabinetBroad
-							</div>
-							<div class="item" data-value="l_9">
-								<div class="ui orange empty circular label"></div>
-								tabletop
-							</div>
-							<div class="item" data-value="l_10">
-								<div class="ui orange empty circular label"></div>
-								tableLeg
-							</div>
-							<div class="item" data-value="l_11">
-								<div class="ui orange empty circular label"></div>
-								desktop
-							</div>
-							<div class="item" data-value="l_12">
-								<div class="ui orange empty circular label"></div>
-								deskDrawer
 							</div>
 
 						</div>
@@ -495,6 +472,53 @@
 			</div>
 		</div>
 
+		<!--Addbetween tool-->
+		<div class="ui compact parameters" id="parameter_control_tool_addbetween">
+			<div class="ui labeled icon menu" >
+			 
+				<a class="item ui image label addbetween rod">
+					<img src="/images/material/addbetween/rod.jpg">
+					
+					<div class="ui right labeled input rod" >
+						<input type="text" placeholder="2.0" id="InputRodRadius">
+						<div class="ui basic label ">
+							cm
+						</div>
+					</div>
+				</a>
+
+			</div>
+		</div>
+
+		<!--Add tool-->
+		<div class="ui compact parameters" id="parameter_control_tool_add">
+			<div class="ui labeled icon menu" >
+			 
+				<a class="item ui image label add vertical board">
+					<img src="/images/material/align/x.png">
+				</a>
+				<a class="item ui image label add horizontal board">
+					<img src="/images/material/align/x.png">
+				</a>
+				<a class="item ui image label add rod">
+					<img src="/images/material/align/y.png">
+				</a>
+				<a class="item ui image label add leg">
+				  	<img src="/images/material/align/z.png">
+				</a>
+				<a class="item ui image label add wheel">
+				  	<img src="/images/material/align/z.png">
+				</a>
+				<a class="item ui image label add hook">
+				  	<img src="/images/material/align/z.png">
+				</a>
+				<a class="item ui image label add door">
+				  	<img src="/images/material/align/z.png">
+				</a>
+
+			</div>
+		</div>
+
 		<div class="ui compact parameters" id="parameter_control_chair_add">
 			<div class="ui segment" id="CHAIR_ADD">
 				<table class="ui definition table">
@@ -567,8 +591,6 @@
 		<!--end of model input size initialization-->
 
 
-
-
 		<!-- Weihsiang's Block, for seat texture change-->
 		<div class="ui compact parameters" id="parameter_control_cabinet_bed">
 			<div class="ui labeled icon menu" id = "Kallax_Bed">
@@ -586,6 +608,8 @@
 		<!-- End of Weihsiang's Block-->
 
 		<div id="container"></div>
+
+		<div id="Procedure_List"></div>
 
 		<!-- design viewer -->
     	<!-- <div oncontextmenu="return false;" id="viewerContext"></div> --> <!-- avoiding popup when right mouse is clicked -->
