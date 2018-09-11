@@ -31,9 +31,10 @@ function Main()
 
 	//category
 	//todo: an floating window to select category
-	//this.category = "chair";
+	this.category0 = "";
+	this.category = "";
 	//this.category = "cabinet";
-	this.category = "tool";
+	//this.category = "tool";
 
 	//only stores data
 	this.container = document.getElementById('container');
@@ -230,15 +231,15 @@ Main.prototype = {
 		//this.customControl.enablePan = true;
 		//this.customControl.target.set(0, 0.5, - 0.2);
 
-		this.customControl.lookSpeed = 0.05;
-        this.customControl.movementSpeed = 20;
-        this.customControl.noFly = true;
-        this.customControl.lookVertical = true;
-        this.customControl.constrainVertical = true;
-        this.customControl.verticalMin = 1.0;
-        this.customControl.verticalMax = 2.0;
-        this.customControl.lon = -110;
-        this.customControl.lat = -50;
+		// this.customControl.lookSpeed = 0.05;
+  //       this.customControl.movementSpeed = 20;
+  //       this.customControl.noFly = true;
+  //       this.customControl.lookVertical = true;
+  //       this.customControl.constrainVertical = true;
+  //       this.customControl.verticalMin = 1.0;
+  //       this.customControl.verticalMax = 2.0;
+  //       this.customControl.lon = -110;
+  //       this.customControl.lat = -50;
 
 
 		this.transformControls = new THREE.TransformControls(this.camera, this.renderer.domElement);
@@ -1015,6 +1016,16 @@ Main.prototype = {
 		return center;
 	},
 
+	getSize: function(object) {
+		var box = new THREE.Box3();
+		box.setFromObject(object);
+		var box_size = new THREE.Vector3();
+		box.getSize(box_size);
+
+		//this includes width, height, depth
+		return box_size;
+	},
+
 	explode: function(furniture){
 		this.select(null);
 
@@ -1026,6 +1037,9 @@ Main.prototype = {
 		this.explodeVectors = [];
 		this.selectedIds = [];
 		var objects = furniture.getObjects(); //get the children objs
+
+		var lowestHeight = 0;
+
 		for(var i = 0; i < objects.length; i++)  //objects.length
 		{
 			var elmCenter = this.getCenterPoint(objects[i]);
@@ -1037,6 +1051,20 @@ Main.prototype = {
 			var subVector = new THREE.Vector3();
 			subVector.subVectors(elmCenter, this.objCenter);
 			subVector.multiplyScalar(2);
+
+			//attention to the rotations
+			
+			var elmQuaternion = new THREE.Quaternion();
+			var elmPosition = new THREE.Vector3();
+			var elmScale = new THREE.Vector3();
+			objects[i].matrixWorld.decompose(elmPosition, elmQuaternion, elmScale);
+			//console.log(elmScale);
+
+			var inverseQuaternion = new THREE.Quaternion();
+			inverseQuaternion.copy(elmQuaternion);
+			inverseQuaternion.inverse();
+			subVector.applyQuaternion(inverseQuaternion);
+
 			this.explodeVectors.push(subVector.clone());
 
 			objects[i].translateX(subVector.x);
@@ -1050,7 +1078,49 @@ Main.prototype = {
 			// 	console.log(elmCenter);
 			// }
 
+			//get lowest y
+			elmCenter = this.getCenterPoint(objects[i]);
+			var elmSize = this.getSize(objects[i]);
+
+			var bottomHeight = elmCenter.y - elmSize.y/2;
+
+			if(bottomHeight < lowestHeight){
+				lowestHeight = bottomHeight;
+			}
 		}
+
+
+		//position above 0
+
+		//console.log(lowestHeight);
+
+		if(lowestHeight < 0)
+		{
+			for(var i = 0; i < objects.length; i++)
+			{
+				
+				var elmQuaternion = new THREE.Quaternion();
+				var elmPosition = new THREE.Vector3();
+				var elmScale = new THREE.Vector3();
+				objects[i].matrixWorld.decompose(elmPosition, elmQuaternion, elmScale);
+
+				//there might be a problem is the object is not evently scaled
+				var additionalVec = new THREE.Vector3(0, Math.abs(lowestHeight) / elmScale.y, 0);
+
+				var inverseQuaternion = new THREE.Quaternion();
+				inverseQuaternion.copy(elmQuaternion);
+				inverseQuaternion.inverse();
+				additionalVec.applyQuaternion(inverseQuaternion);
+
+				this.explodeVectors[i].add(additionalVec);
+
+				objects[i].translateX(additionalVec.x);
+				objects[i].translateY(additionalVec.y);
+				objects[i].translateZ(additionalVec.z);
+
+			}
+		}
+
 		
 	},
 

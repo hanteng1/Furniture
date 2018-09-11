@@ -43,6 +43,51 @@ Ui.prototype = {
 
 		var scope = this;
 
+
+		//select a category
+		$('#category_chair').click(function() {
+			//group function
+			scope.main.category0 = "chair";
+			$('#blocker').hide();
+			$('#initial_category_window').hide();
+
+			$('#minfo').html(scope.main.category0);
+
+		});
+
+		$('#category_cabinet').click(function() {
+			//group function
+			scope.main.category0 = "cabinet";
+			$('#blocker').hide();
+			$('#initial_category_window').hide();
+
+			$('#minfo').html(scope.main.category0);
+
+		});
+
+
+		$('#category_table').click(function() {
+			//group function
+			scope.main.category0 = "table";
+			$('#blocker').hide();
+			$('#initial_category_window').hide();
+
+			$('#minfo').html(scope.main.category0);
+
+		});
+
+
+		$('#category_bed').click(function() {
+			//group function
+			scope.main.category0 = "bed";
+			$('#blocker').hide();
+			$('#initial_category_window').hide();
+
+			$('#minfo').html(scope.main.category0);
+
+		});
+
+
 		$('.ui.dropdown').dropdown({
 			action: 'hide',
 			onChange: function(value, text, $selectedItem) {
@@ -181,9 +226,18 @@ Ui.prototype = {
 
 		$('.ui.blue.submit.button.newdesign').click(function(){
 
+			scope.main.category = scope.main.category0;
 			scope.main.applyDesign();
 
 		});
+
+		$('.ui.blue.submit.button.customdesign').click(function(){
+
+			scope.main.category = "tool";
+			scope.main.applyDesign();
+
+		});
+
 		$('.ui.blue.submit.button.getsize').click(function(){
 
 			scope.main.LabelSize();

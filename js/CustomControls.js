@@ -84,15 +84,15 @@ THREE.CustomControls = function ( object, domElement ) {
 	this.target0 = this.target.clone();
 	this.position0 = this.object.position.clone();
 	this.zoom0 = this.object.zoom;
-	this.lookatDir0 = new THREE.Vector3(0, 0, -90);
+	this.lookatDir0 = new THREE.Vector3(0, -3.55067, -87.86557);
 
 	//////////////////////////////first person view
 
 	//attention, this is different from target
 	this.fp_target = new THREE.Vector3( 0, 0, 0 );
 
-	this.movementSpeed = 1.0;
-	this.lookSpeed = 0.0005;
+	this.movementSpeed = 20.0;
+	this.lookSpeed = 0.05;
 
 	this.lookVertical = true;
 	this.autoForward = false;
@@ -104,17 +104,17 @@ THREE.CustomControls = function ( object, domElement ) {
 	this.heightMin = 0.0;
 	this.heightMax = 1.0;
 
-	this.constrainVertical = false;
-	this.verticalMin = 0;
-	this.verticalMax = Math.PI;
+	this.constrainVertical = true;
+	this.verticalMin = 1.0;
+	this.verticalMax = 2.0;//Math.PI;
 
 	this.autoSpeedFactor = 0.0;
 
 	this.mouseX = 0;
 	this.mouseY = 0;
 
-	this.lat = 0;
-	this.lon = 0;
+	this.lat = -50;
+	this.lon = -90;
 	this.phi = 0;
 	this.theta = 0;
 
@@ -181,6 +181,7 @@ THREE.CustomControls = function ( object, domElement ) {
 
 			scope.target.copy(scope.fp_target);
 
+
 			//problem
 			//it will make a sudden jump
 			scope.tg_update();
@@ -199,23 +200,30 @@ THREE.CustomControls = function ( object, domElement ) {
 
 			//switch back to the original position
 			//target lookatDir
-			this.lon = -110;
-			if ( this.lookVertical ) this.lat = 0;
+			this.lon = -90;
+			if ( this.lookVertical ) this.lat = -50;
 
 			this.lat = Math.max( - 85, Math.min( 85, this.lat ) );
 			
-			// this.phi = THREE.Math.degToRad( 90 - this.lat );
-			// this.theta = THREE.Math.degToRad( this.lon );
 
-			// if ( this.constrainVertical ) {
-			// 	this.phi = THREE.Math.mapLinear( this.phi, 0, Math.PI, this.verticalMin, this.verticalMax );
-			// }
+			//update the fp_target
+			this.phi = THREE.Math.degToRad( 90 - this.lat );
+			this.theta = THREE.Math.degToRad( this.lon );
 
-			// var targetLookatDir = new THREE.Vector3();
+			if ( this.constrainVertical ) {
 
-			// targetLookatDir.x = scope.position0.x + 100 * Math.sin( this.phi ) * Math.cos( this.theta );
-			// targetLookatDir.y = scope.position0.y + 100 * Math.cos( this.phi );
-			// targetLookatDir.z = scope.position0.z + 100 * Math.sin( this.phi ) * Math.sin( this.theta );
+				this.phi = THREE.Math.mapLinear( this.phi, 0, Math.PI, this.verticalMin, this.verticalMax );
+
+			}
+
+			var targetPosition = this.fp_target,
+				position = scope.position0; //this.object.position;
+
+			targetPosition.x = position.x + 100 * Math.sin( this.phi ) * Math.cos( this.theta );
+			targetPosition.y = position.y + 100 * Math.cos( this.phi );
+			targetPosition.z = position.z + 100 * Math.sin( this.phi ) * Math.sin( this.theta );
+			//console.log(targetPosition);
+
 
 			scope.lerpIndex = 0;
 
@@ -960,8 +968,7 @@ THREE.CustomControls = function ( object, domElement ) {
 	//window.addEventListener( 'keydown', onKeyDown, false );
 
 	// force an update at start
-	//this.tg_update();
-
+	this.fp_update();
 
 
 };

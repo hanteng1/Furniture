@@ -31,8 +31,6 @@ function Processor(main) {
 	this.chair_align = undefined;
 	
 
-
-
 	this.transformFunctions = { };
 
 
@@ -77,7 +75,7 @@ Processor.prototype = {
 		var scope = this;
 
 
-		switch(scope.category){
+		switch(this.main.category){
 
 			case "chair" :
 				if(scope.furnitures.length == 0) {
@@ -140,7 +138,6 @@ Processor.prototype = {
 					}
 
 					
-
 				}else if( scope.furnitures.length > 1) {
 					//possible actions with many furnitures
 
