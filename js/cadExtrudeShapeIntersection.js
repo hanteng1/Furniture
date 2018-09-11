@@ -19,7 +19,7 @@ function cadExtrudeShapeIntersection ( shape1, path1, shape2, path2, shape3, pat
 	var geometry = csgToGeometries(result)[0];
 	
 	//var obj = geometryToCsgs(geometry);
-	//obj = obj[0].expand(0.2, 3);
+	//obj = obj[0].expand(0.2, 8);
 
 	//geometry = csgToGeometries(obj)[0];
 	geometry = new THREE.Geometry().fromBufferGeometry( geometry );

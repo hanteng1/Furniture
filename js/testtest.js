@@ -1,28 +1,12 @@
 function testtest(){
 
 	
-	// function a() {
- //    	alert('A');
-	// }
-	// //alerts 'A', returns undefined
+	// var test = new THREE.Vector3(10, 10, 10);
+	// var di = new THREE.Vector3(1, 2, 3);
 
-	// function b() {
-	//     alert('B');
-	//     return a;
-	// }
-	// //alerts 'B', returns function a
+	// test.divide(di);
 
-	// this.c = function () {
-	//     alert('C');
-	//     return a;
-	// }();
-	// //alerts 'C', alerts 'A', returns undefined
-
-	// //alert("Function 'a' returns " + a());
-	// //alert("Function 'b' returns " + b());
-	// //alert("Function 'c' returns " + c());
-
-	// this.c(); //only calls a very interesting
+	// console.log(test);
 
 };
 
