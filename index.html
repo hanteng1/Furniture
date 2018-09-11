@@ -692,9 +692,11 @@
 				gl_FragColor.a = 1.0;
 			}
 		</script>
+		
 		-->
 
 
+		
 		<script type="x-shader/x-vertex" id="vertexShader">
 			varying vec3 vWorldPosition;
 			void main() {
@@ -715,6 +717,7 @@
 				gl_FragColor = vec4( mix( bottomColor, topColor, max( pow( max( h, 0.0 ), exponent ), 0.0 ) ), 1.0 );
 			}
 		</script>
+		
 
 		<script type="text/javascript" src="js/bundle.js"></script>
 		<!--<script type="text/javascript" src="js/Main.js"></script>-->
