@@ -7717,6 +7717,7 @@ Model_wrap.prototype = {
         
 
 	},
+
 	Wrap: function( model , texture ){
 		//console.log(model.geometry);
 		
@@ -7731,7 +7732,10 @@ Model_wrap.prototype = {
 													bottom_to_top[0], bottom_to_top[1] );
 		
 		var material = new THREE.MeshBasicMaterial( {map: texture,
-        wireframe: false} );
+        	wireframe: false} );
+
+		//var material = new THREE.MeshBasicMaterial( {wireframe: true} );
+		
 		
 		var backRest = new THREE.Mesh( geometry, material );
 		this.main.WrapObject.push(backRest);
@@ -8239,8 +8243,12 @@ const Model_wrap = require('./Model_wrap');
 const Model_Rotation = require('./Model_Rotation');
 const Model_Align = require('./Model_Align');
 const Model_Add = require('./Model_Add');
+<<<<<<< HEAD
 const {Model_AddBetween , AddRodMousePosi1, AddRodMousePosi2,
 	SelectFurniComponent, SelectFurni} = require('./Model_AddBetween');
+=======
+const Model_AddBetween = require('./Model_AddBetween');
+>>>>>>> master
 
 
 function Processor(main) {
@@ -9548,12 +9556,10 @@ function cadExtrudeShapeIntersection ( shape1, path1, shape2, path2, shape3, pat
 	var result = intersection( geo1 , geo2 );
 	result = intersection( result , geo3 );
 
+	result = result.expand(0.2, 8);
+
 	var geometry = csgToGeometries(result)[0];
 	
-	//var obj = geometryToCsgs(geometry);
-	//obj = obj[0].expand(0.2, 3);
-
-	//geometry = csgToGeometries(obj)[0];
 	geometry = new THREE.Geometry().fromBufferGeometry( geometry );
     
     assignUVs(geometry);
@@ -10729,6 +10735,10 @@ function Main()
 
 	//for explode vectors
 	this.explodeVectors = [];
+
+	//this is used only for adding normal rotations
+	this.explodeVectorsCorrected = [];
+
 	this.selectedIds = [];
 	this.objCenter = new THREE.Vector3();
 	//for multi selection
@@ -11617,6 +11627,7 @@ Main.prototype = {
 		//console.log(this.objCenter);
 		
 		this.explodeVectors = [];
+		this.explodeVectorsCorrected  = [];
 		this.selectedIds = [];
 		var objects = furniture.getObjects(); //get the children objs
 
@@ -11632,6 +11643,7 @@ Main.prototype = {
 			
 			var subVector = new THREE.Vector3();
 			subVector.subVectors(elmCenter, this.objCenter);
+<<<<<<< HEAD
 			subVector.multiplyScalar(2);
 
 			//attention to the rotations
@@ -11647,7 +11659,29 @@ Main.prototype = {
 			inverseQuaternion.inverse();
 			subVector.applyQuaternion(inverseQuaternion);
 
+=======
+			subVector.multiplyScalar(1);
+
+			//attention to the rotations
+>>>>>>> master
 			this.explodeVectors.push(subVector.clone());
+			
+			var elmQuaternion = new THREE.Quaternion();
+			var elmPosition = new THREE.Vector3();
+			var elmScale = new THREE.Vector3();
+			objects[i].matrixWorld.decompose(elmPosition, elmQuaternion, elmScale);
+
+
+			subVector.divide(elmScale);
+			//console.log(elmScale);
+
+			var inverseQuaternion = new THREE.Quaternion();
+			inverseQuaternion.copy(elmQuaternion);
+			inverseQuaternion.inverse();
+			subVector.applyQuaternion(inverseQuaternion);
+
+			this.explodeVectorsCorrected.push(subVector.clone());
+
 
 			objects[i].translateX(subVector.x);
 			objects[i].translateY(subVector.y);
@@ -11669,6 +11703,7 @@ Main.prototype = {
 			if(bottomHeight < lowestHeight){
 				lowestHeight = bottomHeight;
 			}
+<<<<<<< HEAD
 		}
 
 
@@ -11703,6 +11738,46 @@ Main.prototype = {
 			}
 		}
 
+=======
+		}
+
+
+		//position above 0
+
+		//console.log(lowestHeight);
+
+		if(lowestHeight < 0)
+		{
+			for(var i = 0; i < objects.length; i++)
+			{
+				
+				var additionalVec = new THREE.Vector3(0, Math.abs(lowestHeight), 0);
+				this.explodeVectors[i].add(additionalVec.clone());
+
+				var elmQuaternion = new THREE.Quaternion();
+				var elmPosition = new THREE.Vector3();
+				var elmScale = new THREE.Vector3();
+				objects[i].matrixWorld.decompose(elmPosition, elmQuaternion, elmScale);
+
+				//there might be a problem is the object is not evently scaled
+				additionalVec.divide(elmScale);
+
+				var inverseQuaternion = new THREE.Quaternion();
+				inverseQuaternion.copy(elmQuaternion);
+				inverseQuaternion.inverse();
+				additionalVec.applyQuaternion(inverseQuaternion);
+
+				this.explodeVectorsCorrected[i].add(additionalVec.clone());
+
+
+				objects[i].translateX(additionalVec.x);
+				objects[i].translateY(additionalVec.y);
+				objects[i].translateZ(additionalVec.z);
+
+			}
+		}
+
+>>>>>>> master
 		
 	},
 
@@ -11712,14 +11787,51 @@ Main.prototype = {
 		if(this.explodeVectors.length != objects.length)
 			return;
 
-		for(var i = 0; i < objects.length; i++)
+
+		if(furniture.hasNormalRotation == true) 
 		{
-			var subVector = this.explodeVectors[i];
-			subVector.negate();
-			objects[i].translateX(subVector.x);
-			objects[i].translateY(subVector.y);
-			objects[i].translateZ(subVector.z);
+
+			for(var i = 0; i < objects.length; i++)
+			{
+				var subVector = this.explodeVectorsCorrected[i];
+				subVector.negate();
+
+				objects[i].translateX(subVector.x);
+				objects[i].translateY(subVector.y);
+				objects[i].translateZ(subVector.z);
+			}
+
+
+			furniture.hasNormalRotation = false;
+
+		}else{
+			for(var i = 0; i < objects.length; i++)
+			{
+				var subVector = this.explodeVectors[i];
+				subVector.negate();
+
+				//attention
+				var elmQuaternion = new THREE.Quaternion();
+				var elmPosition = new THREE.Vector3();
+				var elmScale = new THREE.Vector3();
+				objects[i].matrixWorld.decompose(elmPosition, elmQuaternion, elmScale);
+				//console.log(elmScale);
+
+				subVector.divide(elmScale);
+
+				var inverseQuaternion = new THREE.Quaternion();
+				inverseQuaternion.copy(elmQuaternion);
+				inverseQuaternion.inverse();
+				subVector.applyQuaternion(inverseQuaternion);
+				
+
+				objects[i].translateX(subVector.x);
+				objects[i].translateY(subVector.y);
+				objects[i].translateZ(subVector.z);
+			}
 		}
+					
+		this.explodeVectorsCorrected  = [];
 		this.explodeVectors = [];
 	},
 
@@ -11749,6 +11861,20 @@ Main.prototype = {
 			selectedIndices.push(objects.indexOf(childObj));
 			var subVector = this.explodeVectors[ objects.indexOf(childObj) ];
 			subVector.negate();
+
+			//attention
+			var elmQuaternion = new THREE.Quaternion();
+			var elmPosition = new THREE.Vector3();
+			var elmScale = new THREE.Vector3();
+			childObj.matrixWorld.decompose(elmPosition, elmQuaternion, elmScale);
+
+			subVector.divide(elmScale);
+
+			var inverseQuaternion = new THREE.Quaternion();
+			inverseQuaternion.copy(elmQuaternion);
+			inverseQuaternion.inverse();
+			subVector.applyQuaternion(inverseQuaternion);
+
 			childObj.translateX(subVector.x);
 			childObj.translateY(subVector.y);
 			childObj.translateZ(subVector.z);
@@ -12827,7 +12953,11 @@ document.addEventListener('DOMContentLoaded', function(event){
 
 
 
+<<<<<<< HEAD
 },{"./MarkBetweenSize":24,"./MarkSize":25,"./Model_AddBetween":27,"./Processor":33,"./cadCutByPlane":36,"./cadMakeRod":39,"./computeConvexHull":43}],54:[function(require,module,exports){
+=======
+},{"./MarkBetweenSize":24,"./MarkSize":25,"./Processor":33,"./cadCutByPlane":36,"./cadMakeRod":39,"./computeConvexHull":43}],54:[function(require,module,exports){
+>>>>>>> master
 /*
 ## License
 

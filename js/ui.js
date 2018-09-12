@@ -475,6 +475,12 @@ Ui.prototype = {
 		});
 
 
+		//cut
+		$('#operation_Cut').click(function(){
+			scope.processor.executeDesign("MODEL_CUT", "cut");
+		});
+
+
 	},
 
 

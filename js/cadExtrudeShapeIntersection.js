@@ -16,12 +16,18 @@ function cadExtrudeShapeIntersection ( shape1, path1, shape2, path2, shape3, pat
 	var result = intersection( geo1 , geo2 );
 	result = intersection( result , geo3 );
 
+	//examine the result vertices
+	//predict how it may require
+	//and then decide whether to do it or not
+	result = result.expand(0.2, 8);
+
+
+	//another way
+	//test to geometry, and simplify, and back to csg, and expand
+
+
 	var geometry = csgToGeometries(result)[0];
 	
-	//var obj = geometryToCsgs(geometry);
-	//obj = obj[0].expand(0.2, 3);
-
-	//geometry = csgToGeometries(obj)[0];
 	geometry = new THREE.Geometry().fromBufferGeometry( geometry );
     
     assignUVs(geometry);
@@ -29,6 +35,8 @@ function cadExtrudeShapeIntersection ( shape1, path1, shape2, path2, shape3, pat
 	return geometry;
 	
 }
+
+
 function cadExtrudeShape( shape , path){
 
 	//correct path
@@ -55,6 +63,8 @@ function cadExtrudeShape( shape , path){
     
 	return solid;
 }
+
+
 function SimplifyGeo( geometry ){
 
 	var verticesAttribute = geometry.getAttribute('position');

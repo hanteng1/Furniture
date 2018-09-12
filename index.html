@@ -273,6 +273,11 @@
 						</button>
 
 
+						<button class="ui inverted secondary button" id="operation_Cut">
+								<i class="gamepad icon"></i>
+	    						Cut
+						</button>
+
  					</div>
 
 				</div>
@@ -519,6 +524,20 @@
 			</div>
 		</div>
 
+
+
+		<!--cut tool-->
+		<div class="ui compact parameters" id="parameter_control_tool_cut">
+			<div class="ui labeled icon menu" >
+			 
+				<a class="item ui image label cut vertical">
+					<img src="/images/material/addbetween/rod.jpg">
+					Cut
+				</a>
+
+			</div>
+		</div>
+
 		<!--Add tool-->
 		<div class="ui compact parameters" id="parameter_control_tool_add">
 			<div class="ui labeled icon menu" >
@@ -695,9 +714,11 @@
 				gl_FragColor.a = 1.0;
 			}
 		</script>
+		
 		-->
 
 
+		
 		<script type="x-shader/x-vertex" id="vertexShader">
 			varying vec3 vWorldPosition;
 			void main() {
@@ -718,6 +739,7 @@
 				gl_FragColor = vec4( mix( bottomColor, topColor, max( pow( max( h, 0.0 ), exponent ), 0.0 ) ), 1.0 );
 			}
 		</script>
+		
 
 		<script type="text/javascript" src="js/bundle.js"></script>
 		<!--<script type="text/javascript" src="js/Main.js"></script>-->
