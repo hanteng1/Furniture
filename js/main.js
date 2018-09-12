@@ -615,14 +615,24 @@ Main.prototype = {
 				this.mouse.y = - ( event.clientY / window.innerHeight ) * 2 + 1;
 				var raycaster = new THREE.Raycaster();
 				raycaster.setFromCamera( this.mouse, this.camera );
-				var intersects = raycaster.intersectObject(this.processor.model_add.selectFurniture);
+				var intersects = raycaster.intersectObjects(this.processor.model_add.selectFurniture.children);
 				if(intersects.length > 0){
 					var pos = intersects[0].point;
-					// this.processor.model_add.mousePoint.position.set(pos.x, pos.y, pos.z);
-					this.processor.model_add.updateObjectPosition(pos);					
+					var furniture = intersects[0].object;
+					var normalVector = intersects[0].face.normal;
+					var isInsidePoint = this.processor.model_add.checkInsidePosint(this.processor.model_add.selectFurniture, pos);
+					if(isInsidePoint){
+						console.log("inside position");
+						this.processor.model_add.insideCase(furniture, pos, normalVector);
+					}
+					else{
+						// console.log("outside position");
+						var worldNormalVector = this.processor.model_add.getFurnitureNormalVectorToWorldVector(furniture, normalVector);
+						this.processor.model_add.updateObjectPosition(pos, worldNormalVector);
+					}
 				}
 				else
-					console.log("miss");
+					console.log("mousemove miss");
 			}
 		}
 		else if(this.SelectComponent == true){
@@ -1234,7 +1244,43 @@ Main.prototype = {
 						this.GetSizeObj = [];
 						this.GetSizeObj.push( this.furniture.getFurniture() );
 						$('.ui.blue.submit.button.getsize').show();
+
+						//-----------------Add Model----------------------------
 						
+						if( this.processor.model_add !== undefined){
+							if(!this.processor.model_add.isCreateObject){
+								console.log("hit");
+								var furniture = this.furniture.getFurniture();
+								this.processor.model_add.selectFurnitureUUID = furniture.uuid;
+								this.processor.model_add.selectFurniture = furniture;
+								if(this.processor.model_add.selectObjectName != ""){
+									console.log("create a new " + this.processor.model_add.selectObjectName);
+									this.processor.model_add.createObject();
+								}
+								else
+									console.log("No object need to create");
+							}
+							else{
+								// furniture change
+
+								if(this.processor.model_add.selectFurniture != this.furniture.getFurniture()){
+									var furniture = this.furniture.getFurniture();
+									this.processor.model_add.selectFurnitureUUID = furniture.uuid;
+									this.processor.model_add.selectFurniture = furniture;
+								}
+								else{
+									this.processor.model_add.isCreateObject = false;
+									var furniture = this.processor.model_add.selectFurniture;
+									var obj = this.processor.model_add.selectObject;
+									var pos = obj.position.clone ();
+									this.processor.model_add.objectAddToFurniture(furniture, obj, pos);
+									console.log("add success");
+									this.processor.model_add.selectFurnitureUUID = "";
+									this.processor.model_add.selectObjectName = "";
+								}
+							}
+						}
+						//-----------------Add Model----------------------------
 
 						break;
 					} else {
@@ -1246,6 +1292,7 @@ Main.prototype = {
 						this.GetSizeObj = [];
 						$('.ui.blue.submit.button.getsize').hide();
 						//this.RemoveSizeLabel();
+						
 					}
 				}
 				
@@ -1305,11 +1352,7 @@ Main.prototype = {
 						this.GetSizeObj.push(object);
 						$('.ui.blue.submit.button.getsize').show();
 
-						//---------------Add Model------------------
-						if( this.processor.model_add !== undefined){
-							if(this.processor.model_add.selectObjectName != "")
-								this.processor.model_add.select(object);
-						}
+						
 
 					}
 				} else {
@@ -1317,11 +1360,7 @@ Main.prototype = {
 					this.select( null );
 				}
 
-				//---------------Add Model------------------
-				if( this.processor.model_add !== undefined){
-					if(this.processor.model_add.selectObjectName != "")
-						this.processor.model_add.selectPlane(this.mouse, this.camera, this.onUpPosition);
-				}
+				
 
 			}
 			//select two obj for getting distance
@@ -1473,7 +1512,6 @@ Main.prototype = {
 			// console.log("no furniture");
 			this.customControl.switchView2FP();
 		}
-
 	},
 
 	onKeyDown: function(event) {
@@ -1582,44 +1620,9 @@ Main.prototype = {
 		{
 			this.onCtrlE = false;
 
-			//-------------Add Model----------------------
-			if( this.processor.model_add !== undefined){
-				if(this.processor.model_add.selectObjectName != "")
-					var bef = this.processor.model_add.getPartCenter(this.processor.model_add.selectFurniture);
-			}
-
 			//disable explosion view 
 			if(this.furniture  != null )
 				this.collapse(this.furniture);
-
-
-			//-------------Add Model----------------------
-			if( this.processor.model_add !== undefined){
-				if(this.processor.model_add.isCreateObject){
-					var aft = this.processor.model_add.getPartCenter(this.processor.model_add.selectFurniture);				
-					var offset = new THREE.Vector3( aft.x - bef.x, aft.y - bef.y, aft.z - bef.z);
-					var obj = [];
-					for (var i = 0; i < this.scene.children.length; i++) {
-						if(this.scene.children[i].name == this.processor.model_add.selectObjectName)
-							obj.push(this.scene.children[i]);
-					}
-
-					for (var i = 0; i < obj.length; i++) {
-						obj[i].position.x = parseFloat(obj[i].position.x) + parseFloat(offset.x);
-						obj[i].position.y = parseFloat(obj[i].position.y) + parseFloat(offset.y);
-						obj[i].position.z = parseFloat(obj[i].position.z) + parseFloat(offset.z);
-					}
-
-					var furniture = this.processor.model_add.selectFurniture;
-					while(furniture.parent.uuid != this.scene.uuid)
-						furniture = furniture.parent;
-
-					for (var i = 0; i < obj.length; i++) {
-						var pos = new THREE.Vector3(obj[i].position.x, obj[i].position.y, obj[i].position.z);
-						this.processor.model_add.objectAddToFurniture(furniture, obj[i], pos);					
-					}
-				}
-			}
 
 			if(this.selectionBoxes.length > 0)
 			{
@@ -1665,18 +1668,7 @@ Main.prototype = {
 			
 			this.RemoveSizeLabel();
 
-			//----------------------Add Model---------------------------
-			//when "E" Up
-			if( this.processor.model_add !== undefined){
-				if(this.processor.model_add.isCreateObject){
-					this.processor.model_add.deleteSelectBox(this.scene);
-					this.processor.model_add.selectObjectName = "";
-					// this.processor.model_add.mousePoint.position.set(1000, 0, 0);
-					this.processor.model_add.selectFurnitureUUID = "";
-		    		this.processor.model_add.hasSelectBox = false;
-		    		this.processor.model_add.isCreateObject = false;
-	    		}
-			}
+			
 
 		}else {
 
