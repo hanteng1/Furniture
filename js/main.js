@@ -24,6 +24,8 @@ const cadCutByPlane = require('./cadCutByPlane')
 const MarkSize = require('./MarkSize')
 const MarkBetweenSize = require('./MarkBetweenSize')
 const cadMakeRod = require('./cadMakeRod')
+const {Model_AddBetween , AddRodMousePosi1, AddRodMousePosi2,
+	SelectFurniComponent, SelectFurni} = require('./Model_AddBetween')
 //Wei Hsiang end
 
 function Main()
@@ -31,9 +33,10 @@ function Main()
 
 	//category
 	//todo: an floating window to select category
-	//this.category = "chair";
+	this.category0 = "";
+	this.category = "";
 	//this.category = "cabinet";
-	this.category = "tool";
+	//this.category = "tool";
 
 	//only stores data
 	this.container = document.getElementById('container');
@@ -99,13 +102,17 @@ function Main()
 	this.stepNumber = 0;
 
 	//select the single component
-	this.SelectComponent = false;
+	this.Addrod = false;
 	//the selected single component 
 	this.component = null;
 	//the select point
 	this.pointball = null;
 	this.fixpointball = false;
 	this.intersectpoint = null;
+
+
+	this.cutplane = null;
+	this.fixcutplane = false;
 
 
 	//this is to store the furnitures before any chance
@@ -119,6 +126,10 @@ function Main()
 
 	//for explode vectors
 	this.explodeVectors = [];
+
+	//this is used only for adding normal rotations
+	this.explodeVectorsCorrected = [];
+
 	this.selectedIds = [];
 	this.objCenter = new THREE.Vector3();
 	//for multi selection
@@ -230,15 +241,15 @@ Main.prototype = {
 		//this.customControl.enablePan = true;
 		//this.customControl.target.set(0, 0.5, - 0.2);
 
-		this.customControl.lookSpeed = 0.05;
-        this.customControl.movementSpeed = 20;
-        this.customControl.noFly = true;
-        this.customControl.lookVertical = true;
-        this.customControl.constrainVertical = true;
-        this.customControl.verticalMin = 1.0;
-        this.customControl.verticalMax = 2.0;
-        this.customControl.lon = -110;
-        this.customControl.lat = -50;
+		// this.customControl.lookSpeed = 0.05;
+  //       this.customControl.movementSpeed = 20;
+  //       this.customControl.noFly = true;
+  //       this.customControl.lookVertical = true;
+  //       this.customControl.constrainVertical = true;
+  //       this.customControl.verticalMin = 1.0;
+  //       this.customControl.verticalMax = 2.0;
+  //       this.customControl.lon = -110;
+  //       this.customControl.lat = -50;
 
 
 		this.transformControls = new THREE.TransformControls(this.camera, this.renderer.domElement);
@@ -609,7 +620,7 @@ Main.prototype = {
 	//-----------------------------------Add Model--------------------------
 	onMouseMove: function ( event ) {
 
-		if( this.processor.model_add !== undefined && this.SelectComponent == false){
+		if( this.processor.model_add !== undefined && this.Addrod == false){
 			if(this.processor.model_add.isCreateObject){
 				this.mouse.x = ( event.clientX / window.innerWidth ) * 2 - 1;
 				this.mouse.y = - ( event.clientY / window.innerHeight ) * 2 + 1;
@@ -634,28 +645,15 @@ Main.prototype = {
 				else
 					console.log("mousemove miss");
 			}
+		}//if want to add rod
+		else if(this.Addrod == true){
+			//select the adding position in select position
+			if( this.onCtrl == false )
+				AddRodMousePosi1(this);
+			if( this.onCtrl == true )
+				AddRodMousePosi2(this);
 		}
-		else if(this.SelectComponent == true){
-			if (this.component != null){
-				this.mouse.x = ( event.clientX / window.innerWidth ) * 2 - 1;
-				this.mouse.y = - ( event.clientY / window.innerHeight ) * 2 + 1;
-				var raycaster = new THREE.Raycaster();
-				raycaster.setFromCamera( this.mouse, this.camera );
-				var intersects = raycaster.intersectObject(this.component);
-				if(intersects.length > 0){
-					this.intersectpoint = intersects[0];
-					var pos = intersects[0].point;
-					//console.log(this.intersectpoint.face.normal);
-					if(this.fixpointball==false)
-						this.pointball.position.set( pos.x, pos.y, pos.z );					
-					//console.log(pos);
-				}
-				else{
-					//console.log("miss");
-				}
-			}
-			
-		}
+		//else if(this.onCtrl == true)
 	},
 
 	preAddObject: function(object) {
@@ -1011,6 +1009,16 @@ Main.prototype = {
 		return center;
 	},
 
+	getSize: function(object) {
+		var box = new THREE.Box3();
+		box.setFromObject(object);
+		var box_size = new THREE.Vector3();
+		box.getSize(box_size);
+
+		//this includes width, height, depth
+		return box_size;
+	},
+
 	explode: function(furniture){
 		this.select(null);
 
@@ -1020,8 +1028,12 @@ Main.prototype = {
 		//console.log(this.objCenter);
 		
 		this.explodeVectors = [];
+		this.explodeVectorsCorrected  = [];
 		this.selectedIds = [];
 		var objects = furniture.getObjects(); //get the children objs
+
+		var lowestHeight = 0;
+
 		for(var i = 0; i < objects.length; i++)  //objects.length
 		{
 			var elmCenter = this.getCenterPoint(objects[i]);
@@ -1032,8 +1044,27 @@ Main.prototype = {
 			
 			var subVector = new THREE.Vector3();
 			subVector.subVectors(elmCenter, this.objCenter);
-			subVector.multiplyScalar(2);
+			subVector.multiplyScalar(1);
+
+			//attention to the rotations
 			this.explodeVectors.push(subVector.clone());
+			
+			var elmQuaternion = new THREE.Quaternion();
+			var elmPosition = new THREE.Vector3();
+			var elmScale = new THREE.Vector3();
+			objects[i].matrixWorld.decompose(elmPosition, elmQuaternion, elmScale);
+
+
+			subVector.divide(elmScale);
+			//console.log(elmScale);
+
+			var inverseQuaternion = new THREE.Quaternion();
+			inverseQuaternion.copy(elmQuaternion);
+			inverseQuaternion.inverse();
+			subVector.applyQuaternion(inverseQuaternion);
+
+			this.explodeVectorsCorrected.push(subVector.clone());
+
 
 			objects[i].translateX(subVector.x);
 			objects[i].translateY(subVector.y);
@@ -1046,7 +1077,53 @@ Main.prototype = {
 			// 	console.log(elmCenter);
 			// }
 
+			//get lowest y
+			elmCenter = this.getCenterPoint(objects[i]);
+			var elmSize = this.getSize(objects[i]);
+
+			var bottomHeight = elmCenter.y - elmSize.y/2;
+
+			if(bottomHeight < lowestHeight){
+				lowestHeight = bottomHeight;
+			}
 		}
+
+
+		//position above 0
+
+		//console.log(lowestHeight);
+
+		if(lowestHeight < 0)
+		{
+			for(var i = 0; i < objects.length; i++)
+			{
+				
+				var additionalVec = new THREE.Vector3(0, Math.abs(lowestHeight), 0);
+				this.explodeVectors[i].add(additionalVec.clone());
+
+				var elmQuaternion = new THREE.Quaternion();
+				var elmPosition = new THREE.Vector3();
+				var elmScale = new THREE.Vector3();
+				objects[i].matrixWorld.decompose(elmPosition, elmQuaternion, elmScale);
+
+				//there might be a problem is the object is not evently scaled
+				additionalVec.divide(elmScale);
+
+				var inverseQuaternion = new THREE.Quaternion();
+				inverseQuaternion.copy(elmQuaternion);
+				inverseQuaternion.inverse();
+				additionalVec.applyQuaternion(inverseQuaternion);
+
+				this.explodeVectorsCorrected[i].add(additionalVec.clone());
+
+
+				objects[i].translateX(additionalVec.x);
+				objects[i].translateY(additionalVec.y);
+				objects[i].translateZ(additionalVec.z);
+
+			}
+		}
+
 		
 	},
 
@@ -1056,14 +1133,51 @@ Main.prototype = {
 		if(this.explodeVectors.length != objects.length)
 			return;
 
-		for(var i = 0; i < objects.length; i++)
+
+		if(furniture.hasNormalRotation == true) 
 		{
-			var subVector = this.explodeVectors[i];
-			subVector.negate();
-			objects[i].translateX(subVector.x);
-			objects[i].translateY(subVector.y);
-			objects[i].translateZ(subVector.z);
+
+			for(var i = 0; i < objects.length; i++)
+			{
+				var subVector = this.explodeVectorsCorrected[i];
+				subVector.negate();
+
+				objects[i].translateX(subVector.x);
+				objects[i].translateY(subVector.y);
+				objects[i].translateZ(subVector.z);
+			}
+
+
+			furniture.hasNormalRotation = false;
+
+		}else{
+			for(var i = 0; i < objects.length; i++)
+			{
+				var subVector = this.explodeVectors[i];
+				subVector.negate();
+
+				//attention
+				var elmQuaternion = new THREE.Quaternion();
+				var elmPosition = new THREE.Vector3();
+				var elmScale = new THREE.Vector3();
+				objects[i].matrixWorld.decompose(elmPosition, elmQuaternion, elmScale);
+				//console.log(elmScale);
+
+				subVector.divide(elmScale);
+
+				var inverseQuaternion = new THREE.Quaternion();
+				inverseQuaternion.copy(elmQuaternion);
+				inverseQuaternion.inverse();
+				subVector.applyQuaternion(inverseQuaternion);
+				
+
+				objects[i].translateX(subVector.x);
+				objects[i].translateY(subVector.y);
+				objects[i].translateZ(subVector.z);
+			}
 		}
+					
+		this.explodeVectorsCorrected  = [];
 		this.explodeVectors = [];
 	},
 
@@ -1093,6 +1207,20 @@ Main.prototype = {
 			selectedIndices.push(objects.indexOf(childObj));
 			var subVector = this.explodeVectors[ objects.indexOf(childObj) ];
 			subVector.negate();
+
+			//attention
+			var elmQuaternion = new THREE.Quaternion();
+			var elmPosition = new THREE.Vector3();
+			var elmScale = new THREE.Vector3();
+			childObj.matrixWorld.decompose(elmPosition, elmQuaternion, elmScale);
+
+			subVector.divide(elmScale);
+
+			var inverseQuaternion = new THREE.Quaternion();
+			inverseQuaternion.copy(elmQuaternion);
+			inverseQuaternion.inverse();
+			subVector.applyQuaternion(inverseQuaternion);
+
 			childObj.translateX(subVector.x);
 			childObj.translateY(subVector.y);
 			childObj.translateZ(subVector.z);
@@ -1226,7 +1354,7 @@ Main.prototype = {
 		if ( this.onDownPosition.distanceTo( this.onUpPosition ) === 0 ) {
 
 			if(this.onCtrlE == false && this.onCtrl == false 
-				&& this.SelectComponent == false) {
+				&& this.Addrod == false) {
 
 				var objselect = true;
 				//only select the furniture
@@ -1332,7 +1460,7 @@ Main.prototype = {
 
 
 			}else if (this.onCtrlE == true && this.onCtrl == false
-				&& this.SelectComponent == false){
+				&& this.Addrod == false){
 				//select from explode objects, this.furniture should not be null
 				var intersects = this.getIntersects( this.onUpPosition, this.furniture.getObjects());
 
@@ -1364,7 +1492,7 @@ Main.prototype = {
 
 			}
 			//select two obj for getting distance
-			else if(this.onCtrl == true && this.SelectComponent == false){
+			else if(this.onCtrl == true && this.Addrod == false){
 				//console.log('select two');
 				var objselect = true;
 				//only select the furniture
@@ -1405,30 +1533,11 @@ Main.prototype = {
 
 			}
 			//select the furniture component for select the adding position
-			else if( this.SelectComponent == true){
-				
-				var intersects = this.getIntersects( this.onUpPosition, this.furniture.getObjects());
-
-				if ( intersects.length > 0 ) {
-
-					var object = intersects[ 0 ].object;
-					//if select the same component, record the click position
-					if(this.component == object){
-						this.fixpointball = true;
-						this.AddRod();
-					}
-
-					if ( object.userData.object !== undefined ) {
-						this.select( object.userData.object );
-						this.component = object.userData.object;
-					} else {
-						this.select( object );
-						this.component = object;
-					}
-				} else {
-					//it also calls select, to detach
-					this.select( null );
-				}
+			else if( this.Addrod == true){
+				if(this.onCtrl == false)
+					SelectFurniComponent(this);
+				else
+					SelectFurni(this);
 			}
 		}
 	},
@@ -1840,6 +1949,7 @@ Main.prototype = {
 		$('.operations.operation_desk').hide();
 		$('.operations.operation_table').hide();
 		$('#parameter_control_tool_addbetween').hide();
+		$('#AddRodInput').hide();
 
 		this.furnitures.length = 0;	
 
@@ -1948,6 +2058,7 @@ Main.prototype = {
 		$('.operations.operation_desk').hide();
 		$('.operations.operation_table').hide();
 		$('#parameter_control_tool_addbetween').hide();
+		$('#AddRodInput').hide();
 
 		this.processor.init();
 		//this.processor.executeDesign();
@@ -2099,17 +2210,23 @@ Main.prototype = {
     },
 
     //creat the rod in intersection point
-    AddRod: function(){
+    AddRodFunc: function(){
     	//get the point's normal vector
     	var addvector = this.intersectpoint.face.normal;
+    	//set normal vector from local to world
     	var normalMatrix = new THREE.Matrix3().getNormalMatrix( this.intersectpoint.object.matrixWorld );
     	addvector = addvector.clone().applyMatrix3( normalMatrix ).normalize();
     	//set the point position
     	var original  = new THREE.Vector3().addVectors(this.pointball.position,addvector);
     	//set the raycaster from point and normal vector
     	var Raycaster = new THREE.Raycaster( original, addvector );
+    	var intersects;
     	//get the intersects from raycaster
-    	var intersects = Raycaster.intersectObjects ( this.furniture.getObjects(), true);
+    	if(this.onCtrl == false)
+    		intersects = Raycaster.intersectObjects ( this.furniture.getObjects(), true);
+    	if(this.onCtrl == true )
+    		intersects = Raycaster.intersectObjects ( this.DistanceObj , true);
+    	
     	//if get intersections
     	if (intersects.length>0){
     		var pos =  intersects[0].point;
@@ -2132,27 +2249,18 @@ Main.prototype = {
     			this.furniture.getFurniture(), rod, newPosi);
     		this.furniture.getFurniture().worldToLocal(pos);
     		rod.lookAt(pos);
-    		/*
-    		var newPosi = rod.position.clone();
-    		var group = this.furniture.getFurniture();
-    		var inverseMatrix = new THREE.Matrix4();
-			inverseMatrix.getInverse(group.matrixWorld, true);
-			rod.applyMatrix(inverseMatrix);
 
-			group.worldToLocal(newPosi);
-			group.add(rod);
-			rod.position.set( newPosi.x, newPosi.y, newPosi.z );
-			*/
     		this.selectionBox.visible = false;
 			this.transformControls.detach();
 			this.furniture = null;
-    		this.SelectComponent = false;
+    		this.Addrod = false;
     		this.component = null;
     		this.intersectpoint = null;
     		this.fixpointball = false;
     		this.scene.remove(this.pointball);
     		this.pointball = null;
-
+    		$('#AddRodInput').hide();
+    		document.getElementById('InputRodRadius').value = "";
     	}
     	else{//if don't get
     		alert('position err');

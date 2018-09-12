@@ -6915,24 +6915,38 @@ function Model_AddBetween( main ){
     var scope = this;
     
     $( ".item.ui.image.label.addbetween.rod" ).click(function() {
-        console.log('AddRod');
+        
         //check select furniture or not
-        if(scope.main.furniture == null){
+        if(scope.main.furniture == null && 
+        	scope.main.onCtrl == false){
         	alert('Please select the furniture first');
         	return;
         }
-        scope.main.SelectComponent = true;
+        //check user selected furniture number if they want to
+        //select two furniture
+        if(scope.main.onCtrl == true && 
+        	scope.main.DistanceObj.length != 2 ){
+        	alert('Please select two furniture ');
+        	return;
+        }
+
+        scope.main.Addrod = true;
         //add the point ball to scene
-        var geometry = new THREE.SphereGeometry( 0.1 );
-		var material = new THREE.MeshBasicMaterial( {color: 0xff0000} );
-		var sphere = new THREE.Mesh( geometry, material );
-		scope.main.pointball = sphere;
-		scope.main.scene.add( sphere );
+        
+        if(scope.main.pointball == null){
+        	var geometry = new THREE.CylinderGeometry( 0.1, 0.1, 0.01, 32 );;
+			var material = new THREE.MeshBasicMaterial( {color: 0xff0000} );
+			scope.main.pointball = new THREE.Mesh( geometry, material );
+			scope.main.scene.add( scope.main.pointball );
+        }
+
+        $('#AddRodInput').show();
     	scope.main.component = null;
     	scope.main.intersectpoint = null;
     	scope.main.fixpointball = false;
         
     });
+    	
     
 }
 Model_AddBetween.prototype = {
@@ -6956,7 +6970,18 @@ Model_AddBetween.prototype = {
         }
         else if(this.addbetween_mode == true || name!= 'addbetween'){
             $('#parameter_control_tool_addbetween').hide();
+            $('#AddRodInput').hide();
+            document.getElementById('InputRodRadius').value = "";
+            this.main.component = null;
+    		this.main.intersectpoint = null;
+    		this.main.fixpointball = false;
+            this.main.Addrod = false;
             this.addbetween_mode = false;
+            if(this.main.pointball != null)
+            	this.main.scene.remove(this.main.pointball);
+            this.main.pointball = null;
+            this.main.selectionBox.visible = false;
+			this.main.transformControls.detach();
         }
         
 
@@ -6978,11 +7003,129 @@ Model_AddBetween.prototype = {
         }
     }
 
-
-
+}
+//add rod inside the furniture
+function AddRodMousePosi1(main){
+	//if user not select the furniture component, return
+	if (main.component == null){
+		return;
+	}
+	main.mouse.x = ( event.clientX / window.innerWidth ) * 2 - 1;
+	main.mouse.y = - ( event.clientY / window.innerHeight ) * 2 + 1;
+	var raycaster = new THREE.Raycaster();
+	raycaster.setFromCamera( main.mouse, main.camera );
+	var intersects = raycaster.intersectObject(main.component);
+	if(intersects.length > 0){
+		main.intersectpoint = intersects[0];
+		var pos = intersects[0].point;
+		//let the red point move to mouse position
+		if(main.fixpointball==false){
+			main.pointball.position.set( pos.x, pos.y, pos.z );
+			//set normal vector from local to world
+			var normalMatrix = new THREE.Matrix3().getNormalMatrix( main.intersectpoint.object.matrixWorld );
+			var normal = intersects[0].face.normal
+			normal = normal.clone().applyMatrix3( normalMatrix ).normalize();
+			//rotate the point
+			var newDir = new THREE.Vector3().addVectors(pos, normal);
+			main.pointball.lookAt( newDir );
+			main.pointball.rotateX(90* Math.PI/180);
+			var radius = document.getElementById('InputRodRadius').value;
+			if(radius == "")
+				main.pointball.scale.set(2.0, 1, 2.0);
+			else
+				main.pointball.scale.set(parseFloat(radius), 1, parseFloat(radius));
+		}
+		//console.log(pos);
+	}
+	else{
+		//console.log("miss");
+	}
+	
 
 }
-module.exports = Model_AddBetween
+//add rod inside the furniture
+function AddRodMousePosi2(main){
+	
+	main.mouse.x = ( event.clientX / window.innerWidth ) * 2 - 1;
+	main.mouse.y = - ( event.clientY / window.innerHeight ) * 2 + 1;
+	var raycaster = new THREE.Raycaster();
+	raycaster.setFromCamera( main.mouse, main.camera );
+	//select the adding position from these two furnitures
+	var intersects = raycaster.intersectObjects(main.DistanceObj , true);
+
+	if(intersects.length > 0){
+		main.intersectpoint = intersects[0];
+		var pos = intersects[0].point;
+		//let the red point move to mouse position
+		if(main.fixpointball==false){
+			main.pointball.position.set( pos.x, pos.y, pos.z );
+			//set normal vector from local to world
+			var normalMatrix = new THREE.Matrix3().getNormalMatrix( main.intersectpoint.object.matrixWorld );
+			var normal = intersects[0].face.normal
+			normal = normal.clone().applyMatrix3( normalMatrix ).normalize();
+			//rotate the point
+			var newDir = new THREE.Vector3().addVectors(pos, normal);
+			main.pointball.lookAt( newDir );
+			main.pointball.rotateX(90* Math.PI/180);
+			var radius = document.getElementById('InputRodRadius').value;
+			if(radius == "")
+				main.pointball.scale.set(2.0, 1, 2.0);
+			else
+				main.pointball.scale.set(parseFloat(radius), 1, parseFloat(radius));
+		}
+		//console.log(pos);
+	}
+	else{
+		//console.log("miss");
+	}
+	
+
+}
+//select furniture component to add rod
+function SelectFurniComponent(main){
+
+	var intersects = main.getIntersects( main.onUpPosition, main.furniture.getObjects());
+
+	if ( intersects.length > 0 ) {
+
+		var object = intersects[ 0 ].object;
+		//if select the same component, record the click position
+		if(main.component == object){
+			main.fixpointball = true;
+			main.AddRodFunc();
+		}
+
+		if ( object.userData.object !== undefined ) {
+			main.select( object.userData.object );
+			main.component = object.userData.object;
+		} else {
+			main.select( object );
+			main.component = object;
+		}
+	} else {
+		//it also calls select, to detach
+		main.select( null );
+	}
+
+}
+//select furniture to add rod
+function SelectFurni(main){
+	
+	for(var i = 0; i < main.DistanceObj.length; i++) {
+		var intersects = main.getIntersect( main.onUpPosition, 
+											main.DistanceObj[i]);
+		if ( intersects.length > 0 ) {
+
+			main.fixpointball = true;
+			main.AddRodFunc();
+			break;
+		}
+	}
+
+}
+
+module.exports = {Model_AddBetween , AddRodMousePosi1, AddRodMousePosi2,
+				 SelectFurniComponent, SelectFurni}
 
 
 },{"./Procedure_button":32}],28:[function(require,module,exports){
@@ -7670,6 +7813,7 @@ Model_wrap.prototype = {
         
 
 	},
+
 	Wrap: function( model , texture ){
 		//console.log(model.geometry);
 		
@@ -7684,7 +7828,10 @@ Model_wrap.prototype = {
 													bottom_to_top[0], bottom_to_top[1] );
 		
 		var material = new THREE.MeshBasicMaterial( {map: texture,
-        wireframe: false} );
+        	wireframe: false} );
+
+		//var material = new THREE.MeshBasicMaterial( {wireframe: true} );
+		
 		
 		var backRest = new THREE.Mesh( geometry, material );
 		this.main.WrapObject.push(backRest);
@@ -8192,7 +8339,12 @@ const Model_wrap = require('./Model_wrap');
 const Model_Rotation = require('./Model_Rotation');
 const Model_Align = require('./Model_Align');
 const Model_Add = require('./Model_Add');
+<<<<<<< HEAD
+const {Model_AddBetween , AddRodMousePosi1, AddRodMousePosi2,
+	SelectFurniComponent, SelectFurni} = require('./Model_AddBetween');
+=======
 const Model_AddBetween = require('./Model_AddBetween');
+>>>>>>> master
 
 
 function Processor(main) {
@@ -8205,8 +8357,6 @@ function Processor(main) {
 	//chair
 	this.chair_align = undefined;
 	
-
-
 
 	this.transformFunctions = { };
 
@@ -8252,7 +8402,7 @@ Processor.prototype = {
 		var scope = this;
 
 
-		switch(scope.category){
+		switch(this.main.category){
 
 			case "chair" :
 				if(scope.furnitures.length == 0) {
@@ -8315,7 +8465,6 @@ Processor.prototype = {
 					}
 
 					
-
 				}else if( scope.furnitures.length > 1) {
 					//possible actions with many furnitures
 
@@ -9503,12 +9652,10 @@ function cadExtrudeShapeIntersection ( shape1, path1, shape2, path2, shape3, pat
 	var result = intersection( geo1 , geo2 );
 	result = intersection( result , geo3 );
 
+	result = result.expand(0.2, 8);
+
 	var geometry = csgToGeometries(result)[0];
 	
-	//var obj = geometryToCsgs(geometry);
-	//obj = obj[0].expand(0.2, 3);
-
-	//geometry = csgToGeometries(obj)[0];
 	geometry = new THREE.Geometry().fromBufferGeometry( geometry );
     
     assignUVs(geometry);
@@ -9572,8 +9719,16 @@ const {translate, rotate} = scadApi.transformations
 const csgToGeometries = require('./csgToGeometries')
 
 function cadMakeRod( length ){
+    var radius;
+    if (document.getElementById('InputRodRadius').value == ""){
+        radius = 0.2;
+    }
+    else{
+        radius = parseFloat(document.getElementById('InputRodRadius').value);
+        radius = radius/10;
+    }
 
-	var rod = cylinder({r: 0.25, h: length}); 
+	var rod = cylinder({r: radius, h: length}); 
 
 	var geometry = csgToGeometries(rod)[0];
 
@@ -10578,6 +10733,8 @@ const cadCutByPlane = require('./cadCutByPlane')
 const MarkSize = require('./MarkSize')
 const MarkBetweenSize = require('./MarkBetweenSize')
 const cadMakeRod = require('./cadMakeRod')
+const {Model_AddBetween , AddRodMousePosi1, AddRodMousePosi2,
+	SelectFurniComponent, SelectFurni} = require('./Model_AddBetween')
 //Wei Hsiang end
 
 function Main()
@@ -10585,9 +10742,10 @@ function Main()
 
 	//category
 	//todo: an floating window to select category
-	//this.category = "chair";
+	this.category0 = "";
+	this.category = "";
 	//this.category = "cabinet";
-	this.category = "tool";
+	//this.category = "tool";
 
 	//only stores data
 	this.container = document.getElementById('container');
@@ -10653,7 +10811,7 @@ function Main()
 	this.stepNumber = 0;
 
 	//select the single component
-	this.SelectComponent = false;
+	this.Addrod = false;
 	//the selected single component 
 	this.component = null;
 	//the select point
@@ -10673,6 +10831,10 @@ function Main()
 
 	//for explode vectors
 	this.explodeVectors = [];
+
+	//this is used only for adding normal rotations
+	this.explodeVectorsCorrected = [];
+
 	this.selectedIds = [];
 	this.objCenter = new THREE.Vector3();
 	//for multi selection
@@ -10784,15 +10946,15 @@ Main.prototype = {
 		//this.customControl.enablePan = true;
 		//this.customControl.target.set(0, 0.5, - 0.2);
 
-		this.customControl.lookSpeed = 0.05;
-        this.customControl.movementSpeed = 20;
-        this.customControl.noFly = true;
-        this.customControl.lookVertical = true;
-        this.customControl.constrainVertical = true;
-        this.customControl.verticalMin = 1.0;
-        this.customControl.verticalMax = 2.0;
-        this.customControl.lon = -110;
-        this.customControl.lat = -50;
+		// this.customControl.lookSpeed = 0.05;
+  //       this.customControl.movementSpeed = 20;
+  //       this.customControl.noFly = true;
+  //       this.customControl.lookVertical = true;
+  //       this.customControl.constrainVertical = true;
+  //       this.customControl.verticalMin = 1.0;
+  //       this.customControl.verticalMax = 2.0;
+  //       this.customControl.lon = -110;
+  //       this.customControl.lat = -50;
 
 
 		this.transformControls = new THREE.TransformControls(this.camera, this.renderer.domElement);
@@ -11163,7 +11325,7 @@ Main.prototype = {
 	//-----------------------------------Add Model--------------------------
 	onMouseMove: function ( event ) {
 
-		if( this.processor.model_add !== undefined && this.SelectComponent == false){
+		if( this.processor.model_add !== undefined && this.Addrod == false){
 			if(this.processor.model_add.isCreateObject){
 				this.mouse.x = ( event.clientX / window.innerWidth ) * 2 - 1;
 				this.mouse.y = - ( event.clientY / window.innerHeight ) * 2 + 1;
@@ -11188,28 +11350,15 @@ Main.prototype = {
 				else
 					console.log("mousemove miss");
 			}
+		}//if want to add rod
+		else if(this.Addrod == true){
+			//select the adding position in select position
+			if( this.onCtrl == false )
+				AddRodMousePosi1(this);
+			if( this.onCtrl == true )
+				AddRodMousePosi2(this);
 		}
-		else if(this.SelectComponent == true){
-			if (this.component != null){
-				this.mouse.x = ( event.clientX / window.innerWidth ) * 2 - 1;
-				this.mouse.y = - ( event.clientY / window.innerHeight ) * 2 + 1;
-				var raycaster = new THREE.Raycaster();
-				raycaster.setFromCamera( this.mouse, this.camera );
-				var intersects = raycaster.intersectObject(this.component);
-				if(intersects.length > 0){
-					this.intersectpoint = intersects[0];
-					var pos = intersects[0].point;
-					//console.log(this.intersectpoint.face.normal);
-					if(this.fixpointball==false)
-						this.pointball.position.set( pos.x, pos.y, pos.z );					
-					//console.log(pos);
-				}
-				else{
-					//console.log("miss");
-				}
-			}
-			
-		}
+		//else if(this.onCtrl == true)
 	},
 
 	preAddObject: function(object) {
@@ -11565,6 +11714,16 @@ Main.prototype = {
 		return center;
 	},
 
+	getSize: function(object) {
+		var box = new THREE.Box3();
+		box.setFromObject(object);
+		var box_size = new THREE.Vector3();
+		box.getSize(box_size);
+
+		//this includes width, height, depth
+		return box_size;
+	},
+
 	explode: function(furniture){
 		this.select(null);
 
@@ -11574,8 +11733,12 @@ Main.prototype = {
 		//console.log(this.objCenter);
 		
 		this.explodeVectors = [];
+		this.explodeVectorsCorrected  = [];
 		this.selectedIds = [];
 		var objects = furniture.getObjects(); //get the children objs
+
+		var lowestHeight = 0;
+
 		for(var i = 0; i < objects.length; i++)  //objects.length
 		{
 			var elmCenter = this.getCenterPoint(objects[i]);
@@ -11586,8 +11749,45 @@ Main.prototype = {
 			
 			var subVector = new THREE.Vector3();
 			subVector.subVectors(elmCenter, this.objCenter);
+<<<<<<< HEAD
 			subVector.multiplyScalar(2);
+
+			//attention to the rotations
+			
+			var elmQuaternion = new THREE.Quaternion();
+			var elmPosition = new THREE.Vector3();
+			var elmScale = new THREE.Vector3();
+			objects[i].matrixWorld.decompose(elmPosition, elmQuaternion, elmScale);
+			//console.log(elmScale);
+
+			var inverseQuaternion = new THREE.Quaternion();
+			inverseQuaternion.copy(elmQuaternion);
+			inverseQuaternion.inverse();
+			subVector.applyQuaternion(inverseQuaternion);
+
+=======
+			subVector.multiplyScalar(1);
+
+			//attention to the rotations
+>>>>>>> master
 			this.explodeVectors.push(subVector.clone());
+			
+			var elmQuaternion = new THREE.Quaternion();
+			var elmPosition = new THREE.Vector3();
+			var elmScale = new THREE.Vector3();
+			objects[i].matrixWorld.decompose(elmPosition, elmQuaternion, elmScale);
+
+
+			subVector.divide(elmScale);
+			//console.log(elmScale);
+
+			var inverseQuaternion = new THREE.Quaternion();
+			inverseQuaternion.copy(elmQuaternion);
+			inverseQuaternion.inverse();
+			subVector.applyQuaternion(inverseQuaternion);
+
+			this.explodeVectorsCorrected.push(subVector.clone());
+
 
 			objects[i].translateX(subVector.x);
 			objects[i].translateY(subVector.y);
@@ -11600,7 +11800,90 @@ Main.prototype = {
 			// 	console.log(elmCenter);
 			// }
 
+			//get lowest y
+			elmCenter = this.getCenterPoint(objects[i]);
+			var elmSize = this.getSize(objects[i]);
+
+			var bottomHeight = elmCenter.y - elmSize.y/2;
+
+			if(bottomHeight < lowestHeight){
+				lowestHeight = bottomHeight;
+			}
+<<<<<<< HEAD
 		}
+
+
+		//position above 0
+
+		//console.log(lowestHeight);
+
+		if(lowestHeight < 0)
+		{
+			for(var i = 0; i < objects.length; i++)
+			{
+				
+				var elmQuaternion = new THREE.Quaternion();
+				var elmPosition = new THREE.Vector3();
+				var elmScale = new THREE.Vector3();
+				objects[i].matrixWorld.decompose(elmPosition, elmQuaternion, elmScale);
+
+				//there might be a problem is the object is not evently scaled
+				var additionalVec = new THREE.Vector3(0, Math.abs(lowestHeight) / elmScale.y, 0);
+
+				var inverseQuaternion = new THREE.Quaternion();
+				inverseQuaternion.copy(elmQuaternion);
+				inverseQuaternion.inverse();
+				additionalVec.applyQuaternion(inverseQuaternion);
+
+				this.explodeVectors[i].add(additionalVec);
+
+				objects[i].translateX(additionalVec.x);
+				objects[i].translateY(additionalVec.y);
+				objects[i].translateZ(additionalVec.z);
+
+			}
+		}
+
+=======
+		}
+
+
+		//position above 0
+
+		//console.log(lowestHeight);
+
+		if(lowestHeight < 0)
+		{
+			for(var i = 0; i < objects.length; i++)
+			{
+				
+				var additionalVec = new THREE.Vector3(0, Math.abs(lowestHeight), 0);
+				this.explodeVectors[i].add(additionalVec.clone());
+
+				var elmQuaternion = new THREE.Quaternion();
+				var elmPosition = new THREE.Vector3();
+				var elmScale = new THREE.Vector3();
+				objects[i].matrixWorld.decompose(elmPosition, elmQuaternion, elmScale);
+
+				//there might be a problem is the object is not evently scaled
+				additionalVec.divide(elmScale);
+
+				var inverseQuaternion = new THREE.Quaternion();
+				inverseQuaternion.copy(elmQuaternion);
+				inverseQuaternion.inverse();
+				additionalVec.applyQuaternion(inverseQuaternion);
+
+				this.explodeVectorsCorrected[i].add(additionalVec.clone());
+
+
+				objects[i].translateX(additionalVec.x);
+				objects[i].translateY(additionalVec.y);
+				objects[i].translateZ(additionalVec.z);
+
+			}
+		}
+
+>>>>>>> master
 		
 	},
 
@@ -11610,14 +11893,51 @@ Main.prototype = {
 		if(this.explodeVectors.length != objects.length)
 			return;
 
-		for(var i = 0; i < objects.length; i++)
+
+		if(furniture.hasNormalRotation == true) 
 		{
-			var subVector = this.explodeVectors[i];
-			subVector.negate();
-			objects[i].translateX(subVector.x);
-			objects[i].translateY(subVector.y);
-			objects[i].translateZ(subVector.z);
+
+			for(var i = 0; i < objects.length; i++)
+			{
+				var subVector = this.explodeVectorsCorrected[i];
+				subVector.negate();
+
+				objects[i].translateX(subVector.x);
+				objects[i].translateY(subVector.y);
+				objects[i].translateZ(subVector.z);
+			}
+
+
+			furniture.hasNormalRotation = false;
+
+		}else{
+			for(var i = 0; i < objects.length; i++)
+			{
+				var subVector = this.explodeVectors[i];
+				subVector.negate();
+
+				//attention
+				var elmQuaternion = new THREE.Quaternion();
+				var elmPosition = new THREE.Vector3();
+				var elmScale = new THREE.Vector3();
+				objects[i].matrixWorld.decompose(elmPosition, elmQuaternion, elmScale);
+				//console.log(elmScale);
+
+				subVector.divide(elmScale);
+
+				var inverseQuaternion = new THREE.Quaternion();
+				inverseQuaternion.copy(elmQuaternion);
+				inverseQuaternion.inverse();
+				subVector.applyQuaternion(inverseQuaternion);
+				
+
+				objects[i].translateX(subVector.x);
+				objects[i].translateY(subVector.y);
+				objects[i].translateZ(subVector.z);
+			}
 		}
+					
+		this.explodeVectorsCorrected  = [];
 		this.explodeVectors = [];
 	},
 
@@ -11647,6 +11967,20 @@ Main.prototype = {
 			selectedIndices.push(objects.indexOf(childObj));
 			var subVector = this.explodeVectors[ objects.indexOf(childObj) ];
 			subVector.negate();
+
+			//attention
+			var elmQuaternion = new THREE.Quaternion();
+			var elmPosition = new THREE.Vector3();
+			var elmScale = new THREE.Vector3();
+			childObj.matrixWorld.decompose(elmPosition, elmQuaternion, elmScale);
+
+			subVector.divide(elmScale);
+
+			var inverseQuaternion = new THREE.Quaternion();
+			inverseQuaternion.copy(elmQuaternion);
+			inverseQuaternion.inverse();
+			subVector.applyQuaternion(inverseQuaternion);
+
 			childObj.translateX(subVector.x);
 			childObj.translateY(subVector.y);
 			childObj.translateZ(subVector.z);
@@ -11780,7 +12114,7 @@ Main.prototype = {
 		if ( this.onDownPosition.distanceTo( this.onUpPosition ) === 0 ) {
 
 			if(this.onCtrlE == false && this.onCtrl == false 
-				&& this.SelectComponent == false) {
+				&& this.Addrod == false) {
 
 				var objselect = true;
 				//only select the furniture
@@ -11886,7 +12220,7 @@ Main.prototype = {
 
 
 			}else if (this.onCtrlE == true && this.onCtrl == false
-				&& this.SelectComponent == false){
+				&& this.Addrod == false){
 				//select from explode objects, this.furniture should not be null
 				var intersects = this.getIntersects( this.onUpPosition, this.furniture.getObjects());
 
@@ -11918,7 +12252,7 @@ Main.prototype = {
 
 			}
 			//select two obj for getting distance
-			else if(this.onCtrl == true && this.SelectComponent == false){
+			else if(this.onCtrl == true && this.Addrod == false){
 				//console.log('select two');
 				var objselect = true;
 				//only select the furniture
@@ -11959,30 +12293,11 @@ Main.prototype = {
 
 			}
 			//select the furniture component for select the adding position
-			else if( this.SelectComponent == true){
-				
-				var intersects = this.getIntersects( this.onUpPosition, this.furniture.getObjects());
-
-				if ( intersects.length > 0 ) {
-
-					var object = intersects[ 0 ].object;
-					//if select the same component, record the click position
-					if(this.component == object){
-						this.fixpointball = true;
-						this.AddRod();
-					}
-
-					if ( object.userData.object !== undefined ) {
-						this.select( object.userData.object );
-						this.component = object.userData.object;
-					} else {
-						this.select( object );
-						this.component = object;
-					}
-				} else {
-					//it also calls select, to detach
-					this.select( null );
-				}
+			else if( this.Addrod == true){
+				if(this.onCtrl == false)
+					SelectFurniComponent(this);
+				else
+					SelectFurni(this);
 			}
 		}
 	},
@@ -12394,6 +12709,7 @@ Main.prototype = {
 		$('.operations.operation_desk').hide();
 		$('.operations.operation_table').hide();
 		$('#parameter_control_tool_addbetween').hide();
+		$('#AddRodInput').hide();
 
 		this.furnitures.length = 0;	
 
@@ -12502,6 +12818,7 @@ Main.prototype = {
 		$('.operations.operation_desk').hide();
 		$('.operations.operation_table').hide();
 		$('#parameter_control_tool_addbetween').hide();
+		$('#AddRodInput').hide();
 
 		this.processor.init();
 		//this.processor.executeDesign();
@@ -12653,17 +12970,23 @@ Main.prototype = {
     },
 
     //creat the rod in intersection point
-    AddRod: function(){
+    AddRodFunc: function(){
     	//get the point's normal vector
     	var addvector = this.intersectpoint.face.normal;
+    	//set normal vector from local to world
     	var normalMatrix = new THREE.Matrix3().getNormalMatrix( this.intersectpoint.object.matrixWorld );
     	addvector = addvector.clone().applyMatrix3( normalMatrix ).normalize();
     	//set the point position
     	var original  = new THREE.Vector3().addVectors(this.pointball.position,addvector);
     	//set the raycaster from point and normal vector
     	var Raycaster = new THREE.Raycaster( original, addvector );
+    	var intersects;
     	//get the intersects from raycaster
-    	var intersects = Raycaster.intersectObjects ( this.furniture.getObjects(), true);
+    	if(this.onCtrl == false)
+    		intersects = Raycaster.intersectObjects ( this.furniture.getObjects(), true);
+    	if(this.onCtrl == true )
+    		intersects = Raycaster.intersectObjects ( this.DistanceObj , true);
+    	
     	//if get intersections
     	if (intersects.length>0){
     		var pos =  intersects[0].point;
@@ -12686,27 +13009,18 @@ Main.prototype = {
     			this.furniture.getFurniture(), rod, newPosi);
     		this.furniture.getFurniture().worldToLocal(pos);
     		rod.lookAt(pos);
-    		/*
-    		var newPosi = rod.position.clone();
-    		var group = this.furniture.getFurniture();
-    		var inverseMatrix = new THREE.Matrix4();
-			inverseMatrix.getInverse(group.matrixWorld, true);
-			rod.applyMatrix(inverseMatrix);
 
-			group.worldToLocal(newPosi);
-			group.add(rod);
-			rod.position.set( newPosi.x, newPosi.y, newPosi.z );
-			*/
     		this.selectionBox.visible = false;
 			this.transformControls.detach();
 			this.furniture = null;
-    		this.SelectComponent = false;
+    		this.Addrod = false;
     		this.component = null;
     		this.intersectpoint = null;
     		this.fixpointball = false;
     		this.scene.remove(this.pointball);
     		this.pointball = null;
-
+    		$('#AddRodInput').hide();
+    		document.getElementById('InputRodRadius').value = "";
     	}
     	else{//if don't get
     		alert('position err');
@@ -12727,7 +13041,15 @@ document.addEventListener('DOMContentLoaded', function(event){
 
 
 
+<<<<<<< HEAD
 },{"./MarkBetweenSize":24,"./MarkSize":25,"./Processor":33,"./cadCutByPlane":36,"./cadMakeRod":39,"./computeConvexHull":43}],54:[function(require,module,exports){
+=======
+<<<<<<< HEAD
+},{"./MarkBetweenSize":24,"./MarkSize":25,"./Model_AddBetween":27,"./Processor":33,"./cadCutByPlane":36,"./cadMakeRod":39,"./computeConvexHull":43}],54:[function(require,module,exports){
+=======
+},{"./MarkBetweenSize":24,"./MarkSize":25,"./Processor":33,"./cadCutByPlane":36,"./cadMakeRod":39,"./computeConvexHull":43}],54:[function(require,module,exports){
+>>>>>>> master
+>>>>>>> master
 /*
 ## License
 

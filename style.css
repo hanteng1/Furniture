@@ -70,6 +70,27 @@ a {
    left: 0;
 }
 
+
+#initial_category_window {
+
+   background: white;
+
+   opacity: 1.0;
+   -moz-opacity: 1.0;
+
+   border-radius: 5px;
+   position: fixed;
+   top: 50%;
+   left: 50%;
+   font-size: 0.9em;
+
+   box-shadow: 4px 0 10px rgba(0,0,0,0.25);
+   -moz-box-shadow: 4px 0 10px rgba(0,0,0,0.25);
+   -webkit-box-shadow: 4px 0 10px rgba(0,0,0,0.25);
+}
+
+
+
 #viewerContext {
    margin: 0px;             /* not inherited */
    border: 0px none black;  /* not inherited */
@@ -178,13 +199,20 @@ a {
   opacity: 0.8;
   -moz-opacity: 0.8;
   left:350px;
-  top: 70px;
+  top: 80px;
   
 }
 .ui.circular.icon.button.procedure{
   font-size: 20px;
 }
-
-
+#AddRodInput{
+  position: relative;
+  top: 15px;
+  left:-20px;
+  width: 50px;
+}
+.ui.button.InputRod{
+  width: 10px;
+}
 
 

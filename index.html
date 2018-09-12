@@ -9,20 +9,44 @@
 	<body>
 
 		
-		<!-- <div id="blocker">
-			<div id="instructions">
+		<div id="blocker">
+			<!-- <div id="instructions">
 				<span style="font-size:40px">
 					Instructions: blablabalbalabla...
 				</span>
-			</div>
+			</div> -->			
 		</div>
-		 -->
+		
+		<!--category selection-->
+		<div id="initial_category_window">
+			<div class="ui inverted segment" style="background:none">
+				<button class="ui inverted secondary button" id="category_chair">
+						<i class="gamepad icon"></i>
+						CHAIR
+				</button>
+
+				<button class="ui inverted secondary button" id="category_cabinet">
+						<i class="gamepad icon"></i>
+						CABINET
+				</button>
+
+				<button class="ui inverted secondary button" id="category_table">
+						<i class="gamepad icon"></i>
+						TABLE
+				</button>
+
+				<button class="ui inverted secondary button" id="category_bed">
+						<i class="gamepad icon"></i>
+						BED
+				</button>
+				
+			</div>
+
+		</div>
+
+
 
 		<div id="minfo">Description</div>
-
-
-		<!--category selection-->
-
 
 
 		<div id="mmenu">
@@ -65,14 +89,16 @@
 
 			<div class="ui blue submit button reset" style="margin-bottom: 0.5em">Reset</div>
 			<div class="ui blue submit button duplicate" style="margin-bottom: 0.5em">Duplicate</div>
-			<div class="ui blue submit button newdesign" style="margin-bottom: 0.5em">Create New Design</div>
+			<div class="ui blue submit button newdesign" style="margin-bottom: 0.5em">Suggestive Design</div>
+			<div class="ui blue submit button customdesign" style="margin-bottom: 0.5em">Customized Design</div>
+
 			<div class="ui blue submit button getsize" style="margin-bottom: 0.5em">GetSize</div>
 			<div class="ui blue submit button getdis" style="margin-bottom: 0.5em">GetDistance</div>
 			<div class="ui red submit button removesize" style="margin-bottom: 0.5em">RemoveSize</div>
 
 			<!--Available Designs-->
 			<h4 class="ui horizontal divider header">
-				Suggested Designs
+				Design Operations
 			</h4>
 
 			<div class="ui segment">
@@ -246,6 +272,11 @@
 	    						AddBetween
 						</button>
 
+
+						<button class="ui inverted secondary button" id="operation_Cut">
+								<i class="gamepad icon"></i>
+	    						Cut
+						</button>
 
  					</div>
 
@@ -471,12 +502,37 @@
 
 			</div>
 		</div>
+
 		<!--Addbetween tool-->
 		<div class="ui compact parameters" id="parameter_control_tool_addbetween">
 			<div class="ui labeled icon menu" >
 			 
 				<a class="item ui image label addbetween rod">
 					<img src="/images/material/addbetween/rod.jpg">
+					
+					<div class="ui input" id="AddRodInput">
+						<button class="ui button InputRod minus">
+						  <i class="minus icon"></i>
+						</button>
+						<input type="text" placeholder="2.0" id="InputRodRadius">
+						<button class="ui button InputRod plus">
+						  <i class="plus icon"></i>
+						</button>
+					</div>
+				</a>
+
+			</div>
+		</div>
+
+
+
+		<!--cut tool-->
+		<div class="ui compact parameters" id="parameter_control_tool_cut">
+			<div class="ui labeled icon menu" >
+			 
+				<a class="item ui image label cut vertical">
+					<img src="/images/material/addbetween/rod.jpg">
+					Cut
 				</a>
 
 			</div>
@@ -658,9 +714,11 @@
 				gl_FragColor.a = 1.0;
 			}
 		</script>
+		
 		-->
 
 
+		
 		<script type="x-shader/x-vertex" id="vertexShader">
 			varying vec3 vWorldPosition;
 			void main() {
@@ -681,6 +739,7 @@
 				gl_FragColor = vec4( mix( bottomColor, topColor, max( pow( max( h, 0.0 ), exponent ), 0.0 ) ), 1.0 );
 			}
 		</script>
+		
 
 		<script type="text/javascript" src="js/bundle.js"></script>
 		<!--<script type="text/javascript" src="js/Main.js"></script>-->

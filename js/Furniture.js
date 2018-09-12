@@ -57,6 +57,10 @@ function Furniture(furniture) {
 
 
 
+	//a variable to indicate set normal axis event
+	this.hasNormalRotation = false;
+
+
 	////////////////////////////////////////////////////////////
 	//get info and object
 	this.getSize = function() {
@@ -366,17 +370,17 @@ function Furniture(furniture) {
 	//update info
 	this.updatePosition = function(updatedPosition) {
 		this.position.copy(updatedPosition);
-		this.positionInfo.innerHTML = `Pos : (x) ${parseFloat(this.position.x).toFixed(1)} (y) ${parseFloat(this.position.y).toFixed(1)} (z) ${parseFloat(this.position.z).toFixed(1)}`;
+		//this.positionInfo.innerHTML = `Pos : (x) ${parseFloat(this.position.x).toFixed(1)} (y) ${parseFloat(this.position.y).toFixed(1)} (z) ${parseFloat(this.position.z).toFixed(1)}`;
 	}
 
 	this.updatePosition = function() {
 		this.furniture.getWorldPosition(this.position);
-		this.positionInfo.innerHTML = `Pos : (x) ${parseFloat(this.position.x).toFixed(1)} (y) ${parseFloat(this.position.y).toFixed(1)} (z) ${parseFloat(this.position.z).toFixed(1)}`;
+		//this.positionInfo.innerHTML = `Pos : (x) ${parseFloat(this.position.x).toFixed(1)} (y) ${parseFloat(this.position.y).toFixed(1)} (z) ${parseFloat(this.position.z).toFixed(1)}`;
 	}
 
 	this.updateDirection = function() {
 		this.furniture.getWorldDirection(this.direction);
-		this.directionInfo.innerHTML = `Rot : (x) ${parseFloat(this.direction.x).toFixed(1)} (y) ${parseFloat(this.direction.y).toFixed(1)} (z) ${parseFloat(this.direction.z).toFixed(1)}`;
+		//this.directionInfo.innerHTML = `Rot : (x) ${parseFloat(this.direction.x).toFixed(1)} (y) ${parseFloat(this.direction.y).toFixed(1)} (z) ${parseFloat(this.direction.z).toFixed(1)}`;
 	}
 
 	this.updateQuaternion = function(quaternion) {
@@ -419,31 +423,31 @@ function Furniture(furniture) {
 		titleDiv.appendChild(titleHeader);
 
 		//add detailed info
-		var detailDiv = document.createElement("div");
-		detailDiv.className = 'content';
-		card.appendChild(detailDiv);
+		// var detailDiv = document.createElement("div");
+		// detailDiv.className = 'content';
+		// card.appendChild(detailDiv);
 
 		//add category
-		var category = document.createElement('div');
-		category.className = 'description';
-		category.innerHTML = `Category : ${this.category}`;
-		detailDiv.appendChild(category);
+		// var category = document.createElemen('div');
+		// category.className = 'description';
+		// category.innerHTML = `Category : ${this.category}`;
+		// detailDiv.appendChild(category);
 
-		//add size
+		// //add size
 
 
-		//add position in world
-		this.positionInfo.className = 'description';
-		this.furniture.getWorldPosition(this.position);
-		this.positionInfo.innerHTML = `Pos : (x) ${parseFloat(this.position.x).toFixed(1)} (y) ${parseFloat(this.position.y).toFixed(1)} (z) ${parseFloat(this.position.z).toFixed(1)}`;
-		detailDiv.appendChild(this.positionInfo);
+		// //add position in world
+		// this.positionInfo.className = 'description';
+		// this.furniture.getWorldPosition(this.position);
+		// this.positionInfo.innerHTML = `Pos : (x) ${parseFloat(this.position.x).toFixed(1)} (y) ${parseFloat(this.position.y).toFixed(1)} (z) ${parseFloat(this.position.z).toFixed(1)}`;
+		// detailDiv.appendChild(this.positionInfo);
 
-		//add rotation
+		// //add rotation
 		
-		this.directionInfo.className = 'description';
-		this.furniture.getWorldDirection(this.direction);
-		this.directionInfo.innerHTML = `Rot : (x) ${parseFloat(this.direction.x).toFixed(1)} (y) ${parseFloat(this.direction.y).toFixed(1)} (z) ${parseFloat(this.direction.z).toFixed(1)}`;
-		detailDiv.appendChild(this.directionInfo);
+		// this.directionInfo.className = 'description';
+		// this.furniture.getWorldDirection(this.direction);
+		// this.directionInfo.innerHTML = `Rot : (x) ${parseFloat(this.direction.x).toFixed(1)} (y) ${parseFloat(this.direction.y).toFixed(1)} (z) ${parseFloat(this.direction.z).toFixed(1)}`;
+		//detailDiv.appendChild(this.directionInfo);
 
 		//add components
 		var componentDiv = document.createElement("div");
@@ -822,7 +826,7 @@ function Furniture(furniture) {
 
 				//update the ui information
 				this.furniture.getWorldDirection(this.direction);
-				this.directionInfo.innerHTML = `Rot : (x) ${parseFloat(this.direction.x).toFixed(1)} (y) ${parseFloat(this.direction.y).toFixed(1)} (z) ${parseFloat(this.direction.z).toFixed(1)}`;
+				//this.directionInfo.innerHTML = `Rot : (x) ${parseFloat(this.direction.x).toFixed(1)} (y) ${parseFloat(this.direction.y).toFixed(1)} (z) ${parseFloat(this.direction.z).toFixed(1)}`;
 
 			}
 
@@ -840,6 +844,9 @@ function Furniture(furniture) {
 			//add the corners
 			//do not add it here.. there are explode and collapse operations
 			//this.addCorners(name);
+
+			//attention, might have problem
+			this.hasNormalRotation = true;
 
 		}
 
@@ -891,7 +898,7 @@ function Furniture(furniture) {
 
 					//update the ui information
 					this.furniture.getWorldDirection(this.direction);
-					this.directionInfo.innerHTML = `Rot : (x) ${parseFloat(this.direction.x).toFixed(1)} (y) ${parseFloat(this.direction.y).toFixed(1)} (z) ${parseFloat(this.direction.z).toFixed(1)}`;
+					//this.directionInfo.innerHTML = `Rot : (x) ${parseFloat(this.direction.x).toFixed(1)} (y) ${parseFloat(this.direction.y).toFixed(1)} (z) ${parseFloat(this.direction.z).toFixed(1)}`;
 
 				}
 

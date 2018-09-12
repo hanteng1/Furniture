@@ -104,6 +104,7 @@ Model_wrap.prototype = {
         
 
 	},
+
 	Wrap: function( model , texture ){
 		//console.log(model.geometry);
 		
@@ -118,7 +119,10 @@ Model_wrap.prototype = {
 													bottom_to_top[0], bottom_to_top[1] );
 		
 		var material = new THREE.MeshBasicMaterial( {map: texture,
-        wireframe: false} );
+        	wireframe: false} );
+
+		//var material = new THREE.MeshBasicMaterial( {wireframe: true} );
+		
 		
 		var backRest = new THREE.Mesh( geometry, material );
 		this.main.WrapObject.push(backRest);
