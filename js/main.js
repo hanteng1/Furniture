@@ -109,6 +109,10 @@ function Main()
 	this.intersectpoint = null;
 
 
+	this.cutplane = null;
+	this.fixcutplane = false;
+
+
 	//this is to store the furnitures before any chance
 	//simply copy of the this.furnitures
 	this.furnituresDataSet = [];

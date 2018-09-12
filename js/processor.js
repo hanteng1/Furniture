@@ -18,6 +18,7 @@ const Model_Rotation = require('./Model_Rotation');
 const Model_Align = require('./Model_Align');
 const Model_Add = require('./Model_Add');
 const Model_AddBetween = require('./Model_AddBetween');
+const Model_Cut = require('./Model_Cut');
 
 
 function Processor(main) {
@@ -51,18 +52,8 @@ function Processor(main) {
 	this.model_rotation = undefined;
 	this.model_align = undefined;
 	this.model_addbetween = undefined;
+	this.model_cut = undefined;
 
-	//end of weixiang's block
-
-
-
-
-	//trif's block
-
-
-
-
-	//end of trif's block
 
 
 }
@@ -221,6 +212,10 @@ Processor.prototype = {
 				//addbetween
 				scope.model_addbetween = new Model_AddBetween(scope.main);
 				scope.transformFunctions.MODEL_ADDBETWEEN = scope.model_addbetween;
+
+				//cut
+				scope.model_cut = new Model_Cut(scope.main);
+				scope.transformFunctions.MODEL_CUT = scope.model_cut;
 				
 				$('.operations.operation_tool').show();		
 				break;
@@ -250,33 +245,6 @@ Processor.prototype = {
 		}
 		
 	}
-
-
-
-	//zhuen's block
-
-
-
-	//end of zhuen's block
-
-
-
-	//weixiang's bloack
-
-
-
-	//end of weixiang's block
-
-
-
-
-	//trif's block
-
-
-
-
-	//end of trif's block
-
 
 
 }
