@@ -9,8 +9,8 @@ function MarkBetweenSize( main , TargetObj1 , TargetObj2 ){
 	var objSize2	= new THREE.Vector3();
 	var FuniBox 	= new THREE.Box3();
 	var FuniCenter	= new THREE.Vector3();
-	//store objects position array
-	var PosArr		= [];
+	var group		= new THREE.Group();
+	main.scene.add(group);
 	var num = 1;
 
 	//detect the funiture component
@@ -18,34 +18,19 @@ function MarkBetweenSize( main , TargetObj1 , TargetObj2 ){
 		var object =  main.furnitures[i].getFurniture();
 		
 		if(object.isObject3D){
-			//get object center
-			
-			Box.setFromObject(object);
-			Box.getCenter(objCenter1);
-
-			PosArr.push(objCenter1.x);
-			PosArr.push(objCenter1.y);
-			PosArr.push(objCenter1.z);
-			
+			group.add(object.clone());
 		}
 	}
 	for(var i = main.Sceneobjects.length - 1; i > -1; i -- ){
 
 		var object =  main.Sceneobjects[i];
-		
-		//get object center
-		Box.setFromObject(object);
-		Box.getCenter(objCenter1);
-
-		PosArr.push(objCenter1.x);
-		PosArr.push(objCenter1.y);
-		PosArr.push(objCenter1.z);
-		
+		group.add(object.clone());
 	}
 
 	//set funiture bounding box , box center
-	FuniBox.setFromArray( PosArr );
-	FuniBox.getCenter(FuniCenter);
+	FuniBox.setFromObject( group );
+	FuniBox.getCenter( FuniCenter );
+	main.scene.remove( group );
 	
 	//get object center
 	Box.setFromObject( TargetObj1 );

@@ -7,38 +7,26 @@ function MarkSize( main , TargetObj ){
 	var objSize		= new THREE.Vector3();
 	var FuniBox 	= new THREE.Box3();
 	var FuniCenter	= new THREE.Vector3();
-	//store objects position array
-	var PosArr		= [];
+	var group		= new THREE.Group();
+	main.scene.add(group);
 
 	//detect the funiture component
 	for(var i = main.furnitures.length - 1; i > -1; i -- ){ 
 		var object =  main.furnitures[i].getFurniture();
 		
 		if(object.isObject3D){
-			//get object center
-			Box.setFromObject(object);
-			Box.getCenter(objCenter);
-
-			PosArr.push(objCenter.x);
-			PosArr.push(objCenter.y);
-			PosArr.push(objCenter.z);
+			group.add(object.clone());
 		}
 	}
 	for(var i = main.Sceneobjects.length - 1; i > -1; i -- ){
 		var object =  main.Sceneobjects[i];
-		//get object center
-		Box.setFromObject(object);
-		Box.getCenter(objCenter);
-
-		PosArr.push(objCenter.x);
-		PosArr.push(objCenter.y);
-		PosArr.push(objCenter.z);
+		group.add(object.clone());
 	}
 
 	//set funiture bounding box , box center
-	FuniBox.setFromArray( PosArr );
-	FuniBox.getCenter(FuniCenter);
-	
+	FuniBox.setFromObject( group );
+	FuniBox.getCenter( FuniCenter );
+	main.scene.remove( group );
 	//get object center
 	Box.setFromObject(TargetObj);
 	Box.getCenter(objCenter);

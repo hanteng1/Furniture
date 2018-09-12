@@ -89,8 +89,7 @@ Model_Painting.prototype = {
         }
         else if(this.paint_mode == true || name!= 'painting'){
             $('#parameter_control_tool_painting').hide();
-            this.paint_mode = false;
-        }
+            this.paint_mode = false;        }
         
 
     },
