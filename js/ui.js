@@ -298,7 +298,7 @@ Ui.prototype = {
 
 		$('#parameter_control_tool_add').hide();
 		$('#parameter_control_tool_addbetween').hide();
-		$('.ui.right.labeled.input.rod').hide();
+		$('#AddRodInput').hide();
 
 
 	},

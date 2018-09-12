@@ -199,18 +199,20 @@ a {
   opacity: 0.8;
   -moz-opacity: 0.8;
   left:350px;
-  top: 70px;
+  top: 80px;
   
 }
 .ui.circular.icon.button.procedure{
   font-size: 20px;
 }
-.ui.right.labeled.input.rod{
+#AddRodInput{
   position: relative;
-  top: 10px;
+  top: 15px;
   left:-20px;
   width: 50px;
 }
-
+.ui.button.InputRod{
+  width: 10px;
+}
 
 

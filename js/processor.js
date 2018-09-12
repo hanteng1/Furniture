@@ -17,7 +17,8 @@ const Model_wrap = require('./Model_wrap');
 const Model_Rotation = require('./Model_Rotation');
 const Model_Align = require('./Model_Align');
 const Model_Add = require('./Model_Add');
-const Model_AddBetween = require('./Model_AddBetween');
+const {Model_AddBetween , AddRodMousePosi1, AddRodMousePosi2,
+	SelectFurniComponent, SelectFurni} = require('./Model_AddBetween');
 
 
 function Processor(main) {

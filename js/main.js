@@ -24,6 +24,8 @@ const cadCutByPlane = require('./cadCutByPlane')
 const MarkSize = require('./MarkSize')
 const MarkBetweenSize = require('./MarkBetweenSize')
 const cadMakeRod = require('./cadMakeRod')
+const {Model_AddBetween , AddRodMousePosi1, AddRodMousePosi2,
+	SelectFurniComponent, SelectFurni} = require('./Model_AddBetween')
 //Wei Hsiang end
 
 function Main()
@@ -100,7 +102,7 @@ function Main()
 	this.stepNumber = 0;
 
 	//select the single component
-	this.SelectComponent = false;
+	this.Addrod = false;
 	//the selected single component 
 	this.component = null;
 	//the select point
@@ -610,7 +612,7 @@ Main.prototype = {
 	//-----------------------------------Add Model--------------------------
 	onMouseMove: function ( event ) {
 
-		if( this.processor.model_add !== undefined && this.SelectComponent == false){
+		if( this.processor.model_add !== undefined && this.Addrod == false){
 			if(this.processor.model_add.isCreateObject){
 				this.mouse.x = ( event.clientX / window.innerWidth ) * 2 - 1;
 				this.mouse.y = - ( event.clientY / window.innerHeight ) * 2 + 1;
@@ -625,42 +627,15 @@ Main.prototype = {
 				else
 					console.log("miss");
 			}
+		}//if want to add rod
+		else if(this.Addrod == true){
+			//select the adding position in select position
+			if( this.onCtrl == false )
+				AddRodMousePosi1(this);
+			if( this.onCtrl == true )
+				AddRodMousePosi2(this);
 		}
-		else if(this.SelectComponent == true){
-			if (this.component != null){
-				this.mouse.x = ( event.clientX / window.innerWidth ) * 2 - 1;
-				this.mouse.y = - ( event.clientY / window.innerHeight ) * 2 + 1;
-				var raycaster = new THREE.Raycaster();
-				raycaster.setFromCamera( this.mouse, this.camera );
-				var intersects = raycaster.intersectObject(this.component);
-				if(intersects.length > 0){
-					this.intersectpoint = intersects[0];
-					var pos = intersects[0].point;
-					//let the red point move to mouse position
-					if(this.fixpointball==false){
-						this.pointball.position.set( pos.x, pos.y, pos.z );
-						//set normal vector from local to world
-						var normalMatrix = new THREE.Matrix3().getNormalMatrix( this.intersectpoint.object.matrixWorld );
-    					var normal = intersects[0].face.normal
-    					normal = normal.clone().applyMatrix3( normalMatrix ).normalize();
-						//rotate the point
-						var newDir = new THREE.Vector3().addVectors(pos, normal);
-						this.pointball.lookAt( newDir );
-						this.pointball.rotateX(90* Math.PI/180);
-						var radius = document.getElementById('InputRodRadius').value;
-						if(radius == "")
-							this.pointball.scale.set(2.0, 1, 2.0);
-						else
-							this.pointball.scale.set(parseFloat(radius), 1, parseFloat(radius));
-					}
-					//console.log(pos);
-				}
-				else{
-					//console.log("miss");
-				}
-			}
-			
-		}
+		//else if(this.onCtrl == true)
 	},
 
 	preAddObject: function(object) {
@@ -1300,7 +1275,7 @@ Main.prototype = {
 		if ( this.onDownPosition.distanceTo( this.onUpPosition ) === 0 ) {
 
 			if(this.onCtrlE == false && this.onCtrl == false 
-				&& this.SelectComponent == false) {
+				&& this.Addrod == false) {
 
 				var objselect = true;
 				//only select the furniture
@@ -1369,7 +1344,7 @@ Main.prototype = {
 
 
 			}else if (this.onCtrlE == true && this.onCtrl == false
-				&& this.SelectComponent == false){
+				&& this.Addrod == false){
 				//select from explode objects, this.furniture should not be null
 				var intersects = this.getIntersects( this.onUpPosition, this.furniture.getObjects());
 
@@ -1409,7 +1384,7 @@ Main.prototype = {
 
 			}
 			//select two obj for getting distance
-			else if(this.onCtrl == true && this.SelectComponent == false){
+			else if(this.onCtrl == true && this.Addrod == false){
 				//console.log('select two');
 				var objselect = true;
 				//only select the furniture
@@ -1450,30 +1425,11 @@ Main.prototype = {
 
 			}
 			//select the furniture component for select the adding position
-			else if( this.SelectComponent == true){
-				
-				var intersects = this.getIntersects( this.onUpPosition, this.furniture.getObjects());
-
-				if ( intersects.length > 0 ) {
-
-					var object = intersects[ 0 ].object;
-					//if select the same component, record the click position
-					if(this.component == object){
-						this.fixpointball = true;
-						this.AddRod();
-					}
-
-					if ( object.userData.object !== undefined ) {
-						this.select( object.userData.object );
-						this.component = object.userData.object;
-					} else {
-						this.select( object );
-						this.component = object;
-					}
-				} else {
-					//it also calls select, to detach
-					this.select( null );
-				}
+			else if( this.Addrod == true){
+				if(this.onCtrl == false)
+					SelectFurniComponent(this);
+				else
+					SelectFurni(this);
 			}
 		}
 	},
@@ -1932,7 +1888,7 @@ Main.prototype = {
 		$('.operations.operation_desk').hide();
 		$('.operations.operation_table').hide();
 		$('#parameter_control_tool_addbetween').hide();
-		$('.ui.right.labeled.input.rod').hide();
+		$('#AddRodInput').hide();
 
 		this.furnitures.length = 0;	
 
@@ -2041,7 +1997,7 @@ Main.prototype = {
 		$('.operations.operation_desk').hide();
 		$('.operations.operation_table').hide();
 		$('#parameter_control_tool_addbetween').hide();
-		$('.ui.right.labeled.input.rod').hide();
+		$('#AddRodInput').hide();
 
 		this.processor.init();
 		//this.processor.executeDesign();
@@ -2193,7 +2149,7 @@ Main.prototype = {
     },
 
     //creat the rod in intersection point
-    AddRod: function(){
+    AddRodFunc: function(){
     	//get the point's normal vector
     	var addvector = this.intersectpoint.face.normal;
     	//set normal vector from local to world
@@ -2203,8 +2159,13 @@ Main.prototype = {
     	var original  = new THREE.Vector3().addVectors(this.pointball.position,addvector);
     	//set the raycaster from point and normal vector
     	var Raycaster = new THREE.Raycaster( original, addvector );
+    	var intersects;
     	//get the intersects from raycaster
-    	var intersects = Raycaster.intersectObjects ( this.furniture.getObjects(), true);
+    	if(this.onCtrl == false)
+    		intersects = Raycaster.intersectObjects ( this.furniture.getObjects(), true);
+    	if(this.onCtrl == true )
+    		intersects = Raycaster.intersectObjects ( this.DistanceObj , true);
+    	
     	//if get intersections
     	if (intersects.length>0){
     		var pos =  intersects[0].point;
@@ -2227,18 +2188,17 @@ Main.prototype = {
     			this.furniture.getFurniture(), rod, newPosi);
     		this.furniture.getFurniture().worldToLocal(pos);
     		rod.lookAt(pos);
-    		
 
     		this.selectionBox.visible = false;
 			this.transformControls.detach();
 			this.furniture = null;
-    		this.SelectComponent = false;
+    		this.Addrod = false;
     		this.component = null;
     		this.intersectpoint = null;
     		this.fixpointball = false;
     		this.scene.remove(this.pointball);
     		this.pointball = null;
-    		$('.ui.right.labeled.input.rod').hide();
+    		$('#AddRodInput').hide();
     		document.getElementById('InputRodRadius').value = "";
     	}
     	else{//if don't get

@@ -9,14 +9,22 @@ function Model_AddBetween( main ){
     var scope = this;
     
     $( ".item.ui.image.label.addbetween.rod" ).click(function() {
-        //console.log(document.getElementById('InputRodRadius').value);
+        
         //check select furniture or not
-        if(scope.main.furniture == null){
+        if(scope.main.furniture == null && 
+        	scope.main.onCtrl == false){
         	alert('Please select the furniture first');
         	return;
         }
-        $('.ui.right.labeled.input.rod').show();
-        scope.main.SelectComponent = true;
+        //check user selected furniture number if they want to
+        //select two furniture
+        if(scope.main.onCtrl == true && 
+        	scope.main.DistanceObj.length != 2 ){
+        	alert('Please select two furniture ');
+        	return;
+        }
+
+        scope.main.Addrod = true;
         //add the point ball to scene
         
         if(scope.main.pointball == null){
@@ -25,7 +33,8 @@ function Model_AddBetween( main ){
 			scope.main.pointball = new THREE.Mesh( geometry, material );
 			scope.main.scene.add( scope.main.pointball );
         }
-        
+
+        $('#AddRodInput').show();
     	scope.main.component = null;
     	scope.main.intersectpoint = null;
     	scope.main.fixpointball = false;
@@ -55,12 +64,12 @@ Model_AddBetween.prototype = {
         }
         else if(this.addbetween_mode == true || name!= 'addbetween'){
             $('#parameter_control_tool_addbetween').hide();
-            $('.ui.right.labeled.input.rod').hide();
+            $('#AddRodInput').hide();
             document.getElementById('InputRodRadius').value = "";
             this.main.component = null;
     		this.main.intersectpoint = null;
     		this.main.fixpointball = false;
-            this.main.SelectComponent = false;
+            this.main.Addrod = false;
             this.addbetween_mode = false;
             if(this.main.pointball != null)
             	this.main.scene.remove(this.main.pointball);
@@ -88,9 +97,127 @@ Model_AddBetween.prototype = {
         }
     }
 
-
-
+}
+//add rod inside the furniture
+function AddRodMousePosi1(main){
+	//if user not select the furniture component, return
+	if (main.component == null){
+		return;
+	}
+	main.mouse.x = ( event.clientX / window.innerWidth ) * 2 - 1;
+	main.mouse.y = - ( event.clientY / window.innerHeight ) * 2 + 1;
+	var raycaster = new THREE.Raycaster();
+	raycaster.setFromCamera( main.mouse, main.camera );
+	var intersects = raycaster.intersectObject(main.component);
+	if(intersects.length > 0){
+		main.intersectpoint = intersects[0];
+		var pos = intersects[0].point;
+		//let the red point move to mouse position
+		if(main.fixpointball==false){
+			main.pointball.position.set( pos.x, pos.y, pos.z );
+			//set normal vector from local to world
+			var normalMatrix = new THREE.Matrix3().getNormalMatrix( main.intersectpoint.object.matrixWorld );
+			var normal = intersects[0].face.normal
+			normal = normal.clone().applyMatrix3( normalMatrix ).normalize();
+			//rotate the point
+			var newDir = new THREE.Vector3().addVectors(pos, normal);
+			main.pointball.lookAt( newDir );
+			main.pointball.rotateX(90* Math.PI/180);
+			var radius = document.getElementById('InputRodRadius').value;
+			if(radius == "")
+				main.pointball.scale.set(2.0, 1, 2.0);
+			else
+				main.pointball.scale.set(parseFloat(radius), 1, parseFloat(radius));
+		}
+		//console.log(pos);
+	}
+	else{
+		//console.log("miss");
+	}
+	
 
 }
-module.exports = Model_AddBetween
+//add rod inside the furniture
+function AddRodMousePosi2(main){
+	
+	main.mouse.x = ( event.clientX / window.innerWidth ) * 2 - 1;
+	main.mouse.y = - ( event.clientY / window.innerHeight ) * 2 + 1;
+	var raycaster = new THREE.Raycaster();
+	raycaster.setFromCamera( main.mouse, main.camera );
+	//select the adding position from these two furnitures
+	var intersects = raycaster.intersectObjects(main.DistanceObj , true);
+
+	if(intersects.length > 0){
+		main.intersectpoint = intersects[0];
+		var pos = intersects[0].point;
+		//let the red point move to mouse position
+		if(main.fixpointball==false){
+			main.pointball.position.set( pos.x, pos.y, pos.z );
+			//set normal vector from local to world
+			var normalMatrix = new THREE.Matrix3().getNormalMatrix( main.intersectpoint.object.matrixWorld );
+			var normal = intersects[0].face.normal
+			normal = normal.clone().applyMatrix3( normalMatrix ).normalize();
+			//rotate the point
+			var newDir = new THREE.Vector3().addVectors(pos, normal);
+			main.pointball.lookAt( newDir );
+			main.pointball.rotateX(90* Math.PI/180);
+			var radius = document.getElementById('InputRodRadius').value;
+			if(radius == "")
+				main.pointball.scale.set(2.0, 1, 2.0);
+			else
+				main.pointball.scale.set(parseFloat(radius), 1, parseFloat(radius));
+		}
+		//console.log(pos);
+	}
+	else{
+		//console.log("miss");
+	}
+	
+
+}
+//select furniture component to add rod
+function SelectFurniComponent(main){
+
+	var intersects = main.getIntersects( main.onUpPosition, main.furniture.getObjects());
+
+	if ( intersects.length > 0 ) {
+
+		var object = intersects[ 0 ].object;
+		//if select the same component, record the click position
+		if(main.component == object){
+			main.fixpointball = true;
+			main.AddRodFunc();
+		}
+
+		if ( object.userData.object !== undefined ) {
+			main.select( object.userData.object );
+			main.component = object.userData.object;
+		} else {
+			main.select( object );
+			main.component = object;
+		}
+	} else {
+		//it also calls select, to detach
+		main.select( null );
+	}
+
+}
+//select furniture to add rod
+function SelectFurni(main){
+	
+	for(var i = 0; i < main.DistanceObj.length; i++) {
+		var intersects = main.getIntersect( main.onUpPosition, 
+											main.DistanceObj[i]);
+		if ( intersects.length > 0 ) {
+
+			main.fixpointball = true;
+			main.AddRodFunc();
+			break;
+		}
+	}
+
+}
+
+module.exports = {Model_AddBetween , AddRodMousePosi1, AddRodMousePosi2,
+				 SelectFurniComponent, SelectFurni}
 
