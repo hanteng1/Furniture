@@ -21,8 +21,7 @@ const Model_Add = require('./Model_Add');
 const {Model_AddBetween , AddRodMousePosi1, AddRodMousePosi2,
 	SelectFurniComponent, SelectFurni} = require('./Model_AddBetween');
 
-const Model_Cut = require('./Model_Cut');
- 
+const {Model_Cut,  AddCutPlaneMousePosi1, AddCutPlaneComponent} = require('./Model_Cut'); 
 
 
 function Processor(main) {

@@ -1,5 +1,5 @@
 "use strict";
-
+const Procedure_button = require('./Procedure_button');
 
 
 function Model_Cut(main) {
@@ -15,17 +15,19 @@ function Model_Cut(main) {
 	    	return;
 	    }
 
-	    scope.main.SelectComponent = true;
+	    scope.main.Cutting = true;
 
 	    if(scope.main.cutplane == null) {
-	    	var geometry = new THREE.PlaneBufferGeometry( 1, 1);
-			var material = new THREE.MeshBasicMaterial( {color: 0xffff00} );
+	    	var geometry = new THREE.PlaneGeometry( 1, 1);
+			var material = new THREE.MeshBasicMaterial( {color: 0xffff00, side: THREE.DoubleSide, transparent: true, opacity: 0.5} );
 			scope.main.cutplane = new THREE.Mesh( geometry, material );
 			scope.main.scene.add( scope.main.cutplane );
 	    }
 
 	    scope.main.component = null;
 	    scope.main.intersectpoint = null;
+	    scope.main.fixpointball = false;
+
 	});
 
 }
@@ -73,7 +75,119 @@ Model_Cut.prototype = {
 			this.main.transformControls.detach();
         }
 	},
+
+
+	DeleteButton: function(){
+        //console.log(this.main.stepNumber);
+        //console.log(this.main.stepObject.length);
+        this.main.lastStep = true;
+        if (this.main.stepNumber < this.main.stepObject.length){
+            var stepLength = this.main.stepObject.length;
+
+            for(var i=parseInt(this.main.stepNumber); i<stepLength; i++){
+                var btn = document.getElementById(
+                    "ui circular icon button procedure "+i.toString());
+                btn.parentNode.removeChild(btn);
+            }
+            this.main.stepObject.length = parseInt(this.main.stepNumber);
+        }
+    }
+
+
+
 }
 
 
-module.exports = Model_Cut
+function AddCutPlaneMousePosi1(main){
+	//if user not select the furniture component, return
+	if (main.component == null){
+		return;
+	}
+	main.mouse.x = ( event.clientX / window.innerWidth ) * 2 - 1;
+	main.mouse.y = - ( event.clientY / window.innerHeight ) * 2 + 1;
+	var raycaster = new THREE.Raycaster();
+	raycaster.setFromCamera( main.mouse, main.camera );
+	var intersects = raycaster.intersectObject(main.component);
+	if(intersects.length > 0){
+		main.intersectpoint = intersects[0];
+		var pos = intersects[0].point;
+		//let the red point move to mouse position
+		if(main.fixpointball==false){
+			main.cutplane.position.set( pos.x, pos.y, pos.z );
+			//set normal vector from local to world
+			var normalMatrix = new THREE.Matrix3().getNormalMatrix( main.intersectpoint.object.matrixWorld );
+			var normal = intersects[0].face.normal
+			normal = normal.clone().applyMatrix3( normalMatrix ).normalize();
+			//rotate the point
+			var newDir = new THREE.Vector3().addVectors(pos, normal);
+
+			main.cutplane.lookAt( newDir );
+
+
+			if(main.cutplaneDirection == 0)
+			{
+				main.cutplane.rotateX(90* Math.PI/180);
+			}else if(main.cutplaneDirection == 1)
+			{
+				main.cutplane.rotateY(90* Math.PI/180);
+			}else if(main.cutplaneDirection == 2)
+			{
+				main.cutplane.rotateZ(90* Math.PI/180);
+			}		
+			
+
+			//to do... make a reasonable size
+			main.cutplane.scale.set(10.0, 10.0, 10.0);
+			
+		}
+		//console.log(pos);
+	}
+	else{
+		//console.log("miss");
+	}
+	
+}
+
+
+function AddCutPlaneComponent(main) {
+
+	var intersects = main.getIntersects( main.onUpPosition, main.furniture.getObjects());
+
+	if ( intersects.length > 0 ) {
+
+		if(main.customControl.mouseWheelDisabled == false)
+			main.customControl.mouseWheelDisabled = true;
+
+		var object = intersects[ 0 ].object;
+		//if select the same component, record the click position
+		if(main.component == object){
+			main.fixpointball = true;
+			main.AddCutPlaneFunc();
+		}
+
+		if ( object.userData.object !== undefined ) {
+			main.select( object.userData.object );
+			main.component = object.userData.object;
+		} else {
+			main.select( object );
+			main.component = object;
+		}
+	} else {
+		//it also calls select, to detach
+		main.select( null );
+
+
+		if(main.customControl.mouseWheelDisabled == true)
+			main.customControl.mouseWheelDisabled = false;
+
+	}
+
+}
+
+
+
+
+
+
+
+module.exports = {Model_Cut, AddCutPlaneMousePosi1, AddCutPlaneComponent}
