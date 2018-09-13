@@ -295,6 +295,7 @@ Ui.prototype = {
 
 		$('#parameter_control_tool_add').hide();
 		$('#parameter_control_tool_addbetween').hide();
+		$('#parameter_control_tool_cut').hide();
 		$('#AddRodInput').hide();
 
 
