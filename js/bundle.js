@@ -7630,7 +7630,7 @@ Model_Align.prototype = {
 module.exports = Model_Align
 },{"./Procedure_button":33}],29:[function(require,module,exports){
 "use strict";
-
+const Procedure_button = require('./Procedure_button');
 
 
 function Model_Cut(main) {
@@ -7646,17 +7646,19 @@ function Model_Cut(main) {
 	    	return;
 	    }
 
-	    scope.main.SelectComponent = true;
+	    scope.main.Cutting = true;
 
 	    if(scope.main.cutplane == null) {
-	    	var geometry = new THREE.PlaneBufferGeometry( 1, 1);
-			var material = new THREE.MeshBasicMaterial( {color: 0xffff00} );
+	    	var geometry = new THREE.PlaneGeometry( 1, 1);
+			var material = new THREE.MeshBasicMaterial( {color: 0xffff00, side: THREE.DoubleSide, transparent: true, opacity: 0.5} );
 			scope.main.cutplane = new THREE.Mesh( geometry, material );
 			scope.main.scene.add( scope.main.cutplane );
 	    }
 
 	    scope.main.component = null;
 	    scope.main.intersectpoint = null;
+	    scope.main.fixpointball = false;
+
 	});
 
 }
@@ -7704,11 +7706,123 @@ Model_Cut.prototype = {
 			this.main.transformControls.detach();
         }
 	},
+
+
+	DeleteButton: function(){
+        //console.log(this.main.stepNumber);
+        //console.log(this.main.stepObject.length);
+        this.main.lastStep = true;
+        if (this.main.stepNumber < this.main.stepObject.length){
+            var stepLength = this.main.stepObject.length;
+
+            for(var i=parseInt(this.main.stepNumber); i<stepLength; i++){
+                var btn = document.getElementById(
+                    "ui circular icon button procedure "+i.toString());
+                btn.parentNode.removeChild(btn);
+            }
+            this.main.stepObject.length = parseInt(this.main.stepNumber);
+        }
+    }
+
+
+
 }
 
 
-module.exports = Model_Cut
-},{}],30:[function(require,module,exports){
+function AddCutPlaneMousePosi1(main){
+	//if user not select the furniture component, return
+	if (main.component == null){
+		return;
+	}
+	main.mouse.x = ( event.clientX / window.innerWidth ) * 2 - 1;
+	main.mouse.y = - ( event.clientY / window.innerHeight ) * 2 + 1;
+	var raycaster = new THREE.Raycaster();
+	raycaster.setFromCamera( main.mouse, main.camera );
+	var intersects = raycaster.intersectObject(main.component);
+	if(intersects.length > 0){
+		main.intersectpoint = intersects[0];
+		var pos = intersects[0].point;
+		//let the red point move to mouse position
+		if(main.fixpointball==false){
+			main.cutplane.position.set( pos.x, pos.y, pos.z );
+			//set normal vector from local to world
+			var normalMatrix = new THREE.Matrix3().getNormalMatrix( main.intersectpoint.object.matrixWorld );
+			var normal = intersects[0].face.normal
+			normal = normal.clone().applyMatrix3( normalMatrix ).normalize();
+			//rotate the point
+			var newDir = new THREE.Vector3().addVectors(pos, normal);
+
+			main.cutplane.lookAt( newDir );
+
+
+			if(main.cutplaneDirection == 0)
+			{
+				main.cutplane.rotateX(90* Math.PI/180);
+			}else if(main.cutplaneDirection == 1)
+			{
+				main.cutplane.rotateY(90* Math.PI/180);
+			}else if(main.cutplaneDirection == 2)
+			{
+				main.cutplane.rotateZ(90* Math.PI/180);
+			}		
+			
+
+			//to do... make a reasonable size
+			main.cutplane.scale.set(10.0, 10.0, 10.0);
+			
+		}
+		//console.log(pos);
+	}
+	else{
+		//console.log("miss");
+	}
+	
+}
+
+
+function AddCutPlaneComponent(main) {
+
+	var intersects = main.getIntersects( main.onUpPosition, main.furniture.getObjects());
+
+	if ( intersects.length > 0 ) {
+
+		if(main.customControl.mouseWheelDisabled == false)
+			main.customControl.mouseWheelDisabled = true;
+
+		var object = intersects[ 0 ].object;
+		//if select the same component, record the click position
+		if(main.component == object){
+			main.fixpointball = true;
+			main.AddCutPlaneFunc();
+		}
+
+		if ( object.userData.object !== undefined ) {
+			main.select( object.userData.object );
+			main.component = object.userData.object;
+		} else {
+			main.select( object );
+			main.component = object;
+		}
+	} else {
+		//it also calls select, to detach
+		main.select( null );
+
+
+		if(main.customControl.mouseWheelDisabled == true)
+			main.customControl.mouseWheelDisabled = false;
+
+	}
+
+}
+
+
+
+
+
+
+
+module.exports = {Model_Cut, AddCutPlaneMousePosi1, AddCutPlaneComponent}
+},{"./Procedure_button":33}],30:[function(require,module,exports){
 "use strict;"
 const Procedure_button = require('./Procedure_button');
 
@@ -8686,8 +8800,7 @@ const Model_Add = require('./Model_Add');
 const {Model_AddBetween , AddRodMousePosi1, AddRodMousePosi2,
 	SelectFurniComponent, SelectFurni} = require('./Model_AddBetween');
 
-const Model_Cut = require('./Model_Cut');
- 
+const {Model_Cut,  AddCutPlaneMousePosi1, AddCutPlaneComponent} = require('./Model_Cut'); 
 
 
 function Processor(main) {
@@ -9852,41 +9965,50 @@ module.exports = assignUVs
 
 const scadApi = require('@jscad/scad-api')
 const { CSG, CAG, isCSG, isCAG } = require('@jscad/csg')
-const {cube, sphere, cylinder} = scadApi.primitives3d
 const {union, difference, intersection} = scadApi.booleanOps
-const {translate, rotate} = scadApi.transformations
 const csgToGeometries = require('./csgToGeometries')
 const {geometryToCsgs, unionCsgs} = require('./geometryToCsgs')
 
 
-function cadCutByPlane (geometry) {
+function cadCutByPlane (geometry, cutPlane, intersectpoint, matrixWorld) {
 
 	//geometry to csg
 	var original = geometryToCsgs(geometry)[0];
 
-	var plane = CSG.Plane.fromNormalAndPoint([0, 0, 1], [0, 0, 10]);
+	var up = new THREE.Vector3(0, 0, 1);
+	up.applyQuaternion(cutPlane.quaternion);
+	up.normalize();
 
-	var cube = CSG.cube({
-		center: [0, 0, 0],
-		radius: [50, 5, 10]
-	});
+	console.log(up);
 
-	var part_1 = CSG.polyhedron({
-   		points:[ [10,10,0],[10,-10,0],[-10,-10,0],[-10,10,0], // the four points at base
-            [0,0,10]  ],                                 // the apex point 
-   		faces:[ [0,1,4],[1,2,4],[2,3,4],[3,0,4],              // each triangle side
-               [1,0,3],[2,1,3] ]                         // two triangles for square base
-		});
+	var point = intersectpoint.point.clone();
 
-	//problem!!!!!
-	var cutResult = original.cutByPlane(plane);
-	//problem exist whenever there is collision 
-	//var cutResult = union(cube, original);
+	var inverseMatrixWorld = new THREE.Matrix4();
+	inverseMatrixWorld.getInverse(matrixWorld, true);
 
+	//up.applyMatrix4(inverseMatrixWorld);
+	point.applyMatrix4(inverseMatrixWorld);
+	var tpos = new THREE.Vector3();
+	var tquat = new THREE.Quaternion();
+	var tscale = new THREE.Vector3();	
 
-	var result = csgToGeometries(cutResult)[0];
+	inverseMatrixWorld.decompose(tpos, tquat, tscale);
 
-	return result;
+	up.applyQuaternion(tquat);
+
+	up.normalize();
+
+	console.log(up);
+
+	var plane = CSG.Plane.fromNormalAndPoint(up, point);
+
+	var part1 = original.cutByPlane(plane);
+	var part2 = original.cutByPlane(plane.flipped());
+
+	var result1 = csgToGeometries(part1)[0];
+	var result2 = csgToGeometries(part2)[0];
+
+	return [result1, result2];
 }
 
 
@@ -11059,6 +11181,9 @@ const {Model_AddBetween , AddRodMousePosi1, AddRodMousePosi2,
 	SelectFurniComponent, SelectFurni} = require('./Model_AddBetween')
 //Wei Hsiang end
 
+const {Model_Cut,  AddCutPlaneMousePosi1, AddCutPlaneComponent} = require('./Model_Cut'); 
+
+
 function Main()
 {
 
@@ -11142,7 +11267,10 @@ function Main()
 	this.intersectpoint = null;
 
 
+	this.Cutting = false;
 	this.cutplane = null;
+
+	this.cutplaneDirection = 0;
 	this.fixcutplane = false;
 
 
@@ -11253,7 +11381,10 @@ Main.prototype = {
 		window.addEventListener( 'resize', this.onWindowResize.bind(this), false );
 
 		//--------------------Add Model------------------------------------------
-		window.addEventListener( 'mousemove', this.onMouseMove.bind(this), false );
+		this.container.addEventListener( 'mousemove', this.onMouseMove.bind(this), false );
+
+		//change add, plane, cut, rob parameters
+		this.container.addEventListener( 'wheel', this.onMouseWheel.bind(this), false );
 
 		//mouse events
 		this.container.addEventListener('mousedown', this.onMouseDown.bind(this), false);
@@ -11648,51 +11779,9 @@ Main.prototype = {
 		this.renderer.setSize( window.innerWidth, window.innerHeight );
 	},
 
-	//-----------------------------------Add Model--------------------------
-	onMouseMove: function ( event ) {
+	
 
-		if( this.processor.model_add !== undefined && this.Addrod == false){
-			if(this.processor.model_add.isCreateObject){
-				this.mouse.x = ( event.clientX / window.innerWidth ) * 2 - 1;
-				this.mouse.y = - ( event.clientY / window.innerHeight ) * 2 + 1;
-				var raycaster = new THREE.Raycaster();
-				raycaster.setFromCamera( this.mouse, this.camera );
-				var intersects = raycaster.intersectObjects(this.processor.model_add.selectFurniture.children);
-				if(intersects.length > 0){
-					var pos = intersects[0].point;
-					var furniture = intersects[0].object;
-					var normalVector = intersects[0].face.normal;
-					var isInsidePoint = this.processor.model_add.checkInsidePosint(this.processor.model_add.selectFurniture, pos);
-					if(isInsidePoint){
-						console.log("inside position");
-						if(this.processor.model_add.selectObjectName == "create vertical board"){
-							this.processor.model_add.insideCase(furniture, pos, normalVector);	
-						}
-					}
-					else{
-						console.log("outside position");
-						if(this.processor.model_add.selectObjectName == ""){
-							// this.processor.model_add.removeSelectObjectInScene();
-							console.log("resize " + this.processor.model_add.selectObjectName);
-							this.processor.model_add.createObject();
-						}
-						var worldNormalVector = this.processor.model_add.getFurnitureNormalVectorToWorldVector(furniture, normalVector);
-						this.processor.model_add.updateObjectPosition(pos, worldNormalVector);
-					}
-				}
-				else
-					console.log("mousemove miss");
-			}
-		}//if want to add rod
-		else if(this.Addrod == true){
-			//select the adding position in select position
-			if( this.onCtrl == false )
-				AddRodMousePosi1(this);
-			if( this.onCtrl == true )
-				AddRodMousePosi2(this);
-		}
-		//else if(this.onCtrl == true)
-	},
+
 
 	preAddObject: function(object) {
 		
@@ -12392,7 +12481,7 @@ Main.prototype = {
 		if ( this.onDownPosition.distanceTo( this.onUpPosition ) === 0 ) {
 
 			if(this.onCtrlE == false && this.onCtrl == false 
-				&& this.Addrod == false) {
+				&& this.Addrod == false && this.Cutting == false) {
 
 				var objselect = true;
 				//only select the furniture
@@ -12498,7 +12587,7 @@ Main.prototype = {
 
 
 			}else if (this.onCtrlE == true && this.onCtrl == false
-				&& this.Addrod == false){
+				&& this.Addrod == false && this.Cutting == false){
 				//select from explode objects, this.furniture should not be null
 				var intersects = this.getIntersects( this.onUpPosition, this.furniture.getObjects());
 
@@ -12530,7 +12619,7 @@ Main.prototype = {
 
 			}
 			//select two obj for getting distance
-			else if(this.onCtrl == true && this.Addrod == false){
+			else if(this.onCtrl == true && this.Addrod == false && this.Cutting == false){
 				//console.log('select two');
 				var objselect = true;
 				//only select the furniture
@@ -12571,11 +12660,14 @@ Main.prototype = {
 
 			}
 			//select the furniture component for select the adding position
-			else if( this.Addrod == true){
+			else if( this.Addrod == true && this.Cutting == false){
 				if(this.onCtrl == false)
 					SelectFurniComponent(this);
 				else
 					SelectFurni(this);
+			}else if(this.Cutting == true){
+
+				AddCutPlaneComponent(this);
 			}
 		}
 	},
@@ -12609,6 +12701,101 @@ Main.prototype = {
 
 		}
 	},
+
+
+	onMouseMove: function ( event ) {
+
+		if( this.processor.model_add !== undefined && this.Addrod == false && this.Cutting == false && this.Cutting == false){
+			//-----------------------------------Add Model--------------------------
+			if(this.processor.model_add.isCreateObject){
+				this.mouse.x = ( event.clientX / window.innerWidth ) * 2 - 1;
+				this.mouse.y = - ( event.clientY / window.innerHeight ) * 2 + 1;
+				var raycaster = new THREE.Raycaster();
+				raycaster.setFromCamera( this.mouse, this.camera );
+				var intersects = raycaster.intersectObjects(this.processor.model_add.selectFurniture.children);
+				if(intersects.length > 0){
+					var pos = intersects[0].point;
+					var furniture = intersects[0].object;
+					var normalVector = intersects[0].face.normal;
+					var isInsidePoint = this.processor.model_add.checkInsidePosint(this.processor.model_add.selectFurniture, pos);
+					if(isInsidePoint){
+						console.log("inside position");
+						if(this.processor.model_add.selectObjectName == "create vertical board"){
+							this.processor.model_add.insideCase(furniture, pos, normalVector);	
+						}
+					}
+					else{
+						console.log("outside position");
+						if(this.processor.model_add.selectObjectName == ""){
+							// this.processor.model_add.removeSelectObjectInScene();
+							console.log("resize " + this.processor.model_add.selectObjectName);
+							this.processor.model_add.createObject();
+						}
+						var worldNormalVector = this.processor.model_add.getFurnitureNormalVectorToWorldVector(furniture, normalVector);
+						this.processor.model_add.updateObjectPosition(pos, worldNormalVector);
+					}
+				}
+				else
+					console.log("mousemove miss");
+			}
+		}//if want to add rod
+		else if(this.Addrod == true){
+			//select the adding position in select position
+			if( this.onCtrl == false )
+				AddRodMousePosi1(this);
+			if( this.onCtrl == true )
+				AddRodMousePosi2(this);
+		}
+		//else if(this.onCtrl == true)
+
+
+		else if(this.Cutting == true) {
+
+			AddCutPlaneMousePosi1(this);
+		}
+
+
+	},
+
+
+	onMouseWheel: function(event) {
+		event.preventDefault();
+
+		if(this.Cutting == true && this.customControl.mouseWheelDisabled) {
+			//console.log("calling mouse wheel");
+
+			//rotate the cutting plane
+			this.cutplaneDirection++;
+
+			if(this.cutplaneDirection == 3)
+			{
+				this.cutplaneDirection = 0;
+			}
+
+
+			if(this.cutplaneDirection == 0)
+			{
+				this.cutplane.rotateZ(-90* Math.PI/180);
+				this.cutplane.rotateX(90* Math.PI/180);
+			}else if(this.cutplaneDirection == 1)
+			{
+				this.cutplane.rotateX(-90* Math.PI/180);
+				this.cutplane.rotateY(90* Math.PI/180);
+			}else if(this.cutplaneDirection == 2)
+			{
+				this.cutplane.rotateY(-90* Math.PI/180);
+				this.cutplane.rotateZ(90* Math.PI/180);
+			}		
+			
+
+
+		}else {
+
+			// 
+		}
+
+	},
+
 
 	onTouchStart: function(event) {
 		var touch = event.changedTouches[ 0 ];
@@ -13304,6 +13491,45 @@ Main.prototype = {
     		alert('position err');
     		this.fixpointball = false;
     	}
+    },
+
+    AddCutPlaneFunc: function() {
+    	//console.log("calling");
+    	//to do...
+
+    	//console.log(this.intersectpoint);
+
+    	var cutMaterial = new THREE.MeshBasicMaterial();
+
+    	if (Array.isArray(this.component.material))
+			cutMaterial = this.component.material[0].clone();
+		else
+			cutMaterial = this.component.material.clone();
+
+
+    	var cutResultGeometries = cadCutByPlane(this.component.geometry, this.cutplane, this.intersectpoint, this.component.matrixWorld);
+    	
+    	var cutPart1 = new THREE.Mesh( cutResultGeometries[0], cutMaterial );
+    	var cutPart2 = new THREE.Mesh( cutResultGeometries[1], cutMaterial );
+
+    	this.furniture.getFurniture().remove(this.component);
+    	this.furniture.getFurniture().add(cutPart1);
+    	this.furniture.getFurniture().add(cutPart2);
+
+    	//this.scene.add(cutResult);
+
+    	this.selectionBox.visible = false;
+		this.transformControls.detach();
+		this.furniture = null;
+		this.Cutting = false;
+		this.customControl.mouseWheelDisabled = false;
+		this.component = null;
+		this.intersectpoint = null;
+		this.fixpointball = false;
+		this.scene.remove(this.cutplane);
+		this.cutplane = null;
+
+
     }	
 
 };
@@ -13319,7 +13545,7 @@ document.addEventListener('DOMContentLoaded', function(event){
 
 
 
-},{"./MarkBetweenSize":24,"./MarkSize":25,"./Model_AddBetween":27,"./Processor":34,"./cadCutByPlane":37,"./cadMakeRod":40,"./computeConvexHull":44}],55:[function(require,module,exports){
+},{"./MarkBetweenSize":24,"./MarkSize":25,"./Model_AddBetween":27,"./Model_Cut":29,"./Processor":34,"./cadCutByPlane":37,"./cadMakeRod":40,"./computeConvexHull":44}],55:[function(require,module,exports){
 /*
 ## License
 

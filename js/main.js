@@ -28,6 +28,9 @@ const {Model_AddBetween , AddRodMousePosi1, AddRodMousePosi2,
 	SelectFurniComponent, SelectFurni} = require('./Model_AddBetween')
 //Wei Hsiang end
 
+const {Model_Cut,  AddCutPlaneMousePosi1, AddCutPlaneComponent} = require('./Model_Cut'); 
+
+
 function Main()
 {
 
@@ -111,7 +114,10 @@ function Main()
 	this.intersectpoint = null;
 
 
+	this.Cutting = false;
 	this.cutplane = null;
+
+	this.cutplaneDirection = 0;
 	this.fixcutplane = false;
 
 
@@ -222,7 +228,10 @@ Main.prototype = {
 		window.addEventListener( 'resize', this.onWindowResize.bind(this), false );
 
 		//--------------------Add Model------------------------------------------
-		window.addEventListener( 'mousemove', this.onMouseMove.bind(this), false );
+		this.container.addEventListener( 'mousemove', this.onMouseMove.bind(this), false );
+
+		//change add, plane, cut, rob parameters
+		this.container.addEventListener( 'wheel', this.onMouseWheel.bind(this), false );
 
 		//mouse events
 		this.container.addEventListener('mousedown', this.onMouseDown.bind(this), false);
@@ -617,51 +626,9 @@ Main.prototype = {
 		this.renderer.setSize( window.innerWidth, window.innerHeight );
 	},
 
-	//-----------------------------------Add Model--------------------------
-	onMouseMove: function ( event ) {
+	
 
-		if( this.processor.model_add !== undefined && this.Addrod == false){
-			if(this.processor.model_add.isCreateObject){
-				this.mouse.x = ( event.clientX / window.innerWidth ) * 2 - 1;
-				this.mouse.y = - ( event.clientY / window.innerHeight ) * 2 + 1;
-				var raycaster = new THREE.Raycaster();
-				raycaster.setFromCamera( this.mouse, this.camera );
-				var intersects = raycaster.intersectObjects(this.processor.model_add.selectFurniture.children);
-				if(intersects.length > 0){
-					var pos = intersects[0].point;
-					var furniture = intersects[0].object;
-					var normalVector = intersects[0].face.normal;
-					var isInsidePoint = this.processor.model_add.checkInsidePosint(this.processor.model_add.selectFurniture, pos);
-					if(isInsidePoint){
-						console.log("inside position");
-						if(this.processor.model_add.selectObjectName == "create vertical board"){
-							this.processor.model_add.insideCase(furniture, pos, normalVector);	
-						}
-					}
-					else{
-						console.log("outside position");
-						if(this.processor.model_add.selectObjectName == ""){
-							// this.processor.model_add.removeSelectObjectInScene();
-							console.log("resize " + this.processor.model_add.selectObjectName);
-							this.processor.model_add.createObject();
-						}
-						var worldNormalVector = this.processor.model_add.getFurnitureNormalVectorToWorldVector(furniture, normalVector);
-						this.processor.model_add.updateObjectPosition(pos, worldNormalVector);
-					}
-				}
-				else
-					console.log("mousemove miss");
-			}
-		}//if want to add rod
-		else if(this.Addrod == true){
-			//select the adding position in select position
-			if( this.onCtrl == false )
-				AddRodMousePosi1(this);
-			if( this.onCtrl == true )
-				AddRodMousePosi2(this);
-		}
-		//else if(this.onCtrl == true)
-	},
+
 
 	preAddObject: function(object) {
 		
@@ -1361,7 +1328,7 @@ Main.prototype = {
 		if ( this.onDownPosition.distanceTo( this.onUpPosition ) === 0 ) {
 
 			if(this.onCtrlE == false && this.onCtrl == false 
-				&& this.Addrod == false) {
+				&& this.Addrod == false && this.Cutting == false) {
 
 				var objselect = true;
 				//only select the furniture
@@ -1467,7 +1434,7 @@ Main.prototype = {
 
 
 			}else if (this.onCtrlE == true && this.onCtrl == false
-				&& this.Addrod == false){
+				&& this.Addrod == false && this.Cutting == false){
 				//select from explode objects, this.furniture should not be null
 				var intersects = this.getIntersects( this.onUpPosition, this.furniture.getObjects());
 
@@ -1499,7 +1466,7 @@ Main.prototype = {
 
 			}
 			//select two obj for getting distance
-			else if(this.onCtrl == true && this.Addrod == false){
+			else if(this.onCtrl == true && this.Addrod == false && this.Cutting == false){
 				//console.log('select two');
 				var objselect = true;
 				//only select the furniture
@@ -1540,11 +1507,14 @@ Main.prototype = {
 
 			}
 			//select the furniture component for select the adding position
-			else if( this.Addrod == true){
+			else if( this.Addrod == true && this.Cutting == false){
 				if(this.onCtrl == false)
 					SelectFurniComponent(this);
 				else
 					SelectFurni(this);
+			}else if(this.Cutting == true){
+
+				AddCutPlaneComponent(this);
 			}
 		}
 	},
@@ -1578,6 +1548,101 @@ Main.prototype = {
 
 		}
 	},
+
+
+	onMouseMove: function ( event ) {
+
+		if( this.processor.model_add !== undefined && this.Addrod == false && this.Cutting == false && this.Cutting == false){
+			//-----------------------------------Add Model--------------------------
+			if(this.processor.model_add.isCreateObject){
+				this.mouse.x = ( event.clientX / window.innerWidth ) * 2 - 1;
+				this.mouse.y = - ( event.clientY / window.innerHeight ) * 2 + 1;
+				var raycaster = new THREE.Raycaster();
+				raycaster.setFromCamera( this.mouse, this.camera );
+				var intersects = raycaster.intersectObjects(this.processor.model_add.selectFurniture.children);
+				if(intersects.length > 0){
+					var pos = intersects[0].point;
+					var furniture = intersects[0].object;
+					var normalVector = intersects[0].face.normal;
+					var isInsidePoint = this.processor.model_add.checkInsidePosint(this.processor.model_add.selectFurniture, pos);
+					if(isInsidePoint){
+						console.log("inside position");
+						if(this.processor.model_add.selectObjectName == "create vertical board"){
+							this.processor.model_add.insideCase(furniture, pos, normalVector);	
+						}
+					}
+					else{
+						console.log("outside position");
+						if(this.processor.model_add.selectObjectName == ""){
+							// this.processor.model_add.removeSelectObjectInScene();
+							console.log("resize " + this.processor.model_add.selectObjectName);
+							this.processor.model_add.createObject();
+						}
+						var worldNormalVector = this.processor.model_add.getFurnitureNormalVectorToWorldVector(furniture, normalVector);
+						this.processor.model_add.updateObjectPosition(pos, worldNormalVector);
+					}
+				}
+				else
+					console.log("mousemove miss");
+			}
+		}//if want to add rod
+		else if(this.Addrod == true){
+			//select the adding position in select position
+			if( this.onCtrl == false )
+				AddRodMousePosi1(this);
+			if( this.onCtrl == true )
+				AddRodMousePosi2(this);
+		}
+		//else if(this.onCtrl == true)
+
+
+		else if(this.Cutting == true) {
+
+			AddCutPlaneMousePosi1(this);
+		}
+
+
+	},
+
+
+	onMouseWheel: function(event) {
+		event.preventDefault();
+
+		if(this.Cutting == true && this.customControl.mouseWheelDisabled) {
+			//console.log("calling mouse wheel");
+
+			//rotate the cutting plane
+			this.cutplaneDirection++;
+
+			if(this.cutplaneDirection == 3)
+			{
+				this.cutplaneDirection = 0;
+			}
+
+
+			if(this.cutplaneDirection == 0)
+			{
+				this.cutplane.rotateZ(-90* Math.PI/180);
+				this.cutplane.rotateX(90* Math.PI/180);
+			}else if(this.cutplaneDirection == 1)
+			{
+				this.cutplane.rotateX(-90* Math.PI/180);
+				this.cutplane.rotateY(90* Math.PI/180);
+			}else if(this.cutplaneDirection == 2)
+			{
+				this.cutplane.rotateY(-90* Math.PI/180);
+				this.cutplane.rotateZ(90* Math.PI/180);
+			}		
+			
+
+
+		}else {
+
+			// 
+		}
+
+	},
+
 
 	onTouchStart: function(event) {
 		var touch = event.changedTouches[ 0 ];
@@ -2273,6 +2338,45 @@ Main.prototype = {
     		alert('position err');
     		this.fixpointball = false;
     	}
+    },
+
+    AddCutPlaneFunc: function() {
+    	//console.log("calling");
+    	//to do...
+
+    	//console.log(this.intersectpoint);
+
+    	var cutMaterial = new THREE.MeshBasicMaterial();
+
+    	if (Array.isArray(this.component.material))
+			cutMaterial = this.component.material[0].clone();
+		else
+			cutMaterial = this.component.material.clone();
+
+
+    	var cutResultGeometries = cadCutByPlane(this.component.geometry, this.cutplane, this.intersectpoint, this.component.matrixWorld);
+    	
+    	var cutPart1 = new THREE.Mesh( cutResultGeometries[0], cutMaterial );
+    	var cutPart2 = new THREE.Mesh( cutResultGeometries[1], cutMaterial );
+
+    	this.furniture.getFurniture().remove(this.component);
+    	this.furniture.getFurniture().add(cutPart1);
+    	this.furniture.getFurniture().add(cutPart2);
+
+    	//this.scene.add(cutResult);
+
+    	this.selectionBox.visible = false;
+		this.transformControls.detach();
+		this.furniture = null;
+		this.Cutting = false;
+		this.customControl.mouseWheelDisabled = false;
+		this.component = null;
+		this.intersectpoint = null;
+		this.fixpointball = false;
+		this.scene.remove(this.cutplane);
+		this.cutplane = null;
+
+
     }	
 
 };
