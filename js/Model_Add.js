@@ -39,6 +39,8 @@ function Model_Add(main){
     this.objectVector = new THREE.Vector3();
     this.isCreateObject = false;
 
+    this.isCreateInsideObject = false;
+
     this.textures = {};
     
 }
@@ -107,6 +109,31 @@ Model_Add.prototype = {
 		}
 		var result = new THREE.Vector3();
 		tmp.getSize(result);
+		return result;
+	},
+
+	getSelectFurnitureCenterWithoutCreateObject: function() {
+		var furniture = this.selectFurniture;
+		while(furniture.parent != this.main.scene)
+			furniture = furniture.parent;
+		var boxes = [];
+		for (var i = 0; i < furniture.children.length; i++) {
+			if(furniture.children[i].type == "Mesh"){
+				var name = furniture.children[i].name;
+				var isCreatePart = name.includes("create");
+				if(!isCreatePart){
+					var box = new THREE.Box3();
+					box.setFromObject(furniture.children[i]);
+					boxes.push(box);
+				}
+			}
+		}
+		var tmp = new THREE.Box3();
+		for (var i = 0; i < boxes.length; i++) {
+			tmp = tmp.union(boxes[i]);
+		}
+		var result = new THREE.Vector3();
+		tmp.getCenter(result);
 		return result;
 	},
 
@@ -656,14 +683,174 @@ Model_Add.prototype = {
 		this.objectVector = this.planeNormalVector;
 	},
 
+	resizeVerBoard: function(obj) {
+		if(!this.objectVector.equals(this.planeNormalVector)){
+			var objSize = this.getPartSize(obj);
+			var objScale = obj.scale.clone();
+			var furnitureSize = this.getSelectFurnitureSizeWithoutCreateObject();
+			var pos_x = new THREE.Vector3(1,0,0);
+			var pos_y = new THREE.Vector3(0,1,0);
+			var pos_z = new THREE.Vector3(0,0,1);
+			var neg_x = new THREE.Vector3(-1,0,0);
+			var neg_y = new THREE.Vector3(0,-1,0);
+			var neg_z = new THREE.Vector3(0,0,-1);
+			if(this.planeNormalVector.equals(pos_x) || this.planeNormalVector.equals(neg_x)){
+				console.log("Resize to NormalVector X");
+				objScale.x = objScale.x / objSize.x * furnitureSize.x;
+				objScale.y = objScale.y / objSize.y * 0.3;
+				objScale.z = objScale.z / objSize.z * furnitureSize.z;
+			}
+			if(this.planeNormalVector.equals(pos_y) || this.planeNormalVector.equals(neg_y)){
+				console.log("Resize to NormalVector Y");
+				objScale.x = objScale.x / objSize.x * furnitureSize.x;
+				objScale.y = objScale.y / objSize.y * (furnitureSize.y / 3);
+				objScale.z = objScale.z / objSize.z * 0.3;
+			}
+			if(this.planeNormalVector.equals(pos_z) || this.planeNormalVector.equals(neg_z)){
+				console.log("Resize to NormalVector Z");
+				objScale.x = objScale.x / objSize.x * furnitureSize.x;
+				objScale.y = objScale.y / objSize.y * 0.3;
+				objScale.z = objScale.z / objSize.z * furnitureSize.z;
+			}
+			obj.scale.x = objScale.x;
+			obj.scale.y = objScale.y;
+			obj.scale.z = objScale.z;
+		}
+		this.objectVector = this.planeNormalVector;
+	},
+
+	getVerBoardOffset: function(pos) {
+		var verBoardSize = this.getPartSize(this.selectObject);
+		var zero = new THREE.Vector3(-verBoardSize.x/2, verBoardSize.y/2, -verBoardSize.z/2);
+		var furnitureSize = this.getSelectFurnitureSizeWithoutCreateObject();
+		var furnitureCenter = this.getSelectFurnitureCenterWithoutCreateObject();
+		if(this.planeNormalVector.equals(new THREE.Vector3(0,0,1))){
+			var x = parseFloat(furnitureCenter.x) - parseFloat(furnitureSize.x) / 2;
+			var y = parseFloat(pos.y);
+			var z = parseFloat(pos.z);
+			return new THREE.Vector3(x, y, z);
+		}
+		if(this.planeNormalVector.equals(new THREE.Vector3(0,0,-1))){
+			var x = parseFloat(furnitureCenter.x) - parseFloat(furnitureSize.x) / 2;
+			var y = parseFloat(pos.y);
+			var z = parseFloat(pos.z) - parseFloat(verBoardSize.z) + 0.12 * this.selectObject.scale.z;
+			return new THREE.Vector3(x, y, z);
+		}
+		if(this.planeNormalVector.equals(new THREE.Vector3(-1,0,0))){
+			var x = parseFloat(pos.x) - parseFloat(verBoardSize.x) + 0.12 * this.selectObject.scale.x;
+			var y = parseFloat(pos.y);
+			var z = parseFloat(furnitureCenter.z) - parseFloat(furnitureSize.z) / 2;
+			return new THREE.Vector3(x, y, z);
+		}
+		if(this.planeNormalVector.equals(new THREE.Vector3(1,0,0))){
+			var x = parseFloat(pos.x) + 0.12 * this.selectObject.scale.x;
+			var y = parseFloat(pos.y);
+			var z = parseFloat(furnitureCenter.z) - parseFloat(furnitureSize.z) / 2;
+			return new THREE.Vector3(x, y, z);
+		}
+		if(this.planeNormalVector.equals(new THREE.Vector3(0,1,0))){
+			var x = parseFloat(pos.x) + parseFloat(zero.x);
+			var y = parseFloat(pos.y) + 0.12 * this.selectObject.scale.y;
+			var z = parseFloat(pos.z) + parseFloat(zero.z);
+			return new THREE.Vector3(x, y, z);
+		}
+		if(this.planeNormalVector.equals(new THREE.Vector3(0,-1,0))){
+			var x = parseFloat(pos.x) + parseFloat(zero.x);
+			var y = parseFloat(pos.y) - parseFloat(zero.y) - 0.12 * this.selectObject.scale.y;
+			var z = parseFloat(pos.z) + parseFloat(zero.z);
+			return new THREE.Vector3(x, y, z);
+		}
+	},
+
 	updateVerBoardPosition: function(pos) {
-		this.rotateObjectVectorToPlaneNormalVector();
-		this.selectObject.position.set(pos.x, pos.y, pos.z);
+		this.resizeVerBoard(this.selectObject);
+		var offset = this.getVerBoardOffset(pos);
+		this.selectObject.position.set(offset.x, offset.y, offset.z);
+	},
+
+	resizeHorBoard: function(obj) {
+		if(!this.objectVector.equals(this.planeNormalVector)){
+			var objSize = this.getPartSize(obj);
+			var objScale = obj.scale.clone();
+			var furnitureSize = this.getSelectFurnitureSizeWithoutCreateObject();
+			var pos_x = new THREE.Vector3(1,0,0);
+			var pos_y = new THREE.Vector3(0,1,0);
+			var pos_z = new THREE.Vector3(0,0,1);
+			var neg_x = new THREE.Vector3(-1,0,0);
+			var neg_y = new THREE.Vector3(0,-1,0);
+			var neg_z = new THREE.Vector3(0,0,-1);
+			if(this.planeNormalVector.equals(pos_x) || this.planeNormalVector.equals(neg_x)){
+				console.log("Resize to NormalVector X");
+				objScale.x = objScale.x / objSize.x * 0.3;
+				objScale.y = objScale.y / objSize.y * furnitureSize.y;
+				objScale.z = objScale.z / objSize.z * furnitureSize.z;
+			}
+			if(this.planeNormalVector.equals(pos_y) || this.planeNormalVector.equals(neg_y)){
+				console.log("Resize to NormalVector Y");
+				objScale.x = objScale.x / objSize.x * furnitureSize.x;
+				objScale.y = objScale.y / objSize.y * 0.3;
+				objScale.z = objScale.z / objSize.z * furnitureSize.z;
+			}
+			if(this.planeNormalVector.equals(pos_z) || this.planeNormalVector.equals(neg_z)){
+				console.log("Resize to NormalVector Z");
+				objScale.x = objScale.x / objSize.x * furnitureSize.x;
+				objScale.y = objScale.y / objSize.y * furnitureSize.y;
+				objScale.z = objScale.z / objSize.z * 0.3;
+			}
+			obj.scale.x = objScale.x;
+			obj.scale.y = objScale.y;
+			obj.scale.z = objScale.z;
+		}
+		this.objectVector = this.planeNormalVector;
+	},
+
+	getHorBoardOffset: function(pos) {
+		var horBoardSize = this.getPartSize(this.selectObject);
+		var zero = new THREE.Vector3(-horBoardSize.x/2, horBoardSize.y/2, -horBoardSize.z/2);
+		var furnitureSize = this.getSelectFurnitureSizeWithoutCreateObject();
+		var furnitureCenter = this.getSelectFurnitureCenterWithoutCreateObject();
+		if(this.planeNormalVector.equals(new THREE.Vector3(0,0,1))){
+			var x = parseFloat(furnitureCenter.x) - parseFloat(furnitureSize.x) / 2 + 0.12 * this.selectObject.scale.x;
+			var y = parseFloat(pos.y) + 0.12 * this.selectObject.scale.y;
+			var z = parseFloat(pos.z);
+			return new THREE.Vector3(x, y, z);
+		}
+		if(this.planeNormalVector.equals(new THREE.Vector3(0,0,-1))){
+			var x = parseFloat(furnitureCenter.x) - parseFloat(furnitureSize.x) / 2 + 0.12 * this.selectObject.scale.x;
+			var y = parseFloat(pos.y) + 0.12 * this.selectObject.scale.y;
+			var z = parseFloat(pos.z) - parseFloat(horBoardSize.z);
+			return new THREE.Vector3(x, y, z);
+		}
+		if(this.planeNormalVector.equals(new THREE.Vector3(-1,0,0))){
+			var x = parseFloat(pos.x) - parseFloat(horBoardSize.x);
+			var y = parseFloat(pos.y) + 0.12 * this.selectObject.scale.y;
+			var z = parseFloat(furnitureCenter.z) - parseFloat(furnitureSize.z) / 2 + 0.12 * this.selectObject.scale.z;
+			return new THREE.Vector3(x, y, z);
+		}
+		if(this.planeNormalVector.equals(new THREE.Vector3(1,0,0))){
+			var x = parseFloat(pos.x);
+			var y = parseFloat(pos.y) + 0.12 * this.selectObject.scale.y;
+			var z = parseFloat(furnitureCenter.z) - parseFloat(furnitureSize.z) / 2 + 0.12 * this.selectObject.scale.z;
+			return new THREE.Vector3(x, y, z);
+		}
+		if(this.planeNormalVector.equals(new THREE.Vector3(0,1,0))){
+			var x = parseFloat(pos.x) + parseFloat(zero.x);
+			var y = parseFloat(pos.y) + 0.12 * this.selectObject.scale.y;
+			var z = parseFloat(pos.z) + parseFloat(zero.z);
+			return new THREE.Vector3(x, y, z);
+		}
+		if(this.planeNormalVector.equals(new THREE.Vector3(0,-1,0))){
+			var x = parseFloat(furnitureCenter.x) - parseFloat(furnitureSize.x) / 2;
+			var y = parseFloat(pos.y) - parseFloat(zero.y) - 0.12 * this.selectObject.scale.y;
+			var z = parseFloat(furnitureCenter.z) - parseFloat(furnitureSize.z) / 2;
+			return new THREE.Vector3(x, y, z);
+		}
 	},
 
 	updateHorBoardPosition: function(pos) {
-		this.rotateObjectVectorToPlaneNormalVector();
-		this.selectObject.position.set(pos.x, pos.y, pos.z);
+		this.resizeHorBoard(this.selectObject);
+		var offset = this.getHorBoardOffset(pos);
+		this.selectObject.position.set(offset.x, offset.y, offset.z);
 	},
 
 	getRodOffset: function() {
@@ -864,6 +1051,9 @@ Model_Add.prototype = {
 		else if(vector == "axis y fail")
 			console.log("GrowthVector y is not correct");
 		else {
+			// if(!this.isCreateInsideObject){
+			// 	this.removeSelectObjectInScene();
+			// }
 			var dir = "";
 			if(vector.equals(new THREE.Vector3(1,0,0)) || vector.equals(new THREE.Vector3(-1,0,0)))
 				dir = "x";
@@ -872,7 +1062,9 @@ Model_Add.prototype = {
 			else if(vector.equals(new THREE.Vector3(0,0,1)) || vector.equals(new THREE.Vector3(0,0,-1)))
 				dir = "z";
 
+			// //get start point and end point
 			var twoPoint = this.getRange(this.selectFurniture, newPos, vector);
+
 			//create points on the line
 			var points = [];
 			if(dir == "x"){
@@ -917,7 +1109,8 @@ Model_Add.prototype = {
 					}
 				}
 			}
-			//init points info
+
+			// //init points info
 			var marked = [];
 			for (var i = 0; i < points.length; i++) {
 				marked.push("M"); // all points init "miss"
@@ -925,23 +1118,18 @@ Model_Add.prototype = {
 
 			//check range first time
 			for (var i = 0; i < points.length; i++) {
-				var intersects = this.getPointByRay(furniture, points[i], negNormalVector);
+				var intersects = this.getPointByRay(this.selectFurniture, points[i], negNormalVector);
 				if(intersects.length > 0){
 					marked[i] = "H"; // the point is on the same side with user selected point
 				}
 			}
 
-			//check range second time
-			var oppositePoints = []; // record hit points
+			// //check range second time
 			for (var i = 0; i < marked.length; i++) {
 				if (marked[i] == "H"){
 					var intersects = this.getPointByRay(this.selectFurniture, points[i], normalVector);
 					if(intersects.length == 0){
 						marked[i] = "M"; // the opposite point not find 
-						oppositePoints.push("M");
-					}
-					else if(intersects.length > 0){
-						oppositePoints.push(intersects[0].point);
 					}
 				}
 			}
@@ -958,14 +1146,88 @@ Model_Add.prototype = {
 			var j = marked.length - 1;
 			while(marked[j] != "H" && j >= 0)
 				j--;
-			console.log(i);
-			console.log(j);
-			console.log(marked);
-			console.log(points);
+			
+			var intersects1 = this.getPointByRay(this.selectFurniture, points[i], negNormalVector);
+			var intersects2 = this.getPointByRay(this.selectFurniture, points[i], normalVector);
+			var intersects3 = this.getPointByRay(this.selectFurniture, points[j], negNormalVector);
+			var intersects4 = this.getPointByRay(this.selectFurniture, points[j], normalVector);
+
+			var point1 = intersects1[0].point;
+			var point2 = intersects2[0].point;
+			var point3 = intersects3[0].point;
+			var point4 = intersects4[0].point;
+
+			// console.log("sub");
+			var tmp1 = point1.clone();
+			tmp1.sub(point2);
+			// console.log(tmp1);
+			var tmp2 = point2.clone();
+			tmp2.sub(point4);
+			// console.log(tmp2);
+			var width, height, depth;
+			if(parseFloat(tmp1.x).toFixed(3) != 0){
+				width = Math.abs(parseFloat(tmp1.x).toFixed(3));
+			}
+			if(parseFloat(tmp1.y).toFixed(3) != 0){
+				height = Math.abs(parseFloat(tmp1.y).toFixed(3));
+			}
+			if(parseFloat(tmp1.z).toFixed(3) != 0){
+				depth = Math.abs(parseFloat(tmp1.z).toFixed(3));
+			}
+
+			if(parseFloat(tmp2.x).toFixed(3) != 0){
+				width = Math.abs(parseFloat(tmp2.x).toFixed(3));
+			}
+			if(parseFloat(tmp2.y).toFixed(3) != 0){
+				height = Math.abs(parseFloat(tmp2.y).toFixed(3));
+			}
+			if(parseFloat(tmp2.z).toFixed(3) != 0){
+				depth = Math.abs(parseFloat(tmp2.z).toFixed(3));
+			}
+
+			if(typeof(width) == "undefined" || width == 0)
+				width = 0.3;
+			if(typeof(height) == "undefined" || height === 0)
+				height = 0.3;
+			if(typeof(depth) == "undefined" || depth == 0)
+				depth = 0.3;
+
+			if(this.selectObjectName == "") {
+				var texture = this.textures["leg"];
+				var material = new THREE.MeshBasicMaterial( {map: texture} );
+				var geometry = chairCreateBoard(width, height, depth);
+				var insideBoard = new THREE.Mesh(geometry, material);
+				insideBoard.name = "create vertical board";
+				this.selectObject = insideBoard;
+				this.selectObjectName = insideBoard.name;
+				insideBoard.position.set(0,0,-30);
+				this.main.scene.add(insideBoard);
+			}
+			else {
+				var objSize = this.getPartSize(this.selectObject);
+				var objScale = this.selectObject.scale.clone();
+				objScale.x = objScale.x / objSize.x * width;
+				objScale.y = objScale.y / objSize.y * height;
+				objScale.z = objScale.z / objSize.z * depth;
+			}
+
+
+			var tmpx = (parseFloat(point1.x) + parseFloat(point2.x) + parseFloat(point3.x) + parseFloat(point4.x))/4;
+			var tmpy = (parseFloat(point1.y) + parseFloat(point2.y) + parseFloat(point3.y) + parseFloat(point4.y))/4;
+			var tmpz = (parseFloat(point1.z) + parseFloat(point2.z) + parseFloat(point3.z) + parseFloat(point4.z))/4;
+			var updatePosition = new THREE.Vector3(tmpx, tmpy, tmpz);
+			
+			for (var i = 0; i < this.main.scene.children.length; i++) {
+				if(this.main.scene.children[i].name == "create vertical board"){
+					var insideObj = this.main.scene.children[i];
+					break;
+				}
+			}
+			var insideObjSize = this.getPartSize(insideObj);
+			insideObj.position.set( tmpx - parseFloat(insideObjSize.x)/2, 
+									tmpy - parseFloat(insideObjSize.y)/2, 
+									tmpz - parseFloat(insideObjSize.z)/2);
 		}
-		
-
-
 	},
 
 	checkGrowthVector: function(furniture, newPos, normalVector) {
@@ -1009,7 +1271,7 @@ Model_Add.prototype = {
 			dir = "y";
 		else if(vector.equals(new THREE.Vector3(0,0,1)) || vector.equals(new THREE.Vector3(0,0,-1)))
 			dir = "z";
-		console.log("dir = " + dir);
+		// console.log("dir = " + dir);
 		var furnitureSize = this.getPartSize(furniture);
 		var furnitureCenter = this.getPartCenter(furniture);
 		var point1 = pos.clone();
@@ -1026,8 +1288,9 @@ Model_Add.prototype = {
 			if(dir == "z")
 				point1.z = furnitureCenter.z + furnitureSize.z/2;
 		}
-		console.log(point1);
-		var negVector = new THREE.Vector3(-vector.x, -vector.y, -vector.z);
+		// console.log(point1);
+		var negVector = vector.clone();
+		negVector.negate ();
 		var intersects2 = this.getPointByRay(furniture, pos, negVector);
 		if (intersects2.length > 0) {
 			point2 = intersects2[0].point;
@@ -1040,7 +1303,7 @@ Model_Add.prototype = {
 			if(dir == "z")
 				point2.z = furnitureCenter.z - furnitureSize.z/2;
 		}
-		console.log(point2);
+		// console.log(point2);
 		if(pn > 0){
 			if(dir == "x"){
 				point1.x = parseFloat(point1.x) - 0.01;

@@ -634,10 +634,17 @@ Main.prototype = {
 					var isInsidePoint = this.processor.model_add.checkInsidePosint(this.processor.model_add.selectFurniture, pos);
 					if(isInsidePoint){
 						console.log("inside position");
-						this.processor.model_add.insideCase(furniture, pos, normalVector);
+						if(this.processor.model_add.selectObjectName == "create vertical board"){
+							this.processor.model_add.insideCase(furniture, pos, normalVector);	
+						}
 					}
 					else{
-						// console.log("outside position");
+						console.log("outside position");
+						if(this.processor.model_add.selectObjectName == ""){
+							// this.processor.model_add.removeSelectObjectInScene();
+							console.log("resize " + this.processor.model_add.selectObjectName);
+							this.processor.model_add.createObject();
+						}
 						var worldNormalVector = this.processor.model_add.getFurnitureNormalVectorToWorldVector(furniture, normalVector);
 						this.processor.model_add.updateObjectPosition(pos, worldNormalVector);
 					}
@@ -1390,7 +1397,6 @@ Main.prototype = {
 							}
 							else{
 								// furniture change
-
 								if(this.processor.model_add.selectFurniture != this.furniture.getFurniture()){
 									var furniture = this.furniture.getFurniture();
 									this.processor.model_add.selectFurnitureUUID = furniture.uuid;
@@ -1398,6 +1404,7 @@ Main.prototype = {
 								}
 								else{
 									this.processor.model_add.isCreateObject = false;
+									this.processor.model_add.isCreateInsideObject = false;
 									var furniture = this.processor.model_add.selectFurniture;
 									var obj = this.processor.model_add.selectObject;
 									var pos = obj.position.clone ();
