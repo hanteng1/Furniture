@@ -1589,10 +1589,10 @@ module.exports = Chair_Add
 //chair align related functions
 //align in one line
 //add seat
-const cadMakeSeat = require('./cadMakeSeat')
-const computeConvexHull = require('./computeConvexHull')
-const chairCutBack = require('./chairCutBack')
-
+const cadMakeSeat = require('./cadMakeSeat');
+const computeConvexHull = require('./computeConvexHull');
+const chairCutBack = require('./chairCutBack');
+const rebuildMakeLeg = require('./rebuildMakeLeg');
 
 function Chair_Align (main) {
 
@@ -1707,19 +1707,32 @@ Chair_Align.prototype = {
 
 	execute: function(tfname){
 
-		if(this.cornerAdded == false) {
-			for(var i = 0; i < this.furnitures.length; i++) {
-				this.furnitures[i].addCorners();
-				this.furnitures[i].addtoPoint();
-			}
-			this.cornerAdded = true;
-		}
+		
 
 		if(tfname == "vertical"){
+
+
+			if(this.cornerAdded == false) {
+				for(var i = 0; i < this.furnitures.length; i++) {
+					this.furnitures[i].addCorners();
+					this.furnitures[i].addtoPoint();
+				}
+				this.cornerAdded = true;
+			}
+
 			this.align(this.furnitures, this.parameters.DISTANCE, this.parameters.ANGLE);
 			this.addSeat(this.furnitures, this.reference, this.textures);
 
 		}else if(tfname == "horizontal") {
+
+
+			if(this.cornerAdded == false) {
+				for(var i = 0; i < this.furnitures.length; i++) {
+					this.furnitures[i].addCorners();
+					this.furnitures[i].addtoPoint();
+				}
+				this.cornerAdded = true;
+			}
 
 			for(var angle = 0; angle <= 180; angle ++){
 				this.parameters.ANGLE = angle;
@@ -1729,6 +1742,15 @@ Chair_Align.prototype = {
 			this.addSeat(this.furnitures, this.reference, this.textures);
 
 		}else if(tfname == "flip") {
+
+			if(this.cornerAdded == false) {
+				for(var i = 0; i < this.furnitures.length; i++) {
+					this.furnitures[i].addCorners();
+					this.furnitures[i].addtoPoint();
+				}
+				this.cornerAdded = true;
+			}
+			
 
 			this.cut(this.furnitures);
 
@@ -1748,6 +1770,13 @@ Chair_Align.prototype = {
 			//move upwards
 			this.seat.translateZ(-0.6);
 
+		}else if(tfname == "connect1"){
+
+			this.backConnect1(this.furnitures);
+			
+		}else if(tfname == "connect2"){
+
+			this.backConnect2(this.furnitures);
 		}
 		
 	},
@@ -2201,6 +2230,145 @@ Chair_Align.prototype = {
 		scope.main.scene.add( scope.seat );
 
 
+	},
+
+	backConnect1: function( furnitures ){
+		
+		//rotate chair
+		furnitures[0].setRotationWithNormalAxis("back", new THREE.Vector3( 1 , 0 , 0 ) );
+		furnitures[1].setRotationWithNormalAxis("back", new THREE.Vector3( -1, 0 , 0 ) );
+
+		furnitures[0].setRotationWithNormalAxis("back", new THREE.Vector3( 1 , -1.3 , 0 ) );
+		furnitures[1].setRotationWithNormalAxis("back", new THREE.Vector3( -1, -1.3 , 0 ) );
+		
+		//get funiture
+		var f1 = furnitures[0].getFurniture();
+		var f2 = furnitures[1].getFurniture();
+		//get back
+		var f1back = furnitures[0].getComponentByName('seat-back');
+		var f2back = furnitures[1].getComponentByName('seat-back');
+
+		//remove leg
+		this.Notremove(f1,'seat-back');
+		this.Notremove(f2,'seat-back');
+
+		//get back center
+		var box = new THREE.Box3();
+		var BackCenter = new THREE.Vector3();
+		f1BackCenter = new THREE.Vector3();
+		f2BackCenter = new THREE.Vector3();
+		box.setFromObject(f1back);
+		box.getCenter(f1BackCenter);
+		box.setFromObject(f2back);
+		box.getCenter(f2BackCenter);
+
+		//get back size
+		var BackSize = new THREE.Vector3();
+		box.getSize(BackSize);
+		
+		var diff = new THREE.Vector3(f1BackCenter.x - f2BackCenter.x ,
+									 f1BackCenter.y - f2BackCenter.y ,
+									 f1BackCenter.z - f2BackCenter.z );
+
+		//get chair 2 position
+		var f2Position = furnitures[1].getPosition();
+
+		//move chair position
+		f2.position.set(f2Position.x + diff.x - BackSize.x,
+						f2Position.y + diff.y,
+						f2Position.z + diff.z );
+
+	},
+
+	Notremove: function(group, name){
+		for (var i = group.children.length - 1; i >= 0 ; i--) {				
+			var str = group.children[i].name;
+			if (str != name) {
+				group.remove(group.children[i]);
+			}	
+		}
+	},
+
+	backConnect2: function( furnitures ){
+		//rotate chair
+		furnitures[0].setRotationWithNormalAxis("back", new THREE.Vector3( 1 , 0 , 0 ) );
+		furnitures[1].setRotationWithNormalAxis("back", new THREE.Vector3( -1, 0 , 0 ) );
+
+		furnitures[0].setRotationWithNormalAxis("seat", new THREE.Vector3( 0 , 1 , 0 ) );
+		furnitures[1].setRotationWithNormalAxis("seat", new THREE.Vector3( 0, -1 , 0 ) );
+
+		//get funiture
+		var f1 = furnitures[0].getFurniture();
+		var f2 = furnitures[1].getFurniture();
+		//remove leg
+		this.Notremove(f1,'seat-back');
+		this.Notremove(f2,'seat-back');
+
+		//get back
+		var f1back = furnitures[0].getComponentByName('seat-back');
+		var f2back = furnitures[1].getComponentByName('seat-back');
+		//get back center
+		var box = new THREE.Box3();
+		var BackCenter = new THREE.Vector3();
+		var f1BackCenter = new THREE.Vector3();
+		var f2BackCenter = new THREE.Vector3();
+		box.setFromObject(f1back);
+		box.getCenter(f1BackCenter);
+		box.setFromObject(f2back);
+		box.getCenter(f2BackCenter);
+
+		//get back size
+		var BackSize = new THREE.Vector3();
+		box.getSize(BackSize);
+		//get two back diff position
+		var diff = new THREE.Vector3(f1BackCenter.x - f2BackCenter.x ,
+									 f1BackCenter.y - f2BackCenter.y ,
+									 f1BackCenter.z - f2BackCenter.z );
+
+		//get chair position
+		var f1Position = furnitures[0].getPosition();
+		var f2Position = furnitures[1].getPosition();
+
+		//move chair position
+		f2.position.set(f2Position.x + diff.x ,
+						f2Position.y + diff.y - BackSize.y,
+						f2Position.z + diff.z );
+		
+		// creat leg geometry
+		var LegGeometry = rebuildMakeLeg ( BackSize.z/20 , BackSize.y );
+		var texture = new THREE.TextureLoader().load( 'images/material/material2.jpg' );
+		var newmaterial = new THREE.MeshBasicMaterial( { map: texture } );
+		//creat leg model
+		var Leg1Model = new THREE.Mesh( LegGeometry, newmaterial );
+		var Leg2Model = new THREE.Mesh( LegGeometry, newmaterial );
+		this.main.Sceneobjects.push(Leg1Model);
+		this.main.Sceneobjects.push(Leg2Model);
+		
+		//get leg and f2 center
+		var LegCenter = new THREE.Vector3();
+		box.setFromObject(Leg1Model);
+		box.getCenter(LegCenter);
+		box.setFromObject(f2);
+		box.getCenter(f2BackCenter);
+		diff = new THREE.Vector3(f2BackCenter.x - LegCenter.x ,
+								 f2BackCenter.y - LegCenter.y ,
+								 f2BackCenter.z - LegCenter.z );
+		//get leg position
+		var Leg1Posit = Leg1Model.position;
+		var Leg2Posit = Leg2Model.position;
+		//set leg position
+		Leg1Model.position.set( Leg1Posit.x + f2BackCenter.x + BackSize.x/3 ,
+							    Leg1Posit.y + f2BackCenter.y - BackSize.y/2 ,
+							    Leg1Posit.z + f2BackCenter.z + BackSize.z/3);
+		Leg2Model.position.set( Leg2Posit.x + f2BackCenter.x + BackSize.x/3 ,
+							    Leg2Posit.y + f2BackCenter.y - BackSize.y/2 ,
+							    Leg2Posit.z + f2BackCenter.z - BackSize.z/3);
+
+
+		var scope=this;
+		scope.main.scene.add(Leg1Model);
+		scope.main.scene.add(Leg2Model);
+
 	}
 	
 
@@ -2214,7 +2382,7 @@ module.exports = Chair_Align
 
 
 
-},{"./cadMakeSeat":41,"./chairCutBack":43,"./computeConvexHull":44}],7:[function(require,module,exports){
+},{"./cadMakeSeat":41,"./chairCutBack":43,"./computeConvexHull":44,"./rebuildMakeLeg":151}],7:[function(require,module,exports){
 "use strict;"
 
 const rebuildMakeSeat = require('./rebuildMakeSeat');
@@ -2907,146 +3075,146 @@ Chair_Rebuild.prototype = {
 			LegModel.position.set(LegPosi.x , LegPosi.y, LegPosi.z);
 
 		} );
-	},
+	}//,
 
-	backConnect1: function( furnitures ){
+	// backConnect1: function( furnitures ){
 		
-		//rotate chair
-		furnitures[0].setRotationWithNormalAxis("back", new THREE.Vector3( 1 , 0 , 0 ) );
-		furnitures[1].setRotationWithNormalAxis("back", new THREE.Vector3( -1, 0 , 0 ) );
+	// 	//rotate chair
+	// 	furnitures[0].setRotationWithNormalAxis("back", new THREE.Vector3( 1 , 0 , 0 ) );
+	// 	furnitures[1].setRotationWithNormalAxis("back", new THREE.Vector3( -1, 0 , 0 ) );
 
-		furnitures[0].setRotationWithNormalAxis("back", new THREE.Vector3( 1 , -1.3 , 0 ) );
-		furnitures[1].setRotationWithNormalAxis("back", new THREE.Vector3( -1, -1.3 , 0 ) );
+	// 	furnitures[0].setRotationWithNormalAxis("back", new THREE.Vector3( 1 , -1.3 , 0 ) );
+	// 	furnitures[1].setRotationWithNormalAxis("back", new THREE.Vector3( -1, -1.3 , 0 ) );
 		
-		//get funiture
-		var f1 = furnitures[0].getFurniture();
-		var f2 = furnitures[1].getFurniture();
-		//get back
-		var f1back = furnitures[0].getComponentByName('seat-back');
-		var f2back = furnitures[1].getComponentByName('seat-back');
+	// 	//get funiture
+	// 	var f1 = furnitures[0].getFurniture();
+	// 	var f2 = furnitures[1].getFurniture();
+	// 	//get back
+	// 	var f1back = furnitures[0].getComponentByName('seat-back');
+	// 	var f2back = furnitures[1].getComponentByName('seat-back');
 
-		//remove leg
-		this.Notremove(f1,'seat-back');
-		this.Notremove(f2,'seat-back');
+	// 	//remove leg
+	// 	this.Notremove(f1,'seat-back');
+	// 	this.Notremove(f2,'seat-back');
 
-		//get back center
-		var box = new THREE.Box3();
-		var BackCenter = new THREE.Vector3();
-		f1BackCenter = new THREE.Vector3();
-		f2BackCenter = new THREE.Vector3();
-		box.setFromObject(f1back);
-		box.getCenter(f1BackCenter);
-		box.setFromObject(f2back);
-		box.getCenter(f2BackCenter);
+	// 	//get back center
+	// 	var box = new THREE.Box3();
+	// 	var BackCenter = new THREE.Vector3();
+	// 	f1BackCenter = new THREE.Vector3();
+	// 	f2BackCenter = new THREE.Vector3();
+	// 	box.setFromObject(f1back);
+	// 	box.getCenter(f1BackCenter);
+	// 	box.setFromObject(f2back);
+	// 	box.getCenter(f2BackCenter);
 
-		//get back size
-		var BackSize = new THREE.Vector3();
-		box.getSize(BackSize);
+	// 	//get back size
+	// 	var BackSize = new THREE.Vector3();
+	// 	box.getSize(BackSize);
 		
-		var diff = new THREE.Vector3(f1BackCenter.x - f2BackCenter.x ,
-									 f1BackCenter.y - f2BackCenter.y ,
-									 f1BackCenter.z - f2BackCenter.z );
+	// 	var diff = new THREE.Vector3(f1BackCenter.x - f2BackCenter.x ,
+	// 								 f1BackCenter.y - f2BackCenter.y ,
+	// 								 f1BackCenter.z - f2BackCenter.z );
 
-		//get chair 2 position
-		var f2Position = furnitures[1].getPosition();
+	// 	//get chair 2 position
+	// 	var f2Position = furnitures[1].getPosition();
 
-		//move chair position
-		f2.position.set(f2Position.x + diff.x - BackSize.x,
-						f2Position.y + diff.y,
-						f2Position.z + diff.z );
+	// 	//move chair position
+	// 	f2.position.set(f2Position.x + diff.x - BackSize.x,
+	// 					f2Position.y + diff.y,
+	// 					f2Position.z + diff.z );
 
-	},
+	// },
 
-	Notremove: function(group, name){
-		for (var i = group.children.length - 1; i >= 0 ; i--) {				
-			var str = group.children[i].name;
-			if (str != name) {
-				group.remove(group.children[i]);
-			}	
-		}
-	},
+	// Notremove: function(group, name){
+	// 	for (var i = group.children.length - 1; i >= 0 ; i--) {				
+	// 		var str = group.children[i].name;
+	// 		if (str != name) {
+	// 			group.remove(group.children[i]);
+	// 		}	
+	// 	}
+	// },
 
-	backConnect2: function( furnitures ){
-		//rotate chair
-		furnitures[0].setRotationWithNormalAxis("back", new THREE.Vector3( 1 , 0 , 0 ) );
-		furnitures[1].setRotationWithNormalAxis("back", new THREE.Vector3( -1, 0 , 0 ) );
+	// backConnect2: function( furnitures ){
+	// 	//rotate chair
+	// 	furnitures[0].setRotationWithNormalAxis("back", new THREE.Vector3( 1 , 0 , 0 ) );
+	// 	furnitures[1].setRotationWithNormalAxis("back", new THREE.Vector3( -1, 0 , 0 ) );
 
-		furnitures[0].setRotationWithNormalAxis("seat", new THREE.Vector3( 0 , 1 , 0 ) );
-		furnitures[1].setRotationWithNormalAxis("seat", new THREE.Vector3( 0, -1 , 0 ) );
+	// 	furnitures[0].setRotationWithNormalAxis("seat", new THREE.Vector3( 0 , 1 , 0 ) );
+	// 	furnitures[1].setRotationWithNormalAxis("seat", new THREE.Vector3( 0, -1 , 0 ) );
 
-		//get funiture
-		var f1 = furnitures[0].getFurniture();
-		var f2 = furnitures[1].getFurniture();
-		//remove leg
-		this.Notremove(f1,'seat-back');
-		this.Notremove(f2,'seat-back');
+	// 	//get funiture
+	// 	var f1 = furnitures[0].getFurniture();
+	// 	var f2 = furnitures[1].getFurniture();
+	// 	//remove leg
+	// 	this.Notremove(f1,'seat-back');
+	// 	this.Notremove(f2,'seat-back');
 
-		//get back
-		var f1back = furnitures[0].getComponentByName('seat-back');
-		var f2back = furnitures[1].getComponentByName('seat-back');
-		//get back center
-		var box = new THREE.Box3();
-		var BackCenter = new THREE.Vector3();
-		var f1BackCenter = new THREE.Vector3();
-		var f2BackCenter = new THREE.Vector3();
-		box.setFromObject(f1back);
-		box.getCenter(f1BackCenter);
-		box.setFromObject(f2back);
-		box.getCenter(f2BackCenter);
+	// 	//get back
+	// 	var f1back = furnitures[0].getComponentByName('seat-back');
+	// 	var f2back = furnitures[1].getComponentByName('seat-back');
+	// 	//get back center
+	// 	var box = new THREE.Box3();
+	// 	var BackCenter = new THREE.Vector3();
+	// 	var f1BackCenter = new THREE.Vector3();
+	// 	var f2BackCenter = new THREE.Vector3();
+	// 	box.setFromObject(f1back);
+	// 	box.getCenter(f1BackCenter);
+	// 	box.setFromObject(f2back);
+	// 	box.getCenter(f2BackCenter);
 
-		//get back size
-		var BackSize = new THREE.Vector3();
-		box.getSize(BackSize);
-		//get two back diff position
-		var diff = new THREE.Vector3(f1BackCenter.x - f2BackCenter.x ,
-									 f1BackCenter.y - f2BackCenter.y ,
-									 f1BackCenter.z - f2BackCenter.z );
+	// 	//get back size
+	// 	var BackSize = new THREE.Vector3();
+	// 	box.getSize(BackSize);
+	// 	//get two back diff position
+	// 	var diff = new THREE.Vector3(f1BackCenter.x - f2BackCenter.x ,
+	// 								 f1BackCenter.y - f2BackCenter.y ,
+	// 								 f1BackCenter.z - f2BackCenter.z );
 
-		//get chair position
-		var f1Position = furnitures[0].getPosition();
-		var f2Position = furnitures[1].getPosition();
+	// 	//get chair position
+	// 	var f1Position = furnitures[0].getPosition();
+	// 	var f2Position = furnitures[1].getPosition();
 
-		//move chair position
-		f2.position.set(f2Position.x + diff.x ,
-						f2Position.y + diff.y - BackSize.y,
-						f2Position.z + diff.z );
+	// 	//move chair position
+	// 	f2.position.set(f2Position.x + diff.x ,
+	// 					f2Position.y + diff.y - BackSize.y,
+	// 					f2Position.z + diff.z );
 		
-		// creat leg geometry
-		var LegGeometry = rebuildMakeLeg ( BackSize.z/20 , BackSize.y );
-		var texture = new THREE.TextureLoader().load( 'images/material/material2.jpg' );
-		var newmaterial = new THREE.MeshBasicMaterial( { map: texture } );
-		//creat leg model
-		var Leg1Model = new THREE.Mesh( LegGeometry, newmaterial );
-		var Leg2Model = new THREE.Mesh( LegGeometry, newmaterial );
-		this.main.Sceneobjects.push(Leg1Model);
-		this.main.Sceneobjects.push(Leg2Model);
+	// 	// creat leg geometry
+	// 	var LegGeometry = rebuildMakeLeg ( BackSize.z/20 , BackSize.y );
+	// 	var texture = new THREE.TextureLoader().load( 'images/material/material2.jpg' );
+	// 	var newmaterial = new THREE.MeshBasicMaterial( { map: texture } );
+	// 	//creat leg model
+	// 	var Leg1Model = new THREE.Mesh( LegGeometry, newmaterial );
+	// 	var Leg2Model = new THREE.Mesh( LegGeometry, newmaterial );
+	// 	this.main.Sceneobjects.push(Leg1Model);
+	// 	this.main.Sceneobjects.push(Leg2Model);
 		
-		//get leg and f2 center
-		var LegCenter = new THREE.Vector3();
-		box.setFromObject(Leg1Model);
-		box.getCenter(LegCenter);
-		box.setFromObject(f2);
-		box.getCenter(f2BackCenter);
-		diff = new THREE.Vector3(f2BackCenter.x - LegCenter.x ,
-								 f2BackCenter.y - LegCenter.y ,
-								 f2BackCenter.z - LegCenter.z );
-		//get leg position
-		var Leg1Posit = Leg1Model.position;
-		var Leg2Posit = Leg2Model.position;
-		//set leg position
-		Leg1Model.position.set( Leg1Posit.x + f2BackCenter.x + BackSize.x/3 ,
-							    Leg1Posit.y + f2BackCenter.y - BackSize.y/2 ,
-							    Leg1Posit.z + f2BackCenter.z + BackSize.z/3);
-		Leg2Model.position.set( Leg2Posit.x + f2BackCenter.x + BackSize.x/3 ,
-							    Leg2Posit.y + f2BackCenter.y - BackSize.y/2 ,
-							    Leg2Posit.z + f2BackCenter.z - BackSize.z/3);
+	// 	//get leg and f2 center
+	// 	var LegCenter = new THREE.Vector3();
+	// 	box.setFromObject(Leg1Model);
+	// 	box.getCenter(LegCenter);
+	// 	box.setFromObject(f2);
+	// 	box.getCenter(f2BackCenter);
+	// 	diff = new THREE.Vector3(f2BackCenter.x - LegCenter.x ,
+	// 							 f2BackCenter.y - LegCenter.y ,
+	// 							 f2BackCenter.z - LegCenter.z );
+	// 	//get leg position
+	// 	var Leg1Posit = Leg1Model.position;
+	// 	var Leg2Posit = Leg2Model.position;
+	// 	//set leg position
+	// 	Leg1Model.position.set( Leg1Posit.x + f2BackCenter.x + BackSize.x/3 ,
+	// 						    Leg1Posit.y + f2BackCenter.y - BackSize.y/2 ,
+	// 						    Leg1Posit.z + f2BackCenter.z + BackSize.z/3);
+	// 	Leg2Model.position.set( Leg2Posit.x + f2BackCenter.x + BackSize.x/3 ,
+	// 						    Leg2Posit.y + f2BackCenter.y - BackSize.y/2 ,
+	// 						    Leg2Posit.z + f2BackCenter.z - BackSize.z/3);
 
 
-		var scope=this;
-		scope.main.scene.add(Leg1Model);
-		scope.main.scene.add(Leg2Model);
+	// 	var scope=this;
+	// 	scope.main.scene.add(Leg1Model);
+	// 	scope.main.scene.add(Leg2Model);
 
-	}
+	// }
 
 
 
@@ -8869,7 +9037,7 @@ function Processor(main) {
 
 	this.transformFunctions = { };
 
-
+	this.seatback = false;
 
 	//zhuen's block
 	this.chair_add = undefined;
@@ -8890,8 +9058,6 @@ function Processor(main) {
 	this.model_align = undefined;
 	this.model_addbetween = undefined;
 	this.model_cut = undefined;
-
-
 
 }
 
@@ -8925,21 +9091,33 @@ Processor.prototype = {
 				}else if( scope.furnitures.length > 1) {
 					//possible actions with many furnitures
 					
-					scope.chair_align = new Chair_Align(scope.main);
-					scope.chair_align.init();
-					scope.transformFunctions.CHAIR_ALIGN = scope.chair_align;
-					
-					//wei hsiang start
-					//scope.chair_rebuild = new Chair_Rebuild(scope.main);
-					//scope.transformFunctions.CHAIR_REBUILD = scope.chair_rebuild;
-					//wei hsiang end
-					
-					$('.operations.operation_chair_align').show();
+					if(scope.seatback == false) {
+						//seat and back are seperate
+						scope.chair_align = new Chair_Align(scope.main);
+						scope.chair_align.init();
+						scope.transformFunctions.CHAIR_ALIGN = scope.chair_align;
 
+						$('.operations.operation_chair_align').show();
 
-					//zhuen's block
+						//hide connect 1, 2
+
+						$('#operation_chair_align_connect_1').hide();
+						$('#operation_chair_align_connect_2').hide();
+
+					}else{
+						//seat and back are together
+						scope.chair_align = new Chair_Align(scope.main);
+						scope.chair_align.init();
+						scope.transformFunctions.CHAIR_ALIGN = scope.chair_align;
+
+						$('.operations.operation_chair_align').show();
+
+						//only show connect 1, 2
+						$('#operation_chair_align_vertical').hide();
+						$('#operation_chair_align_horizontal').hide();
+						$('#operation_chair_align_flip').hide();
+					}
 					
-					//end of zhuen's block
 				}
 
 
@@ -12449,6 +12627,8 @@ Main.prototype = {
 		{
 			var objIndex = selectedIndices[i];
 			this.explodeVectors.splice(objIndex,1);
+
+			this.explodeVectorsCorrected.splice(objIndex,1);
 		}
 
 		//add the new one to the array
@@ -12457,6 +12637,9 @@ Main.prototype = {
 		//n_subVector.subVectors(n_elmCenter, this.objCenter);
 		//n_subVector.multiplyScalar(2);
 		this.explodeVectors.push(n_subVector.clone());
+
+
+		this.explodeVectorsCorrected.push(n_subVector.clone());
 
 		groupObj.translateX(n_subVector.x);
 		groupObj.translateY(n_subVector.y);
@@ -12499,6 +12682,13 @@ Main.prototype = {
 
 			//enable normal axis
 			this.addNormalAxis(this.furniture, this.selected);
+
+
+			//in case of "seat-back"
+			if(curName == "seat-back")
+			{
+				this.processor.seatback = true;
+			}
 
 		}else{
 			this.selected.name = label;

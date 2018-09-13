@@ -373,14 +373,27 @@ Ui.prototype = {
 		//chair_align_flip
 		$( "#operation_chair_align_flip" ).click(function() {
 
-			// //wei hsiang start
-			// scope.processor.executeDesign("CHAIR_REBUILD", "back");
-			// //wei hsiang end
-
 			console.log("chair_align_flip");
 			scope.processor.executeDesign("CHAIR_ALIGN", "flip");
 
 		});
+
+
+		//chair_aling_connect_1
+		$( "#operation_chair_align_connect_1" ).click(function() {
+			console.log("chair_align_connect_1");
+			scope.processor.executeDesign("CHAIR_ALIGN", "connect1");
+
+		});
+
+
+		//chair_aling_connect_2
+		$( "#operation_chair_align_connect_2" ).click(function() {
+			console.log("chair_align_connect_2");
+			scope.processor.executeDesign("CHAIR_ALIGN", "connect2");
+
+		});
+
 
 		//chair_add_plate
 		$('#operation_chair_add_plate').click(function() {

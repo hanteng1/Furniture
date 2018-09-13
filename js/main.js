@@ -1236,6 +1236,8 @@ Main.prototype = {
 		{
 			var objIndex = selectedIndices[i];
 			this.explodeVectors.splice(objIndex,1);
+
+			this.explodeVectorsCorrected.splice(objIndex,1);
 		}
 
 		//add the new one to the array
@@ -1244,6 +1246,9 @@ Main.prototype = {
 		//n_subVector.subVectors(n_elmCenter, this.objCenter);
 		//n_subVector.multiplyScalar(2);
 		this.explodeVectors.push(n_subVector.clone());
+
+
+		this.explodeVectorsCorrected.push(n_subVector.clone());
 
 		groupObj.translateX(n_subVector.x);
 		groupObj.translateY(n_subVector.y);
@@ -1286,6 +1291,13 @@ Main.prototype = {
 
 			//enable normal axis
 			this.addNormalAxis(this.furniture, this.selected);
+
+
+			//in case of "seat-back"
+			if(curName == "seat-back")
+			{
+				this.processor.seatback = true;
+			}
 
 		}else{
 			this.selected.name = label;

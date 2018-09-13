@@ -37,7 +37,7 @@ function Processor(main) {
 
 	this.transformFunctions = { };
 
-
+	this.seatback = false;
 
 	//zhuen's block
 	this.chair_add = undefined;
@@ -58,8 +58,6 @@ function Processor(main) {
 	this.model_align = undefined;
 	this.model_addbetween = undefined;
 	this.model_cut = undefined;
-
-
 
 }
 
@@ -93,21 +91,33 @@ Processor.prototype = {
 				}else if( scope.furnitures.length > 1) {
 					//possible actions with many furnitures
 					
-					scope.chair_align = new Chair_Align(scope.main);
-					scope.chair_align.init();
-					scope.transformFunctions.CHAIR_ALIGN = scope.chair_align;
-					
-					//wei hsiang start
-					//scope.chair_rebuild = new Chair_Rebuild(scope.main);
-					//scope.transformFunctions.CHAIR_REBUILD = scope.chair_rebuild;
-					//wei hsiang end
-					
-					$('.operations.operation_chair_align').show();
+					if(scope.seatback == false) {
+						//seat and back are seperate
+						scope.chair_align = new Chair_Align(scope.main);
+						scope.chair_align.init();
+						scope.transformFunctions.CHAIR_ALIGN = scope.chair_align;
 
+						$('.operations.operation_chair_align').show();
 
-					//zhuen's block
+						//hide connect 1, 2
+
+						$('#operation_chair_align_connect_1').hide();
+						$('#operation_chair_align_connect_2').hide();
+
+					}else{
+						//seat and back are together
+						scope.chair_align = new Chair_Align(scope.main);
+						scope.chair_align.init();
+						scope.transformFunctions.CHAIR_ALIGN = scope.chair_align;
+
+						$('.operations.operation_chair_align').show();
+
+						//only show connect 1, 2
+						$('#operation_chair_align_vertical').hide();
+						$('#operation_chair_align_horizontal').hide();
+						$('#operation_chair_align_flip').hide();
+					}
 					
-					//end of zhuen's block
 				}
 
 
