@@ -7328,11 +7328,7 @@ Model_Align.prototype = {
 module.exports = Model_Align
 },{"./Procedure_button":33}],29:[function(require,module,exports){
 "use strict";
-<<<<<<< HEAD
-
-=======
 const Procedure_button = require('./Procedure_button');
->>>>>>> master
 
 
 function Model_Cut(main) {
@@ -7348,30 +7344,19 @@ function Model_Cut(main) {
 	    	return;
 	    }
 
-<<<<<<< HEAD
-	    scope.main.SelectComponent = true;
-
-	    if(scope.main.cutplane == null) {
-	    	var geometry = new THREE.PlaneBufferGeometry( 1, 1);
-			var material = new THREE.MeshBasicMaterial( {color: 0xffff00} );
-=======
 	    scope.main.Cutting = true;
 
 	    if(scope.main.cutplane == null) {
 	    	var geometry = new THREE.PlaneGeometry( 1, 1);
 			var material = new THREE.MeshBasicMaterial( {color: 0xffff00, side: THREE.DoubleSide, transparent: true, opacity: 0.5} );
->>>>>>> master
 			scope.main.cutplane = new THREE.Mesh( geometry, material );
 			scope.main.scene.add( scope.main.cutplane );
 	    }
 
 	    scope.main.component = null;
 	    scope.main.intersectpoint = null;
-<<<<<<< HEAD
-=======
 	    scope.main.fixpointball = false;
 
->>>>>>> master
 	});
 
 }
@@ -7419,13 +7404,6 @@ Model_Cut.prototype = {
 			this.main.transformControls.detach();
         }
 	},
-<<<<<<< HEAD
-}
-
-
-module.exports = Model_Cut
-},{}],30:[function(require,module,exports){
-=======
 
 
 	DeleteButton: function(){
@@ -7543,7 +7521,6 @@ function AddCutPlaneComponent(main) {
 
 module.exports = {Model_Cut, AddCutPlaneMousePosi1, AddCutPlaneComponent}
 },{"./Procedure_button":33}],30:[function(require,module,exports){
->>>>>>> master
 "use strict;"
 const Procedure_button = require('./Procedure_button');
 
@@ -8520,12 +8497,7 @@ const Model_Add = require('./Model_Add');
 const {Model_AddBetween , AddRodMousePosi1, AddRodMousePosi2,
 	SelectFurniComponent, SelectFurni} = require('./Model_AddBetween');
 
-<<<<<<< HEAD
-const Model_Cut = require('./Model_Cut');
- 
-=======
 const {Model_Cut,  AddCutPlaneMousePosi1, AddCutPlaneComponent} = require('./Model_Cut'); 
->>>>>>> master
 
 
 function Processor(main) {
@@ -8560,15 +8532,9 @@ function Processor(main) {
 	this.model_align = undefined;
 	this.model_addbetween = undefined;
 	this.model_cut = undefined;
-<<<<<<< HEAD
 
 
 
-=======
-
-
-
->>>>>>> master
 }
 
 Processor.prototype = {
@@ -10998,14 +10964,10 @@ function Main()
 	this.intersectpoint = null;
 
 
-<<<<<<< HEAD
-	this.cutplane = null;
-=======
 	this.Cutting = false;
 	this.cutplane = null;
 
 	this.cutplaneDirection = 0;
->>>>>>> master
 	this.fixcutplane = false;
 
 
@@ -13279,11 +13241,7 @@ document.addEventListener('DOMContentLoaded', function(event){
 
 
 
-<<<<<<< HEAD
-},{"./MarkBetweenSize":24,"./MarkSize":25,"./Model_AddBetween":27,"./Processor":34,"./cadCutByPlane":37,"./cadMakeRod":40,"./computeConvexHull":44}],55:[function(require,module,exports){
-=======
 },{"./MarkBetweenSize":24,"./MarkSize":25,"./Model_AddBetween":27,"./Model_Cut":29,"./Processor":34,"./cadCutByPlane":37,"./cadMakeRod":40,"./computeConvexHull":44}],55:[function(require,module,exports){
->>>>>>> master
 /*
 ## License
 
