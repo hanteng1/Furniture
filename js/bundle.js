@@ -5084,7 +5084,7 @@ Dresser_Add.prototype = {
 		}
 	},
 
-	execute: function() {
+	execute: function(tfname) {
 		if(this.checkHasTopFront(this.furnitures[0])){
 			if(tfname == "cut_chair"){
 				this.cutToChairEvent();
@@ -8952,33 +8952,18 @@ Processor.prototype = {
 
 				}else if(scope.furnitures.length == 1){
 					//possible actions with one furniture
-
-					if (false) {
-						scope.cabinet_kallax = new Cabinet_kallax(scope.main);
-						scope.transformFunctions.CABINET_LALLAX = scope.cabinet_kallax;
-						
-						$('.operations.operation_cabinet_kallax_one').show();
-					}					
-					else{
-						scope.dresser_add = new Dresser_Add(scope.main);		
-						scope.transformFunctions.DRESSER_ADD = scope.dresser_add;
-						$('.operations.operation_dresser_add').show();
-					}
+					scope.cabinet_kallax = new Cabinet_kallax(scope.main);
+					scope.transformFunctions.CABINET_LALLAX = scope.cabinet_kallax;
+					$('.operations.operation_cabinet_kallax_one').show();
+					
 
 					
 				}else if( scope.furnitures.length > 1) {
 					//possible actions with many furnitures
-
-					if(false){
-						scope.cabinet_kallax = new Cabinet_kallax(scope.main);
-						scope.transformFunctions.CABINET_LALLAX = scope.cabinet_kallax;						
-						$('.operations.operation_cabinet_kallax_two').show();
-					}
-					else{
-						scope.dresser_add = new Dresser_Add(scope.main);		
-						scope.transformFunctions.DRESSER_ADD = scope.dresser_add;
-						$('.operations.operation_dresser_add').show();
-					}
+					scope.cabinet_kallax = new Cabinet_kallax(scope.main);
+					scope.transformFunctions.CABINET_LALLAX = scope.cabinet_kallax;						
+					$('.operations.operation_cabinet_kallax_two').show();
+					
 				}
 
 				break;
@@ -9025,6 +9010,26 @@ Processor.prototype = {
 					scope.desk = new Desk(scope.main);
 					scope.transformFunctions.DESK = scope.desk;						
 					$('.operations.operation_desk').show();
+				}
+
+				break;
+
+			case "dresser" :
+				if(scope.furnitures.length == 0) {
+					return;
+				}
+				else if(scope.furnitures.length == 1){
+					//possible actions with one furniture
+					scope.dresser_add = new Dresser_Add(scope.main);		
+					scope.transformFunctions.DRESSER_ADD = scope.dresser_add;
+					$('.operations.operation_dresser_add').show();
+
+				}
+				else if( scope.furnitures.length > 1) {
+					//possible actions with many furnitures
+					scope.dresser_add = new Dresser_Add(scope.main);		
+					scope.transformFunctions.DRESSER_ADD = scope.dresser_add;
+					$('.operations.operation_dresser_add').show();
 				}
 
 				break;

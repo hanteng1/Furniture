@@ -1051,7 +1051,7 @@ Dresser_Add.prototype = {
 		}
 	},
 
-	execute: function() {
+	execute: function(tfname) {
 		if(this.checkHasTopFront(this.furnitures[0])){
 			if(tfname == "cut_chair"){
 				this.cutToChairEvent();
