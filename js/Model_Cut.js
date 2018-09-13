@@ -9,7 +9,7 @@ function Model_Cut(main) {
 	var scope = this;
 	this.cut_mode = false;
 
-	$('.item.ui.image.label.cut.vertical').click(function() {
+	$('.item.ui.image.label.cut').click(function() {
 		if(scope.main.furniture == null){
 	    	alert('Please select the furniture first');
 	    	return;

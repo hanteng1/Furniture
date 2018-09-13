@@ -7268,6 +7268,8 @@ Model_AddBetween.prototype = {
             this.main.processor.executeDesign("MODEL_WRAP", "addbetween");
             this.main.processor.executeDesign("MODEL_ROTATION", "addbetween");
             this.main.processor.executeDesign("MODEL_PAINTING", "addbetween");
+            this.main.processor.executeDesign("MODEL_CUT", "addbetween");
+
             //creat procedure button
             if(this.main.stepOperationName != name){
                 this.DeleteButton();
@@ -7484,6 +7486,8 @@ Model_Align.prototype = {
         	this.main.processor.executeDesign("MODEL_WRAP", "align");
         	this.main.processor.executeDesign("MODEL_ROTATION", "align");
         	this.main.processor.executeDesign("MODEL_ADDBETWEEN", "align");
+        	this.main.processor.executeDesign("MODEL_CUT", "align");
+
         	//creat procedure button
         	if(this.main.stepOperationName != name){
         		this.DeleteButton();
@@ -7685,7 +7689,7 @@ function Model_Cut(main) {
 	var scope = this;
 	this.cut_mode = false;
 
-	$('.item.ui.image.label.cut.vertical').click(function() {
+	$('.item.ui.image.label.cut').click(function() {
 		if(scope.main.furniture == null){
 	    	alert('Please select the furniture first');
 	    	return;
@@ -7949,6 +7953,8 @@ Model_Painting.prototype = {
             this.main.processor.executeDesign("MODEL_WRAP", "painting");
             this.main.processor.executeDesign("MODEL_ROTATION", "painting");
             this.main.processor.executeDesign("MODEL_ADDBETWEEN", "painting");
+            this.main.processor.executeDesign("MODEL_CUT", "painting");
+
             //creat procedure button
             if(this.main.stepOperationName != name){
                 this.DeleteButton();
@@ -8110,6 +8116,7 @@ Model_Rotation.prototype = {
         	this.main.processor.executeDesign("MODEL_PAINTING", "rotation");
         	this.main.processor.executeDesign("MODEL_WRAP", "rotation");
         	this.main.processor.executeDesign("MODEL_ADDBETWEEN", "rotation");
+        	this.main.processor.executeDesign("MODEL_CUT", "rotation");
         	//creat procedure button
         	if(this.main.stepOperationName != name){
         		this.DeleteButton();
@@ -8300,6 +8307,7 @@ Model_wrap.prototype = {
         	this.main.processor.executeDesign("MODEL_PAINTING", "wrap");
         	this.main.processor.executeDesign("MODEL_ROTATION", "wrap");
         	this.main.processor.executeDesign("MODEL_ADDBETWEEN", "wrap");
+        	this.main.processor.executeDesign("MODEL_CUT", "wrap");
         	//creat procedure button
         	if(this.main.stepOperationName != name){
         		this.DeleteButton();
@@ -13221,6 +13229,7 @@ Main.prototype = {
 		$('.operations.operation_desk').hide();
 		$('.operations.operation_table').hide();
 		$('#parameter_control_tool_addbetween').hide();
+		$('#parameter_control_tool_cut').hide();
 		$('#AddRodInput').hide();
 
 		this.furnitures.length = 0;	
@@ -13325,6 +13334,7 @@ Main.prototype = {
 		$('.operations.operation_desk').hide();
 		$('.operations.operation_table').hide();
 		$('#parameter_control_tool_addbetween').hide();
+		$('#parameter_control_tool_cut').hide();
 		$('#AddRodInput').hide();
 
 		this.processor.init();
