@@ -505,7 +505,7 @@ Desk.prototype = {
 
 	execute: function(tfname) {
 		if(this.furnitures.length > 0){
-			var desktop = Table.getComponentByName("desktop");
+			var desktop = this.furnitures[0].getComponentByName("desktop");
 			if(typeof desktop != 'undefined'){
 				if(tfname == "addBesideBoard"){
 					this.addBesideBoardEvent();

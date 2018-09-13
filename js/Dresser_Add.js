@@ -1056,22 +1056,22 @@ Dresser_Add.prototype = {
 			if(tfname == "cut_chair"){
 				this.cutToChairEvent();
 			}
-			if(tfname == "cut_chair"){
+			if(tfname == "add_door"){
 				this.addDoorEvent();
 			}
-			if(tfname == "cut_chair"){
+			if(tfname == "add_leg"){
 				this.addLegEvent();	
 			}
-			if(tfname == "cut_chair"){
+			if(tfname == "add_rod"){
 				this.addRodEvent();
 			}
-			if(tfname == "cut_chair"){
+			if(tfname == "add_spice_rack"){
 				this.addSpiceRackEvent();
 			}
-			if(tfname == "cut_chair"){
+			if(tfname == "add_drawer"){
 				this.addDrawerEvent();
 			}
-			if(tfname == "cut_chair"){
+			if(tfname == "remove_drawers"){
 				this.removeDrawersEvent();
 			}
 		}

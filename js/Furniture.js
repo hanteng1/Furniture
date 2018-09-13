@@ -31,9 +31,14 @@ function Furniture(furniture) {
 		//for cabinet
 		cabinetTop: new THREE.Vector3(0, 1, 0),
 		cabinetFront: new THREE.Vector3(0, 0, 1),
-		cabinetBroad: new THREE.Vector3(0, 1, 0)
+		cabinetBroad: new THREE.Vector3(0, 1, 0),
 
 		//for table
+		tabletop: new THREE.Vector3(0, 1, 0),
+		tableLeg: new THREE.Vector3(0, 0, 1),
+
+		//for desk
+		desktop: new THREE.Vector3(0, 1, 0)
 	};
 
 

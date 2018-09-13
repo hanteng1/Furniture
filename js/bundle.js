@@ -4001,7 +4001,7 @@ Desk.prototype = {
 
 	execute: function(tfname) {
 		if(this.furnitures.length > 0){
-			var desktop = Table.getComponentByName("desktop");
+			var desktop = this.furnitures[0].getComponentByName("desktop");
 			if(typeof desktop != 'undefined'){
 				if(tfname == "addBesideBoard"){
 					this.addBesideBoardEvent();
@@ -5086,13 +5086,27 @@ Dresser_Add.prototype = {
 
 	execute: function() {
 		if(this.checkHasTopFront(this.furnitures[0])){
-			// this.cutToChairEvent();
-			this.addDoorEvent();
-			this.addLegEvent();	
-			this.addRodEvent();
-			this.addSpiceRackEvent();
-			// this.addDrawerEvent();
-			// this.removeDrawersEvent();
+			if(tfname == "cut_chair"){
+				this.cutToChairEvent();
+			}
+			if(tfname == "add_door"){
+				this.addDoorEvent();
+			}
+			if(tfname == "add_leg"){
+				this.addLegEvent();	
+			}
+			if(tfname == "add_rod"){
+				this.addRodEvent();
+			}
+			if(tfname == "add_spice_rack"){
+				this.addSpiceRackEvent();
+			}
+			if(tfname == "add_drawer"){
+				this.addDrawerEvent();
+			}
+			if(tfname == "remove_drawers"){
+				this.removeDrawersEvent();
+			}
 		}
 		else{
 			alert("Please mark cabinetTop and cabinetFront");
@@ -13263,15 +13277,7 @@ Main.prototype = {
 
 		//assume the furnitures are annoted well and get ready
 		//add the corners to the labeled and axised components
-		
-<<<<<<< HEAD
-		// for(var i = 0; i < this.furnitures.length; i++) {
-		// 	this.furnitures[i].addCorners();
-		// 	this.furnitures[i].addtoPoint();
-		// }
-		
-=======
->>>>>>> master
+
 
 		//testing
 		// for(var i = 0; i < this.furnitures.length; i++) {

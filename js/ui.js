@@ -384,6 +384,24 @@ Ui.prototype = {
 		$('#operation_dresser_add_cut_chair').click(function() {
 			scope.processor.executeDesign("DRESSER_ADD", "cut_chair");
 		});
+		$('#operation_dresser_add_add_door').click(function() {
+			scope.processor.executeDesign("DRESSER_ADD", "add_door");
+		});
+		$('#operation_dresser_add_add_leg').click(function() {
+			scope.processor.executeDesign("DRESSER_ADD", "add_leg");
+		});
+		$('#operation_dresser_add_add_rod').click(function() {
+			scope.processor.executeDesign("DRESSER_ADD", "add_rod");
+		});
+		$('#operation_dresser_add_add_spice_rack').click(function() {
+			scope.processor.executeDesign("DRESSER_ADD", "add_spice_rack");
+		});
+		$('#operation_dresser_add_add_drawer').click(function() {
+			scope.processor.executeDesign("DRESSER_ADD", "add_drawer");
+		});
+		$('#operation_dresser_add_remove_drawers').click(function() {
+			scope.processor.executeDesign("DRESSER_ADD", "remove_drawers");
+		});
 
 		//cabinet_kallax_chair
 		$('#operation_cabinet_kallax_chair').click(function() {
