@@ -1053,13 +1053,27 @@ Dresser_Add.prototype = {
 
 	execute: function() {
 		if(this.checkHasTopFront(this.furnitures[0])){
-			// this.cutToChairEvent();
-			this.addDoorEvent();
-			this.addLegEvent();	
-			this.addRodEvent();
-			this.addSpiceRackEvent();
-			// this.addDrawerEvent();
-			// this.removeDrawersEvent();
+			if(tfname == "cut_chair"){
+				this.cutToChairEvent();
+			}
+			if(tfname == "cut_chair"){
+				this.addDoorEvent();
+			}
+			if(tfname == "cut_chair"){
+				this.addLegEvent();	
+			}
+			if(tfname == "cut_chair"){
+				this.addRodEvent();
+			}
+			if(tfname == "cut_chair"){
+				this.addSpiceRackEvent();
+			}
+			if(tfname == "cut_chair"){
+				this.addDrawerEvent();
+			}
+			if(tfname == "cut_chair"){
+				this.removeDrawersEvent();
+			}
 		}
 		else{
 			alert("Please mark cabinetTop and cabinetFront");

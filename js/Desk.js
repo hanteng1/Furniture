@@ -504,13 +504,31 @@ Desk.prototype = {
 
 
 	execute: function(tfname) {
-		if(tfname == "addBoard"){
-			// this.addTopBoardEvent();
-			// this.addBottomBoardEvent();
-			// this.addWheelEvent();
-			// this.addInsideBoardEvent();
-			this.addBesideBoardEvent();
+		if(this.furnitures.length > 0){
+			var desktop = Table.getComponentByName("desktop");
+			if(typeof desktop != 'undefined'){
+				if(tfname == "addBesideBoard"){
+					this.addBesideBoardEvent();
+				}
+				if(tfname == "addTopBoard"){
+					this.addTopBoardEvent();
+				}
+				if(tfname == "addBottomBoard"){
+					this.addBottomBoardEvent();
+				}
+				if(tfname == "addWheel"){
+					this.addWheelEvent();
+				}
+				if(tfname == "addInsideBoard"){
+					this.addInsideBoardEvent();
+				}
+			}
+			else{
+				console.log("Exist one desk isn't marked desktop.");
+			}
 		}
+		else
+			console.log("No Desk in the scene.");
 	}
 
 }

@@ -134,6 +134,18 @@ Ui.prototype = {
 						scope.assignLabel("cabinetBroad");
 						break;
 
+					case "l_9":
+						scope.assignLabel("tabletop");
+						break;
+
+					case "l_10":
+						scope.assignLabel("tableLeg");
+						break;
+
+					case "l_11":
+						scope.assignLabel("desktop");
+						break;
+
 					
 				}
 			}
@@ -434,8 +446,24 @@ Ui.prototype = {
 		});
 
 		//desk
-		$('#operation_desk_add_board').click(function() {
-			scope.processor.executeDesign("DESK", "addBoard");
+		$('#operation_desk_add_beside_board').click(function() {
+			scope.processor.executeDesign("DESK", "addBesideBoard");
+		});
+
+		$('#operation_desk_add_top_board').click(function() {
+			scope.processor.executeDesign("DESK", "addTopBoard");
+		});
+
+		$('#operation_desk_add_bottom_board').click(function() {
+			scope.processor.executeDesign("DESK", "addBottomBoard");
+		});
+
+		$('#operation_desk_add_inside_board').click(function() {
+			scope.processor.executeDesign("DESK", "addInsideBoard");
+		});
+
+		$('#operation_desk_add_wheel').click(function() {
+			scope.processor.executeDesign("DESK", "addWheel");
 		});
 
 		//model painting

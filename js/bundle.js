@@ -3987,13 +3987,31 @@ Desk.prototype = {
 
 
 	execute: function(tfname) {
-		if(tfname == "addBoard"){
-			// this.addTopBoardEvent();
-			// this.addBottomBoardEvent();
-			// this.addWheelEvent();
-			// this.addInsideBoardEvent();
-			this.addBesideBoardEvent();
+		if(this.furnitures.length > 0){
+			var desktop = Table.getComponentByName("desktop");
+			if(typeof desktop != 'undefined'){
+				if(tfname == "addBesideBoard"){
+					this.addBesideBoardEvent();
+				}
+				if(tfname == "addTopBoard"){
+					this.addTopBoardEvent();
+				}
+				if(tfname == "addBottomBoard"){
+					this.addBottomBoardEvent();
+				}
+				if(tfname == "addWheel"){
+					this.addWheelEvent();
+				}
+				if(tfname == "addInsideBoard"){
+					this.addInsideBoardEvent();
+				}
+			}
+			else{
+				console.log("Exist one desk isn't marked desktop.");
+			}
 		}
+		else
+			console.log("No Desk in the scene.");
 	}
 
 }
@@ -8821,6 +8839,8 @@ function Processor(main) {
 	//zhuen's block
 	this.chair_add = undefined;
 	this.dresser_add = undefined;
+	this.table = undefined;
+	this.desk = undefined;
 	this.model_add = undefined;
 	//end of zhuen's block
 
@@ -8898,7 +8918,7 @@ Processor.prototype = {
 				}else if(scope.furnitures.length == 1){
 					//possible actions with one furniture
 
-					if (true) {
+					if (false) {
 						scope.cabinet_kallax = new Cabinet_kallax(scope.main);
 						scope.transformFunctions.CABINET_LALLAX = scope.cabinet_kallax;
 						
@@ -8914,7 +8934,7 @@ Processor.prototype = {
 				}else if( scope.furnitures.length > 1) {
 					//possible actions with many furnitures
 
-					if(true){
+					if(false){
 						scope.cabinet_kallax = new Cabinet_kallax(scope.main);
 						scope.transformFunctions.CABINET_LALLAX = scope.cabinet_kallax;						
 						$('.operations.operation_cabinet_kallax_two').show();
@@ -13231,10 +13251,10 @@ Main.prototype = {
 		//assume the furnitures are annoted well and get ready
 		//add the corners to the labeled and axised components
 		
-		for(var i = 0; i < this.furnitures.length; i++) {
-			this.furnitures[i].addCorners();
-			this.furnitures[i].addtoPoint();
-		}
+		// for(var i = 0; i < this.furnitures.length; i++) {
+		// 	this.furnitures[i].addCorners();
+		// 	this.furnitures[i].addtoPoint();
+		// }
 		
 
 		//testing

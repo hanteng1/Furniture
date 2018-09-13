@@ -42,6 +42,8 @@ function Processor(main) {
 	//zhuen's block
 	this.chair_add = undefined;
 	this.dresser_add = undefined;
+	this.table = undefined;
+	this.desk = undefined;
 	this.model_add = undefined;
 	//end of zhuen's block
 
@@ -119,7 +121,7 @@ Processor.prototype = {
 				}else if(scope.furnitures.length == 1){
 					//possible actions with one furniture
 
-					if (true) {
+					if (false) {
 						scope.cabinet_kallax = new Cabinet_kallax(scope.main);
 						scope.transformFunctions.CABINET_LALLAX = scope.cabinet_kallax;
 						
@@ -135,7 +137,7 @@ Processor.prototype = {
 				}else if( scope.furnitures.length > 1) {
 					//possible actions with many furnitures
 
-					if(true){
+					if(false){
 						scope.cabinet_kallax = new Cabinet_kallax(scope.main);
 						scope.transformFunctions.CABINET_LALLAX = scope.cabinet_kallax;						
 						$('.operations.operation_cabinet_kallax_two').show();
