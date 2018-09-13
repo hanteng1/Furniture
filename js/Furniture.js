@@ -675,6 +675,8 @@ function Furniture(furniture) {
 		inverseMatrixWorld.getInverse(this.furniture.matrixWorld.clone(), true);
 		this.points.applyMatrix(inverseMatrixWorld);
 		this.furniture.add(this.points);
+
+		this.points.visible = false;
 	}
 
 

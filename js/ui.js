@@ -10,31 +10,6 @@ function Ui(main)
 	};
 
 
-
-	//zhuen's block
-
-
-
-	//end of zhuen's block
-
-
-
-	//weixiang's bloack
-
-
-
-	//end of weixiang's block
-
-
-
-
-	//trif's block
-
-
-
-
-	//end of trif's block
-
 }
 
 
@@ -77,15 +52,37 @@ Ui.prototype = {
 		});
 
 
-		$('#category_bed').click(function() {
+		// $('#category_bed').click(function() {
+		// 	//group function
+		// 	scope.main.category0 = "bed";
+		// 	$('#blocker').hide();
+		// 	$('#initial_category_window').hide();
+
+		// 	$('#minfo').html(scope.main.category0);
+
+		// });
+
+		$('#category_desk').click(function() {
 			//group function
-			scope.main.category0 = "bed";
+			scope.main.category0 = "desk";
 			$('#blocker').hide();
 			$('#initial_category_window').hide();
 
 			$('#minfo').html(scope.main.category0);
 
 		});
+
+
+		$('#category_dresser').click(function() {
+			//group function
+			scope.main.category0 = "dresser";
+			$('#blocker').hide();
+			$('#initial_category_window').hide();
+
+			$('#minfo').html(scope.main.category0);
+
+		});
+
 
 
 		$('.ui.dropdown').dropdown({
