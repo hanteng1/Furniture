@@ -5899,7 +5899,7 @@ function Model_Add(main){
 
     //select box
     this.hasSelectBox = false;
-    this.plane = ""; // "selectBoxFront" "selectBoxBack" "selectBoxLeft" "selectBoxRight" "selectBoxUp" "selectBoxDown" string
+    this.planeNormalVector = new THREE.Vector3();
 
     //furniture
     this.selectFurnitureUUID = "";
@@ -5909,20 +5909,22 @@ function Model_Add(main){
     //add object
     this.selectObjectName = "";
     this.selectObject = new THREE.Object3D();
-    this.objectVectorList = {wheel: new THREE.Vector3(0,1,0), 
-    						 rod: new THREE.Vector3(1,0,0), 
-    						 verBoard: new THREE.Vector3(0,0,-1),
-    						 horBoard: new THREE.Vector3(0,1,0),
-    						 leg: new THREE.Vector3(0,-1,0),
-    						 hook: new THREE.Vector3(0,0,-1),
-    						 door: new THREE.Vector3(0,0,-1)
+    this.objectVectorList = {wheel: new THREE.Vector3(0,-1,0), 
+    						 rod: new THREE.Vector3(-1,0,0), 
+    						 verBoard: new THREE.Vector3(0,0,1),
+    						 horBoard: new THREE.Vector3(0,-1,0),
+    						 leg: new THREE.Vector3(0,1,0),
+    						 hook: new THREE.Vector3(0,0,1),
+    						 door: new THREE.Vector3(0,0,1)
     						};
     this.objectAreaList = {wheel: [0.28, 0.28]};
+    this.objectVector = new THREE.Vector3();
     this.isCreateObject = false;
 
-    this.textures = {};
+    this.isCreateInsideObject = false;
 
-    this.mousePoint = new THREE.Mesh();
+    this.textures = {};
+    
 }
 
 Model_Add.prototype = {
@@ -5956,13 +5958,6 @@ Model_Add.prototype = {
 		this.textures["leg"] = textureLoader.load( '../model/Wood_Bamboo_Medium.jpg' );
 	    this.textures["leg"].repeat.set(0.1, 0.1);
 		this.textures["leg"].wrapS = this.textures["leg"].wrapT = THREE.MirroredRepeatWrapping;
-
-		// var geometry = new THREE.BoxGeometry( 0.1, 0.1, 0.1 );
-		// var material = new THREE.MeshBasicMaterial( {color: 0xff0000} );
-		// this.mousePoint = new THREE.Mesh( geometry, material );
-		// this.mousePoint.name = "mousePoint";
-		// this.mousePoint.position.set(1000, 0, 0);
-		// this.main.scene.add(this.mousePoint);
 	},
 
 	test: function(pos) {
@@ -5972,6 +5967,108 @@ Model_Add.prototype = {
 		cube.name = "cube";
 		cube.position.set(pos.x, pos.y, pos.z);
 		this.main.scene.add( cube );
+	},
+
+	getSelectFurnitureSizeWithoutCreateObject: function() {
+		var furniture = this.selectFurniture;
+		while(furniture.parent != this.main.scene)
+			furniture = furniture.parent;
+		var boxes = [];
+		for (var i = 0; i < furniture.children.length; i++) {
+			if(furniture.children[i].type == "Mesh"){
+				var name = furniture.children[i].name;
+				var isCreatePart = name.includes("create");
+				if(!isCreatePart){
+					var box = new THREE.Box3();
+					box.setFromObject(furniture.children[i]);
+					boxes.push(box);
+				}
+			}
+		}
+		var tmp = new THREE.Box3();
+		for (var i = 0; i < boxes.length; i++) {
+			tmp = tmp.union(boxes[i]);
+		}
+		var result = new THREE.Vector3();
+		tmp.getSize(result);
+		return result;
+	},
+
+	getSelectFurnitureCenterWithoutCreateObject: function() {
+		var furniture = this.selectFurniture;
+		while(furniture.parent != this.main.scene)
+			furniture = furniture.parent;
+		var boxes = [];
+		for (var i = 0; i < furniture.children.length; i++) {
+			if(furniture.children[i].type == "Mesh"){
+				var name = furniture.children[i].name;
+				var isCreatePart = name.includes("create");
+				if(!isCreatePart){
+					var box = new THREE.Box3();
+					box.setFromObject(furniture.children[i]);
+					boxes.push(box);
+				}
+			}
+		}
+		var tmp = new THREE.Box3();
+		for (var i = 0; i < boxes.length; i++) {
+			tmp = tmp.union(boxes[i]);
+		}
+		var result = new THREE.Vector3();
+		tmp.getCenter(result);
+		return result;
+	},
+
+	checkInsidePosint(furniture, pos){
+		var boxes = [];
+		for (var i = 0; i < furniture.children.length; i++) {
+			if(furniture.children[i].type == "Mesh"){
+				var name = furniture.children[i].name;
+				var isCreatePart = name.includes("create");
+				if(!isCreatePart){
+					var box = new THREE.Box3();
+					box.setFromObject(furniture.children[i]);
+					boxes.push(box);
+				}
+			}
+		}
+		var tmp = new THREE.Box3();
+		for (var i = 0; i < boxes.length; i++) {
+			tmp = tmp.union(boxes[i]);
+		}
+
+		tmp.max.x = parseFloat(tmp.max.x) - 0.001;
+		tmp.max.y = parseFloat(tmp.max.y) - 0.001;
+		tmp.max.z = parseFloat(tmp.max.z) - 0.001;
+		tmp.min.x = parseFloat(tmp.min.x) + 0.001;
+		tmp.min.y = parseFloat(tmp.min.y) + 0.001;
+		tmp.min.z = parseFloat(tmp.min.z) + 0.001;
+
+		if(tmp.containsPoint(pos))
+			return true;
+		else
+			return false;
+	},
+
+	getFurnitureNormalVectorToWorldVector: function(furniture, normalVector) {
+		normalVector.x = normalVector.x.toFixed(0);
+		normalVector.y = normalVector.y.toFixed(0);
+		normalVector.z = normalVector.z.toFixed(0);
+		var zreo = new THREE.Vector3(0,0,0);
+		normalVector = furniture.localToWorld(normalVector);
+		zreo = furniture.localToWorld(zreo);
+		var result = new THREE.Vector3(normalVector.x - zreo.x, 
+			normalVector.y - zreo.y, normalVector.z - zreo.z);
+		result.x = parseFloat(result.x.toFixed(2));
+		result.y = parseFloat(result.y.toFixed(2));
+		result.z = parseFloat(result.z.toFixed(2));
+		if(parseFloat(result.x) != 0)
+			result.x = Math.abs(parseFloat(result.x)) / parseFloat(result.x);
+		if(parseFloat(result.y) != 0)
+			result.y = Math.abs(parseFloat(result.y)) / parseFloat(result.y);
+		if(parseFloat(result.z) != 0)
+			result.z = Math.abs(parseFloat(result.z)) / parseFloat(result.z);
+		return result;
 	},
 
 	getPartSize: function(obj){
@@ -6017,11 +6114,11 @@ Model_Add.prototype = {
 
 	objectAddToFurniture: function(furniture, object, position) {
 		var inverse = new THREE.Matrix4();
-		inverse.getInverse(furniture.matrixWorld);	
-		object.applyMatrix(inverse);		
-		furniture.worldToLocal(position);		
+		inverse.getInverse(furniture.matrixWorld);
+		object.applyMatrix(inverse);
+		furniture.worldToLocal(position);
 		object.position.set(position.x, position.y, position.z);		
-		furniture.add(object);		
+		furniture.add(object);	
 	},
 
 	checkAxis: function(vector1, vector2) {
@@ -6184,178 +6281,6 @@ Model_Add.prototype = {
     	return ( ( str1 == str2 ) ? 0 : ( ( str1 > str2 ) ? 1 : -1 ) );
 	},
 
-	select: function(obj) {
-		var furniture = new THREE.Object3D();
-		if(this.strcmp(obj.uuid, this.selectFurnitureUUID) != 0){
-			if(this.hasSelectBox){
-				furniture = this.selectFurniture;				
-				while(furniture.parent.uuid != this.main.scene.uuid)
-					furniture = furniture.parent;
-
-				this.deleteSelectBox(this.main.scene);
-			}
-			else
-				this.hasSelectBox = true;
-
-			this.selectFurnitureUUID = obj.uuid;
-			this.selectFurniture = obj;
-
-			this.createSelectBox(this.main.scene, obj);
-		}
-	},
-
-	createSelectBox: function(furniture, obj) {
-		// 0-----1   4-----5
-		// | up  |   | down|
-		// |     |   |     |
-		// 3-----2   7-----6
-		var corners = this.getAllCorners(obj);
-
-        var xy_positive_geometry = new THREE.Geometry();
-        var xy_negative_geometry = new THREE.Geometry();
-        var yz_positive_geometry = new THREE.Geometry();
-        var yz_negative_geometry = new THREE.Geometry();
-        var xz_positive_geometry = new THREE.Geometry();
-        var xz_negative_geometry = new THREE.Geometry();
-        // XY positive (3, 7, 6, 2, 3)
-        xy_positive_geometry.vertices.push(corners[3], corners[7], corners[6], corners[2]);
-        // XY negative (1, 5, 4, 0, 1)
-        xy_negative_geometry.vertices.push(corners[1], corners[5], corners[4], corners[0]);
-        // YZ positive (2, 6, 5, 1, 2)
-        yz_positive_geometry.vertices.push(corners[2], corners[6], corners[5], corners[1]);
-        // YZ negative (0, 4, 7, 3, 0)
-        yz_negative_geometry.vertices.push(corners[0], corners[4], corners[7], corners[3]);
-        // XZ positive (0, 3, 2, 1, 0)
-        xz_positive_geometry.vertices.push(corners[0], corners[3], corners[2], corners[1]);
-        // XZ negative (5, 6, 7, 4, 5)
-        xz_negative_geometry.vertices.push(corners[5], corners[6], corners[7], corners[4]);
-
-		var selectedMaterial = new THREE.MeshLambertMaterial( {
-			color: 0xffffff,
-			opacity: 0.3,
-			transparent: true
-		} );
-		var unselectedMaterial = new THREE.MeshLambertMaterial( {
-			color: 0xffffff,
-			opacity: 0.1,
-			transparent: true
-		} );
-
-		xy_positive_geometry.faces.push( new THREE.Face3( 0, 1, 2 ), new THREE.Face3( 2, 3, 0 ) );
-		xy_negative_geometry.faces.push( new THREE.Face3( 0, 1, 2 ), new THREE.Face3( 2, 3, 0 ) );
-		yz_positive_geometry.faces.push( new THREE.Face3( 0, 1, 2 ), new THREE.Face3( 2, 3, 0 ) );
-		yz_negative_geometry.faces.push( new THREE.Face3( 0, 1, 2 ), new THREE.Face3( 2, 3, 0 ) );
-		xz_positive_geometry.faces.push( new THREE.Face3( 0, 1, 2 ), new THREE.Face3( 2, 3, 0 ) );
-		xz_negative_geometry.faces.push( new THREE.Face3( 0, 1, 2 ), new THREE.Face3( 2, 3, 0 ) );
-
-		var xy_positive = new THREE.Mesh( xy_positive_geometry, unselectedMaterial );
-		var xy_negative = new THREE.Mesh( xy_negative_geometry, unselectedMaterial );
-		var yz_positive = new THREE.Mesh( yz_positive_geometry, unselectedMaterial );
-		var yz_negative = new THREE.Mesh( yz_negative_geometry, unselectedMaterial );
-		var xz_positive = new THREE.Mesh( xz_positive_geometry, unselectedMaterial );
-		var xz_negative = new THREE.Mesh( xz_negative_geometry, unselectedMaterial );
-
-		xy_positive.name = "selectBoxFront";
-		xy_negative.name = "selectBoxBack";
-		yz_positive.name = "selectBoxRight";
-		yz_negative.name = "selectBoxLeft";
-		xz_positive.name = "selectBoxUp";
-		xz_negative.name = "selectBoxDown";
-
-		this.main.scene.add(xy_positive);
-		this.main.scene.add(xy_negative);
-		this.main.scene.add(yz_positive);
-		this.main.scene.add(yz_negative);
-		this.main.scene.add(xz_positive);
-		this.main.scene.add(xz_negative);
-	},
-
-	deleteSelectBox: function(furniture) {
-		console.log("deleteSelectBox");
-		var xy_positive = furniture.getObjectByName("selectBoxFront");
-		var xy_negative = furniture.getObjectByName("selectBoxBack");
-		var yz_positive = furniture.getObjectByName("selectBoxRight");
-		var yz_negative = furniture.getObjectByName("selectBoxLeft");
-		var xz_positive = furniture.getObjectByName("selectBoxUp");
-		var xz_negative = furniture.getObjectByName("selectBoxDown");
-		furniture.remove(xy_positive, xy_negative, yz_positive, yz_negative, xz_positive, xz_negative);
-	},
-
-	changePlaneMaterial: function(plane, material) {
-		var obj = this.main.scene.getObjectByName(plane);
-		obj.material = material;
-	},
-
-	selectPlane: function(mouse, camera, point) {
-		var selectedMaterial = new THREE.MeshLambertMaterial( {
-			color: 0xffffff,
-			opacity: 0.3,
-			transparent: true
-		} );
-		var unselectedMaterial = new THREE.MeshLambertMaterial( {
-			color: 0xffffff,
-			opacity: 0.1,
-			transparent: true
-		} );
-		var raycaster = new THREE.Raycaster();
-		mouse.set( ( point.x * 2 ) - 1, - ( point.y * 2 ) + 1 );
-		raycaster.setFromCamera( mouse, camera );
-		var frontIntersects = raycaster.intersectObject( this.main.scene.getObjectByName("selectBoxFront"), true);
-		var backIntersects = raycaster.intersectObject( this.main.scene.getObjectByName("selectBoxBack"), true);
-		var rightIntersects = raycaster.intersectObject( this.main.scene.getObjectByName("selectBoxRight"), true);
-		var leftIntersects = raycaster.intersectObject( this.main.scene.getObjectByName("selectBoxLeft"), true);
-		var upIntersects = raycaster.intersectObject( this.main.scene.getObjectByName("selectBoxUp"), true);
-		var downIntersects = raycaster.intersectObject( this.main.scene.getObjectByName("selectBoxDown"), true);
-
-		if(frontIntersects.length > 0){
-			this.plane = "selectBoxFront";
-			this.changePlaneMaterial("selectBoxFront", selectedMaterial);
-		}
-		else
-			this.changePlaneMaterial("selectBoxFront", unselectedMaterial);
-		
-		if(backIntersects.length > 0){
-			this.plane = "selectBoxBack";
-			this.changePlaneMaterial("selectBoxBack", selectedMaterial);
-		}
-		else
-			this.changePlaneMaterial("selectBoxBack", unselectedMaterial);
-		
-		if(rightIntersects.length > 0){
-			this.plane = "selectBoxRight";
-			this.changePlaneMaterial("selectBoxRight", selectedMaterial);
-		}
-		else
-			this.changePlaneMaterial("selectBoxRight", unselectedMaterial);
-		
-		if(leftIntersects.length > 0){
-			this.plane = "selectBoxLeft";
-			this.changePlaneMaterial("selectBoxLeft", selectedMaterial);
-		}
-		else
-			this.changePlaneMaterial("selectBoxLeft", unselectedMaterial);
-		
-		if(upIntersects.length > 0){
-			this.plane = "selectBoxUp";
-			this.changePlaneMaterial("selectBoxUp", selectedMaterial);
-		}
-		else
-			this.changePlaneMaterial("selectBoxUp", unselectedMaterial);
-		
-		if(downIntersects.length > 0){
-			this.plane = "selectBoxDown";
-			this.changePlaneMaterial("selectBoxDown", selectedMaterial);
-		}
-		else
-			this.changePlaneMaterial("selectBoxDown", unselectedMaterial);
-
-		//remove object
-		this.removeSelectObjectInScene();
-		
-		//create object
-		this.createObject();
-	},
-
 	removeSelectObjectInScene: function() {
 		if(this.selectObjectName != ""){
 			var object = [];
@@ -6371,53 +6296,37 @@ Model_Add.prototype = {
 			console.log("No object is created");
 	},
 
-	createVerBoard: function(vector) {
+	createVerBoard: function() {
 		var furniture = this.selectFurniture;
 		var texture = this.textures["board"];
 		var boardSelectedMaterial = new THREE.MeshBasicMaterial( {map: texture} );
-		var furnitureSize = this.getPartSize(furniture);
+		var furnitureSize = this.getSelectFurnitureSizeWithoutCreateObject();
 		// (width, height, depth)
 		var array = [];
 		array.push(furnitureSize.x);
 		array.push(furnitureSize.y);
 		array.push(furnitureSize.z);
-		array.sort(function(a, b){return a-b});
+		array.sort(function(a, b){return a-b});		
 		
-		// if(this.plane == "selectBoxFront" || this.plane == "selectBoxBack"){
-			var width = array[1];
-			var height = 0.3;
-			var depth = array[2];
-		// }
-		// if(this.plane == "selectBoxLeft" || this.plane == "selectBoxRight"){
-		// 	var width = furnitureSize.z;
-		// 	var height = 0.3;
-		// 	var depth = furnitureSize.y;
-		// }
-		// if(this.plane == "selectBoxUp" || this.plane == "selectBoxDown"){
-		// 	var width = furnitureSize.x;
-		// 	var height = 0.3;
-		// 	var depth = furnitureSize.z;
-		// }
+		var width = array[1];
+		var height = 0.3;
+		var depth = array[2];
 		
 		var boardGeometry = chairCreateBoard(width, height, depth);
 
 		var board = new THREE.Mesh(boardGeometry, boardSelectedMaterial);
-		board.name = "vertical board";
+		board.name = "create vertical board";
 		this.main.scene.add(board);
 		board.position.set(0,0,0);
 
-		var boardSize = this.getPartSize(board);
-		var axis = this.checkAxis(this.objectVectorList.verBoard, vector);
-		var degree = this.checkDegree(this.objectVectorList.verBoard, vector, axis);
-		this.objectRotationByAxis(board, axis, degree);
-		
+		this.objectVector = this.objectVectorList.verBoard;
 		this.selectObject = board;
 	},
 
-	createHorBoard: function(vector) {//not yet
+	createHorBoard: function() {//not yet
 		var texture = this.textures["board2"];
 		var boardSelectedMaterial = new THREE.MeshBasicMaterial( {map: texture} );
-		var furnitureSize = this.getPartSize(this.selectFurniture);
+		var furnitureSize = this.getSelectFurnitureSizeWithoutCreateObject();
 		var array = [];
 		array.push(furnitureSize.x);
 		array.push(furnitureSize.y);
@@ -6426,399 +6335,537 @@ Model_Add.prototype = {
 		var width = array[1];
 		var height = 0.3;
 		var depth = array[2];
-		// (width, height, depth)
-		// if(this.plane == "selectBoxFront" || this.plane == "selectBoxBack"){
-		// 	var width = furnitureSize.x;
-		// 	var height = 0.3;
-		// 	var depth = furnitureSize.x;
-		// }
-		// if(this.plane == "selectBoxLeft" || this.plane == "selectBoxRight"){
-		// 	var width = furnitureSize.z;
-		// 	var height = 0.3;
-		// 	var depth = furnitureSize.z;
-		// }
-		// if(this.plane == "selectBoxUp" || this.plane == "selectBoxDown"){
-		// 	var width = furnitureSize.x;
-		// 	var height = 0.3;
-		// 	var depth = furnitureSize.z;
-		// }
 
 		var boardGeometry = chairCreateBoard(width, height, depth);
 
 		var board = new THREE.Mesh(boardGeometry, boardSelectedMaterial);
-		board.name = "horizontal board";
+		board.name = "create horizontal board";
 		this.main.scene.add(board);
 		board.position.set(0,0,0);
 
-		var boardSize = this.getPartSize(board);
-		var axis = this.checkAxis(this.objectVectorList.horBoard, vector);
-		var degree = this.checkDegree(this.objectVectorList.horBoard, vector, axis);
-		this.objectRotationByAxis(board, axis, degree);
-		
+		this.objectVector = this.objectVectorList.horBoard;
 		this.selectObject = board;
 	},
 
-	createRod: function(vector) {//rotation vector
+	createRod: function() {//rotation vector
 		var texture = this.textures["shiny"];
 		var rodSelectedMaterial = new THREE.MeshBasicMaterial( {map: texture} );
-		var furnitureSize = this.getPartSize(this.selectFurniture);
-		if(this.plane == "selectBoxFront" || this.plane == "selectBoxBack")
-			var length = furnitureSize.x;
-		if(this.plane == "selectBoxLeft" || this.plane == "selectBoxRight")
-			var length = furnitureSize.z;
-		if(this.plane == "selectBoxUp" || this.plane == "selectBoxDown")
-			var length = furnitureSize.z;
-
+		var length = 3;
 		var rodGeometry = CreateTableRod(length);
 
 		var rod = new THREE.Mesh(rodGeometry, rodSelectedMaterial);
-		rod.name = "rod";
+		rod.name = "create rod";
 		this.main.scene.add(rod);
 		rod.position.set(0,0,0);
 
-		var rodSize = this.getPartSize(rod);
-		var axis = this.checkAxis(this.objectVectorList.rod, vector);
-		var degree = this.checkDegree(this.objectVectorList.rod, vector, axis);
-		this.objectRotationByAxis(rod, axis, degree);
-		
+		this.objectVector = this.objectVectorList.rod;
 		this.selectObject = rod;
-		
 	},
 
-	createLeg: function(vector){
+	createLeg: function(){
 		var texture = this.textures["leg"];
 		var legSelectedMaterial = new THREE.MeshBasicMaterial( {map: texture} );
 		var legGeometry = CreateLeg(3);
 
 		var leg = new THREE.Mesh(legGeometry, legSelectedMaterial);
-		leg.name = "leg";
+		leg.name = "create leg";
 		this.main.scene.add(leg);
 		leg.position.set(0,0,0);
-
-		var legSize = this.getPartSize(leg);
-		var axis = this.checkAxis(this.objectVectorList.leg, vector);
-		var degree = this.checkDegree(this.objectVectorList.leg, vector, axis);
-		this.objectRotationByAxis(leg, axis, degree);
 		
+		this.objectVector = this.objectVectorList.leg;
 		this.selectObject = leg;
 	},
 
-	createWheel: function(vector) {//rotation vector
+	createWheel: function() {//rotation vector
 		var wheelSelectedMaterial = new THREE.MeshBasicMaterial( {color: 0x000000} );
 		var wheelGeometry = CreateWheel();
 
 		var wheel = new THREE.Mesh(wheelGeometry, wheelSelectedMaterial);
-		wheel.name = "wheel";
+		wheel.name = "create wheel";
 		this.main.scene.add(wheel);
 		wheel.position.set(0,0,0);
-
-		var wheelSize = this.getPartSize(wheel);
-		var axis = this.checkAxis(this.objectVectorList.wheel, vector);
-		var degree = this.checkDegree(this.objectVectorList.wheel, vector, axis);
-		this.objectRotationByAxis(wheel, axis, degree);
 		
+		this.objectVector = this.objectVectorList.wheel;
 		this.selectObject = wheel;
 	},
 
-	createHook: function(vector) {//rotation vector
+	createHook: function() {//rotation vector
 		var texture = this.textures["shiny"];
 		var hookSelectedMaterial = new THREE.MeshBasicMaterial( {map: texture} );
 		var hookGeometry = CreateHook();
 
 		var hook = new THREE.Mesh(hookGeometry, hookSelectedMaterial);
-		hook.name = "hook";
+		hook.name = "create hook";
 		this.main.scene.add(hook);
 		hook.position.set(0,0,0);
-
-		var hookSize = this.getPartSize(hook);
-		var axis = this.checkAxis(this.objectVectorList.hook, vector);
-		var degree = this.checkDegree(this.objectVectorList.hook, vector, axis);
-		this.objectRotationByAxis(hook, axis, degree);
 		
+		this.objectVector = this.objectVectorList.hook;
 		this.selectObject = hook;
 	},
 
-	createDoor: function(vector) {
+	createDoor: function() {
 		var texture = this.textures["shiny"];
 		var doorSelectedMaterial = new THREE.MeshBasicMaterial( {map: texture} );
 
-		var furnitureSize = this.getPartSize(this.selectFurniture);
-		if(this.plane == "selectBoxFront" || this.plane == "selectBoxBack") {
-			var h = furnitureSize.y;
-			var w = furnitureSize.z;
-		}
-		if(this.plane == "selectBoxLeft" || this.plane == "selectBoxRight") {
-			var h = furnitureSize.y;
-			var w = furnitureSize.z;
-		}
-		if(this.plane == "selectBoxUp" || this.plane == "selectBoxDown") {
-			var h = furnitureSize.x;
-			var w = furnitureSize.z;
-		}
+		var h = 9;
+		var w = 6;
 
-		var doorGeometry = CreateDoor(h+1, w+1);
+		var doorGeometry = CreateDoor(h, w);
 		var door = new THREE.Mesh(doorGeometry, doorSelectedMaterial);
-		door.name = "door";
+		door.name = "create door";
 		this.main.scene.add(door);
 		door.position.set(0,0,0);
 
-		var doorSize = this.getPartSize(door);
-		var axis = this.checkAxis(this.objectVectorList.door, vector);
-		var degree = this.checkDegree(this.objectVectorList.door, vector, axis);
-		this.objectRotationByAxis(door, axis, degree);
+		this.objectVector = this.objectVectorList.door;
 
 		this.selectObject = door;
 	},
 
 	createObject: function() {
-		this.isCreateObject = true;
-		console.log("create a new " + this.selectObjectName);
-		//which plan selected
-		if(this.plane == "selectBoxFront")
-			var vector = new THREE.Vector3(0,0,-1);
-		if (this.plane == "selectBoxBack")
-			var vector = new THREE.Vector3(0,0,1);
-		if(this.plane == "selectBoxLeft")
-			var vector = new THREE.Vector3(1,0,0);
-		if(this.plane == "selectBoxRight")
-			var vector = new THREE.Vector3(-1,0,0);
-		if(this.plane == "selectBoxUp")
-			var vector = new THREE.Vector3(0,-1,0);
-		if(this.plane == "selectBoxDown")
-			var vector = new THREE.Vector3(0,1,0);
+		this.isCreateObject = true;	
 		
 		//what object need create
-		if(this.selectObjectName == "vertical board")
-			this.createVerBoard(vector);
-		if(this.selectObjectName == "horizontal board")
-			this.createHorBoard(vector);
-		if(this.selectObjectName == "rod")
-			this.createRod(vector);
-		if(this.selectObjectName == "leg")
-			this.createLeg(vector);
-		if(this.selectObjectName == "wheel")
-			this.createWheel(vector);
-		if(this.selectObjectName == "hook")
-			this.createHook(vector);
-		if(this.selectObjectName == "door")
-			this.createDoor(vector);
+		if(this.selectObjectName == "create vertical board")
+			this.createVerBoard();
+		if(this.selectObjectName == "create horizontal board")
+			this.createHorBoard();
+		if(this.selectObjectName == "create rod")
+			this.createRod();
+		if(this.selectObjectName == "create leg")
+			this.createLeg();
+		if(this.selectObjectName == "create wheel")
+			this.createWheel();
+		if(this.selectObjectName == "create hook")
+			this.createHook();
+		if(this.selectObjectName == "create door")
+			this.createDoor();
 	},
 
-	checkOnThePlane: function(pos) {
-		var furnitureCenter = this.getPartCenter(this.selectFurniture);
-		furnitureCenter.x = furnitureCenter.x.toFixed(4);
-		furnitureCenter.y = furnitureCenter.y.toFixed(4);
-		furnitureCenter.z = furnitureCenter.z.toFixed(4);
-		var furnitureSize = this.getPartSize(this.selectFurniture);
-		furnitureSize.x = furnitureSize.x.toFixed(4);
-		furnitureSize.y = furnitureSize.y.toFixed(4);
-		furnitureSize.z = furnitureSize.z.toFixed(4);
-		pos.x = pos.x.toFixed(4);
-		pos.y = pos.y.toFixed(4);
-		pos.z = pos.z.toFixed(4);
+	rotateObjectVectorToPlaneNormalVector: function() {
+		var pos_x = new THREE.Vector3(1,0,0);
+		var pos_y = new THREE.Vector3(0,1,0);
+		var pos_z = new THREE.Vector3(0,0,1);
+		var neg_x = new THREE.Vector3(-1,0,0);
+		var neg_y = new THREE.Vector3(0,-1,0);
+		var neg_z = new THREE.Vector3(0,0,-1);
+		if(this.objectVector.equals(pos_x)){
+			if(this.planeNormalVector.equals(pos_y)){
+				this.objectRotationByAxis(this.selectObject, "z", Math.PI/2);
+			}
+			if(this.planeNormalVector.equals(pos_z)){
+				this.objectRotationByAxis(this.selectObject, "y", Math.PI/2+Math.PI);
+			}
+			if(this.planeNormalVector.equals(neg_x)){
+				this.objectRotationByAxis(this.selectObject, "y", Math.PI);
+			}
+			if(this.planeNormalVector.equals(neg_y)){
+				this.objectRotationByAxis(this.selectObject, "z", Math.PI/2+Math.PI);
+			}
+			if(this.planeNormalVector.equals(neg_z)){
+				this.objectRotationByAxis(this.selectObject, "y", Math.PI/2);
+			}
+		}
+		else if(this.objectVector.equals(pos_y)){
+			if(this.planeNormalVector.equals(pos_x)){
+				this.objectRotationByAxis(this.selectObject, "z", Math.PI/2+Math.PI);
+			}
+			if(this.planeNormalVector.equals(pos_z)){
+				this.objectRotationByAxis(this.selectObject, "z", Math.PI/2+Math.PI);
+				this.objectRotationByAxis(this.selectObject, "y", Math.PI/2+Math.PI);
+			}
+			if(this.planeNormalVector.equals(neg_x)){
+				this.objectRotationByAxis(this.selectObject, "z", Math.PI/2+Math.PI);
+				this.objectRotationByAxis(this.selectObject, "y", Math.PI);
+			}
+			if(this.planeNormalVector.equals(neg_y)){
+				this.objectRotationByAxis(this.selectObject, "z", Math.PI);
+			}
+			if(this.planeNormalVector.equals(neg_z)){
+				this.objectRotationByAxis(this.selectObject, "z", Math.PI/2+Math.PI);
+				this.objectRotationByAxis(this.selectObject, "y", Math.PI/2);
+			}
+		}
+		else if(this.objectVector.equals(pos_z)){
+			if(this.planeNormalVector.equals(pos_x)){
+				this.objectRotationByAxis(this.selectObject, "y", Math.PI/2);
+			}
+			if(this.planeNormalVector.equals(pos_y)){
+				this.objectRotationByAxis(this.selectObject, "y", Math.PI/2);
+				this.objectRotationByAxis(this.selectObject, "z", Math.PI/2);
+			}
+			if(this.planeNormalVector.equals(neg_x)){
+				this.objectRotationByAxis(this.selectObject, "y", Math.PI/2+Math.PI);
+			}
+			if(this.planeNormalVector.equals(neg_y)){
+				this.objectRotationByAxis(this.selectObject, "y", Math.PI/2);
+				this.objectRotationByAxis(this.selectObject, "z", Math.PI/2+Math.PI);
+			}
+			if(this.planeNormalVector.equals(neg_z)){
+				this.objectRotationByAxis(this.selectObject, "y", Math.PI);
+			}
+		}
+		else if(this.objectVector.equals(neg_x)){
+			if(this.planeNormalVector.equals(pos_x)){
+				this.objectRotationByAxis(this.selectObject, "y", Math.PI);
+			}
+			if(this.planeNormalVector.equals(pos_y)){
+				this.objectRotationByAxis(this.selectObject, "y", Math.PI);
+				this.objectRotationByAxis(this.selectObject, "z", Math.PI/2);
+			}
+			if(this.planeNormalVector.equals(pos_z)){
+				this.objectRotationByAxis(this.selectObject, "y", Math.PI/2);
+			}
+			if(this.planeNormalVector.equals(neg_y)){
+				this.objectRotationByAxis(this.selectObject, "y", Math.PI);
+				this.objectRotationByAxis(this.selectObject, "z", Math.PI/2+Math.PI);
+			}
+			if(this.planeNormalVector.equals(neg_z)){
+				this.objectRotationByAxis(this.selectObject, "y", Math.PI/2+Math.PI);
+			}
+		}
+		else if(this.objectVector.equals(neg_y)){
+			if(this.planeNormalVector.equals(pos_x)){
+				this.objectRotationByAxis(this.selectObject, "z", Math.PI/2);
+			}
+			if(this.planeNormalVector.equals(pos_y)){
+				this.objectRotationByAxis(this.selectObject, "z", Math.PI);
+			}
+			if(this.planeNormalVector.equals(pos_z)){
+				this.objectRotationByAxis(this.selectObject, "z", Math.PI/2);
+				this.objectRotationByAxis(this.selectObject, "y", Math.PI/2+Math.PI);
+			}
+			if(this.planeNormalVector.equals(neg_x)){
+				this.objectRotationByAxis(this.selectObject, "z", Math.PI/2);
+				this.objectRotationByAxis(this.selectObject, "y", Math.PI);
+			}
+			if(this.planeNormalVector.equals(neg_z)){
+				this.objectRotationByAxis(this.selectObject, "z", Math.PI/2);
+				this.objectRotationByAxis(this.selectObject, "y", Math.PI/2);
+			}
+		}
+		else if(this.objectVector.equals(neg_z)){
+			if(this.planeNormalVector.equals(pos_x)){
+				this.objectRotationByAxis(this.selectObject, "y", Math.PI/2+Math.PI);
+			}
+			if(this.planeNormalVector.equals(pos_y)){
+				this.objectRotationByAxis(this.selectObject, "y", Math.PI/2+Math.PI);
+				this.objectRotationByAxis(this.selectObject, "z", Math.PI/2);
+			}
+			if(this.planeNormalVector.equals(pos_z)){
+				this.objectRotationByAxis(this.selectObject, "y", Math.PI);
+			}
+			if(this.planeNormalVector.equals(neg_x)){
+				this.objectRotationByAxis(this.selectObject, "y", Math.PI/2);
+			}
+			if(this.planeNormalVector.equals(neg_y)){
+				this.objectRotationByAxis(this.selectObject, "y", Math.PI/2+Math.PI);
+				this.objectRotationByAxis(this.selectObject, "z", Math.PI/2+Math.PI);
+			}
+		}
+		this.objectVector = this.planeNormalVector;
+	},
 
-		if(this.plane == "selectBoxFront"){ // z+
-			var tmp = parseFloat(furnitureCenter.z) + parseFloat(furnitureSize.z)/2;
-			tmp = tmp.toFixed(4);
-			if(pos.z >= tmp)
-				return true;
-			else
-				return false;
+	resizeVerBoard: function(obj) {
+		if(!this.objectVector.equals(this.planeNormalVector)){
+			var objSize = this.getPartSize(obj);
+			var objScale = obj.scale.clone();
+			var furnitureSize = this.getSelectFurnitureSizeWithoutCreateObject();
+			var pos_x = new THREE.Vector3(1,0,0);
+			var pos_y = new THREE.Vector3(0,1,0);
+			var pos_z = new THREE.Vector3(0,0,1);
+			var neg_x = new THREE.Vector3(-1,0,0);
+			var neg_y = new THREE.Vector3(0,-1,0);
+			var neg_z = new THREE.Vector3(0,0,-1);
+			if(this.planeNormalVector.equals(pos_x) || this.planeNormalVector.equals(neg_x)){
+				console.log("Resize to NormalVector X");
+				objScale.x = objScale.x / objSize.x * furnitureSize.x;
+				objScale.y = objScale.y / objSize.y * 0.3;
+				objScale.z = objScale.z / objSize.z * furnitureSize.z;
+			}
+			if(this.planeNormalVector.equals(pos_y) || this.planeNormalVector.equals(neg_y)){
+				console.log("Resize to NormalVector Y");
+				objScale.x = objScale.x / objSize.x * furnitureSize.x;
+				objScale.y = objScale.y / objSize.y * (furnitureSize.y / 3);
+				objScale.z = objScale.z / objSize.z * 0.3;
+			}
+			if(this.planeNormalVector.equals(pos_z) || this.planeNormalVector.equals(neg_z)){
+				console.log("Resize to NormalVector Z");
+				objScale.x = objScale.x / objSize.x * furnitureSize.x;
+				objScale.y = objScale.y / objSize.y * 0.3;
+				objScale.z = objScale.z / objSize.z * furnitureSize.z;
+			}
+			obj.scale.x = objScale.x;
+			obj.scale.y = objScale.y;
+			obj.scale.z = objScale.z;
 		}
-		else if(this.plane == "selectBoxBack"){ //z-
-			var tmp = parseFloat(furnitureCenter.z) - parseFloat(furnitureSize.z)/2;
-			tmp = tmp.toFixed(4);
-			if(pos.z <= tmp)
-				return true;
-			else
-				return false;
+		this.objectVector = this.planeNormalVector;
+	},
+
+	getVerBoardOffset: function(pos) {
+		var verBoardSize = this.getPartSize(this.selectObject);
+		var zero = new THREE.Vector3(-verBoardSize.x/2, verBoardSize.y/2, -verBoardSize.z/2);
+		var furnitureSize = this.getSelectFurnitureSizeWithoutCreateObject();
+		var furnitureCenter = this.getSelectFurnitureCenterWithoutCreateObject();
+		if(this.planeNormalVector.equals(new THREE.Vector3(0,0,1))){
+			var x = parseFloat(furnitureCenter.x) - parseFloat(furnitureSize.x) / 2;
+			var y = parseFloat(pos.y);
+			var z = parseFloat(pos.z);
+			return new THREE.Vector3(x, y, z);
 		}
-		else if(this.plane == "selectBoxLeft"){ //x-
-			var tmp = parseFloat(furnitureCenter.x) - parseFloat(furnitureSize.x)/2;
-			tmp = tmp.toFixed(4);
-			if(pos.x <= tmp)
-				return true;
-			else
-				return false;
+		if(this.planeNormalVector.equals(new THREE.Vector3(0,0,-1))){
+			var x = parseFloat(furnitureCenter.x) - parseFloat(furnitureSize.x) / 2;
+			var y = parseFloat(pos.y);
+			var z = parseFloat(pos.z) - parseFloat(verBoardSize.z) + 0.12 * this.selectObject.scale.z;
+			return new THREE.Vector3(x, y, z);
 		}
-		else if(this.plane == "selectBoxRight"){ //x+
-			var tmp = parseFloat(furnitureCenter.x) + parseFloat(furnitureSize.x)/2;
-			tmp = tmp.toFixed(4);
-			if(pos.x >= tmp)
-				return true;
-			else
-				return false;
+		if(this.planeNormalVector.equals(new THREE.Vector3(-1,0,0))){
+			var x = parseFloat(pos.x) - parseFloat(verBoardSize.x) + 0.12 * this.selectObject.scale.x;
+			var y = parseFloat(pos.y);
+			var z = parseFloat(furnitureCenter.z) - parseFloat(furnitureSize.z) / 2;
+			return new THREE.Vector3(x, y, z);
 		}
-		else if(this.plane == "selectBoxUp"){ //y+
-			var tmp = parseFloat(furnitureCenter.y) + parseFloat(furnitureSize.y)/2;
-			tmp = tmp.toFixed(4);
-			if(pos.y >= tmp)
-				return true;
-			else
-				return false;
+		if(this.planeNormalVector.equals(new THREE.Vector3(1,0,0))){
+			var x = parseFloat(pos.x) + 0.12 * this.selectObject.scale.x;
+			var y = parseFloat(pos.y);
+			var z = parseFloat(furnitureCenter.z) - parseFloat(furnitureSize.z) / 2;
+			return new THREE.Vector3(x, y, z);
 		}
-		else if(this.plane == "selectBoxDown"){ //y-
-			var tmp = parseFloat(furnitureCenter.y) - parseFloat(furnitureSize.y)/2;
-			tmp = tmp.toFixed(4);
-			if(pos.y <= tmp)
-				return true;
-			else
-				return false;
+		if(this.planeNormalVector.equals(new THREE.Vector3(0,1,0))){
+			var x = parseFloat(pos.x) + parseFloat(zero.x);
+			var y = parseFloat(pos.y) + 0.12 * this.selectObject.scale.y;
+			var z = parseFloat(pos.z) + parseFloat(zero.z);
+			return new THREE.Vector3(x, y, z);
+		}
+		if(this.planeNormalVector.equals(new THREE.Vector3(0,-1,0))){
+			var x = parseFloat(pos.x) + parseFloat(zero.x);
+			var y = parseFloat(pos.y) - parseFloat(zero.y) - 0.12 * this.selectObject.scale.y;
+			var z = parseFloat(pos.z) + parseFloat(zero.z);
+			return new THREE.Vector3(x, y, z);
 		}
 	},
 
 	updateVerBoardPosition: function(pos) {
-		var isOnThePlane = this.checkOnThePlane(pos);
-		if(isOnThePlane){
-			this.selectObject.position.set(pos.x, pos.y, pos.z);
+		this.resizeVerBoard(this.selectObject);
+		var offset = this.getVerBoardOffset(pos);
+		this.selectObject.position.set(offset.x, offset.y, offset.z);
+	},
+
+	resizeHorBoard: function(obj) {
+		if(!this.objectVector.equals(this.planeNormalVector)){
+			var objSize = this.getPartSize(obj);
+			var objScale = obj.scale.clone();
+			var furnitureSize = this.getSelectFurnitureSizeWithoutCreateObject();
+			var pos_x = new THREE.Vector3(1,0,0);
+			var pos_y = new THREE.Vector3(0,1,0);
+			var pos_z = new THREE.Vector3(0,0,1);
+			var neg_x = new THREE.Vector3(-1,0,0);
+			var neg_y = new THREE.Vector3(0,-1,0);
+			var neg_z = new THREE.Vector3(0,0,-1);
+			if(this.planeNormalVector.equals(pos_x) || this.planeNormalVector.equals(neg_x)){
+				console.log("Resize to NormalVector X");
+				objScale.x = objScale.x / objSize.x * 0.3;
+				objScale.y = objScale.y / objSize.y * furnitureSize.y;
+				objScale.z = objScale.z / objSize.z * furnitureSize.z;
+			}
+			if(this.planeNormalVector.equals(pos_y) || this.planeNormalVector.equals(neg_y)){
+				console.log("Resize to NormalVector Y");
+				objScale.x = objScale.x / objSize.x * furnitureSize.x;
+				objScale.y = objScale.y / objSize.y * 0.3;
+				objScale.z = objScale.z / objSize.z * furnitureSize.z;
+			}
+			if(this.planeNormalVector.equals(pos_z) || this.planeNormalVector.equals(neg_z)){
+				console.log("Resize to NormalVector Z");
+				objScale.x = objScale.x / objSize.x * furnitureSize.x;
+				objScale.y = objScale.y / objSize.y * furnitureSize.y;
+				objScale.z = objScale.z / objSize.z * 0.3;
+			}
+			obj.scale.x = objScale.x;
+			obj.scale.y = objScale.y;
+			obj.scale.z = objScale.z;
 		}
-		else
-			console.log("Ray position isn't on the plan.");
+		this.objectVector = this.planeNormalVector;
+	},
+
+	getHorBoardOffset: function(pos) {
+		var horBoardSize = this.getPartSize(this.selectObject);
+		var zero = new THREE.Vector3(-horBoardSize.x/2, horBoardSize.y/2, -horBoardSize.z/2);
+		var furnitureSize = this.getSelectFurnitureSizeWithoutCreateObject();
+		var furnitureCenter = this.getSelectFurnitureCenterWithoutCreateObject();
+		if(this.planeNormalVector.equals(new THREE.Vector3(0,0,1))){
+			var x = parseFloat(furnitureCenter.x) - parseFloat(furnitureSize.x) / 2 + 0.12 * this.selectObject.scale.x;
+			var y = parseFloat(pos.y) + 0.12 * this.selectObject.scale.y;
+			var z = parseFloat(pos.z);
+			return new THREE.Vector3(x, y, z);
+		}
+		if(this.planeNormalVector.equals(new THREE.Vector3(0,0,-1))){
+			var x = parseFloat(furnitureCenter.x) - parseFloat(furnitureSize.x) / 2 + 0.12 * this.selectObject.scale.x;
+			var y = parseFloat(pos.y) + 0.12 * this.selectObject.scale.y;
+			var z = parseFloat(pos.z) - parseFloat(horBoardSize.z);
+			return new THREE.Vector3(x, y, z);
+		}
+		if(this.planeNormalVector.equals(new THREE.Vector3(-1,0,0))){
+			var x = parseFloat(pos.x) - parseFloat(horBoardSize.x);
+			var y = parseFloat(pos.y) + 0.12 * this.selectObject.scale.y;
+			var z = parseFloat(furnitureCenter.z) - parseFloat(furnitureSize.z) / 2 + 0.12 * this.selectObject.scale.z;
+			return new THREE.Vector3(x, y, z);
+		}
+		if(this.planeNormalVector.equals(new THREE.Vector3(1,0,0))){
+			var x = parseFloat(pos.x);
+			var y = parseFloat(pos.y) + 0.12 * this.selectObject.scale.y;
+			var z = parseFloat(furnitureCenter.z) - parseFloat(furnitureSize.z) / 2 + 0.12 * this.selectObject.scale.z;
+			return new THREE.Vector3(x, y, z);
+		}
+		if(this.planeNormalVector.equals(new THREE.Vector3(0,1,0))){
+			var x = parseFloat(pos.x) + parseFloat(zero.x);
+			var y = parseFloat(pos.y) + 0.12 * this.selectObject.scale.y;
+			var z = parseFloat(pos.z) + parseFloat(zero.z);
+			return new THREE.Vector3(x, y, z);
+		}
+		if(this.planeNormalVector.equals(new THREE.Vector3(0,-1,0))){
+			var x = parseFloat(furnitureCenter.x) - parseFloat(furnitureSize.x) / 2;
+			var y = parseFloat(pos.y) - parseFloat(zero.y) - 0.12 * this.selectObject.scale.y;
+			var z = parseFloat(furnitureCenter.z) - parseFloat(furnitureSize.z) / 2;
+			return new THREE.Vector3(x, y, z);
+		}
 	},
 
 	updateHorBoardPosition: function(pos) {
-		var isOnThePlane = this.checkOnThePlane(pos);
-		if(isOnThePlane){
-			this.selectObject.position.set(pos.x, pos.y, pos.z);
-		}
-		else
-			console.log("Ray position isn't on the plan.");
+		this.resizeHorBoard(this.selectObject);
+		var offset = this.getHorBoardOffset(pos);
+		this.selectObject.position.set(offset.x, offset.y, offset.z);
 	},
 
 	getRodOffset: function() {
 		var rodSize = this.getPartSize(this.selectObject);
-		if(this.plane == "selectBoxFront")
+		if(this.planeNormalVector.equals(new THREE.Vector3(0,0,1)))
 			return new THREE.Vector3(rodSize.x/2, 0, rodSize.z/2);
-		if(this.plane == "selectBoxBack")
+		if(this.planeNormalVector.equals(new THREE.Vector3(0,0,-1)))
 			return new THREE.Vector3(-rodSize.x/2, 0, -rodSize.z/2);
-		if(this.plane == "selectBoxLeft")
+		if(this.planeNormalVector.equals(new THREE.Vector3(-1,0,0)))
 			return new THREE.Vector3(-rodSize.x/2, 0, rodSize.z/2);
-		if(this.plane == "selectBoxRight")
+		if(this.planeNormalVector.equals(new THREE.Vector3(1,0,0)))
 			return new THREE.Vector3(rodSize.x/2, 0, -rodSize.z/2);
-		if(this.plane == "selectBoxUp")
+		if(this.planeNormalVector.equals(new THREE.Vector3(0,1,0)))
 			return new THREE.Vector3(0, rodSize.y/2, -rodSize.z/2);
-		if(this.plane == "selectBoxDown")
+		if(this.planeNormalVector.equals(new THREE.Vector3(0,-1,0)))
 			return new THREE.Vector3(0, -rodSize.y/2, -rodSize.z/2);
 	},
 
 	updateRodPosition: function(pos) {
-		var isOnThePlane = this.checkOnThePlane(pos);
-		if(isOnThePlane){
-			var offset = this.getRodOffset();
-			pos.x = parseFloat(pos.x) + parseFloat(offset.x);
-			pos.y = parseFloat(pos.y) + parseFloat(offset.y);
-			pos.z = parseFloat(pos.z) + parseFloat(offset.z);
-			this.selectObject.position.set(pos.x, pos.y, pos.z);
-		}
-		else
-			console.log("Ray position isn't on the plan.");
+		this.rotateObjectVectorToPlaneNormalVector();
+		var offset = this.getRodOffset();
+		pos.x = parseFloat(pos.x) + parseFloat(offset.x);
+		pos.y = parseFloat(pos.y) + parseFloat(offset.y);
+		pos.z = parseFloat(pos.z) + parseFloat(offset.z);
+		this.selectObject.position.set(pos.x, pos.y, pos.z);
 	},
 
 	updateLegPosition: function(pos) {
-		var isOnThePlane = this.checkOnThePlane(pos);
-		if(isOnThePlane){
-			this.selectObject.position.set(pos.x, pos.y, pos.z);
-		}
-		else
-			console.log("Ray position isn't on the plan.");
+		this.rotateObjectVectorToPlaneNormalVector();
+		this.selectObject.position.set(pos.x, pos.y, pos.z);
+	},
+
+	getWheelOffset: function() {
+		var wheelSize = this.getPartSize(this.selectObject);
+		if(this.planeNormalVector.equals(new THREE.Vector3(0,0,1)))
+			return new THREE.Vector3(0, 0, wheelSize.z/2);
+		if(this.planeNormalVector.equals(new THREE.Vector3(0,0,-1)))
+			return new THREE.Vector3(0, 0, -wheelSize.z/2);
+		if(this.planeNormalVector.equals(new THREE.Vector3(-1,0,0)))
+			return new THREE.Vector3(-wheelSize.x/2, 0, 0);
+		if(this.planeNormalVector.equals(new THREE.Vector3(1,0,0)))
+			return new THREE.Vector3(wheelSize.x/2, 0, 0);
+		if(this.planeNormalVector.equals(new THREE.Vector3(0,1,0)))
+			return new THREE.Vector3(0, wheelSize.y/2, 0);
+		if(this.planeNormalVector.equals(new THREE.Vector3(0,-1,0)))
+			return new THREE.Vector3(0, -wheelSize.y/2, 0);
 	},
 
 	updateWheelPosition: function(pos) {
-		var furnitureCenter = this.getPartCenter(this.selectFurniture);
-		var furnitureSize = this.getPartSize(this.selectFurniture);
-		var isOnThePlane = this.checkOnThePlane(pos);
-		if(isOnThePlane){
-			this.selectObject.position.set(pos.x, pos.y, pos.z);
-		}
-		else
-			console.log("Ray position isn't on the plan.");
+		this.rotateObjectVectorToPlaneNormalVector();
+		var offset = this.getWheelOffset();
+		pos.x = parseFloat(pos.x) + parseFloat(offset.x);
+		pos.y = parseFloat(pos.y) + parseFloat(offset.y);
+		pos.z = parseFloat(pos.z) + parseFloat(offset.z);
+		this.selectObject.position.set(pos.x, pos.y, pos.z);
 	},
 
 	getHookOffset: function() {
 		var hookSize = this.getPartSize(this.selectObject);
-		if(this.plane == "selectBoxFront")
+		if(this.planeNormalVector.equals(new THREE.Vector3(0,0,1)))
 			return new THREE.Vector3(hookSize.x/2, 0, hookSize.z/2);
-		if(this.plane == "selectBoxBack")
+		if(this.planeNormalVector.equals(new THREE.Vector3(0,0,-1)))
 			return new THREE.Vector3(-hookSize.x/2, 0, -hookSize.z/2);
-		if(this.plane == "selectBoxLeft")
+		if(this.planeNormalVector.equals(new THREE.Vector3(-1,0,0)))
 			return new THREE.Vector3(-hookSize.x/2, 0, hookSize.z/2);
-		if(this.plane == "selectBoxRight")
+		if(this.planeNormalVector.equals(new THREE.Vector3(1,0,0)))
 			return new THREE.Vector3(hookSize.x/2, 0, -hookSize.z/2);
-		if(this.plane == "selectBoxUp")
+		if(this.planeNormalVector.equals(new THREE.Vector3(0,1,0)))
 			return new THREE.Vector3(0, hookSize.y/2, -hookSize.z/2);
-		if(this.plane == "selectBoxDown")
+		if(this.planeNormalVector.equals(new THREE.Vector3(0,-1,0)))
 			return new THREE.Vector3(0, -hookSize.y/2, -hookSize.z/2);
 	},
 
 	updateHookPosition: function(pos) {
-		var isOnThePlane = this.checkOnThePlane(pos);
-		if(isOnThePlane){
-			var offset = this.getRodOffset();
-			pos.x = parseFloat(pos.x) + parseFloat(offset.x);
-			pos.y = parseFloat(pos.y) + parseFloat(offset.y);
-			pos.z = parseFloat(pos.z) + parseFloat(offset.z);
-			this.selectObject.position.set(pos.x, pos.y, pos.z);
-		}
-		else
-			console.log("Ray position isn't on the plan.");
+		this.rotateObjectVectorToPlaneNormalVector();
+		var offset = this.getRodOffset();
+		pos.x = parseFloat(pos.x) + parseFloat(offset.x);
+		pos.y = parseFloat(pos.y) + parseFloat(offset.y);
+		pos.z = parseFloat(pos.z) + parseFloat(offset.z);
+		this.selectObject.position.set(pos.x, pos.y, pos.z);		
 	},
 
 	getDoorOffset: function() {
 		var dookSize = this.getPartSize(this.selectObject);
-		if(this.plane == "selectBoxFront")
+		if(this.planeNormalVector.equals(new THREE.Vector3(0,0,1)))
 			return new THREE.Vector3(dookSize.x/2, 0, dookSize.z/2 - 0.2);
-		if(this.plane == "selectBoxBack")
+		if(this.planeNormalVector.equals(new THREE.Vector3(0,0,-1)))
 			return new THREE.Vector3(-dookSize.x/2, 0, -dookSize.z/2 + 0.2);
-		if(this.plane == "selectBoxLeft")
+		if(this.planeNormalVector.equals(new THREE.Vector3(-1,0,0)))
 			return new THREE.Vector3(-dookSize.x/2 + 0.2, 0, dookSize.z/2);
-		if(this.plane == "selectBoxRight")
+		if(this.planeNormalVector.equals(new THREE.Vector3(1,0,0)))
 			return new THREE.Vector3(dookSize.x/2 -0.2, 0, -dookSize.z/2);
-		if(this.plane == "selectBoxUp")
+		if(this.planeNormalVector.equals(new THREE.Vector3(0,1,0)))
 			return new THREE.Vector3(0, dookSize.y/2 - 0.2, -dookSize.z/2);
-		if(this.plane == "selectBoxDown")
+		if(this.planeNormalVector.equals(new THREE.Vector3(0,-1,0)))
 			return new THREE.Vector3(0, -dookSize.y/2 + 0.2, -dookSize.z/2);
 	},
 
 	updateDoorPosition: function(pos) {
-		var isOnThePlane = this.checkOnThePlane(pos);
-		if(isOnThePlane){
-			var offset = this.getDoorOffset();
-			pos.x = parseFloat(pos.x) + parseFloat(offset.x);
-			pos.y = parseFloat(pos.y) + parseFloat(offset.y);
-			pos.z = parseFloat(pos.z) + parseFloat(offset.z);
-			this.selectObject.position.set(pos.x, pos.y, pos.z);
-		}
-		else
-			console.log("Ray position isn't on the plan.");
+		this.rotateObjectVectorToPlaneNormalVector();
+		var offset = this.getDoorOffset();
+		pos.x = parseFloat(pos.x) + parseFloat(offset.x);
+		pos.y = parseFloat(pos.y) + parseFloat(offset.y);
+		pos.z = parseFloat(pos.z) + parseFloat(offset.z);
+		this.selectObject.position.set(pos.x, pos.y, pos.z);
 	},
 
-	updateObjectPosition: function(pos) {
+	updateObjectPosition: function(pos, furnitureNormalVector) {
 		// control list
-		console.log("update " + this.selectObjectName + " position");
-		if(this.selectObjectName == "vertical board"){
+		this.planeNormalVector = furnitureNormalVector;
+		// console.log("update " + this.selectObjectName + " position");
+		if(this.selectObjectName == "create vertical board"){
 			this.updateVerBoardPosition(pos);
 		}
-		if(this.selectObjectName == "horizontal board"){
+		if(this.selectObjectName == "create horizontal board"){
 			this.updateHorBoardPosition(pos);
 		}
-		if(this.selectObjectName == "rod"){
+		if(this.selectObjectName == "create rod"){
 			this.updateRodPosition(pos);
 		}
-		if(this.selectObjectName == "leg"){
+		if(this.selectObjectName == "create leg"){
 			this.updateLegPosition(pos);
 		}
-		if(this.selectObjectName == "wheel"){
+		if(this.selectObjectName == "create wheel"){
 			this.updateWheelPosition(pos);
 		}
-		if(this.selectObjectName == "hook"){
+		if(this.selectObjectName == "create hook"){
 			this.updateHookPosition(pos);
 		}
-		if(this.selectObjectName == "door"){
+		if(this.selectObjectName == "create door"){
 			this.updateDoorPosition(pos);
 		}
 		// ...
-
-		
 	},
 
 	execute: function( name ){
@@ -6826,39 +6873,351 @@ Model_Add.prototype = {
 		var scope = this;
 		$( ".item.ui.image.label.add.vertical.board" ).click( function() {
 			scope.removeSelectObjectInScene();
-			scope.setAddObjectName("vertical board");
+			scope.setAddObjectName("create vertical board");
 			console.log("click vertical board");
+			scope.isCreateObject = false;
         });
         $( ".item.ui.image.label.add.horizontal.board" ).click( function() {
         	scope.removeSelectObjectInScene();
-			scope.setAddObjectName("horizontal board");
+			scope.setAddObjectName("create horizontal board");
 			console.log("click horizontal board");
+			scope.isCreateObject = false;
         });
         $( ".item.ui.image.label.add.rod" ).click( function() {
         	scope.removeSelectObjectInScene();
-        	scope.setAddObjectName("rod");
+        	scope.setAddObjectName("create rod");
         	console.log("click rod");
+        	scope.isCreateObject = false;
         });
         $( ".item.ui.image.label.add.leg" ).click( function() {
         	scope.removeSelectObjectInScene();
-        	scope.setAddObjectName("leg");
+        	scope.setAddObjectName("create leg");
         	console.log("click leg");
+        	scope.isCreateObject = false;
         });
         $( ".item.ui.image.label.add.wheel" ).click( function() {
         	scope.removeSelectObjectInScene();
-        	scope.setAddObjectName("wheel");
+        	scope.setAddObjectName("create wheel");
         	console.log("click wheel");
+        	scope.isCreateObject = false;
         });
         $( ".item.ui.image.label.add.hook" ).click( function() {
         	scope.removeSelectObjectInScene();
-        	scope.setAddObjectName("hook");
+        	scope.setAddObjectName("create hook");
         	console.log("click hook");
+        	scope.isCreateObject = false;
         });
         $( ".item.ui.image.label.add.door" ).click( function() {
         	scope.removeSelectObjectInScene();		
-			scope.setAddObjectName("door");
+			scope.setAddObjectName("create door");
 			console.log("click door");
+			scope.isCreateObject = false;
         }); 
+	},
+
+	insideCase: function(furniture, pos, localNormalVector) { 
+		//furniture: a part of whole furniture //this.selectFurniture: whole furniture
+		//pos: window ray inside point // localNormalVector: a part of whole furniture local normal vector
+		var normalVector = this.getFurnitureNormalVectorToWorldVector(furniture, localNormalVector);
+		var negNormalVector = new THREE.Vector3(-parseFloat(normalVector.x), -parseFloat(normalVector.y), -parseFloat(normalVector.z));
+
+		var newPos = new THREE.Vector3(parseFloat(pos.x) + parseFloat(normalVector.x) * 0.01,
+									   parseFloat(pos.y) + parseFloat(normalVector.y) * 0.01,
+									   parseFloat(pos.z) + parseFloat(normalVector.z) * 0.01 );
+		
+		
+		var vector = this.checkGrowthVector(this.selectFurniture, newPos, normalVector);
+
+		if(vector == "fail")
+			console.log("GrowthVector is not correct");
+		else if(vector == "axis y fail")
+			console.log("GrowthVector y is not correct");
+		else {
+			// if(!this.isCreateInsideObject){
+			// 	this.removeSelectObjectInScene();
+			// }
+			var dir = "";
+			if(vector.equals(new THREE.Vector3(1,0,0)) || vector.equals(new THREE.Vector3(-1,0,0)))
+				dir = "x";
+			else if(vector.equals(new THREE.Vector3(0,1,0)) || vector.equals(new THREE.Vector3(0,-1,0)))
+				dir = "y";
+			else if(vector.equals(new THREE.Vector3(0,0,1)) || vector.equals(new THREE.Vector3(0,0,-1)))
+				dir = "z";
+
+			// //get start point and end point
+			var twoPoint = this.getRange(this.selectFurniture, newPos, vector);
+
+			//create points on the line
+			var points = [];
+			if(dir == "x"){
+				if(parseFloat(twoPoint[0].x) < parseFloat(twoPoint[1].x)){
+					for (var i = parseFloat(twoPoint[0].x); i < parseFloat(twoPoint[1].x); i += 0.01) {
+						var tmp = new THREE.Vector3(i, parseFloat(twoPoint[0].y), parseFloat(twoPoint[0].z));
+						points.push(tmp);
+					}
+				}
+				else{
+					for (var i = parseFloat(twoPoint[1].x); i < parseFloat(twoPoint[0].x); i += 0.01) {
+						var tmp = new THREE.Vector3(i, parseFloat(twoPoint[0].y), parseFloat(twoPoint[0].z));
+						points.push(tmp);
+					}
+				}
+			}
+			if(dir == "y"){
+				if(parseFloat(twoPoint[0].y) < parseFloat(twoPoint[1].y)){
+					for (var i = parseFloat(twoPoint[0].y); i < parseFloat(twoPoint[1].y); i+= 0.01) {
+						var tmp = new THREE.Vector3(parseFloat(twoPoint[0].x), i, parseFloat(twoPoint[0].z));
+						points.push(tmp);
+					}
+				}
+				else{
+					for (var i = parseFloat(twoPoint[1].y); i < parseFloat(twoPoint[0].y); i+= 0.01) {
+						var tmp = new THREE.Vector3(parseFloat(twoPoint[0].x), i, parseFloat(twoPoint[0].z));
+						points.push(tmp);
+					}
+				}
+			}
+			if(dir == "z"){
+				if(parseFloat(twoPoint[0].z) < parseFloat(twoPoint[1].z)){
+					for (var i = parseFloat(twoPoint[0].z); i < parseFloat(twoPoint[1].z); i+= 0.01) {
+						var tmp = new THREE.Vector3(parseFloat(twoPoint[0].x), parseFloat(twoPoint[0].y), i);
+						points.push(tmp);
+					}
+				}
+				else {
+					for (var i = parseFloat(twoPoint[1].z); i < parseFloat(twoPoint[0].z); i+= 0.01) {
+						var tmp = new THREE.Vector3(parseFloat(twoPoint[0].x), parseFloat(twoPoint[0].y), i);
+						points.push(tmp);
+					}
+				}
+			}
+
+			// //init points info
+			var marked = [];
+			for (var i = 0; i < points.length; i++) {
+				marked.push("M"); // all points init "miss"
+			}
+
+			//check range first time
+			for (var i = 0; i < points.length; i++) {
+				var intersects = this.getPointByRay(this.selectFurniture, points[i], negNormalVector);
+				if(intersects.length > 0){
+					marked[i] = "H"; // the point is on the same side with user selected point
+				}
+			}
+
+			// //check range second time
+			for (var i = 0; i < marked.length; i++) {
+				if (marked[i] == "H"){
+					var intersects = this.getPointByRay(this.selectFurniture, points[i], normalVector);
+					if(intersects.length == 0){
+						marked[i] = "M"; // the opposite point not find 
+					}
+				}
+			}
+
+			// get min and max
+		    // H--------H points
+		    // |        |
+		    // i        j
+		    // |        |
+		    // H--------H oppositePoints
+			var i = 0;
+			while(marked[i] != "H" && i < marked.length)
+				i++;
+			var j = marked.length - 1;
+			while(marked[j] != "H" && j >= 0)
+				j--;
+			
+			var intersects1 = this.getPointByRay(this.selectFurniture, points[i], negNormalVector);
+			var intersects2 = this.getPointByRay(this.selectFurniture, points[i], normalVector);
+			var intersects3 = this.getPointByRay(this.selectFurniture, points[j], negNormalVector);
+			var intersects4 = this.getPointByRay(this.selectFurniture, points[j], normalVector);
+
+			var point1 = intersects1[0].point;
+			var point2 = intersects2[0].point;
+			var point3 = intersects3[0].point;
+			var point4 = intersects4[0].point;
+
+			// console.log("sub");
+			var tmp1 = point1.clone();
+			tmp1.sub(point2);
+			// console.log(tmp1);
+			var tmp2 = point2.clone();
+			tmp2.sub(point4);
+			// console.log(tmp2);
+			var width, height, depth;
+			if(parseFloat(tmp1.x).toFixed(3) != 0){
+				width = Math.abs(parseFloat(tmp1.x).toFixed(3));
+			}
+			if(parseFloat(tmp1.y).toFixed(3) != 0){
+				height = Math.abs(parseFloat(tmp1.y).toFixed(3));
+			}
+			if(parseFloat(tmp1.z).toFixed(3) != 0){
+				depth = Math.abs(parseFloat(tmp1.z).toFixed(3));
+			}
+
+			if(parseFloat(tmp2.x).toFixed(3) != 0){
+				width = Math.abs(parseFloat(tmp2.x).toFixed(3));
+			}
+			if(parseFloat(tmp2.y).toFixed(3) != 0){
+				height = Math.abs(parseFloat(tmp2.y).toFixed(3));
+			}
+			if(parseFloat(tmp2.z).toFixed(3) != 0){
+				depth = Math.abs(parseFloat(tmp2.z).toFixed(3));
+			}
+
+			if(typeof(width) == "undefined" || width == 0)
+				width = 0.3;
+			if(typeof(height) == "undefined" || height === 0)
+				height = 0.3;
+			if(typeof(depth) == "undefined" || depth == 0)
+				depth = 0.3;
+
+			if(this.selectObjectName == "") {
+				var texture = this.textures["leg"];
+				var material = new THREE.MeshBasicMaterial( {map: texture} );
+				var geometry = chairCreateBoard(width, height, depth);
+				var insideBoard = new THREE.Mesh(geometry, material);
+				insideBoard.name = "create vertical board";
+				this.selectObject = insideBoard;
+				this.selectObjectName = insideBoard.name;
+				insideBoard.position.set(0,0,-30);
+				this.main.scene.add(insideBoard);
+			}
+			else {
+				var objSize = this.getPartSize(this.selectObject);
+				var objScale = this.selectObject.scale.clone();
+				objScale.x = objScale.x / objSize.x * width;
+				objScale.y = objScale.y / objSize.y * height;
+				objScale.z = objScale.z / objSize.z * depth;
+			}
+
+
+			var tmpx = (parseFloat(point1.x) + parseFloat(point2.x) + parseFloat(point3.x) + parseFloat(point4.x))/4;
+			var tmpy = (parseFloat(point1.y) + parseFloat(point2.y) + parseFloat(point3.y) + parseFloat(point4.y))/4;
+			var tmpz = (parseFloat(point1.z) + parseFloat(point2.z) + parseFloat(point3.z) + parseFloat(point4.z))/4;
+			var updatePosition = new THREE.Vector3(tmpx, tmpy, tmpz);
+			
+			for (var i = 0; i < this.main.scene.children.length; i++) {
+				if(this.main.scene.children[i].name == "create vertical board"){
+					var insideObj = this.main.scene.children[i];
+					break;
+				}
+			}
+			var insideObjSize = this.getPartSize(insideObj);
+			insideObj.position.set( tmpx - parseFloat(insideObjSize.x)/2, 
+									tmpy - parseFloat(insideObjSize.y)/2, 
+									tmpz - parseFloat(insideObjSize.z)/2);
+		}
+	},
+
+	checkGrowthVector: function(furniture, newPos, normalVector) {
+		//furniture: whole furniture 
+		if(normalVector.equals(new THREE.Vector3(1,0,0)) || normalVector.equals(new THREE.Vector3(-1,0,0))) {
+			return new THREE.Vector3(0,0,1);
+		}
+		else if(normalVector.equals(new THREE.Vector3(0,1,0)) || normalVector.equals(new THREE.Vector3(0,-1,0))) {
+			var growthVector_positive_x = new THREE.Vector3(1,0,0);
+			var growthVector_negative_x = new THREE.Vector3(-1,0,0);
+			var growthVector_positive_z = new THREE.Vector3(0,0,1);
+			var growthVector_negative_z = new THREE.Vector3(0,0,-1);
+			var intersects_positive_x = this.getPointByRay(furniture, newPos, growthVector_positive_x);
+			var intersects_negative_x = this.getPointByRay(furniture, newPos, growthVector_negative_x);
+			var intersects_positive_z = this.getPointByRay(furniture, newPos, growthVector_positive_z);
+			var intersects_negative_z = this.getPointByRay(furniture, newPos, growthVector_negative_z);
+
+			if (intersects_positive_x.length > 0 && intersects_negative_x.length > 0) {
+				return new THREE.Vector3(0,0,1);
+			}
+			else if (intersects_positive_z.length > 0 && intersects_negative_z.length > 0) {
+				return new THREE.Vector3(1,0,0);
+			}
+			else
+				return "axis y fail";
+		}
+		else if(normalVector.equals(new THREE.Vector3(0,0,1)) || normalVector.equals(new THREE.Vector3(0,0,-1))) {
+			return new THREE.Vector3(1,0,0);
+		}
+		else
+			return "fail";
+	},
+
+	getRange: function(furniture, pos, vector) {
+		// furniture: whole furniture // pos: user select point // vector: detecte
+		var pn = parseFloat(vector.x) + parseFloat(vector.y) + parseFloat(vector.z);
+		var dir = "";
+		if(vector.equals(new THREE.Vector3(1,0,0)) || vector.equals(new THREE.Vector3(-1,0,0)))
+			dir = "x";
+		else if(vector.equals(new THREE.Vector3(0,1,0)) || vector.equals(new THREE.Vector3(0,-1,0)))
+			dir = "y";
+		else if(vector.equals(new THREE.Vector3(0,0,1)) || vector.equals(new THREE.Vector3(0,0,-1)))
+			dir = "z";
+		// console.log("dir = " + dir);
+		var furnitureSize = this.getPartSize(furniture);
+		var furnitureCenter = this.getPartCenter(furniture);
+		var point1 = pos.clone();
+		var point2 = pos.clone();
+		var intersects1 = this.getPointByRay(furniture, pos, vector);
+		if (intersects1.length > 0) {
+			point1 = intersects1[0].point;
+		}
+		else {
+			if(dir == "x")
+				point1.x = furnitureCenter.x + furnitureSize.x/2;
+			if(dir == "y")
+				point1.y = furnitureCenter.y + furnitureSize.y/2;
+			if(dir == "z")
+				point1.z = furnitureCenter.z + furnitureSize.z/2;
+		}
+		// console.log(point1);
+		var negVector = vector.clone();
+		negVector.negate ();
+		var intersects2 = this.getPointByRay(furniture, pos, negVector);
+		if (intersects2.length > 0) {
+			point2 = intersects2[0].point;
+		}
+		else {
+			if(dir == "x")
+				point2.x = furnitureCenter.x - furnitureSize.x/2;
+			if(dir == "y")
+				point2.y = furnitureCenter.y - furnitureSize.y/2;
+			if(dir == "z")
+				point2.z = furnitureCenter.z - furnitureSize.z/2;
+		}
+		// console.log(point2);
+		if(pn > 0){
+			if(dir == "x"){
+				point1.x = parseFloat(point1.x) - 0.01;
+				point2.x = parseFloat(point2.x) + 0.01;
+			}
+			if(dir == "y"){
+				point1.y = parseFloat(point1.y) - 0.01;
+				point2.y = parseFloat(point2.y) + 0.01;
+			}
+			if(dir == "z"){
+				point1.z = parseFloat(point1.z) - 0.01;
+				point2.z = parseFloat(point2.z) + 0.01;
+			}
+		}
+		else{
+			if(dir == "x"){
+				var point1 = parseFloat(point1.x) + 0.01;
+				var point2 = parseFloat(point2.x) - 0.01;
+			}
+			if(dir == "y"){
+				var point1 = parseFloat(point1.y) + 0.01;
+				var point2 = parseFloat(point2.y) - 0.01;
+			}
+			if(dir == "z"){
+				var point1 = parseFloat(point1.z) + 0.01;
+				var point2 = parseFloat(point2.z) - 0.01;
+			}
+		}
+		var twoPoint = [];
+		twoPoint.push(point1);
+		twoPoint.push(point2);
+		return twoPoint;
 	}
 }
 
@@ -11476,7 +11835,8 @@ Main.prototype = {
 		this.renderer.setSize( window.innerWidth, window.innerHeight );
 	},
 
-	//-----------------------------------Add Model--------------------------
+	
+
 
 
 	preAddObject: function(object) {
@@ -12195,7 +12555,43 @@ Main.prototype = {
 						this.GetSizeObj = [];
 						this.GetSizeObj.push( this.furniture.getFurniture() );
 						$('.ui.blue.submit.button.getsize').show();
+
+						//-----------------Add Model----------------------------
 						
+						if( this.processor.model_add !== undefined){
+							if(!this.processor.model_add.isCreateObject){
+								console.log("hit");
+								var furniture = this.furniture.getFurniture();
+								this.processor.model_add.selectFurnitureUUID = furniture.uuid;
+								this.processor.model_add.selectFurniture = furniture;
+								if(this.processor.model_add.selectObjectName != ""){
+									console.log("create a new " + this.processor.model_add.selectObjectName);
+									this.processor.model_add.createObject();
+								}
+								else
+									console.log("No object need to create");
+							}
+							else{
+								// furniture change
+								if(this.processor.model_add.selectFurniture != this.furniture.getFurniture()){
+									var furniture = this.furniture.getFurniture();
+									this.processor.model_add.selectFurnitureUUID = furniture.uuid;
+									this.processor.model_add.selectFurniture = furniture;
+								}
+								else{
+									this.processor.model_add.isCreateObject = false;
+									this.processor.model_add.isCreateInsideObject = false;
+									var furniture = this.processor.model_add.selectFurniture;
+									var obj = this.processor.model_add.selectObject;
+									var pos = obj.position.clone ();
+									this.processor.model_add.objectAddToFurniture(furniture, obj, pos);
+									console.log("add success");
+									this.processor.model_add.selectFurnitureUUID = "";
+									this.processor.model_add.selectObjectName = "";
+								}
+							}
+						}
+						//-----------------Add Model----------------------------
 
 						break;
 					} else {
@@ -12207,6 +12603,7 @@ Main.prototype = {
 						this.GetSizeObj = [];
 						$('.ui.blue.submit.button.getsize').hide();
 						//this.RemoveSizeLabel();
+						
 					}
 				}
 				
@@ -12266,11 +12663,7 @@ Main.prototype = {
 						this.GetSizeObj.push(object);
 						$('.ui.blue.submit.button.getsize').show();
 
-						//---------------Add Model------------------
-						if( this.processor.model_add !== undefined){
-							if(this.processor.model_add.selectObjectName != "")
-								this.processor.model_add.select(object);
-						}
+						
 
 					}
 				} else {
@@ -12278,11 +12671,7 @@ Main.prototype = {
 					this.select( null );
 				}
 
-				//---------------Add Model------------------
-				if( this.processor.model_add !== undefined){
-					if(this.processor.model_add.selectObjectName != "")
-						this.processor.model_add.selectPlane(this.mouse, this.camera, this.onUpPosition);
-				}
+				
 
 			}
 			//select two obj for getting distance
@@ -12373,19 +12762,37 @@ Main.prototype = {
 	onMouseMove: function ( event ) {
 
 		if( this.processor.model_add !== undefined && this.Addrod == false && this.Cutting == false && this.Cutting == false){
+			//-----------------------------------Add Model--------------------------
 			if(this.processor.model_add.isCreateObject){
 				this.mouse.x = ( event.clientX / window.innerWidth ) * 2 - 1;
 				this.mouse.y = - ( event.clientY / window.innerHeight ) * 2 + 1;
 				var raycaster = new THREE.Raycaster();
 				raycaster.setFromCamera( this.mouse, this.camera );
-				var intersects = raycaster.intersectObject(this.processor.model_add.selectFurniture);
+				var intersects = raycaster.intersectObjects(this.processor.model_add.selectFurniture.children);
 				if(intersects.length > 0){
 					var pos = intersects[0].point;
-					// this.processor.model_add.mousePoint.position.set(pos.x, pos.y, pos.z);
-					this.processor.model_add.updateObjectPosition(pos);					
+					var furniture = intersects[0].object;
+					var normalVector = intersects[0].face.normal;
+					var isInsidePoint = this.processor.model_add.checkInsidePosint(this.processor.model_add.selectFurniture, pos);
+					if(isInsidePoint){
+						console.log("inside position");
+						if(this.processor.model_add.selectObjectName == "create vertical board"){
+							this.processor.model_add.insideCase(furniture, pos, normalVector);	
+						}
+					}
+					else{
+						console.log("outside position");
+						if(this.processor.model_add.selectObjectName == ""){
+							// this.processor.model_add.removeSelectObjectInScene();
+							console.log("resize " + this.processor.model_add.selectObjectName);
+							this.processor.model_add.createObject();
+						}
+						var worldNormalVector = this.processor.model_add.getFurnitureNormalVectorToWorldVector(furniture, normalVector);
+						this.processor.model_add.updateObjectPosition(pos, worldNormalVector);
+					}
 				}
 				else
-					console.log("miss");
+					console.log("mousemove miss");
 			}
 		}//if want to add rod
 		else if(this.Addrod == true){
@@ -12495,7 +12902,6 @@ Main.prototype = {
 			// console.log("no furniture");
 			this.customControl.switchView2FP();
 		}
-
 	},
 
 	onKeyDown: function(event) {
@@ -12604,44 +13010,9 @@ Main.prototype = {
 		{
 			this.onCtrlE = false;
 
-			//-------------Add Model----------------------
-			if( this.processor.model_add !== undefined){
-				if(this.processor.model_add.selectObjectName != "")
-					var bef = this.processor.model_add.getPartCenter(this.processor.model_add.selectFurniture);
-			}
-
 			//disable explosion view 
 			if(this.furniture  != null )
 				this.collapse(this.furniture);
-
-
-			//-------------Add Model----------------------
-			if( this.processor.model_add !== undefined){
-				if(this.processor.model_add.isCreateObject){
-					var aft = this.processor.model_add.getPartCenter(this.processor.model_add.selectFurniture);				
-					var offset = new THREE.Vector3( aft.x - bef.x, aft.y - bef.y, aft.z - bef.z);
-					var obj = [];
-					for (var i = 0; i < this.scene.children.length; i++) {
-						if(this.scene.children[i].name == this.processor.model_add.selectObjectName)
-							obj.push(this.scene.children[i]);
-					}
-
-					for (var i = 0; i < obj.length; i++) {
-						obj[i].position.x = parseFloat(obj[i].position.x) + parseFloat(offset.x);
-						obj[i].position.y = parseFloat(obj[i].position.y) + parseFloat(offset.y);
-						obj[i].position.z = parseFloat(obj[i].position.z) + parseFloat(offset.z);
-					}
-
-					var furniture = this.processor.model_add.selectFurniture;
-					while(furniture.parent.uuid != this.scene.uuid)
-						furniture = furniture.parent;
-
-					for (var i = 0; i < obj.length; i++) {
-						var pos = new THREE.Vector3(obj[i].position.x, obj[i].position.y, obj[i].position.z);
-						this.processor.model_add.objectAddToFurniture(furniture, obj[i], pos);					
-					}
-				}
-			}
 
 			if(this.selectionBoxes.length > 0)
 			{
@@ -12687,18 +13058,7 @@ Main.prototype = {
 			
 			this.RemoveSizeLabel();
 
-			//----------------------Add Model---------------------------
-			//when "E" Up
-			if( this.processor.model_add !== undefined){
-				if(this.processor.model_add.isCreateObject){
-					this.processor.model_add.deleteSelectBox(this.scene);
-					this.processor.model_add.selectObjectName = "";
-					// this.processor.model_add.mousePoint.position.set(1000, 0, 0);
-					this.processor.model_add.selectFurnitureUUID = "";
-		    		this.processor.model_add.hasSelectBox = false;
-		    		this.processor.model_add.isCreateObject = false;
-	    		}
-			}
+			
 
 		}else {
 
