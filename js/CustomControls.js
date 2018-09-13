@@ -131,7 +131,7 @@ THREE.CustomControls = function ( object, domElement ) {
 	this.viewHalfY = 0;
 
 
-
+	this.mouseWheelDisabled = false;
 
 	//public class
 	this.getPolarAngle = function () {
@@ -928,20 +928,22 @@ THREE.CustomControls = function ( object, domElement ) {
 		if ( scope.enabled === false || scope.enableZoom === false || ( state !== STATE.NONE && state !== STATE.ROTATE ) ) return;
 
 		event.preventDefault();
-		event.stopPropagation();
+		//event.stopPropagation();
 
 		scope.dispatchEvent( startEvent );
 
 
-		if(scope.targetFocused) {
-			// console.log("targetFocused");
-			handleMouseTGWheel( event );
-		}else{
-			//make a first person view move forward or backward
-			// console.log("scope.targetFocused");
-			// console.log(scope.targetFocused);
-		}
+		if(scope.mouseWheelDisabled == false) {
 
+			if(scope.targetFocused) {
+				// console.log("targetFocused");
+				handleMouseTGWheel( event );
+			}else{
+				//make a first person view move forward or backward
+				// console.log("scope.targetFocused");
+				// console.log(scope.targetFocused);
+			}
+		}
 
 		scope.dispatchEvent( endEvent );
 
