@@ -4284,10 +4284,10 @@ Dresser_Add.prototype = {
 
 	addBottom: function(dresser, size, center) {
 		var material = this.getPartMaterial(dresser);
-		var geometry = chairCreateBoard(size.x - 0.6, 0.1, size.z - 0.6);
+		var geometry = chairCreateBoard(size.x - 0.24, 0.1, size.z - 0.24);
 		var bottom = new THREE.Mesh(geometry, material);
 		bottom.name = "Dresser_part_bottom";
-		var tmp = new THREE.Vector3(center.x - size.x/2, center.y - size.y/2, center.z - size.z/2);
+		var tmp = new THREE.Vector3(center.x - size.x/2 + 0.12, center.y - size.y/2 + 0.12, center.z - size.z/2);
 		var inverse = new THREE.Matrix4();
 		inverse.getInverse(dresser.matrixWorld);
 		dresser.worldToLocal(tmp);
@@ -4317,10 +4317,10 @@ Dresser_Add.prototype = {
 
 	addBack: function(dresser, size, center) {
 		var material = this.getPartMaterial(dresser);
-		var geometry = chairCreateBoard(size.x - 0.6, size.y - 0.6, 0.1);
+		var geometry = chairCreateBoard(size.x - 0.24, size.y - 0.24, 0.05);
 		var back = new THREE.Mesh(geometry, material);
 		back.name = "Dresser_part_back";
-		var tmp = new THREE.Vector3(center.x - size.x/2 + 0.3, center.y - size.y/2 + 0.3, center.z - size.z/2);
+		var tmp = new THREE.Vector3(center.x - size.x/2 + 0.12, center.y - size.y/2 + 0.12, center.z - size.z/2);
 		var inverse = new THREE.Matrix4();
 		inverse.getInverse(dresser.matrixWorld);
 		dresser.worldToLocal(tmp);
@@ -4352,15 +4352,15 @@ Dresser_Add.prototype = {
 		var dresser = furniture.getObjectByName("Dresser");
 		var material = this.getPartMaterial(dresser);
 
-		var geometry = chairCreateBoard(spaceSize.x - 0.6, 0.1, spaceSize.z - 0.6);
+		var geometry = chairCreateBoard(spaceSize.x - 0.24, 0.1, spaceSize.z - 0.24);
 		var shelf = new THREE.Mesh(geometry, material);
 		var shelfSize = this.getPartSize(shelf);
 		var shelf_inverse = new THREE.Matrix4();
 		shelf_inverse.getInverse(dresser.matrixWorld);
 		shelf.applyMatrix(shelf_inverse);
 
-		shelf.position.set(spaceCenter.x - spaceSize.x/2, spaceCenter.y - spaceSize.y/2, 
-			spaceCenter.z - spaceSize.z/2);
+		shelf.position.set(spaceCenter.x - spaceSize.x/2 + 0.12, spaceCenter.y - spaceSize.y/2 + 0.12, 
+			spaceCenter.z - spaceSize.z/2 + 0.12);
 		dresser.worldToLocal(shelf.position);
 
 		dresser.add(shelf);
