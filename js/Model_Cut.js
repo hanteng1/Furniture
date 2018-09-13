@@ -137,7 +137,7 @@ function AddCutPlaneMousePosi1(main){
 			
 
 			//to do... make a reasonable size
-			main.cutplane.scale.set(10.0, 10.0, 10.0);
+			main.cutplane.scale.set(4.0, 4.0, 4.0);
 			
 		}
 		//console.log(pos);
