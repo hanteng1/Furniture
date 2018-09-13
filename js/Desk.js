@@ -91,7 +91,7 @@ Desk.prototype = {
 	},
 
 	getDesktopSurfaceCenterPoint: function(Desk) {
-		var desktop = Desk.getObjectByName("desktop");
+		var desktop = Desk.getObjectByName("dTop");
 		var desktopSize = this.getPartSize(desktop);
 		var desktopCenter = this.getPartCenter(desktop);
 		var origin = new THREE.Vector3(desktopCenter.x, desktopCenter.y + desktopSize.y, desktopCenter.z);
@@ -108,7 +108,7 @@ Desk.prototype = {
 	addTopBoardEvent: function() {
 		var desk = this.furnitures[0].getFurniture();
 		var surfaceCenterPoint = this.getDesktopSurfaceCenterPoint(desk);
-		var desktop = desk.getObjectByName("desktop");
+		var desktop = desk.getObjectByName("dTop");
 		var desktopSize = this.getPartSize(desktop);
 		// 0 ---- 1
 		// |      |
@@ -149,7 +149,7 @@ Desk.prototype = {
 
 	addBottomBoardEvent: function() {
 		var desk = this.furnitures[0].getFurniture();
-		var desktop = desk.getObjectByName("desktop");
+		var desktop = desk.getObjectByName("dTop");
 		var desktopSize = this.getPartSize(desktop);
 		var deskSize = this.getPartSize(desk);
 		var deskCenter = this.getPartCenter(desk);
@@ -476,7 +476,7 @@ Desk.prototype = {
 		var bottomBoard = desk.getObjectByName("bottomBoard");
 		var bottomBoardSize = this.getPartSize(bottomBoard);
 		var bottomBoardCenter = this.getPartCenter(bottomBoard);
-		var desktop = desk.getObjectByName("desktop");
+		var desktop = desk.getObjectByName("dTop");
 		var material = this.getPartMaterial(desktop);
 		var geometry = CreateWheel();
 		var wheel = new THREE.Mesh(geometry, material);
@@ -505,7 +505,7 @@ Desk.prototype = {
 
 	execute: function(tfname) {
 		if(this.furnitures.length > 0){
-			var desktop = this.furnitures[0].getComponentByName("desktop");
+			var desktop = this.furnitures[0].getComponentByName("dTop");
 			if(typeof desktop != 'undefined'){
 				if(tfname == "addBesideBoard"){
 					this.addBesideBoardEvent();

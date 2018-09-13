@@ -65,9 +65,8 @@ Dresser_Add.prototype = {
 
 	checkHasTopFront: function(furniture) {
 		var obj = furniture.getFurniture();
-		// console.log(obj);
-		var str1 = "cabinetTop-cabinetFront";
-		var str2 = "cabinetFront-cabinetTop";
+		var str1 = "cFront-cTop";
+		var str2 = "cTop-cFront";
 		for (var i = 0; i < obj.children.length; i++) {
 			if(obj.children[i].name == str1 || obj.children[i].name == str2)
 				return true;			
@@ -102,7 +101,6 @@ Dresser_Add.prototype = {
 		var origin = new THREE.Vector3(center.x, center.y - size.y, center.z);
 		var direction = new THREE.Vector3(0,1,0);
 		var intersects = this.getPointByRay(dresser, origin, direction);
-		// console.log(intersects.length);
 		if(intersects.length > 0){
 			var pos = intersects[0].point;
 			if(pos.y > center.y){
@@ -136,7 +134,6 @@ Dresser_Add.prototype = {
 		var origin = new THREE.Vector3(center.x, center.y, center.z - size.z);
 		var direction = new THREE.Vector3(0,0,1);
 		var intersects = this.getPointByRay(dresser, origin, direction);
-		// console.log(intersects.length);
 		if(intersects.length > 0){
 			var pos = intersects[0].point;
 			if(pos.z > center.z){
@@ -151,22 +148,6 @@ Dresser_Add.prototype = {
 
 	addShelf: function(furniture, spaceCenter, spaceSize) {
 		var dresser = furniture.getObjectByName("Dresser");
-		// console.log("dresser");
-		// console.log(dresser);
-		// var raycaster = new THREE.Raycaster();
-		// var pos = spaceCenter.clone();
-		// pos.y = pos.y + spaceSize.y;
-		// raycaster.set(pos, new THREE.Vector3(0,-1,0));
-
-		// var intersects = raycaster.intersectObjects(dresser.children);
-		// if(intersects.length > 2){
-		// 	console.log("Dresser shelf exit.");
-		// 	return;
-		// }
-		// console.log("Dresser no shelf.");
-
-		//get dresser material case1: no children case2: has children
-
 		var material = this.getPartMaterial(dresser);
 
 		var geometry = chairCreateBoard(spaceSize.x - 0.6, 0.1, spaceSize.z - 0.6);
@@ -428,9 +409,9 @@ Dresser_Add.prototype = {
 	},
 
 	markCabinet: function(furniture) {
-		var obj = furniture.getObjectByName("cabinetTop-cabinetFront");
+		var obj = furniture.getObjectByName("cTop-cFront");
 		if(typeof obj == 'undefined')
-			obj = furniture.getObjectByName("cabinetFront-cabinetTop");
+			obj = furniture.getObjectByName("cFront-cTop");
 
 		if(typeof obj == 'undefined'){
 			obj = furniture.getObjectByName("Dresser");

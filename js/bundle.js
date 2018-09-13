@@ -3587,7 +3587,7 @@ Desk.prototype = {
 	},
 
 	getDesktopSurfaceCenterPoint: function(Desk) {
-		var desktop = Desk.getObjectByName("desktop");
+		var desktop = Desk.getObjectByName("dTop");
 		var desktopSize = this.getPartSize(desktop);
 		var desktopCenter = this.getPartCenter(desktop);
 		var origin = new THREE.Vector3(desktopCenter.x, desktopCenter.y + desktopSize.y, desktopCenter.z);
@@ -3604,7 +3604,7 @@ Desk.prototype = {
 	addTopBoardEvent: function() {
 		var desk = this.furnitures[0].getFurniture();
 		var surfaceCenterPoint = this.getDesktopSurfaceCenterPoint(desk);
-		var desktop = desk.getObjectByName("desktop");
+		var desktop = desk.getObjectByName("dTop");
 		var desktopSize = this.getPartSize(desktop);
 		// 0 ---- 1
 		// |      |
@@ -3645,7 +3645,7 @@ Desk.prototype = {
 
 	addBottomBoardEvent: function() {
 		var desk = this.furnitures[0].getFurniture();
-		var desktop = desk.getObjectByName("desktop");
+		var desktop = desk.getObjectByName("dTop");
 		var desktopSize = this.getPartSize(desktop);
 		var deskSize = this.getPartSize(desk);
 		var deskCenter = this.getPartCenter(desk);
@@ -3972,7 +3972,7 @@ Desk.prototype = {
 		var bottomBoard = desk.getObjectByName("bottomBoard");
 		var bottomBoardSize = this.getPartSize(bottomBoard);
 		var bottomBoardCenter = this.getPartCenter(bottomBoard);
-		var desktop = desk.getObjectByName("desktop");
+		var desktop = desk.getObjectByName("dTop");
 		var material = this.getPartMaterial(desktop);
 		var geometry = CreateWheel();
 		var wheel = new THREE.Mesh(geometry, material);
@@ -4001,7 +4001,7 @@ Desk.prototype = {
 
 	execute: function(tfname) {
 		if(this.furnitures.length > 0){
-			var desktop = this.furnitures[0].getComponentByName("desktop");
+			var desktop = this.furnitures[0].getComponentByName("dTop");
 			if(typeof desktop != 'undefined'){
 				if(tfname == "addBesideBoard"){
 					this.addBesideBoardEvent();
@@ -4098,9 +4098,8 @@ Dresser_Add.prototype = {
 
 	checkHasTopFront: function(furniture) {
 		var obj = furniture.getFurniture();
-		// console.log(obj);
-		var str1 = "cabinetTop-cabinetFront";
-		var str2 = "cabinetFront-cabinetTop";
+		var str1 = "cFront-cTop";
+		var str2 = "cTop-cFront";
 		for (var i = 0; i < obj.children.length; i++) {
 			if(obj.children[i].name == str1 || obj.children[i].name == str2)
 				return true;			
@@ -4135,7 +4134,6 @@ Dresser_Add.prototype = {
 		var origin = new THREE.Vector3(center.x, center.y - size.y, center.z);
 		var direction = new THREE.Vector3(0,1,0);
 		var intersects = this.getPointByRay(dresser, origin, direction);
-		// console.log(intersects.length);
 		if(intersects.length > 0){
 			var pos = intersects[0].point;
 			if(pos.y > center.y){
@@ -4169,7 +4167,6 @@ Dresser_Add.prototype = {
 		var origin = new THREE.Vector3(center.x, center.y, center.z - size.z);
 		var direction = new THREE.Vector3(0,0,1);
 		var intersects = this.getPointByRay(dresser, origin, direction);
-		// console.log(intersects.length);
 		if(intersects.length > 0){
 			var pos = intersects[0].point;
 			if(pos.z > center.z){
@@ -4184,22 +4181,6 @@ Dresser_Add.prototype = {
 
 	addShelf: function(furniture, spaceCenter, spaceSize) {
 		var dresser = furniture.getObjectByName("Dresser");
-		// console.log("dresser");
-		// console.log(dresser);
-		// var raycaster = new THREE.Raycaster();
-		// var pos = spaceCenter.clone();
-		// pos.y = pos.y + spaceSize.y;
-		// raycaster.set(pos, new THREE.Vector3(0,-1,0));
-
-		// var intersects = raycaster.intersectObjects(dresser.children);
-		// if(intersects.length > 2){
-		// 	console.log("Dresser shelf exit.");
-		// 	return;
-		// }
-		// console.log("Dresser no shelf.");
-
-		//get dresser material case1: no children case2: has children
-
 		var material = this.getPartMaterial(dresser);
 
 		var geometry = chairCreateBoard(spaceSize.x - 0.6, 0.1, spaceSize.z - 0.6);
@@ -4461,9 +4442,9 @@ Dresser_Add.prototype = {
 	},
 
 	markCabinet: function(furniture) {
-		var obj = furniture.getObjectByName("cabinetTop-cabinetFront");
+		var obj = furniture.getObjectByName("cTop-cFront");
 		if(typeof obj == 'undefined')
-			obj = furniture.getObjectByName("cabinetFront-cabinetTop");
+			obj = furniture.getObjectByName("cFront-cTop");
 
 		if(typeof obj == 'undefined'){
 			obj = furniture.getObjectByName("Dresser");
@@ -9115,8 +9096,8 @@ function Table (main){
 Table.prototype = {
 	checkTableInfo: function(Table) {
 		// body...
-		var tabletop = Table.getComponentByName("tabletop");
-		var tableLeg = Table.getComponentByName("tableLeg");
+		var tabletop = Table.getComponentByName("tTop");
+		var tableLeg = Table.getComponentByName("tLeg");
 		if(typeof tabletop == 'undefined' || typeof tableLeg == 'undefined')
 			return false;
 		return true;
@@ -9374,7 +9355,7 @@ Table.prototype = {
 					obj2.position.y += offset.y;
 					obj2.position.z += offset.z;
 
-					var tabletop = obj1.getObjectByName("tabletop");
+					var tabletop = obj1.getObjectByName("tTop");
 					var tabletopMaterial = this.getPartMaterial(tabletop);
 					var boardGeometry = chairCreateBoard(obj1Size.x, 0.05, obj1Size.z);
 					var board = new THREE.Mesh(boardGeometry, tabletopMaterial);
@@ -9423,7 +9404,7 @@ Table.prototype = {
 	getNumber1LegBottom: function(Table) {
 		var tableCenter = this.getPartCenter(Table);
 		var tableSize = this.getPartSize(Table);
-		var tableLeg = Table.getObjectByName("tableLeg");
+		var tableLeg = Table.getObjectByName("tLeg");
 		//get middle x position (pos1+pos2)/2
 		var origin1 = new THREE.Vector3(tableCenter.x, tableCenter.y, tableCenter.z - tableSize.z/2 + 0.01);
 		var direction1 = new THREE.Vector3(-1, 0, 0);
@@ -9472,7 +9453,7 @@ Table.prototype = {
 	getNumber2LegBottom: function(Table) {
 		var tableCenter = this.getPartCenter(Table);
 		var tableSize = this.getPartSize(Table);
-		var tableLeg = Table.getObjectByName("tableLeg");
+		var tableLeg = Table.getObjectByName("tLeg");
 		//get middle x position (pos1+pos2)/2
 		var origin1 = new THREE.Vector3(tableCenter.x, tableCenter.y, tableCenter.z - tableSize.z/2 + 0.01);
 		var direction1 = new THREE.Vector3(1, 0, 0);
@@ -9521,7 +9502,7 @@ Table.prototype = {
 	getNumber3LegBottom: function(Table) {
 		var tableCenter = this.getPartCenter(Table);
 		var tableSize = this.getPartSize(Table);
-		var tableLeg = Table.getObjectByName("tableLeg");
+		var tableLeg = Table.getObjectByName("tLeg");
 		//get middle x position (pos1+pos2)/2
 		var origin1 = new THREE.Vector3(tableCenter.x, tableCenter.y, tableCenter.z + tableSize.z/2 - 0.01);
 		var direction1 = new THREE.Vector3(1, 0, 0);
@@ -9570,7 +9551,7 @@ Table.prototype = {
 	getNumber4LegBottom: function(Table) {
 		var tableCenter = this.getPartCenter(Table);
 		var tableSize = this.getPartSize(Table);
-		var tableLeg = Table.getObjectByName("tableLeg");
+		var tableLeg = Table.getObjectByName("tLeg");
 		//get middle x position (pos1+pos2)/2
 		var origin1 = new THREE.Vector3(tableCenter.x, tableCenter.y, tableCenter.z + tableSize.z/2 - 0.01);
 		var direction1 = new THREE.Vector3(-1, 0, 0);
@@ -9619,7 +9600,7 @@ Table.prototype = {
 	getLegBottomCenterPosition: function(Table, number) {
 		var tableCenter = this.getPartCenter(Table);
 		var tableSize = this.getPartSize(Table);
-		var tableLeg = Table.getObjectByName("tableLeg");
+		var tableLeg = Table.getObjectByName("tLeg");
 
 		if(number == 1){
 			return this.getNumber1LegBottom(Table);
@@ -9648,7 +9629,7 @@ Table.prototype = {
 		var legsPosition = [];
 		this.getLegsPosition(table, legsPosition);
 
-		var tabletop = table.getObjectByName("tabletop");
+		var tabletop = table.getObjectByName("tTop");
 		var material = this.getPartMaterial(tabletop);
 		var geometry = CreateWheel();
 		var wheel = new THREE.Mesh(geometry, material);
@@ -9676,7 +9657,7 @@ Table.prototype = {
 	},
 
 	getTabletopSurfaceCenterPoint: function(Table) {
-		var tabletop = Table.getObjectByName("tabletop");
+		var tabletop = Table.getObjectByName("tTop");
 		var tabletopSize = this.getPartSize(tabletop);
 		var tabletopCenter = this.getPartCenter(tabletop);
 		var origin = new THREE.Vector3(tabletopCenter.x, tabletopCenter.y + tabletopSize.y, tabletopCenter.z);
@@ -9693,7 +9674,7 @@ Table.prototype = {
 	addBoardOnTabletop: function() {
 		var table = this.furnitures[0].getFurniture();
 		var surfaceCenterPoint = this.getTabletopSurfaceCenterPoint(table);
-		var tabletop = table.getObjectByName("tabletop");
+		var tabletop = table.getObjectByName("tTop");
 		var tabletopSize = this.getPartSize(tabletop);
 		// 0 ---- 1
 		// |      |
@@ -9734,7 +9715,7 @@ Table.prototype = {
 
 	addBoard: function() {
 		var table = this.furnitures[0].getFurniture();
-		var tabletop = table.getObjectByName("tabletop");
+		var tabletop = table.getObjectByName("tTop");
 		var tableCenter = this.getPartCenter(table);
 		var tabletopCenter =  this.getPartCenter(tabletop);
 		var tabletopSize = this.getPartSize(tabletop);
@@ -9753,7 +9734,7 @@ Table.prototype = {
 		var table = this.furnitures[0].getFurniture();
 		var tableSize = this.getPartSize(table);
 		var tableCenter = this.getPartCenter(table);
-		var tabletop = table.getObjectByName("tabletop");
+		var tabletop = table.getObjectByName("tTop");
 		this.addBoard();		
 		var board = table.getObjectByName("board");
 		var boardCenter = this.getPartCenter(board);
@@ -9867,7 +9848,7 @@ Table.prototype = {
 
 	addRod: function() {
 		var table = this.furnitures[0].getFurniture();
-		var tabletop = table.getObjectByName("tabletop");
+		var tabletop = table.getObjectByName("tTop");
 		var tabletopCenter = this.getPartCenter(tabletop);
 		var tabletopSize = this.getPartSize(tabletop);
 		var material = this.getPartMaterial(tabletop);
@@ -9895,7 +9876,7 @@ Table.prototype = {
 
 	addSeat: function() {
 		var table = this.furnitures[0].getFurniture();
-		var tabletop = table.getObjectByName("tabletop");
+		var tabletop = table.getObjectByName("tTop");
 		var tabletopSize = this.getPartSize(tabletop);
 		var tabletopCenter = this.getPartCenter(tabletop);
 
@@ -9913,7 +9894,7 @@ Table.prototype = {
 	addDoorBoard: function() {
 		var table = this.furnitures[0].getFurniture();	
 		var tableSize = this.getPartSize(table);	
-		var tabletop = table.getObjectByName("tabletop");
+		var tabletop = table.getObjectByName("tTop");
 		var tabletopSize = this.getPartSize(tabletop);
 		var tabletopCenter = this.getPartCenter(tabletop);		
 		var material = this.getPartMaterial(tabletop);
