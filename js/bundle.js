@@ -1601,6 +1601,7 @@ function Chair_Align (main) {
 
 	this.reference = null;  //midframe, seat, mixed
 
+	this.cornerAdded = false;
 
 	this.parameters = {
 
@@ -1706,6 +1707,14 @@ Chair_Align.prototype = {
 
 	execute: function(tfname){
 
+		if(this.cornerAdded == false) {
+			for(var i = 0; i < this.furnitures.length; i++) {
+				this.furnitures[i].addCorners();
+				this.furnitures[i].addtoPoint();
+			}
+			this.cornerAdded = true;
+		}
+
 		if(tfname == "vertical"){
 			this.align(this.furnitures, this.parameters.DISTANCE, this.parameters.ANGLE);
 			this.addSeat(this.furnitures, this.reference, this.textures);
@@ -1734,6 +1743,10 @@ Chair_Align.prototype = {
 
 			//seat
 			this.addSeat(this.furnitures, this.reference, this.textures);
+
+
+			//move upwards
+			this.seat.translateZ(-0.6);
 
 		}
 		
@@ -13230,11 +13243,6 @@ Main.prototype = {
 
 		//assume the furnitures are annoted well and get ready
 		//add the corners to the labeled and axised components
-		
-		for(var i = 0; i < this.furnitures.length; i++) {
-			this.furnitures[i].addCorners();
-			this.furnitures[i].addtoPoint();
-		}
 		
 
 		//testing
