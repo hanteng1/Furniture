@@ -673,6 +673,28 @@ Main.prototype = {
 
 				loadMatrix.compose(location, quaternion, scale);
 		
+			}else{
+
+				//you decide whether this will be used
+
+
+
+
+				var location = new THREE.Vector3(0, 0, -30);
+				//var location = new THREE.Vector3();
+				//this will cause errors in addAxis
+				//var quaternion = new THREE.Quaternion().setFromUnitVectors(new THREE.Vector3(0, 0, 1), new THREE.Vector3(0, 1, 0));
+				var quaternion = new THREE.Quaternion();
+
+				var scale = new THREE.Vector3(0.0254 * 10, 0.0254 * 10, 0.0254 * 10)
+
+				loadMatrix.compose(location, quaternion, scale);
+
+
+
+
+
+
 			}
 
 		}
