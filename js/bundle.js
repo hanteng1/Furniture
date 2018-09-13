@@ -3294,7 +3294,7 @@ const {translate, rotate} = scadApi.transformations
 const csgToGeometries = require('./csgToGeometries')
 
 function CreateDoor(h, w) {
-   	var board = cube({size:[0.2, h - 1, w - 1], center:true});
+   	var board = cube({size:[0.1, h - 1, w - 1], center:true});
 	var obj = board.expand(0.1, 16);
 	var path = new CSG.Path2D([[-0.25, w/8+w/10], 
 	[-0.25, w/8], [-0.25-w/20, w/8-w/15], 
@@ -4224,7 +4224,7 @@ function Dresser_Add (main){
 	// door event
 	// this.mode = "upToDown";
 	this.mode = "leftToRight";
-	this.RAngle = 70;
+	this.RAngle = 90;
 
 	// add drawer
 	// this.drawerMode = "vertical";
@@ -4352,7 +4352,7 @@ Dresser_Add.prototype = {
 		var dresser = furniture.getObjectByName("Dresser");
 		var material = this.getPartMaterial(dresser);
 
-		var geometry = chairCreateBoard(spaceSize.x - 0.24, 0.1, spaceSize.z - 0.24);
+		var geometry = chairCreateBoard(spaceSize.x - 0.24, 0.05, spaceSize.z - 0.24);
 		var shelf = new THREE.Mesh(geometry, material);
 		var shelfSize = this.getPartSize(shelf);
 		var shelf_inverse = new THREE.Matrix4();
@@ -4845,7 +4845,7 @@ Dresser_Add.prototype = {
 
 			var angle = this.RAngle/180*Math.PI;
 
-			var offsetZ = spaceSize.x/2 * Math.sin(angle) + 0.8 * Math.cos(angle);
+			var offsetZ = spaceSize.x/2 * Math.sin(angle) + 0.24 * Math.cos(angle);
 
 			
 			var offsetX = -1 * spaceSize.x/2 * Math.cos(angle) + 0.5 * Math.sin(angle);
@@ -4865,6 +4865,8 @@ Dresser_Add.prototype = {
 			var hingeGeometry = CreateHinge(this.RAngle-90, this.mode);			
 			var hinge1 = new THREE.Mesh(hingeGeometry, doorMaterial);
 			hinge1.name = "hinge";
+			hinge1.scale.set(0.1, 0.1, 0.1);
+			console.log(hinge1);
 			var hinge2 = hinge1.clone();
 			var hinge1pos = new THREE.Vector3(spaceCenter.x + spaceSize.x/2 - 0.3, 
 				spaceCenter.y + spaceSize.y/4, spaceCenter.z + spaceSize.z/2);
