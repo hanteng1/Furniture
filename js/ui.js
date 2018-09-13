@@ -28,6 +28,13 @@ Ui.prototype = {
 
 			$('#minfo').html(scope.main.category0);
 
+			$('#label_l_6').hide();
+			$('#label_l_7').hide();
+			$('#label_l_8').hide();
+			$('#label_l_9').hide();
+			$('#label_l_10').hide();
+			$('#label_l_11').hide();
+
 		});
 
 		$('#category_cabinet').click(function() {
@@ -37,6 +44,12 @@ Ui.prototype = {
 			$('#initial_category_window').hide();
 
 			$('#minfo').html(scope.main.category0);
+
+			$('#label_l_1').hide();
+			$('#label_l_2').hide();
+			$('#label_l_9').hide();
+			$('#label_l_10').hide();
+			$('#label_l_11').hide();
 
 		});
 
@@ -48,6 +61,13 @@ Ui.prototype = {
 			$('#initial_category_window').hide();
 
 			$('#minfo').html(scope.main.category0);
+
+			$('#label_l_1').hide();
+			$('#label_l_2').hide();
+			$('#label_l_6').hide();
+			$('#label_l_7').hide();
+			$('#label_l_8').hide();
+			$('#label_l_11').hide();
 
 		});
 
@@ -70,6 +90,15 @@ Ui.prototype = {
 
 			$('#minfo').html(scope.main.category0);
 
+
+			$('#label_l_1').hide();
+			$('#label_l_2').hide();
+			$('#label_l_6').hide();
+			$('#label_l_7').hide();
+			$('#label_l_8').hide();
+			$('#label_l_9').hide();
+			$('#label_l_10').hide();
+
 		});
 
 
@@ -80,6 +109,13 @@ Ui.prototype = {
 			$('#initial_category_window').hide();
 
 			$('#minfo').html(scope.main.category0);
+
+			$('#label_l_1').hide();
+			$('#label_l_2').hide();
+			$('#label_l_8').hide();
+			$('#label_l_9').hide();
+			$('#label_l_10').hide();
+			$('#label_l_11').hide();
 
 		});
 
@@ -120,27 +156,27 @@ Ui.prototype = {
 						break;
 					case "l_6":
 						//stand
-						scope.assignLabel("cabinetTop");
+						scope.assignLabel("cTop");
 						break;
 					case "l_7":
 						//stand
-						scope.assignLabel("cabinetFront");
+						scope.assignLabel("cFront");
 						break;
 					case "l_8":
 						//stand
-						scope.assignLabel("cabinetBroad");
+						scope.assignLabel("cBroad");
 						break;
 
 					case "l_9":
-						scope.assignLabel("tabletop");
+						scope.assignLabel("tTop");
 						break;
 
 					case "l_10":
-						scope.assignLabel("tableLeg");
+						scope.assignLabel("tLeg");
 						break;
 
 					case "l_11":
-						scope.assignLabel("desktop");
+						scope.assignLabel("dTop");
 						break;
 
 					

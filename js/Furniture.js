@@ -29,16 +29,16 @@ function Furniture(furniture) {
 		midframe: new THREE.Vector3(0, 0, 1),
 
 		//for cabinet
-		cabinetTop: new THREE.Vector3(0, 1, 0),
-		cabinetFront: new THREE.Vector3(0, 0, 1),
-		cabinetBroad: new THREE.Vector3(0, 1, 0),
+		cTop: new THREE.Vector3(0, 1, 0),
+		cFront: new THREE.Vector3(0, 0, 1),
+		cBroad: new THREE.Vector3(0, 1, 0),
 
 		//for table
-		tabletop: new THREE.Vector3(0, 1, 0),
-		tableLeg: new THREE.Vector3(0, 0, 1),
+		tTop: new THREE.Vector3(0, 1, 0),
+		tLeg: new THREE.Vector3(0, 0, 1),
 
 		//for desk
-		desktop: new THREE.Vector3(0, 1, 0)
+		dTop: new THREE.Vector3(0, 1, 0)
 	};
 
 
