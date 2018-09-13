@@ -2065,6 +2065,9 @@ Main.prototype = {
 		}
 		this.Sceneobjects=[];
 
+
+		//-----Dresser Add-------
+		this.processor.dresser_add.hasRemovedDrawers = false;
 	},
 
 

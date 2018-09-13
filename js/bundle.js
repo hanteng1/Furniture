@@ -4100,8 +4100,9 @@ Dresser_Add.prototype = {
 		var obj = furniture.getFurniture();
 		var str1 = "cFront-cTop";
 		var str2 = "cTop-cFront";
+		var str3 = "Dresser";
 		for (var i = 0; i < obj.children.length; i++) {
-			if(obj.children[i].name == str1 || obj.children[i].name == str2)
+			if(obj.children[i].name == str1 || obj.children[i].name == str2 || obj.children[i].name == str3)
 				return true;			
 		}
 		return false;
@@ -13259,6 +13260,9 @@ Main.prototype = {
 		}
 		this.Sceneobjects=[];
 
+
+		//-----Dresser Add-------
+		this.processor.dresser_add.hasRemovedDrawers = false;
 	},
 
 
