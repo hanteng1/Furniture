@@ -7,6 +7,9 @@ const {union, difference, intersection} = scadApi.booleanOps
 const {translate, rotate} = scadApi.transformations
 const csgToGeometries = require('./csgToGeometries')
 
+const assignUVs = require('./assignUVs');
+
+
 function CreateDrawer(width, length, height) {
     
     // var width = 10, length = 15, height = 5;
@@ -31,6 +34,10 @@ function CreateDrawer(width, length, height) {
     obj = obj.rotateY(-90);
 
     var geometry = csgToGeometries(obj)[0];
+
+    geometry = new THREE.Geometry().fromBufferGeometry( geometry );
+    assignUVs(geometry);
+    
 	return geometry;
 }
 

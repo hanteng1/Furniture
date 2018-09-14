@@ -7,6 +7,9 @@ const {union, difference, intersection} = scadApi.booleanOps
 const {translate, rotate} = scadApi.transformations
 const csgToGeometries = require('./csgToGeometries')
 
+const assignUVs = require('./assignUVs');
+
+
 function CreateSpiceRack(length) {
 
     var mid = cylinder({r: 0.4, h: length});
@@ -19,6 +22,9 @@ function CreateSpiceRack(length) {
 	spiceRack = spiceRack.rotateZ(90);
     var geometry = csgToGeometries(spiceRack)[0];
 
+    geometry = new THREE.Geometry().fromBufferGeometry( geometry );
+    assignUVs(geometry);
+    
 	return geometry;
 }
 

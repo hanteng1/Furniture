@@ -7,6 +7,8 @@ const {union, difference, intersection} = scadApi.booleanOps
 const {translate, rotate} = scadApi.transformations
 const csgToGeometries = require('./csgToGeometries')
 
+const assignUVs = require('./assignUVs');
+
 function CreateTableRod(length) {
 
 	// var length = 5;
@@ -25,6 +27,9 @@ function CreateTableRod(length) {
 	obj = obj.center();
 
 	var geometry = csgToGeometries(obj)[0];
+
+	geometry = new THREE.Geometry().fromBufferGeometry( geometry );
+    assignUVs(geometry);
 
 	return geometry;
 }
