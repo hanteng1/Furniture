@@ -222,7 +222,7 @@ Cabinet_kallax.prototype = {
 		var group = furniture.getFurniture();
 
 		//rotate cabinet
-		furniture.setRotationWithNormalAxis("cabinetTop", new THREE.Vector3( -1 , 0 , 0 ) );
+		furniture.setRotationWithNormalAxis("cTop", new THREE.Vector3( -1 , 0 , 0 ) );
 		
 		//get cabinet outside info
 		var box 		= new THREE.Box3();
@@ -274,6 +274,11 @@ Cabinet_kallax.prototype = {
 
 	},
 	ToTable: function(furnitures){
+		this.furnitures[0].setRotationWithNormalAxis("cFront", new THREE.Vector3( 1 , 0 , 0 ) );
+		this.furnitures[1].setRotationWithNormalAxis("cFront", new THREE.Vector3( 1 , 0 , 0 ) );
+
+		this.furnitures[0].setRotationWithNormalAxis("cTop", new THREE.Vector3( 0 , 0 , 1 ) );
+		this.furnitures[1].setRotationWithNormalAxis("cTop", new THREE.Vector3( 0 , 0 , 1 ) );
 
 		var funiture1 = furnitures[0].getFurniture();
 		var funiture2 = furnitures[1].getFurniture();
@@ -385,6 +390,7 @@ Cabinet_kallax.prototype = {
 	SelectBed: function(){
 		var mode = '';
 		var main = this;
+
 		$( ".item.ui.image.label.twin_bed" ).click(function() {
 			
 			if (mode != 'twin' ){
@@ -407,7 +413,11 @@ Cabinet_kallax.prototype = {
 	}, 
 
 	ToBed: function(furnitures , mode){
+		this.furnitures[0].setRotationWithNormalAxis("cFront", new THREE.Vector3( 1 , 0 , 0 ) );
+		this.furnitures[1].setRotationWithNormalAxis("cFront", new THREE.Vector3( 1 , 0 , 0 ) );
 
+		this.furnitures[0].setRotationWithNormalAxis("cTop", new THREE.Vector3( 0 , 0 , 1 ) );
+		this.furnitures[1].setRotationWithNormalAxis("cTop", new THREE.Vector3( 0 , 0 , 1 ) );
 		var scope = this;
 		var funiture1 = furnitures[0].getFurniture();
 		var funiture2 = furnitures[1].getFurniture();
@@ -570,9 +580,11 @@ Cabinet_kallax.prototype = {
 
 			scope.main.scene.add(Model);
 			scope.main.Sceneobjects.push(Model);
+			
+			Model.children[0].children[0].children[0].children[0].children[0].material = material;
 			Model.scale.set(10,10,10);
 			Model.rotateOnWorldAxis(new THREE.Vector3(0,1,0) , 90 * Math.PI/180);
-
+			
 			
 			var box 		= new THREE.Box3();
 			var bedCenter	= new THREE.Vector3( ( f1Center.x + f2Center.x )/2 ,
@@ -2825,10 +2837,15 @@ Chair_Rebuild.prototype = {
 				scope.changeseatmodel(furniture,SeatSize,SeatPosi, texture, mode);
 			}
 			//change material function
+			var manager = new THREE.LoadingManager();
+	    	var textureLoader = new THREE.TextureLoader( manager );
 			var seat = furniture.getComponentByName('seat');
-			texture = scope.textures["material4"];
+			var texture = textureLoader.load( '../model/__Wood-cherry_.jpg' );
+	    	texture.repeat.set(0.3, 0.3);
+			texture.wrapS = texture.wrapT = THREE.MirroredRepeatWrapping;
 			// immediately use the texture for material creation
 			newmaterial = new THREE.MeshBasicMaterial( { map: texture } );
+			//newmaterial = scope.furnitures[0].getFurniture().children[0].material;
 			seat.material = newmaterial;
 			
 		});

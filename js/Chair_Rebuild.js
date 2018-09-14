@@ -440,10 +440,15 @@ Chair_Rebuild.prototype = {
 				scope.changeseatmodel(furniture,SeatSize,SeatPosi, texture, mode);
 			}
 			//change material function
+			var manager = new THREE.LoadingManager();
+	    	var textureLoader = new THREE.TextureLoader( manager );
 			var seat = furniture.getComponentByName('seat');
-			texture = scope.textures["material4"];
+			var texture = textureLoader.load( '../model/__Wood-cherry_.jpg' );
+	    	texture.repeat.set(0.3, 0.3);
+			texture.wrapS = texture.wrapT = THREE.MirroredRepeatWrapping;
 			// immediately use the texture for material creation
 			newmaterial = new THREE.MeshBasicMaterial( { map: texture } );
+			//newmaterial = scope.furnitures[0].getFurniture().children[0].material;
 			seat.material = newmaterial;
 			
 		});
