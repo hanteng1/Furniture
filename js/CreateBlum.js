@@ -7,6 +7,9 @@ const {union, difference, intersection} = scadApi.booleanOps
 const {translate, rotate} = scadApi.transformations
 const csgToGeometries = require('./csgToGeometries')
 
+const assignUVs = require('./assignUVs');
+
+
 function CreateBlum(width, length, height) {
 	var blum1 = cube([length-0.8,0.2,0.2]).translate([0.2,-0.2,height/2-1]);
     var blum2 = cube([length-0.8,0.2,0.2]).translate([0.2,-0.2,height/2-1.5]);
@@ -16,6 +19,11 @@ function CreateBlum(width, length, height) {
     obj = obj.rotateX(-90);
     obj = obj.rotateY(-90);
 	var geometry = csgToGeometries(obj)[0];
+
+	geometry = new THREE.Geometry().fromBufferGeometry( geometry );
+    assignUVs(geometry);
+
+	
 	return geometry;
 }
 

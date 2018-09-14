@@ -7,6 +7,8 @@ const {union, difference, intersection} = scadApi.booleanOps
 const {translate, rotate} = scadApi.transformations
 const csgToGeometries = require('./csgToGeometries')
 
+const assignUVs = require('./assignUVs');
+
 function CreateDoor(h, w) {
    	var board = cube({size:[0.1, h - 1, w - 1], center:true});
 	var obj = board.expand(0.1, 16);
@@ -21,6 +23,9 @@ function CreateDoor(h, w) {
     obj = obj.rotateY(90);
 
     var geometry = csgToGeometries(obj)[0];
+
+    geometry = new THREE.Geometry().fromBufferGeometry( geometry );
+    assignUVs(geometry);
 
 	return geometry;
 
