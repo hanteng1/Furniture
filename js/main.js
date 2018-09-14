@@ -673,6 +673,28 @@ Main.prototype = {
 
 				loadMatrix.compose(location, quaternion, scale);
 		
+			}else{
+
+				//you decide whether this will be used
+
+
+
+
+				var location = new THREE.Vector3(0, 0, -30);
+				//var location = new THREE.Vector3();
+				//this will cause errors in addAxis
+				//var quaternion = new THREE.Quaternion().setFromUnitVectors(new THREE.Vector3(0, 0, 1), new THREE.Vector3(0, 1, 0));
+				var quaternion = new THREE.Quaternion();
+
+				var scale = new THREE.Vector3(0.0254 * 10, 0.0254 * 10, 0.0254 * 10)
+
+				loadMatrix.compose(location, quaternion, scale);
+
+
+
+
+
+
 			}
 
 		}
@@ -1236,6 +1258,8 @@ Main.prototype = {
 		{
 			var objIndex = selectedIndices[i];
 			this.explodeVectors.splice(objIndex,1);
+
+			this.explodeVectorsCorrected.splice(objIndex,1);
 		}
 
 		//add the new one to the array
@@ -1244,6 +1268,9 @@ Main.prototype = {
 		//n_subVector.subVectors(n_elmCenter, this.objCenter);
 		//n_subVector.multiplyScalar(2);
 		this.explodeVectors.push(n_subVector.clone());
+
+
+		this.explodeVectorsCorrected.push(n_subVector.clone());
 
 		groupObj.translateX(n_subVector.x);
 		groupObj.translateY(n_subVector.y);
@@ -1286,6 +1313,13 @@ Main.prototype = {
 
 			//enable normal axis
 			this.addNormalAxis(this.furniture, this.selected);
+
+
+			//in case of "seat-back"
+			if(curName == "seat-back")
+			{
+				this.processor.seatback = true;
+			}
 
 		}else{
 			this.selected.name = label;
@@ -2021,6 +2055,7 @@ Main.prototype = {
 		$('.operations.operation_desk').hide();
 		$('.operations.operation_table').hide();
 		$('#parameter_control_tool_addbetween').hide();
+		$('#parameter_control_tool_cut').hide();
 		$('#AddRodInput').hide();
 
 		this.furnitures.length = 0;	
@@ -2064,6 +2099,9 @@ Main.prototype = {
 		}
 		this.Sceneobjects=[];
 
+
+		//-----Dresser Add-------
+		this.processor.dresser_add.hasRemovedDrawers = false;
 	},
 
 
@@ -2077,12 +2115,7 @@ Main.prototype = {
 
 		//assume the furnitures are annoted well and get ready
 		//add the corners to the labeled and axised components
-		
-		for(var i = 0; i < this.furnitures.length; i++) {
-			this.furnitures[i].addCorners();
-			this.furnitures[i].addtoPoint();
-		}
-		
+
 
 		//testing
 		// for(var i = 0; i < this.furnitures.length; i++) {
@@ -2130,6 +2163,7 @@ Main.prototype = {
 		$('.operations.operation_desk').hide();
 		$('.operations.operation_table').hide();
 		$('#parameter_control_tool_addbetween').hide();
+		$('#parameter_control_tool_cut').hide();
 		$('#AddRodInput').hide();
 
 		this.processor.init();

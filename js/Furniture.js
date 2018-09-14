@@ -29,11 +29,16 @@ function Furniture(furniture) {
 		midframe: new THREE.Vector3(0, 0, 1),
 
 		//for cabinet
-		cabinetTop: new THREE.Vector3(0, 1, 0),
-		cabinetFront: new THREE.Vector3(0, 0, 1),
-		cabinetBroad: new THREE.Vector3(0, 1, 0)
+		cTop: new THREE.Vector3(0, 1, 0),
+		cFront: new THREE.Vector3(0, 0, 1),
+		cBroad: new THREE.Vector3(0, 1, 0),
 
 		//for table
+		tTop: new THREE.Vector3(0, 1, 0),
+		tLeg: new THREE.Vector3(0, 0, 1),
+
+		//for desk
+		dTop: new THREE.Vector3(0, 1, 0)
 	};
 
 
@@ -675,6 +680,8 @@ function Furniture(furniture) {
 		inverseMatrixWorld.getInverse(this.furniture.matrixWorld.clone(), true);
 		this.points.applyMatrix(inverseMatrixWorld);
 		this.furniture.add(this.points);
+
+		this.points.visible = false;
 	}
 
 

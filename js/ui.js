@@ -10,31 +10,6 @@ function Ui(main)
 	};
 
 
-
-	//zhuen's block
-
-
-
-	//end of zhuen's block
-
-
-
-	//weixiang's bloack
-
-
-
-	//end of weixiang's block
-
-
-
-
-	//trif's block
-
-
-
-
-	//end of trif's block
-
 }
 
 
@@ -53,6 +28,13 @@ Ui.prototype = {
 
 			$('#minfo').html(scope.main.category0);
 
+			$('#label_l_6').hide();
+			$('#label_l_7').hide();
+			$('#label_l_8').hide();
+			$('#label_l_9').hide();
+			$('#label_l_10').hide();
+			$('#label_l_11').hide();
+
 		});
 
 		$('#category_cabinet').click(function() {
@@ -62,6 +44,12 @@ Ui.prototype = {
 			$('#initial_category_window').hide();
 
 			$('#minfo').html(scope.main.category0);
+
+			$('#label_l_1').hide();
+			$('#label_l_2').hide();
+			$('#label_l_9').hide();
+			$('#label_l_10').hide();
+			$('#label_l_11').hide();
 
 		});
 
@@ -74,18 +62,63 @@ Ui.prototype = {
 
 			$('#minfo').html(scope.main.category0);
 
+			$('#label_l_1').hide();
+			$('#label_l_2').hide();
+			$('#label_l_6').hide();
+			$('#label_l_7').hide();
+			$('#label_l_8').hide();
+			$('#label_l_11').hide();
+
 		});
 
 
-		$('#category_bed').click(function() {
+		// $('#category_bed').click(function() {
+		// 	//group function
+		// 	scope.main.category0 = "bed";
+		// 	$('#blocker').hide();
+		// 	$('#initial_category_window').hide();
+
+		// 	$('#minfo').html(scope.main.category0);
+
+		// });
+
+		$('#category_desk').click(function() {
 			//group function
-			scope.main.category0 = "bed";
+			scope.main.category0 = "desk";
 			$('#blocker').hide();
 			$('#initial_category_window').hide();
 
 			$('#minfo').html(scope.main.category0);
 
+
+			$('#label_l_1').hide();
+			$('#label_l_2').hide();
+			$('#label_l_6').hide();
+			$('#label_l_7').hide();
+			$('#label_l_8').hide();
+			$('#label_l_9').hide();
+			$('#label_l_10').hide();
+
 		});
+
+
+		$('#category_dresser').click(function() {
+			//group function
+			scope.main.category0 = "dresser";
+			$('#blocker').hide();
+			$('#initial_category_window').hide();
+
+			$('#minfo').html(scope.main.category0);
+
+			$('#label_l_1').hide();
+			$('#label_l_2').hide();
+			$('#label_l_8').hide();
+			$('#label_l_9').hide();
+			$('#label_l_10').hide();
+			$('#label_l_11').hide();
+
+		});
+
 
 
 		$('.ui.dropdown').dropdown({
@@ -123,15 +156,27 @@ Ui.prototype = {
 						break;
 					case "l_6":
 						//stand
-						scope.assignLabel("cabinetTop");
+						scope.assignLabel("cTop");
 						break;
 					case "l_7":
 						//stand
-						scope.assignLabel("cabinetFront");
+						scope.assignLabel("cFront");
 						break;
 					case "l_8":
 						//stand
-						scope.assignLabel("cabinetBroad");
+						scope.assignLabel("cBroad");
+						break;
+
+					case "l_9":
+						scope.assignLabel("tTop");
+						break;
+
+					case "l_10":
+						scope.assignLabel("tLeg");
+						break;
+
+					case "l_11":
+						scope.assignLabel("dTop");
 						break;
 
 					
@@ -298,6 +343,7 @@ Ui.prototype = {
 
 		$('#parameter_control_tool_add').hide();
 		$('#parameter_control_tool_addbetween').hide();
+		$('#parameter_control_tool_cut').hide();
 		$('#AddRodInput').hide();
 
 
@@ -327,14 +373,27 @@ Ui.prototype = {
 		//chair_align_flip
 		$( "#operation_chair_align_flip" ).click(function() {
 
-			// //wei hsiang start
-			// scope.processor.executeDesign("CHAIR_REBUILD", "back");
-			// //wei hsiang end
-
 			console.log("chair_align_flip");
 			scope.processor.executeDesign("CHAIR_ALIGN", "flip");
 
 		});
+
+
+		//chair_aling_connect_1
+		$( "#operation_chair_align_connect_1" ).click(function() {
+			console.log("chair_align_connect_1");
+			scope.processor.executeDesign("CHAIR_ALIGN", "connect1");
+
+		});
+
+
+		//chair_aling_connect_2
+		$( "#operation_chair_align_connect_2" ).click(function() {
+			console.log("chair_align_connect_2");
+			scope.processor.executeDesign("CHAIR_ALIGN", "connect2");
+
+		});
+
 
 		//chair_add_plate
 		$('#operation_chair_add_plate').click(function() {
@@ -374,6 +433,24 @@ Ui.prototype = {
 		//dresser
 		$('#operation_dresser_add_cut_chair').click(function() {
 			scope.processor.executeDesign("DRESSER_ADD", "cut_chair");
+		});
+		$('#operation_dresser_add_add_door').click(function() {
+			scope.processor.executeDesign("DRESSER_ADD", "add_door");
+		});
+		$('#operation_dresser_add_add_leg').click(function() {
+			scope.processor.executeDesign("DRESSER_ADD", "add_leg");
+		});
+		$('#operation_dresser_add_add_rod').click(function() {
+			scope.processor.executeDesign("DRESSER_ADD", "add_rod");
+		});
+		$('#operation_dresser_add_add_spice_rack').click(function() {
+			scope.processor.executeDesign("DRESSER_ADD", "add_spice_rack");
+		});
+		$('#operation_dresser_add_add_drawer').click(function() {
+			scope.processor.executeDesign("DRESSER_ADD", "add_drawer");
+		});
+		$('#operation_dresser_add_remove_drawers').click(function() {
+			scope.processor.executeDesign("DRESSER_ADD", "remove_drawers");
 		});
 
 		//cabinet_kallax_chair
@@ -434,8 +511,24 @@ Ui.prototype = {
 		});
 
 		//desk
-		$('#operation_desk_add_board').click(function() {
-			scope.processor.executeDesign("DESK", "addBoard");
+		$('#operation_desk_add_beside_board').click(function() {
+			scope.processor.executeDesign("DESK", "addBesideBoard");
+		});
+
+		$('#operation_desk_add_top_board').click(function() {
+			scope.processor.executeDesign("DESK", "addTopBoard");
+		});
+
+		$('#operation_desk_add_bottom_board').click(function() {
+			scope.processor.executeDesign("DESK", "addBottomBoard");
+		});
+
+		$('#operation_desk_add_inside_board').click(function() {
+			scope.processor.executeDesign("DESK", "addInsideBoard");
+		});
+
+		$('#operation_desk_add_wheel').click(function() {
+			scope.processor.executeDesign("DESK", "addWheel");
 		});
 
 		//model painting

@@ -9,7 +9,7 @@ function Model_Cut(main) {
 	var scope = this;
 	this.cut_mode = false;
 
-	$('.item.ui.image.label.cut.vertical').click(function() {
+	$('.item.ui.image.label.cut').click(function() {
 		if(scope.main.furniture == null){
 	    	alert('Please select the furniture first');
 	    	return;
@@ -137,7 +137,7 @@ function AddCutPlaneMousePosi1(main){
 			
 
 			//to do... make a reasonable size
-			main.cutplane.scale.set(10.0, 10.0, 10.0);
+			main.cutplane.scale.set(4.0, 4.0, 4.0);
 			
 		}
 		//console.log(pos);

@@ -2,7 +2,7 @@
 <html>
 	<head>
 		<meta charset=utf-8>
-		<title>test app</title>
+		<title>Upcycle-Chic</title>
 		<link rel="stylesheet" type="text/css" href="js/semantic/dist/semantic.min.css">
 		<link rel="stylesheet" href="style.css">
 	</head>
@@ -21,23 +21,33 @@
 		<div id="initial_category_window">
 			<div class="ui inverted segment" style="background:none">
 				<button class="ui inverted secondary button" id="category_chair">
-						<i class="gamepad icon"></i>
+						<!-- <i class="gamepad icon"></i> -->
 						CHAIR
 				</button>
 
 				<button class="ui inverted secondary button" id="category_cabinet">
-						<i class="gamepad icon"></i>
+						<!-- <i class="gamepad icon"></i> -->
 						CABINET
 				</button>
 
 				<button class="ui inverted secondary button" id="category_table">
-						<i class="gamepad icon"></i>
+						<!-- <i class="gamepad icon"></i> -->
 						TABLE
 				</button>
 
-				<button class="ui inverted secondary button" id="category_bed">
+				<!-- <button class="ui inverted secondary button" id="category_bed">
 						<i class="gamepad icon"></i>
 						BED
+				</button> -->
+
+				<button class="ui inverted secondary button" id="category_desk">
+						<!-- <i class="gamepad icon"></i> -->
+						DESK
+				</button>
+
+				<button class="ui inverted secondary button" id="category_dresser">
+						<!-- <i class="gamepad icon"></i> -->
+						DRESSER
 				</button>
 				
 			</div>
@@ -61,10 +71,10 @@
 						<span class="description">ctrl + o</span>
 						Open...
 					</div>
-					<div class="item" data-value="f_3">
+					<!-- <div class="item" data-value="f_3">
 						<span class="description">ctrl + s</span>
 						Save as...
-					</div>
+					</div> -->
 				</div>
 			</div>
 
@@ -120,6 +130,18 @@
 								<i class="gamepad icon"></i>
 	    						Flip
 						</button>
+
+
+						<button class="ui inverted secondary button" id="operation_chair_align_connect_1">
+								<i class="gamepad icon"></i>
+	    						Connect-1
+						</button>
+
+						<button class="ui inverted secondary button" id="operation_chair_align_connect_2">
+								<i class="gamepad icon"></i>
+	    						Connect-2
+						</button>
+
 					</div>
 
 					<div class="operations operation_chair_add">
@@ -163,7 +185,31 @@
 	 					<h3 class="ui header">Dresser</h3>
 	 					<button class="ui inverted secondary button" id="operation_dresser_add_cut_chair">
 								<i class="gamepad icon"></i>
-	    						CutChair
+	    						Cut Chair
+	    				</button>
+	    				<button class="ui inverted secondary button" id="operation_dresser_add_add_door">
+								<i class="gamepad icon"></i>
+	    						Add Door
+	    				</button>
+	    				<button class="ui inverted secondary button" id="operation_dresser_add_add_leg">
+								<i class="gamepad icon"></i>
+	    						Add Leg
+	    				</button>
+	    				<button class="ui inverted secondary button" id="operation_dresser_add_add_rod">
+								<i class="gamepad icon"></i>
+	    						Add Rod
+	    				</button>
+	    				<button class="ui inverted secondary button" id="operation_dresser_add_add_spice_rack">
+								<i class="gamepad icon"></i>
+	    						Add Spice Rack
+	    				</button>
+	    				<button class="ui inverted secondary button" id="operation_dresser_add_add_drawer">
+								<i class="gamepad icon"></i>
+	    						Add Drawer
+	    				</button>
+	    				<button class="ui inverted secondary button" id="operation_dresser_add_remove_drawers">
+								<i class="gamepad icon"></i>
+	    						Remove Drawers
 	    				</button>
 	    			</div>
 
@@ -234,9 +280,25 @@
 
 					<div class="operations operation_desk">
 	 					<h3 class="ui header">Desk</h3>
-						<button class="ui inverted secondary button" id="operation_desk_add_board">
+						<button class="ui inverted secondary button" id="operation_desk_add_beside_board">
 								<i class="gamepad icon"></i>
-	    						AddBoard
+	    						Add Beside Board
+						</button>
+						<button class="ui inverted secondary button" id="operation_desk_add_top_board">
+								<i class="gamepad icon"></i>
+	    						Add Top Board
+						</button>
+						<button class="ui inverted secondary button" id="operation_desk_add_bottom_board">
+								<i class="gamepad icon"></i>
+	    						Add Bottom Board
+						</button>
+						<button class="ui inverted secondary button" id="operation_desk_add_inside_board">
+								<i class="gamepad icon"></i>
+	    						Add Inside Board
+						</button>
+						<button class="ui inverted secondary button" id="operation_desk_add_wheel">
+								<i class="gamepad icon"></i>
+	    						Add Wheel
 						</button>
  					</div>
 					
@@ -310,15 +372,18 @@
 					<span class="text">Label</span>
 					<div class="menu">
 						<div class="scrolling menu">
-							<div class="item" data-value="l_1">
+
+							<!--chair-->
+
+							<div class="item" data-value="l_1" id="label_l_1">
 								<div class="ui red empty circular label"></div>
 								Back
 							</div>
-							<div class="item" data-value="l_2">
+							<div class="item" data-value="l_2" id="label_l_2">
 								<div class="ui blue empty circular label"></div>
 								Seat
 							</div>
-							<div class="item" data-value="l_3">
+							<!-- <div class="item" data-value="l_3">
 								<div class="ui black empty circular label"></div>
 								MidFrame
 							</div>
@@ -329,20 +394,41 @@
 							<div class="item" data-value="l_5">
 								<div class="ui orange empty circular label"></div>
 								...
-							</div> 
-							<div class="item" data-value="l_6">
+							</div>  -->
+
+							<!--cabinet -->
+							<div class="item" data-value="l_6" id="label_l_6">
 								<div class="ui orange empty circular label"></div>
 								cabinetTop
-
 							</div> 
-							<div class="item" data-value="l_7">
+							<div class="item" data-value="l_7" id="label_l_7">
 								<div class="ui orange empty circular label"></div>
 								cabinetFront
 							</div>
-							<div class="item" data-value="l_8">
+							<div class="item" data-value="l_8" id="label_l_8">
 								<div class="ui orange empty circular label"></div>
 								cabinetBroad
 							</div>
+
+
+							<!--table-->
+							<div class="item" data-value="l_9" id="label_l_9">
+								<div class="ui orange empty circular label"></div>
+								tableTop
+							</div>
+
+							<div class="item" data-value="l_10" id="label_l_10">
+								<div class="ui orange empty circular label"></div>
+								tableLeg
+							</div>
+
+
+							<!--desk-->
+							<div class="item" data-value="l_11" id="label_l_11">
+								<div class="ui orange empty circular label"></div>
+								deskTop
+							</div>
+
 
 						</div>
 					</div>
@@ -545,8 +631,7 @@
 		<div class="ui compact parameters" id="parameter_control_tool_cut">
 			<div class="ui labeled icon menu" >
 			 
-				<a class="item ui image label cut vertical">
-					<img src="/images/material/addbetween/rod.jpg">
+				<a class="item ui image label cut">
 					Cut
 				</a>
 

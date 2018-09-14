@@ -55,6 +55,8 @@ Model_AddBetween.prototype = {
             this.main.processor.executeDesign("MODEL_WRAP", "addbetween");
             this.main.processor.executeDesign("MODEL_ROTATION", "addbetween");
             this.main.processor.executeDesign("MODEL_PAINTING", "addbetween");
+            this.main.processor.executeDesign("MODEL_CUT", "addbetween");
+
             //creat procedure button
             if(this.main.stepOperationName != name){
                 this.DeleteButton();

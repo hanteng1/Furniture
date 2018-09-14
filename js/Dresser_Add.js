@@ -23,7 +23,7 @@ function Dresser_Add (main){
 	// door event
 	// this.mode = "upToDown";
 	this.mode = "leftToRight";
-	this.RAngle = 70;
+	this.RAngle = 90;
 
 	// add drawer
 	// this.drawerMode = "vertical";
@@ -65,11 +65,11 @@ Dresser_Add.prototype = {
 
 	checkHasTopFront: function(furniture) {
 		var obj = furniture.getFurniture();
-		// console.log(obj);
-		var str1 = "cabinetTop-cabinetFront";
-		var str2 = "cabinetFront-cabinetTop";
+		var str1 = "cFront-cTop";
+		var str2 = "cTop-cFront";
+		var str3 = "Dresser";
 		for (var i = 0; i < obj.children.length; i++) {
-			if(obj.children[i].name == str1 || obj.children[i].name == str2)
+			if(obj.children[i].name == str1 || obj.children[i].name == str2 || obj.children[i].name == str3)
 				return true;			
 		}
 		return false;
@@ -83,10 +83,10 @@ Dresser_Add.prototype = {
 
 	addBottom: function(dresser, size, center) {
 		var material = this.getPartMaterial(dresser);
-		var geometry = chairCreateBoard(size.x - 0.6, 0.1, size.z - 0.6);
+		var geometry = chairCreateBoard(size.x - 0.24, 0.1, size.z - 0.24);
 		var bottom = new THREE.Mesh(geometry, material);
 		bottom.name = "Dresser_part_bottom";
-		var tmp = new THREE.Vector3(center.x - size.x/2, center.y - size.y/2, center.z - size.z/2);
+		var tmp = new THREE.Vector3(center.x - size.x/2 + 0.12, center.y - size.y/2 + 0.12, center.z - size.z/2);
 		var inverse = new THREE.Matrix4();
 		inverse.getInverse(dresser.matrixWorld);
 		dresser.worldToLocal(tmp);
@@ -102,7 +102,6 @@ Dresser_Add.prototype = {
 		var origin = new THREE.Vector3(center.x, center.y - size.y, center.z);
 		var direction = new THREE.Vector3(0,1,0);
 		var intersects = this.getPointByRay(dresser, origin, direction);
-		// console.log(intersects.length);
 		if(intersects.length > 0){
 			var pos = intersects[0].point;
 			if(pos.y > center.y){
@@ -117,10 +116,10 @@ Dresser_Add.prototype = {
 
 	addBack: function(dresser, size, center) {
 		var material = this.getPartMaterial(dresser);
-		var geometry = chairCreateBoard(size.x - 0.6, size.y - 0.6, 0.1);
+		var geometry = chairCreateBoard(size.x - 0.24, size.y - 0.24, 0.05);
 		var back = new THREE.Mesh(geometry, material);
 		back.name = "Dresser_part_back";
-		var tmp = new THREE.Vector3(center.x - size.x/2 + 0.3, center.y - size.y/2 + 0.3, center.z - size.z/2);
+		var tmp = new THREE.Vector3(center.x - size.x/2 + 0.12, center.y - size.y/2 + 0.12, center.z - size.z/2);
 		var inverse = new THREE.Matrix4();
 		inverse.getInverse(dresser.matrixWorld);
 		dresser.worldToLocal(tmp);
@@ -136,7 +135,6 @@ Dresser_Add.prototype = {
 		var origin = new THREE.Vector3(center.x, center.y, center.z - size.z);
 		var direction = new THREE.Vector3(0,0,1);
 		var intersects = this.getPointByRay(dresser, origin, direction);
-		// console.log(intersects.length);
 		if(intersects.length > 0){
 			var pos = intersects[0].point;
 			if(pos.z > center.z){
@@ -151,33 +149,17 @@ Dresser_Add.prototype = {
 
 	addShelf: function(furniture, spaceCenter, spaceSize) {
 		var dresser = furniture.getObjectByName("Dresser");
-		// console.log("dresser");
-		// console.log(dresser);
-		// var raycaster = new THREE.Raycaster();
-		// var pos = spaceCenter.clone();
-		// pos.y = pos.y + spaceSize.y;
-		// raycaster.set(pos, new THREE.Vector3(0,-1,0));
-
-		// var intersects = raycaster.intersectObjects(dresser.children);
-		// if(intersects.length > 2){
-		// 	console.log("Dresser shelf exit.");
-		// 	return;
-		// }
-		// console.log("Dresser no shelf.");
-
-		//get dresser material case1: no children case2: has children
-
 		var material = this.getPartMaterial(dresser);
 
-		var geometry = chairCreateBoard(spaceSize.x - 0.6, 0.1, spaceSize.z - 0.6);
+		var geometry = chairCreateBoard(spaceSize.x - 0.24, 0.05, spaceSize.z - 0.24);
 		var shelf = new THREE.Mesh(geometry, material);
 		var shelfSize = this.getPartSize(shelf);
 		var shelf_inverse = new THREE.Matrix4();
 		shelf_inverse.getInverse(dresser.matrixWorld);
 		shelf.applyMatrix(shelf_inverse);
 
-		shelf.position.set(spaceCenter.x - spaceSize.x/2, spaceCenter.y - spaceSize.y/2, 
-			spaceCenter.z - spaceSize.z/2);
+		shelf.position.set(spaceCenter.x - spaceSize.x/2 + 0.12, spaceCenter.y - spaceSize.y/2 + 0.12, 
+			spaceCenter.z - spaceSize.z/2 + 0.12);
 		dresser.worldToLocal(shelf.position);
 
 		dresser.add(shelf);
@@ -428,9 +410,9 @@ Dresser_Add.prototype = {
 	},
 
 	markCabinet: function(furniture) {
-		var obj = furniture.getObjectByName("cabinetTop-cabinetFront");
+		var obj = furniture.getObjectByName("cTop-cFront");
 		if(typeof obj == 'undefined')
-			obj = furniture.getObjectByName("cabinetFront-cabinetTop");
+			obj = furniture.getObjectByName("cFront-cTop");
 
 		if(typeof obj == 'undefined'){
 			obj = furniture.getObjectByName("Dresser");
@@ -662,7 +644,7 @@ Dresser_Add.prototype = {
 
 			var angle = this.RAngle/180*Math.PI;
 
-			var offsetZ = spaceSize.x/2 * Math.sin(angle) + 0.8 * Math.cos(angle);
+			var offsetZ = spaceSize.x/2 * Math.sin(angle) + 0.24 * Math.cos(angle);
 
 			
 			var offsetX = -1 * spaceSize.x/2 * Math.cos(angle) + 0.5 * Math.sin(angle);
@@ -682,6 +664,8 @@ Dresser_Add.prototype = {
 			var hingeGeometry = CreateHinge(this.RAngle-90, this.mode);			
 			var hinge1 = new THREE.Mesh(hingeGeometry, doorMaterial);
 			hinge1.name = "hinge";
+			hinge1.scale.set(0.1, 0.1, 0.1);
+			console.log(hinge1);
 			var hinge2 = hinge1.clone();
 			var hinge1pos = new THREE.Vector3(spaceCenter.x + spaceSize.x/2 - 0.3, 
 				spaceCenter.y + spaceSize.y/4, spaceCenter.z + spaceSize.z/2);
@@ -1051,15 +1035,29 @@ Dresser_Add.prototype = {
 		}
 	},
 
-	execute: function() {
+	execute: function(tfname) {
 		if(this.checkHasTopFront(this.furnitures[0])){
-			// this.cutToChairEvent();
-			this.addDoorEvent();
-			this.addLegEvent();	
-			this.addRodEvent();
-			this.addSpiceRackEvent();
-			// this.addDrawerEvent();
-			// this.removeDrawersEvent();
+			if(tfname == "cut_chair"){
+				this.cutToChairEvent();
+			}
+			if(tfname == "add_door"){
+				this.addDoorEvent();
+			}
+			if(tfname == "add_leg"){
+				this.addLegEvent();	
+			}
+			if(tfname == "add_rod"){
+				this.addRodEvent();
+			}
+			if(tfname == "add_spice_rack"){
+				this.addSpiceRackEvent();
+			}
+			if(tfname == "add_drawer"){
+				this.addDrawerEvent();
+			}
+			if(tfname == "remove_drawers"){
+				this.removeDrawersEvent();
+			}
 		}
 		else{
 			alert("Please mark cabinetTop and cabinetFront");

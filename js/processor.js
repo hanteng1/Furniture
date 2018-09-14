@@ -37,11 +37,13 @@ function Processor(main) {
 
 	this.transformFunctions = { };
 
-
+	this.seatback = false;
 
 	//zhuen's block
 	this.chair_add = undefined;
 	this.dresser_add = undefined;
+	this.table = undefined;
+	this.desk = undefined;
 	this.model_add = undefined;
 	//end of zhuen's block
 
@@ -56,8 +58,6 @@ function Processor(main) {
 	this.model_align = undefined;
 	this.model_addbetween = undefined;
 	this.model_cut = undefined;
-
-
 
 }
 
@@ -91,21 +91,33 @@ Processor.prototype = {
 				}else if( scope.furnitures.length > 1) {
 					//possible actions with many furnitures
 					
-					scope.chair_align = new Chair_Align(scope.main);
-					scope.chair_align.init();
-					scope.transformFunctions.CHAIR_ALIGN = scope.chair_align;
-					
-					//wei hsiang start
-					//scope.chair_rebuild = new Chair_Rebuild(scope.main);
-					//scope.transformFunctions.CHAIR_REBUILD = scope.chair_rebuild;
-					//wei hsiang end
-					
-					$('.operations.operation_chair_align').show();
+					if(scope.seatback == false) {
+						//seat and back are seperate
+						scope.chair_align = new Chair_Align(scope.main);
+						scope.chair_align.init();
+						scope.transformFunctions.CHAIR_ALIGN = scope.chair_align;
 
+						$('.operations.operation_chair_align').show();
 
-					//zhuen's block
+						//hide connect 1, 2
+
+						$('#operation_chair_align_connect_1').hide();
+						$('#operation_chair_align_connect_2').hide();
+
+					}else{
+						//seat and back are together
+						scope.chair_align = new Chair_Align(scope.main);
+						scope.chair_align.init();
+						scope.transformFunctions.CHAIR_ALIGN = scope.chair_align;
+
+						$('.operations.operation_chair_align').show();
+
+						//only show connect 1, 2
+						$('#operation_chair_align_vertical').hide();
+						$('#operation_chair_align_horizontal').hide();
+						$('#operation_chair_align_flip').hide();
+					}
 					
-					//end of zhuen's block
 				}
 
 
@@ -118,33 +130,18 @@ Processor.prototype = {
 
 				}else if(scope.furnitures.length == 1){
 					//possible actions with one furniture
-
-					if (true) {
-						scope.cabinet_kallax = new Cabinet_kallax(scope.main);
-						scope.transformFunctions.CABINET_LALLAX = scope.cabinet_kallax;
-						
-						$('.operations.operation_cabinet_kallax_one').show();
-					}					
-					else{
-						scope.dresser_add = new Dresser_Add(scope.main);		
-						scope.transformFunctions.DRESSER_ADD = scope.dresser_add;
-						$('.operations.operation_dresser_add').show();
-					}
+					scope.cabinet_kallax = new Cabinet_kallax(scope.main);
+					scope.transformFunctions.CABINET_LALLAX = scope.cabinet_kallax;
+					$('.operations.operation_cabinet_kallax_one').show();
+					
 
 					
 				}else if( scope.furnitures.length > 1) {
 					//possible actions with many furnitures
-
-					if(true){
-						scope.cabinet_kallax = new Cabinet_kallax(scope.main);
-						scope.transformFunctions.CABINET_LALLAX = scope.cabinet_kallax;						
-						$('.operations.operation_cabinet_kallax_two').show();
-					}
-					else{
-						scope.dresser_add = new Dresser_Add(scope.main);		
-						scope.transformFunctions.DRESSER_ADD = scope.dresser_add;
-						$('.operations.operation_dresser_add').show();
-					}
+					scope.cabinet_kallax = new Cabinet_kallax(scope.main);
+					scope.transformFunctions.CABINET_LALLAX = scope.cabinet_kallax;						
+					$('.operations.operation_cabinet_kallax_two').show();
+					
 				}
 
 				break;
@@ -191,6 +188,26 @@ Processor.prototype = {
 					scope.desk = new Desk(scope.main);
 					scope.transformFunctions.DESK = scope.desk;						
 					$('.operations.operation_desk').show();
+				}
+
+				break;
+
+			case "dresser" :
+				if(scope.furnitures.length == 0) {
+					return;
+				}
+				else if(scope.furnitures.length == 1){
+					//possible actions with one furniture
+					scope.dresser_add = new Dresser_Add(scope.main);		
+					scope.transformFunctions.DRESSER_ADD = scope.dresser_add;
+					$('.operations.operation_dresser_add').show();
+
+				}
+				else if( scope.furnitures.length > 1) {
+					//possible actions with many furnitures
+					scope.dresser_add = new Dresser_Add(scope.main);		
+					scope.transformFunctions.DRESSER_ADD = scope.dresser_add;
+					$('.operations.operation_dresser_add').show();
 				}
 
 				break;
