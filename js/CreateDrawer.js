@@ -12,22 +12,15 @@ const assignUVs = require('./assignUVs');
 
 function CreateDrawer(width, length, height) {
     
-    // var width = 10, length = 15, height = 5;
-    var obj = cube([length, width-1, 0.5]);
-    var obj1 = cube([length, 0.5, height-1]);
-    var obj2 = cube([0.5, width-1, height-1]);
-    var obj3 = cube([length ,0.5, height-1]).translate([0 ,width-1, 0]);
-    var obj4 = cube([0.5, width, height]).translate([length-0.5, -0.25, 0]);
-    
-    var path = new CSG.Path2D([[-0.25, width/8+width/10], [-0.25, width/8], 
-    [-0.25-width/20, width/8-width/15], [-0.25-width/20, -1*width/8+width/15], 
-    [-0.25, -1*width/8], [-0.25, -1*width/8-width/10]],false);
-	var handle = path.rectangularExtrude(0.2, 1, 10, true);
-	//handle = handle.center();
-	handle = handle.rotateY(180);
-	
-	
-	handle = handle.translate([length-0.2,width/2,(height+1)/2]);
+    // var width = 1, length = 1.5, height = 0.5;
+    var obj = cube([length, width-0.1, 0.05]);
+    var obj1 = cube([length, 0.05, height-0.1]);
+    var obj2 = cube([0.05, width-0.1, height-0.1]);
+    var obj3 = cube([length ,0.05, height-0.1]).translate([0 ,width-0.1, 0]);
+    var obj4 = cube([0.05, width, height]).translate([length-0.05, -0.025, 0]);
+    var handle = cylinder({r: height/4, h: height/4});
+    handle = handle.rotateY(90);
+    handle = handle.translate([length,width/2, height/2]);
     obj = union(obj, obj1, obj2, obj3, obj4, handle);
     // obj = obj.center();
     obj = obj.rotateX(-90);

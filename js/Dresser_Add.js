@@ -21,18 +21,55 @@ function Dresser_Add (main){
 	this.parameter = 7;
 
 	// door event
-	this.mode = "upToDown";
-	// this.mode = "leftToRight";
+	// this.mode = "upToDown";
+	this.mode = "leftToRight";
 	this.RAngle = 70;
 
 	// add drawer
-	// this.drawerMode = "vertical";
-	this.drawerMode = "horizontal";
+	this.drawerMode = "vertical";
+	// this.drawerMode = "horizontal";
 	this.drawerParameter = 3;
+
+
+	this.textures = {};
 }
 
 
 Dresser_Add.prototype = {
+//--------------------------------------------------------------------------------------------
+	init : function() {
+		var manager = new THREE.LoadingManager();
+	    manager.onProgress = function ( item, loaded, total ) {
+	        console.log( item, loaded, total );
+	    };
+		var textureLoader = new THREE.TextureLoader( manager );
+		this.textures["board"] = textureLoader.load( '../model/Wood_Bamboo_Medium.jpg' );
+	    this.textures["board"].repeat.set(0.1, 0.1);
+		this.textures["board"].wrapS = this.textures["board"].wrapT = THREE.MirroredRepeatWrapping;
+
+		this.textures["board2"] = textureLoader.load( '../model/Oak_tile.jpg' );
+	    this.textures["board2"].repeat.set(0.1, 0.1);
+		this.textures["board2"].wrapS = this.textures["board"].wrapT = THREE.MirroredRepeatWrapping;
+	},
+//--------------------------------------------------------------------------------------------
+	test: function(pos) {
+		var geometry = new THREE.BoxGeometry( 0.1, 0.1, 0.1 );
+		var material = new THREE.MeshBasicMaterial( {color: Math.random() * 0xffffff} );
+		var cube = new THREE.Mesh( geometry, material );
+		cube.name = "cube";
+		cube.position.set(pos.x, pos.y, pos.z);
+		this.main.scene.add( cube );
+	},
+
+	objectAddToFurniture: function(furniture, object, position) {
+		var inverse = new THREE.Matrix4();
+		inverse.getInverse(furniture.matrixWorld);
+		object.applyMatrix(inverse);
+		furniture.worldToLocal(position);
+		object.position.set(position.x, position.y, position.z);		
+		furniture.add(object);	
+	},
+
 	loadClothesHanger: function(rod) {
 		var clothesHanger;
 		var scene = this.main.scene;
@@ -82,7 +119,10 @@ Dresser_Add.prototype = {
 	},
 
 	addBottom: function(dresser, size, center) {
-		var material = this.getPartMaterial(dresser);
+
+		var texture = this.textures["board"];
+		var material = new THREE.MeshBasicMaterial( {map: texture} );
+
 		var geometry = chairCreateBoard(size.x - 0.24, 0.1, size.z - 0.24);
 		var bottom = new THREE.Mesh(geometry, material);
 		bottom.name = "Dresser_part_bottom";
@@ -115,7 +155,8 @@ Dresser_Add.prototype = {
 	},
 
 	addBack: function(dresser, size, center) {
-		var material = this.getPartMaterial(dresser);
+		var texture = this.textures["board"];
+		var material = new THREE.MeshBasicMaterial( {map: texture} );
 		var geometry = chairCreateBoard(size.x - 0.24, size.y - 0.24, 0.05);
 		var back = new THREE.Mesh(geometry, material);
 		back.name = "Dresser_part_back";
@@ -149,7 +190,8 @@ Dresser_Add.prototype = {
 
 	addShelf: function(furniture, spaceCenter, spaceSize) {
 		var dresser = furniture.getObjectByName("Dresser");
-		var material = this.getPartMaterial(dresser);
+		var texture = this.textures["board"];
+		var material = new THREE.MeshBasicMaterial( {map: texture} );
 
 		var geometry = chairCreateBoard(spaceSize.x - 0.24, 0.05, spaceSize.z - 0.24);
 		var shelf = new THREE.Mesh(geometry, material);
@@ -166,6 +208,7 @@ Dresser_Add.prototype = {
 	},
 
 	createTheDrawer: function(drawerMaterial, blumsMaterial, size){
+		console.log(size);
 		if(this.drawerMode == "vertical"){
 			var geometry = CreateDrawer(size.x, size.z, size.y/2);
 			var drawer = new THREE.Mesh(geometry, drawerMaterial);
@@ -176,11 +219,11 @@ Dresser_Add.prototype = {
 			blums.name = "blums";
 		}
 		else if(this.drawerMode == "horizontal"){
-			var geometry = CreateDrawer(size.x/2 - 0.5, size.z, size.y);
+			var geometry = CreateDrawer(size.x/2 - 0.25, size.z, size.y);
 			var drawer = new THREE.Mesh(geometry, drawerMaterial);
 			drawer.name = "drawer";
 
-			var blumsGeometry = CreateBlum(size.x/2 - 0.5, size.z, size.y);
+			var blumsGeometry = CreateBlum(size.x/2 - 0.25, size.z, size.y);
 			var blums = new THREE.Mesh(blumsGeometry, blumsMaterial);
 			blums.name = "blums";
 		}
@@ -525,16 +568,51 @@ Dresser_Add.prototype = {
 	cutToChairEvent: function() {
 		var furniture_cutToChair = new THREE.Object3D();
 		furniture_cutToChair = this.furnitures[0].getFurniture();
-
+		
 		this.markCabinet(furniture_cutToChair);
 		this.markDrawer(furniture_cutToChair);
 		var dresser = furniture_cutToChair.getObjectByName("Dresser");
 		this.hasBottom(dresser);
 		this.hasBack(dresser);
+		var count = [];
+		this.removeDrawersByColumn(furniture_cutToChair, 3, count);
 		
+		
+		var children = [];
+		this.getAllChildren(this.furnitures[0].getFurniture(), children);
+		for (var i = 0; i < children.length; i++) {
+			var center = this.getPartCenter( children[i] );
+			if(center.y > 6.78){
+				this.furnitures[0].getFurniture().remove(children[i]);
+				dresser.remove(children[i]);
+			}
+		}
+		
+		var center = this.getPartCenter(dresser);
+		center.y -= 1;
+		this.test(center);
+		var direction1 = new THREE.Vector3(1, 0, 0);
+		var direction2 = new THREE.Vector3(0, 0, -1);
+
+		var intersects1 = this.getPointByRay(dresser, center, direction1);
+		var intersects2 = this.getPointByRay(dresser, center, direction1.negate() );
+		var intersects3 = this.getPointByRay(dresser, center, direction2);
+
+		var left = intersects2[0].point;
+		var right = intersects1[0].point;
+		var back = intersects3[0].point;
+
+		var texture = this.textures["board"];
+		var material = new THREE.MeshBasicMaterial( {map: texture} );
+		var geometry = chairCreateBoard(parseFloat(right.x) - parseFloat(left.x), 0.05, 
+			(parseFloat(center.z) - parseFloat(back.z)) * 2);
+		var shelf = new THREE.Mesh(geometry, material);
+		var size = this.getPartSize(shelf);
+		var pos = new THREE.Vector3(center.x - size.x/2, center.y, center.z - size.z/2);
+		this.objectAddToFurniture(dresser, shelf, pos);
 	},
 
-	addLegEvent: function() {
+	addLegEvent: function() {		
 		var furniture_addLeg = new THREE.Object3D();
 		furniture_addLeg = this.furnitures[0].getFurniture();
 
@@ -553,7 +631,9 @@ Dresser_Add.prototype = {
 		var inverse = new THREE.Matrix4();
 		inverse.getInverse(furniture_addLeg.matrixWorld);
 		
-		var material = this.getPartMaterial(dresser);
+		var texture = this.textures["board"];
+		var material = new THREE.MeshBasicMaterial( {map: texture} );
+
 		var legGeometry = CreateDresserLeg();
 		var leg = new THREE.Mesh(legGeometry, material);
 		leg.name = "leg";
@@ -609,7 +689,12 @@ Dresser_Add.prototype = {
 		// console.log(furniture_addDoor);
 		var dresserSize = this.getPartSize(dresser);
 		var dresserCenter = this.getPartCenter(dresser);
-		var doorMaterial = this.getPartMaterial(dresser);
+		var doorMaterial = new THREE.MeshPhongMaterial({
+														color:0x202020,
+														emissive: 0x0,
+														specular: 0xffffff,
+														shininess: 20
+														});
 
 		var count = new Array();
 		
@@ -792,7 +877,12 @@ Dresser_Add.prototype = {
 			spaceBox.getCenter(spaceCenter);
 			
 			//add rod
-			var rodMaterial = this.getPartMaterial(dresser);
+			var rodMaterial = new THREE.MeshPhongMaterial({
+															color:0x0,
+															emissive: 0x202020,
+															specular: 0xffffff,
+															shininess: 20
+														});
 			var rodGeometry = CreateRod(spaceSize.x);
 			var rod = new THREE.Mesh(rodGeometry, rodMaterial);
 			rod.name = "rod";
@@ -822,7 +912,12 @@ Dresser_Add.prototype = {
 			//add rod
 			var furniture_addRod = this.furnitures[0].getFurniture();
 			var dresser = furniture_addRod.getObjectByName("Dresser");
-			var rodMaterial = this.getPartMaterial(dresser);
+			var rodMaterial = new THREE.MeshPhongMaterial({
+															color:0x0,
+															emissive: 0x202020,
+															specular: 0xffffff,
+															shininess: 20
+														});
 
 			for (var i = 0, offest = furnitureSize.x; i < this.furnitures.length - 1;
 			 i++, offest += furnitureSize.x*2) {
@@ -840,6 +935,8 @@ Dresser_Add.prototype = {
 	addSpiceRackEvent: function() {
 		var furniture_addSpiceRack = new THREE.Object3D();
 		furniture_addSpiceRack = this.furnitures[0].getFurniture();
+		this.markCabinet(furniture_addSpiceRack);		
+		this.markDrawer(furniture_addSpiceRack);
 		var dresser = furniture_addSpiceRack.getObjectByName("Dresser");
 		var furnitureSize = this.getPartSize(dresser);
 		var furnitureCenter = this.getPartCenter(dresser);
@@ -851,23 +948,29 @@ Dresser_Add.prototype = {
 		inverse.getInverse(furniture_addSpiceRack.matrixWorld);
 
 		
-		var material = this.getPartMaterial(dresser);
+		// var texture = this.textures["board2"];
+		// var material = new THREE.MeshBasicMaterial( {map: texture} );
+		var material = new THREE.MeshPhongMaterial({
+				color:0x755f3e,
+				emissive: 0x4a2707,
+				specular: 0x702e00,
+				shininess: 10
+			});
 		var spiceRackGeometry = CreateSpiceRack(furnitureSize.z * 2 / 3);
 		var spiceRackRight = new THREE.Mesh(spiceRackGeometry, material);
+
 		var spiceRackLeft = spiceRackRight.clone();
 		var spiceRackSize = this.getPartSize(spiceRackRight);
-		var spiceRackRightPosition = new THREE.Vector3(furnitureCenter.x + furnitureSize.x/2 + 
-			spiceRackSize.x/2, furnitureCenter.y, furnitureCenter.z);
+		var x = furnitureCenter.x + furnitureSize.x/2 + spiceRackSize.x/2;
+		var spiceRackRightPosition = new THREE.Vector3(x, furnitureCenter.y, furnitureCenter.z);
 
 		spiceRackRight.applyMatrix(inverse);
 		furniture_addSpiceRack.worldToLocal(spiceRackRightPosition);
-		spiceRackRight.position.set(spiceRackRightPosition.x, 
-			spiceRackRightPosition.y, spiceRackRightPosition.z);
+		spiceRackRight.position.set(spiceRackRightPosition.x, spiceRackRightPosition.y, spiceRackRightPosition.z);
 		furniture_addSpiceRack.add(spiceRackRight);
 
-		
-		var spiceRackLeftPosition = new THREE.Vector3(furnitureCenter.x - furnitureSize.x/2 - spiceRackSize.x/2, 
-			furnitureCenter.y, furnitureCenter.z);
+		x = furnitureCenter.x - furnitureSize.x/2 - spiceRackSize.x/2;
+		var spiceRackLeftPosition = new THREE.Vector3(x, furnitureCenter.y, furnitureCenter.z);
 		
 		spiceRackLeft.applyMatrix(inverse);
 		furniture_addSpiceRack.worldToLocal(spiceRackLeftPosition);		
@@ -888,7 +991,20 @@ Dresser_Add.prototype = {
 		this.hasBack(furniture_addDrawer);
 
 		var dresser = furniture_addDrawer.getObjectByName("Dresser");
-		var material = this.getPartMaterial(dresser);
+		var texture = this.textures["board"];
+		var material = new THREE.MeshBasicMaterial( {map: texture} );
+		var drawerMaterial = new THREE.MeshPhongMaterial({
+							color:0x4d2311,
+							emissive: 0x3c220c,
+							specular: 0x7a5439,
+							shininess: 10
+						});
+		var blumsMaterial = new THREE.MeshPhongMaterial({
+							color:0x0,
+							emissive: 0x202020,
+							specular: 0xffffff,
+							shininess: 20
+						});
 		var inverse = new THREE.Matrix4();
 		inverse.getInverse(furniture_addDrawer.matrixWorld);
 
@@ -923,14 +1039,14 @@ Dresser_Add.prototype = {
 		console.log("theDrawerSize");
 		console.log(theDrawerSize);
 
-		var theDrawer = this.createTheDrawer(material, material, theDrawerSize);
+		var theDrawer = this.createTheDrawer(drawerMaterial, blumsMaterial, theDrawerSize);
 		console.log("theDrawer");
 		console.log(theDrawer);
 
 		if(this.drawerMode == "vertical"){
 			var drawerSize = this.getPartSize(theDrawer);
 			var tmp = new THREE.Box3();
-			for (var i = 0, move = 3; i < this.drawerParameter; i++) {
+			for (var i = 0, move = 0.3; i < this.drawerParameter; i++) {
 				tmp.copy(space);				
 				tmp.max.y -= offest * i; 
 				tmp.min.y += offest * (this.drawerParameter - i - 1);
@@ -942,14 +1058,14 @@ Dresser_Add.prototype = {
 				var spaceSize = new THREE.Vector3();
 				tmp.getCenter(spaceCenter);
 				tmp.getSize(spaceSize);
-				var drawerpos = new THREE.Vector3(spaceCenter.x - drawerSize.x/2 + 0.25, spaceCenter.y,
+				var drawerpos = new THREE.Vector3(spaceCenter.x - drawerSize.x/2 + 0.1, spaceCenter.y,
 				 spaceCenter.z - spaceSize.z/2 + move);
 				drawer1.applyMatrix(inverse);
 				drawer1.position.set(drawerpos.x, drawerpos.y, drawerpos.z);
 				furniture_addDrawer.worldToLocal(drawer1.position);
 				
-				var drawer2pos = new THREE.Vector3(spaceCenter.x - drawerSize.x/2 + 0.25, 
-					spaceCenter.y - spaceSize.y/2, spaceCenter.z - spaceSize.z/2 + move + 2);
+				var drawer2pos = new THREE.Vector3(spaceCenter.x - drawerSize.x/2 + 0.1, 
+					spaceCenter.y - spaceSize.y/2, spaceCenter.z - spaceSize.z/2 + move + 0.3);
 				drawer2.applyMatrix(inverse);
 				drawer2.position.set(drawer2pos.x, drawer2pos.y, drawer2pos.z);
 				furniture_addDrawer.worldToLocal(drawer2.position);
@@ -960,7 +1076,7 @@ Dresser_Add.prototype = {
 		else if(this.drawerMode == "horizontal"){
 			var drawerSize = this.getPartSize(theDrawer);
 			var tmp = new THREE.Box3();
-			for (var i = 0, move = 3; i < this.drawerParameter; i++) {
+			for (var i = 0, move = 0.3; i < this.drawerParameter; i++) {
 				tmp.copy(space);				
 				tmp.max.y -= offest * i; 
 				tmp.min.y += offest * (this.drawerParameter - i - 1);
@@ -974,22 +1090,22 @@ Dresser_Add.prototype = {
 				tmp.getSize(spaceSize);
 
 				drawer1.applyMatrix(inverse);
-				drawer1.position.set(spaceCenter.x + 0.75, spaceCenter.y - spaceSize.y/2,
+				drawer1.position.set(spaceCenter.x + 0.25, spaceCenter.y - spaceSize.y/2,
 				 spaceCenter.z - spaceSize.z/2 + move);
 				furniture_addDrawer.worldToLocal(drawer1.position);
 				furniture_addDrawer.add(drawer1);
 
-				var MidBoardgeometry = chairCreateBoard(1, spaceSize.y - 0.6, spaceSize.z - 0.6);
+				var MidBoardgeometry = chairCreateBoard(0.25, spaceSize.y - 0.6, spaceSize.z - 0.6);
 				var drawerMidBoard = new THREE.Mesh(MidBoardgeometry, material);
 				drawerMidBoard.name = "drawerMidBoard";
 				drawerMidBoard.applyMatrix(inverse);
-				drawerMidBoard.position.set(spaceCenter.x - 0.5, spaceCenter.y - spaceSize.y/2,
+				drawerMidBoard.position.set(spaceCenter.x - 0.12, spaceCenter.y - spaceSize.y/2,
 				 spaceCenter.z - spaceSize.z/2);
 				furniture_addDrawer.worldToLocal(drawerMidBoard.position);
 				furniture_addDrawer.add(drawerMidBoard);
 
 				drawer2.applyMatrix(inverse);
-				drawer2.position.set(spaceCenter.x - spaceSize.x/2 + 0.25, spaceCenter.y - spaceSize.y/2,
+				drawer2.position.set(spaceCenter.x - spaceSize.x/2 + 0.1, spaceCenter.y - spaceSize.y/2,
 				 spaceCenter.z - spaceSize.z/2 + move +2);
 				furniture_addDrawer.worldToLocal(drawer2.position);
 				furniture_addDrawer.add(drawer2);

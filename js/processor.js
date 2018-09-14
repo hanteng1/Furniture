@@ -198,14 +198,16 @@ Processor.prototype = {
 				}
 				else if(scope.furnitures.length == 1){
 					//possible actions with one furniture
-					scope.dresser_add = new Dresser_Add(scope.main);		
+					scope.dresser_add = new Dresser_Add(scope.main);
+					scope.dresser_add.init();		
 					scope.transformFunctions.DRESSER_ADD = scope.dresser_add;
 					$('.operations.operation_dresser_add').show();
 
 				}
 				else if( scope.furnitures.length > 1) {
 					//possible actions with many furnitures
-					scope.dresser_add = new Dresser_Add(scope.main);		
+					scope.dresser_add = new Dresser_Add(scope.main);
+					scope.dresser_add.init();	
 					scope.transformFunctions.DRESSER_ADD = scope.dresser_add;
 					$('.operations.operation_dresser_add').show();
 				}
