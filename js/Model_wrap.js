@@ -90,6 +90,8 @@ Model_wrap.prototype = {
         	this.main.processor.executeDesign("MODEL_ROTATION", "wrap");
         	this.main.processor.executeDesign("MODEL_ADDBETWEEN", "wrap");
         	this.main.processor.executeDesign("MODEL_CUT", "wrap");
+        	this.main.processor.executeDesign("MODEL_ADD", "wrap");
+        	
         	//creat procedure button
         	if(this.main.stepOperationName != name){
         		this.DeleteButton();

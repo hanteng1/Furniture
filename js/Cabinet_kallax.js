@@ -396,7 +396,6 @@ Cabinet_kallax.prototype = {
 			scope.main.scene.add(Model);
 			scope.main.Sceneobjects.push(Model);
 			
-			Model.children[0].children[0].children[0].children[0].children[0].material = material;
 			Model.scale.set(10,10,10);
 			Model.rotateOnWorldAxis(new THREE.Vector3(0,1,0) , 90 * Math.PI/180);
 			
