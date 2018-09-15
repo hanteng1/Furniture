@@ -7,6 +7,9 @@ const {union, difference, intersection} = scadApi.booleanOps
 const {translate, rotate} = scadApi.transformations
 const csgToGeometries = require('./csgToGeometries')
 
+const assignUVs = require('./assignUVs');
+
+
 function CreateDoorBoard (length, height){
 
 	// var length = 2;

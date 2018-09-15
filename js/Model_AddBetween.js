@@ -6,6 +6,7 @@ function Model_AddBetween( main ){
     this.main = main;
     this.furnitures = main.furnitures;
     this.addbetween_mode = false;
+    document.getElementById('InputRodRadius').value = "2.0"
     var scope = this;
     
     $( ".item.ui.image.label.addbetween.rod" ).click(function() {
@@ -55,7 +56,8 @@ Model_AddBetween.prototype = {
             this.main.processor.executeDesign("MODEL_ROTATION", "addbetween");
             this.main.processor.executeDesign("MODEL_PAINTING", "addbetween");
             this.main.processor.executeDesign("MODEL_CUT", "addbetween");
-
+            this.main.processor.executeDesign("MODEL_ADD", "addbetween");
+            
             //creat procedure button
             if(this.main.stepOperationName != name){
                 this.DeleteButton();
@@ -67,7 +69,7 @@ Model_AddBetween.prototype = {
         else if(this.addbetween_mode == true || name!= 'addbetween'){
             $('#parameter_control_tool_addbetween').hide();
             $('#AddRodInput').hide();
-            document.getElementById('InputRodRadius').value = "";
+            document.getElementById('InputRodRadius').value = "2.0";
             this.main.component = null;
     		this.main.intersectpoint = null;
     		this.main.fixpointball = false;
@@ -100,7 +102,7 @@ Model_AddBetween.prototype = {
     }
 
 }
-//add rod inside the furniture
+//move the red point inside the furniture
 function AddRodMousePosi1(main){
 	//if user not select the furniture component, return
 	if (main.component == null){
@@ -139,7 +141,7 @@ function AddRodMousePosi1(main){
 	
 
 }
-//add rod inside the furniture
+//move red point on two furnitures
 function AddRodMousePosi2(main){
 	
 	main.mouse.x = ( event.clientX / window.innerWidth ) * 2 - 1;

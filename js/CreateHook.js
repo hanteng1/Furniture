@@ -7,6 +7,8 @@ const {union, difference, intersection} = scadApi.booleanOps
 const {translate, rotate} = scadApi.transformations
 const csgToGeometries = require('./csgToGeometries')
 
+const assignUVs = require('./assignUVs');
+
 function CreateHook() {
 
 	var c = cube({size: [0.35,0.05,0.35]});
@@ -17,6 +19,10 @@ function CreateHook() {
     obj = obj.center();
 
     var geometry = csgToGeometries(obj)[0];
+
+    geometry = new THREE.Geometry().fromBufferGeometry( geometry );
+    assignUVs(geometry);
+
 	return geometry;
 }
 

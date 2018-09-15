@@ -46,7 +46,7 @@ Model_Cut.prototype = {
             this.main.processor.executeDesign("MODEL_ROTATION", "cut");
             this.main.processor.executeDesign("MODEL_PAINTING", "cut");
             this.main.processor.executeDesign("MODEL_ADDBETWEEN", "cut");
-            
+            this.main.processor.executeDesign("MODEL_ADD", "cut");
 
             //creat procedure button
             if(this.main.stepOperationName != name){

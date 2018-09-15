@@ -40,6 +40,8 @@ function Procedure_button(main, str){
         main.processor.executeDesign("MODEL_WRAP", "initial");
         main.processor.executeDesign("MODEL_ROTATION", "initial");
         main.processor.executeDesign("MODEL_ADDBETWEEN", "initial");
+        main.processor.executeDesign("MODEL_CUT", "initial");
+        main.processor.executeDesign("MODEL_ADD", "initial");
 	    //show the control buttons
 	    if(btn.firstChild.nodeValue != 'Initial')
 	    	$('#parameter_control_tool_' + btn.firstChild.nodeValue).show();	    

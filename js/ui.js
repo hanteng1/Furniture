@@ -566,13 +566,22 @@ Ui.prototype = {
 			scope.processor.executeDesign("MODEL_ADDBETWEEN", "addbetween");
 
 		});
-
+		$('.ui.button.InputRod.minus').click(function() {
+			var num = parseFloat(document.getElementById('InputRodRadius').value);
+			num-=0.1;
+			document.getElementById('InputRodRadius').value = num.toFixed(1).toString();
+		});
+		$('.ui.button.InputRod.plus').click(function() {
+			var num = parseFloat(document.getElementById('InputRodRadius').value);
+			num+=0.1;
+			document.getElementById('InputRodRadius').value = num.toFixed(1).toString();
+		});
 
 		//cut
 		$('#operation_Cut').click(function(){
 			scope.processor.executeDesign("MODEL_CUT", "cut");
 		});
-
+		
 
 	},
 

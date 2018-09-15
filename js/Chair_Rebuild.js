@@ -33,21 +33,41 @@ Chair_Rebuild.prototype = {
 
 	    var textureLoader = new THREE.TextureLoader( manager );
 	    
-	    this.textures["material1"] = textureLoader.load( '../images/linen_cloth.jpg' );
-	    this.textures["material1"].repeat.set(0.1, 0.1);
+	    this.textures["material1"] = textureLoader.load( '../images/material/wrap/wrap7.jpg' );
+	    this.textures["material1"].repeat.set(0.3, 0.3);
 		this.textures["material1"].wrapS = this.textures["material1"].wrapT = THREE.MirroredRepeatWrapping;
 
 		this.textures["material2"] = textureLoader.load( '../images/material/material2.jpg' );
 	    this.textures["material2"].repeat.set(0.1, 0.1);
 		this.textures["material2"].wrapS = this.textures["material2"].wrapT = THREE.MirroredRepeatWrapping;
 
-		this.textures["material3"] = textureLoader.load( '../images/material/material4.jpg' );
-	    this.textures["material3"].repeat.set(0.1, 0.1);
+		this.textures["material3"] = textureLoader.load( '../images/material/wrap/wrap5.jpg' );
+	    this.textures["material3"].repeat.set(0.3, 0.3);
 		this.textures["material3"].wrapS = this.textures["material3"].wrapT = THREE.MirroredRepeatWrapping;
 
 		this.textures["material4"] = textureLoader.load( '../images/material/material5.jpg' );
 	    this.textures["material4"].repeat.set(0.1, 0.1);
 		this.textures["material4"].wrapS = this.textures["material4"].wrapT = THREE.MirroredRepeatWrapping;
+
+		this.textures["material5"] = textureLoader.load( '../images/material/wrap/wrap8.jpg' );
+	    this.textures["material5"].repeat.set(0.1, 0.1);
+		this.textures["material5"].wrapS = this.textures["material5"].wrapT = THREE.MirroredRepeatWrapping;
+
+		this.textures["material6"] = textureLoader.load( '../images/material/wrap/wrap11.jpg' );
+	    this.textures["material6"].repeat.set(0.3, 0.3);
+		this.textures["material6"].wrapS = this.textures["material6"].wrapT = THREE.MirroredRepeatWrapping;
+
+		this.textures["material7"] = textureLoader.load( '../images/material/wrap/wrap15.jpg' );
+	    this.textures["material7"].repeat.set(0.2, 0.2);
+		this.textures["material7"].wrapS = this.textures["material7"].wrapT = THREE.MirroredRepeatWrapping;
+
+		this.textures["material8"] = textureLoader.load( '../images/material/wrap/wrap13.jpg' );
+	    this.textures["material8"].repeat.set(0.5, 0.5);
+		this.textures["material8"].wrapS = this.textures["material8"].wrapT = THREE.MirroredRepeatWrapping;
+
+		this.textures["material9"] = textureLoader.load( '../images/material/wrap/wrap14.jpg' );
+	    this.textures["material9"].repeat.set(0.5, 0.5);
+		this.textures["material9"].wrapS = this.textures["material9"].wrapT = THREE.MirroredRepeatWrapping;
 
 	},
 
@@ -283,22 +303,19 @@ Chair_Rebuild.prototype = {
 		var group = furniture.getFurniture();
 		var mode = "NormalSeat"
 		var texture = this.textures["material1"];
-		var main = this;
-		//main.changeseatmodel(furniture,SeatSize,SeatPosi, texture, mode);
-		console.log(seat);
-		Model_Painting( seat , texture);
+		var scope = this;
+		scope.changeseatmodel(furniture,SeatSize,SeatPosi, texture, mode);
 
 		$( ".item.ui.image.label.1" ).click(function() {
 			//change seat
 			if (mode == "ThinBoard"){
 				mode = "NormalSeat";
 				SeatPosi = furniture.getComponentCenterPosition('seat');
-				main.changeseatmodel(furniture,SeatSize,SeatPosi, texture, mode);
-				
+				scope.changeseatmodel(furniture,SeatSize,SeatPosi, texture, mode);	
 			}
 			//change material function
 			var seat = furniture.getComponentByName('seat');
-			texture = main.textures["material1"];
+			texture = scope.textures["material1"];
 			// immediately use the texture for material creation
 			newmaterial = new THREE.MeshBasicMaterial( { map: texture } );
 			seat.material = newmaterial;
@@ -308,12 +325,11 @@ Chair_Rebuild.prototype = {
 			if (mode == "ThinBoard"){
 				mode = "NormalSeat";
 				SeatPosi = furniture.getComponentCenterPosition('seat');
-				main.changeseatmodel(furniture,SeatSize,SeatPosi, texture, mode);
-				
+				scope.changeseatmodel(furniture,SeatSize,SeatPosi, texture, mode);
 			}
 			//change material function
 			var seat = furniture.getComponentByName('seat');
-			texture = main.textures["material2"];
+			texture = scope.textures["material2"];
 			// immediately use the texture for material creation
 			newmaterial = new THREE.MeshBasicMaterial( { map: texture } );
 			seat.material = newmaterial;
@@ -323,12 +339,11 @@ Chair_Rebuild.prototype = {
 			if (mode == "ThinBoard"){
 				mode = "NormalSeat";
 				SeatPosi = furniture.getComponentCenterPosition('seat');
-				main.changeseatmodel(furniture,SeatSize,SeatPosi, texture, mode);
-				
+				scope.changeseatmodel(furniture,SeatSize,SeatPosi, texture, mode);	
 			}
 			//change material function
 			var seat = furniture.getComponentByName('seat');
-			texture = main.textures["material3"];
+			texture = scope.textures["material3"];
 			// immediately use the texture for material creation
 			newmaterial = new THREE.MeshBasicMaterial( { map: texture } );
 			seat.material = newmaterial;
@@ -338,12 +353,81 @@ Chair_Rebuild.prototype = {
 			if (mode == "ThinBoard"){
 				mode = "NormalSeat";
 				SeatPosi = furniture.getComponentCenterPosition('seat');
-				main.changeseatmodel(furniture,SeatSize,SeatPosi, texture, mode);
-				
+				scope.changeseatmodel(furniture,SeatSize,SeatPosi, texture, mode);	
 			}
 			//change material function
 			var seat = furniture.getComponentByName('seat');
-			texture = main.textures["material4"];
+			texture = scope.textures["material4"];
+			// immediately use the texture for material creation
+			newmaterial = new THREE.MeshBasicMaterial( { map: texture } );
+			seat.material = newmaterial;
+		});
+		$( ".item.ui.image.label.5" ).click(function() {
+			//change seat
+			if (mode == "ThinBoard"){
+				mode = "NormalSeat";
+				SeatPosi = furniture.getComponentCenterPosition('seat');
+				scope.changeseatmodel(furniture,SeatSize,SeatPosi, texture, mode);
+			}
+			//change material function
+			var seat = furniture.getComponentByName('seat');
+			texture = scope.textures["material5"];
+			// immediately use the texture for material creation
+			newmaterial = new THREE.MeshBasicMaterial( { map: texture } );
+			seat.material = newmaterial;
+		});
+		$( ".item.ui.image.label.6" ).click(function() {
+			//change seat
+			if (mode == "ThinBoard"){
+				mode = "NormalSeat";
+				SeatPosi = furniture.getComponentCenterPosition('seat');
+				scope.changeseatmodel(furniture,SeatSize,SeatPosi, texture, mode);
+			}
+			//change material function
+			var seat = furniture.getComponentByName('seat');
+			texture = scope.textures["material6"];
+			// immediately use the texture for material creation
+			newmaterial = new THREE.MeshBasicMaterial( { map: texture } );
+			seat.material = newmaterial;
+		});
+		$( ".item.ui.image.label.7" ).click(function() {
+			//change seat
+			if (mode == "ThinBoard"){
+				mode = "NormalSeat";
+				SeatPosi = furniture.getComponentCenterPosition('seat');
+				scope.changeseatmodel(furniture,SeatSize,SeatPosi, texture, mode);
+			}
+			//change material function
+			var seat = furniture.getComponentByName('seat');
+			texture = scope.textures["material7"];
+			// immediately use the texture for material creation
+			newmaterial = new THREE.MeshBasicMaterial( { map: texture } );
+			seat.material = newmaterial;
+		});
+		$( ".item.ui.image.label.8" ).click(function() {
+			//change seat
+			if (mode == "ThinBoard"){
+				mode = "NormalSeat";
+				SeatPosi = furniture.getComponentCenterPosition('seat');
+				scope.changeseatmodel(furniture,SeatSize,SeatPosi, texture, mode);
+			}
+			//change material function
+			var seat = furniture.getComponentByName('seat');
+			texture = scope.textures["material8"];
+			// immediately use the texture for material creation
+			newmaterial = new THREE.MeshBasicMaterial( { map: texture } );
+			seat.material = newmaterial;
+		});
+		$( ".item.ui.image.label.9" ).click(function() {
+			//change seat
+			if (mode == "ThinBoard"){
+				mode = "NormalSeat";
+				SeatPosi = furniture.getComponentCenterPosition('seat');
+				scope.changeseatmodel(furniture,SeatSize,SeatPosi, texture, mode);
+			}
+			//change material function
+			var seat = furniture.getComponentByName('seat');
+			texture = scope.textures["material9"];
 			// immediately use the texture for material creation
 			newmaterial = new THREE.MeshBasicMaterial( { map: texture } );
 			seat.material = newmaterial;
@@ -353,14 +437,18 @@ Chair_Rebuild.prototype = {
 			if (mode == "NormalSeat"){
 				mode = "ThinBoard";
 				SeatPosi = furniture.getComponentCenterPosition('seat');
-				main.changeseatmodel(furniture,SeatSize,SeatPosi, texture, mode);
-
+				scope.changeseatmodel(furniture,SeatSize,SeatPosi, texture, mode);
 			}
 			//change material function
+			var manager = new THREE.LoadingManager();
+	    	var textureLoader = new THREE.TextureLoader( manager );
 			var seat = furniture.getComponentByName('seat');
-			texture = main.textures["material4"];
+			var texture = textureLoader.load( '../model/__Wood-cherry_.jpg' );
+	    	texture.repeat.set(0.3, 0.3);
+			texture.wrapS = texture.wrapT = THREE.MirroredRepeatWrapping;
 			// immediately use the texture for material creation
 			newmaterial = new THREE.MeshBasicMaterial( { map: texture } );
+			//newmaterial = scope.furnitures[0].getFurniture().children[0].material;
 			seat.material = newmaterial;
 			
 		});

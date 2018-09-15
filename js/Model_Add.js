@@ -8,7 +8,7 @@ const CreateDoor = require('./CreateDoor')
 const CreateLeg = require('./CreateLeg')
 const CreateHook = require('./CreateHook')
 const chairCreateBoard = require('./chairCreateBoard')
-
+const Procedure_button = require('./Procedure_button');
 
 function Model_Add(main){
 	this.main = main;
@@ -42,16 +42,61 @@ function Model_Add(main){
     this.isCreateInsideObject = false;
 
     this.textures = {};
-    
+    var scope = this;
+	$( ".item.ui.image.label.add.vertical.board" ).click( function() {
+		scope.DeleteButton();
+		scope.removeSelectObjectInScene();
+		scope.setAddObjectName("create vertical board");
+		console.log("click vertical board");
+		scope.isCreateObject = false;
+    });
+    $( ".item.ui.image.label.add.horizontal.board" ).click( function() {
+    	scope.DeleteButton();
+		scope.removeSelectObjectInScene();
+		scope.setAddObjectName("create horizontal board");
+		console.log("click horizontal board");
+		scope.isCreateObject = false;
+    });
+    $( ".item.ui.image.label.add.rod" ).click( function() {
+    	scope.DeleteButton();
+		scope.removeSelectObjectInScene();
+    	scope.setAddObjectName("create rod");
+    	console.log("click rod");
+    	scope.isCreateObject = false;
+    });
+    $( ".item.ui.image.label.add.leg" ).click( function() {
+    	scope.DeleteButton();
+		scope.removeSelectObjectInScene();
+    	scope.setAddObjectName("create leg");
+    	console.log("click leg");
+    	scope.isCreateObject = false;
+    });
+    $( ".item.ui.image.label.add.wheel" ).click( function() {
+    	scope.DeleteButton();
+		scope.removeSelectObjectInScene();
+    	scope.setAddObjectName("create wheel");
+    	console.log("click wheel");
+    	scope.isCreateObject = false;
+    });
+    $( ".item.ui.image.label.add.hook" ).click( function() {
+    	scope.DeleteButton();
+		scope.removeSelectObjectInScene();
+    	scope.setAddObjectName("create hook");
+    	console.log("click hook");
+    	scope.isCreateObject = false;
+    });
+    $( ".item.ui.image.label.add.door" ).click( function() {
+    	scope.DeleteButton();
+		scope.removeSelectObjectInScene();		
+		scope.setAddObjectName("create door");
+		console.log("click door");
+		scope.isCreateObject = false;
+    }); 
 }
 
 Model_Add.prototype = {
 	init: function() {
-    	$('#parameter_control_tool_add').show();
-        this.Add_mode = true;
-        $('#parameter_control_tool_painting').hide();
-        $('#parameter_control_tool_wrap').hide();
-        $('#parameter_control_tool_align').hide();
+
         this.isCreateObject = false;
 
         var manager = new THREE.LoadingManager();
@@ -988,49 +1033,29 @@ Model_Add.prototype = {
 
 	execute: function( name ){
 		this.init();
-		var scope = this;
-		$( ".item.ui.image.label.add.vertical.board" ).click( function() {
-			scope.removeSelectObjectInScene();
-			scope.setAddObjectName("create vertical board");
-			console.log("click vertical board");
-			scope.isCreateObject = false;
-        });
-        $( ".item.ui.image.label.add.horizontal.board" ).click( function() {
-        	scope.removeSelectObjectInScene();
-			scope.setAddObjectName("create horizontal board");
-			console.log("click horizontal board");
-			scope.isCreateObject = false;
-        });
-        $( ".item.ui.image.label.add.rod" ).click( function() {
-        	scope.removeSelectObjectInScene();
-        	scope.setAddObjectName("create rod");
-        	console.log("click rod");
-        	scope.isCreateObject = false;
-        });
-        $( ".item.ui.image.label.add.leg" ).click( function() {
-        	scope.removeSelectObjectInScene();
-        	scope.setAddObjectName("create leg");
-        	console.log("click leg");
-        	scope.isCreateObject = false;
-        });
-        $( ".item.ui.image.label.add.wheel" ).click( function() {
-        	scope.removeSelectObjectInScene();
-        	scope.setAddObjectName("create wheel");
-        	console.log("click wheel");
-        	scope.isCreateObject = false;
-        });
-        $( ".item.ui.image.label.add.hook" ).click( function() {
-        	scope.removeSelectObjectInScene();
-        	scope.setAddObjectName("create hook");
-        	console.log("click hook");
-        	scope.isCreateObject = false;
-        });
-        $( ".item.ui.image.label.add.door" ).click( function() {
-        	scope.removeSelectObjectInScene();		
-			scope.setAddObjectName("create door");
-			console.log("click door");
-			scope.isCreateObject = false;
-        }); 
+		if(this.Add_mode == false && name=='add'){
+        	$('#parameter_control_tool_add').show();
+            this.Add_mode = true;
+            this.main.processor.executeDesign("MODEL_PAINTING", "add");
+        	this.main.processor.executeDesign("MODEL_WRAP", "add");
+        	this.main.processor.executeDesign("MODEL_ROTATION", "add");
+        	this.main.processor.executeDesign("MODEL_ADDBETWEEN", "add");
+        	this.main.processor.executeDesign("MODEL_CUT", "add");
+        	this.main.processor.executeDesign("MODEL_ALIGN", "add");
+
+        	//creat procedure button
+        	if(this.main.stepOperationName != name){
+        		this.DeleteButton();
+	        	Procedure_button( this.main, this.main.stepOperationName );
+	        	//record the operation name
+	        	this.main.stepOperationName = name;
+        	}
+	        	
+        }
+        else if(this.Add_mode == true || name!= 'add'){
+        	$('#parameter_control_tool_add').hide();
+            this.Add_mode = false;
+        }
 	},
 
 	insideCase: function(furniture, pos, localNormalVector) { 
@@ -1336,7 +1361,23 @@ Model_Add.prototype = {
 		twoPoint.push(point1);
 		twoPoint.push(point2);
 		return twoPoint;
-	}
+	},
+	DeleteButton: function(){
+    	//console.log(this.main.stepNumber);
+		//console.log(this.main.stepObject.length);
+		this.main.lastStep = true;
+		if (this.main.stepNumber < this.main.stepObject.length){
+			var stepLength = this.main.stepObject.length;
+
+			for(var i=parseInt(this.main.stepNumber); i<stepLength; i++){
+				var btn = document.getElementById(
+					"ui circular icon button procedure "+i.toString());
+				btn.parentNode.removeChild(btn);
+			}
+			this.main.stepObject.length = parseInt(this.main.stepNumber);
+		}
+
+    }
 }
 
 module.exports = Model_Add

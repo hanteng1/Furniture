@@ -7,6 +7,8 @@ const {union, difference, intersection} = scadApi.booleanOps
 const {translate, rotate} = scadApi.transformations
 const csgToGeometries = require('./csgToGeometries')
 
+const assignUVs = require('./assignUVs');
+
 function CreateWheel() {
 
 	var c1 = cylinder({r: 0.4, h: 0.1});
@@ -21,6 +23,9 @@ function CreateWheel() {
     obj = obj.center();
 
 	var geometry = csgToGeometries(obj)[0];
+
+    geometry = new THREE.Geometry().fromBufferGeometry( geometry );
+    assignUVs(geometry);
 
 	return geometry;
 }

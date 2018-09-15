@@ -7,6 +7,9 @@ const {union, difference, intersection} = scadApi.booleanOps
 const {translate, rotate} = scadApi.transformations
 const csgToGeometries = require('./csgToGeometries')
 
+const assignUVs = require('./assignUVs');
+
+
 function CreateHinge(RAngle, mode) {
 
 	var board1 = cube({size:[2, 4.3, 0.1], center:true}).translate([-1.1,0.15,-0.5]);
@@ -36,13 +39,18 @@ function CreateHinge(RAngle, mode) {
     var c = cylinder({start: [0,-2.1,0], end: [0,2.4,0], r1: 0.3, r2: 0.3, fn: 50});
    	c = c.scale([0.5,0.5,0.5]);
     var hinge = union(left, c, c1, c3, c2, c4, right);
-    
+    hinge = hinge.scale([0.4,0.4,0.4]); 
     // left to right (1) // up to down (2) + (1)
     if(mode == "upToDown") 
     	hinge = hinge.rotateX(-90); // (2)
     hinge = hinge.rotateY(-90); // (1)    
 
     var geometry = csgToGeometries(hinge)[0];
+
+
+    geometry = new THREE.Geometry().fromBufferGeometry( geometry );
+    assignUVs(geometry);
+    
     return geometry;
 
 }

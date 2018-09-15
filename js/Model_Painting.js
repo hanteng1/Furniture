@@ -80,6 +80,7 @@ Model_Painting.prototype = {
             this.main.processor.executeDesign("MODEL_ROTATION", "painting");
             this.main.processor.executeDesign("MODEL_ADDBETWEEN", "painting");
             this.main.processor.executeDesign("MODEL_CUT", "painting");
+            this.main.processor.executeDesign("MODEL_ADD", "painting");
 
             //creat procedure button
             if(this.main.stepOperationName != name){
@@ -91,8 +92,7 @@ Model_Painting.prototype = {
         }
         else if(this.paint_mode == true || name!= 'painting'){
             $('#parameter_control_tool_painting').hide();
-            this.paint_mode = false;
-        }
+            this.paint_mode = false;        }
         
 
     },

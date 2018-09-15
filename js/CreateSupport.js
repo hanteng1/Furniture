@@ -7,6 +7,8 @@ const {union, difference, intersection} = scadApi.booleanOps
 const {translate, rotate} = scadApi.transformations
 const csgToGeometries = require('./csgToGeometries')
 
+const assignUVs = require('./assignUVs');
+
 function CreateSupport(length) {
     var mid = cylinder({r: 0.4, h: length});
     
@@ -26,6 +28,9 @@ function CreateSupport(length) {
 	rod = rod.rotateX(90);
 	rod = rod.center();
 	var geometry = csgToGeometries(rod)[0];
+
+	geometry = new THREE.Geometry().fromBufferGeometry( geometry );
+    assignUVs(geometry);
 
 	return geometry;
 }
