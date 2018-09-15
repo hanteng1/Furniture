@@ -4352,7 +4352,7 @@ Dresser_Add.prototype = {
 		var dresser = furniture.getObjectByName("Dresser");
 		var material = this.getPartMaterial(dresser);
 
-		var geometry = chairCreateBoard(spaceSize.x - 0.24, 0.1, spaceSize.z - 0.24);
+		var geometry = chairCreateBoard(spaceSize.x - 0.24, 0.05, spaceSize.z - 0.24);
 		var shelf = new THREE.Mesh(geometry, material);
 		var shelfSize = this.getPartSize(shelf);
 		var shelf_inverse = new THREE.Matrix4();
