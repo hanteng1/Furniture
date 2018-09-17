@@ -12441,6 +12441,14 @@ Main.prototype = {
 			}
 
 		}
+		else{
+			var location = new THREE.Vector3(0, 0, -30);
+			var quaternion = new THREE.Quaternion();
+
+			var scale = new THREE.Vector3(1, 1, 1);
+
+			loadMatrix.compose(location, quaternion, scale);
+		}
 
 		//visualize
 		var defaultLength = parseFloat(length).toFixed(1);
