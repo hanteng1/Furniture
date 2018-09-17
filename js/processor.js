@@ -42,6 +42,7 @@ function Processor(main) {
 	//zhuen's block
 	this.chair_add = undefined;
 	this.dresser_add = undefined;
+	this.dresser_add_two = undefined;
 	this.table = undefined;
 	this.desk = undefined;
 	this.model_add = undefined;
@@ -159,6 +160,7 @@ Processor.prototype = {
 					scope.table = new Table(scope.main);
 					scope.transformFunctions.TABLE = scope.table;						
 					$('.operations.operation_table').show();
+					$('.operations.operation_table_two').hide();
 
 				}
 				else if( scope.furnitures.length > 1) {
@@ -167,7 +169,8 @@ Processor.prototype = {
 					
 					scope.table = new Table(scope.main);
 					scope.transformFunctions.TABLE = scope.table;						
-					$('.operations.operation_table').show();
+					$('.operations.operation_table_two').show();
+					$('.operations.operation_table').hide();
 
 				}
 				break;
@@ -202,14 +205,16 @@ Processor.prototype = {
 					scope.dresser_add.init();		
 					scope.transformFunctions.DRESSER_ADD = scope.dresser_add;
 					$('.operations.operation_dresser_add').show();
+					$('.operations.operation_dresser_add_two').hide();
 
 				}
 				else if( scope.furnitures.length > 1) {
 					//possible actions with many furnitures
-					scope.dresser_add = new Dresser_Add(scope.main);
-					scope.dresser_add.init();	
-					scope.transformFunctions.DRESSER_ADD = scope.dresser_add;
-					$('.operations.operation_dresser_add').show();
+					scope.dresser_add_two = new Dresser_Add(scope.main);
+					scope.dresser_add_two.init();	
+					scope.transformFunctions.DRESSER_ADD = scope.dresser_add_two;
+					$('.operations.operation_dresser_add_two').show();
+					$('.operations.operation_dresser_add').hide();
 				}
 
 				break;

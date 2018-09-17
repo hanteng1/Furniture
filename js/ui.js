@@ -325,6 +325,7 @@ Ui.prototype = {
 		$('.operations.operation_chair_rebuild').hide();
 
 		$('.operations.operation_dresser_add').hide();
+		$('.operations.operation_dresser_add_two').hide();
 
 		$('.operations.operation_cabinet_kallax_one').hide();
 		$('.operations.operation_cabinet_kallax_two').hide();
@@ -333,6 +334,7 @@ Ui.prototype = {
 		$('.ui.blue.submit.button.getdis').hide();
 
 		$('.operations.operation_table').hide();
+		$('.operations.operation_table_two').hide();
 		$('.operations.operation_desk').hide();
 
 		$('.operations.operation_tool').hide();
@@ -441,6 +443,9 @@ Ui.prototype = {
 			scope.processor.executeDesign("DRESSER_ADD", "add_leg");
 		});
 		$('#operation_dresser_add_add_rod').click(function() {
+			scope.processor.executeDesign("DRESSER_ADD", "add_rod");
+		});
+		$('#operation_dresser_add_add_rod_two').click(function() {
 			scope.processor.executeDesign("DRESSER_ADD", "add_rod");
 		});
 		$('#operation_dresser_add_add_spice_rack').click(function() {
