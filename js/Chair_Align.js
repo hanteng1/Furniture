@@ -691,6 +691,9 @@ Chair_Align.prototype = {
 						f2Position.y + diff.y,
 						f2Position.z + diff.z );
 
+		f1.position.set(f1.position.x, f1.position.y-2, f1.position.z);
+		f2.position.set(f2.position.x, f2.position.y-2, f2.position.z);
+
 	},
 
 	Notremove: function(group, name){

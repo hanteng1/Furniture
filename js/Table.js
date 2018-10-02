@@ -808,8 +808,8 @@ Table.prototype = {
 		var seat = new THREE.Mesh( geometry, material );
 		seat.name = 'seat';
 		var seatSize = this.getPartSize(seat);
-		var pos = new THREE.Vector3(tabletopCenter.x - seatSize.x/2 + 0.3, tabletopCenter.y, 
-			tabletopCenter.z - seatSize.z/2 + 0.3);
+		var pos = new THREE.Vector3(tabletopCenter.x - seatSize.x/2 + 0.12, tabletopCenter.y, 
+			tabletopCenter.z - seatSize.z/2 + 0.12);
 		this.objectAddToFurniture(table, seat, pos);
 	},
 
@@ -830,6 +830,7 @@ Table.prototype = {
 			this.objectRotationByAxis(doorBoard, "y", Math.PI / 2);
 			var pos = new THREE.Vector3(tabletopCenter.x, doorBoardSize.y/2, tabletopCenter.z);
 			this.objectAddToFurniture(table, doorBoard, pos);
+			
 
 		}
 		else{
@@ -839,8 +840,13 @@ Table.prototype = {
 			var doorBoardSize = this.getPartSize(doorBoard);
 			var pos = new THREE.Vector3(tabletopCenter.x, doorBoardSize.y/2, tabletopCenter.z);
 			this.objectAddToFurniture(table, doorBoard, pos);
+
+			this.rotationByAxis(this.furnitures[0], "y", Math.PI/2);
 		}
-		
+		var wall = this.main.purpleWall;
+		var moveTo = new THREE.Vector3(wall.position.x + 16, 0, wall.position.z + 4);
+		console.log(moveTo);
+		table.position.set(moveTo.x, moveTo.y, moveTo.z);
 		
 	},
 

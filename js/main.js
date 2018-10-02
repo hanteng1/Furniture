@@ -1776,7 +1776,7 @@ Main.prototype = {
 
 			//delete
 
-		}else if(keyCode == 17 && this.onCtrl == false) {//press Ctrl button
+		}else if(keyCode == 91 && this.onCtrl == false) {//press Ctrl button
 
 			this.onCtrl = true;
 			console.log('Ctrl down');
@@ -2109,7 +2109,8 @@ Main.prototype = {
 
 
 		//-----Dresser Add-------
-		this.processor.dresser_add.hasRemovedDrawers = false;
+		if( this.processor.dresser_add !== undefined)
+			this.processor.dresser_add.hasRemovedDrawers = false;
 	},
 
 

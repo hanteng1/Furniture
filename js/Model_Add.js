@@ -511,9 +511,15 @@ Model_Add.prototype = {
 	},
 
 	createRod: function() {//rotation vector
-		var texture = this.textures["shiny"];
-		var rodSelectedMaterial = new THREE.MeshBasicMaterial( {map: texture} );
-		var length = 3;
+		// var texture = this.textures["shiny"];
+		// var rodSelectedMaterial = new THREE.MeshBasicMaterial( {map: texture} );
+		var rodSelectedMaterial = new THREE.MeshPhongMaterial({
+														color:0x202020,
+														emissive: 0x0,
+														specular: 0xffffff,
+														shininess: 20
+														});
+		var length = 8;
 		var rodGeometry = CreateTableRod(length);
 
 		var rod = new THREE.Mesh(rodGeometry, rodSelectedMaterial);
@@ -567,11 +573,17 @@ Model_Add.prototype = {
 	},
 
 	createDoor: function() {
-		var texture = this.textures["shiny"];
-		var doorSelectedMaterial = new THREE.MeshBasicMaterial( {map: texture} );
+		// var texture = this.textures["shiny"];
+		// var doorSelectedMaterial = new THREE.MeshBasicMaterial( {map: texture} );
+		var doorSelectedMaterial = new THREE.MeshPhongMaterial({
+														color:0x202020,
+														emissive: 0x0,
+														specular: 0xffffff,
+														shininess: 20
+														});
 
-		var h = 9;
-		var w = 6;
+		var h = 7.5;
+		var w = 8.5;
 
 		var doorGeometry = CreateDoor(h, w);
 		var door = new THREE.Mesh(doorGeometry, doorSelectedMaterial);

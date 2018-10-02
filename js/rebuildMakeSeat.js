@@ -51,7 +51,7 @@ function rebuildMakeSeat ( NewSeatSizex , NewSeatSizey , NewSeatSizez , mode){
 
 	    geometry = new THREE.Geometry().fromBufferGeometry( geometry );
     	assignUVs(geometry);
-
+    	
 		return geometry;
 	}
 }

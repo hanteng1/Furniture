@@ -2325,6 +2325,9 @@ Chair_Align.prototype = {
 						f2Position.y + diff.y,
 						f2Position.z + diff.z );
 
+		f1.position.set(f1.position.x, f1.position.y-2, f1.position.z);
+		f2.position.set(f2.position.x, f2.position.y-2, f2.position.z);
+
 	},
 
 	Notremove: function(group, name){
@@ -6844,9 +6847,15 @@ Model_Add.prototype = {
 	},
 
 	createRod: function() {//rotation vector
-		var texture = this.textures["shiny"];
-		var rodSelectedMaterial = new THREE.MeshBasicMaterial( {map: texture} );
-		var length = 3;
+		// var texture = this.textures["shiny"];
+		// var rodSelectedMaterial = new THREE.MeshBasicMaterial( {map: texture} );
+		var rodSelectedMaterial = new THREE.MeshPhongMaterial({
+														color:0x202020,
+														emissive: 0x0,
+														specular: 0xffffff,
+														shininess: 20
+														});
+		var length = 8;
 		var rodGeometry = CreateTableRod(length);
 
 		var rod = new THREE.Mesh(rodGeometry, rodSelectedMaterial);
@@ -6900,11 +6909,17 @@ Model_Add.prototype = {
 	},
 
 	createDoor: function() {
-		var texture = this.textures["shiny"];
-		var doorSelectedMaterial = new THREE.MeshBasicMaterial( {map: texture} );
+		// var texture = this.textures["shiny"];
+		// var doorSelectedMaterial = new THREE.MeshBasicMaterial( {map: texture} );
+		var doorSelectedMaterial = new THREE.MeshPhongMaterial({
+														color:0x202020,
+														emissive: 0x0,
+														specular: 0xffffff,
+														shininess: 20
+														});
 
-		var h = 9;
-		var w = 6;
+		var h = 7.5;
+		var w = 8.5;
 
 		var doorGeometry = CreateDoor(h, w);
 		var door = new THREE.Mesh(doorGeometry, doorSelectedMaterial);
@@ -10434,8 +10449,8 @@ Table.prototype = {
 		var seat = new THREE.Mesh( geometry, material );
 		seat.name = 'seat';
 		var seatSize = this.getPartSize(seat);
-		var pos = new THREE.Vector3(tabletopCenter.x - seatSize.x/2 + 0.3, tabletopCenter.y, 
-			tabletopCenter.z - seatSize.z/2 + 0.3);
+		var pos = new THREE.Vector3(tabletopCenter.x - seatSize.x/2 + 0.12, tabletopCenter.y, 
+			tabletopCenter.z - seatSize.z/2 + 0.12);
 		this.objectAddToFurniture(table, seat, pos);
 	},
 
@@ -10456,6 +10471,7 @@ Table.prototype = {
 			this.objectRotationByAxis(doorBoard, "y", Math.PI / 2);
 			var pos = new THREE.Vector3(tabletopCenter.x, doorBoardSize.y/2, tabletopCenter.z);
 			this.objectAddToFurniture(table, doorBoard, pos);
+			
 
 		}
 		else{
@@ -10465,8 +10481,13 @@ Table.prototype = {
 			var doorBoardSize = this.getPartSize(doorBoard);
 			var pos = new THREE.Vector3(tabletopCenter.x, doorBoardSize.y/2, tabletopCenter.z);
 			this.objectAddToFurniture(table, doorBoard, pos);
+
+			this.rotationByAxis(this.furnitures[0], "y", Math.PI/2);
 		}
-		
+		var wall = this.main.purpleWall;
+		var moveTo = new THREE.Vector3(wall.position.x + 16, 0, wall.position.z + 4);
+		console.log(moveTo);
+		table.position.set(moveTo.x, moveTo.y, moveTo.z);
 		
 	},
 
@@ -13524,7 +13545,7 @@ Main.prototype = {
 
 			//delete
 
-		}else if(keyCode == 17 && this.onCtrl == false) {//press Ctrl button
+		}else if(keyCode == 91 && this.onCtrl == false) {//press Ctrl button
 
 			this.onCtrl = true;
 			console.log('Ctrl down');
@@ -13857,7 +13878,8 @@ Main.prototype = {
 
 
 		//-----Dresser Add-------
-		this.processor.dresser_add.hasRemovedDrawers = false;
+		if( this.processor.dresser_add !== undefined)
+			this.processor.dresser_add.hasRemovedDrawers = false;
 	},
 
 
@@ -30991,7 +31013,7 @@ function rebuildMakeSeat ( NewSeatSizex , NewSeatSizey , NewSeatSizez , mode){
 
 	    geometry = new THREE.Geometry().fromBufferGeometry( geometry );
     	assignUVs(geometry);
-
+    	
 		return geometry;
 	}
 }
