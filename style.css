@@ -216,3 +216,9 @@ a {
 }
 
 
+.example{
+  position: absolute;
+  opacity: 1;
+  left: 350px;
+  top: 500px;
+}
