@@ -2066,6 +2066,9 @@ Main.prototype = {
 		$('#parameter_control_tool_cut').hide();
 		$('#AddRodInput').hide();
 
+		// example
+		$('.example').hide();
+
 		this.furnitures.length = 0;	
 
 		//add the furnitures and their cards
