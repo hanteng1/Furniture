@@ -349,6 +349,8 @@ Ui.prototype = {
 		$('#AddRodInput').hide();
 
 
+		// example
+		$('.example').hide();
 	},
 
 

@@ -258,6 +258,8 @@ Processor.prototype = {
 		var scope = this;
 		if(tfname in this.transformFunctions) {
 			this.transformFunctions[tfname].execute(tfvalue);
+			console.log(tfname);
+			console.log(tfvalue);
 		}
 
 	},
