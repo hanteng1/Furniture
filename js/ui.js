@@ -17,6 +17,7 @@ Ui.prototype = {
 	init: function(){
 		//example
 		var exampleImage = document.getElementById("exampleImage");
+		var exampleLink = document.getElementById("exampleLink");
 
 		var scope = this;
 
@@ -369,6 +370,8 @@ Ui.prototype = {
 
 			// example
 			exampleImage.src = "images/example/CHAIR_ALIGN_vertical.png";
+			exampleLink.href = "https://read01.com/zh-tw/eL887P.html#.XCRznc8zZBx";
+			exampleLink.text = "Bench";
 			$('.example').show();
 		});
 
@@ -378,6 +381,8 @@ Ui.prototype = {
 
 			// example
 			exampleImage.src = "images/example/CHAIR_ALIGN_horizontal.png";
+			exampleLink.href = "https://read01.com/zh-tw/eL887P.html#.XCRznc8zZBx";
+			exampleLink.text = "Bench";
 			$('.example').show();
 		});
 
@@ -387,6 +392,8 @@ Ui.prototype = {
 
 			// example
 			exampleImage.src = "images/example/CHAIR_ALIGN_flip.png";
+			exampleLink.href = "https://www.pinterest.com/pin/56646907794456800/";
+			exampleLink.text = "Bench";
 			$('.example').show();
 		});
 
@@ -410,6 +417,8 @@ Ui.prototype = {
 
 			// example
 			exampleImage.src = "images/example/CHAIR_ADD_plate.png";
+			exampleLink.href = "https://www.pinterest.com/pin/281543705299914/";
+			exampleLink.text = "Shelf";
 			$('.example').show();
 		});
 
@@ -419,6 +428,8 @@ Ui.prototype = {
 
 			// example
 			exampleImage.src = "images/example/CHAIR_ADD_hook.png";
+			exampleLink.href = "https://read01.com/zh-tw/G4o6aL.html#.XCR4Cc8zZBx";
+			exampleLink.text = "Hook";
 			$('.example').show();
 		});
 
@@ -428,6 +439,8 @@ Ui.prototype = {
 
 			// example
 			exampleImage.src = "images/example/CHAIR_ADD_hang.png";
+			exampleLink.href = "https://www.pinterest.com/pin/566186984387890581/";
+			exampleLink.text = "Swing";
 			$('.example').show();
 		});
 
@@ -438,6 +451,8 @@ Ui.prototype = {
 
 			// example
 			exampleImage.src = "images/example/CHAIR_REBUILD_seat.png";
+			exampleLink.href = "http://www.architectureartdesigns.com/15-most-amazing-before-and-after-chair-makeover-ideas/amp/";
+			exampleLink.text = "Chair";
 			$('.example').show();
 		});
 
@@ -447,6 +462,8 @@ Ui.prototype = {
 
 			// example
 			exampleImage.src = "images/example/CHAIR_REBUILD_backrest.png";
+			exampleLink.href = "http://www.architectureartdesigns.com/15-most-amazing-before-and-after-chair-makeover-ideas/amp/";
+			exampleLink.text = "Chair";
 			$('.example').show();
 		});
 
@@ -456,6 +473,8 @@ Ui.prototype = {
 
 			// example
 			exampleImage.src = "images/example/CHAIR_REBUILD_leg.png";
+			exampleLink.href = "https://www.pinterest.com/pin/83035186854913776/";
+			exampleLink.text = "Office Chair";
 			$('.example').show();
 		});
 
@@ -465,6 +484,8 @@ Ui.prototype = {
 
 			// example
 			exampleImage.src = "images/example/DRESSER_ADD_cutChair.png";
+			exampleLink.href = "http://www.foliver.com/diy/40-awesome-makeovers-clever-ways-with-tutorials-to-repurpose-old-furniture/";
+			exampleLink.text = "Chair";
 			$('.example').show();
 		});
 		$('#operation_dresser_add_add_door').click(function() {
@@ -472,6 +493,8 @@ Ui.prototype = {
 
 			// example
 			exampleImage.src = "images/example/DRESSER_ADD_addDoor.png";
+			exampleLink.href = "https://www.ikeahackers.net/2016/07/nornas-cd-lp-chest.html";
+			exampleLink.text = "Dresser";
 			$('.example').show();
 		});
 		$('#operation_dresser_add_add_leg').click(function() {
@@ -479,6 +502,8 @@ Ui.prototype = {
 
 			// example
 			exampleImage.src = "images/example/DRESSER_ADD_addLeg.png";
+			exampleLink.href = "https://www.ikeahackers.net/2016/12/ivar-grown.html";
+			exampleLink.text = "Dresser";
 			$('.example').show();
 		});
 		$('#operation_dresser_add_add_rod').click(function() {
@@ -486,6 +511,8 @@ Ui.prototype = {
 
 			// example
 			exampleImage.src = "images/example/DRESSER_ADD_addRod1.png";
+			exampleLink.href = "https://www.ikeahackers.net/2016/12/ivar-grown.html";
+			exampleLink.text = "Dresser";
 			$('.example').show();
 		});
 		$('#operation_dresser_add_add_rod_two').click(function() {
@@ -493,6 +520,8 @@ Ui.prototype = {
 
 			// example
 			exampleImage.src = "images/example/DRESSER_ADD_addRod2.png";
+			exampleLink.href = "https://www.ikeahackers.net/2013/10/twin-rasts-in-the-nursery.html";
+			exampleLink.text = "Wardrobe";
 			$('.example').show();
 		});
 		$('#operation_dresser_add_add_spice_rack').click(function() {
@@ -500,6 +529,8 @@ Ui.prototype = {
 
 			// example
 			exampleImage.src = "images/example/DRESSER_ADD_addSpiceRack.png";
+			exampleLink.href = "http://www.foliver.com/diy/40-awesome-makeovers-clever-ways-with-tutorials-to-repurpose-old-furniture/6/";
+			exampleLink.text = "Wardrobe";
 			$('.example').show();
 		});
 		$('#operation_dresser_add_add_drawer').click(function() {
@@ -507,6 +538,8 @@ Ui.prototype = {
 
 			// example
 			exampleImage.src = "images/example/DRESSER_ADD_addDrawer.png";
+			exampleLink.href = "https://www.pinterest.com/pin/397372367099234865/";
+			exampleLink.text = "Dresser";
 			$('.example').show();
 		});
 		$('#operation_dresser_add_remove_drawers').click(function() {
@@ -514,6 +547,8 @@ Ui.prototype = {
 
 			// example
 			exampleImage.src = "images/example/DRESSER_ADD_removeDrawers.png";
+			exampleLink.href = "http://www.foliver.com/diy/40-awesome-makeovers-clever-ways-with-tutorials-to-repurpose-old-furniture/28/";
+			exampleLink.text = "Dresser";
 			$('.example').show();
 		});
 
@@ -523,6 +558,8 @@ Ui.prototype = {
 
 			// example
 			exampleImage.src = "images/example/CABINET_KALLAX_chiar.png";
+			exampleLink.href = "https://lesbricolesdemel.wordpress.com/2016/03/20/inspiration-1-ikea-hack-la-gamme-kallax/";
+			exampleLink.text = "Chair";
 			$('.example').show();
 		});
 
@@ -533,6 +570,8 @@ Ui.prototype = {
 
 			// example
 			exampleImage.src = "images/example/CABINET_KALLAX_bed.png";
+			exampleLink.href = "https://www.pinterest.com/pin/596234438136893984/";
+			exampleLink.text = "Bed";
 			$('.example').show();
 		});
 
@@ -544,6 +583,8 @@ Ui.prototype = {
 
 			// example
 			exampleImage.src = "images/example/CABINET_KALLAX_table.png";
+			exampleLink.href = "https://www.pinterest.com/pin/453385887470070464/";
+			exampleLink.text = "Table";
 			$('.example').show();
 		});
 
@@ -554,6 +595,8 @@ Ui.prototype = {
 
 			// example
 			exampleImage.src = "images/example/TABLE_stack.png";
+			exampleLink.href = "https://www.ikeahackers.net/2015/11/kitchen-tables-converted-canine-condo.html";
+			exampleLink.text = "Shelf";
 			$('.example').show();
 		});
 
@@ -562,6 +605,8 @@ Ui.prototype = {
 
 			// example
 			exampleImage.src = "images/example/TABLE_flipStack.png";
+			exampleLink.href = "https://www.ikeahackers.net/2016/08/complementary-small-lack-entertainment-centre-lack-coffee-table.html";
+			exampleLink.text = "Shelf";
 			$('.example').show();
 		});
 
@@ -570,6 +615,8 @@ Ui.prototype = {
 
 			// example
 			exampleImage.src = "images/example/TABLE_addWheel.png";
+			exampleLink.href = "https://www.ikeahackers.net/2014/11/norden-tables-turn-into-rolling-kitchen-island.html";
+			exampleLink.text = "Shelf";
 			$('.example').show();
 		});
 
@@ -578,6 +625,8 @@ Ui.prototype = {
 
 			// example
 			exampleImage.src = "images/example/TABLE_addBoardOnTabletop.png";
+			exampleLink.href = "https://www.ikeahackers.net/2016/04/norden-concealed-puzzle-table.html";
+			exampleLink.text = "Table";
 			$('.example').show();
 		});
 
@@ -586,6 +635,8 @@ Ui.prototype = {
 
 			// example
 			exampleImage.src = "images/example/TABLE_addBoard.png";
+			exampleLink.href = "https://www.ikeahackers.net/2014/12/coastal-ikea-kitchen-island-from-bjorkudden-table.html";
+			exampleLink.text = "Shelf";
 			$('.example').show();
 		});
 
@@ -594,6 +645,8 @@ Ui.prototype = {
 
 			// example
 			exampleImage.src = "images/example/TABLE_addDrawer.png";
+			exampleLink.href = "https://www.ikeahackers.net/2015/10/lack-table-with-lego-storage-drawers.html";
+			exampleLink.text = "Desk";
 			$('.example').show();
 		});
 
@@ -602,6 +655,8 @@ Ui.prototype = {
 
 			// example
 			exampleImage.src = "images/example/TABLE_addRod.png";
+			exampleLink.href = "https://www.ikeahackers.net/2012/01/latt-table-equipped.html";
+			exampleLink.text = "Table";
 			$('.example').show();
 		});
 
@@ -610,6 +665,8 @@ Ui.prototype = {
 
 			// example
 			exampleImage.src = "images/example/TABLE_addSeat.png";
+			exampleLink.href = "https://www.ikeahackers.net/2014/12/hemnes-coffee-table-turned-ottoman.html";
+			exampleLink.text = "Chair";
 			$('.example').show();
 		});
 
@@ -618,6 +675,8 @@ Ui.prototype = {
 
 			// example
 			exampleImage.src = "images/example/TABLE_addDoorBoard.png";
+			exampleLink.href = "https://www.pinterest.com/pin/434386326543745294/";
+			exampleLink.text = "Table";
 			$('.example').show();
 		});
 
@@ -627,6 +686,8 @@ Ui.prototype = {
 
 			// example
 			exampleImage.src = "images/example/DESK_addBesideBoard.png";
+			exampleLink.href = "https://www.pinterest.com/pin/Ac4hkJyzj0ISaeN8xDGwSCOVbudDAWn3bO3ZEZkd7aBbfXLXYk6P04Q/";
+			exampleLink.text = "Desk";
 			$('.example').show();
 		});
 
@@ -635,6 +696,8 @@ Ui.prototype = {
 
 			// example
 			exampleImage.src = "images/example/DESK_addTopBoard.png";
+			exampleLink.href = "https://www.ikeahackers.net/2015/10/affordable-dressing-table-makeup-vanity.html";
+			exampleLink.text = "Desk";
 			$('.example').show();
 		});
 
@@ -643,6 +706,8 @@ Ui.prototype = {
 
 			// example
 			exampleImage.src = "images/example/DESK_addBottomBoard.png";
+			exampleLink.href = "https://www.pinterest.com/pin/112097478194528944/";
+			exampleLink.text = "Shelf";
 			$('.example').show();
 		});
 
@@ -651,6 +716,8 @@ Ui.prototype = {
 
 			// example
 			exampleImage.src = "images/example/DESK_addInsideBoard.png";
+			exampleLink.href = "http://www.chicaandjo.com/turn-a-sewing-table-into-a-bar-cart/";
+			exampleLink.text = "Shelf";
 			$('.example').show();
 		});
 
@@ -659,6 +726,8 @@ Ui.prototype = {
 
 			// example
 			exampleImage.src = "images/example/DESK_addWheel.png";
+			exampleLink.href = "https://www.pinterest.com/pin/288863763581244731/";
+			exampleLink.text = "Shelf";
 			$('.example').show();
 		});
 
