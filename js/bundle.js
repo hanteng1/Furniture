@@ -11784,13 +11784,9 @@ module.exports = {
 //here we define 1 unit == 1 fm
 
 const Processor = require('./Processor')
-
 const computeConvexHull = require('./computeConvexHull')
-
-
 //test cut
 const cadCutByPlane = require('./cadCutByPlane')
-
 //Wei Hsiang start
 const MarkSize = require('./MarkSize')
 const MarkBetweenSize = require('./MarkBetweenSize')
@@ -11798,7 +11794,6 @@ const cadMakeRod = require('./cadMakeRod')
 const {Model_AddBetween , AddRodMousePosi1, AddRodMousePosi2,
 	SelectFurniComponent, SelectFurni} = require('./Model_AddBetween')
 //Wei Hsiang end
-
 const {Model_Cut,  AddCutPlaneMousePosi1, AddCutPlaneComponent} = require('./Model_Cut'); 
 
 
@@ -11806,7 +11801,6 @@ function Main()
 {
 
 	//category
-	//todo: an floating window to select category
 	this.category0 = "";
 	this.category = "";
 	//this.category = "cabinet";
@@ -11950,6 +11944,7 @@ Main.prototype = {
 
 		this.camera = new THREE.PerspectiveCamera (45, window.innerWidth / window.innerHeight, 1, 10000);
 		this.camera.position.set(0, 17, 10); //height at 1.7m
+		
 		//this.camera.lookAt(new THREE.Vector3(0, 10, 200));
 
 		var ambientLight = new THREE.AmbientLight( 0xeeeeee, 0.4);
@@ -12420,6 +12415,7 @@ Main.prototype = {
 
 		//a series test to decide the most suitable predicted sizes
 		//assume we are using dae files.. and the z is height.. need a rotation?
+		//working on...
 
 		var size = []; size.push(box_size.x, box_size.y, box_size.z);
 		size.sort(function(a, b){return a - b});
@@ -12444,12 +12440,9 @@ Main.prototype = {
 
 				loadMatrix.compose(location, quaternion, scale);
 		
-			}else{
+			}else{  // ==1
 
 				//you decide whether this will be used
-
-
-
 
 				var location = new THREE.Vector3(0, 0, -30);
 				//var location = new THREE.Vector3();
@@ -12460,11 +12453,6 @@ Main.prototype = {
 				var scale = new THREE.Vector3(0.0254 * 10, 0.0254 * 10, 0.0254 * 10)
 
 				loadMatrix.compose(location, quaternion, scale);
-
-
-
-
-
 
 			}
 

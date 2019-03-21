@@ -187,10 +187,6 @@ Ui.prototype = {
 			}
 		});
 		
-		//weixiang's bloack
-
-
-		//end of weixiang's block
 
 		$( ".item.m_group" ).click(function() {
 			//group function
