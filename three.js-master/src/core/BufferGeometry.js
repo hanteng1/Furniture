@@ -154,6 +154,18 @@ BufferGeometry.prototype = Object.assign( Object.create( EventDispatcher.prototy
 
 		}
 
+		var tangent = this.attributes.tangent;
+
+		if ( tangent !== undefined ) {
+
+			var normalMatrix = new Matrix3().getNormalMatrix( matrix );
+
+			// Tangent is vec4, but the '.w' component is a sign value (+1/-1).
+			normalMatrix.applyToBufferAttribute( tangent );
+			tangent.needsUpdate = true;
+
+		}
+
 		if ( this.boundingBox !== null ) {
 
 			this.computeBoundingBox();
@@ -542,9 +554,10 @@ BufferGeometry.prototype = Object.assign( Object.create( EventDispatcher.prototy
 
 				var morphTarget = morphTargets[ i ];
 
-				var attribute = new Float32BufferAttribute( morphTarget.length * 3, 3 );
+				var attribute = new Float32BufferAttribute( morphTarget.data.length * 3, 3 );
+				attribute.name = morphTarget.name;
 
-				array.push( attribute.copyVector3sArray( morphTarget ) );
+				array.push( attribute.copyVector3sArray( morphTarget.data ) );
 
 			}
 
@@ -674,7 +687,6 @@ BufferGeometry.prototype = Object.assign( Object.create( EventDispatcher.prototy
 
 		var index = this.index;
 		var attributes = this.attributes;
-		var groups = this.groups;
 
 		if ( attributes.position ) {
 
@@ -710,46 +722,31 @@ BufferGeometry.prototype = Object.assign( Object.create( EventDispatcher.prototy
 
 				var indices = index.array;
 
-				if ( groups.length === 0 ) {
+				for ( var i = 0, il = index.count; i < il; i += 3 ) {
 
-					this.addGroup( 0, indices.length );
+					vA = indices[ i + 0 ] * 3;
+					vB = indices[ i + 1 ] * 3;
+					vC = indices[ i + 2 ] * 3;
 
-				}
+					pA.fromArray( positions, vA );
+					pB.fromArray( positions, vB );
+					pC.fromArray( positions, vC );
 
-				for ( var j = 0, jl = groups.length; j < jl; ++ j ) {
+					cb.subVectors( pC, pB );
+					ab.subVectors( pA, pB );
+					cb.cross( ab );
 
-					var group = groups[ j ];
+					normals[ vA ] += cb.x;
+					normals[ vA + 1 ] += cb.y;
+					normals[ vA + 2 ] += cb.z;
 
-					var start = group.start;
-					var count = group.count;
+					normals[ vB ] += cb.x;
+					normals[ vB + 1 ] += cb.y;
+					normals[ vB + 2 ] += cb.z;
 
-					for ( var i = start, il = start + count; i < il; i += 3 ) {
-
-						vA = indices[ i + 0 ] * 3;
-						vB = indices[ i + 1 ] * 3;
-						vC = indices[ i + 2 ] * 3;
-
-						pA.fromArray( positions, vA );
-						pB.fromArray( positions, vB );
-						pC.fromArray( positions, vC );
-
-						cb.subVectors( pC, pB );
-						ab.subVectors( pA, pB );
-						cb.cross( ab );
-
-						normals[ vA ] += cb.x;
-						normals[ vA + 1 ] += cb.y;
-						normals[ vA + 2 ] += cb.z;
-
-						normals[ vB ] += cb.x;
-						normals[ vB + 1 ] += cb.y;
-						normals[ vB + 2 ] += cb.z;
-
-						normals[ vC ] += cb.x;
-						normals[ vC + 1 ] += cb.y;
-						normals[ vC + 2 ] += cb.z;
-
-					}
+					normals[ vC ] += cb.x;
+					normals[ vC + 1 ] += cb.y;
+					normals[ vC + 2 ] += cb.z;
 
 				}
 
@@ -863,21 +860,7 @@ BufferGeometry.prototype = Object.assign( Object.create( EventDispatcher.prototy
 
 	toNonIndexed: function () {
 
-		if ( this.index === null ) {
-
-			console.warn( 'THREE.BufferGeometry.toNonIndexed(): Geometry is already non-indexed.' );
-			return this;
-
-		}
-
-		var geometry2 = new BufferGeometry();
-
-		var indices = this.index.array;
-		var attributes = this.attributes;
-
-		for ( var name in attributes ) {
-
-			var attribute = attributes[ name ];
+		function convertBufferAttribute( attribute, indices ) {
 
 			var array = attribute.array;
 			var itemSize = attribute.itemSize;
@@ -898,9 +881,60 @@ BufferGeometry.prototype = Object.assign( Object.create( EventDispatcher.prototy
 
 			}
 
-			geometry2.addAttribute( name, new BufferAttribute( array2, itemSize ) );
+			return new BufferAttribute( array2, itemSize );
 
 		}
+
+		//
+
+		if ( this.index === null ) {
+
+			console.warn( 'THREE.BufferGeometry.toNonIndexed(): Geometry is already non-indexed.' );
+			return this;
+
+		}
+
+		var geometry2 = new BufferGeometry();
+
+		var indices = this.index.array;
+		var attributes = this.attributes;
+
+		// attributes
+
+		for ( var name in attributes ) {
+
+			var attribute = attributes[ name ];
+
+			var newAttribute = convertBufferAttribute( attribute, indices );
+
+			geometry2.addAttribute( name, newAttribute );
+
+		}
+
+		// morph attributes
+
+		var morphAttributes = this.morphAttributes;
+
+		for ( name in morphAttributes ) {
+
+			var morphArray = [];
+			var morphAttribute = morphAttributes[ name ]; // morphAttribute: array of Float32BufferAttributes
+
+			for ( var i = 0, il = morphAttribute.length; i < il; i ++ ) {
+
+				var attribute = morphAttribute[ i ];
+
+				var newAttribute = convertBufferAttribute( attribute, indices );
+
+				morphArray.push( newAttribute );
+
+			}
+
+			geometry2.morphAttributes[ name ] = morphArray;
+
+		}
+
+		// groups
 
 		var groups = this.groups;
 
@@ -952,11 +986,9 @@ BufferGeometry.prototype = Object.assign( Object.create( EventDispatcher.prototy
 
 		if ( index !== null ) {
 
-			var array = Array.prototype.slice.call( index.array );
-
 			data.data.index = {
 				type: index.array.constructor.name,
-				array: array
+				array: Array.prototype.slice.call( index.array )
 			};
 
 		}
@@ -967,16 +999,56 @@ BufferGeometry.prototype = Object.assign( Object.create( EventDispatcher.prototy
 
 			var attribute = attributes[ key ];
 
-			var array = Array.prototype.slice.call( attribute.array );
-
-			data.data.attributes[ key ] = {
+			var attributeData = {
 				itemSize: attribute.itemSize,
 				type: attribute.array.constructor.name,
-				array: array,
+				array: Array.prototype.slice.call( attribute.array ),
 				normalized: attribute.normalized
 			};
 
+			if ( attribute.name !== '' ) attributeData.name = attribute.name;
+
+			data.data.attributes[ key ] = attributeData;
+
 		}
+
+		var morphAttributes = {};
+		var hasMorphAttributes = false;
+
+		for ( var key in this.morphAttributes ) {
+
+			var attributeArray = this.morphAttributes[ key ];
+
+			var array = [];
+
+			for ( var i = 0, il = attributeArray.length; i < il; i ++ ) {
+
+				var attribute = attributeArray[ i ];
+
+				var attributeData = {
+					itemSize: attribute.itemSize,
+					type: attribute.array.constructor.name,
+					array: Array.prototype.slice.call( attribute.array ),
+					normalized: attribute.normalized
+				};
+
+				if ( attribute.name !== '' ) attributeData.name = attribute.name;
+
+				array.push( attributeData );
+
+			}
+
+			if ( array.length > 0 ) {
+
+				morphAttributes[ key ] = array;
+
+				hasMorphAttributes = true;
+
+			}
+
+		}
+
+		if ( hasMorphAttributes ) data.data.morphAttributes = morphAttributes;
 
 		var groups = this.groups;
 

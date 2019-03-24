@@ -269,7 +269,6 @@ var Viewport = function ( editor ) {
 	var controls = new THREE.EditorControls( camera, container.dom );
 	controls.addEventListener( 'change', function () {
 
-		transformControls.update();
 		signals.cameraChanged.dispatch( camera );
 
 	} );
@@ -313,6 +312,7 @@ var Viewport = function ( editor ) {
 
 		renderer.autoClear = false;
 		renderer.autoUpdateScene = false;
+		renderer.gammaOutput = true;
 		renderer.setPixelRatio( window.devicePixelRatio );
 		renderer.setSize( container.dom.offsetWidth, container.dom.offsetHeight );
 
@@ -391,11 +391,10 @@ var Viewport = function ( editor ) {
 		if ( editor.selected === object ) {
 
 			selectionBox.setFromObject( object );
-			transformControls.update();
 
 		}
 
-		if ( object instanceof THREE.PerspectiveCamera ) {
+		if ( object.isPerspectiveCamera ) {
 
 			object.updateProjectionMatrix();
 
@@ -412,6 +411,12 @@ var Viewport = function ( editor ) {
 	} );
 
 	signals.objectRemoved.add( function ( object ) {
+
+		if ( object === transformControls.object ) {
+
+			transformControls.detach();
+
+		}
 
 		object.traverse( function ( child ) {
 
@@ -473,13 +478,13 @@ var Viewport = function ( editor ) {
 
 		}
 
-		if ( scene.fog instanceof THREE.Fog ) {
+		if ( scene.fog.isFog ) {
 
 			scene.fog.color.setHex( fogColor );
 			scene.fog.near = fogNear;
 			scene.fog.far = fogFar;
 
-		} else if ( scene.fog instanceof THREE.FogExp2 ) {
+		} else if ( scene.fog.isFogExp2 ) {
 
 			scene.fog.color.setHex( fogColor );
 			scene.fog.density = fogDensity;
@@ -514,6 +519,29 @@ var Viewport = function ( editor ) {
 		render();
 
 	} );
+
+	// animations
+
+	var prevTime = performance.now();
+
+	function animate( time ) {
+
+		requestAnimationFrame( animate );
+
+		var mixer = editor.mixer;
+
+		if ( mixer.stats.actions.inUse > 0 ) {
+
+			mixer.update( ( time - prevTime ) / 1000 );
+			render();
+
+		}
+
+		prevTime = time;
+
+	}
+
+	requestAnimationFrame( animate );
 
 	//
 
