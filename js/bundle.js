@@ -11952,7 +11952,7 @@ Main.prototype = {
 		
 		//this.camera.position.set(0, 17, 10); //height at 1.7m
 		
-		this.camera.position.set( 0, 2, 6 );
+		this.camera.position.set( 0, 2, 3 );
 		this.camera.lookAt( 0, 0, 0 );
 
 		//this.camera.lookAt(new THREE.Vector3(0, 10, 200));
@@ -11996,7 +11996,6 @@ Main.prototype = {
 		
 		this.loadHouseEnvironment();
 
-
 		//test loading objects, used as an example
 		var loadingManager = new THREE.LoadingManager( function () {
 
@@ -12006,7 +12005,7 @@ Main.prototype = {
 
 
 		var loader = new THREE.ColladaLoader( loadingManager );
-		loader.load( './models/chair/chair6.dae', function ( collada ) {					
+		loader.load( './models/chair/chair5.dae', function ( collada ) {					
 					elf = collada.scene;
 					//let scaleNum = 0.1
 
@@ -12143,7 +12142,7 @@ Main.prototype = {
     	groundTexture.repeat.set( 10, 16 );
 
 		var ground = new THREE.Mesh(
-			new THREE.PlaneBufferGeometry( 100, 160, 10, 16),
+			new THREE.PlaneBufferGeometry( 10, 16, 10, 16),
 			new THREE.MeshPhongMaterial( {wireframe: false, map: groundTexture, specular: 0x101010} )
 		);
 		ground.rotation.x = - Math.PI / 2;
@@ -12159,11 +12158,11 @@ Main.prototype = {
     	purpleWallTexture.repeat.set( 10, 3 );
 
     	var purple_wall = new THREE.Mesh(
-			new THREE.PlaneBufferGeometry( 100, 30, 10, 3),
+			new THREE.PlaneBufferGeometry( 10, 3, 10, 3),
 			new THREE.MeshPhongMaterial( {map: purpleWallTexture, specular: 0x101010} )
 		);
 
-    	purple_wall.position.copy(new THREE.Vector3(0, 15, -80));
+    	purple_wall.position.copy(new THREE.Vector3(0, 1.5, -8));
 		purple_wall.receiveShadow = true;
 		//scope.scene.add(purple_wall);
 		this.house.add(purple_wall);
@@ -12182,11 +12181,11 @@ Main.prototype = {
 
 		//left wall
 		var left_wall = new THREE.Mesh(
-			new THREE.BoxBufferGeometry( 3, 30, 40, 1, 3, 4),
+			new THREE.BoxBufferGeometry( 0.3, 3, 4, 1, 3, 4),
 			new THREE.MeshPhongMaterial( {map: whiteWallTexture, specular: 0x101010} )
 		);
 
-    	left_wall.position.copy(new THREE.Vector3(-50, 15, -60));
+    	left_wall.position.copy(new THREE.Vector3(-5, 1.5, -6));
 		left_wall.receiveShadow = true;
 		//scope.scene.add(left_wall);
 		this.house.add(left_wall);
@@ -12196,8 +12195,8 @@ Main.prototype = {
 
 		loader.load( '../models/window.dae', function ( collada ) {
 			var fcWindow = collada.scene;
-			fcWindow.scale.copy(new THREE.Vector3(0.21, 0.21, 0.21));
-			fcWindow.position.copy(new THREE.Vector3(-53, 0, -60));
+			fcWindow.scale.copy(new THREE.Vector3(0.021, 0.021, 0.021));
+			fcWindow.position.copy(new THREE.Vector3(-5.3, 0, -6));
 			fcWindow.rotation.z = - Math.PI / 2;
 			//scope.scene.add(fcWindow);
 			scope.house.add(fcWindow);
@@ -12205,11 +12204,11 @@ Main.prototype = {
 
 		whiteWallTexture.repeat.set( 3, 3 );
 		var left_window_wall = new THREE.Mesh(
-			new THREE.BoxBufferGeometry( 3, 30, 30, 1, 3, 3),
+			new THREE.BoxBufferGeometry( 0.3, 3, 3, 1, 3, 3),
 			new THREE.MeshPhongMaterial( {map: whiteWallTexture, specular: 0x101010} )
 		);
 
-		left_window_wall.position.copy(new THREE.Vector3(-50, 15, 31));
+		left_window_wall.position.copy(new THREE.Vector3(-5, 1.5, 3.1));
 		left_window_wall.receiveShadow = true;
 		//scope.scene.add(left_wall);
 		this.house.add(left_window_wall);
@@ -12218,11 +12217,11 @@ Main.prototype = {
 		//left window left
 		whiteWallTexture.repeat.set( 1, 3);
 		var left_window_left_wall = new THREE.Mesh(
-			new THREE.BoxBufferGeometry( 3, 30, 90 - 55.5, 1, 3, 3),
+			new THREE.BoxBufferGeometry( 0.3, 3, 9 - 5.55, 1, 3, 3),
 			new THREE.MeshPhongMaterial( {map: whiteWallTexture, specular: 0x101010} )
 		);
 
-    	left_window_left_wall.position.copy(new THREE.Vector3(-20, 15, 80 - (90 - 55.5)/2));
+    	left_window_left_wall.position.copy(new THREE.Vector3(-2.0, 1.5, 8.0 - (9.0 - 5.55)/2));
 		left_window_left_wall.receiveShadow = true;
 		//scope.scene.add(left_window_left_wall);
 		this.house.add(left_window_left_wall);
@@ -12230,11 +12229,11 @@ Main.prototype = {
 
 		whiteWallTexture.repeat.set( 3, 3);
 		var left_wall_left_wall = new THREE.Mesh(
-			new THREE.BoxBufferGeometry( 30, 30, 3, 3, 3, 1),
+			new THREE.BoxBufferGeometry( 3.0, 3.0, 0.3, 3, 3, 1),
 			new THREE.MeshPhongMaterial( {map: whiteWallTexture, specular: 0x101010} )
 		);
 
-    	left_wall_left_wall.position.copy(new THREE.Vector3(-35, 15, 80 - (90 - 55.5) + 1.5));
+    	left_wall_left_wall.position.copy(new THREE.Vector3(-3.5, 1.5, 8.0 - (9.0 - 5.55) + 0.15));
 		left_wall_left_wall.receiveShadow = true;
 		//scope.scene.add(left_wall_left_wall);
 		this.house.add(left_wall_left_wall);
@@ -12243,11 +12242,11 @@ Main.prototype = {
 		//right wall
 		whiteWallTexture.repeat.set(3, 8);
 		var right_wall = new THREE.Mesh(
-			new THREE.BoxBufferGeometry( 3, 30, 80, 1, 3, 8),
+			new THREE.BoxBufferGeometry( 0.3, 3.0, 8.0, 1, 3, 8),
 			new THREE.MeshPhongMaterial( {map: whiteWallTexture, specular: 0x101010} )
 		);
 
-    	right_wall.position.copy(new THREE.Vector3(50, 15, -40));
+    	right_wall.position.copy(new THREE.Vector3(5.0, 1.5, -4.0));
 		right_wall.receiveShadow = true;
 		//scope.scene.add(right_wall);
 		this.house.add(right_wall);
@@ -12255,8 +12254,8 @@ Main.prototype = {
 		//right door
 		loader.load( '../models/door.dae', function ( collada ) {
 			var fcDoor = collada.scene;
-			fcDoor.scale.copy(new THREE.Vector3(0.25, 0.25, 0.25));
-			fcDoor.position.copy(new THREE.Vector3(40, 0, -14.3));
+			fcDoor.scale.copy(new THREE.Vector3(0.025, 0.025, 0.025));
+			fcDoor.position.copy(new THREE.Vector3(4, 0, -1.43));
 			fcDoor.rotation.z = - Math.PI / 2;
 			//scope.scene.add(fcDoor);
 			scope.house.add(fcDoor);
@@ -12267,11 +12266,11 @@ Main.prototype = {
 		//right door top
 		whiteWallTexture.repeat.set(1, 1);
 		var right_door_top_wall = new THREE.Mesh(
-			new THREE.BoxBufferGeometry( 3, 9.4, 8.858, 1, 1, 1),
+			new THREE.BoxBufferGeometry( 0.3, 0.94, 0.8858, 1, 1, 1),
 			new THREE.MeshPhongMaterial( {map: whiteWallTexture, specular: 0x101010} )
 		);
 
-    	right_door_top_wall.position.copy(new THREE.Vector3(50, 20.66 + 9.4 / 2, 8.858 / 2));
+    	right_door_top_wall.position.copy(new THREE.Vector3(5, 2.066 +0.94 / 2, 0.8858 / 2));
 		right_door_top_wall.receiveShadow = true;
 		//scope.scene.add(right_door_top_wall);
 		this.house.add(right_door_top_wall);
@@ -12279,11 +12278,11 @@ Main.prototype = {
 		//right door right
 		whiteWallTexture.repeat.set(3, 7);
 		var right_door_right_wall = new THREE.Mesh(
-			new THREE.BoxBufferGeometry( 3, 30, 80 - 8.85, 1, 3, 7),
+			new THREE.BoxBufferGeometry( 0.3, 3, 8 - 0.885, 1, 3, 7),
 			new THREE.MeshPhongMaterial( {map: whiteWallTexture, specular: 0x101010} )
 		);
 
-    	right_door_right_wall.position.copy(new THREE.Vector3(50, 15, 8.85 + (80 - 8.858) / 2));
+    	right_door_right_wall.position.copy(new THREE.Vector3(5, 1.5, 0.885 + (8.0 - 0.8858) / 2));
 		right_door_right_wall.receiveShadow = true;
 		//scope.scene.add(right_door_right_wall);
 		this.house.add(right_door_right_wall);
@@ -12291,10 +12290,10 @@ Main.prototype = {
 		//ceiling
 		whiteWallTexture.repeat.set(10, 16);
 		var ceiling = new THREE.Mesh(
-			new THREE.PlaneBufferGeometry( 100, 160, 10, 16),
+			new THREE.PlaneBufferGeometry( 10.0, 16.0, 10, 16),
 			new THREE.MeshPhongMaterial( {map: whiteWallTexture, specular: 0x101010} )
 		);
-		ceiling.position.y = 30;
+		ceiling.position.y = 3;
 		ceiling.rotation.x = Math.PI / 2;
 		ceiling.receiveShadow = true;
 		//scope.scene.add(ceiling);
@@ -12310,8 +12309,8 @@ Main.prototype = {
 		//the other side, 70 window
 		loader.load( '../models/wall_window.dae', function ( collada ) {
 			var wWindow = collada.scene;
-			wWindow.scale.copy(new THREE.Vector3(0.25, 0.25, 0.25));
-			wWindow.position.copy(new THREE.Vector3(-40, 0, 85));
+			wWindow.scale.copy(new THREE.Vector3(0.025, 0.025, 0.025));
+			wWindow.position.copy(new THREE.Vector3(-4, 0, 8.5));
 			//wWindow.rotation.z = - Math.PI / 2;
 			wWindow.rotation.x = - Math.PI / 2;
 			//scope.scene.add(wWindow);
@@ -12340,8 +12339,8 @@ Main.prototype = {
 			// 	}
 			// });
 
-			apsad.scale.copy(new THREE.Vector3(0.4, 0.4, 0.4));
-			apsad.position.copy(new THREE.Vector3(-40, 0, -70));
+			apsad.scale.copy(new THREE.Vector3(0.04, 0.04, 0.04));
+			apsad.position.copy(new THREE.Vector3(-4.0, 0, -7.0));
 			apsad.rotation.x = - Math.PI / 2;
 			scope.house.add(apsad);
 			
@@ -12360,8 +12359,8 @@ Main.prototype = {
 			// 	}
 			// });
 
-			wall_art.scale.copy(new THREE.Vector3(0.02, 0.02, 0.02));
-			wall_art.position.copy(new THREE.Vector3(0, 15, -79));
+			wall_art.scale.copy(new THREE.Vector3(0.002, 0.002, 0.002));
+			wall_art.position.copy(new THREE.Vector3(0, 1.5, -7.9));
 			wall_art.rotation.z = Math.PI / 2;
 			scope.house.add(wall_art);
 			
@@ -12379,10 +12378,10 @@ Main.prototype = {
 				}
 			});
 
-			wall_shelf.position.copy(new THREE.Vector3(48.5, 15, -30));
+			wall_shelf.position.copy(new THREE.Vector3(4.85, 1.5, -3.0));
 			//wall_shelf.rotation.x = - Math.PI / 2;
 			wall_shelf.rotation.z = - Math.PI / 2;
-			wall_shelf.scale.copy(new THREE.Vector3(0.3, 0.3, 0.3));
+			wall_shelf.scale.copy(new THREE.Vector3(0.03, 0.03, 0.03));
 
 			scope.house.add(wall_shelf);
 			

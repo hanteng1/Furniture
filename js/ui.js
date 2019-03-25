@@ -213,7 +213,7 @@ Ui.prototype = {
     		}
 		});
 
-		//$('.ui.toggle.checkbox.house').checkbox("check");
+		$('.ui.toggle.checkbox.house').checkbox("check");
 
 		//reset the scene
 		$('.ui.blue.submit.button.reset').click(function(){
