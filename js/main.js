@@ -160,6 +160,10 @@ function Main()
 	this.purpleWall = new THREE.Object3D();
 	this.ceiling = new THREE.Object3D();
 
+
+
+	this.elf = null;
+
 }
 
 Main.prototype = {
@@ -168,12 +172,18 @@ Main.prototype = {
 		var scope = this;
 
 		let a = 1;
-		if(!Detector.webgl)
-			Detector.addGetWebGLMessage();
+
+		//detect if webgl is supported
+		// if(!Detector.webgl)
+		// 	Detector.addGetWebGLMessage();
 
 		this.camera = new THREE.PerspectiveCamera (45, window.innerWidth / window.innerHeight, 1, 10000);
-		this.camera.position.set(0, 17, 10); //height at 1.7m
 		
+		//this.camera.position.set(0, 17, 10); //height at 1.7m
+		
+		this.camera.position.set( 0, 2, 6 );
+		this.camera.lookAt( 0, 0, 0 );
+
 		//this.camera.lookAt(new THREE.Vector3(0, 10, 200));
 
 		var ambientLight = new THREE.AmbientLight( 0xeeeeee, 0.4);
@@ -194,8 +204,8 @@ Main.prototype = {
 		directlight.position.set( 0, 30, 50 );
 		// directlight.castShadow = true;
 		// directlight.shadow.camera.top = 1.8;
-		// directlight.shadow.camera.bottom = -1.8;
 		// directlight.shadow.camera.left = -1.2;
+		// directlight.shadow.camera.bottom = -1.8;
 		// directlight.shadow.camera.right = 1.2;
 		this.scene.add( directlight );
 		this.addHelper(directlight);
@@ -210,9 +220,50 @@ Main.prototype = {
 
 		this.scene.background = new THREE.Color(.95,.95,.95);
 
-		this.gridHelper = new THREE.GridHelper( 1000, 20 ) ;//size, divisions
+		this.gridHelper = new THREE.GridHelper( 10, 10) ;//size, divisions
 		this.scene.add( this.gridHelper );
+		
 		this.loadHouseEnvironment();
+
+
+		//test loading objects, used as an example
+		var loadingManager = new THREE.LoadingManager( function () {
+
+					scope.scene.add( elf );
+
+				} );
+
+
+		var loader = new THREE.ColladaLoader( loadingManager );
+		loader.load( './models/chair/chair6.dae', function ( collada ) {					
+					elf = collada.scene;
+					//let scaleNum = 0.1
+
+					var loadedScale = new THREE.Vector3();
+					elf.getWorldScale(loadedScale);
+
+					console.log(loadedScale);
+
+					var box = new THREE.Box3();
+					box.setFromObject(elf);
+					var box_size = new THREE.Vector3();
+					box.getSize(box_size);
+
+					console.log(box_size);
+
+
+					// let box = new THREE.Box3().setFromObject(elf);//定位
+					// Cx = (box.max.x + box.min.x)/2;//找到模型中心
+					// Cy = (box.max.y + box.min.y)/2;
+					// Cz = (box.max.z + box.min.z)/2;
+					// elf.position.set(-Cx,-Cy,-Cz);//缩放
+
+				} );
+
+
+		//test loading end
+
+
 		
 		this.renderer.setPixelRatio( window.devicePixelRatio );
 		this.renderer.setSize( window.innerWidth, window.innerHeight );
@@ -750,6 +801,63 @@ Main.prototype = {
 
 		this.furnitures.push(furniture);
 
+		this.scene.add(this.furnitures[this.furnitures.length - 1].getFurniture());
+
+		//update the menu interface
+		furniture.addCard();
+
+	},
+
+
+	addObject: function(object) {
+
+
+		var loadedScale = new THREE.Vector3();
+		object.getWorldScale(loadedScale);
+
+		console.log(loadedScale);
+
+		var box = new THREE.Box3();
+		box.setFromObject(object);
+		var box_size = new THREE.Vector3();
+		box.getSize(box_size);
+
+		console.log(box_size);
+
+		var size = []; size.push(box_size.x, box_size.y, box_size.z);
+		size.sort(function(a, b){return a - b});
+
+		//in case of chair
+		var length = size[0];
+		var width = size[1];
+		var height = size[2];
+
+
+
+
+
+		var objects = [];
+		object.traverse(function(child){
+			if(child.geometry !== undefined)
+			{
+				child.material.needsUpdate = true;
+				child.castShadow = true;
+				child.name = "";
+				objects.push(child);
+			}
+		}) ;
+
+		var furnitureObj = new THREE.Object3D();
+		for(var i = 0; i< objects.length; i++){
+			furnitureObj.add(objects[i]);
+		}
+
+		let furniture = new Furniture(furnitureObj);
+
+		furniture.setCategory("straight_chair");  //does this matter ? 
+
+		furniture.setIndex(this.furnitures.length + 1);
+		this.furnitures.push(furniture);
 		this.scene.add(this.furnitures[this.furnitures.length - 1].getFurniture());
 
 		//update the menu interface

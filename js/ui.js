@@ -213,7 +213,7 @@ Ui.prototype = {
     		}
 		});
 
-		$('.ui.toggle.checkbox.house').checkbox("check");
+		//$('.ui.toggle.checkbox.house').checkbox("check");
 
 		//reset the scene
 		$('.ui.blue.submit.button.reset').click(function(){
@@ -892,7 +892,8 @@ Ui.prototype = {
 					var object = new THREE.OBJLoader().parse( contents );
 					object.name = filename;
 					//add to the scene
-					scope.main.preAddObject(object);  //this.main becomes undefined
+					//scope.main.preAddObject(object);  //this.main becomes undefined
+					scope.main.addObject(object);
 				}, false );
 				reader.readAsText( file );
 
@@ -909,8 +910,8 @@ Ui.prototype = {
 					var collada = loader.parse( contents );
 
 					collada.scene.name = filename;
-					scope.main.preAddObject(collada.scene ); 
-
+					//scope.main.preAddObject(collada.scene ); 
+					scope.main.addObject(collada.scene);
 				}, false );
 				reader.readAsText( file );
 			break;
@@ -925,8 +926,8 @@ Ui.prototype = {
 
 					var loader = new THREE.GLTFLoader();
 					var gltf = loader.parse(contents);
-					scope.main.preAddObject(gltf.scene ); 
-
+					//scope.main.preAddObject(gltf.scene ); 
+					scope.main.addObject(gltf.scene);
 				}, false );
 
 				reader.readAsText( file );
