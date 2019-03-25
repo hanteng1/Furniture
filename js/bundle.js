@@ -11991,49 +11991,10 @@ Main.prototype = {
 
 		this.scene.background = new THREE.Color(.95,.95,.95);
 
-		this.gridHelper = new THREE.GridHelper( 10, 10) ;//size, divisions
+		this.gridHelper = new THREE.GridHelper( 16, 16) ;//size, divisions
 		this.scene.add( this.gridHelper );
 		
 		this.loadHouseEnvironment();
-
-		//test loading objects, used as an example
-		var loadingManager = new THREE.LoadingManager( function () {
-
-					scope.scene.add( elf );
-
-				} );
-
-
-		var loader = new THREE.ColladaLoader( loadingManager );
-		loader.load( './models/chair/chair5.dae', function ( collada ) {					
-					elf = collada.scene;
-					//let scaleNum = 0.1
-
-					var loadedScale = new THREE.Vector3();
-					elf.getWorldScale(loadedScale);
-
-					console.log(loadedScale);
-
-					var box = new THREE.Box3();
-					box.setFromObject(elf);
-					var box_size = new THREE.Vector3();
-					box.getSize(box_size);
-
-					console.log(box_size);
-
-
-					// let box = new THREE.Box3().setFromObject(elf);//定位
-					// Cx = (box.max.x + box.min.x)/2;//找到模型中心
-					// Cy = (box.max.y + box.min.y)/2;
-					// Cz = (box.max.z + box.min.z)/2;
-					// elf.position.set(-Cx,-Cy,-Cz);//缩放
-
-				} );
-
-
-		//test loading end
-
-
 		
 		this.renderer.setPixelRatio( window.devicePixelRatio );
 		this.renderer.setSize( window.innerWidth, window.innerHeight );
@@ -12582,29 +12543,35 @@ Main.prototype = {
 	addObject: function(object) {
 
 
-		var loadedScale = new THREE.Vector3();
-		object.getWorldScale(loadedScale);
+		console.log(object);
 
-		console.log(loadedScale);
+		var loadMatrix = new THREE.Matrix4();
+		var position = new THREE.Vector3();
+		position.copy(object.position);
+		var quaternion = new THREE.Quaternion();
+		quaternion.copy(object.quaternion);
+		var scale = new THREE.Vector3();
+		scale.copy(object.scale);
 
-		var box = new THREE.Box3();
-		box.setFromObject(object);
-		var box_size = new THREE.Vector3();
-		box.getSize(box_size);
-
-		console.log(box_size);
-
-		var size = []; size.push(box_size.x, box_size.y, box_size.z);
-		size.sort(function(a, b){return a - b});
-
-		//in case of chair
-		var length = size[0];
-		var width = size[1];
-		var height = size[2];
+		loadMatrix.compose(position, quaternion, scale);
 
 
 
+		var object_1 = object.children[0].children[1];
+		var loadMatrix_1 = new THREE.Matrix4();
+		var position_1 = new THREE.Vector3();
+		position_1.copy(object_1.position);
+		var quaternion_1 = new THREE.Quaternion();
+		quaternion_1.copy(object_1.quaternion);
+		var scale_1 = new THREE.Vector3();
+		scale_1.copy(object_1.scale);
 
+		loadMatrix_1.compose(position_1, quaternion_1, scale_1);
+
+
+		loadMatrix.multiply(loadMatrix_1);
+
+		console.log(loadMatrix);
 
 		var objects = [];
 		object.traverse(function(child){
@@ -12627,7 +12594,11 @@ Main.prototype = {
 		furniture.setCategory("straight_chair");  //does this matter ? 
 
 		furniture.setIndex(this.furnitures.length + 1);
+		furniture.setLoadMatrix(loadMatrix);
+
 		this.furnitures.push(furniture);
+		
+		//this is where the position, orientation and scale information got lost
 		this.scene.add(this.furnitures[this.furnitures.length - 1].getFurniture());
 
 		//update the menu interface

@@ -912,6 +912,11 @@ Ui.prototype = {
 					collada.scene.name = filename;
 					//scope.main.preAddObject(collada.scene ); 
 					scope.main.addObject(collada.scene);
+
+					//test
+					//scope.main.scene.add(collada.scene);
+
+
 				}, false );
 				reader.readAsText( file );
 			break;
