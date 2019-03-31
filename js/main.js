@@ -636,137 +636,137 @@ Main.prototype = {
 
 
 
-	preAddObject: function(object) {
+	// preAddObject: function(object) {
 		
-		var scope = this;
+	// 	var scope = this;
 
-		//predict the length, width, height
-		var loadedScale = new THREE.Vector3();
-		object.getWorldScale(loadedScale);
+	// 	//predict the length, width, height
+	// 	var loadedScale = new THREE.Vector3();
+	// 	object.getWorldScale(loadedScale);
 
-		console.log(loadedScale);
+	// 	console.log(loadedScale);
 
-		var box = new THREE.Box3();
-		box.setFromObject(object);
-		var box_size = new THREE.Vector3();
-		box.getSize(box_size);
+	// 	var box = new THREE.Box3();
+	// 	box.setFromObject(object);
+	// 	var box_size = new THREE.Vector3();
+	// 	box.getSize(box_size);
 
-		console.log(box_size);
+	// 	console.log(box_size);
 
-		//a series test to decide the most suitable predicted sizes
-		//assume we are using dae files.. and the z is height.. need a rotation?
-		//working on...
+	// 	//a series test to decide the most suitable predicted sizes
+	// 	//assume we are using dae files.. and the z is height.. need a rotation?
+	// 	//working on...
 
-		var size = []; size.push(box_size.x, box_size.y, box_size.z);
-		size.sort(function(a, b){return a - b});
+	// 	var size = []; size.push(box_size.x, box_size.y, box_size.z);
+	// 	size.sort(function(a, b){return a - b});
 
-		//in case of chair
-		var length = size[0];
-		var width = size[1];
-		var height = size[2];
+	// 	//in case of chair
+	// 	var length = size[0];
+	// 	var width = size[1];
+	// 	var height = size[2];
 
-		var loadMatrix = new THREE.Matrix4();
+	// 	var loadMatrix = new THREE.Matrix4();
 
-		if( height > 0.5 && height < 1.5) {
-			//keep the size and ignore the scale
-			if(loadedScale.x != 1) {
-				var location = new THREE.Vector3(0, 0, -30);
-				//var location = new THREE.Vector3();
-				//this will cause errors in addAxis
-				//var quaternion = new THREE.Quaternion().setFromUnitVectors(new THREE.Vector3(0, 0, 1), new THREE.Vector3(0, 1, 0));
-				var quaternion = new THREE.Quaternion();
+	// 	if( height > 0.5 && height < 1.5) {
+	// 		//keep the size and ignore the scale
+	// 		if(loadedScale.x != 1) {
+	// 			var location = new THREE.Vector3(0, 0, -30);
+	// 			//var location = new THREE.Vector3();
+	// 			//this will cause errors in addAxis
+	// 			//var quaternion = new THREE.Quaternion().setFromUnitVectors(new THREE.Vector3(0, 0, 1), new THREE.Vector3(0, 1, 0));
+	// 			var quaternion = new THREE.Quaternion();
 
-				var scale = new THREE.Vector3(loadedScale.x * 10, loadedScale.y * 10, loadedScale.z * 10)
+	// 			var scale = new THREE.Vector3(loadedScale.x * 10, loadedScale.y * 10, loadedScale.z * 10)
 
-				loadMatrix.compose(location, quaternion, scale);
+	// 			loadMatrix.compose(location, quaternion, scale);
 		
-			}else{  // ==1
+	// 		}else{  // ==1
 
-				//you decide whether this will be used
+	// 			//you decide whether this will be used
 
-				var location = new THREE.Vector3(0, 0, -30);
-				//var location = new THREE.Vector3();
-				//this will cause errors in addAxis
-				//var quaternion = new THREE.Quaternion().setFromUnitVectors(new THREE.Vector3(0, 0, 1), new THREE.Vector3(0, 1, 0));
-				var quaternion = new THREE.Quaternion();
+	// 			var location = new THREE.Vector3(0, 0, -30);
+	// 			//var location = new THREE.Vector3();
+	// 			//this will cause errors in addAxis
+	// 			//var quaternion = new THREE.Quaternion().setFromUnitVectors(new THREE.Vector3(0, 0, 1), new THREE.Vector3(0, 1, 0));
+	// 			var quaternion = new THREE.Quaternion();
 
-				var scale = new THREE.Vector3(0.0254 * 10, 0.0254 * 10, 0.0254 * 10)
+	// 			var scale = new THREE.Vector3(0.0254 * 10, 0.0254 * 10, 0.0254 * 10)
 
-				loadMatrix.compose(location, quaternion, scale);
+	// 			loadMatrix.compose(location, quaternion, scale);
 
-			}
+	// 		}
 
-		}
-		else{
-			var location = new THREE.Vector3(0, 0, -30);
-			var quaternion = new THREE.Quaternion();
+	// 	}
+	// 	else{
+	// 		var location = new THREE.Vector3(0, 0, -30);
+	// 		var quaternion = new THREE.Quaternion();
 
-			var scale = new THREE.Vector3(1, 1, 1);
+	// 		var scale = new THREE.Vector3(1, 1, 1);
 
-			loadMatrix.compose(location, quaternion, scale);
-		}
+	// 		loadMatrix.compose(location, quaternion, scale);
+	// 	}
 
-		//visualize
-		var defaultLength = parseFloat(length).toFixed(1);
-		var defaultWidth = parseFloat(width).toFixed(1);
-		var defaultHeight = parseFloat(height).toFixed(1);
-		$('#model_size_initialization').slideDown(300);
-		$('#model_size_initialization').find("input")[0].setAttribute("placeholder", "Length " + `${defaultLength}` + " m");
-		$('#model_size_initialization').find("input")[1].setAttribute("placeholder", "Width " + `${defaultWidth}` + " m");
-		$('#model_size_initialization').find("input")[2].setAttribute("placeholder", "Height " + `${defaultHeight}` + " m");
+	// 	//visualize
+	// 	var defaultLength = parseFloat(length).toFixed(1);
+	// 	var defaultWidth = parseFloat(width).toFixed(1);
+	// 	var defaultHeight = parseFloat(height).toFixed(1);
+	// 	$('#model_size_initialization').slideDown(300);
+	// 	$('#model_size_initialization').find("input")[0].setAttribute("placeholder", "Length " + `${defaultLength}` + " m");
+	// 	$('#model_size_initialization').find("input")[1].setAttribute("placeholder", "Width " + `${defaultWidth}` + " m");
+	// 	$('#model_size_initialization').find("input")[2].setAttribute("placeholder", "Height " + `${defaultHeight}` + " m");
 
-		//this.addObject(object);
-		console.log($('#model_size_initialization').find(".fluid.ui.button"));
+	// 	//this.addObject(object);
+	// 	console.log($('#model_size_initialization').find(".fluid.ui.button"));
 
-		$('#model_size_initialization').find("button")[0].onclick =function() {
-			scope.addObject(object, loadMatrix);
-			$('#model_size_initialization').slideUp(200);
-		};
+	// 	$('#model_size_initialization').find("button")[0].onclick =function() {
+	// 		scope.addObject(object, loadMatrix);
+	// 		$('#model_size_initialization').slideUp(200);
+	// 	};
 
-	},
+	// },
 
 	//function to load model into the scene
-	addObject: function ( object, loadMatrix ) {
+	// addObject: function ( object, loadMatrix ) {
 
-		//add the compoennts
-		var objects = [];
-		object.traverse( function ( child ) {
+	// 	//add the compoennts
+	// 	var objects = [];
+	// 	object.traverse( function ( child ) {
 
-			if ( child.geometry !== undefined ) {
-				//child.material.envMap = scope.envMap;
-				child.material.needsUpdate = true;
-				child.castShadow = true;
-				child.name = "";
+	// 		if ( child.geometry !== undefined ) {
+	// 			//child.material.envMap = scope.envMap;
+	// 			child.material.needsUpdate = true;
+	// 			child.castShadow = true;
+	// 			child.name = "";
 
-				objects.push(child);
-				//scope.addHelper( child ); //to visualize helpers
+	// 			objects.push(child);
+	// 			//scope.addHelper( child ); //to visualize helpers
 
-			}
+	// 		}
 
-			//if ( child.material !== undefined ) scope.addMaterial( child.material );
-		} );
+	// 		//if ( child.material !== undefined ) scope.addMaterial( child.material );
+	// 	} );
 
-		//add this to array and visualize its
-		var furnitureObj = new THREE.Object3D();
-		for(var i = 0; i < objects.length; i++){
-			furnitureObj.add(objects[i]);
-		}
+	// 	//add this to array and visualize its
+	// 	var furnitureObj = new THREE.Object3D();
+	// 	for(var i = 0; i < objects.length; i++){
+	// 		furnitureObj.add(objects[i]);
+	// 	}
 
-		let furniture = new Furniture(furnitureObj);
-		//furniture.setObjects(objects);
-		furniture.setCategory("straight_chair");
-		furniture.setIndex(this.furnitures.length + 1);
+	// 	let furniture = new Furniture(furnitureObj);
+	// 	//furniture.setObjects(objects);
+	// 	furniture.setCategory("straight_chair");
+	// 	furniture.setIndex(this.furnitures.length + 1);
 
-		furniture.setLoadMatrix(loadMatrix);
+	// 	furniture.setLoadMatrix(loadMatrix);
 
-		this.furnitures.push(furniture);
+	// 	this.furnitures.push(furniture);
 
-		this.scene.add(this.furnitures[this.furnitures.length - 1].getFurniture());
+	// 	this.scene.add(this.furnitures[this.furnitures.length - 1].getFurniture());
 
-		//update the menu interface
-		furniture.addCard();
+	// 	//update the menu interface
+	// 	furniture.addCard();
 
-	},
+	// },
 
 
 	addObject: function(object) {

@@ -45,10 +45,6 @@ THREE.CustomControls = function ( object, domElement ) {
 	this.enableDamping = false;
 	this.dampingFactor = 0.25;
 
-	// Set to false to disable rotating
-	this.enableRotate = true;
-	this.rotateSpeed = 1.0;
-
 
 	// This option actually enables dollying in and out; left as "zoom" for backwards compatibility.
 	// Set to false to disable zooming
@@ -57,7 +53,7 @@ THREE.CustomControls = function ( object, domElement ) {
 
 	// Set to false to disable rotating
 	this.enableRotate = true;
-	this.rotateSpeed = 1.0;
+	this.rotateSpeed = 1;
 
 	// Set to false to disable panning
 	this.enablePan = true;
@@ -186,7 +182,7 @@ THREE.CustomControls = function ( object, domElement ) {
 			//it will make a sudden jump
 			scope.tg_update();
 
-			scope.target.copy(new THREE.Vector3(0, 0, -30));
+			scope.target.copy(new THREE.Vector3(0, 0, 0));
 		}
 
 		
