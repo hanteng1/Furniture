@@ -166,6 +166,17 @@ THREE.CustomControls = function ( object, domElement ) {
 	};
 
 
+	//when loaded a object
+	this.loadObject = function() {
+
+		//move the camera to a good view of the current loaded object
+		
+
+
+		scope.switchView2TG();
+	};
+
+
 	//switch views
 	this.switchView2TG = function() {
 		// console.log("switchView2TG");

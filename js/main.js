@@ -248,11 +248,13 @@ Main.prototype = {
 		document.addEventListener('keydown', this.onKeyDown.bind(this), false);
 
 
-		//orbit control
+		//custom control
 		this.customControl = new THREE.CustomControls( this.camera, this.renderer.domElement );
 		this.customControl.addEventListener( 'change', this.render.bind(this) );
 		this.customControl.minDistance = 1;
 		this.customControl.maxDistance = 10000;
+
+
 		//this.customControl.enablePan = true;
 		//this.customControl.target.set(0, 0.5, - 0.2);
 
@@ -284,6 +286,40 @@ Main.prototype = {
 
 		//initialize processor
 		this.processor = new Processor(scope);
+
+
+
+		// //test loading
+		// var loadingManager = new THREE.LoadingManager( function () {
+		// 		scope.scene.add( scope.elf );
+		// } );
+
+		// // collada
+		// var loader = new THREE.ColladaLoader( loadingManager );
+		// loader.load( './models/chair/chair6.dae', function ( collada ) {
+		// 	scope.elf = collada.scene;
+
+		// 	console.log(scope.elf);
+
+		// 	scope.elf.traverse(function(child){
+		// 		if(child instanceof THREE.PerspectiveCamera){
+
+		// 			console.log("found it");
+
+		// 			//scope.camera = child;
+		// 			//scope.camera.updateProjectionMatrix();
+		// 			//scope.camera.far = 10000;
+		// 			//scope.camera.lookAt(0, 0, 0);
+		// 			//console.log(scope.camera);
+		// 		}
+		// 	});
+
+		// 	//var vector = new THREE.Vector3();
+		// 	//vector.setFromMatrixPosition(scope.elf.children[0].children[1]);
+			
+
+		// } );
+
 
 	},
 
@@ -774,7 +810,10 @@ Main.prototype = {
 
 		console.log(object);
 
+		//general matrix
 		var loadMatrix = new THREE.Matrix4();
+		var loadCameraMatrix = new THREE.Matrix4();
+
 		var position = new THREE.Vector3();
 		position.copy(object.position);
 		var quaternion = new THREE.Quaternion();
@@ -783,9 +822,9 @@ Main.prototype = {
 		scale.copy(object.scale);
 
 		loadMatrix.compose(position, quaternion, scale);
+		loadCameraMatrix.copy(loadMatrix);
 
-
-
+		//object matrix
 		var object_1 = object.children[0].children[1];
 		var loadMatrix_1 = new THREE.Matrix4();
 		var position_1 = new THREE.Vector3();
@@ -796,11 +835,37 @@ Main.prototype = {
 		scale_1.copy(object_1.scale);
 
 		loadMatrix_1.compose(position_1, quaternion_1, scale_1);
-
-
 		loadMatrix.multiply(loadMatrix_1);
 
 		console.log(loadMatrix);
+
+
+		// var camera_0 = object.children[0].children[0];
+
+		// if(camera_0.isPerspectiveCamera)
+		// {
+		// 	console.log("PerspectiveCamera");
+
+		// 	// var loadMatrix_0 = new THREE.Matrix4();
+		// 	// var position_0 = new THREE.Vector3();
+		// 	// position_0.copy(camera_0.position);
+		// 	// var quaternion_0 = new THREE.Quaternion();
+		// 	// quaternion_0.copy(camera_0.quaternion);
+		// 	// var scale_0 = new THREE.Vector3();
+		// 	// scale_0.copy(camera_0.scale);
+
+		// 	// loadMatrix_0.compose(position_0, quaternion_0, scale_0);
+		// 	// loadCameraMatrix.multiply(loadMatrix_0);
+
+		// 	// console.log(loadCameraMatrix);
+
+		// 	this.customControl.loadObject(camera_0, loadCameraMatrix);
+		// }
+
+
+		this.customControl.loadObject();
+
+
 
 		var objects = [];
 		object.traverse(function(child){
