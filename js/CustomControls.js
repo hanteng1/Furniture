@@ -29,7 +29,7 @@ THREE.CustomControls = function ( object, domElement ) {
 	this.target = new THREE.Vector3();
 
 	//siwch betwen first person rotate and target centered rotate
-	this.targetFocused = false;
+	this.targetFocused = true;
 
 	// How far you can dolly in and out ( PerspectiveCamera only )
 	this.minDistance = 0;
@@ -85,7 +85,10 @@ THREE.CustomControls = function ( object, domElement ) {
 	this.target0 = this.target.clone();
 	this.position0 = this.object.position.clone();
 	this.zoom0 = this.object.zoom;
-	this.lookatDir0 = new THREE.Vector3(0, -3.55067, -87.86557);
+
+
+	//x: -1.8796731184734745e-13, y: -23.95314596188338, z: -93.57346537574996
+	this.lookatDir0 = new THREE.Vector3(0, -23.95314, -93.573465);
 
 	//////////////////////////////first person view
 
@@ -114,7 +117,7 @@ THREE.CustomControls = function ( object, domElement ) {
 	this.mouseX = 0;
 	this.mouseY = 0;
 
-	this.lat = -50;
+	this.lat = -60;
 	this.lon = -90;
 	this.phi = 0;
 	this.theta = 0;
@@ -183,12 +186,15 @@ THREE.CustomControls = function ( object, domElement ) {
 
 		var furnitureCenter = furniture.getFurnitureCenter();
 		var funitureSize = furniture.getSize();
-		var viewSpam = new THREE.Vector3(funitureSize.x * 2, funitureSize.y / 2, funitureSize.z * 2);
+
+		//mind the scale number
+		var viewSpam = new THREE.Vector3(funitureSize.x * 4, funitureSize.y / 2, funitureSize.z * 4);
 
 
 		scope.focusingPosition.copy(viewSpam.add(furnitureCenter));
 		scope.focusingLookAt.copy(furnitureCenter);
 
+		scope.target.copy(furnitureCenter);
 
 		console.log("focusingPosition");
 		console.log(scope.focusingPosition);
@@ -196,7 +202,7 @@ THREE.CustomControls = function ( object, domElement ) {
 		console.log("focusingLookAt");
 		console.log(scope.focusingLookAt);
 
-
+		scope.lerpIndex = 0;
 		scope.focusing = true;
 
 		
@@ -208,18 +214,19 @@ THREE.CustomControls = function ( object, domElement ) {
 		// console.log("switchView2TG");
 		if(scope.targetFocused == false) {
 			scope.targetFocused = true;
-			// console.log("targetFocused = true");
-			//copy target position
-			//scope.target
-
-			scope.target.copy(scope.fp_target);
 
 
-			//problem
-			//it will make a sudden jump
-			scope.tg_update();
+			// var tempTarget = new THREE.Vector3();
+			// tempTarget.copy(scope.target);
 
-			scope.target.copy(new THREE.Vector3(0, 0, 0));
+			// scope.target.copy(scope.fp_target);
+
+
+			// //problem
+			// //it will make a sudden jump
+			// scope.tg_update();
+
+			// scope.target.copy(tempTarget);
 		}
 
 		
@@ -234,7 +241,7 @@ THREE.CustomControls = function ( object, domElement ) {
 			//switch back to the original position
 			//target lookatDir
 			this.lon = -90;
-			if ( this.lookVertical ) this.lat = -50;
+			if ( this.lookVertical ) this.lat = -60;
 
 			this.lat = Math.max( - 85, Math.min( 85, this.lat ) );
 			
@@ -317,9 +324,22 @@ THREE.CustomControls = function ( object, domElement ) {
 		//console.log(curLookatDir);
 
 		if(scope.lerpIndex >= 1.0) {
+
+			if(scope.transiting == true)
+			{
+				scope.transiting = false;
+			}
 			
-			scope.transiting = false;
-			scope.focusing = false;
+			if(scope.focusing == true)
+			{
+				scope.focusing = false;
+
+				//switch to tg view
+				scope.switchView2TG();
+
+
+			}
+			
 		}
 
 	};
@@ -473,7 +493,7 @@ THREE.CustomControls = function ( object, domElement ) {
 		if ( this.lookVertical ) this.lat -= this.mouseY * actualLookSpeed * verticalLookRatio;
 
 
-		//console.log(this.lon + " , " + this.lat);
+		console.log(this.lon + " , " + this.lat);
 
 
 		this.lat = Math.max( - 85, Math.min( 85, this.lat ) );
@@ -495,7 +515,7 @@ THREE.CustomControls = function ( object, domElement ) {
 		targetPosition.x = position.x + 100 * Math.sin( this.phi ) * Math.cos( this.theta );
 		targetPosition.y = position.y + 100 * Math.cos( this.phi );
 		targetPosition.z = position.z + 100 * Math.sin( this.phi ) * Math.sin( this.theta );
-		//console.log(targetPosition);
+		console.log(targetPosition);
 
 		this.object.lookAt( targetPosition );
 

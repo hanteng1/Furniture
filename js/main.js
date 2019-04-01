@@ -1860,7 +1860,9 @@ Main.prototype = {
 
 		if(this.furniture !== null) {
 			// console.log("yes furniture");
-			this.customControl.switchView2TG();
+			//this.customControl.switchView2TG();
+
+			this.customControl.loadObject(this.furniture);
 		}else {
 			// console.log("no furniture");
 			this.customControl.switchView2FP();
