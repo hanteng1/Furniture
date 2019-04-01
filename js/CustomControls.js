@@ -15,8 +15,13 @@ THREE.CustomControls = function ( object, domElement ) {
 	this.transiting = false;
 	this.lerpIndex = 0;
 
-	this.lerpStartPos;
-	this.lerpStartLookatDir;
+	this.lerpStartPos = new THREE.Vector3();
+	this.lerpStartLookatDir = new THREE.Vector3();
+
+
+	this.focusing = false;
+	this.focusingPosition = new THREE.Vector3();
+	this.focusingLookAt = new THREE.Vector3();
 
 	//////////////////////////////target rotating view
 
@@ -167,13 +172,34 @@ THREE.CustomControls = function ( object, domElement ) {
 
 
 	//when loaded a object
-	this.loadObject = function() {
+	this.loadObject = function(furniture) {
 
 		//move the camera to a good view of the current loaded object
+
+		scope.lerpStartPos.copy(scope.object.position);
+		scope.object.getWorldDirection( scope.lerpStartLookatDir );
+		scope.lerpStartLookatDir.multiplyScalar(90);
+
+
+		var furnitureCenter = furniture.getFurnitureCenter();
+		var funitureSize = furniture.getSize();
+		var viewSpam = new THREE.Vector3(funitureSize.x * 2, funitureSize.y / 2, funitureSize.z * 2);
+
+
+		scope.focusingPosition.copy(viewSpam.add(furnitureCenter));
+		scope.focusingLookAt.copy(furnitureCenter);
+
+
+		console.log("focusingPosition");
+		console.log(scope.focusingPosition);
+
+		console.log("focusingLookAt");
+		console.log(scope.focusingLookAt);
+
+
+		scope.focusing = true;
+
 		
-
-
-		scope.switchView2TG();
 	};
 
 
@@ -235,7 +261,7 @@ THREE.CustomControls = function ( object, domElement ) {
 			scope.lerpIndex = 0;
 
 			//position
-			scope.lerpStartPos = new THREE.Vector3();
+			//scope.lerpStartPos = new THREE.Vector3();
 			scope.lerpStartPos.copy(scope.object.position);
 
 			//look at, problem. this is normalize
@@ -243,7 +269,7 @@ THREE.CustomControls = function ( object, domElement ) {
 			//this is where the problem is
 			//direction is not the lookatdir
 
-			scope.lerpStartLookatDir = new THREE.Vector3();
+			//scope.lerpStartLookatDir = new THREE.Vector3();
 			scope.object.getWorldDirection( scope.lerpStartLookatDir );
 			scope.lerpStartLookatDir.multiplyScalar(90);
 
@@ -260,6 +286,8 @@ THREE.CustomControls = function ( object, domElement ) {
 		
 		if(scope.transiting == true) {
 			scope.transiteCamera(scope.lerpStartPos, scope.lerpStartLookatDir, scope.position0, scope.lookatDir0);
+		}else if(scope.focusing == true) {
+			scope.transiteCamera(scope.lerpStartPos, scope.lerpStartLookatDir, scope.focusingPosition, scope.focusingLookAt);
 		}
 
 	}
@@ -285,12 +313,13 @@ THREE.CustomControls = function ( object, domElement ) {
 		//set lookat
 		scope.object.lookAt( curLookatDir );
 
-		//console.log(scope.lerpIndex);
+		console.log(scope.lerpIndex);
 		//console.log(curLookatDir);
 
 		if(scope.lerpIndex >= 1.0) {
 			
 			scope.transiting = false;
+			scope.focusing = false;
 		}
 
 	};

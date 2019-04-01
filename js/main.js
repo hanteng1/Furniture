@@ -808,11 +808,11 @@ Main.prototype = {
 	addObject: function(object) {
 
 
-		console.log(object);
+		//console.log(object);
 
 		//general matrix
 		var loadMatrix = new THREE.Matrix4();
-		var loadCameraMatrix = new THREE.Matrix4();
+		//var loadCameraMatrix = new THREE.Matrix4();
 
 		var position = new THREE.Vector3();
 		position.copy(object.position);
@@ -822,7 +822,7 @@ Main.prototype = {
 		scale.copy(object.scale);
 
 		loadMatrix.compose(position, quaternion, scale);
-		loadCameraMatrix.copy(loadMatrix);
+		//loadCameraMatrix.copy(loadMatrix);
 
 		//object matrix
 		var object_1 = object.children[0].children[1];
@@ -837,7 +837,7 @@ Main.prototype = {
 		loadMatrix_1.compose(position_1, quaternion_1, scale_1);
 		loadMatrix.multiply(loadMatrix_1);
 
-		console.log(loadMatrix);
+		//console.log(loadMatrix);
 
 
 		// var camera_0 = object.children[0].children[0];
@@ -861,11 +861,6 @@ Main.prototype = {
 
 		// 	this.customControl.loadObject(camera_0, loadCameraMatrix);
 		// }
-
-
-		this.customControl.loadObject();
-
-
 
 		var objects = [];
 		object.traverse(function(child){
@@ -894,6 +889,10 @@ Main.prototype = {
 		
 		//this is where the position, orientation and scale information got lost
 		this.scene.add(this.furnitures[this.furnitures.length - 1].getFurniture());
+
+
+		//load the object camera view change
+		this.customControl.loadObject(furniture);
 
 		//update the menu interface
 		furniture.addCard();
