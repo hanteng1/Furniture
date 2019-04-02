@@ -2,6 +2,7 @@ package com.example.furniturephoto;
 
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
@@ -10,9 +11,12 @@ import android.graphics.PointF;
 import android.graphics.PorterDuff;
 import android.graphics.PorterDuffXfermode;
 import android.graphics.Rect;
+import android.graphics.drawable.BitmapDrawable;
 import android.util.AttributeSet;
 import android.view.View;
 
+import java.io.IOException;
+import java.net.URL;
 import java.util.ArrayList;
 
 public class PaintView extends View {
@@ -34,6 +38,9 @@ public class PaintView extends View {
 
     public Bitmap resultBitmap;
     public Bitmap cropOriginBitmap;
+
+
+
 
     public PaintView(Context context, AttributeSet attrs)
     {
@@ -73,16 +80,17 @@ public class PaintView extends View {
         cropOriginBitmap = Bitmap.createBitmap(screenWidth, screenHeight,
                 Bitmap.Config.ARGB_8888);
 
-
     }
 
 
-    public void setImageBitmap(Bitmap bitMap)
+    public void setBitmap(String path)
     {
 
-        resultBitmap.createBitmap(bitMap);
-        this.setImageBitmap(resultBitmap);
+        Bitmap d = new BitmapDrawable(MainActivity.getSharedInstance().getResources() , path).getBitmap();
+        int nh = (int) ( d.getHeight() * (1080.0 / d.getWidth()) );
+        resultBitmap = Bitmap.createScaledBitmap(d, 1080, nh, true);
 
+        invalidate();
     }
 
     private void clear()
@@ -99,8 +107,7 @@ public class PaintView extends View {
     {
 
         //copy and paste demo
-        //canvas.
-
+        canvas.drawBitmap(resultBitmap, 0, 0, inputPaint);
 
 
         //if still drawing
@@ -121,15 +128,16 @@ public class PaintView extends View {
     }
 
 
-    public void onDoubleTap(float x, float y)
+    public void onDown(float x, float y)
     {
         clear();
+        isdrawing = true;
         touchPath.moveTo(x, y);
         touchPoints.add(new PointF(x, y));
     }
 
 
-    public void onTapMove(float x, float y)
+    public void onScroll(float x, float y)
     {
         touchPath.lineTo(x, y);
         touchPoints.add(new PointF(x, y));
@@ -155,6 +163,11 @@ public class PaintView extends View {
         }
 
         invalidate();
+    }
+
+    public void onFling()
+    {
+        isdrawing = false;
     }
 
 
