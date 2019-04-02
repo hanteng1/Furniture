@@ -6,30 +6,70 @@
     android:layout_height="match_parent"
     tools:context=".MainActivity">
 
+
+    <RelativeLayout
+        android:id="@+id/container3"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
     <Button
+        android:id="@+id/button_photo"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/button_photo"
         android:text="Take Photo"
 
+        android:layout_marginLeft="30dp"
+        android:layout_marginTop="550dp"
+
+        />
 
 
+    <Button
+        android:id="@+id/button_clear"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Clear"
+        android:layout_marginLeft="150dp"
+        android:layout_marginTop="520dp"
+        />
+
+
+
+    <Button
+        android:id="@+id/button_crop"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Crop"
+        android:layout_marginLeft="150dp"
+        android:layout_marginTop="580dp"
 
         />
 
 
-    <ImageView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:id="@+id/image_view"
 
+
+    <Button
+        android:id="@+id/button_send"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Send"
+        android:layout_marginLeft="250dp"
+        android:layout_marginTop="550dp"
         />
 
-    
+
+
     <com.example.furniturephoto.PaintView
+        android:id="@+id/paint_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:id="@+id/paint_view"
         />
-        
+
+
+
+    </RelativeLayout>
 </android.support.constraint.ConstraintLayout>

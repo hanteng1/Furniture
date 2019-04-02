@@ -54,14 +54,40 @@ public class MainActivity extends AppCompatActivity implements
 
         instance = this;
 
-        Button button = (Button) findViewById(R.id.button_photo);
-        button.setOnClickListener(new View.OnClickListener() {
+        Button button_photo = (Button) findViewById(R.id.button_photo);
+        button_photo.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 // Do something in response to button click
                 dispatchTakePictureIntent();
 
             }
         });
+
+        Button button_clear = (Button) findViewById(R.id.button_clear);
+        button_clear.setOnClickListener(new View.OnClickListener(){
+            public void onClick(View v){
+                paintView.clear();
+            }
+        });
+
+        Button button_crop = (Button) findViewById(R.id.button_crop);
+        button_crop.setOnClickListener(new View.OnClickListener(){
+            public void onClick(View v){
+                paintView.makeCrop();
+            }
+        });
+
+
+
+
+        Button button_send = (Button) findViewById(R.id.button_send);
+        button_send.setOnClickListener(new View.OnClickListener(){
+            public void onClick(View v){
+
+            }
+        });
+
+
 
         //imageView = (ImageView) findViewById(R.id.image_view);
 
