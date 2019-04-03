@@ -5,6 +5,8 @@
 const Chair_Align = require('./Chair_Align');
 const Chair_Add = require('./Chair_Add');
 const Chair_Rebuild = require('./Chair_Rebuild');
+const Storage_Bin = require('./Storage_Bin');
+
 const Cabinet_kallax = require('./Cabinet_kallax');
 const Dresser_Add = require('./Dresser_Add');
 
@@ -41,6 +43,7 @@ function Processor(main) {
 
 	//zhuen's block
 	this.chair_add = undefined;
+	this.storage_bin = undefined;
 	this.dresser_add = undefined;
 	this.dresser_add_two = undefined;
 	this.table = undefined;
@@ -85,6 +88,9 @@ Processor.prototype = {
 
 					scope.chair_rebuild = new Chair_Rebuild(scope.main);
 					scope.transformFunctions.CHAIR_REBUILD = scope.chair_rebuild;
+
+					scope.storage_bin = new Storage_Bin(scope.main);
+					scope.transformFunctions.STORAGE_BIN = scope.storage_bin;
 
 					$('.operations.operation_chair_add').show();
 					$('.operations.operation_chair_rebuild').show();

@@ -428,6 +428,7 @@ Ui.prototype = {
 			scope.processor.executeDesign("CHAIR_ALIGN", "connect2");
 		});
 
+		
 
 		//chair_add_plate
 		$('#operation_chair_add_plate').click(function() {
@@ -460,6 +461,17 @@ Ui.prototype = {
 			exampleImage.src = "images/example/CHAIR_ADD_hang.png";
 			exampleLink.href = "https://www.pinterest.com/pin/566186984387890581/";
 			exampleLink.text = "Swing";
+			$('.example').show();
+		});
+
+		//chair_storage_bin
+		$('#operation_chair_storage_bin').click(function() {
+			scope.processor.executeDesign("STORAGE_BIN", "");
+
+			// example
+			exampleImage.src = "images/example/Storage_Bin.png";
+			exampleLink.href = "https://br.pinterest.com/pin/546835579746661436/?lp=true";
+			exampleLink.text = "Storage";
 			$('.example').show();
 		});
 
