@@ -1813,14 +1813,14 @@ Chair_Align.prototype = {
 			}
 
 			//flip
-			//this.flip(this.furnitures);
+			this.flip(this.furnitures);
 
 			//seat
-			//this.addSeat(this.furnitures, this.reference, this.textures);
+			this.addSeat(this.furnitures, this.reference, this.textures);
 
 
 			//move upwards
-			//this.seat.translateZ(-0.6);
+			this.seat.translateZ(-0.06);
 
 		}else if(tfname == "connect1"){
 
@@ -2136,7 +2136,7 @@ Chair_Align.prototype = {
 				///console.log(simplified);
 				//cut
 				offset = furnitures[ij].getComponentCenterPosition('midframe').y - furnitures[ij].getComponentSize('midframe').y;		
-				//offset = offset*4.5;
+				offset = offset / 0.0254;
 				var cutResultGeometry = chairCutBack(simplified, offset);
 				var newleg = new THREE.Mesh( cutResultGeometry, legMaterial );
 				furniture.remove(legs[i]);
@@ -2144,7 +2144,7 @@ Chair_Align.prototype = {
 				
 			}
 
-			/*
+			
 			//cut back
 			var BackNeedCut = this.checkBackNeedCut(furniture);
 
@@ -2181,7 +2181,7 @@ Chair_Align.prototype = {
 
 			}
 
-			*/
+			
 		}
 	},
 
