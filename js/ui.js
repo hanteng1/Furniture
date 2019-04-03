@@ -22,6 +22,8 @@ Ui.prototype = {
 		var scope = this;
 
 
+
+
 		//select a category
 		$('#category_chair').click(function() {
 			//group function
@@ -299,18 +301,34 @@ Ui.prototype = {
 		});
 		
 
+
+		//initial category window model selection
+		$('#model_image_1').click(function(){
+			//load model 1	
+			scope.quickLoadFile();
+		});
+
+		$('#model_image_2').click(function(){
+			//load model 2	
+			scope.quickLoadFile();
+		});
+
+		$('#model_image_3').click(function(){
+			//load model 3	
+			scope.quickLoadFile();
+		});
+
+
+
 		//chair_align controller function
 		this.designButtons();
 
 
 		this.rangeSlider();
 
-
-		
-
-
 		//in the end, hide all the needed items
 		$('#model_size_initialization').hide();
+		$('#initial_category_window').hide();
 
 		$('#label').hide();
 
@@ -350,6 +368,9 @@ Ui.prototype = {
 
 		// example
 		$('.example').hide();
+
+
+		$('#initial_category_window').slideDown(500);
 	},
 
 
@@ -861,6 +882,9 @@ Ui.prototype = {
 		fileInput.addEventListener( 'change', function ( event ) {
 
 			scope.loadFile( fileInput.files[ 0 ] );
+
+			console.log(fileInput.files[ 0 ]);
+
 			form.reset();
 
 		} );
@@ -921,7 +945,6 @@ Ui.prototype = {
 				reader.readAsText( file );
 			break;
 
-
 			case 'glb':
 				reader.addEventListener( 'load', function ( event ) {
 
@@ -939,6 +962,24 @@ Ui.prototype = {
 
 			break;
 		}
+	},
+
+
+
+	quickLoadFile: function(path)
+	{
+		var elf;
+		var scope = this;
+
+		var loadingManager = new THREE.LoadingManager( function () {
+			scope.main.addObject(elf);
+		} );
+
+		var loader = new THREE.ColladaLoader( loadingManager );
+		loader.load( './models/chair/chair6.dae', function ( collada ) {
+			elf = collada.scene;
+		});
+
 	},
 
 	assignLabel: function(label){
