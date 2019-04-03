@@ -12,9 +12,14 @@ import android.graphics.PorterDuff;
 import android.graphics.PorterDuffXfermode;
 import android.graphics.Rect;
 import android.graphics.drawable.BitmapDrawable;
+import android.os.Environment;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.View;
 
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
@@ -56,7 +61,7 @@ public class PaintView extends View {
 
         //set touch paint, transparent
         touchPaint.setAntiAlias(true);
-        touchPaint.setStrokeWidth(20);
+        touchPaint.setStrokeWidth(40);
         touchPaint.setColor(Color.GREEN);
         touchPaint.setAlpha(150);
         touchPaint.setStyle(Paint.Style.STROKE);
@@ -135,11 +140,6 @@ public class PaintView extends View {
 
             }
         }
-
-
-
-        //if finger up
-
 
     }
 
@@ -221,7 +221,7 @@ public class PaintView extends View {
 
             Paint paint = new Paint();
             paint.setAntiAlias(true);
-            paint.setStrokeWidth(20);
+            paint.setStrokeWidth(40);
             paint.setColor(Color.GREEN);
             paint.setAlpha(150);
             paint.setStyle(Paint.Style.STROKE);
@@ -235,6 +235,33 @@ public class PaintView extends View {
         isCropped = true;
         invalidate();
 
+    }
+
+    public void sendImage()
+    {
+        try{
+            File newfile = savebitmap(resultBitmap);
+
+            Log.v("photo", "saved");
+        }catch (Exception e) {
+            Log.e(e.getClass().getName(), e.getMessage());
+        }
+    }
+
+
+    public static File savebitmap(Bitmap bmp) throws IOException {
+        ByteArrayOutputStream bytes = new ByteArrayOutputStream();
+        bmp.compress(Bitmap.CompressFormat.JPEG, 60, bytes);
+        File f = new File(Environment.getExternalStorageDirectory()
+                + File.separator + "testimage.jpg");
+
+        Log.v("file", "" + Environment.getExternalStorageDirectory().toString());
+
+        f.createNewFile();
+        FileOutputStream fo = new FileOutputStream(f);
+        fo.write(bytes.toByteArray());
+        fo.close();
+        return f;
     }
 
 

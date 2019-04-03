@@ -83,7 +83,7 @@ public class MainActivity extends AppCompatActivity implements
         Button button_send = (Button) findViewById(R.id.button_send);
         button_send.setOnClickListener(new View.OnClickListener(){
             public void onClick(View v){
-
+                paintView.sendImage();
             }
         });
 
