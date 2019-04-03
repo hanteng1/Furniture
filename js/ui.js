@@ -359,7 +359,7 @@ Ui.prototype = {
 
 	category_dresser:function(){
 		var scope = this;
-		
+
 		scope.main.category0 = "dresser";
 		$('#blocker').hide();
 		$('#initial_category_window').hide();
