@@ -22,110 +22,6 @@ Ui.prototype = {
 		var scope = this;
 
 
-
-
-		//select a category
-		$('#category_chair').click(function() {
-			//group function
-			scope.main.category0 = "chair";
-			$('#blocker').hide();
-			$('#initial_category_window').hide();
-
-			$('#minfo').html(scope.main.category0);
-
-			$('#label_l_6').hide();
-			$('#label_l_7').hide();
-			$('#label_l_8').hide();
-			$('#label_l_9').hide();
-			$('#label_l_10').hide();
-			$('#label_l_11').hide();
-
-		});
-
-		$('#category_cabinet').click(function() {
-			//group function
-			scope.main.category0 = "cabinet";
-			$('#blocker').hide();
-			$('#initial_category_window').hide();
-
-			$('#minfo').html(scope.main.category0);
-
-			$('#label_l_1').hide();
-			$('#label_l_2').hide();
-			$('#label_l_9').hide();
-			$('#label_l_10').hide();
-			$('#label_l_11').hide();
-
-		});
-
-
-		$('#category_table').click(function() {
-			//group function
-			scope.main.category0 = "table";
-			$('#blocker').hide();
-			$('#initial_category_window').hide();
-
-			$('#minfo').html(scope.main.category0);
-
-			$('#label_l_1').hide();
-			$('#label_l_2').hide();
-			$('#label_l_6').hide();
-			$('#label_l_7').hide();
-			$('#label_l_8').hide();
-			$('#label_l_11').hide();
-
-		});
-
-
-		// $('#category_bed').click(function() {
-		// 	//group function
-		// 	scope.main.category0 = "bed";
-		// 	$('#blocker').hide();
-		// 	$('#initial_category_window').hide();
-
-		// 	$('#minfo').html(scope.main.category0);
-
-		// });
-
-		$('#category_desk').click(function() {
-			//group function
-			scope.main.category0 = "desk";
-			$('#blocker').hide();
-			$('#initial_category_window').hide();
-
-			$('#minfo').html(scope.main.category0);
-
-
-			$('#label_l_1').hide();
-			$('#label_l_2').hide();
-			$('#label_l_6').hide();
-			$('#label_l_7').hide();
-			$('#label_l_8').hide();
-			$('#label_l_9').hide();
-			$('#label_l_10').hide();
-
-		});
-
-
-		$('#category_dresser').click(function() {
-			//group function
-			scope.main.category0 = "dresser";
-			$('#blocker').hide();
-			$('#initial_category_window').hide();
-
-			$('#minfo').html(scope.main.category0);
-
-			$('#label_l_1').hide();
-			$('#label_l_2').hide();
-			$('#label_l_8').hide();
-			$('#label_l_9').hide();
-			$('#label_l_10').hide();
-			$('#label_l_11').hide();
-
-		});
-
-
-
 		$('.ui.dropdown').dropdown({
 			action: 'hide',
 			onChange: function(value, text, $selectedItem) {
@@ -306,16 +202,22 @@ Ui.prototype = {
 		$('#model_image_1').click(function(){
 			//load model 1	
 			scope.quickLoadFile();
+			scope.category_chair();
+
 		});
 
 		$('#model_image_2').click(function(){
 			//load model 2	
 			scope.quickLoadFile();
+			scope.category_chair();
+
 		});
 
 		$('#model_image_3').click(function(){
 			//load model 3	
 			scope.quickLoadFile();
+			scope.category_chair();
+
 		});
 
 
@@ -371,6 +273,106 @@ Ui.prototype = {
 
 
 		$('#initial_category_window').slideDown(500);
+	},
+
+
+
+
+	//select a category
+	category_chair:function(){
+		//group function
+		var scope = this;
+
+		scope.main.category0 = "chair";
+		$('#blocker').hide();
+		$('#initial_category_window').hide();
+
+		$('#minfo').html(scope.main.category0);
+
+		$('#label_l_6').hide();
+		$('#label_l_7').hide();
+		$('#label_l_8').hide();
+		$('#label_l_9').hide();
+		$('#label_l_10').hide();
+		$('#label_l_11').hide();
+
+	},
+
+	category_cabinet:function(){
+		//group function
+		var scope = this;
+
+		scope.main.category0 = "cabinet";
+		$('#blocker').hide();
+		$('#initial_category_window').hide();
+
+		$('#minfo').html(scope.main.category0);
+
+		$('#label_l_1').hide();
+		$('#label_l_2').hide();
+		$('#label_l_9').hide();
+		$('#label_l_10').hide();
+		$('#label_l_11').hide();
+
+	},
+
+	category_table:function(){
+		//group function
+		var scope = this;
+
+		scope.main.category0 = "table";
+		$('#blocker').hide();
+		$('#initial_category_window').hide();
+
+		$('#minfo').html(scope.main.category0);
+
+		$('#label_l_1').hide();
+		$('#label_l_2').hide();
+		$('#label_l_6').hide();
+		$('#label_l_7').hide();
+		$('#label_l_8').hide();
+		$('#label_l_11').hide();
+
+	},
+
+	category_desk:function(){
+		//group function
+		var scope = this;
+
+		scope.main.category0 = "desk";
+		$('#blocker').hide();
+		$('#initial_category_window').hide();
+
+		$('#minfo').html(scope.main.category0);
+
+
+		$('#label_l_1').hide();
+		$('#label_l_2').hide();
+		$('#label_l_6').hide();
+		$('#label_l_7').hide();
+		$('#label_l_8').hide();
+		$('#label_l_9').hide();
+		$('#label_l_10').hide();
+
+	},
+
+
+	category_dresser:function(){
+		var scope = this;
+		
+		scope.main.category0 = "dresser";
+		$('#blocker').hide();
+		$('#initial_category_window').hide();
+
+		$('#minfo').html(scope.main.category0);
+
+		$('#label_l_1').hide();
+		$('#label_l_2').hide();
+		$('#label_l_8').hide();
+		$('#label_l_9').hide();
+		$('#label_l_10').hide();
+		$('#label_l_11').hide();
+
 	},
 
 
