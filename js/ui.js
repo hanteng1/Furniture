@@ -936,7 +936,8 @@ Ui.prototype = {
 					var collada = loader.parse( contents );
 
 					collada.scene.name = filename;
-					//scope.main.preAddObject(collada.scene ); 
+					//scope.main.preAddObject(collada.scene );
+
 					scope.main.addObject(collada.scene);
 
 					//test
@@ -974,11 +975,12 @@ Ui.prototype = {
 		var scope = this;
 
 		var loadingManager = new THREE.LoadingManager( function () {
+
 			scope.main.addObject(elf);
 		} );
 
 		var loader = new THREE.ColladaLoader( loadingManager );
-		loader.load( './models/chair/chair6.dae', function ( collada ) {
+		loader.load( './models/chair/chair5.dae', function ( collada ) {
 			elf = collada.scene;
 		});
 

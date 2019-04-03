@@ -319,7 +319,7 @@ Chair_Add.prototype = {
 		loader.load( "./models/plant1.dae", function ( collada ) {
 			plant = collada.scene;
 			plant.name = "plant";
-			plant.scale.x = 0.02; plant.scale.y = 0.02; plant.scale.z = 0.02;
+			plant.scale.x = 0.002; plant.scale.y = 0.002; plant.scale.z = 0.002;
 			
 
 		} );
@@ -348,7 +348,7 @@ Chair_Add.prototype = {
 
 	addBoard: function(furniture_clone){
 		var wall = this.main.purpleWall;
-		var moveTo = new THREE.Vector3(wall.position.x + 10, wall.position.y - 5, wall.position.z + 5);
+		var moveTo = new THREE.Vector3(wall.position.x + 1, wall.position.y - 0.5, wall.position.z + 0.5);
 
 		console.log(furniture_clone);
 		var scale = furniture_clone.scale;

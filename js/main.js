@@ -289,36 +289,16 @@ Main.prototype = {
 
 
 
-		// //test loading
+		////test loading
 		// var loadingManager = new THREE.LoadingManager( function () {
 		// 		scope.scene.add( scope.elf );
 		// } );
 
 		// // collada
 		// var loader = new THREE.ColladaLoader( loadingManager );
-		// loader.load( './models/chair/chair6.dae', function ( collada ) {
+		// loader.load( './models/chair/chair5.dae', function ( collada ) {
 		// 	scope.elf = collada.scene;
-
-		// 	console.log(scope.elf);
-
-		// 	scope.elf.traverse(function(child){
-		// 		if(child instanceof THREE.PerspectiveCamera){
-
-		// 			console.log("found it");
-
-		// 			//scope.camera = child;
-		// 			//scope.camera.updateProjectionMatrix();
-		// 			//scope.camera.far = 10000;
-		// 			//scope.camera.lookAt(0, 0, 0);
-		// 			//console.log(scope.camera);
-		// 		}
-		// 	});
-
-		// 	//var vector = new THREE.Vector3();
-		// 	//vector.setFromMatrixPosition(scope.elf.children[0].children[1]);
-			
-
-		// } );
+		// });
 
 
 	},
