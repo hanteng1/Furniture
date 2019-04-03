@@ -31,7 +31,7 @@ function cadMakeSeat (innerRace, outerRace, offsetY, textures) {
     path = path.close();
     var cag = path.innerToCAG();
     var csg = cag.extrude({
-      offset: [0, 0, 0.2],   // direction for extrusion
+      offset: [0, 0, 0.02],   // direction for extrusion
       twistangle: 0,       // top surface is rotated 30 degrees 
       twiststeps: 0        // create 10 slices
     });
@@ -86,7 +86,7 @@ function cadMakeSeat (innerRace, outerRace, offsetY, textures) {
     mesh.receiveShadow = true;
 
     //todo.. can we set it in the csgtogeometry function? the normal vectors are meshed up
-    mesh.translateY(offsetY + 0.2);
+    mesh.translateY(offsetY + 0.02);
     //rotate from y - z
     var tempQuaternion = new THREE.Quaternion();
     tempQuaternion.setFromUnitVectors(new THREE.Vector3(0, 1, 0), new THREE.Vector3(0, 0, 1));

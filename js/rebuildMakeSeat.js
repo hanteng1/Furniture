@@ -13,7 +13,7 @@ function rebuildMakeSeat ( NewSeatSizex , NewSeatSizey , NewSeatSizez , mode){
 		//var seat = geometryToCsgs(geometry);
 		var seat = cube({size:[NewSeatSizex , NewSeatSizey , NewSeatSizez]});
 		
-		var obj = seat.expand(0.1, 16);
+		var obj = seat.expand(0.01, 16);
 
 		var geometry = csgToGeometries(obj)[0];
 		geometry = new THREE.Geometry().fromBufferGeometry( geometry );

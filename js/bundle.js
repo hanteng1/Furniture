@@ -1056,12 +1056,10 @@ Chair_Add.prototype = {
 	},
 
 	addBoard: function(furniture_clone){
+		console.log("addBoard");
 		var wall = this.main.purpleWall;
 		var moveTo = new THREE.Vector3(wall.position.x + 1, wall.position.y - 0.5, wall.position.z + 0.5);
-
-		console.log(furniture_clone);
 		var scale = furniture_clone.scale;
-		console.log(scale);
 		//remove other part
 		var group = furniture_clone;		
 		this.remove(group);
@@ -1073,17 +1071,19 @@ Chair_Add.prototype = {
 
 		//creat board width > depth > height
 		var size_back = this.getPartSize(back);
+		//console.log(size_back);
+		
 		var array = new Array();
 		array.push(size_back.x, size_back.y, size_back.z);
 		array.sort(function(a, b){return b-a});
 		var width = size_back.x;
 		var depth  = array[1]; 
 		var height = array[2];
+		
 
-		var board = this.createBoard(back, width, height/10, depth/2);
+		var board = this.createBoard(back, width, height / 10, depth / 2);
 		board.name = "board";
-
-		this.plantLoader(group);
+		
 
 		//get chair back world position and back world matrix's inverse
 		var component = furniture_clone.getObjectByName('back');		
@@ -1093,26 +1093,30 @@ Chair_Add.prototype = {
 		var back_matrix_inverse = new THREE.Matrix4();
 		back_matrix_inverse.getInverse(back.matrixWorld, true);
 		
-
 		//set board position and rotation in back
 		board.applyMatrix(back_matrix_inverse);
-		board.position.set(pos.x - size_board.x/2, pos.y, pos.z);		
-		back.worldToLocal(board.position);	
-
+		board.position.set(pos.x - size_board.x/2, pos.y, pos.z);
+		back.worldToLocal(board.position);
+		
 		//add board to furniture
 		group.add(board);
+		//this.main.scene.add(board);
+		
 
 		//change max and min value
 		var position_id = document.getElementById("CHAIR_ADD_POSITION");
-		position_id.max = this.computeNumber(size_back.y / 2);
-		position_id.min = this.computeNumber((size_back.y / 2) * (-1));
+		//position_id.max = this.computeNumber(size_back.y / 2);
+		position_id.max = 2;
+		//position_id.min = this.computeNumber((size_back.y / 2) * (-1));
+		position_id.min = -2;
 
-		var position_id = document.getElementById("CHAIR_ADD_WIDTH");
-		position_id.max = this.computeNumber(size_board.z  * 5);
+		var width_id = document.getElementById("CHAIR_ADD_WIDTH");
+		width_id.max = this.computeNumber(size_board.z  * 25);
 
-		var position_id = document.getElementById("CHAIR_ADD_HEIGHT");
-		position_id.max = this.computeNumber(size_board.z  * 2.5);		
+		var height_id = document.getElementById("CHAIR_ADD_HEIGHT");
+		height_id.max = this.computeNumber(size_board.z  * 25);		
 		group.position.set(moveTo.x, moveTo.y, moveTo.z);
+		this.plantLoader(group);
 		
 	},
 
@@ -1126,17 +1130,18 @@ Chair_Add.prototype = {
 		//get parameters CHAIR_ADD_WIDTH, CHAIR_ADD_HEIGHT
 		var segWidth = this.parameters.CHAIR_ADD_WIDTH;
 		var segHeight = this.parameters.CHAIR_ADD_HEIGHT;
-
-		board.scale.x = 4 + 0.05 * parseInt(segWidth);
-		board.scale.z = 4 + 0.05 * parseInt(segHeight);
+		console.log(board);
+		board.scale.x = 39 + 0.5 * parseInt(segWidth);
+		board.scale.z = 39 + 0.5 * parseInt(segHeight);
 
 		//get chair back world position and back world matrix's inverse
 		var component = group.getObjectByName('back');		
 		var pos = this.getPartCenter(component);
 		var size_board = this.getPartSize(board);
 		
+		var size_back = this.getPartSize(back);
 		var segPosition = this.parameters.CHAIR_ADD_POSITION;
-		pos.y += parseInt(segPosition);
+		pos.y += parseInt(segPosition) * (size_back.y / 5);
 		board.position.set(pos.x - size_board.x/2, pos.y, pos.z);
 		back.worldToLocal(board.position);
 		
@@ -1395,7 +1400,7 @@ Chair_Add.prototype = {
 		hang.name = "add_hang";
 		this.main.scene.add( hang );
 		var wall = this.main.purpleWall;
-		var moveTo = new THREE.Vector3(wall.position.x + 10, wall.position.y - 10, wall.position.z + 10);
+		var moveTo = new THREE.Vector3(wall.position.x + 1, wall.position.y - 1, wall.position.z + 1);
 		hang.position.set(moveTo.x, moveTo.y, moveTo.z);
 
 		console.log(hang);		
@@ -1808,14 +1813,14 @@ Chair_Align.prototype = {
 			}
 
 			//flip
-			this.flip(this.furnitures);
+			//this.flip(this.furnitures);
 
 			//seat
-			this.addSeat(this.furnitures, this.reference, this.textures);
+			//this.addSeat(this.furnitures, this.reference, this.textures);
 
 
 			//move upwards
-			this.seat.translateZ(-0.6);
+			//this.seat.translateZ(-0.6);
 
 		}else if(tfname == "connect1"){
 
@@ -1879,7 +1884,6 @@ Chair_Align.prototype = {
 			box.setFromObject(array[i]);
 			if(checkBox.intersectsBox(box)){
 				array[i].name = "leg";
-				//console.log(array[i]);
 			}
 		}
 		
@@ -2012,8 +2016,8 @@ Chair_Align.prototype = {
 		//make it based on x axis
 		var segAngleR = segAngle/180*Math.PI * (-1);
 
-		var destVector = new THREE.Vector3(0, refHeight, -30);
-		var segVector = new THREE.Vector3(segDistance, 0, 0);
+		var destVector = new THREE.Vector3(0, refHeight, -3);
+		var segVector = new THREE.Vector3(segDistance / 10, 0, 0);
 		
 		var refAxis = new THREE.Vector3(0, 1, 0);
 
@@ -2088,7 +2092,7 @@ Chair_Align.prototype = {
 		for(var ij = 0; ij < furnitures.length; ij++){
 
 			var furniture = furnitures[ij].getFurniture();
-
+			
 			this.checkHasMidFrame(furniture);
 			this.checkHasLeg(furniture);
 
@@ -2111,6 +2115,8 @@ Chair_Align.prototype = {
 				}						
 			}
 
+			console.log(furniture);
+			
 			while(this.hasChildren(legs[0]))
 				legs[0] = legs[0].children[0];
 			var legMaterial = new THREE.MeshBasicMaterial();
@@ -2130,7 +2136,7 @@ Chair_Align.prototype = {
 				///console.log(simplified);
 				//cut
 				offset = furnitures[ij].getComponentCenterPosition('midframe').y - furnitures[ij].getComponentSize('midframe').y;		
-				offset = offset*4.5;
+				//offset = offset*4.5;
 				var cutResultGeometry = chairCutBack(simplified, offset);
 				var newleg = new THREE.Mesh( cutResultGeometry, legMaterial );
 				furniture.remove(legs[i]);
@@ -2138,6 +2144,7 @@ Chair_Align.prototype = {
 				
 			}
 
+			/*
 			//cut back
 			var BackNeedCut = this.checkBackNeedCut(furniture);
 
@@ -2174,7 +2181,7 @@ Chair_Align.prototype = {
 
 			}
 
-
+			*/
 		}
 	},
 
@@ -2585,8 +2592,6 @@ Chair_Rebuild.prototype = {
 
 	addBackRest: function(furniture) {
 
-		console.log("function called");
-
 		//get back and its contour
 		var back_left = furniture.getComponentInName("back", "left");
 		var back_left_points = computeConvexHull(back_left, "yz"); //2d points
@@ -2722,9 +2727,21 @@ Chair_Rebuild.prototype = {
 		var material = new THREE.MeshBasicMaterial( {map: texture} );
 
 		var backRest = new THREE.Mesh( geometry, material );
+		backRest.name = "backRest";
 
-		this.main.scene.add( backRest );
-
+		//this.main.scene.add( backRest );
+		console.log(backRest);
+		var back_matrix_inverse = new THREE.Matrix4();
+		back_matrix_inverse.getInverse(back_whole.matrixWorld, true);
+		
+		//set backRest position and rotation in back
+		backRest.applyMatrix(back_matrix_inverse);
+		backRest.position.set(0, 0, 0);
+		back_whole.worldToLocal(backRest.position);
+		
+		//add backRest to furniture
+		var obj = furniture.getFurniture();
+		obj.add(backRest);
 	},
 
 
@@ -10663,7 +10680,7 @@ function cadExtrudeShape (shape, path) {
 	});
     
     //this is not efficient
-	solid = solid.expand(0.2, 8);
+	solid = solid.expand(0.02, 8);
 	
 	var geometry = csgToGeometries(solid)[0];
 	
@@ -10854,7 +10871,7 @@ function cadMakeSeat (innerRace, outerRace, offsetY, textures) {
     path = path.close();
     var cag = path.innerToCAG();
     var csg = cag.extrude({
-      offset: [0, 0, 0.2],   // direction for extrusion
+      offset: [0, 0, 0.02],   // direction for extrusion
       twistangle: 0,       // top surface is rotated 30 degrees 
       twiststeps: 0        // create 10 slices
     });
@@ -10909,7 +10926,7 @@ function cadMakeSeat (innerRace, outerRace, offsetY, textures) {
     mesh.receiveShadow = true;
 
     //todo.. can we set it in the csgtogeometry function? the normal vectors are meshed up
-    mesh.translateY(offsetY + 0.2);
+    mesh.translateY(offsetY + 0.02);
     //rotate from y - z
     var tempQuaternion = new THREE.Quaternion();
     tempQuaternion.setFromUnitVectors(new THREE.Vector3(0, 1, 0), new THREE.Vector3(0, 0, 1));
@@ -10938,7 +10955,7 @@ const assignUVs = require('./assignUVs');
 
 function chairCreateBoard(width, height, depth) {
 	var board = cube({size:[width, height, depth]});
-	var obj = board.expand(0.12, 16);
+	var obj = board.expand(0.012, 16);
 
 	var geometry = csgToGeometries(obj)[0];
 
@@ -31092,7 +31109,7 @@ function rebuildMakeSeat ( NewSeatSizex , NewSeatSizey , NewSeatSizez , mode){
 		//var seat = geometryToCsgs(geometry);
 		var seat = cube({size:[NewSeatSizex , NewSeatSizey , NewSeatSizez]});
 		
-		var obj = seat.expand(0.1, 16);
+		var obj = seat.expand(0.01, 16);
 
 		var geometry = csgToGeometries(obj)[0];
 		geometry = new THREE.Geometry().fromBufferGeometry( geometry );

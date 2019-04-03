@@ -150,8 +150,6 @@ Chair_Rebuild.prototype = {
 
 	addBackRest: function(furniture) {
 
-		console.log("function called");
-
 		//get back and its contour
 		var back_left = furniture.getComponentInName("back", "left");
 		var back_left_points = computeConvexHull(back_left, "yz"); //2d points
@@ -287,9 +285,21 @@ Chair_Rebuild.prototype = {
 		var material = new THREE.MeshBasicMaterial( {map: texture} );
 
 		var backRest = new THREE.Mesh( geometry, material );
+		backRest.name = "backRest";
 
-		this.main.scene.add( backRest );
-
+		//this.main.scene.add( backRest );
+		console.log(backRest);
+		var back_matrix_inverse = new THREE.Matrix4();
+		back_matrix_inverse.getInverse(back_whole.matrixWorld, true);
+		
+		//set backRest position and rotation in back
+		backRest.applyMatrix(back_matrix_inverse);
+		backRest.position.set(0, 0, 0);
+		back_whole.worldToLocal(backRest.position);
+		
+		//add backRest to furniture
+		var obj = furniture.getFurniture();
+		obj.add(backRest);
 	},
 
 

@@ -174,14 +174,14 @@ Chair_Align.prototype = {
 			}
 
 			//flip
-			this.flip(this.furnitures);
+			//this.flip(this.furnitures);
 
 			//seat
-			this.addSeat(this.furnitures, this.reference, this.textures);
+			//this.addSeat(this.furnitures, this.reference, this.textures);
 
 
 			//move upwards
-			this.seat.translateZ(-0.6);
+			//this.seat.translateZ(-0.6);
 
 		}else if(tfname == "connect1"){
 
@@ -245,7 +245,6 @@ Chair_Align.prototype = {
 			box.setFromObject(array[i]);
 			if(checkBox.intersectsBox(box)){
 				array[i].name = "leg";
-				//console.log(array[i]);
 			}
 		}
 		
@@ -378,8 +377,8 @@ Chair_Align.prototype = {
 		//make it based on x axis
 		var segAngleR = segAngle/180*Math.PI * (-1);
 
-		var destVector = new THREE.Vector3(0, refHeight, -30);
-		var segVector = new THREE.Vector3(segDistance, 0, 0);
+		var destVector = new THREE.Vector3(0, refHeight, -3);
+		var segVector = new THREE.Vector3(segDistance / 10, 0, 0);
 		
 		var refAxis = new THREE.Vector3(0, 1, 0);
 
@@ -454,7 +453,7 @@ Chair_Align.prototype = {
 		for(var ij = 0; ij < furnitures.length; ij++){
 
 			var furniture = furnitures[ij].getFurniture();
-
+			
 			this.checkHasMidFrame(furniture);
 			this.checkHasLeg(furniture);
 
@@ -477,6 +476,8 @@ Chair_Align.prototype = {
 				}						
 			}
 
+			console.log(furniture);
+			
 			while(this.hasChildren(legs[0]))
 				legs[0] = legs[0].children[0];
 			var legMaterial = new THREE.MeshBasicMaterial();
@@ -496,7 +497,7 @@ Chair_Align.prototype = {
 				///console.log(simplified);
 				//cut
 				offset = furnitures[ij].getComponentCenterPosition('midframe').y - furnitures[ij].getComponentSize('midframe').y;		
-				offset = offset*4.5;
+				//offset = offset*4.5;
 				var cutResultGeometry = chairCutBack(simplified, offset);
 				var newleg = new THREE.Mesh( cutResultGeometry, legMaterial );
 				furniture.remove(legs[i]);
@@ -504,6 +505,7 @@ Chair_Align.prototype = {
 				
 			}
 
+			/*
 			//cut back
 			var BackNeedCut = this.checkBackNeedCut(furniture);
 
@@ -540,7 +542,7 @@ Chair_Align.prototype = {
 
 			}
 
-
+			*/
 		}
 	},
 

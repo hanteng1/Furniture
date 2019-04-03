@@ -33,7 +33,7 @@ function cadExtrudeShape (shape, path) {
 	});
     
     //this is not efficient
-	solid = solid.expand(0.2, 8);
+	solid = solid.expand(0.02, 8);
 	
 	var geometry = csgToGeometries(solid)[0];
 	
