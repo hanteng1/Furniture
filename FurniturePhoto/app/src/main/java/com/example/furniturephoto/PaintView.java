@@ -42,9 +42,6 @@ public class PaintView extends View {
     public Bitmap cropOriginBitmap;
 
 
-    public Bitmap croppedBitmap;
-
-
     public PaintView(Context context, AttributeSet attrs)
     {
         super(context, attrs);
@@ -79,13 +76,6 @@ public class PaintView extends View {
         screenWidth = x;
         screenHeight = y;
 
-        resultBitmap = Bitmap.createBitmap(screenWidth, screenHeight,
-                Bitmap.Config.ARGB_8888);
-
-
-        croppedBitmap = Bitmap.createBitmap(screenWidth, screenHeight,
-                Bitmap.Config.ARGB_8888);
-
         cropOriginBitmap = Bitmap.createBitmap(screenWidth, screenHeight,
                 Bitmap.Config.ARGB_8888);
 
@@ -98,16 +88,13 @@ public class PaintView extends View {
         Bitmap d = new BitmapDrawable(MainActivity.getSharedInstance().getResources() , path).getBitmap();
         screenWidth = 1080;
         screenHeight = (int) ( d.getHeight() * (1080.0 / d.getWidth()) );
-        resultBitmap = Bitmap.createScaledBitmap(d, screenWidth, screenHeight, true);
-
-
-//        Bitmap background = BitmapFactory.decodeResource(MainActivity.getSharedInstance().getResources(), R.drawable.white);
-//        whiteBackground = Bitmap.createScaledBitmap(background, screenWidth, screenHeight, true);
-        //Rect rect = new Rect(0, 0, screenWidth, screenHeight);
-
-        croppedBitmap = Bitmap.createBitmap(resultBitmap);
+        cropOriginBitmap = Bitmap.createScaledBitmap(d, screenWidth, screenHeight, true);
 
         isCropped = false;
+
+
+        resultBitmap = Bitmap.createBitmap(screenWidth, screenHeight,
+                Bitmap.Config.ARGB_8888);
 
         invalidate();
     }
@@ -128,12 +115,12 @@ public class PaintView extends View {
     {
 
         //copy and paste demo
-        if(isCropped)
-        {
-            canvas.drawBitmap(croppedBitmap, 0, 0, inputPaint);
-        }else{
-
+        if(isCropped) {
             canvas.drawBitmap(resultBitmap, 0, 0, inputPaint);
+
+        }else {
+
+            canvas.drawBitmap(cropOriginBitmap, 0, 0, inputPaint);
 
 
             //if still drawing
@@ -207,17 +194,19 @@ public class PaintView extends View {
         Canvas mCanvas = new Canvas();
         mCanvas.setBitmap(resultBitmap);
 //
-//        Bitmap background = BitmapFactory.decodeResource(MainActivity.getSharedInstance().getResources(), R.drawable.white);
-//        Rect rect = new Rect(0, 0, screenWidth, screenHeight);
-//        mCanvas.drawBitmap(background, null, rect, inputPaint);
-//        background.recycle();
-//        background = null;
+        //Bitmap background = BitmapFactory.decodeResource(MainActivity.getSharedInstance().getResources(), R.drawable.white);
+        Rect rect = new Rect(0, 0, screenWidth, screenHeight);
+        mCanvas.drawBitmap(cropOriginBitmap, null, rect, inputPaint);
+        cropOriginBitmap.recycle();
+        cropOriginBitmap = null;
 //
 //
 //
 //        //crop the bitmap, using the drawing path if possible
 //        //save it for later work
 //        //https://stackoverflow.com/questions/8993292/cutting-a-multipoint-ploygon-out-of-bitmap-and-placing-it-on-transparency
+
+
         Path cropPath = new Path();
 
         if(touchPoints.size() > 1)
@@ -243,30 +232,7 @@ public class PaintView extends View {
             mCanvas.drawPath(cropPath, paint);
         }
 
-
-
-        //make it white background
-
-
-        mCanvas = new Canvas();
-        mCanvas.setBitmap(croppedBitmap);
-
-
-        Bitmap background = BitmapFactory.decodeResource(MainActivity.getSharedInstance().getResources(), R.drawable.white);
-        Rect rect = new Rect(0, 0, screenWidth, screenHeight);
-        mCanvas.drawBitmap(background, null, rect, inputPaint);
-        background.recycle();
-        background = null;
-
-        mCanvas.drawBitmap(resultBitmap, 0, 0 , inputPaint);
-
-
         isCropped = true;
-
-
-
-
-
         invalidate();
 
     }
