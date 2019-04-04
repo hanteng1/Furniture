@@ -567,6 +567,7 @@ Model_Add.prototype = {
 		hook.name = "create hook";
 		this.main.scene.add(hook);
 		hook.position.set(0,0,0);
+		hook.scale.set(0.1, 0.1, 0.1);
 		
 		this.objectVector = this.objectVectorList.hook;
 		this.selectObject = hook;

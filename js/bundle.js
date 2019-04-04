@@ -1400,7 +1400,7 @@ Chair_Add.prototype = {
 		hang.name = "add_hang";
 		this.main.scene.add( hang );
 		var wall = this.main.purpleWall;
-		var moveTo = new THREE.Vector3(wall.position.x + 1, wall.position.y - 1, wall.position.z + 1);
+		var moveTo = new THREE.Vector3(wall.position.x + 1, wall.position.y - 1, wall.position.z + 4);
 		hang.position.set(moveTo.x, moveTo.y, moveTo.z);
 
 		console.log(hang);		
@@ -6920,6 +6920,7 @@ Model_Add.prototype = {
 		hook.name = "create hook";
 		this.main.scene.add(hook);
 		hook.position.set(0,0,0);
+		hook.scale.set(0.1, 0.1, 0.1);
 		
 		this.objectVector = this.objectVectorList.hook;
 		this.selectObject = hook;
