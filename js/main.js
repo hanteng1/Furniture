@@ -198,7 +198,7 @@ Main.prototype = {
 		var hemiLight = new THREE.HemisphereLight( 0xffffff, 0x444444, 0.2);
 		hemiLight.position.set( 0, 100, 0 );
 		this.scene.add( hemiLight );
-		this.addHelper(hemiLight);
+		//this.addHelper(hemiLight);
 
 		var directlight = new THREE.DirectionalLight( 0xffffff, 0.3 );
 		directlight.position.set( 0, 30, 50 );
@@ -208,7 +208,7 @@ Main.prototype = {
 		// directlight.shadow.camera.bottom = -1.8;
 		// directlight.shadow.camera.right = 1.2;
 		this.scene.add( directlight );
-		this.addHelper(directlight);
+		//this.addHelper(directlight);
 
 		var path = './skybox/';
 		var format = '.jpg';
