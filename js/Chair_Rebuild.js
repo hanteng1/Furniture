@@ -32,41 +32,41 @@ Chair_Rebuild.prototype = {
 	    };
 
 	    var textureLoader = new THREE.TextureLoader( manager );
-	    
 	    this.textures["material1"] = textureLoader.load( '../images/material/wrap/wrap7.jpg' );
-	    this.textures["material1"].repeat.set(0.3, 0.3);
 		this.textures["material1"].wrapS = this.textures["material1"].wrapT = THREE.MirroredRepeatWrapping;
+		this.textures["material1"].repeat.set(10, 10);
+		console.log(this.textures["material1"]);
 
 		this.textures["material2"] = textureLoader.load( '../images/material/material2.jpg' );
-	    this.textures["material2"].repeat.set(0.1, 0.1);
+	    this.textures["material2"].repeat.set(1, 1);
 		this.textures["material2"].wrapS = this.textures["material2"].wrapT = THREE.MirroredRepeatWrapping;
 
 		this.textures["material3"] = textureLoader.load( '../images/material/wrap/wrap5.jpg' );
-	    this.textures["material3"].repeat.set(0.3, 0.3);
+	    this.textures["material3"].repeat.set(3, 3);
 		this.textures["material3"].wrapS = this.textures["material3"].wrapT = THREE.MirroredRepeatWrapping;
 
 		this.textures["material4"] = textureLoader.load( '../images/material/material5.jpg' );
-	    this.textures["material4"].repeat.set(0.1, 0.1);
+	    this.textures["material4"].repeat.set(1, 1);
 		this.textures["material4"].wrapS = this.textures["material4"].wrapT = THREE.MirroredRepeatWrapping;
 
 		this.textures["material5"] = textureLoader.load( '../images/material/wrap/wrap8.jpg' );
-	    this.textures["material5"].repeat.set(0.1, 0.1);
+	    this.textures["material5"].repeat.set(1, 1);
 		this.textures["material5"].wrapS = this.textures["material5"].wrapT = THREE.MirroredRepeatWrapping;
 
 		this.textures["material6"] = textureLoader.load( '../images/material/wrap/wrap11.jpg' );
-	    this.textures["material6"].repeat.set(0.3, 0.3);
+	    this.textures["material6"].repeat.set(3, 3);
 		this.textures["material6"].wrapS = this.textures["material6"].wrapT = THREE.MirroredRepeatWrapping;
 
 		this.textures["material7"] = textureLoader.load( '../images/material/wrap/wrap15.jpg' );
-	    this.textures["material7"].repeat.set(0.2, 0.2);
+	    this.textures["material7"].repeat.set(2, 2);
 		this.textures["material7"].wrapS = this.textures["material7"].wrapT = THREE.MirroredRepeatWrapping;
 
 		this.textures["material8"] = textureLoader.load( '../images/material/wrap/wrap13.jpg' );
-	    this.textures["material8"].repeat.set(0.5, 0.5);
+	    this.textures["material8"].repeat.set(5, 5);
 		this.textures["material8"].wrapS = this.textures["material8"].wrapT = THREE.MirroredRepeatWrapping;
 
 		this.textures["material9"] = textureLoader.load( '../images/material/wrap/wrap14.jpg' );
-	    this.textures["material9"].repeat.set(0.5, 0.5);
+	    this.textures["material9"].repeat.set(5, 5);
 		this.textures["material9"].wrapS = this.textures["material9"].wrapT = THREE.MirroredRepeatWrapping;
 
 	},
@@ -281,7 +281,7 @@ Chair_Rebuild.prototype = {
 
 		//generate shape
 		var geometry = cadExtrudeShape(back_left_3d, back_extrude_3d);
-		var texture = this.textures["material1"];
+		var texture = this.textures["material6"];
 		var material = new THREE.MeshBasicMaterial( {map: texture} );
 
 		var backRest = new THREE.Mesh( geometry, material );
