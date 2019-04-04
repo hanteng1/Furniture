@@ -104,11 +104,10 @@ Model_Painting.prototype = {
         for(var i=0 ; i<this.main.GetSizeObj.length ; i++ ){
             
             var model = this.main.GetSizeObj[i];
+
             var ChangeTextureObj = [];
             this.getAllChildren(model , ChangeTextureObj);
-
             for(var j=0 ; j < ChangeTextureObj.length ; j++ ){
-
                 if( ChangeTextureObj[j].geometry.isBufferGeometry ){
                     ChangeTextureObj[j].geometry = new THREE.Geometry().fromBufferGeometry( ChangeTextureObj[j].geometry );
                     assignUVs( ChangeTextureObj[j].geometry );
@@ -122,6 +121,9 @@ Model_Painting.prototype = {
     },
 
     getAllChildren: function(obj, array) {
+        if(obj.type == "Mesh"){
+            array.push(obj);
+        }
         if (obj.children.length > 0) {
             for (var i = 0; i < obj.children.length; i++) {
                 if(obj.children[i].type == "Mesh" || obj.children[i].type == "Object3D"){
@@ -129,10 +131,6 @@ Model_Painting.prototype = {
                 }   
             }
         }
-        else{
-            array.push(obj);    
-        }
-
     },
 
     DeleteButton: function(){
