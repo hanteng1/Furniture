@@ -2501,7 +2501,6 @@ Main.prototype = {
     AddCutPlaneFunc: function() {
     	//console.log("calling");
     	//to do...
-
     	//console.log(this.intersectpoint);
 
     	var cutMaterial = new THREE.MeshBasicMaterial();
@@ -2517,7 +2516,8 @@ Main.prototype = {
     	var cutPart1 = new THREE.Mesh( cutResultGeometries[0], cutMaterial );
     	var cutPart2 = new THREE.Mesh( cutResultGeometries[1], cutMaterial );
 
-    	this.furniture.getFurniture().remove(this.component);
+    	var parent = this.component.parent;
+    	parent.remove(this.component);
     	this.furniture.getFurniture().add(cutPart1);
     	this.furniture.getFurniture().add(cutPart2);
 
