@@ -18,7 +18,7 @@ function Model_Cut(main) {
 	    scope.main.Cutting = true;
 
 	    if(scope.main.cutplane == null) {
-	    	var geometry = new THREE.PlaneGeometry( -.1, 0.1);
+	    	var geometry = new THREE.PlaneGeometry( 0.1, 0.1);
 			var material = new THREE.MeshBasicMaterial( {color: 0xffff00, side: THREE.DoubleSide, transparent: true, opacity: 0.5} );
 			scope.main.cutplane = new THREE.Mesh( geometry, material );
 			scope.main.scene.add( scope.main.cutplane );
