@@ -11943,7 +11943,7 @@ Main.prototype = {
 
 	init: function(){
 		var scope = this;
-
+		document.getElementById("minfo").style = "display:none";
 		let a = 1;
 		if(!Detector.webgl)
 			Detector.addGetWebGLMessage();
