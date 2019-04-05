@@ -174,29 +174,28 @@ Ui.prototype = {
 		});
 
 		$('.ui.blue.submit.button.customdesign').click(function(){
-
+			$('.ui.blue.submit.button.showexample').hide();
 			scope.main.category = "tool";
 			scope.main.applyDesign();
 
 		});
 
 		$('.ui.blue.submit.button.getsize').click(function(){
-
 			scope.main.LabelSize();
-
 		});
 		$('.ui.red.submit.button.removesize').click(function(){
 
 			scope.main.RemoveSizeLabel();
 			
 		});
-		$('.ui.blue.submit.button.getdis').click(function(){
 
+		$('.ui.blue.submit.button.getdis').click(function(){
 			scope.main.GetDistance();
-			
 		});
 		
-
+		$('.ui.blue.submit.button.showexample').click(function(){
+			scope.main.showExample();
+		});
 
 		//initial category window model selection
 		$('#model_image_1').click(function(){
@@ -251,6 +250,7 @@ Ui.prototype = {
 		$('.ui.blue.submit.button.getsize').hide();
 		$('.ui.red.submit.button.removesize').hide();
 		$('.ui.blue.submit.button.getdis').hide();
+		$('.ui.blue.submit.button.showexample').hide();
 
 		$('.operations.operation_table').hide();
 		$('.operations.operation_table_two').hide();
@@ -388,10 +388,10 @@ Ui.prototype = {
 			$('#parameter_control_chair_align').show();
 
 			// example
+			$('.ui.blue.submit.button.showexample').show();
 			exampleImage.src = "images/example/CHAIR_ALIGN_vertical.png";
 			exampleLink.href = "https://read01.com/zh-tw/eL887P.html#.XCRznc8zZBx";
 			exampleLink.text = "Bench";
-			$('.example').show();
 		});
 
 		//chair_align_horizontal
@@ -399,10 +399,10 @@ Ui.prototype = {
 			scope.processor.executeDesign("CHAIR_ALIGN", "horizontal");
 
 			// example
+			$('.ui.blue.submit.button.showexample').show();
 			exampleImage.src = "images/example/CHAIR_ALIGN_horizontal.png";
 			exampleLink.href = "https://read01.com/zh-tw/eL887P.html#.XCRznc8zZBx";
 			exampleLink.text = "Bench";
-			$('.example').show();
 		});
 
 		//chair_align_flip
@@ -410,10 +410,10 @@ Ui.prototype = {
 			scope.processor.executeDesign("CHAIR_ALIGN", "flip");
 
 			// example
+			$('.ui.blue.submit.button.showexample').show();
 			exampleImage.src = "images/example/CHAIR_ALIGN_flip.png";
 			exampleLink.href = "https://www.pinterest.com/pin/56646907794456800/";
 			exampleLink.text = "Bench";
-			$('.example').show();
 		});
 
 
@@ -436,10 +436,10 @@ Ui.prototype = {
 			$('#parameter_control_chair_add').show();
 
 			// example
+			$('.ui.blue.submit.button.showexample').show();
 			exampleImage.src = "images/example/CHAIR_ADD_plate.png";
 			exampleLink.href = "https://www.pinterest.com/pin/281543705299914/";
 			exampleLink.text = "Shelf";
-			$('.example').show();
 		});
 
 		//chair_add_hook
@@ -447,10 +447,10 @@ Ui.prototype = {
 			scope.processor.executeDesign("CHAIR_ADD", "hook");
 
 			// example
+			$('.ui.blue.submit.button.showexample').show();
 			exampleImage.src = "images/example/CHAIR_ADD_hook.png";
 			exampleLink.href = "https://read01.com/zh-tw/G4o6aL.html#.XCR4Cc8zZBx";
 			exampleLink.text = "Hook";
-			$('.example').show();
 		});
 
 		//chair_add_flip
@@ -458,10 +458,10 @@ Ui.prototype = {
 			scope.processor.executeDesign("CHAIR_ADD", "hang");
 
 			// example
+			$('.ui.blue.submit.button.showexample').show();
 			exampleImage.src = "images/example/CHAIR_ADD_hang.png";
 			exampleLink.href = "https://www.pinterest.com/pin/566186984387890581/";
 			exampleLink.text = "Swing";
-			$('.example').show();
 		});
 
 		//chair_storage_bin
@@ -469,10 +469,10 @@ Ui.prototype = {
 			scope.processor.executeDesign("STORAGE_BIN", "");
 
 			// example
+			$('.ui.blue.submit.button.showexample').show();
 			exampleImage.src = "images/example/Storage_Bin.png";
 			exampleLink.href = "https://br.pinterest.com/pin/546835579746661436/?lp=true";
 			exampleLink.text = "Storage";
-			$('.example').show();
 		});
 
 		//chair_rebuild_seat
@@ -481,10 +481,10 @@ Ui.prototype = {
 			$('#parameter_control_chair_rebuild').show();
 
 			// example
+			$('.ui.blue.submit.button.showexample').show();
 			exampleImage.src = "images/example/CHAIR_REBUILD_seat.png";
 			exampleLink.href = "http://www.architectureartdesigns.com/15-most-amazing-before-and-after-chair-makeover-ideas/amp/";
 			exampleLink.text = "Chair";
-			$('.example').show();
 		});
 
 		//chair_rebuild_back
@@ -492,10 +492,11 @@ Ui.prototype = {
 			scope.processor.executeDesign("CHAIR_REBUILD", "backrest");
 
 			// example
+			$('.ui.blue.submit.button.showexample').show();
 			exampleImage.src = "images/example/CHAIR_REBUILD_backrest.png";
 			exampleLink.href = "http://www.architectureartdesigns.com/15-most-amazing-before-and-after-chair-makeover-ideas/amp/";
 			exampleLink.text = "Chair";
-			$('.example').show();
+			
 		});
 
 		//chair_rebuild_leg
@@ -503,10 +504,11 @@ Ui.prototype = {
 			scope.processor.executeDesign("CHAIR_REBUILD", "leg");
 
 			// example
+			$('.ui.blue.submit.button.showexample').show();
 			exampleImage.src = "images/example/CHAIR_REBUILD_leg.png";
 			exampleLink.href = "https://www.pinterest.com/pin/83035186854913776/";
 			exampleLink.text = "Office Chair";
-			$('.example').show();
+			
 		});
 
 		//dresser
@@ -514,73 +516,81 @@ Ui.prototype = {
 			scope.processor.executeDesign("DRESSER_ADD", "cut_chair");
 
 			// example
+			$('.ui.blue.submit.button.showexample').show();
 			exampleImage.src = "images/example/DRESSER_ADD_cutChair.png";
 			exampleLink.href = "http://www.foliver.com/diy/40-awesome-makeovers-clever-ways-with-tutorials-to-repurpose-old-furniture/";
 			exampleLink.text = "Chair";
-			$('.example').show();
+			
 		});
 		$('#operation_dresser_add_add_door').click(function() {
 			scope.processor.executeDesign("DRESSER_ADD", "add_door");
 
 			// example
+			$('.ui.blue.submit.button.showexample').show();
 			exampleImage.src = "images/example/DRESSER_ADD_addDoor.png";
 			exampleLink.href = "https://www.ikeahackers.net/2016/07/nornas-cd-lp-chest.html";
 			exampleLink.text = "Dresser";
-			$('.example').show();
+			
 		});
 		$('#operation_dresser_add_add_leg').click(function() {
 			scope.processor.executeDesign("DRESSER_ADD", "add_leg");
 
 			// example
+			$('.ui.blue.submit.button.showexample').show();
 			exampleImage.src = "images/example/DRESSER_ADD_addLeg.png";
 			exampleLink.href = "https://www.ikeahackers.net/2016/12/ivar-grown.html";
 			exampleLink.text = "Dresser";
-			$('.example').show();
+			
 		});
 		$('#operation_dresser_add_add_rod').click(function() {
 			scope.processor.executeDesign("DRESSER_ADD", "add_rod");
 
 			// example
+			$('.ui.blue.submit.button.showexample').show();
 			exampleImage.src = "images/example/DRESSER_ADD_addRod1.png";
 			exampleLink.href = "https://www.ikeahackers.net/2016/12/ivar-grown.html";
 			exampleLink.text = "Dresser";
-			$('.example').show();
+			
 		});
 		$('#operation_dresser_add_add_rod_two').click(function() {
 			scope.processor.executeDesign("DRESSER_ADD", "add_rod");
 
 			// example
+			$('.ui.blue.submit.button.showexample').show();
 			exampleImage.src = "images/example/DRESSER_ADD_addRod2.png";
 			exampleLink.href = "https://www.ikeahackers.net/2013/10/twin-rasts-in-the-nursery.html";
 			exampleLink.text = "Wardrobe";
-			$('.example').show();
+			
 		});
 		$('#operation_dresser_add_add_spice_rack').click(function() {
 			scope.processor.executeDesign("DRESSER_ADD", "add_spice_rack");
 
 			// example
+			$('.ui.blue.submit.button.showexample').show();
 			exampleImage.src = "images/example/DRESSER_ADD_addSpiceRack.png";
 			exampleLink.href = "http://www.foliver.com/diy/40-awesome-makeovers-clever-ways-with-tutorials-to-repurpose-old-furniture/6/";
 			exampleLink.text = "Wardrobe";
-			$('.example').show();
+			
 		});
 		$('#operation_dresser_add_add_drawer').click(function() {
 			scope.processor.executeDesign("DRESSER_ADD", "add_drawer");
 
 			// example
+			$('.ui.blue.submit.button.showexample').show();
 			exampleImage.src = "images/example/DRESSER_ADD_addDrawer.png";
 			exampleLink.href = "https://www.pinterest.com/pin/397372367099234865/";
 			exampleLink.text = "Dresser";
-			$('.example').show();
+			
 		});
 		$('#operation_dresser_add_remove_drawers').click(function() {
 			scope.processor.executeDesign("DRESSER_ADD", "remove_drawers");
 
 			// example
+			$('.ui.blue.submit.button.showexample').show();
 			exampleImage.src = "images/example/DRESSER_ADD_removeDrawers.png";
 			exampleLink.href = "http://www.foliver.com/diy/40-awesome-makeovers-clever-ways-with-tutorials-to-repurpose-old-furniture/28/";
 			exampleLink.text = "Dresser";
-			$('.example').show();
+			
 		});
 
 		//cabinet_kallax_chair
@@ -588,10 +598,11 @@ Ui.prototype = {
 			scope.processor.executeDesign("CABINET_LALLAX", "chair");
 
 			// example
+			$('.ui.blue.submit.button.showexample').show();
 			exampleImage.src = "images/example/CABINET_KALLAX_chiar.png";
 			exampleLink.href = "https://lesbricolesdemel.wordpress.com/2016/03/20/inspiration-1-ikea-hack-la-gamme-kallax/";
 			exampleLink.text = "Chair";
-			$('.example').show();
+			
 		});
 
 		//cabinet_kallax_bed
@@ -600,10 +611,11 @@ Ui.prototype = {
 			$('#parameter_control_cabinet_bed').show();
 
 			// example
+			$('.ui.blue.submit.button.showexample').show();
 			exampleImage.src = "images/example/CABINET_KALLAX_bed.png";
 			exampleLink.href = "https://www.pinterest.com/pin/596234438136893984/";
 			exampleLink.text = "Bed";
-			$('.example').show();
+			
 		});
 
 		
@@ -613,10 +625,11 @@ Ui.prototype = {
 			scope.processor.executeDesign("CABINET_LALLAX", "table");
 
 			// example
+			$('.ui.blue.submit.button.showexample').show();
 			exampleImage.src = "images/example/CABINET_KALLAX_table.png";
 			exampleLink.href = "https://www.pinterest.com/pin/453385887470070464/";
 			exampleLink.text = "Table";
-			$('.example').show();
+			
 		});
 
 
@@ -625,90 +638,99 @@ Ui.prototype = {
 			scope.processor.executeDesign("TABLE", "stack");
 
 			// example
+			$('.ui.blue.submit.button.showexample').show();
 			exampleImage.src = "images/example/TABLE_stack.png";
 			exampleLink.href = "https://www.ikeahackers.net/2015/11/kitchen-tables-converted-canine-condo.html";
 			exampleLink.text = "Shelf";
-			$('.example').show();
+			
 		});
 
 		$('#operation_table_flipStack').click(function() {
 			scope.processor.executeDesign("TABLE", "flipStack");
 
 			// example
+			$('.ui.blue.submit.button.showexample').show();
 			exampleImage.src = "images/example/TABLE_flipStack.png";
 			exampleLink.href = "https://www.ikeahackers.net/2016/08/complementary-small-lack-entertainment-centre-lack-coffee-table.html";
 			exampleLink.text = "Shelf";
-			$('.example').show();
+			
 		});
 
 		$('#operation_table_addWheel').click(function() {
 			scope.processor.executeDesign("TABLE", "addWheel");
 
 			// example
+			$('.ui.blue.submit.button.showexample').show();
 			exampleImage.src = "images/example/TABLE_addWheel.png";
 			exampleLink.href = "https://www.ikeahackers.net/2014/11/norden-tables-turn-into-rolling-kitchen-island.html";
 			exampleLink.text = "Shelf";
-			$('.example').show();
+			
 		});
 
 		$('#operation_table_addBoardOnTabletop').click(function() {
 			scope.processor.executeDesign("TABLE", "addBoardOnTabletop");
 
 			// example
+			$('.ui.blue.submit.button.showexample').show();
 			exampleImage.src = "images/example/TABLE_addBoardOnTabletop.png";
 			exampleLink.href = "https://www.ikeahackers.net/2016/04/norden-concealed-puzzle-table.html";
 			exampleLink.text = "Table";
-			$('.example').show();
+			
 		});
 
 		$('#operation_table_addBoard').click(function() {
 			scope.processor.executeDesign("TABLE", "addBoard");
 
 			// example
+			$('.ui.blue.submit.button.showexample').show();
 			exampleImage.src = "images/example/TABLE_addBoard.png";
 			exampleLink.href = "https://www.ikeahackers.net/2014/12/coastal-ikea-kitchen-island-from-bjorkudden-table.html";
 			exampleLink.text = "Shelf";
-			$('.example').show();
+			
 		});
 
 		$('#operation_table_addDrawer').click(function() {
 			scope.processor.executeDesign("TABLE", "addDrawer");
 
 			// example
+			$('.ui.blue.submit.button.showexample').show();
 			exampleImage.src = "images/example/TABLE_addDrawer.png";
 			exampleLink.href = "https://www.ikeahackers.net/2015/10/lack-table-with-lego-storage-drawers.html";
 			exampleLink.text = "Desk";
-			$('.example').show();
+			
 		});
 
 		$('#operation_table_addRod').click(function() {
 			scope.processor.executeDesign("TABLE", "addRod");
 
 			// example
+			$('.ui.blue.submit.button.showexample').show();
 			exampleImage.src = "images/example/TABLE_addRod.png";
 			exampleLink.href = "https://www.ikeahackers.net/2012/01/latt-table-equipped.html";
 			exampleLink.text = "Table";
-			$('.example').show();
+			
 		});
 
 		$('#operation_table_addSeat').click(function() {
 			scope.processor.executeDesign("TABLE", "addSeat");
 
 			// example
+			$('.ui.blue.submit.button.showexample').show();
 			exampleImage.src = "images/example/TABLE_addSeat.png";
 			exampleLink.href = "https://www.ikeahackers.net/2014/12/hemnes-coffee-table-turned-ottoman.html";
 			exampleLink.text = "Chair";
-			$('.example').show();
+			
 		});
 
 		$('#operation_table_addDoorBoard').click(function() {
 			scope.processor.executeDesign("TABLE", "addDoorBoard");
 
 			// example
+			$('.ui.blue.submit.button.showexample').show();
 			exampleImage.src = "images/example/TABLE_addDoorBoard.png";
 			exampleLink.href = "https://www.pinterest.com/pin/434386326543745294/";
 			exampleLink.text = "Table";
-			$('.example').show();
+			
 		});
 
 		//desk
@@ -716,50 +738,55 @@ Ui.prototype = {
 			scope.processor.executeDesign("DESK", "addBesideBoard");
 
 			// example
+			$('.ui.blue.submit.button.showexample').show();
 			exampleImage.src = "images/example/DESK_addBesideBoard.png";
 			exampleLink.href = "https://www.pinterest.com/pin/Ac4hkJyzj0ISaeN8xDGwSCOVbudDAWn3bO3ZEZkd7aBbfXLXYk6P04Q/";
 			exampleLink.text = "Desk";
-			$('.example').show();
+			
 		});
 
 		$('#operation_desk_add_top_board').click(function() {
 			scope.processor.executeDesign("DESK", "addTopBoard");
 
 			// example
+			$('.ui.blue.submit.button.showexample').show();
 			exampleImage.src = "images/example/DESK_addTopBoard.png";
 			exampleLink.href = "https://www.ikeahackers.net/2015/10/affordable-dressing-table-makeup-vanity.html";
 			exampleLink.text = "Desk";
-			$('.example').show();
+			
 		});
 
 		$('#operation_desk_add_bottom_board').click(function() {
 			scope.processor.executeDesign("DESK", "addBottomBoard");
 
 			// example
+			$('.ui.blue.submit.button.showexample').show();
 			exampleImage.src = "images/example/DESK_addBottomBoard.png";
 			exampleLink.href = "https://www.pinterest.com/pin/112097478194528944/";
 			exampleLink.text = "Shelf";
-			$('.example').show();
+			
 		});
 
 		$('#operation_desk_add_inside_board').click(function() {
 			scope.processor.executeDesign("DESK", "addInsideBoard");
 
 			// example
+			$('.ui.blue.submit.button.showexample').show();
 			exampleImage.src = "images/example/DESK_addInsideBoard.png";
 			exampleLink.href = "http://www.chicaandjo.com/turn-a-sewing-table-into-a-bar-cart/";
 			exampleLink.text = "Shelf";
-			$('.example').show();
+			
 		});
 
 		$('#operation_desk_add_wheel').click(function() {
 			scope.processor.executeDesign("DESK", "addWheel");
 
 			// example
+			$('.ui.blue.submit.button.showexample').show();
 			exampleImage.src = "images/example/DESK_addWheel.png";
 			exampleLink.href = "https://www.pinterest.com/pin/288863763581244731/";
 			exampleLink.text = "Shelf";
-			$('.example').show();
+			
 		});
 
 
@@ -769,7 +796,7 @@ Ui.prototype = {
 			scope.processor.executeDesign("MODEL_PAINTING", "painting");
 
 			// example
-			$('.example').hide();
+			$('.ui.blue.submit.button.showexample').hide();
 		});
 
 		//model wrap
@@ -777,7 +804,8 @@ Ui.prototype = {
 			scope.processor.executeDesign("MODEL_WRAP", "wrap");
 
 			// example
-			$('.example').hide();
+			$('.ui.blue.submit.button.showexample').hide();
+			
 		});
 
 		//model rotation
@@ -785,7 +813,8 @@ Ui.prototype = {
 			scope.processor.executeDesign("MODEL_ROTATION", "rotation");
 
 			// example
-			$('.example').hide();
+			$('.ui.blue.submit.button.showexample').hide();
+			
 		});
 
 		//model align
@@ -793,7 +822,8 @@ Ui.prototype = {
 			scope.processor.executeDesign("MODEL_ALIGN", "align");
 
 			// example
-			$('.example').hide();
+			$('.ui.blue.submit.button.showexample').hide();
+			
 		});
 
 		//add
@@ -801,7 +831,8 @@ Ui.prototype = {
 			scope.processor.executeDesign("MODEL_ADD", "add");
 
 			// example
-			$('.example').hide();
+			$('.ui.blue.submit.button.showexample').hide();
+			
 		});
 
 		//addbetween
@@ -809,7 +840,8 @@ Ui.prototype = {
 			scope.processor.executeDesign("MODEL_ADDBETWEEN", "addbetween");
 
 			// example
-			$('.example').hide();
+			$('.ui.blue.submit.button.showexample').hide();
+			
 		});
 		$('.ui.button.InputRod.minus').click(function() {
 			var num = parseFloat(document.getElementById('InputRodRadius').value);
@@ -817,7 +849,8 @@ Ui.prototype = {
 			document.getElementById('InputRodRadius').value = num.toFixed(1).toString();
 
 			// example
-			$('.example').hide();
+			$('.ui.blue.submit.button.showexample').hide();
+			
 		});
 		$('.ui.button.InputRod.plus').click(function() {
 			var num = parseFloat(document.getElementById('InputRodRadius').value);
@@ -825,7 +858,8 @@ Ui.prototype = {
 			document.getElementById('InputRodRadius').value = num.toFixed(1).toString();
 
 			// example
-			$('.example').hide();
+			$('.ui.blue.submit.button.showexample').hide();
+			
 		});
 
 		//cut
@@ -833,7 +867,8 @@ Ui.prototype = {
 			scope.processor.executeDesign("MODEL_CUT", "cut");
 
 			// example
-			$('.example').hide();
+			$('.ui.blue.submit.button.showexample').hide();
+			
 		});
 		
 

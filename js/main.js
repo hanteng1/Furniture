@@ -164,11 +164,15 @@ function Main()
 
 	this.elf = null;
 
+	this.showExample_flag = false;
+
 }
 
 Main.prototype = {
 
 	init: function(){
+
+		document.getElementById("minfo").style = "display:none";
 		var scope = this;
 
 		let a = 1;
@@ -300,7 +304,7 @@ Main.prototype = {
 		// 	scope.elf = collada.scene;
 		// });
 
-
+		this.showExample_flag = false;
 	},
 
 
@@ -1701,6 +1705,18 @@ Main.prototype = {
 		}
 	},
 
+	getAllChildren: function(obj, array) {
+        if(obj.type == "Mesh"){
+            array.push(obj);
+        }
+        if (obj.children.length > 0) {
+            for (var i = 0; i < obj.children.length; i++) {
+                if(obj.children[i].type == "Mesh" || obj.children[i].type == "Object3D"){
+                    this.getAllChildren(obj.children[i], array);
+                }   
+            }
+        }
+    },
 
 	onMouseMove: function ( event ) {
 
@@ -1711,31 +1727,19 @@ Main.prototype = {
 				this.mouse.y = - ( event.clientY / window.innerHeight ) * 2 + 1;
 				var raycaster = new THREE.Raycaster();
 				raycaster.setFromCamera( this.mouse, this.camera );
-				var intersects = raycaster.intersectObjects(this.processor.model_add.selectFurniture.children);
+				var array = [];
+				this.getAllChildren(this.processor.model_add.selectFurniture, array);
+				var intersects = raycaster.intersectObjects(array);
 				if(intersects.length > 0){
 					var pos = intersects[0].point;
 					var furniture = intersects[0].object;
 					var normalVector = intersects[0].face.normal;
-					var isInsidePoint = this.processor.model_add.checkInsidePosint(this.processor.model_add.selectFurniture, pos);
-					if(isInsidePoint){
-						console.log("inside position");
-						if(this.processor.model_add.selectObjectName == "create vertical board"){
-							this.processor.model_add.insideCase(furniture, pos, normalVector);	
-						}
-					}
-					else{
-						console.log("outside position");
-						if(this.processor.model_add.selectObjectName == ""){
-							// this.processor.model_add.removeSelectObjectInScene();
-							console.log("resize " + this.processor.model_add.selectObjectName);
-							this.processor.model_add.createObject();
-						}
-						var worldNormalVector = this.processor.model_add.getFurnitureNormalVectorToWorldVector(furniture, normalVector);
-						this.processor.model_add.updateObjectPosition(pos, worldNormalVector);
-					}
+					var worldNormalVector = this.processor.model_add.getFurnitureNormalVectorToWorldVector(furniture, normalVector);
+					this.processor.model_add.updateObjectPosition(pos, worldNormalVector);
 				}
-				else
+				else{
 					console.log("mousemove miss");
+				}
 			}
 		}//if want to add rod
 		else if(this.Addrod == true){
@@ -2412,6 +2416,17 @@ Main.prototype = {
 
         //this includes width, height, depth
         return box_size;
+    },
+
+    showExample: function(){
+    	if(this.showExample_flag){
+    		$('.example').hide();
+    		this.showExample_flag = false;
+    	}
+    	else{
+    		$('.example').show();
+    		this.showExample_flag = true;
+    	}
     },
 
     getCenterPosition: function( model ){
