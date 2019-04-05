@@ -479,6 +479,7 @@ Ui.prototype = {
 		$('#operation_chair_rebuild_seat').click(function() {
 			scope.processor.executeDesign("CHAIR_REBUILD", "seat");
 			$('#parameter_control_chair_rebuild').show();
+			
 
 			// example
 			$('.ui.blue.submit.button.showexample').show();

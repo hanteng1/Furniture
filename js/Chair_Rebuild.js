@@ -69,6 +69,33 @@ Chair_Rebuild.prototype = {
 	    this.textures["material9"].repeat.set(5, 5);
 		this.textures["material9"].wrapS = this.textures["material9"].wrapT = THREE.MirroredRepeatWrapping;
 
+		this.textures["material11"] = textureLoader.load('../images/material/material1.jpg');
+		this.textures["material11"].repeat.set(0.1, 0.1);
+		this.textures["material11"].wrapS = this.textures["material11"].wrapT = THREE.MirroredRepeatWrapping;
+
+		this.textures["material12"] = textureLoader.load('../images/material/material2.jpg');
+		this.textures["material12"].repeat.set(0.1, 0.1);
+		this.textures["material12"].wrapS = this.textures["material12"].wrapT = THREE.MirroredRepeatWrapping;
+
+		this.textures["material13"] = textureLoader.load('../images/material/material3.jpg');
+		this.textures["material13"].repeat.set(0.1, 0.1);
+		this.textures["material13"].wrapS = this.textures["material13"].wrapT = THREE.MirroredRepeatWrapping;
+
+		this.textures["material14"] = textureLoader.load('../images/material/material4.jpg');
+		this.textures["material14"].repeat.set(0.1, 0.1);
+		this.textures["material14"].wrapS = this.textures["material14"].wrapT = THREE.MirroredRepeatWrapping;
+
+		this.textures["material15"] = textureLoader.load('../images/material/material5.jpg');
+		this.textures["material15"].repeat.set(0.1, 0.1);
+		this.textures["material15"].wrapS = this.textures["material15"].wrapT = THREE.MirroredRepeatWrapping;
+
+		this.textures["material16"] = textureLoader.load('../images/material/material7.jpg');
+		this.textures["material16"].repeat.set(0.1, 0.1);
+		this.textures["material16"].wrapS = this.textures["material16"].wrapT = THREE.MirroredRepeatWrapping;
+
+		this.textures["material17"] = textureLoader.load('../images/material/material9.jpg');
+		this.textures["material17"].repeat.set(0.1, 0.1);
+		this.textures["material17"].wrapS = this.textures["material17"].wrapT = THREE.MirroredRepeatWrapping;
 	},
 
 	checkHasFrame: function(furniture) {
@@ -311,8 +338,8 @@ Chair_Rebuild.prototype = {
 		var SeatPosi = furniture.getComponentCenterPosition('seat');
 
 		var group = furniture.getFurniture();
-		var mode = "NormalSeat"
-		var texture = this.textures["material1"];
+		var mode = "NormalSeat";
+		var texture = this.textures["material6"];
 		var scope = this;
 		scope.changeseatmodel(furniture,SeatSize,SeatPosi, texture, mode);
 
@@ -463,6 +490,42 @@ Chair_Rebuild.prototype = {
 			
 		});
 
+		//painting
+		$( ".item.ui.image.label.paint1" ).click(function() {
+			texture = scope.textures["material11"];
+	        var newmaterial = new THREE.MeshBasicMaterial( {map: texture} );
+	        scope.Painting( newmaterial );
+	    });
+	    $( ".item.ui.image.label.paint2" ).click(function() {
+			texture = scope.textures["material12"];
+	        var newmaterial = new THREE.MeshBasicMaterial( {map: texture} );
+	        scope.Painting( newmaterial );
+	    });
+	    $( ".item.ui.image.label.paint3" ).click(function() {
+			texture = scope.textures["material13"];
+	        var newmaterial = new THREE.MeshBasicMaterial( {map: texture} );
+	        scope.Painting( newmaterial );
+	    });
+	    $( ".item.ui.image.label.paint4" ).click(function() {
+			texture = scope.textures["material14"];
+	        var newmaterial = new THREE.MeshBasicMaterial( {map: texture} );
+	        scope.Painting( newmaterial );
+	    });
+	    $( ".item.ui.image.label.paint5" ).click(function() {
+			texture = scope.textures["material15"];
+	        var newmaterial = new THREE.MeshBasicMaterial( {map: texture} );
+	        scope.Painting( newmaterial );
+	    });
+	    $( ".item.ui.image.label.paint7" ).click(function() {
+			texture = scope.textures["material16"];
+	        var newmaterial = new THREE.MeshBasicMaterial( {map: texture} );
+	        scope.Painting( newmaterial );
+	    });
+	    $( ".item.ui.image.label.paint9" ).click(function() {
+			texture = scope.textures["material17"];
+	        var newmaterial = new THREE.MeshBasicMaterial( {map: texture} );
+	        scope.Painting( newmaterial );
+	    });
 	},
 
 	changeseatmodel: function(furniture,NewSeatSize,NewSeatPosi, texture, mode){
@@ -788,7 +851,42 @@ Chair_Rebuild.prototype = {
 			LegModel.position.set(LegPosi.x , LegPosi.y, LegPosi.z);
 
 		} );
-	}//,
+	}, 
+
+	Painting( newmaterial ){
+        
+            
+        var model = this.furnitures[0].getFurniture();
+        console.log(model);
+        var array = [];
+        this.getAllChildren(model , array);
+        for(var j=0 ; j < array.length ; j++ ){
+            if( array[j].geometry.isBufferGeometry ){
+                array[j].geometry = new THREE.Geometry().fromBufferGeometry( array[j].geometry );
+                assignUVs( array[j].geometry );
+                array[j].geometry= new THREE.BufferGeometry().fromGeometry( array[j].geometry );
+            }
+            
+            array[j].material = newmaterial;
+        }
+    },
+
+    getAllChildren: function(obj, array) {
+        if(obj.type == "Mesh" && obj.name != "seat"){
+            array.push(obj);
+        }
+        if (obj.children.length > 0) {
+            for (var i = 0; i < obj.children.length; i++) {
+                if(obj.children[i].type == "Mesh" || obj.children[i].type == "Object3D"){
+                    this.getAllChildren(obj.children[i], array);
+                }   
+            }
+        }
+    },
+
+    
+
+	//,
 
 	// backConnect1: function( furnitures ){
 		
@@ -931,5 +1029,30 @@ Chair_Rebuild.prototype = {
 
 
 
+}
+
+function assignUVs(geometry) {
+
+    geometry.faceVertexUvs[0] = [];
+
+    geometry.faces.forEach(function(face) {
+
+        var components = ['x', 'y', 'z'].sort(function(a, b) {
+            return Math.abs(face.normal[a]) > Math.abs(face.normal[b]);
+        });
+
+        var v1 = geometry.vertices[face.a];
+        var v2 = geometry.vertices[face.b];
+        var v3 = geometry.vertices[face.c];
+
+        geometry.faceVertexUvs[0].push([
+            new THREE.Vector2(v1[components[0]], v1[components[1]]),
+            new THREE.Vector2(v2[components[0]], v2[components[1]]),
+            new THREE.Vector2(v3[components[0]], v3[components[1]])
+        ]);
+
+    });
+
+    geometry.uvsNeedUpdate = true;
 }
 module.exports = Chair_Rebuild
