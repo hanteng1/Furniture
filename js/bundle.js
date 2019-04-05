@@ -1106,9 +1106,9 @@ Chair_Add.prototype = {
 		//change max and min value
 		var position_id = document.getElementById("CHAIR_ADD_POSITION");
 		//position_id.max = this.computeNumber(size_back.y / 2);
-		position_id.max = 2;
+		position_id.max = 5;
 		//position_id.min = this.computeNumber((size_back.y / 2) * (-1));
-		position_id.min = -2;
+		position_id.min = 0;
 
 		var width_id = document.getElementById("CHAIR_ADD_WIDTH");
 		width_id.max = this.computeNumber(size_board.z  * 25);
@@ -1141,7 +1141,7 @@ Chair_Add.prototype = {
 		
 		var size_back = this.getPartSize(back);
 		var segPosition = this.parameters.CHAIR_ADD_POSITION;
-		pos.y += parseInt(segPosition) * (size_back.y / 5);
+		pos.y += parseInt(segPosition) * (size_back.y / 10);
 		board.position.set(pos.x - size_board.x/2, pos.y, pos.z);
 		back.worldToLocal(board.position);
 		
