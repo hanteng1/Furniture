@@ -35,7 +35,6 @@ Chair_Rebuild.prototype = {
 	    this.textures["material1"] = textureLoader.load( '../images/material/wrap/wrap7.jpg' );
 		this.textures["material1"].wrapS = this.textures["material1"].wrapT = THREE.MirroredRepeatWrapping;
 		this.textures["material1"].repeat.set(10, 10);
-		console.log(this.textures["material1"]);
 
 		this.textures["material2"] = textureLoader.load( '../images/material/material2.jpg' );
 	    this.textures["material2"].repeat.set(1, 1);

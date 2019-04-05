@@ -44,11 +44,9 @@ Chair_Align.prototype = {
 	    manager.onProgress = function ( item, loaded, total ) {
 	        console.log( item, loaded, total );
 	    };
-
 	    var textureLoader = new THREE.TextureLoader( manager );
-	    this.textures["linen"] = textureLoader.load( '../images/linen_cloth.jpg' );
-
-	    this.textures["linen"].repeat.set(0.1, 0.1);
+	    this.textures["linen"] = textureLoader.load( '../images/linen_cloth.jpg');
+	    this.textures["linen"].repeat.set(0.5, 0.5);
 		this.textures["linen"].wrapS = this.textures["linen"].wrapT = THREE.MirroredRepeatWrapping;
 
 
