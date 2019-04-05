@@ -9497,7 +9497,8 @@ function clearScene(main){
 }
 
 function SaveFurniture( furniture , furnituresDataSet) {
-
+	console.log("SaveFurniture");
+	console.log(furniture);
 	//var furniture = this.furnitures[i];
 	var new_furnitureObj = new THREE.Object3D();
 	new_furnitureObj.copy(furniture.getFurniture(), true);
@@ -9513,8 +9514,8 @@ function SaveFurniture( furniture , furnituresDataSet) {
 	new_furniture.updateQuaternion(furniture.quaternion);
 
 	//copy the components and labeled state
-	new_furniture.updateListedComponents(furniture.listedComponents);
-	new_furniture.updateLabeledComponents(furniture.labeledComponents);
+	//new_furniture.updateListedComponents(furniture.listedComponents);
+	//new_furniture.updateLabeledComponents(furniture.labeledComponents);
 
 	//copy the already labeled normal axis
 	//Object.assign(new_furniture.normalAxises, furniture.normalAxises);
