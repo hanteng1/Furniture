@@ -1106,9 +1106,9 @@ Chair_Add.prototype = {
 		//change max and min value
 		var position_id = document.getElementById("CHAIR_ADD_POSITION");
 		//position_id.max = this.computeNumber(size_back.y / 2);
-		position_id.max = 2;
+		position_id.max = 5;
 		//position_id.min = this.computeNumber((size_back.y / 2) * (-1));
-		position_id.min = -2;
+		position_id.min = 0;
 
 		var width_id = document.getElementById("CHAIR_ADD_WIDTH");
 		width_id.max = this.computeNumber(size_board.z  * 25);
@@ -1141,7 +1141,7 @@ Chair_Add.prototype = {
 		
 		var size_back = this.getPartSize(back);
 		var segPosition = this.parameters.CHAIR_ADD_POSITION;
-		pos.y += parseInt(segPosition) * (size_back.y / 5);
+		pos.y += parseInt(segPosition) * (size_back.y / 10);
 		board.position.set(pos.x - size_board.x/2, pos.y, pos.z);
 		back.worldToLocal(board.position);
 		
@@ -1683,11 +1683,9 @@ Chair_Align.prototype = {
 	    manager.onProgress = function ( item, loaded, total ) {
 	        console.log( item, loaded, total );
 	    };
-
 	    var textureLoader = new THREE.TextureLoader( manager );
-	    this.textures["linen"] = textureLoader.load( '../images/linen_cloth.jpg' );
-
-	    this.textures["linen"].repeat.set(0.1, 0.1);
+	    this.textures["linen"] = textureLoader.load( '../images/linen_cloth.jpg');
+	    this.textures["linen"].repeat.set(0.5, 0.5);
 		this.textures["linen"].wrapS = this.textures["linen"].wrapT = THREE.MirroredRepeatWrapping;
 
 
@@ -2477,7 +2475,6 @@ Chair_Rebuild.prototype = {
 	    this.textures["material1"] = textureLoader.load( '../images/material/wrap/wrap7.jpg' );
 		this.textures["material1"].wrapS = this.textures["material1"].wrapT = THREE.MirroredRepeatWrapping;
 		this.textures["material1"].repeat.set(10, 10);
-		console.log(this.textures["material1"]);
 
 		this.textures["material2"] = textureLoader.load( '../images/material/material2.jpg' );
 	    this.textures["material2"].repeat.set(1, 1);
@@ -8394,7 +8391,7 @@ function Model_Cut(main) {
 	    scope.main.Cutting = true;
 
 	    if(scope.main.cutplane == null) {
-	    	var geometry = new THREE.PlaneGeometry( 1, 1);
+	    	var geometry = new THREE.PlaneGeometry( 0.1, 0.1);
 			var material = new THREE.MeshBasicMaterial( {color: 0xffff00, side: THREE.DoubleSide, transparent: true, opacity: 0.5} );
 			scope.main.cutplane = new THREE.Mesh( geometry, material );
 			scope.main.scene.add( scope.main.cutplane );
@@ -9500,7 +9497,8 @@ function clearScene(main){
 }
 
 function SaveFurniture( furniture , furnituresDataSet) {
-
+	console.log("SaveFurniture");
+	console.log(furniture);
 	//var furniture = this.furnitures[i];
 	var new_furnitureObj = new THREE.Object3D();
 	new_furnitureObj.copy(furniture.getFurniture(), true);
@@ -9516,8 +9514,8 @@ function SaveFurniture( furniture , furnituresDataSet) {
 	new_furniture.updateQuaternion(furniture.quaternion);
 
 	//copy the components and labeled state
-	new_furniture.updateListedComponents(furniture.listedComponents);
-	new_furniture.updateLabeledComponents(furniture.labeledComponents);
+	//new_furniture.updateListedComponents(furniture.listedComponents);
+	//new_furniture.updateLabeledComponents(furniture.labeledComponents);
 
 	//copy the already labeled normal axis
 	//Object.assign(new_furniture.normalAxises, furniture.normalAxises);
