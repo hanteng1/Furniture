@@ -691,7 +691,7 @@ Chair_Add.prototype = {
 		hang.name = "add_hang";
 		this.main.scene.add( hang );
 		var wall = this.main.purpleWall;
-		var moveTo = new THREE.Vector3(wall.position.x + 1, wall.position.y - 1, wall.position.z + 1);
+		var moveTo = new THREE.Vector3(wall.position.x + 1, wall.position.y - 1, wall.position.z + 4);
 		hang.position.set(moveTo.x, moveTo.y, moveTo.z);
 
 		console.log(hang);		

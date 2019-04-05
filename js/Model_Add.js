@@ -567,6 +567,7 @@ Model_Add.prototype = {
 		hook.name = "create hook";
 		this.main.scene.add(hook);
 		hook.position.set(0,0,0);
+		hook.scale.set(0.1, 0.1, 0.1);
 		
 		this.objectVector = this.objectVectorList.hook;
 		this.selectObject = hook;
@@ -737,6 +738,8 @@ Model_Add.prototype = {
 				this.objectRotationByAxis(this.selectObject, "z", Math.PI/2+Math.PI);
 			}
 		}
+		else 
+			return;
 		this.objectVector = this.planeNormalVector;
 	},
 
@@ -983,7 +986,7 @@ Model_Add.prototype = {
 
 	updateHookPosition: function(pos) {
 		this.rotateObjectVectorToPlaneNormalVector();
-		var offset = this.getRodOffset();
+		var offset = this.getHookOffset();
 		pos.x = parseFloat(pos.x) + parseFloat(offset.x);
 		pos.y = parseFloat(pos.y) + parseFloat(offset.y);
 		pos.z = parseFloat(pos.z) + parseFloat(offset.z);

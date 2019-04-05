@@ -1,4 +1,6 @@
 const chairCutBackFlip = require('./chairCutBackFlip');
+const CreateBox = require('./CreateBox');
+const chairCreateBoard = require('./chairCreateBoard');
 
 function Storage_Bin (main) {
 	this.main = main;
@@ -54,15 +56,18 @@ Storage_Bin.prototype = {
 
 	remove: function(furniture){
 		var group = furniture.getFurniture();
-		var seat = group.getObjectByName("back");
-		var center_seat = this.getPartCenter(seat);
+		var back = group.getObjectByName("back");
+		var center_back = this.getPartCenter(back);
+		var size_back = this.getPartSize(back);
 		var parts = new Array();
 		this.findAllChildren(parts, group);
 		for (var i = parts.length - 1; i >= 0; i--) {
 			if(parts[i].type == "Mesh"){
 				if (parts[i].name == "") {
 					var center_obj = this.getPartCenter(parts[i]);
-					if(center_obj.y > center_seat.y)
+					if(center_obj.y > center_back.y)
+						group.remove(parts[i]);
+					else if(center_obj.y < center_back.y - size_back.y/3)
 						group.remove(parts[i]);
 				}
 			}
@@ -82,7 +87,6 @@ Storage_Bin.prototype = {
 
 	cut: function(furniture){
 		var group = furniture.getFurniture();
-		console.log(group);
 		var back = group.getObjectByName("back");
 		var seat = group.getObjectByName("seat");
 		var size_seat = this.getPartSize(seat);
@@ -143,10 +147,93 @@ Storage_Bin.prototype = {
 		group.remove(back);
 	},
 
+	addBox: function(furniture){
+		var group = furniture.getFurniture();
+		var test1 = group.getObjectByName("test1");
+		var test2 = group.getObjectByName("test2");
+
+		var manager = new THREE.LoadingManager();
+	    manager.onProgress = function ( item, loaded, total ) {
+	        console.log( item, loaded, total );
+	    };
+	    var textureLoader = new THREE.TextureLoader( manager );
+		var texture = textureLoader.load('../images/material/material8.jpg');
+		texture.repeat.set(1, 1);
+		texture.wrapS = texture.wrapT = THREE.MirroredRepeatWrapping;
+		var material = new THREE.MeshBasicMaterial( { map: texture } );
+
+		var size_test1 = this.getPartSize(test1);
+		var size_test2 = this.getPartSize(test2);
+		var size_group = this.getPartSize(group);
+		var center_test1 = this.getPartCenter(test1);
+		var center_test2 = this.getPartCenter(test2);
+		var center_group = this.getPartCenter(group);
+
+		var box = this.newBox(material, size_group.z / 3, size_group.x, size_test1.y / 2);
+		var size_board = this.getPartSize(box);
+		var pos = new THREE.Vector3(center_group.x - size_group.x / 2, center_group.y, 
+			center_group.z + size_group.z / 2);
+		this.objectAddToFurniture(group, box, pos);
+	},
+
+	newBox: function(material, depth, length, height){
+		var geometry = CreateBox(depth, length, height);	
+		var board = new THREE.Mesh( geometry, material );
+		return board;
+	},
+
+	objectAddToFurniture: function(furniture, object, position) {
+		var inverse = new THREE.Matrix4();
+		inverse.getInverse(furniture.matrixWorld);	
+		object.applyMatrix(inverse);		
+		furniture.worldToLocal(position);		
+		object.position.set(position.x, position.y, position.z);		
+		furniture.add(object);		
+	},
+
+	addBoard: function(furniture){
+		var group = furniture.getFurniture();
+		var test1 = group.getObjectByName("test1");
+
+		var material = new THREE.MeshBasicMaterial();
+		material = test1.material.clone();
+
+		var size_test1 = this.getPartSize(test1);
+		var size_group = this.getPartSize(group);
+
+		var center_group = this.getPartCenter(group);
+
+		var board = this.newBoard(material, size_group.x , size_group.y / 4, size_test1.z / 2);
+		var pos = new THREE.Vector3(center_group.x - size_group.x / 2, center_group.y - size_group.y / 2, 
+			center_group.z - size_group.z / 2);
+		
+
+		var board_left = board.clone();
+		var pos_left = new THREE.Vector3(pos.x, pos.y, pos.z);
+
+		var board_right = board.clone();
+		var pos_right = new THREE.Vector3(pos.x + size_group.x, pos.y, pos.z);
+
+		this.objectAddToFurniture(group, board, pos);
+		this.objectAddToFurniture(group, board_left, pos_left);
+		this.objectAddToFurniture(group, board_right, pos_right);
+
+		board_left.rotateY(-Math.PI/2);
+		board_right.rotateY(-Math.PI/2);
+	},
+
+	newBoard: function(material, width, height, depth){
+		var geometry = chairCreateBoard(width, height, depth);	
+		var board = new THREE.Mesh( geometry, material );
+		return board;
+	},
+
 	execute: function(tfname){
 		if(this.checkHasBack(this.furnitures[0]) && this.checkHasSeat(this.furnitures[0])){
 			this.remove(this.furnitures[0]);
 			this.cut(this.furnitures[0]);
+			this.addBox(this.furnitures[0]);
+			this.addBoard(this.furnitures[0]);
 			this.flip(this.furnitures[0]);
 		}
 		else
