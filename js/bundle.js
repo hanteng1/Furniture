@@ -13069,7 +13069,6 @@ Main.prototype = {
 			if(child.geometry !== undefined)
 			{
 				child.material.needsUpdate = true;
-				//child.material.wireframe = true;
 				child.castShadow = true;
 				child.name = "";
 				objects.push(child);
